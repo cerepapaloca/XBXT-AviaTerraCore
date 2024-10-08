@@ -1,0 +1,73 @@
+package net.atcore.avia.BaseCommand;
+
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import net.atcore.avia.Messages.TypeMessages;
+import org.bukkit.Bukkit;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
+import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.*;
+
+import static net.atcore.avia.Messages.MessagesManager.sendMessage;
+
+@Getter
+@RequiredArgsConstructor //esta anotación crea un constructor con las variables que tenga el final
+public class CommandHandler implements TabExecutor {
+    private final HashSet<BaseCommand> commands = new HashSet<>();
+
+    /**
+     * Este método es de bukkit y se dispara cada vez que un jugador ejecuta un comando
+     * @param sender esta es la instancia del que ejecuto el comando que puede ser un Player o la Consola
+     * @param cmd con este parámetro puedes saber cuál comando está ejecutado
+     * @param args esto son los argumentos que tiene los comando
+     */
+
+    @Override
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {
+        for (BaseCommand command : commands) {
+            if (!(cmd.getName().equalsIgnoreCase(command.getName()))) continue;
+            boolean hasPermission = false;
+            for (String permission : command.getPermissions()) {
+                if (sender.hasPermission(permission)) {
+                    hasPermission = true;
+                    break;
+                }
+            }
+
+            if (command.getIsHide()) {
+                if (sender.isOp()){
+                    command.execute(sender, args);
+                } else {
+                    sendMessage(sender, "No tienes Permisos", TypeMessages.ERROR);
+                }
+                break;
+            }
+
+            if (hasPermission) {
+                command.execute(sender, args);
+            }else{
+                sendMessage(sender, "No tienes Permisos", TypeMessages.ERROR);
+            }
+            break;
+        }
+        return true;
+    }
+
+    /**
+     * Es casí lo mismo que el OnCommand, pero se dispara cada vez que un jugador escribe los argumentos
+     * @return Te vuelve una lista de argumentos que puede ejecutar
+     */
+
+    @Override
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String alias, String[] args) {
+        for (BaseCommand command : commands) {
+            if (!(cmd.getName().equalsIgnoreCase(command.getName()))) continue;
+            if (command instanceof BaseTabCommand tabCommand)return tabCommand.onTab(sender, args);
+        }
+        return Collections.singletonList("");
+    }
+}

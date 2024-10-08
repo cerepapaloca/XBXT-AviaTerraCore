@@ -1,8 +1,11 @@
-name: Avia Terra Core
+name: AviaTerraCore
 version: '0.0.0'
 main: net.atcore.avia.AviaTerraCore
 api-version: '1.21'
 prefix: AviaTerraCore
-load: STARTUP
-authors: [ Ceres, Vitah, EvaProject ]
+authors: [Ceres, Vitah, EvaProject]
 description: Sera las bases del servidor
+
+commands:
+  prueba:
+    aliases: test
