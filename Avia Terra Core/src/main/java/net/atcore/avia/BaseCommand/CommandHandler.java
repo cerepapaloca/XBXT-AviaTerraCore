@@ -3,11 +3,9 @@ package net.atcore.avia.BaseCommand;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.atcore.avia.Messages.TypeMessages;
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -20,7 +18,7 @@ public class CommandHandler implements TabExecutor {
     private final HashSet<BaseCommand> commands = new HashSet<>();
 
     /**
-     * Este método es de bukkit y se dispara cada vez que un jugador ejecuta un comando
+     * Este method es de bukkit y se dispara cada vez que un jugador ejecuta un comando
      * @param sender esta es la instancia del que ejecuto el comando que puede ser un Player o la Consola
      * @param cmd con este parámetro puedes saber cuál comando está ejecutado
      * @param args esto son los argumentos que tiene los comando

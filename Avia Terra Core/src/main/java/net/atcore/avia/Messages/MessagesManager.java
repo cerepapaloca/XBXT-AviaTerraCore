@@ -7,8 +7,8 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * En esta clase esta todo relacionado al los colores y envio de mensajes todos los mensjaes tiene que pasar por quí
- * al igual que todos los colores es por queremos modificar los calores sea más fácil
+ * En esta clase esta tod0 relacionado con los colores y envío de mensajes todos los mensajes tiene que pasar por quí
+ * al igual que todos los colores es por quereros modificar los calores sea más fácil
  */
 public record MessagesManager() {
 
