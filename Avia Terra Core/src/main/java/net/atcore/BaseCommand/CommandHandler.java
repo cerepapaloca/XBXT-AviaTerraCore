@@ -1,8 +1,8 @@
-package net.atcore.avia.BaseCommand;
+package net.atcore.BaseCommand;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import net.atcore.avia.Messages.TypeMessages;
+import net.atcore.Messages.TypeMessages;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
-import static net.atcore.avia.Messages.MessagesManager.sendMessage;
+import static net.atcore.Messages.MessagesManager.sendMessage;
 
 @Getter
 @RequiredArgsConstructor //esta anotación crea un constructor con las variables que tenga el final
@@ -35,21 +35,26 @@ public class CommandHandler implements TabExecutor {
                     break;
                 }
             }
+            try {
+                if (command.getIsHide()) {
+                    if (sender.isOp()){
+                        command.execute(sender, args);
+                    } else {
+                        sendMessage(sender, "No tienes Permisos", TypeMessages.ERROR);
+                    }
+                    break;
+                }
 
-            if (command.getIsHide()) {
-                if (sender.isOp()){
+                if (hasPermission) {
                     command.execute(sender, args);
-                } else {
+                }else{
                     sendMessage(sender, "No tienes Permisos", TypeMessages.ERROR);
                 }
-                break;
+            }catch (Exception e) {
+                sendMessage(sender, "Ops!! Hubo un error al ejecutar el comando contacta con el desarrollador", TypeMessages.ERROR);
+                throw new RuntimeException(e);
             }
 
-            if (hasPermission) {
-                command.execute(sender, args);
-            }else{
-                sendMessage(sender, "No tienes Permisos", TypeMessages.ERROR);
-            }
             break;
         }
         return true;

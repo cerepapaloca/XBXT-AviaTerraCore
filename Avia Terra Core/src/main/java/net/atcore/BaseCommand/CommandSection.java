@@ -1,9 +1,12 @@
-package net.atcore.avia.BaseCommand;
+package net.atcore.BaseCommand;
 
 import lombok.Getter;
-import net.atcore.avia.BaseCommand.Commnads.CommandPrueba;
-import net.atcore.avia.Section;
-import net.atcore.avia.Utils.RegisterManager;
+import net.atcore.BaseCommand.Commnads.CommandAviaTerra;
+import net.atcore.BaseCommand.Commnads.CommandFreeze;
+import net.atcore.BaseCommand.Commnads.CommandPrueba;
+import net.atcore.Section;
+
+import static net.atcore.Utils.RegisterManager.register;
 
 
 public class CommandSection implements Section {
@@ -13,7 +16,9 @@ public class CommandSection implements Section {
     @Override
     public void enable() {
         commandHandler = new CommandHandler();
-        RegisterManager.register(new CommandPrueba());
+        register(new CommandFreeze());
+        register(new CommandPrueba());
+        register(new CommandAviaTerra());
     }
 
     @Override

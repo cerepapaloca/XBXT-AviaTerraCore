@@ -1,4 +1,4 @@
-package net.atcore.avia.Utils;
+package net.atcore.Utils;
 
 import lombok.experimental.UtilityClass;
 import org.bukkit.command.CommandSender;

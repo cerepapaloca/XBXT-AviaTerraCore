@@ -1,4 +1,4 @@
-package net.atcore.avia.Messages;
+package net.atcore.Messages;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -10,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
  * En esta clase esta tod0 relacionado con los colores y envío de mensajes todos los mensajes tiene que pasar por quí
  * al igual que todos los colores es por quereros modificar los calores sea más fácil
  */
-public record MessagesManager() {
+public final class MessagesManager {
 
     public static final String colorSuccess = "&a";
     public static final String colorInfo = "&3";

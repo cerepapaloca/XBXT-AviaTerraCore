@@ -1,18 +1,15 @@
-package net.atcore.avia.Utils;
-import net.atcore.avia.AviaTerraCore;
-import net.atcore.avia.BaseCommand.BaseCommand;
-import net.atcore.avia.BaseCommand.CommandSection;
-import net.atcore.avia.Messages.TypeMessages;
-import net.atcore.avia.Section;
-import org.bukkit.Bukkit;
+package net.atcore.Utils;
+import net.atcore.BaseCommand.BaseCommand;
+import net.atcore.BaseCommand.CommandSection;
+import net.atcore.Messages.TypeMessages;
+import net.atcore.Section;
 import org.bukkit.command.PluginCommand;
-import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
 import org.bukkit.event.Listener;
 
-import static net.atcore.avia.AviaTerraCore.plugin;
-import static net.atcore.avia.Messages.MessagesManager.*;
+import static net.atcore.AviaTerraCore.plugin;
+import static net.atcore.Messages.MessagesManager.*;
 import static org.bukkit.Bukkit.getServer;
 
 /**

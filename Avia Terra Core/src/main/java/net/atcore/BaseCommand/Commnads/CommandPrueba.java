@@ -1,8 +1,8 @@
-package net.atcore.avia.BaseCommand.Commnads;
+package net.atcore.BaseCommand.Commnads;
 
-import net.atcore.avia.BaseCommand.BaseCommand;
-import net.atcore.avia.Messages.MessagesManager;
-import net.atcore.avia.Messages.TypeMessages;
+import net.atcore.BaseCommand.BaseCommand;
+import net.atcore.Messages.MessagesManager;
+import net.atcore.Messages.TypeMessages;
 import org.bukkit.command.CommandSender;
 
 public class CommandPrueba extends BaseCommand {

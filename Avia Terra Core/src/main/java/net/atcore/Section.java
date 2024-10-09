@@ -1,4 +1,4 @@
-package net.atcore.avia;
+package net.atcore;
 
 /**
  * En esta interfaz esta los métodos de inicialización para cada parte del plugin

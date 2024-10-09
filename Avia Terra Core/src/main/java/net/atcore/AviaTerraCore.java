@@ -1,13 +1,13 @@
-package net.atcore.avia;
+package net.atcore;
 
-import net.atcore.avia.BaseCommand.CommandSection;
-import net.atcore.avia.Messages.TypeMessages;
-import net.atcore.avia.Utils.RegisterManager;
+import net.atcore.BaseCommand.CommandSection;
+import net.atcore.Messages.TypeMessages;
+import net.atcore.Utils.RegisterManager;
+import net.atcore.moderation.ModerationSection;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import static net.atcore.avia.Messages.MessagesManager.sendMessage;
-import static net.atcore.avia.Messages.MessagesManager.sendMessageConsole;
+import static net.atcore.Messages.MessagesManager.sendMessageConsole;
 
 public final class AviaTerraCore extends JavaPlugin {
 
@@ -24,6 +24,7 @@ public final class AviaTerraCore extends JavaPlugin {
         timeCurrent = System.currentTimeMillis();
         sendMessageConsole("Avia Terra Iniciando...", TypeMessages.INFO, false);
         RegisterManager.register(new CommandSection());
+        RegisterManager.register(new ModerationSection());
         sendMessageConsole("Avia Terra Iniciado. " + "&6" + (System.currentTimeMillis() - timeCurrent) + "ms", TypeMessages.SUCCESS, false);
     }
 

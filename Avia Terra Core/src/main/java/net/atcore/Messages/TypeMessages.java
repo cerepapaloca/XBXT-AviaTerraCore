@@ -1,4 +1,4 @@
-package net.atcore.avia.Messages;
+package net.atcore.Messages;
 
 public enum TypeMessages {
     SUCCESS,

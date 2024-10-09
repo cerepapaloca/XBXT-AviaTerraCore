@@ -1,6 +1,6 @@
 name: AviaTerraCore
 version: '0.0.0'
-main: net.atcore.avia.AviaTerraCore
+main: net.atcore.AviaTerraCore
 api-version: '1.21'
 prefix: AviaTerraCore
 authors: [Ceres, Vitah, EvaProject]
@@ -9,3 +9,7 @@ description: Sera las bases del servidor
 commands:
   prueba:
     aliases: test
+  aviaterra:
+    aliases: at
+  freeze:
+

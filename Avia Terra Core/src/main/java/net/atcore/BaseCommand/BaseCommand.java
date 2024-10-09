@@ -1,4 +1,4 @@
-package net.atcore.avia.BaseCommand;
+package net.atcore.BaseCommand;
 
 import lombok.Getter;
 import org.bukkit.command.CommandSender;
