@@ -18,7 +18,7 @@ public final class MessagesManager {
     public static final String colorWarning = "&e";
     public static final String colorError = "&c";
 
-    private static final String prefix = "&6&l[" + GlobalUtils.applyGradient("<#61CAFD>Avia Terra<#B378CB>",'l') + "&6&l]&r " ;
+    private static final String prefix = "&6[" + GlobalUtils.applyGradient("<#61CAFD>Avia Terra<#B378CB>",'l') + "&6]&r " ;
 
     public static void sendMessage(CommandSender sender, String message,@Nullable TypeMessages type) {
         sendMessage(sender, message, type, true);

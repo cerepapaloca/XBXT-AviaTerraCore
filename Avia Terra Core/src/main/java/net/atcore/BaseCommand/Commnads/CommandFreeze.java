@@ -3,7 +3,10 @@ package net.atcore.BaseCommand.Commnads;
 import net.atcore.BaseCommand.BaseTabCommand;
 import net.atcore.Messages.TypeMessages;
 import net.atcore.Moderation.ModerationSection;
+import net.atcore.Utils.GlobalUtils;
+import net.atcore.Utils.ModeTab;
 import org.bukkit.Bukkit;
+import org.bukkit.Utility;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -70,11 +73,7 @@ public class CommandFreeze extends BaseTabCommand {
     @Override
     public List<String> onTab(CommandSender sender, String[] args) {
         if (args.length == 2) {
-            String[] argsTAB = new String[]{"on", "off"};
-            String currentArg = args[1].toLowerCase();
-            return Arrays.stream(argsTAB).toList().stream()
-                    .filter(name -> name.startsWith(currentArg))
-                    .collect(Collectors.toList());
+            return GlobalUtils.listTab(args[1], new String[]{"on", "off"});
         }
         return null;
     }
