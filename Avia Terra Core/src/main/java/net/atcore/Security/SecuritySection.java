@@ -20,6 +20,6 @@ public class SecuritySection implements Section {
 
     @Override
     public String getName() {
-        return "";
+        return "Security";
     }
 }

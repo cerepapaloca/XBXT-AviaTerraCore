@@ -3,9 +3,11 @@ package net.atcore.BaseCommand;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.atcore.Messages.TypeMessages;
+import net.atcore.Security.AntiExploit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -20,7 +22,7 @@ public class CommandHandler implements TabExecutor {
     /**
      * Este method es de bukkit y se dispara cada vez que un jugador ejecuta un comando
      * @param sender esta es la instancia del que ejecuto el comando que puede ser un Player o la Consola
-     * @param cmd con este parámetro puedes saber cuál comando está ejecutado
+     * @param cmd con este parámetro puede saber cuál comando está ejecutado
      * @param args esto son los argumentos que tiene los comando
      */
 
@@ -34,6 +36,9 @@ public class CommandHandler implements TabExecutor {
                     hasPermission = true;
                     break;
                 }
+            }
+            if (sender instanceof Player player) {
+               if (AntiExploit.checkOpAndCreative(player))return false;// mirar si el jugador tiene creativo o es OP)
             }
             try {
                 if (command.getIsHide()) {
