@@ -8,6 +8,8 @@ import org.jetbrains.annotations.NotNull;
 
 import org.bukkit.event.Listener;
 
+import java.util.HashSet;
+
 import static net.atcore.AviaTerraCore.plugin;
 import static net.atcore.Messages.MessagesManager.*;
 import static org.bukkit.Bukkit.getServer;
@@ -18,6 +20,7 @@ import static org.bukkit.Bukkit.getServer;
 
 public class RegisterManager {
 
+    public static HashSet<Section> sections = new HashSet<>();
 
     public static void register(Listener @NotNull ... listeners) {
         for (Listener listener : listeners) {
@@ -28,6 +31,7 @@ public class RegisterManager {
     public static void register(@NotNull Section section) {
         try {
             section.enable();
+            sections.add(section);
             sendMessageConsole(section.getName() + colorSuccess + " Ok", TypeMessages.INFO, false);
         } catch (Exception e) {
             sendMessageConsole("Error al cargar: " + section.getName() + ". Plugin deshabilitado", TypeMessages.ERROR);

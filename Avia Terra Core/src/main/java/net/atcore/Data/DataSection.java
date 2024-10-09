@@ -14,7 +14,7 @@ public class DataSection implements Section {
 
     @Override
     public void disable() {
-
+        DataSection.getMySQLConnection().close();
     }
 
     @Override

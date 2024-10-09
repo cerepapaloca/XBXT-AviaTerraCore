@@ -33,7 +33,9 @@ public final class AviaTerraCore extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        DataSection.getMySQLConnection().close();
+        for (Section section : RegisterManager.sections){
+            section.disable();
+        }
         sendMessageConsole("Avia Terra Se fue a mimir.", TypeMessages.INFO, false);
     }
 }
