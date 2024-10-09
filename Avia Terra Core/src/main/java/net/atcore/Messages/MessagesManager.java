@@ -1,5 +1,6 @@
 package net.atcore.Messages;
 
+import net.atcore.Utils.GlobalUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -17,7 +18,7 @@ public final class MessagesManager {
     public static final String colorWarning = "&e";
     public static final String colorError = "&c";
 
-    private static final String prefix = "[Avia Terra] ";
+    private static final String prefix = "&6&l[" + GlobalUtils.applyGradient("<#61CAFD>Avia Terra<#B378CB>",'l') + "&6&l]&r " ;
 
     public static void sendMessage(CommandSender sender, String message,@Nullable TypeMessages type) {
         sendMessage(sender, message, type, true);
@@ -37,7 +38,7 @@ public final class MessagesManager {
 
     public static void sendMessage(Player player, String message, @Nullable TypeMessages type, boolean isPrefix) {
         if (isPrefix) {
-            player.sendMessage(prefix + ChatColor.translateAlternateColorCodes('&', selectColore(type) + message));
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&',prefix +  selectColore(type) + message));
         }else {
             player.sendMessage(ChatColor.translateAlternateColorCodes('&',selectColore(type) + message));
         }
