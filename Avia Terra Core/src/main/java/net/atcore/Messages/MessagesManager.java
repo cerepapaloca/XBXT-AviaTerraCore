@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * En esta clase esta tod0 relacionado con los colores y envío de mensajes todos los mensajes tiene que pasar por quí
- * al igual que todos los colores es por quereros modificar los calores sea más fácil
+ * al igual que todos los colores. Es para modificar los calores
  */
 public final class MessagesManager {
 

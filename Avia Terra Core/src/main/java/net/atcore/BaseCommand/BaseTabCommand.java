@@ -10,6 +10,10 @@ public abstract class BaseTabCommand extends BaseCommand {
         super(name, usage, permission, isHide, description);
     }
 
+    public BaseTabCommand(String name, String usage, String permission, String description) {
+        super(name, usage, permission, description);
+    }
+
     public BaseTabCommand(String name, String usage, String permission, boolean isHide, String description, String[] subCommands) {
         super(name, usage, permission, isHide, description, subCommands);
     }

@@ -1,4 +1,4 @@
-package net.atcore.moderation;
+package net.atcore.Moderation;
 
 import lombok.Getter;
 import net.atcore.Section;

@@ -22,7 +22,11 @@ public abstract class BaseCommand {
         this(name, usage, permission, isHide, description ,null);
     }
 
-    public BaseCommand(@NotNull String name, @NotNull  String usage, @NotNull String permission, @NotNull Boolean isHide, @Nullable String description) {
+    public BaseCommand(@NotNull String name, @NotNull  String usage, @NotNull  String permission, @NotNull Boolean isHide, @Nullable String description) {
+        this(name, usage, permission, isHide, description ,null);
+    }
+
+    public BaseCommand(@NotNull String name, @NotNull  String usage, @NotNull String permission, @Nullable String description) {
         this(name, usage, permission,false , description ,null);
     }
 

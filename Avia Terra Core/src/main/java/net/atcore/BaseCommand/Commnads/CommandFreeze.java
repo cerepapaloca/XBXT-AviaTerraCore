@@ -2,7 +2,7 @@ package net.atcore.BaseCommand.Commnads;
 
 import net.atcore.BaseCommand.BaseTabCommand;
 import net.atcore.Messages.TypeMessages;
-import net.atcore.moderation.ModerationSection;
+import net.atcore.Moderation.ModerationSection;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
