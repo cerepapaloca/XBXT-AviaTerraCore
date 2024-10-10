@@ -6,20 +6,13 @@ import java.sql.*;
 
 import static net.atcore.Messages.MessagesManager.sendMessageConsole;
 
-public class MySQLConnection {
+public abstract class DataBaseMySql {
     private static Connection connection;
 
-    private static String host;
-    private static String database;
-    private static String user;
-    private static String password;
-
-    public MySQLConnection(String host, String database, String user, String password) {
-        MySQLConnection.host = host;
-        MySQLConnection.database = database;
-        MySQLConnection.user = user;
-        MySQLConnection.password = password;
-    }
+    private static final String host = "localhost";
+    private static final String database = "AviaTerra";
+    private static final String user = "root";
+    private static final String password = "";
 
     /**
      * No usar este method para tener la conexión con la base de datos
@@ -65,7 +58,7 @@ public class MySQLConnection {
      * de la base de datos
      */
 
-    public static Connection getConnection() {
+    protected static Connection getConnection() {
         try {
             if (connection == null || connection.isClosed()) {
                 sendMessageConsole("Conexión perdida Reconectando...", TypeMessages.WARNING);
@@ -76,5 +69,9 @@ public class MySQLConnection {
         }
         return connection;
     }
+
+    protected abstract void reloadDatabase();
+
+    protected abstract void createTable();
 
 }

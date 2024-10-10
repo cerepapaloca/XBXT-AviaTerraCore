@@ -73,7 +73,7 @@ public final class GlobalUtils {
      * Filtra una lista de argumentos a través de un argumento que está escribiendo el usuario.
      * @param arg El argumento que se está escribiendo
      * @param args La lista de argumentos disponibles
-     * @param mode El modo de filtrado sé según como lo pida la situación
+     * @param mode El modo de filtrado
      * @return te vuelve la lista de argumento disponible para el argumento que se está
      * escribiendo actualmente
      */

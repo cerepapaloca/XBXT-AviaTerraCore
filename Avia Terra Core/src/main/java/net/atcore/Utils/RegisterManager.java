@@ -1,6 +1,8 @@
 package net.atcore.Utils;
 import net.atcore.BaseCommand.BaseCommand;
 import net.atcore.BaseCommand.CommandSection;
+import net.atcore.Data.DataBaseMySql;
+import net.atcore.Data.DataSection;
 import net.atcore.Messages.TypeMessages;
 import net.atcore.Section;
 import org.bukkit.command.PluginCommand;
@@ -44,6 +46,10 @@ public class RegisterManager {
         PluginCommand pluginCommand = plugin.getCommand(command.getName());
         pluginCommand.setExecutor(CommandSection.getCommandHandler());
         pluginCommand.setTabCompleter(CommandSection.getCommandHandler());
+    }
+
+    public static void register(@NotNull DataBaseMySql database) {
+        DataSection.getDataBases().add(database);
     }
 
 }

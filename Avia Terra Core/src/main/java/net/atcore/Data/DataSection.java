@@ -3,13 +3,19 @@ package net.atcore.Data;
 import lombok.Getter;
 import net.atcore.Section;
 
+import java.util.HashSet;
+
+import static net.atcore.Utils.RegisterManager.register;
+
 public class DataSection implements Section {
-    @Getter
-    private static MySQLConnection mySQLConnection;
+
+    @Getter private final static HashSet<DataBaseMySql> dataBases = new HashSet<>();
+    @Getter private static DataBaseMySql mySQLConnection;
 
     @Override
     public void enable() {
-        mySQLConnection = new MySQLConnection("localhost", "AviaTerra", "root", "");//los datos para conectar se a la base de dato
+        register(mySQLConnection = new BanDataBase());
+        for (DataBaseMySql db : dataBases) db.createTable();
     }
 
     @Override
@@ -19,7 +25,7 @@ public class DataSection implements Section {
 
     @Override
     public void reloadConfig() {
-
+        for (DataBaseMySql dataBaseMySql : dataBases) dataBaseMySql.reloadDatabase();
     }
 
     @Override

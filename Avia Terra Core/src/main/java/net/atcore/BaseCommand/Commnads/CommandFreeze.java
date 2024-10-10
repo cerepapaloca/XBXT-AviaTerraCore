@@ -4,19 +4,15 @@ import net.atcore.BaseCommand.BaseTabCommand;
 import net.atcore.Messages.TypeMessages;
 import net.atcore.Moderation.ModerationSection;
 import net.atcore.Utils.GlobalUtils;
-import net.atcore.Utils.ModeTab;
 import org.bukkit.Bukkit;
-import org.bukkit.Utility;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import static net.atcore.Messages.MessagesManager.sendMessage;
 
