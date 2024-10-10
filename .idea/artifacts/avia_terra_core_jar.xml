@@ -1,9 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" name="avia-terra-core:jar">
-    <output-path>$USER_HOME$/Desktop/AviaTerra/plugins</output-path>
-    <root id="archive" name="avia-terra-core.jar">
-      <element id="module-output" name="avia-terra-core" />
-      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/jetbrains/annotations/24.1.0/annotations-24.1.0.jar" path-in-jar="/" />
-    </root>
-  </artifact>
-</component>

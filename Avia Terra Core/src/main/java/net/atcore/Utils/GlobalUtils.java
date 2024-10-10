@@ -27,7 +27,7 @@ public final class GlobalUtils {
      * @return te da el texto con los degradados y formato
      */
 
-    public @NotNull String applyGradient(String input, char in) {
+    public @NotNull String applyGradient(@NotNull String input, char in) {
         if (input.contains("</#"))input = input.replace("/","");
         StringBuilder gradientText = new StringBuilder();
 
@@ -78,7 +78,7 @@ public final class GlobalUtils {
      * escribiendo actualmente
      */
 
-    public static @Nullable List<String> listTab(String arg, String[] args, ModeTab mode){
+    public @Nullable List<String> listTab(String arg, String[] args, @NotNull ModeTab mode){
         switch (mode){
             case Contains -> {
                 return Arrays.stream(args)
