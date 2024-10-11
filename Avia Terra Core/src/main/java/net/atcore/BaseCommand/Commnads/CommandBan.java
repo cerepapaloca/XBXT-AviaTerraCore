@@ -58,8 +58,7 @@ public class CommandBan extends BaseTabCommand {
                     }else {
                         BanManager.banPlayer(args[0], null, null, finalReason, time, contextBan, sender.getName());
                     }
-                    sendMessage(sender, "el jugador <|" + args[0] + "|> fue baneado de <|" + contextBan.name() + "|> durante <|" +
-                            GlobalUtils.TimeToString(time, 2) + "|> por el jugador <|" + sender.getName(), TypeMessages.SUCCESS);
+                    sendMessage(sender, "El jugador fue baneado", TypeMessages.SUCCESS);
                 });
             }
         }

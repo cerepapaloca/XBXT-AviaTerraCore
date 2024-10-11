@@ -171,7 +171,7 @@ public class BanDataBase extends DataBaseMySql {
             statement.executeUpdate();
             sendMessageConsole("el jugador <|" + name + "|> fue baneado de <|" + context + "|> durante <|" +
                     GlobalUtils.TimeToString(unbanDate - banDate, 2) + "|> por el jugador <|" + author +
-                    "|>y la razón es <|" + reason, TypeMessages.SUCCESS, CategoryMessages.BAN);
+                    "|> y la razón es <|" + reason + "|>", TypeMessages.SUCCESS, CategoryMessages.BAN);
             return addListDataBan(name, uuid, ip, reason, unbanDate, banDate, context, author);
         } catch (SQLException | UnknownHostException e) {
             throw new RuntimeException(e);

@@ -1,6 +1,7 @@
 package net.atcore.Messages;
 
 import net.atcore.AviaTerraCore;
+import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.md_5.bungee.api.ChatColor;
@@ -117,27 +118,38 @@ public final class MessagesManager {
     private static void sendMessageLogDiscord(TypeMessages type, CategoryMessages categoryMessages, String message) {
         String channelId;
         switch (categoryMessages) {
-            case BAN -> channelId = "676059877486886933";
-            case MODERATION -> channelId = "676059877486886933";
+            case BAN -> channelId = "1294324328401207389";
+            case MODERATION -> channelId = "1294324285602795550";
             default -> {
                 return;
             }
         }
-        switch (type) {
-            case SUCCESS -> message = "『🟩』 " + message;
-            case INFO -> message = "『🟦』 " + message;
-            case WARNING -> message = "『🟨』 " + message;
-            case ERROR -> message = "『🟥』 " + message;
-        }
-        // Obtén el canal por su ID
-        TextChannel channel = JDABuilder.createDefault(AviaTerraCore.TOKEN_BOT).build().getTextChannelById(channelId);
+        Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.PLUGIN, () -> {
+            String finalMessage = "";
+            switch (type) {
+                case SUCCESS -> finalMessage = "『🟩』 " + message;
+                case INFO -> finalMessage = "『🟦』 " + message;
+                case WARNING -> finalMessage = "『🟨』 " + message;
+                case ERROR -> finalMessage = "『🟥』 " + message;
+            }
+            try{
+                // Obtén el canal por su ID
 
-        if (channel != null) {
-            message = message.replace("<|", "**").replace("|>", "**");
-            // Envía el mensaje al canal
-            channel.sendMessage("message").queue();
-        } else {
-            System.out.println("Canal no encontrado.");
-        }
+                JDA jda = JDABuilder.createDefault(AviaTerraCore.TOKEN_BOT).build();
+                jda.awaitReady();
+                TextChannel channel = jda.getTextChannelById(channelId);
+                if (channel != null) {
+                    channel.sendMessage(finalMessage.replace("<|", "**").replace("|>", "**")).queue();
+                } else {
+                    System.out.println("Canal no encontrado.");
+                }
+            }catch (InterruptedException e){
+                throw new RuntimeException(e);
+            }
+
+        });
+
+
+
     }
 }
