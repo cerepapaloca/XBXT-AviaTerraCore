@@ -1,6 +1,7 @@
 package net.atcore;
 
 import net.atcore.BaseCommand.CommandSection;
+import net.atcore.Data.DataSection;
 import net.atcore.Messages.TypeMessages;
 import net.atcore.Security.SecuritySection;
 import net.atcore.Utils.RegisterManager;
@@ -30,9 +31,9 @@ public final class AviaTerraCore extends JavaPlugin {
         RegisterManager.register(new CommandSection());
         RegisterManager.register(new ModerationSection());
         RegisterManager.register(new SecuritySection());
-        //RegisterManager.register(new DataSection());
-        enableModules();
-        sendMessageConsole("Avia Terra Iniciado. " + "&6" + (System.currentTimeMillis() - timeCurrent) + "ms", TypeMessages.SUCCESS, false);
+        RegisterManager.register(new DataSection());
+        //enableModules();
+        sendMessageConsole("Avia Terra Iniciado. <|" + (System.currentTimeMillis() - timeCurrent) + "ms", TypeMessages.SUCCESS, false);
     }
 
     @Override
@@ -40,7 +41,7 @@ public final class AviaTerraCore extends JavaPlugin {
         for (Section section : RegisterManager.sections){
             section.disable();
         }
-        disableModules();
+        //disableModules();
         sendMessageConsole("Avia Terra Se fue a mimir.", TypeMessages.INFO, false);
     }
 

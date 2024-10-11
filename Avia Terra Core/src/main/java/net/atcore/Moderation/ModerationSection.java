@@ -8,10 +8,13 @@ import static net.atcore.Utils.RegisterManager.register;
 public class ModerationSection implements Section {
 
     @Getter private static FreezeListener freezeListener;
+    @Getter private static BanManager banManager;
 
     @Override
     public void enable() {
         register(freezeListener = new FreezeListener());
+        register(new CheckBanListener());
+        banManager = new BanManager();
     }
 
     @Override

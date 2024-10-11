@@ -12,4 +12,7 @@ commands:
   aviaterra:
     aliases: at
   freeze:
+  ban:
+  unban:
+  checkban:
 

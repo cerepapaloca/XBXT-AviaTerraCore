@@ -9,7 +9,7 @@ import static net.atcore.Messages.MessagesManager.sendMessageConsole;
 public abstract class DataBaseMySql {
     private static Connection connection;
 
-    private static final String host = "localhost";
+    private static final String host = "192.168.1.55";
     private static final String database = "AviaTerra";
     private static final String user = "root";
     private static final String password = "";

@@ -19,6 +19,9 @@ public final class MessagesManager {
     public static final String colorWarning = "&e";
     public static final String colorError = "&c";
 
+    public static final String colorEspacial = "&b";
+    public static final String linkDiscord = "&a&nhttps://discord.gg/azurex";
+
     private static final String prefix = "&6[" + GlobalUtils.applyGradient("<#61CAFD>Avia Terra<#B378CB>",'l') + "&6]&r " ;
 
     public static void sendMessage(CommandSender sender, String message,@Nullable TypeMessages type) {
@@ -38,6 +41,7 @@ public final class MessagesManager {
     }
 
     public static void sendMessage(Player player, String message, @Nullable TypeMessages type, boolean isPrefix) {
+        message = addEspecialColor(message, type);
         if (isPrefix) {
             player.sendMessage(ChatColor.translateAlternateColorCodes('&',prefix +  selectColore(type) + message));
         }else {
@@ -50,14 +54,17 @@ public final class MessagesManager {
     }
 
     public static void sendMessageConsole(String message, @Nullable TypeMessages type, boolean isPrefix) {
-        if (isPrefix) {
-            Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', prefix + selectColore(type) + message));
-        }else{
-            Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', selectColore(type) + message));
+        String s;
+        if (isPrefix){
+            s = prefix;
+        }else {
+            s = "";
         }
+        message = addEspecialColor(message, type);
+        Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', s + selectColore(type) + message));
     }
 
-    public static String selectColore(@Nullable TypeMessages type) {
+    private static String selectColore(@Nullable TypeMessages type) {
         String color = "&8";
         if (type != null) {
             switch (type) {
@@ -68,5 +75,9 @@ public final class MessagesManager {
             }
         }
         return color;
+    }
+
+    private static String addEspecialColor(String message, TypeMessages type) {
+        return message.replace("<|",colorEspacial).replace("|>",selectColore(type));
     }
 }

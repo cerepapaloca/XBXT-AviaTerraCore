@@ -1,9 +1,7 @@
 package net.atcore.BaseCommand;
 
 import lombok.Getter;
-import net.atcore.BaseCommand.Commnads.CommandAviaTerra;
-import net.atcore.BaseCommand.Commnads.CommandFreeze;
-import net.atcore.BaseCommand.Commnads.CommandPrueba;
+import net.atcore.BaseCommand.Commnads.*;
 import net.atcore.Section;
 
 import static net.atcore.Utils.RegisterManager.register;
@@ -19,6 +17,9 @@ public class CommandSection implements Section {
         register(new CommandFreeze());
         register(new CommandPrueba());
         register(new CommandAviaTerra());
+        register(new CommandUnban());
+        register(new CommandBan());
+        register(new CommandCheckBan());
     }
 
     @Override

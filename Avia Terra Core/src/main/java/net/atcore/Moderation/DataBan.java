@@ -10,12 +10,13 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class DataBan {
 
-    private final UUID uuid;
     private final String name;
+    private final UUID uuid;
     private final InetAddress address;
     private final String reason;
     private final long unbanDate;
     private final long banDate;
     private final ContextBan context;
+    private final String author;
 
 }
