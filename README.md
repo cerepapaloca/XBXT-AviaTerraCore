@@ -3,6 +3,6 @@
 > lo que tiene que poner
 > ```java
 > Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
->       //toda la logica que tenga una base de tados             
+>       //toda la logica que tenga una base de dados            
 > });
 > ````
