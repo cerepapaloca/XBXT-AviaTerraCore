@@ -1,4 +1,4 @@
-package net.atcore.Moderation;
+package net.atcore.Moderation.Ban;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

@@ -2,9 +2,10 @@ package net.atcore.Data;
 
 import net.atcore.Messages.MessagesManager;
 import net.atcore.Messages.TypeMessages;
-import net.atcore.Moderation.ContextBan;
-import net.atcore.Moderation.DataBan;
-import net.atcore.Moderation.SearchBanBy;
+import net.atcore.Moderation.Ban.ContextBan;
+import net.atcore.Moderation.Ban.DataBan;
+import net.atcore.Moderation.Ban.SearchBanBy;
+import net.atcore.Utils.GlobalUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -14,6 +15,9 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.sql.*;
 import java.util.*;
+
+import static net.atcore.Messages.MessagesManager.sendMessage;
+import static net.atcore.Messages.MessagesManager.sendMessageConsole;
 
 public class BanDataBase extends DataBaseMySql {
 
@@ -56,7 +60,7 @@ public class BanDataBase extends DataBaseMySql {
             throw new RuntimeException(e);
         }
 
-        MessagesManager.sendMessageConsole("Bases recargado exitosamente", TypeMessages.SUCCESS);
+        sendMessageConsole("Bases recargado exitosamente", TypeMessages.SUCCESS);
     }
 
     @Override
@@ -76,7 +80,7 @@ public class BanDataBase extends DataBaseMySql {
              Statement statement = connection.createStatement()) {
             statement.executeUpdate(createTableSQL);
             reloadDatabase();
-            MessagesManager.sendMessageConsole("MySql " + MessagesManager.colorSuccess + "Ok", TypeMessages.INFO);
+            sendMessageConsole("MySql " + MessagesManager.colorSuccess + "Ok", TypeMessages.INFO);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -165,6 +169,8 @@ public class BanDataBase extends DataBaseMySql {
             statement.setString(7, context);
             statement.setString(8, author);
             statement.executeUpdate();
+            sendMessageConsole("el jugador <|" + name + "|> fue baneado de <|" + context + "|> durante <|" +
+                    GlobalUtils.TimeToString(unbanDate - banDate, 2) + "|> por el jugador <|" + author, TypeMessages.SUCCESS);
             return addListDataBan(name, uuid, ip, reason, unbanDate, banDate, context, author);
         } catch (SQLException | UnknownHostException e) {
             throw new RuntimeException(e);
@@ -184,7 +190,7 @@ public class BanDataBase extends DataBaseMySql {
             }else{
                 reloadDatabase();
             }
-
+            sendMessageConsole("Se Desbano el juagor <|" + name + "|> en el contexto <|" + context.name(), TypeMessages.INFO);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

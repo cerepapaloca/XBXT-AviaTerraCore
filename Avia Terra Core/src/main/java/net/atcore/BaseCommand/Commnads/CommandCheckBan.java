@@ -2,9 +2,9 @@ package net.atcore.BaseCommand.Commnads;
 
 import net.atcore.BaseCommand.BaseTabCommand;
 import net.atcore.Messages.TypeMessages;
-import net.atcore.Moderation.BanManager;
-import net.atcore.Moderation.ContextBan;
-import net.atcore.Moderation.DataBan;
+import net.atcore.Moderation.Ban.BanManager;
+import net.atcore.Moderation.Ban.ContextBan;
+import net.atcore.Moderation.Ban.DataBan;
 import net.atcore.Utils.GlobalUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;

@@ -1,7 +1,8 @@
-package net.atcore.Moderation;
+package net.atcore.Moderation.Ban;
 
 import net.atcore.Data.BanDataBase;
 import net.atcore.Messages.TypeMessages;
+import net.atcore.Moderation.ModerationSection;
 import net.atcore.Utils.GlobalUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

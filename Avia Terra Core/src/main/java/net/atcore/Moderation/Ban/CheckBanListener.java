@@ -1,4 +1,4 @@
-package net.atcore.Moderation;
+package net.atcore.Moderation.Ban;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
