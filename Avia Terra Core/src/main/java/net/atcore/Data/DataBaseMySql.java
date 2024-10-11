@@ -1,18 +1,19 @@
 package net.atcore.Data;
 
-import net.atcore.Messages.TypeMessages;
-
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 import static net.atcore.Messages.MessagesManager.sendMessageConsole;
+import net.atcore.Messages.TypeMessages;
 
 public abstract class DataBaseMySql {
     private static Connection connection;
 
-    private static final String host = "192.168.1.55";
-    private static final String database = "AviaTerra";
-    private static final String user = "root";
-    private static final String password = "";
+    private static final String HOST = "xbxtpvp.xyz";//este domino es un misterio
+    private static final String DATABASE = "AviaTerra";
+    private static final String USER = "root";
+    private static final String PASSWORD = "AdeptusAzurex1313#waos";
 
     /**
      * No usar este method para tener la conexión con la base de datos
@@ -20,13 +21,17 @@ public abstract class DataBaseMySql {
      */
 
     private static void connect() {
-        String url = "jdbc:mysql://" + host + "/" + database;
+        String url = "jdbc:mysql://" + HOST + "/" + DATABASE;
         try {
-            connection = DriverManager.getConnection(url, user, password);
+            connection = DriverManager.getConnection(url, USER, PASSWORD);
             sendMessageConsole("Conexión a MySQL establecida", TypeMessages.SUCCESS);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static String getHost() {
+        return HOST;
     }
 
     /**

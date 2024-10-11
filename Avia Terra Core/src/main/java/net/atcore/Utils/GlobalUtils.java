@@ -2,7 +2,6 @@ package net.atcore.Utils;
 
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatColor;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -59,6 +58,7 @@ public final class GlobalUtils {
                     gradientText.append(ChatColor.of(hexColor)).append(text.charAt(i));
                 }
                 gradientText.append(ChatColor.of(hexColor)).append("&").append(in).append(text.charAt(i));
+                ChatColor.of("#" + hexColor);
             }
         }
         return  gradientText.toString();
@@ -196,7 +196,13 @@ public final class GlobalUtils {
     }
 
     public String[] EnumsToStrings(Enum[] raw){
-        return Arrays.stream(raw).map(Enum::name).toArray(String[]::new);
+        String[] strings = new String[raw.length];
+        int i = 0 ;
+        for (Enum e : raw){
+            strings[i] = e.name().toLowerCase();
+            i++;
+        }
+        return strings;
     }
 
     /**

@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 
-import static net.atcore.AviaTerraCore.plugin;
+import static net.atcore.AviaTerraCore.PLUGIN;
 import static net.atcore.Messages.MessagesManager.*;
 
 public class CommandBan extends BaseTabCommand {
@@ -52,7 +52,7 @@ public class CommandBan extends BaseTabCommand {
                 }
                 String finalReason = reason;
                 Player player = Bukkit.getPlayer(args[0]);
-                Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {//hilo aparte por si no Boom!!
+                Bukkit.getScheduler().runTaskAsynchronously(PLUGIN, () -> {//hilo aparte por si no Boom!!
                     if (player != null) {
                         BanManager.banPlayer(player, finalReason, time, contextBan, sender.getName());
                     }else {

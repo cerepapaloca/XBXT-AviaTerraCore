@@ -16,6 +16,7 @@ public class ModerationSection implements Section {
     public void enable() {
         register(freezeListener = new FreezeListener());
         register(new CheckBanListener());
+        register(new ChatListener());
         banManager = new BanManager();
     }
 

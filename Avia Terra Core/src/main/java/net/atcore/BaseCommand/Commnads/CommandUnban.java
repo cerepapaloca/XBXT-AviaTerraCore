@@ -7,7 +7,7 @@ import net.atcore.Moderation.ModerationSection;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 
-import static net.atcore.AviaTerraCore.plugin;
+import static net.atcore.AviaTerraCore.PLUGIN;
 import static net.atcore.Messages.MessagesManager.sendMessage;
 
 public class CommandUnban extends BaseCommand {
@@ -30,7 +30,7 @@ public class CommandUnban extends BaseCommand {
             sendMessage(sender, "contexto no valido", TypeMessages.ERROR);
             return;
         }
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> ModerationSection.getBanManager().removeBanPlayer(args[0], contextBan));//en un hilo aparte por qué explota el servidor
+        Bukkit.getScheduler().runTaskAsynchronously(PLUGIN, () -> ModerationSection.getBanManager().removeBanPlayer(args[0], contextBan, sender.getName()));//en un hilo aparte por qué explota el servidor
         sendMessage(sender, "El jugador fue desbaneado", TypeMessages.SUCCESS);
     }
 }

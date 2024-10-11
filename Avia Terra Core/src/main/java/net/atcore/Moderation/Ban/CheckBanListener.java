@@ -4,6 +4,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,6 +17,16 @@ public class CheckBanListener implements Listener {
         if (s != null && !s.isEmpty()) {
             event.setKickMessage(s);
             event.setResult(PlayerLoginEvent.Result.KICK_OTHER);
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onChat(@NotNull AsyncPlayerChatEvent event) {
+        Player player = event.getPlayer();
+        String s = BanManager.checkBan(player, ContextBan.CHAT);
+        if (s != null && !s.isEmpty()) {
+            event.setCancelled(true);
+            event.setMessage(s);
         }
     }
 }

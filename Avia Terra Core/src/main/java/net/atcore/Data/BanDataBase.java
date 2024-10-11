@@ -1,5 +1,6 @@
 package net.atcore.Data;
 
+import net.atcore.Messages.CategoryMessages;
 import net.atcore.Messages.MessagesManager;
 import net.atcore.Messages.TypeMessages;
 import net.atcore.Moderation.Ban.ContextBan;
@@ -16,7 +17,6 @@ import java.net.UnknownHostException;
 import java.sql.*;
 import java.util.*;
 
-import static net.atcore.Messages.MessagesManager.sendMessage;
 import static net.atcore.Messages.MessagesManager.sendMessageConsole;
 
 public class BanDataBase extends DataBaseMySql {
@@ -170,14 +170,15 @@ public class BanDataBase extends DataBaseMySql {
             statement.setString(8, author);
             statement.executeUpdate();
             sendMessageConsole("el jugador <|" + name + "|> fue baneado de <|" + context + "|> durante <|" +
-                    GlobalUtils.TimeToString(unbanDate - banDate, 2) + "|> por el jugador <|" + author, TypeMessages.SUCCESS);
+                    GlobalUtils.TimeToString(unbanDate - banDate, 2) + "|> por el jugador <|" + author +
+                    "|>y la razón es <|" + reason, TypeMessages.SUCCESS, CategoryMessages.BAN);
             return addListDataBan(name, uuid, ip, reason, unbanDate, banDate, context, author);
         } catch (SQLException | UnknownHostException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void removeBanPlayer(String name, ContextBan context) {
+    public void removeBanPlayer(String name, ContextBan context, String author) {
         String sql = "DELETE FROM bans WHERE name = ? AND context = ?";
         try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -190,7 +191,8 @@ public class BanDataBase extends DataBaseMySql {
             }else{
                 reloadDatabase();
             }
-            sendMessageConsole("Se Desbano el juagor <|" + name + "|> en el contexto <|" + context.name(), TypeMessages.INFO);
+            sendMessageConsole("Se Desbano el juagor <|" + name + "|> en el contexto <|" + context.name() + "|> " +
+                    "por <|" + author, TypeMessages.INFO, CategoryMessages.BAN);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

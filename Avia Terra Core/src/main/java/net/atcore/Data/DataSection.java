@@ -6,7 +6,7 @@ import org.bukkit.Bukkit;
 
 import java.util.HashSet;
 
-import static net.atcore.AviaTerraCore.plugin;
+import static net.atcore.AviaTerraCore.PLUGIN;
 import static net.atcore.Utils.RegisterManager.register;
 
 public class DataSection implements Section {
@@ -17,7 +17,7 @@ public class DataSection implements Section {
     @Override
     public void enable() {
         register(mySQLConnection = new BanDataBase());
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+        Bukkit.getScheduler().runTaskAsynchronously(PLUGIN, () -> {
             for (DataBaseMySql db : dataBases) db.createTable();
         });
     }
@@ -29,7 +29,7 @@ public class DataSection implements Section {
 
     @Override
     public void reloadConfig() {
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+        Bukkit.getScheduler().runTaskAsynchronously(PLUGIN, () -> {
             for (DataBaseMySql dataBaseMySql : dataBases) dataBaseMySql.reloadDatabase();
         });
     }

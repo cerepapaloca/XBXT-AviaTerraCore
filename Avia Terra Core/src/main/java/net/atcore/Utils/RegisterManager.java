@@ -12,7 +12,7 @@ import org.bukkit.event.Listener;
 
 import java.util.HashSet;
 
-import static net.atcore.AviaTerraCore.plugin;
+import static net.atcore.AviaTerraCore.PLUGIN;
 import static net.atcore.Messages.MessagesManager.*;
 import static org.bukkit.Bukkit.getServer;
 
@@ -26,7 +26,7 @@ public class RegisterManager {
 
     public static void register(Listener @NotNull ... listeners) {
         for (Listener listener : listeners) {
-            getServer().getPluginManager().registerEvents(listener , plugin);
+            getServer().getPluginManager().registerEvents(listener , PLUGIN);
         }
     }
 
@@ -43,7 +43,7 @@ public class RegisterManager {
 
     public static void register(@NotNull BaseCommand command) {
         CommandSection.getCommandHandler().getCommands().add(command);
-        PluginCommand pluginCommand = plugin.getCommand(command.getName());
+        PluginCommand pluginCommand = PLUGIN.getCommand(command.getName());
         pluginCommand.setExecutor(CommandSection.getCommandHandler());
         pluginCommand.setTabCompleter(CommandSection.getCommandHandler());
     }
