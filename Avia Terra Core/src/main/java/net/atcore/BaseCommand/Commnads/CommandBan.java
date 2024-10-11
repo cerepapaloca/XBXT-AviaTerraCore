@@ -48,7 +48,7 @@ public class CommandBan extends BaseTabCommand {
                 }
 
                 String reason = "";
-                for (int i = 4; i < args.length; i++){
+                for (int i = 3; i < args.length; i++){
                     reason = reason.concat(args[i] + " ");
                 }
                 String finalReason = reason;
