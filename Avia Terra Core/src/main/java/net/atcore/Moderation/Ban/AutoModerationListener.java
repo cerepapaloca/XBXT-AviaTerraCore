@@ -28,7 +28,7 @@ public class AutoModerationListener implements Listener {
     private static String lastMessage = "";
     private static final ArrayList<Player> ChatBotTime = new ArrayList<>();
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public static void checkAutoBanChat(AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
         String message = event.getMessage();

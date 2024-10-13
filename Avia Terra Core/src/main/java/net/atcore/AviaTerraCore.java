@@ -13,7 +13,7 @@ import net.dv8tion.jda.api.JDABuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import static net.atcore.Messages.MessagesManager.colorSuccess;
+import static net.atcore.Messages.MessagesManager.COLOR_SUCCESS;
 import static net.atcore.Messages.MessagesManager.sendMessageConsole;
 
 public final class AviaTerraCore extends JavaPlugin {
@@ -37,7 +37,7 @@ public final class AviaTerraCore extends JavaPlugin {
             BOT_DISCORD = JDABuilder.createDefault(TOKEN_BOT).build();
             try {
                 BOT_DISCORD.awaitReady();
-                sendMessageConsole("discord bot" + colorSuccess + " Ok", TypeMessages.INFO, true);
+                sendMessageConsole("discord bot" + COLOR_SUCCESS + " Ok", TypeMessages.INFO, true);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }

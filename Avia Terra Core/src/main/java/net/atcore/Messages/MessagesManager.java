@@ -1,10 +1,7 @@
 package net.atcore.Messages;
 
 import net.atcore.AviaTerraCore;
-import net.atcore.Exception.ConnedDataBaseMainThread;
 import net.atcore.Exception.DiscordChannelNotFound;
-import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
@@ -12,26 +9,27 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.zip.DataFormatException;
-
 /**
  * En esta clase esta tod0 relacionado con los colores y envío de mensajes todos los mensajes tiene que pasar por quí
  * al igual que todos los colores. Es para modificar los calores
  */
 public final class MessagesManager {
 
-    public static final String colorSuccess = "&a";
-    public static final String colorInfo = "&3";
-    public static final String colorWarning = "&e";
-    public static final String colorError = "&c";
+    public static final String COLOR_SUCCESS = "&a";
+    public static final String COLOR_INFO = "&3";
+    public static final String COLOR_WARING = "&e";
+    public static final String COLOR_ERROR = "&c";
 
-    public static final String colorEspacial = "&b";
-    public static final String linkDiscord = "&a&nhttps://discord.gg/azurex";
+    public static final String COLOR_ESPECIAL = "&b";
+    public static final String LINK_DISCORD = "&a&nhttps://discord.gg/azurex";
 
     private static final String prefix = "&6[" + ChatColor.of("#00FFFF") + "&lA" + ChatColor.of("#55FFFF")
             + "&lv" + ChatColor.of("#AAFFFF") + "&li" + ChatColor.of("#FFFFFF") + "&la" + ChatColor.of("#FFFFFF")
             + "&lT" + ChatColor.of("#FFFFFF") + "&le" + ChatColor.of("#FFAAFF") + "&lr" + ChatColor.of("#FF55FF")
             + "&lr" + ChatColor.of("#FF00FF") + "&la" +  "&6]&r " ;
+
+    ///////////////////////////
+    ///////////////////////////
 
     public static void sendMessage(CommandSender sender, String message,@Nullable TypeMessages type) {
         sendMessage(sender, message, type, CategoryMessages.PRIVATE, true);
@@ -49,6 +47,9 @@ public final class MessagesManager {
         }
     }
 
+    ///////////////////////////
+    ///////////////////////////
+
     public static void sendMessage(Player player, String message,@Nullable TypeMessages type) {
         sendMessage(player, message, type,  CategoryMessages.PRIVATE,true);
     }
@@ -61,12 +62,14 @@ public final class MessagesManager {
         if (categoryMessages != CategoryMessages.PRIVATE){
             sendMessageLogDiscord(type, categoryMessages, message);
         }
-        message = addProprieties(message, type, categoryMessages);
-        if (isPrefix) {
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&',prefix +  selectColore(type) + message));
+        String s;
+        if (isPrefix){
+            s = prefix;
         }else {
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&',selectColore(type) + message));
+            s = "";
         }
+        message = addProprieties(message, type, categoryMessages);
+        player.sendMessage(ChatColor.translateAlternateColorCodes('&', s + selectColore(type) + message));
     }
 
     ///////////////////////////
@@ -75,7 +78,6 @@ public final class MessagesManager {
     public static void sendMessageConsole(String message, TypeMessages type) {
         sendMessageConsole(message, type, CategoryMessages.PRIVATE);
     }
-
 
     public static void sendMessageConsole(String message, TypeMessages type, boolean prefix) {
         sendMessageConsole(message, type, CategoryMessages.PRIVATE, prefix);
@@ -99,27 +101,31 @@ public final class MessagesManager {
         Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', s + selectColore(type) + message));
     }
 
+    ///////////////////////////
+    ///////////////////////////
+
     private static String selectColore(@Nullable TypeMessages type) {
         String color = "&8";
         if (type != null) {
             switch (type) {
-                case SUCCESS -> color = colorSuccess;
-                case INFO -> color = colorInfo;
-                case WARNING -> color = colorWarning;
-                case ERROR -> color = colorError;
+                case SUCCESS -> color = COLOR_SUCCESS;
+                case INFO -> color = COLOR_INFO;
+                case WARNING -> color = COLOR_WARING;
+                case ERROR -> color = COLOR_ERROR;
             }
         }
         return color;
     }
 
     private static String addProprieties(String message, TypeMessages type, CategoryMessages categoryMessages) {
+        Bukkit.getConsoleSender().sendMessage(message);
         if (categoryMessages != CategoryMessages.PRIVATE) {
             while (Character.isSpaceChar(message.charAt(message.length()-1))){
                 message = message.substring(0, message.length()-1);
             }
             message = message + "&c[R]";
         }
-        return message.replace("<|",colorEspacial).replace("|>",selectColore(type));
+        return message.replace("<|", COLOR_ESPECIAL).replace("|>",selectColore(type)).replace("|!>", selectColore(type));
     }
 
     private static void sendMessageLogDiscord(TypeMessages type, CategoryMessages categoryMessages, String message) {
@@ -142,7 +148,7 @@ public final class MessagesManager {
             // Obtén el canal por su ID
             TextChannel channel = AviaTerraCore.BOT_DISCORD.getTextChannelById(channelId);
             if (channel != null) {
-                channel.sendMessage(finalMessage.replace("<|", "**").replace("|>", "**")).queue();
+                channel.sendMessage(finalMessage.replace("<|", "**").replace("|>", "**").replace("|!>", "")).queue();
             } else {
                 throw new DiscordChannelNotFound("No se encontró canal de discord para los registro " + type.name());
             }

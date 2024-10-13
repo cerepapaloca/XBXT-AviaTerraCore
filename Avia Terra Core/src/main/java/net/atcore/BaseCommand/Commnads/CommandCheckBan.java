@@ -3,6 +3,7 @@ package net.atcore.BaseCommand.Commnads;
 import net.atcore.BaseCommand.BaseTabCommand;
 import net.atcore.Messages.TypeMessages;
 import net.atcore.Moderation.Ban.BanManager;
+import net.atcore.Moderation.Ban.CheckBanListener;
 import net.atcore.Moderation.Ban.ContextBan;
 import net.atcore.Moderation.Ban.DataBan;
 import net.atcore.Utils.GlobalUtils;
@@ -18,10 +19,12 @@ public class CommandCheckBan extends BaseTabCommand {
 
     public CommandCheckBan() {
         super("checkban",
-                "/CheckBan <jugador> <Contexto>",
+                "/CheckBan <jugador> <! | ?> <Contexto>",
                 "aviaterra.command.checkban",
                 true,
-                "Compruebas que el jugador este baneado del contexto seleccionado"
+                "Compruebas que el jugador este baneado usando ? o !. con ? solo miras que contexto esta baneado y no requiere especificar " +
+                        "el contexto mientras el ! se usa cuando quieres echar un jugador baneado de un contexto especificado (esto por si se llega a " +
+                        "colar en un modo de juego o si hay bug)"
         );
     }
 
@@ -34,23 +37,41 @@ public class CommandCheckBan extends BaseTabCommand {
         if (args.length >= 2) {
             Player player = Bukkit.getPlayer(args[0]);
             if (player != null) {
-                ContextBan contextBan;
-                try {
-                    contextBan = ContextBan.valueOf(args[1].toUpperCase());
-                }catch (Exception ignored) {
-                    sendMessage(sender, "contexto no valido", TypeMessages.ERROR);
-                    return;
+                boolean isChecking;
+                switch (args[1]){
+                    case "?" -> isChecking = true;
+                    case "!" -> isChecking = false;
+                    default -> {
+                        return;
+                    }
                 }
-                if (BanManager.checkBan(player, contextBan) == null){
-                    sendMessage(sender, "el jugador no esta banedo de ningún contexto", TypeMessages.SUCCESS);;
-                }else if (BanManager.checkBan(player, contextBan).isEmpty()){
-                    sendMessage(sender, "el jugador esta baneado pero no del contexto seleccionado pero esta baneado de:", TypeMessages.SUCCESS);
+
+                if (isChecking) {
                     for (DataBan dataBan : BanManager.getDataBan(player.getName())){
-                        sendMessage(sender, "&f-|> Esta baneado de " + dataBan.getContext() + " y expira " + GlobalUtils.TimeToString(dataBan.getUnbanDate(), 1), TypeMessages.INFO);
+                        sendMessage(sender, "&f-|!> Esta baneado de " + dataBan.getContext() + " y expira " + GlobalUtils.TimeToString(dataBan.getUnbanDate(), 1), TypeMessages.INFO);
                     }
                 }else {
-                    sendMessage(sender, "El jugador <|" + player.getName() + "|> fue echo del contexto <| " + contextBan +
-                            "|> seleccionado", TypeMessages.SUCCESS);
+                    if (args.length >= 3) {
+                        ContextBan contextBan;
+                        try {
+                            contextBan = ContextBan.valueOf(args[2].toUpperCase());
+                            if (BanManager.checkBan(player, contextBan) == null){
+                                sendMessage(sender, "el jugador no esta banedo de ningún contexto", TypeMessages.SUCCESS);;
+                            }else if (BanManager.checkBan(player, contextBan).isEmpty()){
+                                sendMessage(sender, "el jugador esta baneado pero no del contexto seleccionado pero esta baneado de:", TypeMessages.SUCCESS);
+                                for (DataBan dataBan : BanManager.getDataBan(player.getName())){
+                                    sendMessage(sender, "&f-|!> Esta baneado de " + dataBan.getContext() + " y expira " + GlobalUtils.TimeToString(dataBan.getUnbanDate(), 1), TypeMessages.INFO);
+                                }
+                            }else {
+                                sendMessage(sender, "El jugador <|" + player.getName() + "|> fue echo del contexto <| " + contextBan +
+                                        "|> seleccionado", TypeMessages.SUCCESS);
+                            }
+                        }catch (Exception ignored) {
+                            sendMessage(sender, "contexto no valido", TypeMessages.ERROR);
+                        }
+                    }else {
+                        sendMessage(sender, "Tiene que incluir el contexto", TypeMessages.ERROR);
+                    }
                 }
             }else {
                 sendMessage(sender, "el jugador no existe o esta desconectado", TypeMessages.ERROR);
@@ -60,8 +81,13 @@ public class CommandCheckBan extends BaseTabCommand {
 
     @Override
     public List<String> onTab(CommandSender sender, String[] args) {
-        if (args.length == 2) {
-            return GlobalUtils.listTab(args[1], GlobalUtils.EnumsToStrings(ContextBan.values()));
+        switch (args.length) {
+            case 2 -> {
+                return GlobalUtils.listTab(args[1], new String[]{"?","!"});
+            }
+            case 3 -> {
+                return GlobalUtils.listTab(args[2], GlobalUtils.EnumsToStrings(ContextBan.values()));
+            }
         }
         return List.of("");
     }

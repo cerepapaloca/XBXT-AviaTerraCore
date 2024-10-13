@@ -34,16 +34,12 @@ public abstract class DataBaseMySql {
         }
     }
 
-    public static String getHost() {
-        return HOST;
-    }
-
     /**
      * Para cerrar la connection, pero no es muy util porque la connexion
      * se cierra automáticamente
      */
 
-    public void close() {
+    protected void close() {
         try {
             if (connection != null && !connection.isClosed()) {
                 connection.close();

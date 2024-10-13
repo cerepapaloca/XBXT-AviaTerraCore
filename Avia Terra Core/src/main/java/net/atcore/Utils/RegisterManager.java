@@ -34,7 +34,7 @@ public class RegisterManager {
         try {
             section.enable();
             sections.add(section);
-            sendMessageConsole(section.getName() + colorSuccess + " Ok", TypeMessages.INFO, false);
+            sendMessageConsole(section.getName() + COLOR_SUCCESS + " Ok", TypeMessages.INFO, false);
         } catch (Exception e) {
             sendMessageConsole("Error al cargar: " + section.getName() + ". Plugin deshabilitado", TypeMessages.ERROR);
             throw new RuntimeException(e);

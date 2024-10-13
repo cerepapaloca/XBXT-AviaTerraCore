@@ -2,6 +2,7 @@ package net.atcore.Moderation.Ban;
 
 import net.atcore.AviaTerraCore;
 import net.atcore.Data.BanDataBase;
+import net.atcore.Messages.CategoryMessages;
 import net.atcore.Messages.TypeMessages;
 import net.atcore.Moderation.ModerationSection;
 import net.atcore.Utils.GlobalUtils;
@@ -19,13 +20,6 @@ import java.util.Objects;
 import static net.atcore.Messages.MessagesManager.*;
 
 public class BanManager extends BanDataBase {
-
-    //todo falta cositas para tener el sistema de baneo
-
-    public static void unBanPlayer(String name, ContextBan context) {
-
-        sendMessageConsole("Se desbaneo el jugador <|" + name, TypeMessages.INFO);
-    }
 
     public static void banPlayer(Player player, String reason, long time, ContextBan contextBan, String nameAuthor) {
         banPlayer(player.getName(),
@@ -103,12 +97,19 @@ public class BanManager extends BanDataBase {
                 if (ban.getContext().equals(context)) {//saber si el contexto del check le corresponde al baneo
                     long unbanDate = ban.getUnbanDate();
                     long currentTime = System.currentTimeMillis();
+                    String time;
+                    if (unbanDate == 0){
+                        time = "Permanente";
+                    }else {
+                        time = GlobalUtils.TimeToString(currentTime - unbanDate,1);
+                    }
                     if (unbanDate == 0 || currentTime < unbanDate) {//para saber si él baneo ya expiro
                         sendMessageConsole(player.getName() + " se echo por que estar baneado de: " + context.name() +
-                                ". Se detecto por Nombre: <|" + checkName + "|> por ip: <|" + checkIp, TypeMessages.WARNING);
+                                ". Se detecto por Nombre: <|" + checkName + "|> por ip: <|" + checkIp + "|>. tiempo restante " +
+                                "<|" +  time + "|> ", TypeMessages.INFO, CategoryMessages.BAN);
                         return kickBan(ban);
                     } else {//eliminar él baneó cuando expiro y realiza en un hilo aparte para que no pete el servidor
-                        Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(), () -> ModerationSection.getBanManager().removeBanPlayer(player.getName(), ban.getContext(), "Expiro"));
+                        Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(), () -> ModerationSection.getBanManager().removeBanPlayer(player.getName(), ban.getContext(), "Servidor (Expiro)"));
                         return null;
                     }
                 } else{
@@ -124,12 +125,19 @@ public class BanManager extends BanDataBase {
     private static String kickBan(DataBan dataBan) {
         String contextName = dataBan.getContext().name().toLowerCase().replace("_", " ");
         if (Objects.equals(dataBan.getContext().name(), "GLOBAL")) contextName = "Avia Terra";
+        String time;
+        if (dataBan.getUnbanDate() == 0){
+            time = "&lPermanente";
+        }else {
+            time =GlobalUtils.TimeToString(dataBan.getUnbanDate() - System.currentTimeMillis(), 1) ;
+        }
 
         String reasonFinal = ChatColor.translateAlternateColorCodes('&',
-                colorInfo + "Estas baneado de &o" + contextName + "&r\n" +
-                colorInfo + "Expira en: " + colorEspacial + GlobalUtils.TimeToString(dataBan.getUnbanDate() - System.currentTimeMillis(), 1) + "\n" +
-                colorInfo + "Razón de baneo: " + colorEspacial + dataBan.getReason() + "\n" +
-                colorInfo + "Apelación de ban: " + linkDiscord);
+                        "&c&l &m  &r&c&lAviaBans&m  \n&r"+
+                        "&c" + "Estas baneado de &4&o" + contextName + "&r\n" +
+                        "&c" + "Expira en: " + "&4" + time + "\n" +
+                        "&c" + "Razón de baneo: " + "&4" + dataBan.getReason() + "\n" +
+                        "&c" + "Apelación de ban: " +  "&4" + LINK_DISCORD);
         Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> {
             Player player = null;
             if (dataBan.getUuid() != null) player = Bukkit.getPlayer(dataBan.getUuid());

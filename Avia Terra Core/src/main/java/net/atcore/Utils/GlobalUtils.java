@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-import static net.atcore.Messages.MessagesManager.colorError;
+import static net.atcore.Messages.MessagesManager.COLOR_ERROR;
 
 @UtilityClass//Le añade static a todos los métodos y a las variables
 public final class GlobalUtils {
@@ -33,6 +33,7 @@ public final class GlobalUtils {
 
     public @NotNull String applyGradient(@NotNull String input, char in) {
         if (input.contains("</#"))input = input.replace("/","");
+        input = input.replace("##","#");
         StringBuilder gradientText = new StringBuilder();
 
         for (String s : input.split("::")){
@@ -72,7 +73,7 @@ public final class GlobalUtils {
                 list.addAll(Arrays.asList(others));
                 return list;
             }else{
-                return List.of(ChatColor.translateAlternateColorCodes('&',colorError + "Error. no tiene s, m, h, d. al final del argumento"));
+                return List.of(ChatColor.translateAlternateColorCodes('&', COLOR_ERROR + "Error. no tiene s, m, h, d. al final del argumento"));
             }
         }else {
             return listTab(arg, others);

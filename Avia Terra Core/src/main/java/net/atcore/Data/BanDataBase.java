@@ -65,6 +65,24 @@ public class BanDataBase extends DataBaseMySql {
 
     @Override
     protected void createTable() {
+        String checkTableSQL = "SELECT COUNT(*) FROM information_schema.tables " +
+                "WHERE table_schema = ? AND table_name = ?";
+
+        try (PreparedStatement stmt = getConnection().prepareStatement(checkTableSQL)) {//revisa si la tabla existe
+            stmt.setString(1, "aviaterra");
+            stmt.setString(2, "bans");
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    if (rs.getInt(1) > 0) {
+                        sendMessageConsole("MySql " + MessagesManager.COLOR_SUCCESS + "Ok", TypeMessages.INFO);
+                        return;//si existe, se detiene
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         String createTableSQL = "CREATE TABLE IF NOT EXISTS bans (" +
                 "id INT AUTO_INCREMENT PRIMARY KEY, " +
                 "name VARCHAR(36) NOT NULL, " +
@@ -82,7 +100,7 @@ public class BanDataBase extends DataBaseMySql {
             statement.executeUpdate(createTableSQL);
             statement.executeUpdate(addUniqueKeySQL);
             reloadDatabase();
-            sendMessageConsole("MySql " + MessagesManager.colorSuccess + "Ok", TypeMessages.INFO);
+            sendMessageConsole("MySql " + MessagesManager.COLOR_SUCCESS + "Ok", TypeMessages.INFO);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -180,7 +198,7 @@ public class BanDataBase extends DataBaseMySql {
             }
             sendMessageConsole("el jugador <|" + name + "|> fue baneado de <|" + context + "|> durante <|" +
                     tiempoDeBaneo + "|> por el jugador <|" + author +
-                    "|> y la razón es <|" + reason + "|>      ", TypeMessages.SUCCESS, CategoryMessages.BAN);
+                    "|> y la razón es <|" + reason + "|> ", TypeMessages.SUCCESS, CategoryMessages.BAN);
             return addListDataBan(name, uuid, ip, reason, unbanDate, banDate, context, author);
         } catch (SQLException | UnknownHostException e) {
             throw new RuntimeException(e);
@@ -200,7 +218,7 @@ public class BanDataBase extends DataBaseMySql {
             }else{
                 reloadDatabase();
             }
-            sendMessageConsole("Se Desbano el juagor <|" + name + "|> en el contexto <|" + context.name() + "|> " +
+            sendMessageConsole("Se Desbano el jugador <|" + name + "|> en el contexto <|" + context.name() + "|> " +
                     "por <|" + author + "|>", TypeMessages.INFO, CategoryMessages.BAN);
         } catch (SQLException e) {
             throw new RuntimeException(e);
