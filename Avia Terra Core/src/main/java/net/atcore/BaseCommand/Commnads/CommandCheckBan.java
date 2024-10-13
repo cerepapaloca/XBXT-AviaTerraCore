@@ -3,7 +3,6 @@ package net.atcore.BaseCommand.Commnads;
 import net.atcore.BaseCommand.BaseTabCommand;
 import net.atcore.Messages.TypeMessages;
 import net.atcore.Moderation.Ban.BanManager;
-import net.atcore.Moderation.Ban.CheckBanListener;
 import net.atcore.Moderation.Ban.ContextBan;
 import net.atcore.Moderation.Ban.DataBan;
 import net.atcore.Utils.GlobalUtils;
@@ -82,6 +81,9 @@ public class CommandCheckBan extends BaseTabCommand {
     @Override
     public List<String> onTab(CommandSender sender, String[] args) {
         switch (args.length) {
+            case 1 -> {
+                return null;
+            }
             case 2 -> {
                 return GlobalUtils.listTab(args[1], new String[]{"?","!"});
             }

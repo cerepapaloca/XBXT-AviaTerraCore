@@ -214,7 +214,7 @@ public class BanDataBase extends DataBaseMySql {
             statement.executeUpdate();
             Player player = Bukkit.getPlayer(name);
             if (player != null){
-                listDataBanByNAME.remove(player.getUniqueId());
+                listDataBanByNAME.remove(player.getName());
             }else{
                 reloadDatabase();
             }

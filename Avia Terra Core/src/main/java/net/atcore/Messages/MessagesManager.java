@@ -118,7 +118,6 @@ public final class MessagesManager {
     }
 
     private static String addProprieties(String message, TypeMessages type, CategoryMessages categoryMessages) {
-        Bukkit.getConsoleSender().sendMessage(message);
         if (categoryMessages != CategoryMessages.PRIVATE) {
             while (Character.isSpaceChar(message.charAt(message.length()-1))){
                 message = message.substring(0, message.length()-1);
