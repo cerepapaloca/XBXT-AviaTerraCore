@@ -1,12 +1,12 @@
 package net.atcore.Data;
 
 import lombok.Getter;
+import net.atcore.AviaTerraCore;
 import net.atcore.Section;
 import org.bukkit.Bukkit;
 
 import java.util.HashSet;
 
-import static net.atcore.AviaTerraCore.PLUGIN;
 import static net.atcore.Utils.RegisterManager.register;
 
 public class DataSection implements Section {
@@ -17,7 +17,7 @@ public class DataSection implements Section {
     @Override
     public void enable() {
         register(mySQLConnection = new BanDataBase());
-        Bukkit.getScheduler().runTaskAsynchronously(PLUGIN, () -> {
+        Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(), () -> {
             for (DataBaseMySql db : dataBases) db.createTable();
         });
     }
@@ -29,7 +29,7 @@ public class DataSection implements Section {
 
     @Override
     public void reloadConfig() {
-        Bukkit.getScheduler().runTaskAsynchronously(PLUGIN, () -> {
+        Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(), () -> {
             for (DataBaseMySql dataBaseMySql : dataBases) dataBaseMySql.reloadDatabase();
         });
     }

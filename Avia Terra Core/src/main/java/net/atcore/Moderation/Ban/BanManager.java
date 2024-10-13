@@ -1,5 +1,6 @@
 package net.atcore.Moderation.Ban;
 
+import net.atcore.AviaTerraCore;
 import net.atcore.Data.BanDataBase;
 import net.atcore.Messages.TypeMessages;
 import net.atcore.Moderation.ModerationSection;
@@ -15,7 +16,6 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Objects;
 
-import static net.atcore.AviaTerraCore.PLUGIN;
 import static net.atcore.Messages.MessagesManager.*;
 
 public class BanManager extends BanDataBase {
@@ -108,7 +108,7 @@ public class BanManager extends BanDataBase {
                                 ". Se detecto por Nombre: <|" + checkName + "|> por ip: <|" + checkIp, TypeMessages.WARNING);
                         return kickBan(ban);
                     } else {//eliminar él baneó cuando expiro y realiza en un hilo aparte para que no pete el servidor
-                        Bukkit.getScheduler().runTaskAsynchronously(PLUGIN, () -> ModerationSection.getBanManager().removeBanPlayer(player.getName(), ban.getContext(), "Expiro"));
+                        Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(), () -> ModerationSection.getBanManager().removeBanPlayer(player.getName(), ban.getContext(), "Expiro"));
                         return null;
                     }
                 } else{
@@ -130,7 +130,7 @@ public class BanManager extends BanDataBase {
                 colorInfo + "Expira en: " + colorEspacial + GlobalUtils.TimeToString(dataBan.getUnbanDate() - System.currentTimeMillis(), 1) + "\n" +
                 colorInfo + "Razón de baneo: " + colorEspacial + dataBan.getReason() + "\n" +
                 colorInfo + "Apelación de ban: " + linkDiscord);
-        Bukkit.getScheduler().runTask(PLUGIN, () -> {
+        Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> {
             Player player = null;
             if (dataBan.getUuid() != null) player = Bukkit.getPlayer(dataBan.getUuid());
             if (player != null) player.kickPlayer(reasonFinal);

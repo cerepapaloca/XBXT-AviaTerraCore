@@ -35,6 +35,6 @@ public class ChatListener implements Listener {
             public void run() {
                 listCooldown.remove(uuid);
             }
-        }.runTaskLater(AviaTerraCore.PLUGIN, 20*4);//4 segundos de cooldown
+        }.runTaskLater(AviaTerraCore.getInstance(), 20*4);//4 segundos de cooldown
     }
 }

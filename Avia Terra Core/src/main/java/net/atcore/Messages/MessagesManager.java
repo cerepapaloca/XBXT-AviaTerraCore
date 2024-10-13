@@ -131,7 +131,7 @@ public final class MessagesManager {
                 return;
             }
         }
-        Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.PLUGIN, () -> {
+        Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(), () -> {
             String finalMessage = "";
             switch (type) {
                 case SUCCESS -> finalMessage = "『🟩』 " + message;
@@ -144,7 +144,7 @@ public final class MessagesManager {
             if (channel != null) {
                 channel.sendMessage(finalMessage.replace("<|", "**").replace("|>", "**")).queue();
             } else {
-                sendMessageConsole("No se encontró el canal de discord", TypeMessages.WARNING);
+                throw new DiscordChannelNotFound("No se encontró canal de discord para los registro " + type.name());
             }
         });
     }

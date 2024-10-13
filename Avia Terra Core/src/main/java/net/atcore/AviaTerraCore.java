@@ -1,5 +1,6 @@
 package net.atcore;
 
+import lombok.Getter;
 import lombok.SneakyThrows;
 import net.atcore.BaseCommand.CommandSection;
 import net.atcore.Data.DataSection;
@@ -16,15 +17,15 @@ import static net.atcore.Messages.MessagesManager.colorSuccess;
 import static net.atcore.Messages.MessagesManager.sendMessageConsole;
 
 public final class AviaTerraCore extends JavaPlugin {
-
-    public static AviaTerraCore PLUGIN;
+    @Getter
+    private static AviaTerraCore instance;
     public static long timeCurrent;
     public static final String TOKEN_BOT = "MTI5MTUzODM1MjY0NjEzMTc3NA.GDwtcq.azwlvX6fWKbusXk8sOyzRMK78Qe9CwbHy_pmWk";
     public static JDA BOT_DISCORD;
 
     @Override
     public void onLoad(){
-        PLUGIN = this;
+        instance = this;
 
     }
 

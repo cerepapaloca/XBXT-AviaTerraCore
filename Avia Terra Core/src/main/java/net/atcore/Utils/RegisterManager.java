@@ -1,4 +1,5 @@
 package net.atcore.Utils;
+import net.atcore.AviaTerraCore;
 import net.atcore.BaseCommand.BaseCommand;
 import net.atcore.BaseCommand.CommandSection;
 import net.atcore.Data.DataBaseMySql;
@@ -12,7 +13,6 @@ import org.bukkit.event.Listener;
 
 import java.util.HashSet;
 
-import static net.atcore.AviaTerraCore.PLUGIN;
 import static net.atcore.Messages.MessagesManager.*;
 import static org.bukkit.Bukkit.getServer;
 
@@ -26,7 +26,7 @@ public class RegisterManager {
 
     public static void register(Listener @NotNull ... listeners) {
         for (Listener listener : listeners) {
-            getServer().getPluginManager().registerEvents(listener , PLUGIN);
+            getServer().getPluginManager().registerEvents(listener , AviaTerraCore.getInstance());
         }
     }
 
@@ -43,7 +43,7 @@ public class RegisterManager {
 
     public static void register(@NotNull BaseCommand command) {
         CommandSection.getCommandHandler().getCommands().add(command);
-        PluginCommand pluginCommand = PLUGIN.getCommand(command.getName());
+        PluginCommand pluginCommand = AviaTerraCore.getInstance().getCommand(command.getName());
         pluginCommand.setExecutor(CommandSection.getCommandHandler());
         pluginCommand.setTabCompleter(CommandSection.getCommandHandler());
     }
