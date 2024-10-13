@@ -5,14 +5,18 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 import static net.atcore.Messages.MessagesManager.sendMessageConsole;
+
+import net.atcore.Exception.ConnedDataBaseMainThread;
 import net.atcore.Messages.TypeMessages;
+import org.bukkit.Bukkit;
 
 public abstract class DataBaseMySql {
     private static Connection connection;
 
-    private static final String HOST = "xbxtpvp.xyz";//este domino es un misterio
+    private static final String HOST = "147.185.221.20";
+    private static final String PORT = "2149";
     private static final String DATABASE = "AviaTerra";
-    private static final String USER = "root";
+    private static final String USER = "azurex";
     private static final String PASSWORD = "AdeptusAzurex1313#waos";
 
     /**
@@ -21,7 +25,7 @@ public abstract class DataBaseMySql {
      */
 
     private static void connect() {
-        String url = "jdbc:mysql://" + HOST + "/" + DATABASE;
+        String url = "jdbc:mysql://" + HOST + ":" + PORT + "/" + DATABASE;
         try {
             connection = DriverManager.getConnection(url, USER, PASSWORD);
             sendMessageConsole("Conexión a MySQL establecida", TypeMessages.SUCCESS);
@@ -64,6 +68,9 @@ public abstract class DataBaseMySql {
      */
 
     protected static Connection getConnection() {
+        if (Bukkit.isPrimaryThread()){
+            throw new ConnedDataBaseMainThread("No usar el hilo principal para la base de datos");
+        }
         try {
             if (connection == null || connection.isClosed()) {
                 sendMessageConsole("Conexión perdida Reconectando...", TypeMessages.WARNING);

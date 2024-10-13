@@ -1,6 +1,8 @@
 package net.atcore.Messages;
 
 import net.atcore.AviaTerraCore;
+import net.atcore.Exception.ConnedDataBaseMainThread;
+import net.atcore.Exception.DiscordChannelNotFound;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
@@ -9,6 +11,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.zip.DataFormatException;
 
 /**
  * En esta clase esta tod0 relacionado con los colores y envío de mensajes todos los mensajes tiene que pasar por quí
@@ -110,7 +114,10 @@ public final class MessagesManager {
 
     private static String addProprieties(String message, TypeMessages type, CategoryMessages categoryMessages) {
         if (categoryMessages != CategoryMessages.PRIVATE) {
-            message = message + "&c [R]";
+            while (Character.isSpaceChar(message.charAt(message.length()-1))){
+                message = message.substring(0, message.length()-1);
+            }
+            message = message + "&c[R]";
         }
         return message.replace("<|",colorEspacial).replace("|>",selectColore(type));
     }
@@ -132,24 +139,13 @@ public final class MessagesManager {
                 case WARNING -> finalMessage = "『🟨』 " + message;
                 case ERROR -> finalMessage = "『🟥』 " + message;
             }
-            try{
-                // Obtén el canal por su ID
-
-                JDA jda = JDABuilder.createDefault(AviaTerraCore.TOKEN_BOT).build();
-                jda.awaitReady();
-                TextChannel channel = jda.getTextChannelById(channelId);
-                if (channel != null) {
-                    channel.sendMessage(finalMessage.replace("<|", "**").replace("|>", "**")).queue();
-                } else {
-                    System.out.println("Canal no encontrado.");
-                }
-            }catch (InterruptedException e){
-                throw new RuntimeException(e);
+            // Obtén el canal por su ID
+            TextChannel channel = AviaTerraCore.BOT_DISCORD.getTextChannelById(channelId);
+            if (channel != null) {
+                channel.sendMessage(finalMessage.replace("<|", "**").replace("|>", "**")).queue();
+            } else {
+                sendMessageConsole("No se encontró el canal de discord", TypeMessages.WARNING);
             }
-
         });
-
-
-
     }
 }

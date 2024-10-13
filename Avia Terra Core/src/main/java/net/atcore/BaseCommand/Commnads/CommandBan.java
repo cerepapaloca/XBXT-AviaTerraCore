@@ -41,7 +41,7 @@ public class CommandBan extends BaseTabCommand {
                 }
                 long time;
                 if (args[2].equalsIgnoreCase("perma")){
-                    time = Long.MAX_VALUE - 1L ; //creo que lo banea por un par de siglos o algo así
+                    time = 0;
                 }else{
                     time = GlobalUtils.StringToMilliseconds(args[2]);
                 }

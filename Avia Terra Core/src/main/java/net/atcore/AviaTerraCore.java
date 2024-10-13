@@ -9,8 +9,10 @@ import net.atcore.Utils.RegisterManager;
 import net.atcore.Moderation.ModerationSection;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import static net.atcore.Messages.MessagesManager.colorSuccess;
 import static net.atcore.Messages.MessagesManager.sendMessageConsole;
 
 public final class AviaTerraCore extends JavaPlugin {
@@ -18,10 +20,12 @@ public final class AviaTerraCore extends JavaPlugin {
     public static AviaTerraCore PLUGIN;
     public static long timeCurrent;
     public static final String TOKEN_BOT = "MTI5MTUzODM1MjY0NjEzMTc3NA.GDwtcq.azwlvX6fWKbusXk8sOyzRMK78Qe9CwbHy_pmWk";
+    public static JDA BOT_DISCORD;
 
     @Override
     public void onLoad(){
         PLUGIN = this;
+
     }
 
     @SneakyThrows
@@ -29,12 +33,20 @@ public final class AviaTerraCore extends JavaPlugin {
     public void onEnable() {
         timeCurrent = System.currentTimeMillis();
         sendMessageConsole("AviaTerra Iniciando...", TypeMessages.INFO, false);
+        Bukkit.getScheduler().runTaskAsynchronously(this, () -> {
+            BOT_DISCORD = JDABuilder.createDefault(TOKEN_BOT).build();
+            try {
+                BOT_DISCORD.awaitReady();
+                sendMessageConsole("discord bot" + colorSuccess + " Ok", TypeMessages.INFO, true);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
         RegisterManager.register(new CommandSection());
         RegisterManager.register(new ModerationSection());
         RegisterManager.register(new SecuritySection());
         RegisterManager.register(new DataSection());
-        JDA jda = JDABuilder.createDefault(TOKEN_BOT).build();
-        jda.awaitReady();
         //enableModules();
         sendMessageConsole("AviaTerra Iniciado. <|" + (System.currentTimeMillis() - timeCurrent) + "ms", TypeMessages.SUCCESS, false);
     }

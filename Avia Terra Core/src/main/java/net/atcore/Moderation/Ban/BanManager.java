@@ -36,11 +36,12 @@ public class BanManager extends BanDataBase {
     }
 
     public static void banPlayer(String name, String uuid, String ip, String reason, long time, ContextBan context, String nameAuthor) {
+        long finalTime = time == 0 ? 0 : time + System.currentTimeMillis();
         kickBan(addBanPlayer(name,
                 uuid,
                 ip,
                 reason,
-                (time + System.currentTimeMillis()),
+                (finalTime),
                 System.currentTimeMillis(),
                 context.name(),
                 nameAuthor)
@@ -102,8 +103,7 @@ public class BanManager extends BanDataBase {
                 if (ban.getContext().equals(context)) {//saber si el contexto del check le corresponde al baneo
                     long unbanDate = ban.getUnbanDate();
                     long currentTime = System.currentTimeMillis();
-
-                    if (currentTime < unbanDate) {//para saber si él baneo ya expiro
+                    if (unbanDate == 0 || currentTime < unbanDate) {//para saber si él baneo ya expiro
                         sendMessageConsole(player.getName() + " se echo por que estar baneado de: " + context.name() +
                                 ". Se detecto por Nombre: <|" + checkName + "|> por ip: <|" + checkIp, TypeMessages.WARNING);
                         return kickBan(ban);

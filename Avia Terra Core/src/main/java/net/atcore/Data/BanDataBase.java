@@ -66,19 +66,21 @@ public class BanDataBase extends DataBaseMySql {
     @Override
     protected void createTable() {
         String createTableSQL = "CREATE TABLE IF NOT EXISTS bans (" +
+                "id INT AUTO_INCREMENT PRIMARY KEY, " +
                 "name VARCHAR(36) NOT NULL, " +
-                "uuid VARCHAR(100)," +
+                "uuid VARCHAR(100), " +
                 "ip VARCHAR(45), " +
                 "reason TEXT, " +
                 "unban_date BIGINT NOT NULL, " +
                 "ban_date BIGINT, " +
-                "context VARCHAR(255) NOT NULL," +
-                "author VARCHAR(36), " +
-                "PRIMARY KEY (name) " +
+                "context VARCHAR(255) NOT NULL, " +
+                "author VARCHAR(36)" +
                 ");";
+        String addUniqueKeySQL = "ALTER TABLE bans ADD UNIQUE KEY unique_name_context (name, context)";
         try (Connection connection = getConnection();
              Statement statement = connection.createStatement()) {
             statement.executeUpdate(createTableSQL);
+            statement.executeUpdate(addUniqueKeySQL);
             reloadDatabase();
             sendMessageConsole("MySql " + MessagesManager.colorSuccess + "Ok", TypeMessages.INFO);
         } catch (SQLException e) {
@@ -156,7 +158,8 @@ public class BanDataBase extends DataBaseMySql {
     public static DataBan addBanPlayer(String name, String uuid, String ip, String reason, long unbanDate, long banDate, String context, String author) {
         String sql = "INSERT INTO bans (name, uuid, ip, reason, unban_date, ban_date, context, author) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?) " +
-                "ON DUPLICATE KEY UPDATE name = VALUES(name), uuid = VALUES(uuid), ip = VALUES(ip), reason = VALUES(reason), " +
+                "ON DUPLICATE KEY UPDATE " +
+                "name = VALUES(name), uuid = VALUES(uuid), ip = VALUES(ip), reason = VALUES(reason), " +
                 "unban_date = VALUES(unban_date), ban_date = VALUES(ban_date), context = VALUES(context), author = VALUES(author)";
         try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -169,9 +172,15 @@ public class BanDataBase extends DataBaseMySql {
             statement.setString(7, context);
             statement.setString(8, author);
             statement.executeUpdate();
+            String tiempoDeBaneo;
+            if (unbanDate == 0){
+                tiempoDeBaneo = "Permanente";
+            }else {
+                tiempoDeBaneo = GlobalUtils.TimeToString(unbanDate - banDate, 2);
+            }
             sendMessageConsole("el jugador <|" + name + "|> fue baneado de <|" + context + "|> durante <|" +
-                    GlobalUtils.TimeToString(unbanDate - banDate, 2) + "|> por el jugador <|" + author +
-                    "|> y la razón es <|" + reason + "|>", TypeMessages.SUCCESS, CategoryMessages.BAN);
+                    tiempoDeBaneo + "|> por el jugador <|" + author +
+                    "|> y la razón es <|" + reason + "|>      ", TypeMessages.SUCCESS, CategoryMessages.BAN);
             return addListDataBan(name, uuid, ip, reason, unbanDate, banDate, context, author);
         } catch (SQLException | UnknownHostException e) {
             throw new RuntimeException(e);
@@ -192,7 +201,7 @@ public class BanDataBase extends DataBaseMySql {
                 reloadDatabase();
             }
             sendMessageConsole("Se Desbano el juagor <|" + name + "|> en el contexto <|" + context.name() + "|> " +
-                    "por <|" + author, TypeMessages.INFO, CategoryMessages.BAN);
+                    "por <|" + author + "|>", TypeMessages.INFO, CategoryMessages.BAN);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
