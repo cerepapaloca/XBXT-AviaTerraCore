@@ -19,7 +19,6 @@ import static net.atcore.Messages.MessagesManager.sendMessageConsole;
 public final class AviaTerraCore extends JavaPlugin {
     @Getter
     private static AviaTerraCore instance;
-    public static long timeCurrent;
     public static final String TOKEN_BOT = "MTI5MTUzODM1MjY0NjEzMTc3NA.GDwtcq.azwlvX6fWKbusXk8sOyzRMK78Qe9CwbHy_pmWk";
     public static JDA BOT_DISCORD;
 
@@ -32,7 +31,7 @@ public final class AviaTerraCore extends JavaPlugin {
     @SneakyThrows
     @Override
     public void onEnable() {
-        timeCurrent = System.currentTimeMillis();
+        long timeCurrent = System.currentTimeMillis();
         sendMessageConsole("AviaTerra Iniciando...", TypeMessages.INFO, false);
         Bukkit.getScheduler().runTaskAsynchronously(this, () -> {
             BOT_DISCORD = JDABuilder.createDefault(TOKEN_BOT).build();
