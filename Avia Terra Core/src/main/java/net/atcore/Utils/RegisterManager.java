@@ -6,6 +6,7 @@ import net.atcore.Data.DataBaseMySql;
 import net.atcore.Data.DataSection;
 import net.atcore.Messages.TypeMessages;
 import net.atcore.Section;
+import org.bukkit.command.CommandException;
 import org.bukkit.command.PluginCommand;
 import org.jetbrains.annotations.NotNull;
 
@@ -44,6 +45,9 @@ public class RegisterManager {
     public static void register(@NotNull BaseCommand command) {
         CommandSection.getCommandHandler().getCommands().add(command);
         PluginCommand pluginCommand = AviaTerraCore.getInstance().getCommand(command.getName());
+        if (pluginCommand == null) {
+            throw new CommandException(command.getName() + " El comando no existe. tiene que añadirlo en plugin.yml");
+        }
         pluginCommand.setExecutor(CommandSection.getCommandHandler());
         pluginCommand.setTabCompleter(CommandSection.getCommandHandler());
     }

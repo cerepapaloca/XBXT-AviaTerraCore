@@ -37,7 +37,7 @@ public abstract class BaseCommand {
     }
 
     public BaseCommand(@NotNull String name, @NotNull  String usage, @NotNull  String permissions, @NotNull  Boolean isHide, @Nullable String description, @Nullable String[] subCommands) {
-        this.name = name;;
+        this.name = name;
         this.usage = usage;
         this.permissions = new String[]{permissions};
         this.description = description == null || description.isEmpty() ? "&oSin Descripción" : description;

@@ -1,13 +1,19 @@
 package net.atcore.Utils;
 
 import lombok.experimental.UtilityClass;
+import net.atcore.AviaTerraCore;
 import net.md_5.bungee.api.ChatColor;
+import org.bukkit.NamespacedKey;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -15,6 +21,8 @@ import static net.atcore.Messages.MessagesManager.COLOR_ERROR;
 
 @UtilityClass//Le añade static a todos los métodos y a las variables
 public final class GlobalUtils {
+
+    public final NamespacedKey KEY_ANTI_DUPE = new NamespacedKey(AviaTerraCore.getInstance(), "uuid");
 
     public @NotNull String applyGradient(String input){
         return applyGradient(input , 'r');
@@ -177,7 +185,7 @@ public final class GlobalUtils {
                 }
             }
             case 1 -> {
-                return days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
+                return days + "d " + hours + "h " + minutes + "m " + seconds + "s";
             }
             case 2 -> {
                 String date = "";
@@ -212,7 +220,7 @@ public final class GlobalUtils {
      * @return el tiempo en ms
      */
 
-    public static long StringToMilliseconds(@NotNull String time) {
+    public long StringToMilliseconds(@NotNull String time) {
         time = time.toLowerCase();
         char unit = time.charAt(time.length() - 1);
         long value = Long.parseLong(time.substring(0, time.length() - 1));
@@ -228,5 +236,13 @@ public final class GlobalUtils {
                     value * 1000 * 60 * 60 * 24;
             default -> throw new IllegalArgumentException("Unidad de tiempo no válida: " + unit);
         };
+    }
+
+    public ItemStack addProtectionAntiDupe(ItemStack item){
+        ItemMeta meta = item.getItemMeta();
+        if (meta == null) return item;
+        meta.getPersistentDataContainer().set(KEY_ANTI_DUPE, PersistentDataType.STRING, UUID.randomUUID().toString());
+        item.setItemMeta(meta);
+        return item;
     }
 }

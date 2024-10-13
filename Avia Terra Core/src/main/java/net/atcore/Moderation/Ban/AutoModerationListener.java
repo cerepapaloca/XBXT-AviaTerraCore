@@ -2,8 +2,9 @@ package net.atcore.Moderation.Ban;
 
 import net.atcore.AviaTerraCore;
 import net.atcore.Messages.TypeMessages;
+import net.atcore.Moderation.ModerationSection;
+import net.atcore.Utils.GlobalUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -42,7 +43,7 @@ public class AutoModerationListener implements Listener {
                         if (ChatBotTime.size() > 1) {
                             for (Player player : ChatBotTime) {
                                 assert player != null;
-                                BanManager.banPlayer(player, "Por Bot",1000 * 60 * 60 * 24 * 5L, ContextBan.CHAT, "Servidor");
+                                ModerationSection.getBanManager().banPlayer(player, "Por Bot",1000 * 60 * 60 * 24 * 5L, ContextBan.CHAT, "Servidor");
                             }
                             sendMessageConsole("Purga terminada", TypeMessages.SUCCESS);
                             ChatBotTime.clear();
@@ -66,7 +67,7 @@ public class AutoModerationListener implements Listener {
                 sendMessageConsole("Este jugador usa AutoBotChat: (" + timeDifferenceCount.get(player.getUniqueId()) + "/3) " + "Tiene una precision de "
                         + (DifferenceOld - DifferenceNew) + " ms", TypeMessages.WARNING);
                 if (timeDifferenceCount.get(player.getUniqueId()) >= 3){
-                    BanManager.banPlayer(player, "Por Bot",1000 * 60 * 60 * 24 * 5L, ContextBan.CHAT, "Servidor");
+                    ModerationSection.getBanManager().banPlayer(player, "Por Bot",1000 * 60 * 60 * 24 * 5L, ContextBan.CHAT, "Servidor");
                     timeDifferenceCount.remove(player.getUniqueId());
                     timeDifferenceOld.remove(player.getUniqueId());
                     timeDifferenceNew.remove(player.getUniqueId());
@@ -83,14 +84,13 @@ public class AutoModerationListener implements Listener {
         Player player = (Player) event.getWhoClicked();
         Map<String, Integer> itemCounts = new HashMap<>();
 
-        NamespacedKey key = new NamespacedKey(AviaTerraCore.getInstance(), "uuid");
-
         for (ItemStack item : player.getInventory()) {
             if (item == null) continue;
+            if (item.getItemMeta() == null) continue;
 
             PersistentDataContainer dataContainer = item.getItemMeta().getPersistentDataContainer();
-            if (dataContainer.has(key, PersistentDataType.STRING)) {
-                String uniqueId = dataContainer.get(key, PersistentDataType.STRING);
+            if (dataContainer.has(GlobalUtils.KEY_ANTI_DUPE, PersistentDataType.STRING)) {
+                String uniqueId = dataContainer.get(GlobalUtils.KEY_ANTI_DUPE, PersistentDataType.STRING);
 
                 itemCounts.put(uniqueId, itemCounts.getOrDefault(uniqueId, 0) + 1);
             }
@@ -99,7 +99,7 @@ public class AutoModerationListener implements Listener {
         for (Map.Entry<String, Integer> entry : itemCounts.entrySet()) {
             if (entry.getValue() > 1) {
                 player.getInventory().clear();
-                Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(), () -> BanManager.banPlayer(player, "Por estar dupeando",1000 * 60 * 60 * 24 * 5L, ContextBan.GLOBAL, "Servidor"));
+                Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(), () -> ModerationSection.getBanManager().banPlayer(player, "Por estar dupeando",1000 * 60 * 60 * 24 * 5L, ContextBan.GLOBAL, "Servidor"));
 
             }
         }

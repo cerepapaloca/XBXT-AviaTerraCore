@@ -122,7 +122,7 @@ public final class MessagesManager {
             while (Character.isSpaceChar(message.charAt(message.length()-1))){
                 message = message.substring(0, message.length()-1);
             }
-            message = message + "&c[R]";
+            message = message + " &c[R]";
         }
         return message.replace("<|", COLOR_ESPECIAL).replace("|>",selectColore(type)).replace("|!>", selectColore(type));
     }

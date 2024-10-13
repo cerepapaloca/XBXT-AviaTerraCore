@@ -14,6 +14,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.net.InetAddress;
 import java.sql.SQLException;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 
@@ -21,7 +22,7 @@ import static net.atcore.Messages.MessagesManager.*;
 
 public class BanManager extends BanDataBase {
 
-    public static void banPlayer(Player player, String reason, long time, ContextBan contextBan, String nameAuthor) {
+    public void banPlayer(Player player, String reason, long time, ContextBan contextBan, String nameAuthor) {
         banPlayer(player.getName(),
                 player.getUniqueId().toString(),
                 Objects.requireNonNull(player.getAddress()).getHostName(),
@@ -29,7 +30,7 @@ public class BanManager extends BanDataBase {
                 nameAuthor);
     }
 
-    public static void banPlayer(String name, String uuid, String ip, String reason, long time, ContextBan context, String nameAuthor) {
+    public void banPlayer(String name, String uuid, String ip, String reason, long time, ContextBan context, String nameAuthor) {
         long finalTime = time == 0 ? 0 : time + System.currentTimeMillis();
         kickBan(addBanPlayer(name,
                 uuid,
@@ -61,7 +62,7 @@ public class BanManager extends BanDataBase {
     public static String checkBan(@NotNull Player player, @Nullable InetAddress ip, @Nullable ContextBan context) {
         boolean checkName = false;
         boolean checkIp = false;
-        List<DataBan> dataBans = null;
+        HashSet<DataBan> dataBans = null;
 
         if (listDataBanByNAME.containsKey(player.getName())) {
             dataBans = getDataBan(player.getName());
@@ -101,12 +102,12 @@ public class BanManager extends BanDataBase {
                     if (unbanDate == 0){
                         time = "Permanente";
                     }else {
-                        time = GlobalUtils.TimeToString(currentTime - unbanDate,1);
+                        time = GlobalUtils.TimeToString(unbanDate - currentTime,1);
                     }
                     if (unbanDate == 0 || currentTime < unbanDate) {//para saber si él baneo ya expiro
                         sendMessageConsole(player.getName() + " se echo por que estar baneado de: " + context.name() +
                                 ". Se detecto por Nombre: <|" + checkName + "|> por ip: <|" + checkIp + "|>. tiempo restante " +
-                                "<|" +  time + "|> ", TypeMessages.INFO, CategoryMessages.BAN);
+                                "<|" +  time + "|>", TypeMessages.INFO, CategoryMessages.BAN);
                         return kickBan(ban);
                     } else {//eliminar él baneó cuando expiro y realiza en un hilo aparte para que no pete el servidor
                         Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(), () -> ModerationSection.getBanManager().removeBanPlayer(player.getName(), ban.getContext(), "Servidor (Expiro)"));
@@ -133,11 +134,13 @@ public class BanManager extends BanDataBase {
         }
 
         String reasonFinal = ChatColor.translateAlternateColorCodes('&',
-                        "&c&l &m  &r&c&lAviaBans&m  \n&r"+
+                        "&c&m &r &c&m       &r  &4&lAviaBans&c  &m        &r &c&m \n\n&r"+
                         "&c" + "Estas baneado de &4&o" + contextName + "&r\n" +
                         "&c" + "Expira en: " + "&4" + time + "\n" +
                         "&c" + "Razón de baneo: " + "&4" + dataBan.getReason() + "\n" +
-                        "&c" + "Apelación de ban: " +  "&4" + LINK_DISCORD);
+                        "&c" + "Apelación de ban: " +  "&4" + LINK_DISCORD + "\n\n" +
+                        "&c" + "&m &r &c&m                                 &r &c&m "
+                );
         Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> {
             Player player = null;
             if (dataBan.getUuid() != null) player = Bukkit.getPlayer(dataBan.getUuid());

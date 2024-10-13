@@ -3,8 +3,8 @@ package net.atcore.BaseCommand.Commnads;
 import net.atcore.AviaTerraCore;
 import net.atcore.BaseCommand.BaseTabCommand;
 import net.atcore.Messages.TypeMessages;
-import net.atcore.Moderation.Ban.BanManager;
 import net.atcore.Moderation.Ban.ContextBan;
+import net.atcore.Moderation.ModerationSection;
 import net.atcore.Utils.GlobalUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -54,9 +54,9 @@ public class CommandBan extends BaseTabCommand {
                 Player player = Bukkit.getPlayer(args[0]);
                 Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance() , () -> {//hilo aparte por si no Boom!!
                     if (player != null) {
-                        BanManager.banPlayer(player, finalReason, time, contextBan, sender.getName());
+                        ModerationSection.getBanManager().banPlayer(player, finalReason, time, contextBan, sender.getName());
                     }else {
-                        BanManager.banPlayer(args[0], null, null, finalReason, time, contextBan, sender.getName());
+                        ModerationSection.getBanManager().banPlayer(args[0], null, null, finalReason, time, contextBan, sender.getName());
                     }
                     sendMessage(sender, "El jugador fue baneado", TypeMessages.SUCCESS);
                 });

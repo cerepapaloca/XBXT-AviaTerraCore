@@ -7,7 +7,6 @@ import net.atcore.Moderation.Ban.ContextBan;
 import net.atcore.Moderation.Ban.DataBan;
 import net.atcore.Moderation.Ban.SearchBanBy;
 import net.atcore.Utils.GlobalUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -25,12 +24,12 @@ public class BanDataBase extends DataBaseMySql {
     protected static final HashMap<InetAddress, HashSet<DataBan>> listDataBanByIP = new HashMap<>();
 
 
-    public static List<DataBan> getDataBan(String name) {
-        return listDataBanByNAME.get(name).stream().toList();
+    public static HashSet<DataBan> getDataBan(String name) {
+        return listDataBanByNAME.get(name);
     }
 
-    public static List<DataBan> getDataBan(InetAddress ip) {
-        return listDataBanByIP.get(ip).stream().toList();
+    public static HashSet<DataBan> getDataBan(InetAddress ip) {
+        return listDataBanByIP.get(ip);
     }
 
     @Override
@@ -76,6 +75,7 @@ public class BanDataBase extends DataBaseMySql {
                 if (rs.next()) {
                     if (rs.getInt(1) > 0) {
                         sendMessageConsole("MySql " + MessagesManager.COLOR_SUCCESS + "Ok", TypeMessages.INFO);
+                        reloadDatabase();
                         return;//si existe, se detiene
                     }
                 }
@@ -99,14 +99,15 @@ public class BanDataBase extends DataBaseMySql {
              Statement statement = connection.createStatement()) {
             statement.executeUpdate(createTableSQL);
             statement.executeUpdate(addUniqueKeySQL);
-            reloadDatabase();
             sendMessageConsole("MySql " + MessagesManager.COLOR_SUCCESS + "Ok", TypeMessages.INFO);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private static DataBan addListDataBan(String name,@Nullable String uuids, @Nullable String ip, String reason, long dateUnban, long dateBan, String context, String author) throws UnknownHostException {
+
+
+    private static void addListDataBan(String name, @Nullable String uuids, @Nullable String ip, String reason, long dateUnban, long dateBan, String context, String author) throws UnknownHostException {
         UUID uuid = null;
         if (uuids != null){
             uuid = UUID.fromString(uuids);
@@ -118,17 +119,16 @@ public class BanDataBase extends DataBaseMySql {
         listUUID.add(dataBan);//Añade el DataBan a la lista
         listDataBanByNAME.put(name, listUUID);//Añade la lista de DataBan Remplazando el dato
 
-        if (ip == null) return dataBan;
+        if (ip == null) return;
 
         HashSet <DataBan> listIP = listDataBanByIP.getOrDefault(ipAddress,  new HashSet<>());
         listIP.add(dataBan);
         listDataBanByIP.put(ipAddress, listIP);
 
-        return dataBan;
     }
 
-    protected static @NotNull List<DataBan> getDataBan(@NotNull Player player, InetAddress address, SearchBanBy searchBanBy) throws SQLException {
-        List<DataBan> banList = new ArrayList<>();
+    protected static @NotNull HashSet<DataBan> getDataBan(@NotNull Player player, InetAddress address, SearchBanBy searchBanBy) throws SQLException {
+        HashSet<DataBan> banList = new HashSet<>();
         PreparedStatement statement = null;
         Connection connection = getConnection();
         ResultSet resultSet;
@@ -172,8 +172,7 @@ public class BanDataBase extends DataBaseMySql {
         return banList;
     }
 
-
-    public static DataBan addBanPlayer(String name, String uuid, String ip, String reason, long unbanDate, long banDate, String context, String author) {
+    public DataBan addBanPlayer(String name, String uuid, String ip, String reason, long unbanDate, long banDate, String context, String author) {
         String sql = "INSERT INTO bans (name, uuid, ip, reason, unban_date, ban_date, context, author) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?) " +
                 "ON DUPLICATE KEY UPDATE " +
@@ -196,10 +195,17 @@ public class BanDataBase extends DataBaseMySql {
             }else {
                 tiempoDeBaneo = GlobalUtils.TimeToString(unbanDate - banDate, 2);
             }
+            reloadDatabase();
             sendMessageConsole("el jugador <|" + name + "|> fue baneado de <|" + context + "|> durante <|" +
                     tiempoDeBaneo + "|> por el jugador <|" + author +
                     "|> y la razón es <|" + reason + "|> ", TypeMessages.SUCCESS, CategoryMessages.BAN);
-            return addListDataBan(name, uuid, ip, reason, unbanDate, banDate, context, author);
+            UUID uuids;
+            if (uuid == null){
+                uuids = null;
+            }else {
+                uuids = UUID.fromString(uuid);
+            }
+            return new DataBan(name, uuids, InetAddress.getByName(ip), reason, unbanDate, banDate, ContextBan.valueOf(context), author);
         } catch (SQLException | UnknownHostException e) {
             throw new RuntimeException(e);
         }
@@ -212,12 +218,7 @@ public class BanDataBase extends DataBaseMySql {
             statement.setString(1, name);
             statement.setString(2, context.name());
             statement.executeUpdate();
-            Player player = Bukkit.getPlayer(name);
-            if (player != null){
-                listDataBanByNAME.remove(player.getName());
-            }else{
-                reloadDatabase();
-            }
+            reloadDatabase();
             sendMessageConsole("Se Desbano el jugador <|" + name + "|> en el contexto <|" + context.name() + "|> " +
                     "por <|" + author + "|>", TypeMessages.INFO, CategoryMessages.BAN);
         } catch (SQLException e) {

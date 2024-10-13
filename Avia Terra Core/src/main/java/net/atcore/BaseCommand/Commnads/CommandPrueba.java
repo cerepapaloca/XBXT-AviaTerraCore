@@ -1,18 +1,13 @@
 package net.atcore.BaseCommand.Commnads;
 
-import net.atcore.AviaTerraCore;
 import net.atcore.BaseCommand.BaseCommand;
 import net.atcore.Messages.MessagesManager;
 import net.atcore.Messages.TypeMessages;
+import net.atcore.Utils.GlobalUtils;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataType;
-
-import java.util.UUID;
 
 public class CommandPrueba extends BaseCommand {
 
@@ -28,12 +23,8 @@ public class CommandPrueba extends BaseCommand {
     @Override
     public void execute(CommandSender sender, String[] args) {
         MessagesManager.sendMessage(sender, "Hola Mundo!", TypeMessages.SUCCESS);
-        ItemStack item = new ItemStack(Material.NAME_TAG);
-        ItemMeta meta = item.getItemMeta();
-        meta.getPersistentDataContainer().set(new NamespacedKey(AviaTerraCore.getInstance(), "uuid"), PersistentDataType.STRING, UUID.randomUUID().toString());
-        item.setItemMeta(meta);
         if (sender instanceof Player player) {
-            player.getInventory().addItem(item);
+            player.getInventory().addItem(GlobalUtils.addProtectionAntiDupe(new ItemStack(Material.NAME_TAG)));
         }
     }
 }
