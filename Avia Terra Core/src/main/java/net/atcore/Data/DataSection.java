@@ -1,5 +1,6 @@
 package net.atcore.Data;
 
+import lombok.Data;
 import lombok.Getter;
 import net.atcore.AviaTerraCore;
 import net.atcore.Section;
@@ -25,6 +26,8 @@ public class DataSection implements Section {
     @Override
     public void disable() {
         DataSection.getMySQLConnection().close();
+        BanDataBase.listDataBanByNAME.clear();
+        BanDataBase.listDataBanByIP.clear();
     }
 
     @Override

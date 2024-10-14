@@ -6,10 +6,8 @@ import net.atcore.Moderation.ModerationSection;
 import net.atcore.Utils.GlobalUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
@@ -20,7 +18,7 @@ import java.util.*;
 
 import static net.atcore.Messages.MessagesManager.sendMessageConsole;
 
-public class AutoModerationListener implements Listener {
+public class CheckAutoBan implements Listener {
 
     private static final HashMap<UUID, Long> timePunishChat = new HashMap<>();
     private static final HashMap<UUID, Long> timeDifferenceNew = new HashMap<>();
@@ -29,10 +27,7 @@ public class AutoModerationListener implements Listener {
     private static String lastMessage = "";
     private static final ArrayList<Player> ChatBotTime = new ArrayList<>();
 
-    @EventHandler(ignoreCancelled = true)
-    public static void checkAutoBanChat(AsyncPlayerChatEvent event) {
-        Player player = event.getPlayer();
-        String message = event.getMessage();
+    public static void checkAutoBanChat(Player player, String message) {
         long currentTime = System.currentTimeMillis();
         if (Objects.equals(lastMessage, message)){
             ChatBotTime.add(player);
@@ -79,9 +74,7 @@ public class AutoModerationListener implements Listener {
         timePunishChat.put(player.getUniqueId(), currentTime);
     }
 
-    @EventHandler
-    public void checkDupe(@NotNull InventoryClickEvent event) {
-        Player player = (Player) event.getWhoClicked();
+    public static void checkDupe(@NotNull Player player) {
         Map<String, Integer> itemCounts = new HashMap<>();
 
         for (ItemStack item : player.getInventory()) {

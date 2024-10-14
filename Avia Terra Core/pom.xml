@@ -76,7 +76,17 @@
     </repositories>
 
     <dependencies>
+        <!-- requiere un .jar en el servidor -->
+
+        <dependency>
+            <groupId>net.luckperms</groupId>
+            <artifactId>api</artifactId>
+            <version>5.4</version>
+            <scope>provided</scope>
+        </dependency>
+
         <!-- Ninguna de estas dependecias hace falta un .jar -->
+
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
