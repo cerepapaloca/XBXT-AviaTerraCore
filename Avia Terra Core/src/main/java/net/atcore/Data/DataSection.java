@@ -1,6 +1,5 @@
 package net.atcore.Data;
 
-import lombok.Data;
 import lombok.Getter;
 import net.atcore.AviaTerraCore;
 import net.atcore.Section;

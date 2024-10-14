@@ -3,9 +3,9 @@ package net.atcore;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import net.atcore.BaseCommand.CommandSection;
+import net.atcore.Data.DataSection;
 import net.atcore.Messages.TypeMessages;
 import net.atcore.ListenerManager.ListenerManagerSection;
-import net.atcore.Security.SecuritySection;
 import net.atcore.Utils.RegisterManager;
 import net.atcore.Moderation.ModerationSection;
 import net.dv8tion.jda.api.JDA;
@@ -52,7 +52,7 @@ public final class AviaTerraCore extends JavaPlugin {
 
         RegisterManager.register(new CommandSection());
         RegisterManager.register(new ModerationSection());
-        //RegisterManager.register(new DataSection());
+        RegisterManager.register(new DataSection());
         RegisterManager.register(new ListenerManagerSection());
         //enableModules();
         sendMessageConsole("AviaTerra Iniciado. <|" + (System.currentTimeMillis() - timeCurrent) + "ms", TypeMessages.SUCCESS, false);

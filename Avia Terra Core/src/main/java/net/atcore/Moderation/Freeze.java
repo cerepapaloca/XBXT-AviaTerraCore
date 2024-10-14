@@ -5,12 +5,12 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.UUID;
-@Getter
 public class Freeze {
 
-    private static final ArrayList<UUID> playerFreeze = new ArrayList<>();
+    @Getter
+    private static final HashSet<UUID> playerFreeze = new HashSet<>();
 
     public static boolean isFreeze(@NotNull Player player) {
         if(playerFreeze.contains(player.getUniqueId())){

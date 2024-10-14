@@ -7,14 +7,22 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
-import static net.atcore.Messages.MessagesManager.COLOR_ERROR;
+import static net.atcore.Messages.MessagesManager.*;
 
-public class JoinListener implements Listener {
+public class JoinAndExitListener implements Listener {
+
+    @EventHandler
+    public void onQuit(PlayerQuitEvent event) {
+        event.setQuitMessage(ChatColor.translateAlternateColorCodes('&',
+                "&8[&4-&8] " + COLOR_ESPECIAL + event.getPlayer().getDisplayName() + COLOR_INFO + " se a ido."));
+    }
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
-
+        event.setJoinMessage(ChatColor.translateAlternateColorCodes('&',
+                "&8[&a+&8] " + COLOR_ESPECIAL + event.getPlayer().getDisplayName() + COLOR_INFO + " se a unido."));
     }
 
     @EventHandler

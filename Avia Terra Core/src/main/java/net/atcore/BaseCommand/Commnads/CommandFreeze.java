@@ -2,6 +2,7 @@ package net.atcore.BaseCommand.Commnads;
 
 import net.atcore.BaseCommand.BaseTabCommand;
 import net.atcore.Messages.TypeMessages;
+import net.atcore.Moderation.Freeze;
 import net.atcore.Moderation.ModerationSection;
 import net.atcore.Utils.GlobalUtils;
 import org.bukkit.Bukkit;
@@ -11,6 +12,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 
@@ -30,7 +32,7 @@ public class CommandFreeze extends BaseTabCommand {
     public void execute(CommandSender sender, String[] args) {
         Player player = Bukkit.getPlayer(args[0]);
         if (player != null) {
-            ArrayList<UUID> listFreeze = ModerationSection.getFreezeListener().getPlayerFreeze();
+            HashSet<UUID> listFreeze = Freeze.getPlayerFreeze();
             if (sender instanceof Player p) {
                 if (p == player) {
                     sendMessage(sender, "No puedes congelarte a tí mismo", TypeMessages.ERROR);
@@ -42,7 +44,7 @@ public class CommandFreeze extends BaseTabCommand {
                     if (listFreeze.contains(player.getUniqueId())) {
                         sendMessage(sender, "El jugador ya esta congelado", TypeMessages.ERROR);
                     }else {
-                        ModerationSection.getFreezeListener().getPlayerFreeze().add(player.getUniqueId());
+                        Freeze.getPlayerFreeze().add(player.getUniqueId());
                         player.closeInventory();
                         player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, Integer.MAX_VALUE, 1));
                         sendMessage(player, "Te an congelado, por favor habla con el staff", TypeMessages.INFO);
@@ -52,7 +54,7 @@ public class CommandFreeze extends BaseTabCommand {
                 }
                 case "off" -> {
                     if (listFreeze.contains(player.getUniqueId())) {
-                        ModerationSection.getFreezeListener().getPlayerFreeze().remove(player.getUniqueId());
+                        Freeze.getPlayerFreeze().remove(player.getUniqueId());
                         player.removePotionEffect(PotionEffectType.BLINDNESS);
                         sendMessage(sender, "El jugador ya fue descongelado", TypeMessages.SUCCESS);
                         sendMessage(player, "Te descongelado", TypeMessages.INFO);

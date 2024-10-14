@@ -4,17 +4,12 @@ import lombok.Getter;
 import net.atcore.Moderation.Ban.BanManager;
 import net.atcore.Section;
 
-import static net.atcore.Utils.RegisterManager.register;
-
 public class ModerationSection implements Section {
 
-    @Getter private static Freeze freezeListener;
     @Getter private static BanManager banManager;
 
     @Override
     public void enable() {
-        register(freezeListener = new Freeze());
-        //register(new CheckBanListener());
         banManager = new BanManager();
     }
 
