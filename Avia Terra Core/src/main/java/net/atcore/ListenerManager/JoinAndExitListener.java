@@ -1,12 +1,13 @@
 package net.atcore.ListenerManager;
 
+import com.comphenix.protocol.wrappers.WrappedGameProfile;
+import com.comphenix.protocol.wrappers.WrappedSignedProperty;
+import com.github.games647.craftapi.model.skin.Textures;
 import net.atcore.Moderation.Ban.CheckBan;
 import net.atcore.Security.AntiTwoPlayer;
-import net.atcore.Service.NewPremiun;
-import org.bukkit.Bukkit;
+import net.atcore.Service.SimulateOnlineMode;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
@@ -15,8 +16,6 @@ import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import static net.atcore.Messages.MessagesManager.*;
-import static net.atcore.Service.MojangAPI.isLoginOnMojang;
-import static net.atcore.Service.MojangAPI.isRegisteredOnMojang;
 
 public class JoinAndExitListener implements Listener {
 
@@ -44,6 +43,13 @@ public class JoinAndExitListener implements Listener {
                     "¡¡Ya Este Jugador Esta Jugando!!"));
             event.setLoginResult(AsyncPlayerPreLoginEvent.Result.KICK_BANNED);
         }
-        NewPremiun.getIps().put(event.getName(), event.getAddress());
+        SimulateOnlineMode.getIps().put(event.getName(), event.getAddress());
+    }
+
+    private void applySkin(Player player, String skinData, String signature) {
+        WrappedGameProfile gameProfile = WrappedGameProfile.fromPlayer(player);
+
+        WrappedSignedProperty skin = WrappedSignedProperty.fromValues(Textures.KEY, skinData, signature);
+        gameProfile.getProperties().put(Textures.KEY, skin);
     }
 }

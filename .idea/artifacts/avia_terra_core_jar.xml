@@ -5,6 +5,7 @@
       <element id="module-output" name="avia-terra-core" />
       <element id="extracted-dir" path="$PROJECT_DIR$/Avia Terra Core/libs/JDA-5.1.2-withDependencies.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/jetbrains/annotations/24.1.0/annotations-24.1.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/github/games647/craftapi/0.8.1/craftapi-0.8.1.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>
