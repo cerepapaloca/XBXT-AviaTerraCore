@@ -103,6 +103,7 @@ public class SimulateOnlineMode {
         ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(AviaTerraCore.getInstance(), PacketType.Login.Client.START){
             @Override
             public void onPacketReceiving(PacketEvent event) {
+
                 event.setCancelled(true);
                 PacketContainer packetEncryption = new PacketContainer(PacketType.Login.Server.ENCRYPTION_BEGIN);
                 // Genera el token
