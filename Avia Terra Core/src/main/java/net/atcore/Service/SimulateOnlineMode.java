@@ -3,13 +3,9 @@ package net.atcore.Service;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.*;
-import com.comphenix.protocol.injector.packet.PacketRegistry;
-import com.comphenix.protocol.reflect.accessors.Accessors;
-import com.comphenix.protocol.reflect.accessors.ConstructorAccessor;
-import com.comphenix.protocol.utility.MinecraftVersion;
-import com.comphenix.protocol.wrappers.*;
 import com.github.games647.craftapi.model.auth.Verification;
 import com.github.games647.craftapi.resolver.MojangResolver;
+import com.github.games647.craftapi.resolver.RateLimitException;
 import com.google.common.hash.Hasher;
 import com.google.common.hash.Hashing;
 import lombok.Getter;
@@ -33,7 +29,7 @@ public class SimulateOnlineMode {
 
     private final Encrypt keyGenerator;
 
-    public SimulateOnlineMode() throws Exception {
+    public SimulateOnlineMode() {
         super();
         try {
             keyGenerator = new Encrypt();
@@ -81,16 +77,13 @@ public class SimulateOnlineMode {
                         ////////////////////////////////////////
 
                         String serverId = generateServerId("",keyGenerator.getPublicKey(),  sharedSecret);
-
                         Player player = event.getPlayer();
-
                         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-                            //event.getAsyncMarker().incrementProcessingDelay();
-
                             MojangResolver resolver = AviaTerraCore.getResolver();
+
                             Optional<Verification> response;
                             try {
-                                response = resolver.hasJoined("cerespapaloca", serverId, InetAddress.getByName("localhost"));
+                                response = resolver.hasJoined("olasdda", serverId, InetAddress.getByName("localhost"));
                             } catch (IOException e) {
                                 throw new RuntimeException(e);
                             }
@@ -138,29 +131,13 @@ public class SimulateOnlineMode {
         return (new BigInteger(serverHash)).toString(16);
     }
 
-    public static void receiveFakeStartPacket(String username, UUID uuid, Player player) {
+    public static void FakeStartPacket(String username, UUID uuid, Player player) {
+
         PacketContainer startPacket;
-        if (new MinecraftVersion(1, 20, 2).atOrAbove()) {
-            startPacket = new PacketContainer(START);
-            startPacket.getStrings().write(0, username);
-            startPacket.getUUIDs().write(0, uuid);
-        } else if (new MinecraftVersion(1, 19, 3).atOrAbove()) {
-            startPacket = new PacketContainer(START);
-            startPacket.getStrings().write(0, username);
-            startPacket.getOptionals(Converters.passthrough(UUID.class)).write(0, Optional.of(uuid));
-        } else {
-
-            WrappedGameProfile fakeProfile = new WrappedGameProfile(UUID.randomUUID(), username);
-
-            Class<?> profileHandleType = fakeProfile.getHandleType();
-            Class<?> packetHandleType = PacketRegistry.getPacketClassFromType(START);
-            ConstructorAccessor startCons = Accessors.getConstructorAccessorOrNull(packetHandleType, profileHandleType);
-            startPacket = new PacketContainer(START, startCons.invoke(fakeProfile.getHandle()));
-        }
-        Bukkit.getConsoleSender().sendMessage("FakeStartPacket");
+        startPacket = new PacketContainer(START);
+        startPacket.getStrings().write(0, username);
+        startPacket.getUUIDs().write(0, uuid);
 
         ProtocolLibrary.getProtocolManager().receiveClientPacket(player, startPacket, false);
     }
-
-
 }

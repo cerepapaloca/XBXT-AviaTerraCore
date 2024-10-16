@@ -47,7 +47,7 @@ public class Encrypt {
         }
 
         //setPremiumUUID(session.getUuid());
-        SimulateOnlineMode.receiveFakeStartPacket(realUsername, UUID.fromString("d422b2e3-3aac-3cda-815d-4482a6988619"), player);
+        SimulateOnlineMode.FakeStartPacket(realUsername, UUID.fromString("d422b2e3-3aac-3cda-815d-4482a6988619"), player);
     }
 
     public SecretKey decryptSharedSecret(byte[] encryptedSharedSecret)
