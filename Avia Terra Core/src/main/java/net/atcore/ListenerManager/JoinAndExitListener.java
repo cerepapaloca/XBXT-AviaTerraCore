@@ -2,14 +2,21 @@ package net.atcore.ListenerManager;
 
 import net.atcore.Moderation.Ban.CheckBan;
 import net.atcore.Security.AntiTwoPlayer;
+import net.atcore.Service.NewPremiun;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import static net.atcore.Messages.MessagesManager.*;
+import static net.atcore.Service.MojangAPI.isLoginOnMojang;
+import static net.atcore.Service.MojangAPI.isRegisteredOnMojang;
 
 public class JoinAndExitListener implements Listener {
 
@@ -30,12 +37,13 @@ public class JoinAndExitListener implements Listener {
         CheckBan.onLogin(event);
     }
 
-    @EventHandler
-    public void onPreLogin(PlayerLoginEvent event) {
-        if (AntiTwoPlayer.checkTwoPlayer(event.getEventName())){
+    @EventHandler(ignoreCancelled = true)
+    public void onPreLogin(AsyncPlayerPreLoginEvent event) {
+        if (AntiTwoPlayer.checkTwoPlayer(event.getName())){
             event.setKickMessage(ChatColor.translateAlternateColorCodes('&',COLOR_ERROR +
                     "¡¡Ya Este Jugador Esta Jugando!!"));
-            event.setResult(PlayerLoginEvent.Result.KICK_OTHER);
+            event.setLoginResult(AsyncPlayerPreLoginEvent.Result.KICK_BANNED);
         }
+        NewPremiun.getIps().put(event.getName(), event.getAddress());
     }
 }

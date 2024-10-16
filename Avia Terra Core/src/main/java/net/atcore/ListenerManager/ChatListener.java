@@ -1,5 +1,9 @@
 package net.atcore.ListenerManager;
 
+import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.events.PacketContainer;
+import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import net.atcore.Messages.TypeMessages;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
@@ -24,6 +28,12 @@ public class ChatListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onChat(AsyncPlayerChatEvent e) {
         Player player = e.getPlayer();
+        PacketContainer packet =  ProtocolLibrary.getProtocolManager().createPacket(PacketType.Play.Server.CHAT);
+
+        // Añadir el mensaje (en formato JSON)
+        packet.getChatComponents().write(0, WrappedChatComponent.fromText("test"));
+        ProtocolLibrary.getProtocolManager().sendServerPacket(player, packet);
+
         e.setCancelled(true);
 
         LuckPerms luckPerms = LuckPermsProvider.get();

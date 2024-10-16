@@ -6,6 +6,7 @@ import net.atcore.BaseCommand.CommandSection;
 import net.atcore.Data.DataSection;
 import net.atcore.Messages.TypeMessages;
 import net.atcore.ListenerManager.ListenerManagerSection;
+import net.atcore.Service.NewPremiun;
 import net.atcore.Utils.RegisterManager;
 import net.atcore.Moderation.ModerationSection;
 import net.dv8tion.jda.api.JDA;
@@ -23,8 +24,7 @@ public final class AviaTerraCore extends JavaPlugin {
     private static AviaTerraCore instance;
     public static final String TOKEN_BOT = "MTI5MTUzODM1MjY0NjEzMTc3NA.GDwtcq.azwlvX6fWKbusXk8sOyzRMK78Qe9CwbHy_pmWk";
     public static JDA BOT_DISCORD;
-    @Getter
-    private static LuckPerms LP;
+    @Getter private static LuckPerms LP;
 
     @Override
     public void onLoad(){
@@ -49,11 +49,12 @@ public final class AviaTerraCore extends JavaPlugin {
                 throw new RuntimeException(e);
             }
         });
-
         RegisterManager.register(new CommandSection());
         RegisterManager.register(new ModerationSection());
         RegisterManager.register(new DataSection());
         RegisterManager.register(new ListenerManagerSection());
+        //new Premiun();
+        new NewPremiun();
         //enableModules();
         sendMessageConsole("AviaTerra Iniciado. <|" + (System.currentTimeMillis() - timeCurrent) + "ms", TypeMessages.SUCCESS, false);
     }
