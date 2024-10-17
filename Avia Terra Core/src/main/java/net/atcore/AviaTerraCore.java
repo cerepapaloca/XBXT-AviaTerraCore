@@ -1,5 +1,6 @@
 package net.atcore;
 
+import com.comphenix.protocol.ProtocolLibrary;
 import com.github.games647.craftapi.resolver.MojangResolver;
 import lombok.Getter;
 import lombok.SneakyThrows;
@@ -57,7 +58,6 @@ public final class AviaTerraCore extends JavaPlugin {
         RegisterManager.register(new DataSection());
         RegisterManager.register(new ListenerManagerSection());
         RegisterManager.register(new ServiceSection());
-
         //enableModules();
         sendMessageConsole("AviaTerra Iniciado. <|" + (System.currentTimeMillis() - timeCurrent) + "ms", TypeMessages.SUCCESS, false);
     }

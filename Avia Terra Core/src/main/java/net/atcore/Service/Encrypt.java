@@ -2,13 +2,11 @@ package net.atcore.Service;
 
 import com.github.games647.craftapi.model.auth.Verification;
 import lombok.Getter;
-import org.bukkit.entity.Player;
 
 import javax.crypto.*;
 import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.SecretKeySpec;
 import java.security.*;
-import java.util.UUID;
+import java.util.Objects;
 
 @Getter
 public class Encrypt {
@@ -40,38 +38,10 @@ public class Encrypt {
         }
     }
 
-    public void encryptConnection(Verification verification, Player player) {
+    public boolean encryptConnection(Verification verification, String name) {
         String realUsername = verification.getName();
-        if (realUsername == null) {
-            throw new RuntimeException();
-        }
-
-        //setPremiumUUID(session.getUuid());
-        SimulateOnlineMode.FakeStartPacket(realUsername, UUID.fromString("d422b2e3-3aac-3cda-815d-4482a6988619"), player);
-    }
-
-    public SecretKey decryptSharedSecret(byte[] encryptedSharedSecret)
-        // Inicializa el cifrador RSA con la clave privada del servidor
-            throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException,
-            BadPaddingException, InvalidKeyException {
-        return new SecretKeySpec(decrypt(privateKey, encryptedSharedSecret), "AES");
-    }
-
-    public byte[] decrypt(PrivateKey key, byte[] data)
-            throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException,
-            IllegalBlockSizeException, BadPaddingException {
-        Cipher cipher = Cipher.getInstance(key.getAlgorithm());
-        cipher.init(Cipher.DECRYPT_MODE, key);
-        return cipher.doFinal(data);
-    }
-
-    public byte[] decryptToken(byte[] encryptedToken) throws Exception {
-        // Inicializa el cifrador RSA con la clave privada del servidor
-        Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
-        cipher.init(Cipher.DECRYPT_MODE, privateKey); // privateKey debe ser la clave privada del servidor
-
-        // Realiza el descifrado y devuelve el token
-        return cipher.doFinal(encryptedToken);
+        return realUsername != null && Objects.equals(name, realUsername);
+        //setPremiumUUID(session.getUuid())
     }
 
     public byte[] encrypt(byte[] plaintext) throws Exception {
@@ -87,6 +57,15 @@ public class Encrypt {
         cipher.init(Cipher.DECRYPT_MODE, secretKey, ivParams);
         return cipher.doFinal(ciphertext);
     }
+
+    public byte[] decryptData(byte[] data)
+            throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+        Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
+        cipher.init(Cipher.DECRYPT_MODE, privateKey); // privateKey debe ser la clave privada del servidor
+        // Realiza el descifrado y devuelve el secreto compartido
+        return cipher.doFinal(data);
+    }
+
 
 }
 

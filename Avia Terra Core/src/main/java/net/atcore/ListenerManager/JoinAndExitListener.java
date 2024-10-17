@@ -43,13 +43,5 @@ public class JoinAndExitListener implements Listener {
                     "¡¡Ya Este Jugador Esta Jugando!!"));
             event.setLoginResult(AsyncPlayerPreLoginEvent.Result.KICK_BANNED);
         }
-        SimulateOnlineMode.getIps().put(event.getName(), event.getAddress());
-    }
-
-    private void applySkin(Player player, String skinData, String signature) {
-        WrappedGameProfile gameProfile = WrappedGameProfile.fromPlayer(player);
-
-        WrappedSignedProperty skin = WrappedSignedProperty.fromValues(Textures.KEY, skinData, signature);
-        gameProfile.getProperties().put(Textures.KEY, skin);
     }
 }
