@@ -143,10 +143,13 @@ public final class MessagesManager {
                 case INFO -> finalMessage = "『🟦』 " + message;
                 case WARNING -> finalMessage = "『🟨』 " + message;
                 case ERROR -> finalMessage = "『🟥』 " + message;
+                default -> {
+                    return;
+                }
             }
             // Obtén el canal por su ID
             TextChannel channel = AviaTerraCore.BOT_DISCORD.getTextChannelById(channelId);
-            if (channel != null) {
+            if (channel !=  null) {
                 channel.sendMessage(finalMessage.replace("<|", "**").replace("|>", "**").replace("|!>", "")).queue();
             } else {
                 throw new DiscordChannelNotFound("No se encontró canal de discord para los registro " + type.name());

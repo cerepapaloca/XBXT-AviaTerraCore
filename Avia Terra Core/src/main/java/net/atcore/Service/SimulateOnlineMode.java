@@ -12,8 +12,6 @@ import com.comphenix.protocol.utility.MinecraftReflection;
 import com.comphenix.protocol.wrappers.*;
 import com.github.games647.craftapi.model.auth.Verification;
 import com.github.games647.craftapi.model.skin.Textures;
-import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.properties.Property;
 import lombok.Getter;
 import net.atcore.AviaTerraCore;
 import net.atcore.Messages.TypeMessages;
@@ -99,10 +97,11 @@ public class SimulateOnlineMode {
                 PacketType.Login.Client.START){
             @Override
             public void onPacketReceiving(PacketEvent event) {
-                if (Bukkit.getOnlineMode()) return;
 
-                if (event.getPlayer().getAddress() == null){
-                    GlobalUtils.kickPlayer(event.getPlayer(), "Error de connexion vuele a intentar");
+                Player player = event.getPlayer();
+
+                if (player.getAddress() == null){
+                    GlobalUtils.kickPlayer(player, "Error de connexion vuele a intentar");
                     return;
                 }
 
@@ -110,14 +109,14 @@ public class SimulateOnlineMode {
                 String name = event.getPacket().getStrings().read(0);
 
                 SessionLogin session = LoginManager.getListSession().get(name);
-                if (session == null || session.getEndTime() < System.currentTimeMillis()) {
-                    switch (LoginManager.isPremium(name)){//revisa entre las sesiones o los registro del los jugadores
+                if (session == null || session.getEndTimeLogin() < System.currentTimeMillis()) {
+                    switch (LoginManager.getState(player.getAddress().getAddress() ,name)){//revisa entre las sesiones o los registro del los jugadores
                         case PREMIUM -> {
                             event.setCancelled(true);//se cancela por que asi el servidor no se da cuenta que a recibido un paquete
-                            StartLoginPremium(name, uuid, event.getPlayer());
+                            StartLoginPremium(name, uuid, player);
                         }
                         case CRACKED -> StartLoginCracked(name, uuid);
-                        case UNKNOWN -> GlobalUtils.kickPlayer(event.getPlayer(), "Error de connexion vuele a intentar");
+                        case UNKNOWN -> GlobalUtils.kickPlayer(player, "Error de connexion vuele a intentar");
                     }
                 }
             }

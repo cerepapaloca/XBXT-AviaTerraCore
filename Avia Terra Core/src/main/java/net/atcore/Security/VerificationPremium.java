@@ -9,12 +9,12 @@ import net.atcore.AviaTerraCore;
 import net.atcore.Exception.ExceptionPackageConnection;
 import net.atcore.Messages.CategoryMessages;
 import net.atcore.Messages.TypeMessages;
+import net.atcore.Security.Login.SessionLogin;
+import net.atcore.Security.Login.StateLogins;
 import net.atcore.Service.ServiceSection;
 import net.atcore.Service.SimulateOnlineMode;
 import net.atcore.Utils.GlobalUtils;
-import org.apache.commons.collections4.BagUtils;
 import org.bukkit.entity.Player;
-import org.checkerframework.checker.units.qual.C;
 import org.jetbrains.annotations.NotNull;
 
 import javax.crypto.spec.SecretKeySpec;
@@ -72,6 +72,7 @@ public class VerificationPremium {
                             //Activa el protocolo de encriptación de minecraft. Más información en https://wiki.vg/Protocol_Encryption
                             if (SimulateOnlineMode.enableEncryption(new SecretKeySpec(sharedSecret, "AES"), player)){
                                 String userName = verification.getName();
+                                new SessionLogin(name, GlobalUtils.getUUIDByName(name), verification.getId(), StateLogins.PREMIUM, false);
                                 listUUIDPremium.put(userName, verification);
                             }else{
                                 GlobalUtils.kickPlayer(player, "hubo un error. Reinicie su cliente");

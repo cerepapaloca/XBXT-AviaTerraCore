@@ -3,33 +3,25 @@ package net.atcore.Security.Login;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.net.InetAddress;
 import java.util.UUID;
 
 @Getter
 @Setter
-public class SessionLogin {
+public class SessionLogin extends RegisterData {
 
-    public SessionLogin(String username, StateLogins state) {
-        this.username = username;
-        this.stateLogins = state;
-        this.startTime = System.currentTimeMillis();
-    }
-
-    public SessionLogin(String username, UUID uuid, StateLogins state) {
-        this.username = username;
-        this.stateLogins = state;
-        this.startTime = System.currentTimeMillis();
-        this.uuid = uuid;
-    }
-
-    private final String username;
-    private final StateLogins stateLogins;
-    private final long startTime;
-    private UUID uuid;
-    private long endTime;
-    private InetAddress ip;
-    private String passwordShaded;
+    private long startTimeLogin;
+    private long endTimeLogin;
     private boolean loggedDiscord;
 
+    public SessionLogin(String username, UUID uuidCracked, UUID uuidPremium, StateLogins state, boolean isTemporary) {
+        super(username, uuidCracked, uuidPremium, state, isTemporary);
+        LoginManager.getListRegister().remove(username);
+        LoginManager.getListSession().put(username, this);
+    }
+
+    public SessionLogin(String username, UUID uuidCracked, StateLogins state, boolean isTemporary) {
+        super(username, uuidCracked, state, isTemporary);
+        LoginManager.getListRegister().remove(username);
+        LoginManager.getListSession().put(username, this);
+    }
 }

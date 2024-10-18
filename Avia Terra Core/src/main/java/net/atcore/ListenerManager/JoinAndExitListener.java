@@ -1,15 +1,9 @@
 package net.atcore.ListenerManager;
 
-import com.comphenix.protocol.wrappers.WrappedGameProfile;
-import com.comphenix.protocol.wrappers.WrappedSignedProperty;
-import com.github.games647.craftapi.model.skin.Textures;
 import net.atcore.Moderation.Ban.CheckBan;
 import net.atcore.Security.AntiTwoPlayer;
 import net.atcore.Service.ServiceSection;
-import net.atcore.Service.SimulateOnlineMode;
 import org.bukkit.ChatColor;
-import org.bukkit.Server;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;

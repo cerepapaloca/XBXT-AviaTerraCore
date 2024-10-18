@@ -4,6 +4,7 @@ import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
+import com.google.common.base.Charsets;
 import lombok.experimental.UtilityClass;
 import net.atcore.AviaTerraCore;
 import net.md_5.bungee.api.ChatColor;
@@ -259,5 +260,9 @@ public final class GlobalUtils {
         }finally {
             player.kickPlayer(reason);
         }
+    }
+
+    public UUID getUUIDByName(String username) {
+        return UUID.nameUUIDFromBytes(("OfflinePlayer:" + username).getBytes(Charsets.UTF_8));
     }
 }

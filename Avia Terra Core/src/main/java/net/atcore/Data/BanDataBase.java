@@ -74,7 +74,7 @@ public class BanDataBase extends DataBaseMySql {
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     if (rs.getInt(1) > 0) {
-                        sendMessageConsole("MySql " + MessagesManager.COLOR_SUCCESS + "Ok", TypeMessages.INFO);
+                        sendMessageConsole("DataBase Bans " + MessagesManager.COLOR_SUCCESS + "Ok", TypeMessages.INFO);
                         reloadDatabase();
                         return;//si existe, se detiene
                     }
@@ -99,7 +99,7 @@ public class BanDataBase extends DataBaseMySql {
              Statement statement = connection.createStatement()) {
             statement.executeUpdate(createTableSQL);
             statement.executeUpdate(addUniqueKeySQL);
-            sendMessageConsole("MySql " + MessagesManager.COLOR_SUCCESS + "Ok", TypeMessages.INFO);
+            sendMessageConsole("DataBase Bans " + MessagesManager.COLOR_SUCCESS + "Ok", TypeMessages.INFO);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
