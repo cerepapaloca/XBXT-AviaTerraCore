@@ -10,16 +10,19 @@ import java.util.UUID;
 public class DataRegister extends BaseDataLogin {
 
     public DataRegister(String username, UUID uuidCracked, UUID uuidPremium , StateLogins state, boolean isTemporary) {
-        super(username, uuidCracked, isTemporary, state);
+        super(username, uuidCracked, state);
         this.setUuidPremium(uuidPremium);
         LoginManager.getListRegister().put(username, this);
+        this.isTemporary = isTemporary;
     }
 
     public DataRegister(String username, UUID uuidCracked, StateLogins state, boolean isTemporary) {
-        super(username, uuidCracked, isTemporary, state);
+        super(username, uuidCracked, state);
         LoginManager.getListRegister().put(username, this);
+        this.isTemporary = isTemporary;
     }
 
+    private boolean isTemporary;
     private long lastLoginDate;
     private long registerDate;
 

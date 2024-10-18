@@ -72,7 +72,7 @@ public class VerificationPremium {
                             //Activa el protocolo de encriptación de minecraft. Más información en https://wiki.vg/Protocol_Encryption
                             if (SimulateOnlineMode.enableEncryption(new SecretKeySpec(sharedSecret, "AES"), player)){
                                 String userName = verification.getName();
-                                new DataSession(name, GlobalUtils.getUUIDByName(name), verification.getId(), StateLogins.PREMIUM, false);
+                                new DataSession(name, GlobalUtils.getUUIDByName(name), verification.getId(), StateLogins.PREMIUM);
                                 listUUIDPremium.put(userName, verification);
                             }else{
                                 GlobalUtils.kickPlayer(player, "hubo un error. Reinicie su cliente");

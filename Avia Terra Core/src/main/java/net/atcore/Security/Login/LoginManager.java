@@ -8,6 +8,7 @@ import net.atcore.AviaTerraCore;
 import net.atcore.Data.RegisterDataBase;
 import net.atcore.Utils.GlobalUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -17,15 +18,15 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.Optional;
+import java.util.*;
 
 public class LoginManager {
 
     //la llave es el nombre de usuario
     @Getter private static final HashMap<String, DataSession> listSession = new HashMap<>();
     @Getter private static final HashMap<String, DataRegister> listRegister = new HashMap<>();
+
+    @Getter private static final HashSet<UUID> listPlayerLoginIn = new HashSet<>();
 
     public static StateLogins getState(InetAddress ip, String name){
         if (listRegister.containsKey(name)){
@@ -94,9 +95,28 @@ public class LoginManager {
         return Base64.getEncoder().encodeToString(hash);
     }
 
+    public static boolean isEqualPassword(@NotNull String name, @NotNull String password) throws InvalidKeySpecException, NoSuchAlgorithmException {
+        return hashPassword(name, password).equals(getListRegister().get(name).getPasswordShaded());
+    }
+
     private static void saveRegisterData(@NotNull DataRegister register){
         Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(), () -> {
 
         });
+    }
+
+    public static boolean isLoginIn(Player player, boolean force){
+        if (listSession.containsKey(player.getName())){
+            DataSession dataSession = listSession.get(player.getName());
+            if (dataSession.getIp() == Objects.requireNonNull(player.getAddress()).getAddress()){
+                if (!force) return true;
+                if (dataSession.getEndTimeLogin() > System.currentTimeMillis()){
+                    return true;
+                }
+            }
+        }
+        listPlayerLoginIn.remove(player.getUniqueId());
+        listSession.remove(player.getName());
+        return false;
     }
 }

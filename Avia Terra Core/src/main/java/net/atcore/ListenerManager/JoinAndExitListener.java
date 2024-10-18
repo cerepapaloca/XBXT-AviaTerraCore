@@ -1,15 +1,20 @@
 package net.atcore.ListenerManager;
 
+import net.atcore.Messages.TypeMessages;
 import net.atcore.Moderation.Ban.CheckBan;
 import net.atcore.Security.AntiTwoPlayer;
+import net.atcore.Security.Login.LoginManager;
 import net.atcore.Service.ServiceSection;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+
+import java.io.BufferedReader;
 
 import static net.atcore.Messages.MessagesManager.*;
 
@@ -23,6 +28,16 @@ public class JoinAndExitListener implements Listener {
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
+        Player player = event.getPlayer();
+
+        if (LoginManager.getListRegister().containsKey(player.getName())) {
+            if (!LoginManager.isLoginIn(player, true)) {
+                sendMessage(player, "login porfa", TypeMessages.INFO);
+            }
+        }else{
+            sendMessage(player, "lregistrate porfa ", TypeMessages.INFO);
+        }
+
         event.setJoinMessage(ChatColor.translateAlternateColorCodes('&',
                 "&8[&a+&8] " + COLOR_ESPECIAL + event.getPlayer().getDisplayName() + COLOR_INFO + " se a unido."));
     }
