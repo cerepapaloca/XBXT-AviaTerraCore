@@ -7,11 +7,14 @@ public class ServiceSection implements Section {
 
     @Getter
     private static Encrypt encrypt;
+    @Getter
+    private static SimulateOnlineMode simulateOnlineMode;
+
 
     @Override
     public void enable() {
         encrypt = new Encrypt();
-        new SimulateOnlineMode();
+        simulateOnlineMode = new SimulateOnlineMode();
     }
 
     @Override
@@ -26,6 +29,6 @@ public class ServiceSection implements Section {
 
     @Override
     public String getName() {
-        return "";
+        return "Servicios";
     }
 }

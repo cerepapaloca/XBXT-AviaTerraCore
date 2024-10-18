@@ -38,12 +38,6 @@ public class Encrypt {
         }
     }
 
-    public boolean encryptConnection(Verification verification, String name) {
-        String realUsername = verification.getName();
-        return realUsername != null && Objects.equals(name, realUsername);
-        //setPremiumUUID(session.getUuid())
-    }
-
     public byte[] encrypt(byte[] plaintext) throws Exception {
         Cipher cipher = Cipher.getInstance("AES/CFB8/PKCS5Padding");
         IvParameterSpec ivParams = new IvParameterSpec(this.iv);
@@ -62,10 +56,6 @@ public class Encrypt {
             throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
         Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
         cipher.init(Cipher.DECRYPT_MODE, privateKey); // privateKey debe ser la clave privada del servidor
-        // Realiza el descifrado y devuelve el secreto compartido
         return cipher.doFinal(data);
     }
-
-
 }
-

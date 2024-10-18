@@ -5,5 +5,6 @@ public enum CategoryMessages {
     GENERIC,
     BAN,
     MODERATION,
+    LOGIN,
     PVP,
 }

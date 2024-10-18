@@ -5,8 +5,10 @@ import com.comphenix.protocol.wrappers.WrappedSignedProperty;
 import com.github.games647.craftapi.model.skin.Textures;
 import net.atcore.Moderation.Ban.CheckBan;
 import net.atcore.Security.AntiTwoPlayer;
+import net.atcore.Service.ServiceSection;
 import net.atcore.Service.SimulateOnlineMode;
 import org.bukkit.ChatColor;
+import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -33,6 +35,7 @@ public class JoinAndExitListener implements Listener {
 
     @EventHandler
     public void onLogin(PlayerLoginEvent event) {
+        ServiceSection.getSimulateOnlineMode().applySkin(event.getPlayer());
         CheckBan.onLogin(event);
     }
 

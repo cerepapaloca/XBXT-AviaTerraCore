@@ -1,9 +1,14 @@
 package net.atcore.Utils;
 
+import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.events.PacketContainer;
+import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import lombok.experimental.UtilityClass;
 import net.atcore.AviaTerraCore;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.NamespacedKey;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
@@ -244,5 +249,15 @@ public final class GlobalUtils {
         meta.getPersistentDataContainer().set(KEY_ANTI_DUPE, PersistentDataType.STRING, UUID.randomUUID().toString());
         item.setItemMeta(meta);
         return item;
+    }
+
+    public void kickPlayer(Player player, String reason) {
+        try {
+            PacketContainer kickPack = new PacketContainer(PacketType.Login.Server.DISCONNECT);
+            kickPack.getChatComponents().write(0, WrappedChatComponent.fromText(reason));
+            ProtocolLibrary.getProtocolManager().sendServerPacket(player, kickPack);
+        }finally {
+            player.kickPlayer(reason);
+        }
     }
 }
