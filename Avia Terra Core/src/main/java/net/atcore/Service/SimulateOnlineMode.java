@@ -16,7 +16,7 @@ import lombok.Getter;
 import net.atcore.AviaTerraCore;
 import net.atcore.Messages.TypeMessages;
 import net.atcore.Security.Login.LoginManager;
-import net.atcore.Security.Login.SessionLogin;
+import net.atcore.Security.Login.DataSession;
 import net.atcore.Security.VerificationPremium;
 import net.atcore.Utils.GlobalUtils;
 import org.bukkit.Bukkit;
@@ -108,17 +108,20 @@ public class SimulateOnlineMode {
                 UUID uuid = event.getPacket().getUUIDs().read(0);
                 String name = event.getPacket().getStrings().read(0);
 
-                SessionLogin session = LoginManager.getListSession().get(name);
-                if (session == null || session.getEndTimeLogin() < System.currentTimeMillis()) {
-                    switch (LoginManager.getState(player.getAddress().getAddress() ,name)){//revisa entre las sesiones o los registro del los jugadores
-                        case PREMIUM -> {
-                            event.setCancelled(true);//se cancela por que asi el servidor no se da cuenta que a recibido un paquete
-                            StartLoginPremium(name, uuid, player);
+                DataSession session = LoginManager.getListSession().get(name);
+
+                Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(), () -> {
+                    if (session == null || session.getEndTimeLogin() < System.currentTimeMillis()) {
+                        switch (LoginManager.getState(player.getAddress().getAddress() ,name)){//revisa entre las sesiones o los registro del los jugadores
+                            case PREMIUM -> {
+                                event.setCancelled(true);//se cancela por que asi el servidor no se da cuenta que a recibido un paquete
+                                StartLoginPremium(name, uuid, player);
+                            }
+                            case CRACKED -> StartLoginCracked(name, uuid);
+                            case UNKNOWN -> GlobalUtils.kickPlayer(player, "Error de connexion vuele a intentar");
                         }
-                        case CRACKED -> StartLoginCracked(name, uuid);
-                        case UNKNOWN -> GlobalUtils.kickPlayer(player, "Error de connexion vuele a intentar");
                     }
-                }
+                });
             }
         });
     }

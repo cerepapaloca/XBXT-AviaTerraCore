@@ -1,10 +1,11 @@
 package net.atcore.Data;
 
-import net.atcore.Messages.CategoryMessages;
 import net.atcore.Messages.MessagesManager;
 import net.atcore.Messages.TypeMessages;
-import net.atcore.Moderation.Ban.ContextBan;
-import net.atcore.Moderation.Ban.DataBan;
+import net.atcore.Security.Login.DataSession;
+import net.atcore.Security.Login.LoginManager;
+import net.atcore.Security.Login.DataRegister;
+import net.atcore.Security.Login.StateLogins;
 import net.atcore.Utils.GlobalUtils;
 
 import java.net.InetAddress;
@@ -17,7 +18,44 @@ import static net.atcore.Messages.MessagesManager.sendMessageConsole;
 public class RegisterDataBase extends DataBaseMySql {
     @Override
     protected void reloadDatabase() {
+        String sql = "SELECT name, uuidPremium, uuidCracked, ipRegister, ipLogin, isPremium, password, lastLoginDate, registerDate FROM register";
+        LoginManager.getListRegister().clear();
 
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql);
+             ResultSet resultSet = statement.executeQuery()) {
+
+            while (resultSet.next()) {
+                String name = resultSet.getString("name");
+                String uuidPremium = resultSet.getString("uuidPremium");
+                String uuidCracked = resultSet.getString("uuidCracked");
+                String ipRegister = resultSet.getString("ipRegister");
+                String ipLogin = resultSet.getString("ipLogin");
+                int isPremium = resultSet.getInt("isPremium");
+                String password = resultSet.getString("password");
+                long lastLoginDate = resultSet.getLong("lastLoginDate");
+                long registerDate = resultSet.getLong("registerDate");
+
+                DataRegister dataRegister = new DataRegister(name, UUID.fromString(uuidCracked),
+                        UUID.fromString(uuidPremium), isPremium == 1 ? StateLogins.PREMIUM : StateLogins.CRACKED,
+                        true);
+                dataRegister.setIp(InetAddress.getByName(ipRegister));
+                dataRegister.setPasswordShaded(password);
+                dataRegister.setLastLoginDate(lastLoginDate);
+                dataRegister.setRegisterDate(registerDate);
+                DataSession session = LoginManager.getListSession().get(name);
+                //////////////////////////////////////////////////////////////
+                if (session == null) return;
+                session.setIp(InetAddress.getByName(ipRegister));
+                session.setPasswordShaded(password);
+                session.setUuidCracked(UUID.fromString(uuidCracked));
+                session.setUuidPremium(UUID.fromString(uuidPremium));
+            }
+        } catch (SQLException | UnknownHostException e) {
+            throw new RuntimeException(e);
+        }
+
+        sendMessageConsole("Bases recargado exitosamente", TypeMessages.SUCCESS);
     }
 
     @Override

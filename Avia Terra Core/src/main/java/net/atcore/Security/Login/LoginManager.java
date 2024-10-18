@@ -8,7 +8,6 @@ import net.atcore.AviaTerraCore;
 import net.atcore.Data.RegisterDataBase;
 import net.atcore.Utils.GlobalUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -25,47 +24,46 @@ import java.util.Optional;
 public class LoginManager {
 
     //la llave es el nombre de usuario
-    @Getter private static final HashMap<String, SessionLogin> listSession = new HashMap<>();
-    @Getter private static final HashMap<String, RegisterData> listRegister = new HashMap<>();
+    @Getter private static final HashMap<String, DataSession> listSession = new HashMap<>();
+    @Getter private static final HashMap<String, DataRegister> listRegister = new HashMap<>();
 
     public static StateLogins getState(InetAddress ip, String name){
         if (listRegister.containsKey(name)){
             return listRegister.get(name).getStateLogins();
         }else{//si no existe crea un registro
-            RegisterData registerData = startRegister(ip, name);
-            if (registerData != null){
-                return registerData.getStateLogins();
+            DataRegister dataRegister = startRegister(ip, name);
+            if (dataRegister != null){
+                return dataRegister.getStateLogins();
             }else {
                 return StateLogins.UNKNOWN;
             }
         }
     }
 
-    private static @Nullable RegisterData startRegister(InetAddress ip ,@NotNull String name){
+    private static @Nullable DataRegister startRegister(InetAddress ip , @NotNull String name){
         try {
             MojangResolver resolver = AviaTerraCore.getResolver();
             Optional<Profile> profile = resolver.findProfile(name);
-            RegisterData registerData;
+            DataRegister dataRegister;
             if (profile.isPresent()){
                 Profile profileObj = profile.get();
-                registerData = new RegisterData(profileObj.getName(), GlobalUtils.getUUIDByName(name), profileObj.getId(), StateLogins.PREMIUM, false);
-                RegisterDataBase.addRegister(registerData.getUsername(),
+                dataRegister = new DataRegister(profileObj.getName(), GlobalUtils.getUUIDByName(name), profileObj.getId(), StateLogins.PREMIUM, false);
+                RegisterDataBase.addRegister(dataRegister.getUsername(),
                         profileObj.getId().toString(), GlobalUtils.getUUIDByName(name).toString(),
                         ip.getHostName(), ip.getHostName(),
                         true, null,
                         System.currentTimeMillis(), System.currentTimeMillis()
                 );
-                return registerData;
             }else {//es temporal el registro por qué no ha puesto la contraseña
-                registerData = new RegisterData(name, GlobalUtils.getUUIDByName(name), StateLogins.CRACKED, true);
-                RegisterDataBase.addRegister(registerData.getUsername(),
+                dataRegister = new DataRegister(name, GlobalUtils.getUUIDByName(name), StateLogins.CRACKED, true);
+                RegisterDataBase.addRegister(dataRegister.getUsername(),
                         null, GlobalUtils.getUUIDByName(name).toString(),
                         ip.getHostName(), ip.getHostName(),
                         false, null,
                         System.currentTimeMillis(), System.currentTimeMillis()
                 );
-                return registerData;
             }
+            return dataRegister;
         } catch (IOException | RateLimitException e) {
             return null;
         }
@@ -96,7 +94,7 @@ public class LoginManager {
         return Base64.getEncoder().encodeToString(hash);
     }
 
-    private static void saveRegisterData(@NotNull RegisterData register){
+    private static void saveRegisterData(@NotNull DataRegister register){
         Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(), () -> {
 
         });
