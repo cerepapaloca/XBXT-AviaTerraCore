@@ -5,6 +5,7 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import net.atcore.Messages.TypeMessages;
+import net.atcore.Security.Login.LoginManager;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
 import net.luckperms.api.model.user.User;
@@ -17,8 +18,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
-import static net.atcore.Messages.MessagesManager.COLOR_ESPECIAL;
-import static net.atcore.Messages.MessagesManager.sendMessageConsole;
+import static net.atcore.Messages.MessagesManager.*;
 import static net.atcore.Moderation.Ban.CheckAutoBan.checkAutoBanChat;
 import static net.atcore.Moderation.Ban.CheckBan.checkChat;
 import static net.atcore.Moderation.ChatModeration.CheckChatModeration;
@@ -28,13 +28,12 @@ public class ChatListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onChat(AsyncPlayerChatEvent e) {
         Player player = e.getPlayer();
-        PacketContainer packet =  ProtocolLibrary.getProtocolManager().createPacket(PacketType.Play.Server.CHAT);
-
-        // Añadir el mensaje (en formato JSON)
-        packet.getChatComponents().write(0, WrappedChatComponent.fromText("test"));
-        ProtocolLibrary.getProtocolManager().sendServerPacket(player, packet);
-
         e.setCancelled(true);
+
+        if (!LoginManager.isLoginIn(player, true)) {
+            sendMessage(player, "Te tienes que loguear para escribir en el chat", TypeMessages.ERROR);
+            return;
+        }
 
         LuckPerms luckPerms = LuckPermsProvider.get();
         User user = luckPerms.getUserManager().getUser(player.getUniqueId());
@@ -54,11 +53,11 @@ public class ChatListener implements Listener {
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (!message.contains(player.getName())) {
                 player.sendMessage(ChatColor.translateAlternateColorCodes('&',
-                        user.getCachedData().getMetaData().getPrefix() + "    " + player.getName() + " » &7" + message));
+                        user.getCachedData().getMetaData().getPrefix() + "    " + user.getUsername() + " » &7" + message));
             }else {
                 player.playSound(player, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1, 1);
                 player.sendMessage(ChatColor.translateAlternateColorCodes('&',
-                        user.getCachedData().getMetaData().getPrefix() + "    " + player.getName() + " » " + COLOR_ESPECIAL + message));
+                        user.getCachedData().getMetaData().getPrefix() + "    " + user.getUsername() + " » " + COLOR_ESPECIAL + message));
             }
         }
     }

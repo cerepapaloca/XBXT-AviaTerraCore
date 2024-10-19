@@ -8,7 +8,9 @@ import net.atcore.AviaTerraCore;
 import net.atcore.Data.DataBaseRegister;
 import net.atcore.Utils.GlobalUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,6 +21,8 @@ import java.net.InetAddress;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.*;
+
+import static net.atcore.Data.DataBaseRegister.*;
 
 public class LoginManager {
 
@@ -73,25 +77,8 @@ public class LoginManager {
         }
     }
 
-    public static void addPassword(@NotNull String name, @NotNull String password){
-        try {
-            String s = hashPassword(name ,password);
-            listRegister.get(name).setPasswordShaded(s);
-            Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(), () -> {
-                DataRegister data = listRegister.get(name);
-                DataBaseRegister.addRegister(data.getUsername(),
-                        data.getUuidPremium() == null ? null : data.getUuidPremium().toString(), GlobalUtils.getUUIDByName(name).toString(),
-                        data.getAddressRegister().toString(), data.getIp().toString(),
-                        false, data.getPasswordShaded(),
-                        System.currentTimeMillis(), data.getRegisterDate());
-            });
-        } catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private static final int ITERATIONS = 65536; // Número de iteraciones
-    private static final int KEY_LENGTH = 256; // Longitud del hash (bits)
+    private static final int ITERATIONS = 65536; //número de iteraciones
+    private static final int KEY_LENGTH = 256; //longitud del hash (bits)
     private static final String ALGORITHM = "PBKDF2WithHmacSHA256";
 
     /**
@@ -111,24 +98,64 @@ public class LoginManager {
         return hashPassword(name, password).equals(getListRegister().get(name).getPasswordShaded());
     }
 
-    private static void saveRegisterData(@NotNull DataRegister register){
+    public static void newRegisterCracked(@NotNull String name, @NotNull InetAddress inetAddress , @NotNull String password){
+        String s;
+        try {
+            s = hashPassword(name ,password);
+            listRegister.get(name).setPasswordShaded(s);
+        } catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+        DataRegister data = listRegister.get(name);
+        data.setIp(inetAddress);
+        data.setLastLoginDate(System.currentTimeMillis());
         Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(), () -> {
-
+            updateLoginDate(name, System.currentTimeMillis());
+            updatePassword(name, s);
         });
     }
 
-    public static boolean isLoginIn(Player player, boolean force){
+    public static void updateLoginDataBase(String name, InetAddress inetAddress){
+        Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(), () -> {
+            updateLoginDate(name, System.currentTimeMillis());
+            updateAddress(name, inetAddress.getHostAddress().replace("/",""));
+        });
+        DataRegister dataRegister = listRegister.get(name);
+        dataRegister.setIp(inetAddress);
+        dataRegister.setLastLoginDate(System.currentTimeMillis());
+    }
+
+    /**
+     * Chequea si el jugador está logueado correctamente y lo cambia de modo de juego
+     * si está logueado correctamente
+     * @param player al jugador que se va chequear
+     * @param ignoreTime sí se tiene en cuenta el tiempo de expiración
+     * @return verdadero cuando esta logueado, falso cuando no lo está
+     */
+
+    public static boolean isLoginIn(Player player, boolean ignoreTime){
         if (listSession.containsKey(player.getName())){
             DataSession dataSession = listSession.get(player.getName());
             if (Objects.equals(dataSession.getIp().getHostName().split(":")[0], Objects.requireNonNull(player.getAddress()).getAddress().getHostName().split(":")[0])){
-                if (!force) return true;
-                if (dataSession.getEndTimeLogin() > System.currentTimeMillis()){
+                if (ignoreTime || dataSession.getEndTimeLogin() > System.currentTimeMillis()){
+                    player.setGameMode(GameMode.SURVIVAL);
                     return true;
                 }
             }
         }
+        player.setGameMode(GameMode.SPECTATOR);
         listPlayerLoginIn.remove(player.getUniqueId());
         listSession.remove(player.getName());
         return false;
+    }
+
+    public static void startTimeOut(Player player, String reason){
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (isLoginIn(player, true)) return;
+                GlobalUtils.kickPlayer(player, reason);
+            }
+        }.runTaskLater(AviaTerraCore.getInstance(), 20*20);
     }
 }

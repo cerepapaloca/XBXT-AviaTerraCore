@@ -28,7 +28,15 @@ public class CommandFreeze extends BaseTabCommand {
 
     @Override
     public void execute(CommandSender sender, String[] args) {
+        if (args.length == 0) {
+            sendMessage(sender, this.getUsage(), TypeMessages.ERROR);
+            return;
+        }
         Player player = Bukkit.getPlayer(args[0]);
+        if (args.length == 1) {
+            sendMessage(sender, "tienes que poner on o off", TypeMessages.ERROR);
+            return;
+        }
         if (player != null) {
             HashSet<UUID> listFreeze = Freeze.getPlayerFreeze();
             if (sender instanceof Player p) {

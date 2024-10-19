@@ -7,6 +7,7 @@ import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import com.google.common.base.Charsets;
 import lombok.experimental.UtilityClass;
 import net.atcore.AviaTerraCore;
+import net.atcore.Messages.MessagesManager;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
@@ -24,6 +25,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import static net.atcore.Messages.MessagesManager.COLOR_ERROR;
+import static net.atcore.Messages.MessagesManager.sendMessage;
 
 @UtilityClass//Le añade static a todos los métodos y a las variables
 public final class GlobalUtils {
@@ -244,19 +246,31 @@ public final class GlobalUtils {
         };
     }
 
+    /**
+     * Añade una protección anti dupe básicamente se le asigna una uuid al item esto
+     * hace que el item no se pueda estakear y si lo se pone en 1
+     * @param item el item que le quieres aplicar la protección
+     * @return el mismo item pero con la protección
+     */
+
     public ItemStack addProtectionAntiDupe(ItemStack item){
         ItemMeta meta = item.getItemMeta();
         if (meta == null) return item;
         meta.getPersistentDataContainer().set(KEY_ANTI_DUPE, PersistentDataType.STRING, UUID.randomUUID().toString());
         item.setItemMeta(meta);
+        item.setAmount(1);//se pone uno por qué si el jugador lo divide va a ser baneado accidentalmente
         return item;
     }
 
     public void kickPlayer(Player player, String reason) {
+        reason =ChatColor.translateAlternateColorCodes('&', MessagesManager.PREFIX_AND_SUFFIX_KICK[0]
+                + "&4" + reason + "&c" + MessagesManager.PREFIX_AND_SUFFIX_KICK[1]);
         try {
-            PacketContainer kickPack = new PacketContainer(PacketType.Login.Server.DISCONNECT);
-            kickPack.getChatComponents().write(0, WrappedChatComponent.fromText(reason));
-            ProtocolLibrary.getProtocolManager().sendServerPacket(player, kickPack);
+            if (player.getName().startsWith("UNKNOWN[")){
+                PacketContainer kickPack = new PacketContainer(PacketType.Login.Server.DISCONNECT);
+                kickPack.getChatComponents().write(0, WrappedChatComponent.fromText(reason));
+                ProtocolLibrary.getProtocolManager().sendServerPacket(player, kickPack);
+            }
         }finally {
             player.kickPlayer(reason);
         }

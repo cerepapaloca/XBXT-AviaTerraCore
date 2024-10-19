@@ -17,6 +17,7 @@ import net.atcore.AviaTerraCore;
 import net.atcore.Messages.TypeMessages;
 import net.atcore.Security.Login.LoginManager;
 import net.atcore.Security.Login.DataSession;
+import net.atcore.Security.Login.StateLogins;
 import net.atcore.Security.VerificationPremium;
 import net.atcore.Utils.GlobalUtils;
 import org.bukkit.Bukkit;
@@ -30,6 +31,7 @@ import java.util.*;
 
 import static com.comphenix.protocol.PacketType.Login.Client.START;
 import static net.atcore.Messages.MessagesManager.sendMessageConsole;
+import static net.atcore.Security.Login.StateLogins.PREMIUM;
 
 public class SimulateOnlineMode {
 
@@ -109,29 +111,23 @@ public class SimulateOnlineMode {
 
                 DataSession session = LoginManager.getListSession().get(name);
                 if (session == null || session.getEndTimeLogin() < System.currentTimeMillis()) {
-                    switch (LoginManager.getState(player.getAddress().getAddress() ,name)){//revisa entre las sesiones o los registro del los jugadores
+                    StateLogins state = LoginManager.getState(player.getAddress().getAddress() ,name);
+                    switch (state){//revisa entre las sesiones o los registro del los jugadores
                         case PREMIUM -> {
-                            Bukkit.getLogger().warning("premium");
                             event.setCancelled(true);//se cancela por que asi el servidor no se da cuenta que a recibido un paquete
                             StartLoginPremium(name, uuid, player);
                         }
-                        case CRACKED -> {
-                            Bukkit.getLogger().warning("cracked");
-                            StartLoginCracked(name, uuid);
-                        }
-                        case UNKNOWN -> {
-                            GlobalUtils.kickPlayer(player, "Error de connexion vuele a intentar");
-                            Bukkit.getLogger().warning("unknown");
-                        }
+                        case CRACKED -> StartLoginCracked(name, uuid);
+                        case UNKNOWN -> GlobalUtils.kickPlayer(player, "Error de connexion vuele a intentar");
                     }
-
+                    sendMessageConsole("Iniciando login <|" + state.name().toLowerCase() + "|>", TypeMessages.INFO);
                 }
             }
         });
     }
 
     private void StartLoginCracked(String name, UUID uuid) {
-
+        //de pronto en el futuro lo usaré o no
     }
 
     private void StartLoginPremium(String name, UUID uuid, Player sender) {
@@ -140,7 +136,7 @@ public class SimulateOnlineMode {
         byte[] token = new byte[4];
         new java.security.SecureRandom().nextBytes(token);
 
-        verifyTokens.put(Arrays.toString(token), name + "|" + sender.getAddress().toString() + "|" + uuid);
+        verifyTokens.put(Arrays.toString(token), name + "|" + sender.getAddress().getHostName() + "|" + uuid);
 
         packetEncryption.getByteArrays().write(0, ServiceSection.getEncrypt().getPublicKey().getEncoded());
         packetEncryption.getByteArrays().write(1, token);

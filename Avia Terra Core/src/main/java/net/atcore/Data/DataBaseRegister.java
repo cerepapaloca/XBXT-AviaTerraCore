@@ -21,6 +21,8 @@ public class DataBaseRegister extends DataBaseMySql {
     protected void reloadDatabase() {
         String sql = "SELECT name, uuidPremium, uuidCracked, ipRegister, ipLogin, isPremium, password, lastLoginDate, registerDate FROM register";
         LoginManager.getListRegister().clear();
+        LoginManager.getListPlayerLoginIn().clear();
+        LoginManager.getListSession().clear();
 
         try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(sql);
@@ -47,11 +49,14 @@ public class DataBaseRegister extends DataBaseMySql {
                 dataRegister.setRegisterDate(registerDate);
                 DataSession session = LoginManager.getListSession().get(name);
                 //////////////////////////////////////////////////////////////
-                if (session == null) return;
+                if (session == null) continue;
+                LoginManager.getListPlayerLoginIn().add(UUID.fromString(uuidCracked));
                 session.setIp(InetAddress.getByName(ipLogin));
                 session.setPasswordShaded(password);
                 session.setUuidCracked(UUID.fromString(uuidCracked));
+                if (uuidPremium == null) continue;
                 session.setUuidPremium(UUID.fromString(uuidPremium));
+
             }
         } catch (SQLException | UnknownHostException e) {
             throw new RuntimeException(e);
@@ -130,6 +135,45 @@ public class DataBaseRegister extends DataBaseMySql {
             /*sendMessageConsole("el jugador <|" + name + "|> fue baneado de <|" + context + "|> durante <|" +
                     tiempoDeBaneo + "|> por el jugador <|" + author +
                     "|> y la razón es <|" + reason + "|> ", TypeMessages.SUCCESS, CategoryMessages.BAN);*/
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void updateLoginDate(String name ,long time){
+        String sql = "UPDATE register SET lastLoginDate = ? WHERE name = ?";
+
+        try (PreparedStatement stmt = getConnection().prepareStatement(sql)) {
+            stmt.setLong(1, time);
+            stmt.setString(2, name);
+
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void updatePassword(String name ,String password){
+        String sql = "UPDATE register SET password = ? WHERE name = ?";
+
+        try (PreparedStatement stmt = getConnection().prepareStatement(sql)) {
+            stmt.setString(1, password);
+            stmt.setString(2, name);
+
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void updateAddress(String name ,String ip){
+        String sql = "UPDATE register SET ipLogin = ? WHERE name = ?";
+
+        try (PreparedStatement stmt = getConnection().prepareStatement(sql)) {
+            stmt.setString(1, ip);
+            stmt.setString(2, name);
+
+            stmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

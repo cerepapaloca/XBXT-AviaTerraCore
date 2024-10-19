@@ -20,6 +20,8 @@ public final class MessagesManager {
     public static final String COLOR_WARING = "&e";
     public static final String COLOR_ERROR = "&c";
 
+    public static final String[] PREFIX_AND_SUFFIX_KICK = new String[]{"&c&m &r &c&m       &r  &4&lAviaKick&c  &m        &r &c&m \n\n&r", "\n\n&m &r &c&m                               &r &c&m "};
+
     public static final String COLOR_ESPECIAL = "&b";
     public static final String LINK_DISCORD = "&a&nhttps://discord.gg/azurex";
 
