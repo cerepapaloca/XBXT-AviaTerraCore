@@ -5,7 +5,7 @@ import com.github.games647.craftapi.resolver.MojangResolver;
 import com.github.games647.craftapi.resolver.RateLimitException;
 import lombok.Getter;
 import net.atcore.AviaTerraCore;
-import net.atcore.Data.RegisterDataBase;
+import net.atcore.Data.DataBaseRegister;
 import net.atcore.Utils.GlobalUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -49,20 +49,23 @@ public class LoginManager {
             if (profile.isPresent()){
                 Profile profileObj = profile.get();
                 dataRegister = new DataRegister(profileObj.getName(), GlobalUtils.getUUIDByName(name), profileObj.getId(), StateLogins.PREMIUM, false);
-                RegisterDataBase.addRegister(dataRegister.getUsername(),
+                dataRegister.setIp(ip);
+                Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(), () -> DataBaseRegister.addRegister(dataRegister.getUsername(),
                         profileObj.getId().toString(), GlobalUtils.getUUIDByName(name).toString(),
                         ip.getHostName(), ip.getHostName(),
                         true, null,
                         System.currentTimeMillis(), System.currentTimeMillis()
-                );
+                ));
+
             }else {//es temporal el registro por qué no ha puesto la contraseña
                 dataRegister = new DataRegister(name, GlobalUtils.getUUIDByName(name), StateLogins.CRACKED, true);
-                RegisterDataBase.addRegister(dataRegister.getUsername(),
+                dataRegister.setIp(ip);
+                Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(), () -> DataBaseRegister.addRegister(dataRegister.getUsername(),
                         null, GlobalUtils.getUUIDByName(name).toString(),
                         ip.getHostName(), ip.getHostName(),
                         false, null,
                         System.currentTimeMillis(), System.currentTimeMillis()
-                );
+                ));
             }
             return dataRegister;
         } catch (IOException | RateLimitException e) {
@@ -72,7 +75,16 @@ public class LoginManager {
 
     public static void addPassword(@NotNull String name, @NotNull String password){
         try {
-            listRegister.get(name).setPasswordShaded(hashPassword(name ,password));
+            String s = hashPassword(name ,password);
+            listRegister.get(name).setPasswordShaded(s);
+            Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(), () -> {
+                DataRegister data = listRegister.get(name);
+                DataBaseRegister.addRegister(data.getUsername(),
+                        data.getUuidPremium() == null ? null : data.getUuidPremium().toString(), GlobalUtils.getUUIDByName(name).toString(),
+                        data.getAddressRegister().toString(), data.getIp().toString(),
+                        false, data.getPasswordShaded(),
+                        System.currentTimeMillis(), data.getRegisterDate());
+            });
         } catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
@@ -108,7 +120,7 @@ public class LoginManager {
     public static boolean isLoginIn(Player player, boolean force){
         if (listSession.containsKey(player.getName())){
             DataSession dataSession = listSession.get(player.getName());
-            if (dataSession.getIp() == Objects.requireNonNull(player.getAddress()).getAddress()){
+            if (Objects.equals(dataSession.getIp().getHostName().split(":")[0], Objects.requireNonNull(player.getAddress()).getAddress().getHostName().split(":")[0])){
                 if (!force) return true;
                 if (dataSession.getEndTimeLogin() > System.currentTimeMillis()){
                     return true;

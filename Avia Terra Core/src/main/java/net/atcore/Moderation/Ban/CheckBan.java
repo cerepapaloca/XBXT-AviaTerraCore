@@ -11,7 +11,7 @@ public class CheckBan implements Listener {
 
     public static void onLogin(@NotNull PlayerLoginEvent event) {//No sé por qué cuando es la primeras vez que entras al servidor se dispara 4 veces seguidas
         Player player = event.getPlayer();
-        String s = BanManager.checkBan(player, event.getAddress(), ContextBan.GLOBAL);
+        String s = ManagerBan.checkBan(player, event.getAddress(), ContextBan.GLOBAL);
         if (s != null && !s.isEmpty()) {
             event.setKickMessage(s);
             event.setResult(PlayerLoginEvent.Result.KICK_BANNED);
@@ -20,7 +20,7 @@ public class CheckBan implements Listener {
 
     public static boolean checkChat(@NotNull AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
-        String s = BanManager.checkBan(player, ContextBan.CHAT);
+        String s = ManagerBan.checkBan(player, ContextBan.CHAT);
         return s != null && !s.isEmpty();
     }
 }

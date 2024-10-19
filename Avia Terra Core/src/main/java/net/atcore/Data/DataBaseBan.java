@@ -18,7 +18,7 @@ import java.util.*;
 
 import static net.atcore.Messages.MessagesManager.sendMessageConsole;
 
-public class BanDataBase extends DataBaseMySql {
+public class DataBaseBan extends DataBaseMySql {
 
     protected static final HashMap<String, HashSet<DataBan>> listDataBanByNAME = new HashMap<>();
     protected static final HashMap<InetAddress, HashSet<DataBan>> listDataBanByIP = new HashMap<>();

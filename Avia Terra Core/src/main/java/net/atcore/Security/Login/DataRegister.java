@@ -25,5 +25,6 @@ public class DataRegister extends BaseDataLogin {
     private boolean isTemporary;
     private long lastLoginDate;
     private long registerDate;
+    private InetAddress addressRegister;
 
 }

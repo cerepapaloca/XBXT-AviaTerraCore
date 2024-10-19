@@ -72,7 +72,6 @@ public class SimulateOnlineMode {
             public void onPacketSending(PacketEvent event) {
                 PacketContainer packet = event.getPacket();
                 String name = packet.getGameProfiles().read(0).getName();
-                listUUIDPremium.remove(name);
             }
         });
 
@@ -109,19 +108,24 @@ public class SimulateOnlineMode {
                 String name = event.getPacket().getStrings().read(0);
 
                 DataSession session = LoginManager.getListSession().get(name);
-
-                Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(), () -> {
-                    if (session == null || session.getEndTimeLogin() < System.currentTimeMillis()) {
-                        switch (LoginManager.getState(player.getAddress().getAddress() ,name)){//revisa entre las sesiones o los registro del los jugadores
-                            case PREMIUM -> {
-                                event.setCancelled(true);//se cancela por que asi el servidor no se da cuenta que a recibido un paquete
-                                StartLoginPremium(name, uuid, player);
-                            }
-                            case CRACKED -> StartLoginCracked(name, uuid);
-                            case UNKNOWN -> GlobalUtils.kickPlayer(player, "Error de connexion vuele a intentar");
+                if (session == null || session.getEndTimeLogin() < System.currentTimeMillis()) {
+                    switch (LoginManager.getState(player.getAddress().getAddress() ,name)){//revisa entre las sesiones o los registro del los jugadores
+                        case PREMIUM -> {
+                            Bukkit.getLogger().warning("premium");
+                            event.setCancelled(true);//se cancela por que asi el servidor no se da cuenta que a recibido un paquete
+                            StartLoginPremium(name, uuid, player);
+                        }
+                        case CRACKED -> {
+                            Bukkit.getLogger().warning("cracked");
+                            StartLoginCracked(name, uuid);
+                        }
+                        case UNKNOWN -> {
+                            GlobalUtils.kickPlayer(player, "Error de connexion vuele a intentar");
+                            Bukkit.getLogger().warning("unknown");
                         }
                     }
-                });
+
+                }
             }
         });
     }
@@ -147,11 +151,14 @@ public class SimulateOnlineMode {
     }
 
     public void applySkin(Player player) {
-        String skinData = listUUIDPremium.get(player.getName()).getProperties()[0].getValue();
-        String signature = listUUIDPremium.get(player.getName()).getProperties()[0].getSignature();
-        WrappedGameProfile gameProfile = WrappedGameProfile.fromPlayer(player);
-        WrappedSignedProperty skin = WrappedSignedProperty.fromValues(Textures.KEY, skinData, signature);
-        gameProfile.getProperties().put(Textures.KEY, skin);
+        if (listUUIDPremium.containsKey(player.getName())){
+            String skinData = listUUIDPremium.get(player.getName()).getProperties()[0].getValue();
+            String signature = listUUIDPremium.get(player.getName()).getProperties()[0].getSignature();
+            listUUIDPremium.remove(player.getName());
+            WrappedGameProfile gameProfile = WrappedGameProfile.fromPlayer(player);
+            WrappedSignedProperty skin = WrappedSignedProperty.fromValues(Textures.KEY, skinData, signature);
+            gameProfile.getProperties().put(Textures.KEY, skin);
+        }
     }
 
     /**
@@ -182,7 +189,7 @@ public class SimulateOnlineMode {
      */
 
     public static boolean enableEncryption(SecretKey loginKey, Player player) throws IllegalArgumentException {
-        sendMessageConsole("Se inicio cifrado para el jugador <|" + player.getName() + "|>", TypeMessages.INFO);
+        sendMessageConsole("Se inicio cifrado", TypeMessages.INFO);
         // Initialize method reflections
         if (encryptKeyMethod == null || encryptMethod == null) {
             Class<?> networkManagerClass = MinecraftReflection.getNetworkManagerClass();

@@ -16,4 +16,6 @@ commands:
   ban:
   unban:
   checkban:
+  login:
+  register:
 

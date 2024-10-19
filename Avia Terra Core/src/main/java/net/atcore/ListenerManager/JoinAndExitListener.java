@@ -30,12 +30,12 @@ public class JoinAndExitListener implements Listener {
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
 
-        if (LoginManager.getListRegister().containsKey(player.getName())) {
+        if (LoginManager.getListRegister().get(player.getName()) != null) {
             if (!LoginManager.isLoginIn(player, true)) {
                 sendMessage(player, "login porfa", TypeMessages.INFO);
             }
         }else{
-            sendMessage(player, "lregistrate porfa ", TypeMessages.INFO);
+            sendMessage(player, "registrate porfa ", TypeMessages.INFO);
         }
 
         event.setJoinMessage(ChatColor.translateAlternateColorCodes('&',

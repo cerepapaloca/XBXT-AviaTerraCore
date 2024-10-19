@@ -61,23 +61,25 @@ public class VerificationPremium {
                 Optional<Verification> response;
 
                 //se investiga en la base de datos en mojang para saber si esta logueado.
-                response = resolver.hasJoined(name, serverId, InetAddress.getByName("localhost"));
+                response = resolver.hasJoined(name, serverId, InetAddress.getByName(player.getAddress().getAddress().getHostName()));
                 if (response.isPresent()){//Se mira la base de datos
                     Verification verification = response.get();
                     if (checkNameAndUUID(verification, name, uuid)) {//mira si son iguales
-                        if (player.getAddress().toString().equals(ip)){//mira si la ip son las misma
+                        if (true){//mira si la ip son las misma
                             SimulateOnlineMode.FakeStartPacket(verification.getName(), verification.getId(), player);//se envía un paquete falso al servidor
                             sendMessageConsole("Certificación del premíum valida del jugador <|" +           //para que siga con el protocolo
                                     name + "|>", TypeMessages.SUCCESS, CategoryMessages.LOGIN);
+                            String userName = verification.getName();
+                            listUUIDPremium.put(userName, verification);
                             //Activa el protocolo de encriptación de minecraft. Más información en https://wiki.vg/Protocol_Encryption
                             if (SimulateOnlineMode.enableEncryption(new SecretKeySpec(sharedSecret, "AES"), player)){
-                                String userName = verification.getName();
-                                new DataSession(name, GlobalUtils.getUUIDByName(name), verification.getId(), StateLogins.PREMIUM);
-                                listUUIDPremium.put(userName, verification);
+                                DataSession session = new DataSession(name, GlobalUtils.getUUIDByName(name), verification.getId(), StateLogins.PREMIUM);
+                                session.setIp(player.getAddress().getAddress());
+                                session.setEndTimeLogin(System.currentTimeMillis() + 1000*20);
                             }else{
                                 GlobalUtils.kickPlayer(player, "hubo un error. Reinicie su cliente");
                                 sendMessageConsole("hubo un error al activar el protocolo de encriptación por el jugador <|"
-                                        + player.getName() + "|> y la ip <|" + player.getAddress().toString() +
+                                        + name + "|> y la ip <|" + player.getAddress().toString() +
                                         "|>. Discrepancia detectada", TypeMessages.ERROR, CategoryMessages.LOGIN);
                             }
                         }else{

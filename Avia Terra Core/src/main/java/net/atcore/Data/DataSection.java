@@ -16,7 +16,8 @@ public class DataSection implements Section {
 
     @Override
     public void enable() {
-        register(mySQLConnection = new BanDataBase());
+        register(mySQLConnection = new DataBaseBan());
+        register(new DataBaseRegister());
         Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(), () -> {
             for (DataBaseMySql db : dataBases) db.createTable();
         });
@@ -25,8 +26,8 @@ public class DataSection implements Section {
     @Override
     public void disable() {
         DataSection.getMySQLConnection().close();
-        BanDataBase.listDataBanByNAME.clear();
-        BanDataBase.listDataBanByIP.clear();
+        DataBaseBan.listDataBanByNAME.clear();
+        DataBaseBan.listDataBanByIP.clear();
     }
 
     @Override

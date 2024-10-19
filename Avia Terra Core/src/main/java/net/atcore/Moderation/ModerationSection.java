@@ -1,16 +1,16 @@
 package net.atcore.Moderation;
 
 import lombok.Getter;
-import net.atcore.Moderation.Ban.BanManager;
+import net.atcore.Moderation.Ban.ManagerBan;
 import net.atcore.Section;
 
 public class ModerationSection implements Section {
 
-    @Getter private static BanManager banManager;
+    @Getter private static ManagerBan banManager;
 
     @Override
     public void enable() {
-        banManager = new BanManager();
+        banManager = new ManagerBan();
     }
 
     @Override

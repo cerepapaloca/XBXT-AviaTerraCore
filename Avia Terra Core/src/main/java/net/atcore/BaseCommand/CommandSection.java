@@ -20,6 +20,8 @@ public class CommandSection implements Section {
         register(new CommandUnban());
         register(new CommandBan());
         register(new CommandCheckBan());
+        register(new CommandLogin());
+        register(new CommandRegister());
     }
 
     @Override

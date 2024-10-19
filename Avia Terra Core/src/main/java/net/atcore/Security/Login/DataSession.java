@@ -2,7 +2,9 @@ package net.atcore.Security.Login;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.Bukkit;
 
+import java.io.BufferedReader;
 import java.util.UUID;
 
 @Getter
@@ -14,6 +16,7 @@ public class DataSession extends BaseDataLogin {
         this.setUuidPremium(uuidPremium);
         LoginManager.getListSession().put(username, this);
         LoginManager.getListPlayerLoginIn().add(uuidCracked);
+        startTimeLogin = System.currentTimeMillis();
 
     }
 
@@ -21,6 +24,7 @@ public class DataSession extends BaseDataLogin {
         super(username, uuidCracked ,state);
         LoginManager.getListSession().put(username, this);
         LoginManager.getListPlayerLoginIn().add(uuidCracked);
+        startTimeLogin = System.currentTimeMillis();
     }
 
     private long startTimeLogin;

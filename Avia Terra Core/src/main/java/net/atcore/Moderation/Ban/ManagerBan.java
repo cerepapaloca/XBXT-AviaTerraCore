@@ -1,7 +1,7 @@
 package net.atcore.Moderation.Ban;
 
 import net.atcore.AviaTerraCore;
-import net.atcore.Data.BanDataBase;
+import net.atcore.Data.DataBaseBan;
 import net.atcore.Messages.CategoryMessages;
 import net.atcore.Messages.TypeMessages;
 import net.atcore.Moderation.ModerationSection;
@@ -15,12 +15,11 @@ import org.jetbrains.annotations.Nullable;
 import java.net.InetAddress;
 import java.sql.SQLException;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Objects;
 
 import static net.atcore.Messages.MessagesManager.*;
 
-public class BanManager extends BanDataBase {
+public class ManagerBan extends DataBaseBan {
 
     public void banPlayer(Player player, String reason, long time, ContextBan contextBan, String nameAuthor) {
         banPlayer(player.getName(),

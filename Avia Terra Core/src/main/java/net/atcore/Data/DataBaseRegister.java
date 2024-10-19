@@ -6,8 +6,9 @@ import net.atcore.Security.Login.DataSession;
 import net.atcore.Security.Login.LoginManager;
 import net.atcore.Security.Login.DataRegister;
 import net.atcore.Security.Login.StateLogins;
-import net.atcore.Utils.GlobalUtils;
+import org.bukkit.Bukkit;
 
+import java.io.BufferedReader;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.sql.*;
@@ -15,7 +16,7 @@ import java.util.UUID;
 
 import static net.atcore.Messages.MessagesManager.sendMessageConsole;
 
-public class RegisterDataBase extends DataBaseMySql {
+public class DataBaseRegister extends DataBaseMySql {
     @Override
     protected void reloadDatabase() {
         String sql = "SELECT name, uuidPremium, uuidCracked, ipRegister, ipLogin, isPremium, password, lastLoginDate, registerDate FROM register";
@@ -37,16 +38,17 @@ public class RegisterDataBase extends DataBaseMySql {
                 long registerDate = resultSet.getLong("registerDate");
 
                 DataRegister dataRegister = new DataRegister(name, UUID.fromString(uuidCracked),
-                        UUID.fromString(uuidPremium), isPremium == 1 ? StateLogins.PREMIUM : StateLogins.CRACKED,
+                        uuidPremium != null ? UUID.fromString(uuidPremium) : null, isPremium == 1 ? StateLogins.PREMIUM : StateLogins.CRACKED,
                         true);
-                dataRegister.setIp(InetAddress.getByName(ipRegister));
+                dataRegister.setAddressRegister(InetAddress.getByName(ipRegister));
+                dataRegister.setIp(InetAddress.getByName(ipLogin));
                 dataRegister.setPasswordShaded(password);
                 dataRegister.setLastLoginDate(lastLoginDate);
                 dataRegister.setRegisterDate(registerDate);
                 DataSession session = LoginManager.getListSession().get(name);
                 //////////////////////////////////////////////////////////////
                 if (session == null) return;
-                session.setIp(InetAddress.getByName(ipRegister));
+                session.setIp(InetAddress.getByName(ipLogin));
                 session.setPasswordShaded(password);
                 session.setUuidCracked(UUID.fromString(uuidCracked));
                 session.setUuidPremium(UUID.fromString(uuidPremium));
@@ -95,6 +97,7 @@ public class RegisterDataBase extends DataBaseMySql {
         try (Connection connection = getConnection();
              Statement statement = connection.createStatement()) {
             statement.executeUpdate(createTableSQL);
+            reloadDatabase();
             sendMessageConsole("DataBase Registro " + MessagesManager.COLOR_SUCCESS + "Ok", TypeMessages.INFO);
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -106,7 +109,7 @@ public class RegisterDataBase extends DataBaseMySql {
                                    String ipLogin, Boolean isPremium,
                                    String password, long lastLoginDate,
                                    long registerDate) {
-        String sql = "INSERT INTO bans (name, uuidPremium, uuidCracked, ipRegister, ipLogin, isPremium, password, lastLoginDate, registerDate) " +
+        String sql = "INSERT INTO register (name, uuidPremium, uuidCracked, ipRegister, ipLogin, isPremium, password, lastLoginDate, registerDate) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) " +
                 "ON DUPLICATE KEY UPDATE " +
                 "name = VALUES(name), uuidPremium = VALUES(uuidPremium), uuidCracked = VALUES(uuidCracked), ipRegister = VALUES(ipRegister), " +
@@ -117,8 +120,8 @@ public class RegisterDataBase extends DataBaseMySql {
             statement.setString(1, name);
             statement.setString(2, uuidPremium);
             statement.setString(3, uuidCracked);
-            statement.setString(4, ipRegister);
-            statement.setString(5, ipLogin);
+            statement.setString(4, ipRegister.replace("/",""));
+            statement.setString(5, ipLogin.replace("/",""));
             statement.setInt(6, isPremium ? 1 : 0);
             statement.setString(7, password);
             statement.setLong(8, lastLoginDate);

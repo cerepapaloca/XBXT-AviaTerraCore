@@ -2,11 +2,10 @@ package net.atcore.BaseCommand.Commnads;
 
 import net.atcore.BaseCommand.BaseTabCommand;
 import net.atcore.Messages.TypeMessages;
-import net.atcore.Moderation.Ban.BanManager;
+import net.atcore.Moderation.Ban.ManagerBan;
 import net.atcore.Moderation.Ban.ContextBan;
 import net.atcore.Moderation.Ban.DataBan;
 import net.atcore.Utils.GlobalUtils;
-import net.dv8tion.jda.api.entities.Guild;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -45,11 +44,11 @@ public class CommandCheckBan extends BaseTabCommand {
             }
 
             if (isChecking) {
-                if (BanManager.getDataBan(args[0]) == null) {
+                if (ManagerBan.getDataBan(args[0]) == null) {
                     sendMessage(sender, "No esta baneado", TypeMessages.INFO);
                     return;
                 }
-                for (DataBan dataBan : BanManager.getDataBan(args[0])){
+                for (DataBan dataBan : ManagerBan.getDataBan(args[0])){
                     getStringTime(sender, dataBan);
                 }
             }else {
@@ -65,16 +64,16 @@ public class CommandCheckBan extends BaseTabCommand {
 
                     Player player = Bukkit.getPlayer(args[0]);
                     if (player != null) {
-                        String reason = BanManager.checkBan(player, contextBan);
+                        String reason = ManagerBan.checkBan(player, contextBan);
                         if (reason == null){
                             sendMessage(sender, "el jugador no esta banedo de ningún contexto", TypeMessages.SUCCESS);;
                         }else if (reason.isEmpty()){
                             sendMessage(sender, "el jugador esta baneado pero no del contexto seleccionado pero esta baneado de:", TypeMessages.SUCCESS);
-                            if (BanManager.getDataBan(player.getName()) == null) {
+                            if (ManagerBan.getDataBan(player.getName()) == null) {
                                 sendMessage(sender, "No esta baneado", TypeMessages.INFO);
                                 return;
                             }
-                            for (DataBan dataBan : BanManager.getDataBan(player.getName())){
+                            for (DataBan dataBan : ManagerBan.getDataBan(player.getName())){
                                 getStringTime(sender, dataBan);
                             }
                         }else {

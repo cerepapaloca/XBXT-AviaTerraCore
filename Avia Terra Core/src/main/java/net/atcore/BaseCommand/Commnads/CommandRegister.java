@@ -25,17 +25,20 @@ public class CommandRegister extends BaseCommand {
     @Override
     public void execute(CommandSender sender, String[] args) {
         if (sender instanceof Player player){
-            if (args.length >= 2){
-                if (Objects.equals(args[0], args[1])){
-                    LoginManager.addPassword(player.getName(), args[1]);
-                    sendMessage(player, "la contraseña se guardo exitosamente y registraste exitosamente", TypeMessages.ERROR);
+            if (!LoginManager.getListRegister().containsKey(player.getName())){
+                if (args.length >= 2){
+                    if (Objects.equals(args[0], args[1])){
+                        LoginManager.addPassword(player.getName(), args[1]);
+                        sendMessage(player, "la contraseña se guardo exitosamente y registraste exitosamente", TypeMessages.SUCCESS);
+                    }else{
+                        sendMessage(player, "las contra seña no son iguales", TypeMessages.ERROR);
+                    }
                 }else{
-                    sendMessage(player, "las contra seña no son iguales", TypeMessages.ERROR);
+                    sendMessage(player, "tiene que escribir la contraseña de nuevo", TypeMessages.ERROR);
                 }
-            }else{
-                sendMessage(player, "tiene que escribir la contraseña de nuevo", TypeMessages.ERROR);
+            }else {
+                sendMessage(player, "Ya estas registrado", TypeMessages.ERROR);
             }
-
         }
     }
 }
