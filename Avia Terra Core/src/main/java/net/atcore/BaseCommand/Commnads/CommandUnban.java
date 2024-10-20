@@ -6,7 +6,9 @@ import net.atcore.Messages.TypeMessages;
 import net.atcore.Moderation.Ban.ContextBan;
 import net.atcore.Moderation.ModerationSection;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import static net.atcore.Messages.MessagesManager.sendMessage;
 

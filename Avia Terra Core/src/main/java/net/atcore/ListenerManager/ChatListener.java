@@ -26,7 +26,7 @@ public class ChatListener implements Listener {
         Player player = e.getPlayer();
         e.setCancelled(true);
 
-        if (!LoginManager.isLoginIn(player, true)) {
+        if (!LoginManager.checkLoginIn(player, true)) {
             sendMessage(player, "Te tienes que loguear para escribir en el chat", TypeMessages.ERROR);
             return;
         }

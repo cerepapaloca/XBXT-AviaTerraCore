@@ -37,7 +37,7 @@ public class CommandRegister extends BaseCommand {
                             LoginManager.newRegisterCracked(player.getName(), player.getAddress().getAddress(),  args[0]);
                             player.sendTitle(ChatColor.translateAlternateColorCodes('&',COLOR_ESPECIAL + "Te haz registrado!"), "", 20, 20*3, 40);
                             session.setEndTimeLogin(System.currentTimeMillis() + 1000*60);
-                            LoginManager.isLoginIn(player, true);
+                            LoginManager.checkLoginIn(player, true);
                         }else{
                             sendMessage(player, "las contra seña no son iguales", TypeMessages.ERROR);
                         }

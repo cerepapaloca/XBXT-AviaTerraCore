@@ -30,7 +30,7 @@ public class LoginManager {
     @Getter private static final HashMap<String, DataSession> listSession = new HashMap<>();
     @Getter private static final HashMap<String, DataRegister> listRegister = new HashMap<>();
 
-    @Getter private static final HashSet<UUID> listPlayerLoginIn = new HashSet<>();
+    @Getter private static final HashSet<UUID> listPlayerLoginIn = new HashSet<>();//esto existe por qué más optimizado que los hashMap
 
     public static StateLogins getState(InetAddress ip, String name){
         if (listRegister.containsKey(name)){
@@ -127,19 +127,21 @@ public class LoginManager {
 
     /**
      * Chequea si el jugador está logueado correctamente y lo cambia de modo de juego
-     * si está logueado correctamente
+     * si está logueado correctamente.
      * @param player al jugador que se va chequear
      * @param ignoreTime sí se tiene en cuenta el tiempo de expiración
      * @return verdadero cuando esta logueado, falso cuando no lo está
      */
 
-    public static boolean isLoginIn(Player player, boolean ignoreTime){
-        if (listSession.containsKey(player.getName())){
+    public static boolean checkLoginIn(Player player, boolean ignoreTime){
+        if (listSession.containsKey(player.getName())){//mira si tiene una session
             DataSession dataSession = listSession.get(player.getName());
-            if (Objects.equals(dataSession.getIp().getHostName().split(":")[0], Objects.requireNonNull(player.getAddress()).getAddress().getHostName().split(":")[0])){
-                if (ignoreTime || dataSession.getEndTimeLogin() > System.currentTimeMillis()){
-                    player.setGameMode(GameMode.SURVIVAL);
-                    return true;
+            if (dataSession.getStateLogins() == StateLogins.CRACKED && dataSession.getPasswordShaded() != null){//tiene contraseña para la cuenta cracked
+                if (Objects.equals(dataSession.getIp().getHostName().split(":")[0], Objects.requireNonNull(player.getAddress()).getAddress().getHostName().split(":")[0])){
+                    if (ignoreTime || dataSession.getEndTimeLogin() > System.currentTimeMillis()){//expiro? o no se tiene en cuenta
+                        player.setGameMode(GameMode.SURVIVAL);
+                        return true;
+                    }
                 }
             }
         }
@@ -153,7 +155,7 @@ public class LoginManager {
         new BukkitRunnable() {
             @Override
             public void run() {
-                if (isLoginIn(player, true)) return;
+                if (checkLoginIn(player, true)) return;
                 GlobalUtils.kickPlayer(player, reason);
             }
         }.runTaskLater(AviaTerraCore.getInstance(), 20*20);

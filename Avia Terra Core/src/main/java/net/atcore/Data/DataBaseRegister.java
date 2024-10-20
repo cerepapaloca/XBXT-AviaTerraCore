@@ -1,11 +1,15 @@
 package net.atcore.Data;
 
+import com.comphenix.protocol.events.PacketContainer;
 import net.atcore.Messages.MessagesManager;
 import net.atcore.Messages.TypeMessages;
 import net.atcore.Security.Login.DataSession;
 import net.atcore.Security.Login.LoginManager;
 import net.atcore.Security.Login.DataRegister;
 import net.atcore.Security.Login.StateLogins;
+import net.atcore.Utils.GlobalUtils;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -18,9 +22,9 @@ public class DataBaseRegister extends DataBaseMySql {
     @Override
     protected void reloadDatabase() {
         String sql = "SELECT name, uuidPremium, uuidCracked, ipRegister, ipLogin, isPremium, password, lastLoginDate, registerDate FROM register";
-        LoginManager.getListRegister().clear();
+        LoginManager.getListRegister().clear();//se limpia los datos
         LoginManager.getListPlayerLoginIn().clear();
-        LoginManager.getListSession().clear();
+        //no está LoginManager.getListSession() por que si no tendría que obligar a todos los usuarios a loguearse de nuevo
 
         try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(sql);
@@ -45,16 +49,30 @@ public class DataBaseRegister extends DataBaseMySql {
                 dataRegister.setPasswordShaded(password);
                 dataRegister.setLastLoginDate(lastLoginDate);
                 dataRegister.setRegisterDate(registerDate);
-                DataSession session = LoginManager.getListSession().get(name);
+                DataSession session = LoginManager.getListSession().get(name);//Se obtiene las sesiones guardadas y se modifica con los datos nuevos
                 //////////////////////////////////////////////////////////////
-                if (session == null) continue;
-                LoginManager.getListPlayerLoginIn().add(UUID.fromString(uuidCracked));
+
+                if (session == null) continue;//si tenia una session actualiza los datos si no lo ignora
                 session.setIp(InetAddress.getByName(ipLogin));
                 session.setPasswordShaded(password);
                 session.setUuidCracked(UUID.fromString(uuidCracked));
-                if (uuidPremium == null) continue;
-                session.setUuidPremium(UUID.fromString(uuidPremium));
+                if (uuidPremium != null) {
+                    session.setUuidPremium(UUID.fromString(uuidPremium));
+                }
 
+                //////////////////////////////////////////////////////////////
+
+                Player player = Bukkit.getPlayer(uuidCracked);
+                if (player == null){//si el jugador está desconectado se borra la session
+                    LoginManager.getListSession().remove(name);
+                    continue;
+                }
+                if (LoginManager.checkLoginIn(player, true)){//si es valida
+                    LoginManager.getListPlayerLoginIn().add(UUID.fromString(uuidCracked));//se gurda como jugadores logueado
+                }else {
+                    LoginManager.getListSession().remove(name);
+                    GlobalUtils.kickPlayer(player, "Hay una discrepancia es tu session, vuelve a iniciar sessión");
+                }
             }
         } catch (SQLException | UnknownHostException e) {
             throw new RuntimeException(e);

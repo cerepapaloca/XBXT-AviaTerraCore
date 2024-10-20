@@ -45,7 +45,7 @@ public class PlayerListener implements Listener {
             return;
         }
 
-        if (!LoginManager.isLoginIn(player, true)) {
+        if (!LoginManager.checkLoginIn(player, true)) {
             sendMessage(player,"Primero inicia sessión usando /login", TypeMessages.ERROR);
             event.setCancelled(true);
         }

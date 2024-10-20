@@ -3,8 +3,11 @@ package net.atcore.ListenerManager;
 import net.atcore.Messages.TypeMessages;
 import net.atcore.Moderation.Ban.CheckBan;
 import net.atcore.Security.AntiTwoPlayer;
+import net.atcore.Security.Login.DataRegister;
 import net.atcore.Security.Login.LoginManager;
+import net.atcore.Security.Login.StateLogins;
 import net.atcore.Service.ServiceSection;
+import net.atcore.Utils.GlobalUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -28,17 +31,23 @@ public class JoinAndExitListener implements Listener {
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
 
-        if (LoginManager.getListRegister().get(player.getName()).getPasswordShaded() != null) {
-            if (!LoginManager.isLoginIn(player, false)) {
-                sendMessage(player, "login porfa", TypeMessages.INFO);
-                LoginManager.startTimeOut(player, "Tardaste mucho en iniciar sesión");
+        DataRegister dataRegister = LoginManager.getListRegister().get(player.getName());
+        if (dataRegister != null) {
+            if (dataRegister.getStateLogins() == StateLogins.CRACKED){
+                if (dataRegister.getPasswordShaded() != null) {//tiene contraseña o no
+                    if (!LoginManager.checkLoginIn(player, false)) {//si tiene una session valida o no
+                        sendMessage(player, "login porfa", TypeMessages.INFO);
+                        LoginManager.startTimeOut(player, "Tardaste mucho en iniciar sesión");
+                    }//si es valida no hace nada
+                }else{
+                    LoginManager.startTimeOut(player, "Tardaste mucho en registrarte");
+                    sendMessage(player, "registrate porfa ", TypeMessages.INFO);//En caso que no tenga una contraseña
+                }
             }
         }else{
-            if (LoginManager.getListRegister().get(player.getName()).getUuidPremium() == null) {
-                LoginManager.startTimeOut(player, "Tardaste mucho en registrarte");
-                sendMessage(player, "registrate porfa ", TypeMessages.INFO);
-            }
+            GlobalUtils.kickPlayer(player, "no estas registrado, vuelve a entrar al servidor");
         }
+
 
         /*if (LoginManager.getListSession().get(player.getName()).getUuidPremium() != null) {
             player.sendTitle(ChatColor.translateAlternateColorCodes('&',COLOR_ESPECIAL + "Te haz logueado!"),
