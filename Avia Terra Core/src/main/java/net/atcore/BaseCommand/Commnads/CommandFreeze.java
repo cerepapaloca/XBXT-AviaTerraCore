@@ -1,6 +1,7 @@
 package net.atcore.BaseCommand.Commnads;
 
 import net.atcore.BaseCommand.BaseTabCommand;
+import net.atcore.BaseCommand.CommandUtils;
 import net.atcore.Messages.TypeMessages;
 import net.atcore.Moderation.Freeze;
 import net.atcore.Utils.GlobalUtils;
@@ -77,7 +78,7 @@ public class CommandFreeze extends BaseTabCommand {
     @Override
     public List<String> onTab(CommandSender sender, String[] args) {
         if (args.length == 2) {
-            return GlobalUtils.listTab(args[1], new String[]{"on", "off"});
+            return CommandUtils.listTab(args[1], new String[]{"on", "off"});
         }
         return null;
     }

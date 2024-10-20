@@ -5,6 +5,7 @@ import net.atcore.BaseCommand.CommandUtils;
 import net.atcore.Messages.TypeMessages;
 import net.atcore.Section;
 import net.atcore.Security.AntiExploit;
+import net.atcore.Utils.GlobalUtils;
 import net.atcore.Utils.RegisterManager;
 import org.bukkit.command.CommandSender;
 
@@ -47,12 +48,31 @@ public class CommandAviaTerra extends BaseTabCommand {
                 }
                 sendMessage(sender,"El anti Op esta" + CommandUtils.booleanToString(AntiExploit.isCheckAntiOP()), TypeMessages.INFO);
             }
+            case "antiilgalitem" -> {
+                if (args.length >= 2) {
+                    if (CommandUtils.isTrueOrFalse(args[1])){
+                        AntiExploit.setCheckAntiOP(true);
+                        sendMessage(sender,"Anti Items Ilegales <|Activado|>", TypeMessages.INFO);
+                    }else{
+                        AntiExploit.setCheckAntiOP(false);
+                        sendMessage(sender,"Anti Items Ilegales <|Desactivado|>", TypeMessages.INFO);
+                        sendMessage(sender,"****************************", TypeMessages.WARNING);
+                        sendMessage(sender,"DESACTIVAR SOLO PARA PRUEBAS", TypeMessages.WARNING);
+                        sendMessage(sender,"****************************", TypeMessages.WARNING);
+                    }
+
+                }
+                sendMessage(sender,"el Anti Items Ilegales esta" + CommandUtils.booleanToString(AntiExploit.isCheckAntiOP()), TypeMessages.INFO);
+            }
         }
     }
 
     @Override
     public List<String> onTab(CommandSender sender, String[] args) {
-        String[] argsRoot = new String[]{"reload", "antiop"};
+        String[] argsRoot = new String[]{"Reload", "AntiOp", "AntiIllegalItems"};
+        switch (args[0].toLowerCase()) {
+            case "antiop", "antiilgalitem" -> CommandUtils.listTab(args[1], new String[]{"true", "false"});
+        }
 
         return Arrays.stream(argsRoot).toList();
     }

@@ -1,6 +1,7 @@
 package net.atcore.BaseCommand.Commnads;
 
 import net.atcore.BaseCommand.BaseTabCommand;
+import net.atcore.BaseCommand.CommandUtils;
 import net.atcore.Messages.TypeMessages;
 import net.atcore.Moderation.Ban.ManagerBan;
 import net.atcore.Moderation.Ban.ContextBan;
@@ -109,10 +110,10 @@ public class CommandCheckBan extends BaseTabCommand {
                 return null;
             }
             case 2 -> {
-                return GlobalUtils.listTab(args[1], new String[]{"?","!"});
+                return CommandUtils.listTab(args[1], new String[]{"?","!"});
             }
             case 3 -> {
-                return GlobalUtils.listTab(args[2], GlobalUtils.EnumsToStrings(ContextBan.values()));
+                return CommandUtils.listTab(args[2], GlobalUtils.EnumsToStrings(ContextBan.values()));
             }
         }
         return List.of("");

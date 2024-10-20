@@ -1,10 +1,13 @@
 package net.atcore.Moderation.Ban;
 
+import lombok.Getter;
+import lombok.Setter;
 import net.atcore.AviaTerraCore;
 import net.atcore.Messages.TypeMessages;
 import net.atcore.Moderation.ModerationSection;
 import net.atcore.Utils.GlobalUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
@@ -16,6 +19,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 
 import static net.atcore.Messages.MessagesManager.sendMessageConsole;
+import static org.bukkit.Material.*;
 
 public class CheckAutoBan implements Listener {
 
@@ -95,5 +99,24 @@ public class CheckAutoBan implements Listener {
 
             }
         }
+    }
+
+    @Getter
+    @Setter
+    private static boolean checkAntiIllegalItems = true;
+
+    private static final HashSet<Material> ILEGAL_ITEMS = (HashSet<Material>) Set.of(BEDROCK, END_PORTAL_FRAME, COMMAND_BLOCK, BARRIER,
+            STRUCTURE_VOID, STRUCTURE_BLOCK, REPEATING_COMMAND_BLOCK, CHAIN_COMMAND_BLOCK, COMMAND_BLOCK_MINECART, SPAWNER, REINFORCED_DEEPSLATE);
+
+    public static void checkAntiIlegalItems(Player player) {
+        if (!checkAntiIllegalItems)return;
+        boolean b = false;
+        for (ItemStack item: player.getInventory().getContents()){
+            if (ILEGAL_ITEMS.contains(item.getType())){
+                item.setType(Material.AIR);
+                b = true;
+            }
+        }
+        if (b) ModerationSection.getBanManager().banPlayer(player, "Obtención de item ilegal",1000 * 60 * 60 * 24 * 10L, ContextBan.CHAT, "Servidor");
     }
 }

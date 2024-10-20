@@ -2,6 +2,7 @@ package net.atcore.BaseCommand.Commnads;
 
 import net.atcore.AviaTerraCore;
 import net.atcore.BaseCommand.BaseTabCommand;
+import net.atcore.BaseCommand.CommandUtils;
 import net.atcore.Messages.TypeMessages;
 import net.atcore.Moderation.Ban.ContextBan;
 import net.atcore.Moderation.ModerationSection;
@@ -68,10 +69,10 @@ public class CommandBan extends BaseTabCommand {
     public List<String> onTab(CommandSender sender, String[] args) {
         switch (args.length) {
             case 2 -> {
-                return GlobalUtils.listTab(args[1], GlobalUtils.EnumsToStrings(ContextBan.values()));
+                return CommandUtils.listTab(args[1], GlobalUtils.EnumsToStrings(ContextBan.values()));
             }
             case 3 -> {
-                return GlobalUtils.listTabTime(args[2], "perma");
+                return CommandUtils.listTabTime(args[2], "perma");
             }
             case 4 -> {
                 return List.of("razón del baneo...");
