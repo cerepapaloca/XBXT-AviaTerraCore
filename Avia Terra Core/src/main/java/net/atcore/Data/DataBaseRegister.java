@@ -6,9 +6,7 @@ import net.atcore.Security.Login.DataSession;
 import net.atcore.Security.Login.LoginManager;
 import net.atcore.Security.Login.DataRegister;
 import net.atcore.Security.Login.StateLogins;
-import org.bukkit.Bukkit;
 
-import java.io.BufferedReader;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.sql.*;

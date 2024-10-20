@@ -14,15 +14,11 @@ import net.atcore.Security.Login.StateLogins;
 import net.atcore.Service.ServiceSection;
 import net.atcore.Service.SimulateOnlineMode;
 import net.atcore.Utils.GlobalUtils;
-import org.apache.commons.collections4.BagUtils;
-import org.bukkit.Bukkit;
-import org.bukkit.ban.IpBanList;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import javax.crypto.spec.SecretKeySpec;
 import java.math.BigInteger;
-import java.net.InetAddress;
 import java.nio.charset.StandardCharsets;
 import java.security.PublicKey;
 import java.util.Arrays;

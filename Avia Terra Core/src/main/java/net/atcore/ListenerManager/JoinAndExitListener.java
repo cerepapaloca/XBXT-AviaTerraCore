@@ -5,7 +5,6 @@ import net.atcore.Moderation.Ban.CheckBan;
 import net.atcore.Security.AntiTwoPlayer;
 import net.atcore.Security.Login.LoginManager;
 import net.atcore.Service.ServiceSection;
-import net.atcore.Utils.GlobalUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

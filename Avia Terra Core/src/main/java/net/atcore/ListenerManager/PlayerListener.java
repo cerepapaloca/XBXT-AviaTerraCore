@@ -3,8 +3,6 @@ package net.atcore.ListenerManager;
 import net.atcore.Messages.TypeMessages;
 import net.atcore.Moderation.Freeze;
 import net.atcore.Security.Login.LoginManager;
-import org.apache.commons.collections4.BagUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

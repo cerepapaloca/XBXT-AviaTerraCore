@@ -25,7 +25,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import static net.atcore.Messages.MessagesManager.COLOR_ERROR;
-import static net.atcore.Messages.MessagesManager.sendMessage;
 
 @UtilityClass//Le añade static a todos los métodos y a las variables
 public final class GlobalUtils {
@@ -212,6 +211,7 @@ public final class GlobalUtils {
         return null;
     }
 
+    @SuppressWarnings("rawtypes")
     public String[] EnumsToStrings(Enum[] raw){
         String[] strings = new String[raw.length];
         int i = 0 ;

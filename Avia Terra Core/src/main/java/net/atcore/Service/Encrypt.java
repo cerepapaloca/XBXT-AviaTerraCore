@@ -1,16 +1,10 @@
 package net.atcore.Service;
 
-import com.github.games647.craftapi.model.auth.Verification;
 import lombok.Getter;
-import org.jetbrains.annotations.NotNull;
 
 import javax.crypto.*;
 import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.PBEKeySpec;
 import java.security.*;
-import java.security.spec.InvalidKeySpecException;
-import java.util.Base64;
-import java.util.Objects;
 
 @Getter
 public class Encrypt {

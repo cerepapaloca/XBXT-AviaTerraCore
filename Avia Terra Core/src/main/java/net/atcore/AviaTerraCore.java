@@ -1,9 +1,7 @@
 package net.atcore;
 
-import com.comphenix.protocol.ProtocolLibrary;
 import com.github.games647.craftapi.resolver.MojangResolver;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.SneakyThrows;
 import net.atcore.BaseCommand.CommandSection;
 import net.atcore.Data.DataSection;

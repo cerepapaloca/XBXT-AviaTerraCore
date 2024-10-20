@@ -1,6 +1,5 @@
 package net.atcore.BaseCommand.Commnads;
 
-import net.atcore.AviaTerraCore;
 import net.atcore.BaseCommand.BaseTabCommand;
 import net.atcore.BaseCommand.CommandUtils;
 import net.atcore.Messages.TypeMessages;
@@ -9,12 +8,9 @@ import net.atcore.Security.AntiExploit;
 import net.atcore.Utils.RegisterManager;
 import org.bukkit.command.CommandSender;
 
-import javax.swing.*;
-import java.io.BufferedReader;
 import java.util.*;
 
 import static net.atcore.Messages.MessagesManager.sendMessage;
-import static net.atcore.Messages.MessagesManager.sendMessageConsole;
 
 public class CommandAviaTerra extends BaseTabCommand {
 
