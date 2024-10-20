@@ -9,6 +9,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.Objects;
 
 import static net.atcore.Messages.MessagesManager.COLOR_ESPECIAL;
@@ -19,7 +21,7 @@ public class CommandRegister extends BaseCommand {
     public CommandRegister() {
         super("register",
                 "/register <contraseña> <contraseña>",
-                "aviaterra.command.login",
+                "",
                 false,
                 "Te registras"
         );
@@ -37,6 +39,11 @@ public class CommandRegister extends BaseCommand {
                             LoginManager.newRegisterCracked(player.getName(), player.getAddress().getAddress(),  args[0]);
                             player.sendTitle(ChatColor.translateAlternateColorCodes('&',COLOR_ESPECIAL + "Te haz registrado!"), "", 20, 20*3, 40);
                             session.setEndTimeLogin(System.currentTimeMillis() + 1000*60);
+                            try {
+                                session.setPasswordShaded(LoginManager.hashPassword(player.getName(), args[0]));
+                            } catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
+                                throw new RuntimeException(e);
+                            }
                             LoginManager.checkLoginIn(player, true);
                         }else{
                             sendMessage(player, "las contra seña no son iguales", TypeMessages.ERROR);

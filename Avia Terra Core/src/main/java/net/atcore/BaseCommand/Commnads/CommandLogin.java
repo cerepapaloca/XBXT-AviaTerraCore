@@ -22,7 +22,7 @@ public class CommandLogin extends BaseCommand {
     public CommandLogin() {
         super("login",
                 "/login <contraseña>",
-                "aviaterra.command.login",
+                "",
                 false,
                 "Te logueas"
         );
@@ -39,6 +39,7 @@ public class CommandLogin extends BaseCommand {
                     }
                     DataSession session = new DataSession(player.getName(), player.getUniqueId(), StateLogins.CRACKED, player.getAddress().getAddress());
                     session.setEndTimeLogin(System.currentTimeMillis() + 1000*60);
+                    session.setPasswordShaded(LoginManager.hashPassword(player.getName(), args[0]));
                     player.sendTitle(ChatColor.translateAlternateColorCodes('&',COLOR_ESPECIAL + "Te haz logueado!"), "", 20, 20*3, 40);
                     sendMessage(player, "Has iniciado session exitosamente", TypeMessages.SUCCESS);
                     player.setGameMode(GameMode.SURVIVAL);

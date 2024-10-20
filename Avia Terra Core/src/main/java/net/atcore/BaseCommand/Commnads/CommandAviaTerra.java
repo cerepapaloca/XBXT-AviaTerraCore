@@ -45,8 +45,10 @@ public class CommandAviaTerra extends BaseTabCommand {
                         sendMessage(sender,"****************************", TypeMessages.WARNING);
                     }
 
+                }else{
+                    sendMessage(sender,"El anti Op esta" + CommandUtils.booleanToString(AntiExploit.isCheckAntiOP()), TypeMessages.INFO);
                 }
-                sendMessage(sender,"El anti Op esta" + CommandUtils.booleanToString(AntiExploit.isCheckAntiOP()), TypeMessages.INFO);
+
             }
             case "antiilgalitem" -> {
                 if (args.length >= 2) {
@@ -61,8 +63,9 @@ public class CommandAviaTerra extends BaseTabCommand {
                         sendMessage(sender,"****************************", TypeMessages.WARNING);
                     }
 
+                }else{
+                    sendMessage(sender,"el Anti Items Ilegales esta" + CommandUtils.booleanToString(AntiExploit.isCheckAntiOP()), TypeMessages.INFO);
                 }
-                sendMessage(sender,"el Anti Items Ilegales esta" + CommandUtils.booleanToString(AntiExploit.isCheckAntiOP()), TypeMessages.INFO);
             }
         }
     }
