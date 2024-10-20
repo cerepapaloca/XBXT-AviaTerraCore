@@ -1,14 +1,16 @@
 package net.atcore.Data;
 
+import org.bukkit.Bukkit;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+
 
 import static net.atcore.Messages.MessagesManager.sendMessageConsole;
 
 import net.atcore.Exception.ConnedDataBaseMainThread;
 import net.atcore.Messages.TypeMessages;
-import org.bukkit.Bukkit;
 
 public abstract class DataBaseMySql {
     private static Connection connection;

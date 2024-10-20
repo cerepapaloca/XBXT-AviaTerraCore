@@ -2,6 +2,7 @@ package net.atcore.ListenerManager;
 
 import net.atcore.Moderation.Ban.CheckAutoBan;
 import net.atcore.Moderation.Freeze;
+import net.atcore.Security.AntiExploit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -14,7 +15,7 @@ public class InventoryListener implements Listener {
     @EventHandler
     public void onInventoryClick(@NotNull InventoryClickEvent event) {
         Player player = (Player) event.getWhoClicked();
-
+        AntiExploit.checkAntiIlegalItems(player);
         CheckAutoBan.checkDupe(player);
         event.setCancelled(Freeze.isFreeze(player));
     }

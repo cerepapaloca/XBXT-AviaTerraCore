@@ -89,13 +89,6 @@
             <scope>provided</scope>
         </dependency>
 
-        <dependency>
-            <groupId>com.comphenix.protocol</groupId>
-            <artifactId>ProtocolLib</artifactId>
-            <version>5.1.0</version>
-            <scope>provided</scope>
-        </dependency>
-
         <!-- Ninguna de estas dependecias hace falta un .jar -->
 
         <dependency>
@@ -120,14 +113,6 @@
         </dependency>
 
         <dependency>
-            <groupId>net.dv8tion</groupId>
-            <artifactId>JDA</artifactId>
-            <version>5.1.2</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/libs/JDA-5.1.2-withDependencies.jar</systemPath>
-        </dependency>
-
-        <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
             <version>2.10.1</version>
@@ -144,6 +129,21 @@
             <groupId>com.github.games647</groupId>
             <artifactId>craftapi</artifactId>
             <version>0.8.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>net.dv8tion</groupId>
+            <artifactId>JDA</artifactId>
+            <version>5.1.2</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/libs/JDA-5.1.2-withDependencies.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>com.comphenix.protocol</groupId>
+            <artifactId>ProtocolLib</artifactId>
+            <version>5.1.0</version>
+            <scope>provided</scope>
         </dependency>
 
         <!--

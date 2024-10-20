@@ -25,7 +25,6 @@ public class PlayerListener implements Listener {
             return;
         }
         event.setCancelled(Freeze.isFreeze(event.getPlayer()));
-        event.setCancelled(Freeze.isFreeze(event.getPlayer()));
     }
 
     @EventHandler
@@ -34,7 +33,6 @@ public class PlayerListener implements Listener {
             event.setCancelled(true);
             return;
         }
-        event.setCancelled(Freeze.isFreeze(event.getPlayer()));
         event.setCancelled(Freeze.isFreeze(event.getPlayer()));
     }
 

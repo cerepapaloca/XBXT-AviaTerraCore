@@ -45,19 +45,19 @@ public class ChatListener implements Listener {
             if (CheckChatModeration(e.getPlayer(), e.getMessage(), prefix)) return;
 
             sendMessageConsole("&r" + prefix + "    " + player.getName() + " » &7" + e.getMessage(), TypeMessages.INFO);
-            broadcastChat(e.getMessage(), user);
+            broadcastChat(e.getMessage(), user, player);
         }
     }
 
-    private void broadcastChat(String message, User user) {
+    private void broadcastChat(String message, User user, Player p) {
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (!message.contains(player.getName())) {
                 player.sendMessage(ChatColor.translateAlternateColorCodes('&',
-                        user.getCachedData().getMetaData().getPrefix() + "    " + user.getUsername() + " » &7" + message));
+                        user.getCachedData().getMetaData().getPrefix() + "    " + p.getDisplayName() + " » &7" + message));
             }else {
                 player.playSound(player, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1, 1);
                 player.sendMessage(ChatColor.translateAlternateColorCodes('&',
-                        user.getCachedData().getMetaData().getPrefix() + "    " + user.getUsername() + " » " + COLOR_ESPECIAL + message));
+                        user.getCachedData().getMetaData().getPrefix() + "    " + p.getDisplayName() + " » " + COLOR_ESPECIAL + message));
             }
         }
     }

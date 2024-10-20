@@ -3,6 +3,7 @@ package net.atcore;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.github.games647.craftapi.resolver.MojangResolver;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.SneakyThrows;
 import net.atcore.BaseCommand.CommandSection;
 import net.atcore.Data.DataSection;
@@ -28,6 +29,7 @@ public final class AviaTerraCore extends JavaPlugin {
     public static JDA BOT_DISCORD;
     @Getter private static LuckPerms LP;
     @Getter private static MojangResolver resolver;
+
 
     @Override
     public void onLoad(){
@@ -69,6 +71,13 @@ public final class AviaTerraCore extends JavaPlugin {
         }
         //disableModules();
         sendMessageConsole("AviaTerra Se fue a mimir.", TypeMessages.INFO, false);
+    }
+
+    @Override
+    public void reloadConfig(){
+        for (Section section : RegisterManager.sections){
+            section.reloadConfig();
+        }
     }
     //no borrar
     /*

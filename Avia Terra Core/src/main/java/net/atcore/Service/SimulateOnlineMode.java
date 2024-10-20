@@ -31,7 +31,6 @@ import java.util.*;
 
 import static com.comphenix.protocol.PacketType.Login.Client.START;
 import static net.atcore.Messages.MessagesManager.sendMessageConsole;
-import static net.atcore.Security.Login.StateLogins.PREMIUM;
 
 public class SimulateOnlineMode {
 
@@ -68,14 +67,6 @@ public class SimulateOnlineMode {
                 Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&bdatos " + event.getPacket().getModifier().getValues().toString()));
             }
         });*/
-
-        ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(AviaTerraCore.getInstance(), PacketType.Login.Server.SUCCESS) {
-            @Override
-            public void onPacketSending(PacketEvent event) {
-                PacketContainer packet = event.getPacket();
-                String name = packet.getGameProfiles().read(0).getName();
-            }
-        });
 
         ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(AviaTerraCore.getInstance(), PacketType.Login.Client.ENCRYPTION_BEGIN) {
             @Override
@@ -136,7 +127,7 @@ public class SimulateOnlineMode {
         byte[] token = new byte[4];
         new java.security.SecureRandom().nextBytes(token);
 
-        verifyTokens.put(Arrays.toString(token), name + "|" + sender.getAddress().getHostName() + "|" + uuid);
+        verifyTokens.put(Arrays.toString(token), name + "|" + Objects.requireNonNull(sender.getAddress()).getHostName() + "|" + uuid);
 
         packetEncryption.getByteArrays().write(0, ServiceSection.getEncrypt().getPublicKey().getEncoded());
         packetEncryption.getByteArrays().write(1, token);
