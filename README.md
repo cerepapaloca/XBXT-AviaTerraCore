@@ -15,7 +15,7 @@ para que se vea el rangos tienes que copiar el carater que lo resepresenta, los 
 - youtuber `🟹`
 - tiktoker `🟺`
 > [!NOTE]
-> Tiene que descargar el resupack [aqui](https://github.com/cerepapaloca/Avia-Terra/blob/master/assets.zip), si no les va funcionar obviamente
+> Tiene que descargar el resourcepacks [aqui](https://github.com/cerepapaloca/Avia-Terra/blob/master/assets.zip), si no les va funcionar obviamente
 ----
 
 > [!IMPORTANT]
