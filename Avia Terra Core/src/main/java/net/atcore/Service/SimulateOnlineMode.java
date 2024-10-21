@@ -13,6 +13,7 @@ import com.comphenix.protocol.wrappers.*;
 import com.github.games647.craftapi.model.auth.Verification;
 import com.github.games647.craftapi.model.skin.Textures;
 import lombok.Getter;
+import lombok.Setter;
 import net.atcore.AviaTerraCore;
 import net.atcore.Messages.TypeMessages;
 import net.atcore.Security.Login.LoginManager;
@@ -45,6 +46,9 @@ public class SimulateOnlineMode {
 
     private static Method encryptMethod;
     private static Method encryptKeyMethod;
+
+    @Getter @Setter
+    private static boolean MixMode = true;
 
 
     @Getter
@@ -103,7 +107,7 @@ public class SimulateOnlineMode {
                 DataSession session = LoginManager.getListSession().get(name);
                 if (session == null || session.getEndTimeLogin() < System.currentTimeMillis()) {
                     StateLogins state = LoginManager.getState(player.getAddress().getAddress() ,name);
-                    switch (state){//revisa entre las sesiones o los registro del los jugadores
+                    switch (MixMode ? state : StateLogins.CRACKED){//revisa entre las sesiones o los registro del los jugadores
                         case PREMIUM -> {
                             event.setCancelled(true);//se cancela por que asi el servidor no se da cuenta que a recibido un paquete
                             StartLoginPremium(name, uuid, player);
@@ -111,7 +115,7 @@ public class SimulateOnlineMode {
                         case CRACKED -> StartLoginCracked(name, uuid);
                         case UNKNOWN -> GlobalUtils.kickPlayer(player, "Error de connexion vuele a intentar");
                     }
-                    sendMessageConsole("Iniciando login <|" + state.name().toLowerCase() + "|>", TypeMessages.INFO);
+                    sendMessageConsole("Iniciando login <|" + (MixMode ? state.name().toLowerCase() : "ModoOffLine") + "|>", TypeMessages.INFO);
                 }
             }
         });

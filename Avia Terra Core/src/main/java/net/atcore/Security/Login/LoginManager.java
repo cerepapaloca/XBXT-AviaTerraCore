@@ -54,6 +54,7 @@ public class LoginManager {
                 Profile profileObj = profile.get();
                 dataRegister = new DataRegister(profileObj.getName(), GlobalUtils.getUUIDByName(name), profileObj.getId(), StateLogins.PREMIUM, false);
                 dataRegister.setIp(ip);
+                //se guarda el registro en la base de datos
                 Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(), () -> DataBaseRegister.addRegister(dataRegister.getUsername(),
                         profileObj.getId().toString(), GlobalUtils.getUUIDByName(name).toString(),
                         ip.getHostName(), ip.getHostName(),
@@ -64,6 +65,7 @@ public class LoginManager {
             }else {//es temporal el registro por qué no ha puesto la contraseña
                 dataRegister = new DataRegister(name, GlobalUtils.getUUIDByName(name), StateLogins.CRACKED, true);
                 dataRegister.setIp(ip);
+                //se guarda el registro en la base de datos
                 Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(), () -> DataBaseRegister.addRegister(dataRegister.getUsername(),
                         null, GlobalUtils.getUUIDByName(name).toString(),
                         ip.getHostName(), ip.getHostName(),

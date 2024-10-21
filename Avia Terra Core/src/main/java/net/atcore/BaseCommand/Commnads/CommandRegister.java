@@ -2,14 +2,18 @@ package net.atcore.BaseCommand.Commnads;
 
 import net.atcore.BaseCommand.BaseCommand;
 import net.atcore.Messages.TypeMessages;
+import net.atcore.Security.Login.DataRegister;
 import net.atcore.Security.Login.DataSession;
 import net.atcore.Security.Login.LoginManager;
 import net.atcore.Security.Login.StateLogins;
+import net.atcore.Service.SimulateOnlineMode;
+import net.atcore.Utils.RegisterManager;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.security.NoSuchAlgorithmException;
+import java.security.Signature;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Objects;
 
@@ -30,8 +34,9 @@ public class CommandRegister extends BaseCommand {
     @Override
     public void execute(CommandSender sender, String[] args) {
         if (sender instanceof Player player){
-            if (LoginManager.getListRegister().containsKey(player.getName())){
-                if (LoginManager.getListRegister().get(player.getName()).getPasswordShaded() == null){
+            DataRegister register = LoginManager.getListRegister().get(player.getName());
+            if (register.getPasswordShaded() == null){
+                if (register.getStateLogins() == StateLogins.CRACKED || !SimulateOnlineMode.isMixMode()){
                     if (args.length >= 2){
                         if (Objects.equals(args[0], args[1])){
                             sendMessage(player, "la contraseña se guardo exitosamente y registraste exitosamente", TypeMessages.SUCCESS);
@@ -39,6 +44,7 @@ public class CommandRegister extends BaseCommand {
                             LoginManager.newRegisterCracked(player.getName(), player.getAddress().getAddress(),  args[0]);
                             player.sendTitle(ChatColor.translateAlternateColorCodes('&',COLOR_ESPECIAL + "Te haz registrado!"), "", 20, 20*3, 40);
                             session.setEndTimeLogin(System.currentTimeMillis() + 1000*60);
+                            register.setTemporary(false);
                             try {
                                 session.setPasswordShaded(LoginManager.hashPassword(player.getName(), args[0]));
                             } catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
@@ -46,13 +52,13 @@ public class CommandRegister extends BaseCommand {
                             }
                             LoginManager.checkLoginIn(player, true);
                         }else{
-                            sendMessage(player, "las contra seña no son iguales", TypeMessages.ERROR);
+                            sendMessage(player, "las contraseña no son iguales", TypeMessages.ERROR);
                         }
                     }else{
                         sendMessage(player, "tiene que escribir la contraseña de nuevo", TypeMessages.ERROR);
                     }
                 }else {
-                    sendMessage(player, "Ya estas registrado", TypeMessages.ERROR);
+                    sendMessage(player, "Los premium no se registran", TypeMessages.ERROR);
                 }
             }else {
                 sendMessage(player, "Ya estas registrado", TypeMessages.ERROR);

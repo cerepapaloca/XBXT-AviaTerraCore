@@ -44,6 +44,9 @@ public final class AviaTerraCore extends JavaPlugin {
     public void onEnable() {
         long timeCurrent = System.currentTimeMillis();
         sendMessageConsole("AviaTerra Iniciando...", TypeMessages.INFO, false);
+        if (Bukkit.getOnlineMode()){
+            throw new IllegalStateException("modo online esta activo");
+        }
         Bukkit.getScheduler().runTaskAsynchronously(this, () -> {
             BOT_DISCORD = JDABuilder.createDefault(TOKEN_BOT).build();
             try {

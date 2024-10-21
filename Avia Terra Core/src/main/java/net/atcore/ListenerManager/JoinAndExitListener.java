@@ -7,6 +7,7 @@ import net.atcore.Security.Login.DataRegister;
 import net.atcore.Security.Login.LoginManager;
 import net.atcore.Security.Login.StateLogins;
 import net.atcore.Service.ServiceSection;
+import net.atcore.Service.SimulateOnlineMode;
 import net.atcore.Utils.GlobalUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -33,7 +34,7 @@ public class JoinAndExitListener implements Listener {
 
         DataRegister dataRegister = LoginManager.getListRegister().get(player.getName());
         if (dataRegister != null) {
-            if (dataRegister.getStateLogins() == StateLogins.CRACKED){
+            if (dataRegister.getStateLogins() == StateLogins.CRACKED || !SimulateOnlineMode.isMixMode()){
                 if (dataRegister.getPasswordShaded() != null) {//tiene contraseña o no
                     if (!LoginManager.checkLoginIn(player, false)) {//si tiene una session valida o no
                         sendMessage(player, "login porfa", TypeMessages.INFO);
