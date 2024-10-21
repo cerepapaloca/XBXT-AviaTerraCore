@@ -7,13 +7,11 @@ import net.atcore.Security.Login.DataSession;
 import net.atcore.Security.Login.LoginManager;
 import net.atcore.Security.Login.StateLogins;
 import net.atcore.Service.SimulateOnlineMode;
-import net.atcore.Utils.RegisterManager;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.security.NoSuchAlgorithmException;
-import java.security.Signature;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Objects;
 
@@ -36,7 +34,7 @@ public class CommandRegister extends BaseCommand {
         if (sender instanceof Player player){
             DataRegister register = LoginManager.getListRegister().get(player.getName());
             if (register.getPasswordShaded() == null){
-                if (register.getStateLogins() == StateLogins.CRACKED || !SimulateOnlineMode.isMixMode()){
+                if (register.getStateLogins() == StateLogins.CRACKED || !SimulateOnlineMode.isMixedMode()){
                     if (args.length >= 2){
                         if (Objects.equals(args[0], args[1])){
                             sendMessage(player, "la contraseña se guardo exitosamente y registraste exitosamente", TypeMessages.SUCCESS);

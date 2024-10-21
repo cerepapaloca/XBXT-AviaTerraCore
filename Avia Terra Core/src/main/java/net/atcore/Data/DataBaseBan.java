@@ -59,7 +59,7 @@ public class DataBaseBan extends DataBaseMySql {
             throw new RuntimeException(e);
         }
 
-        sendMessageConsole("Bases recargado exitosamente", TypeMessages.SUCCESS);
+        sendMessageConsole("Baneos Recargado", TypeMessages.SUCCESS);
     }
 
     @Override

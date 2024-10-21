@@ -48,7 +48,7 @@ public class SimulateOnlineMode {
     private static Method encryptKeyMethod;
 
     @Getter @Setter
-    private static boolean MixMode = true;
+    private static boolean mixedMode = true;
 
 
     @Getter
@@ -107,7 +107,7 @@ public class SimulateOnlineMode {
                 DataSession session = LoginManager.getListSession().get(name);
                 if (session == null || session.getEndTimeLogin() < System.currentTimeMillis()) {
                     StateLogins state = LoginManager.getState(player.getAddress().getAddress() ,name);
-                    switch (MixMode ? state : StateLogins.CRACKED){//revisa entre las sesiones o los registro del los jugadores
+                    switch (mixedMode ? state : StateLogins.CRACKED){//revisa entre las sesiones o los registro del los jugadores
                         case PREMIUM -> {
                             event.setCancelled(true);//se cancela por que asi el servidor no se da cuenta que a recibido un paquete
                             StartLoginPremium(name, uuid, player);
@@ -115,7 +115,12 @@ public class SimulateOnlineMode {
                         case CRACKED -> StartLoginCracked(name, uuid);
                         case UNKNOWN -> GlobalUtils.kickPlayer(player, "Error de connexion vuele a intentar");
                     }
-                    sendMessageConsole("Iniciando login <|" + (MixMode ? state.name().toLowerCase() : "ModoOffLine") + "|>", TypeMessages.INFO);
+                    if (isMixedMode()){
+                        sendMessageConsole("Iniciando login: <|" + state.name().toLowerCase() + "|>", TypeMessages.INFO);
+                    }else{
+                        sendMessageConsole("Login omitido por qué el modo mixto esta desactivado", TypeMessages.INFO);
+                    }
+
                 }
             }
         });

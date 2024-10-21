@@ -76,6 +76,6 @@ public class CommandHandler implements TabExecutor {
             if (!(cmd.getName().equalsIgnoreCase(command.getName()))) continue;
             if (command instanceof BaseTabCommand tabCommand)return tabCommand.onTab(sender, args);
         }
-        return Collections.singletonList("");
+        return null;
     }
 }

@@ -21,7 +21,7 @@ import java.util.*;
 import static net.atcore.Messages.MessagesManager.sendMessageConsole;
 import static org.bukkit.Material.*;
 
-public class CheckAutoBan implements Listener {
+public class CheckAutoBan {
 
     private static final HashMap<UUID, Long> timePunishChat = new HashMap<>();
     private static final HashMap<UUID, Long> timeDifferenceNew = new HashMap<>();
@@ -105,7 +105,7 @@ public class CheckAutoBan implements Listener {
     @Setter
     private static boolean checkAntiIllegalItems = true;
 
-    private static final HashSet<Material> ILEGAL_ITEMS = (HashSet<Material>) Set.of(BEDROCK, END_PORTAL_FRAME, COMMAND_BLOCK, BARRIER,
+    private static final Set<Material> ILEGAL_ITEMS = Set.of(BEDROCK, END_PORTAL_FRAME, COMMAND_BLOCK, BARRIER,
             STRUCTURE_VOID, STRUCTURE_BLOCK, REPEATING_COMMAND_BLOCK, CHAIN_COMMAND_BLOCK, COMMAND_BLOCK_MINECART, SPAWNER, REINFORCED_DEEPSLATE);
 
     public static void checkAntiIlegalItems(Player player) {

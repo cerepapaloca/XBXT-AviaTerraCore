@@ -6,6 +6,8 @@ import com.github.games647.craftapi.resolver.RateLimitException;
 import lombok.Getter;
 import net.atcore.AviaTerraCore;
 import net.atcore.Data.DataBaseRegister;
+import net.atcore.Messages.TypeMessages;
+import net.atcore.Service.SimulateOnlineMode;
 import net.atcore.Utils.GlobalUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -23,6 +25,7 @@ import java.security.spec.InvalidKeySpecException;
 import java.util.*;
 
 import static net.atcore.Data.DataBaseRegister.*;
+import static net.atcore.Messages.MessagesManager.sendMessage;
 
 public class LoginManager {
 
@@ -135,18 +138,22 @@ public class LoginManager {
      * @return verdadero cuando esta logueado, falso cuando no lo está
      */
 
-    public static boolean checkLoginIn(Player player, boolean ignoreTime){
+    public static boolean checkLoginIn(Player player, boolean ignoreTime){//nota tengo que optimizar esto
         if (listSession.containsKey(player.getName())){//mira si tiene una session
             DataSession dataSession = listSession.get(player.getName());
-            if (dataSession.getStateLogins() == StateLogins.CRACKED && dataSession.getPasswordShaded() != null){//tiene contraseña para la cuenta cracked
+            //revisa si tiene una contraseña la cuenta cracked o si es un usuario premium
+            if ((dataSession.getStateLogins() == StateLogins.CRACKED && dataSession.getPasswordShaded() != null) || dataSession.getStateLogins() == StateLogins.PREMIUM){
+                //mira si la ip son iguales
                 if (Objects.equals(dataSession.getIp().getHostName().split(":")[0], Objects.requireNonNull(player.getAddress()).getAddress().getHostName().split(":")[0])){
                     if (ignoreTime || dataSession.getEndTimeLogin() > System.currentTimeMillis()){//expiro? o no se tiene en cuenta
+                        listPlayerLoginIn.add(player.getUniqueId());//por si acaso
                         player.setGameMode(GameMode.SURVIVAL);
                         return true;
                     }
                 }
             }
         }
+        //en caso que no sea valida
         player.setGameMode(GameMode.SPECTATOR);
         listPlayerLoginIn.remove(player.getUniqueId());
         listSession.remove(player.getName());
@@ -161,5 +168,22 @@ public class LoginManager {
                 GlobalUtils.kickPlayer(player, reason);
             }
         }.runTaskLater(AviaTerraCore.getInstance(), 20*20);
+    }
+
+    public static void startMessage(Player player, String message){
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (!player.isOnline()){
+                    cancel();
+                    return;
+                }
+                if (checkLoginIn(player, true)){
+                    cancel();
+                }else{
+                    sendMessage(player, message, TypeMessages.INFO);
+                }
+            }
+        }.runTaskTimer(AviaTerraCore.getInstance(), 20*2, 20*2);
     }
 }

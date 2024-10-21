@@ -67,10 +67,7 @@ public class DataBaseRegister extends DataBaseMySql {
                     LoginManager.getListSession().remove(name);
                     continue;
                 }
-                if (LoginManager.checkLoginIn(player, true)){//si es valida
-                    LoginManager.getListPlayerLoginIn().add(UUID.fromString(uuidCracked));//se gurda como jugadores logueado
-                }else {
-                    LoginManager.getListSession().remove(name);
+                if (!LoginManager.checkLoginIn(player, true)){//si es valida
                     GlobalUtils.kickPlayer(player, "Hay una discrepancia es tu session, vuelve a iniciar sessión");
                 }
             }
@@ -78,7 +75,7 @@ public class DataBaseRegister extends DataBaseMySql {
             throw new RuntimeException(e);
         }
 
-        sendMessageConsole("Bases recargado exitosamente", TypeMessages.SUCCESS);
+        sendMessageConsole("Registros Recargado", TypeMessages.SUCCESS);
     }
 
     @Override

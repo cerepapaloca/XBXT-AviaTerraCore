@@ -38,7 +38,7 @@ public class ChatListener implements Listener {
 
             if (checkChat(e)) return;
             checkAutoBanChat(player , e.getMessage());
-            if (CheckChatModeration(e.getPlayer(), e.getMessage(), prefix)) return;
+            if (CheckChatModeration(player, e.getMessage(), prefix)) return;
 
             sendMessageConsole("&r" + prefix + "    " + player.getName() + " » &7" + e.getMessage(), TypeMessages.INFO);
             broadcastChat(e.getMessage(), user, player);

@@ -1,6 +1,7 @@
 package net.atcore.Moderation;
 
 import lombok.Getter;
+import net.atcore.Moderation.Ban.CheckAutoBan;
 import net.atcore.Moderation.Ban.ManagerBan;
 import net.atcore.Section;
 

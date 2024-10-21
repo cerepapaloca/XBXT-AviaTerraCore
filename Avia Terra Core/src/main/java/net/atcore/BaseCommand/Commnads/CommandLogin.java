@@ -1,5 +1,6 @@
 package net.atcore.BaseCommand.Commnads;
 
+import com.comphenix.protocol.PacketType;
 import net.atcore.BaseCommand.BaseCommand;
 import net.atcore.Messages.TypeMessages;
 import net.atcore.Security.Login.DataSession;
@@ -32,20 +33,24 @@ public class CommandLogin extends BaseCommand {
     public void execute(CommandSender sender, String[] args) {
         if (sender instanceof Player player) {
             try {
-                if (LoginManager.isEqualPassword(player.getName(), args[0])){
-                    if (LoginManager.getListPlayerLoginIn().contains(player.getUniqueId())) {
-                        sendMessage(player, "Ya estas logueado", TypeMessages.ERROR);
-                        return;
+                if (LoginManager.getListRegister().get(player.getName()).getPasswordShaded() != null) {
+                    if (LoginManager.isEqualPassword(player.getName(), args[0])){
+                        if (LoginManager.checkLoginIn(player, true)) {
+                            sendMessage(player, "Ya estas logueado", TypeMessages.ERROR);
+                            return;
+                        }
+                        DataSession session = new DataSession(player.getName(), player.getUniqueId(), StateLogins.CRACKED, player.getAddress().getAddress());
+                        session.setEndTimeLogin(System.currentTimeMillis() + 1000*60);
+                        session.setPasswordShaded(LoginManager.hashPassword(player.getName(), args[0]));
+                        player.sendTitle(ChatColor.translateAlternateColorCodes('&',COLOR_ESPECIAL + "Te haz logueado!"), "", 20, 20*3, 40);
+                        sendMessage(player, "Has iniciado session exitosamente", TypeMessages.SUCCESS);
+                        player.setGameMode(GameMode.SURVIVAL);
+                        LoginManager.updateLoginDataBase(player.getName(), player.getAddress().getAddress());
+                    }else{
+                        GlobalUtils.kickPlayer(player, "contraseña incorrecta, vuele a intentarlo");
                     }
-                    DataSession session = new DataSession(player.getName(), player.getUniqueId(), StateLogins.CRACKED, player.getAddress().getAddress());
-                    session.setEndTimeLogin(System.currentTimeMillis() + 1000*60);
-                    session.setPasswordShaded(LoginManager.hashPassword(player.getName(), args[0]));
-                    player.sendTitle(ChatColor.translateAlternateColorCodes('&',COLOR_ESPECIAL + "Te haz logueado!"), "", 20, 20*3, 40);
-                    sendMessage(player, "Has iniciado session exitosamente", TypeMessages.SUCCESS);
-                    player.setGameMode(GameMode.SURVIVAL);
-                    LoginManager.updateLoginDataBase(player.getName(), player.getAddress().getAddress());
-                }else{
-                    GlobalUtils.kickPlayer(player, "contraseña incorrecta, vuele a intentarlo");
+                }else {
+                    sendMessage(player, "No estas registrado usa el /register", TypeMessages.ERROR);
                 }
             } catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
                 throw new RuntimeException(e);

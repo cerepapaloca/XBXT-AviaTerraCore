@@ -4,7 +4,6 @@ import net.atcore.BaseCommand.BaseTabCommand;
 import net.atcore.BaseCommand.CommandUtils;
 import net.atcore.Messages.TypeMessages;
 import net.atcore.Moderation.Freeze;
-import net.atcore.Utils.GlobalUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;

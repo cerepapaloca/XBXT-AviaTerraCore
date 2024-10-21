@@ -1,6 +1,5 @@
 package net.atcore.BaseCommand.Commnads;
 
-import lombok.extern.java.Log;
 import net.atcore.BaseCommand.BaseTabCommand;
 import net.atcore.BaseCommand.CommandUtils;
 import net.atcore.Messages.TypeMessages;
@@ -12,7 +11,6 @@ import net.atcore.Security.Login.StateLogins;
 import net.atcore.Service.SimulateOnlineMode;
 import net.atcore.Utils.GlobalUtils;
 import net.atcore.Utils.RegisterManager;
-import org.apache.commons.collections4.BagUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -70,7 +68,6 @@ public class CommandAviaTerra extends BaseTabCommand {
                         sendMessage(sender,"DESACTIVAR SOLO PARA PRUEBAS", TypeMessages.WARNING);
                         sendMessage(sender,"****************************", TypeMessages.WARNING);
                     }
-
                 }else{
                     sendMessage(sender,"el Anti Items Ilegales esta" + CommandUtils.booleanToString(CheckAutoBan.isCheckAntiIllegalItems()), TypeMessages.INFO);
                 }
@@ -78,14 +75,14 @@ public class CommandAviaTerra extends BaseTabCommand {
             case "mixmode" -> {
                 if (args.length >= 2) {
                     if (CommandUtils.isTrueOrFalse(args[1])){
-                        SimulateOnlineMode.setMixMode(true);
+                        SimulateOnlineMode.setMixedMode(true);
                         sendMessage(sender,"El Modo Mixto <|Activado|>", TypeMessages.INFO);
                     }else{
-                        SimulateOnlineMode.setMixMode(false);
+                        SimulateOnlineMode.setMixedMode(false);
                         sendMessage(sender,"El Modo Mixto <|Desactivado|>", TypeMessages.INFO);
-                        sendMessage(sender,"*************************************************", TypeMessages.WARNING);
-                        sendMessage(sender,"TODOS LO JUGADORES PREMIUM SE TIENE QUE REGISTRAR", TypeMessages.WARNING);
-                        sendMessage(sender,"*************************************************", TypeMessages.WARNING);
+                        sendMessage(sender,"********************************************************", TypeMessages.WARNING);
+                        sendMessage(sender,"SOLO PARA PRUEBAS O/Y PROBLEMAS CON LOS SERVIDOR DE AUTH", TypeMessages.WARNING);
+                        sendMessage(sender,"********************************************************", TypeMessages.WARNING);
 
                         for (Player player : Bukkit.getOnlinePlayers()){
                             if (LoginManager.getListSession().get(player.getName()).getStateLogins().equals(StateLogins.PREMIUM)){
@@ -95,7 +92,7 @@ public class CommandAviaTerra extends BaseTabCommand {
                     }
 
                 }else{
-                    sendMessage(sender,"el Anti Items Ilegales esta" + CommandUtils.booleanToString(SimulateOnlineMode.isMixMode()), TypeMessages.INFO);
+                    sendMessage(sender,"El modo mixto esta " + CommandUtils.booleanToString(SimulateOnlineMode.isMixedMode()), TypeMessages.INFO);
                 }
             }
         }
@@ -104,10 +101,13 @@ public class CommandAviaTerra extends BaseTabCommand {
     @Override
     public List<String> onTab(CommandSender sender, String[] args) {
         String[] argsRoot = new String[]{"Reload", "AntiOp", "AntiIllegalItems", "MixMode"};
-        switch (args[0].toLowerCase()) {
-            case "antiop", "antiilgalitem", "mixmode" -> CommandUtils.listTab(args[1], new String[]{"true", "false"});
+        if (args.length >= 2) {
+            switch (args[0].toLowerCase()) {
+                case "antiop", "antiilgalitem", "mixmode" -> {
+                    return CommandUtils.listTab(args[1], new String[]{"true", "false"});
+                }
+            }
         }
-
         return Arrays.stream(argsRoot).toList();
     }
 }
