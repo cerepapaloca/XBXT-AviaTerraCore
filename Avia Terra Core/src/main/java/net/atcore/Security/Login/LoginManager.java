@@ -7,7 +7,6 @@ import lombok.Getter;
 import net.atcore.AviaTerraCore;
 import net.atcore.Data.DataBaseRegister;
 import net.atcore.Messages.TypeMessages;
-import net.atcore.Service.SimulateOnlineMode;
 import net.atcore.Utils.GlobalUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -147,7 +146,8 @@ public class LoginManager {
                 if (Objects.equals(dataSession.getIp().getHostName().split(":")[0], Objects.requireNonNull(player.getAddress()).getAddress().getHostName().split(":")[0])){
                     if (ignoreTime || dataSession.getEndTimeLogin() > System.currentTimeMillis()){//expiro? o no se tiene en cuenta
                         listPlayerLoginIn.add(player.getUniqueId());//por si acaso
-                        player.setGameMode(GameMode.SURVIVAL);
+                        //en caso de que sea op no se le cambia el modo de juego y se hace en el hilo principal por si acaso
+                        if (!player.isOp()) Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(), () -> player.setGameMode(GameMode.SURVIVAL));
                         return true;
                     }
                 }

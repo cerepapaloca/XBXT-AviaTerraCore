@@ -56,7 +56,7 @@ public class CommandAviaTerra extends BaseTabCommand {
                 }
 
             }
-            case "antiilgalitem" -> {
+            case "antiilegalitems" -> {
                 if (args.length >= 2) {
                     if (CommandUtils.isTrueOrFalse(args[1])){
                         CheckAutoBan.setCheckAntiIllegalItems(true);
@@ -103,7 +103,7 @@ public class CommandAviaTerra extends BaseTabCommand {
         String[] argsRoot = new String[]{"Reload", "AntiOp", "AntiIllegalItems", "MixMode"};
         if (args.length >= 2) {
             switch (args[0].toLowerCase()) {
-                case "antiop", "antiilgalitem", "mixmode" -> {
+                case "antiop", "antiilegalitems", "mixmode" -> {
                     return CommandUtils.listTab(args[1], new String[]{"true", "false"});
                 }
             }
