@@ -22,9 +22,9 @@ import static net.atcore.Moderation.ChatModeration.CheckChatModeration;
 public class ChatListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onChat(AsyncPlayerChatEvent e) {
-        Player player = e.getPlayer();
-        e.setCancelled(true);
+    public void onChat(AsyncPlayerChatEvent event) {
+        Player player = event.getPlayer();
+        event.setCancelled(true);
 
         if (!LoginManager.checkLoginIn(player, true)) {
             sendMessage(player, "Te tienes que loguear para escribir en el chat", TypeMessages.ERROR);
@@ -36,12 +36,12 @@ public class ChatListener implements Listener {
         if (user != null) {
             String prefix = user.getCachedData().getMetaData().getPrefix();
 
-            if (checkChat(e)) return;
-            checkAutoBanChat(player , e.getMessage());
-            if (CheckChatModeration(player, e.getMessage(), prefix)) return;
+            if (checkChat(event)) return;//está baneado?
+            checkAutoBanChat(player , event.getMessage());//se le va a banear?
+            if (CheckChatModeration(player, event.getMessage(), prefix)) return;//hay algo indecente?
 
-            sendMessageConsole("&r" + prefix + "    " + player.getName() + " » &7" + e.getMessage(), TypeMessages.INFO);
-            broadcastChat(e.getMessage(), user, player);
+            sendMessageConsole("&r" + prefix + "    " + player.getName() + " » &7" + event.getMessage(), TypeMessages.INFO);
+            broadcastChat(event.getMessage(), user, player);
         }
     }
 

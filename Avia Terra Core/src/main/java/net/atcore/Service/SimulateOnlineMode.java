@@ -15,6 +15,7 @@ import com.github.games647.craftapi.model.skin.Textures;
 import lombok.Getter;
 import lombok.Setter;
 import net.atcore.AviaTerraCore;
+import net.atcore.Config;
 import net.atcore.Messages.TypeMessages;
 import net.atcore.Security.Login.LoginManager;
 import net.atcore.Security.Login.DataSession;
@@ -46,9 +47,6 @@ public class SimulateOnlineMode {
 
     private static Method encryptMethod;
     private static Method encryptKeyMethod;
-
-    @Getter @Setter
-    private static boolean mixedMode = true;
 
 
     @Getter
@@ -107,15 +105,15 @@ public class SimulateOnlineMode {
                 DataSession session = LoginManager.getListSession().get(name);
                 if (session == null || session.getEndTimeLogin() < System.currentTimeMillis()) {
                     StateLogins state = LoginManager.getState(player.getAddress().getAddress() ,name);
-                    switch (mixedMode ? state : StateLogins.CRACKED){//revisa entre las sesiones o los registro del los jugadores
+                    switch (Config.isMixedMode() ? state : StateLogins.CRACKED){//revisa entre las sesiones o los registro del los jugadores
                         case PREMIUM -> {
-                            event.setCancelled(true);//se cancela por que asi el servidor no se da cuenta que a recibido un paquete
+                            event.setCancelled(true);//se cancela por que asi el servidor no se da cuenta de que a recibido un paquete
                             StartLoginPremium(name, uuid, player);
                         }
                         case CRACKED -> StartLoginCracked(name, uuid);
                         case UNKNOWN -> GlobalUtils.kickPlayer(player, "Error de connexion vuele a intentar");
                     }
-                    if (isMixedMode()){
+                    if (Config.isMixedMode()){
                         sendMessageConsole("Iniciando login: <|" + state.name().toLowerCase() + "|>", TypeMessages.INFO);
                     }else{
                         sendMessageConsole("Login omitido por qué el modo mixto esta desactivado", TypeMessages.INFO);

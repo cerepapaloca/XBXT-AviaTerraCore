@@ -15,16 +15,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
-
-import static net.atcore.Messages.MessagesManager.COLOR_ERROR;
 
 @UtilityClass//Le añade static a todos los métodos y a las variables
 public final class GlobalUtils {
@@ -198,6 +191,11 @@ public final class GlobalUtils {
         return item;
     }
 
+    /**
+     * Expulsa el jugador sin importar que esté en modo {@code Login} o en modo {@code Play}
+     * y respetando el formato de razón del kick
+     */
+
     public void kickPlayer(Player player, String reason) {
         reason =ChatColor.translateAlternateColorCodes('&', MessagesManager.PREFIX_AND_SUFFIX_KICK[0]
                 + "&4" + reason + "&c" + MessagesManager.PREFIX_AND_SUFFIX_KICK[1]);
@@ -211,6 +209,13 @@ public final class GlobalUtils {
             player.kickPlayer(reason);
         }
     }
+
+    /**
+     * Obtienes la uuid del jugador usando el mismo sistema que usa el servidor
+     * para asignarle la uuid a los jugadores no premium
+     * @param username el nombre de usuario que le quieres sacar la uuid
+     * @return la uuid del jugador
+     */
 
     public UUID getUUIDByName(String username) {
         return UUID.nameUUIDFromBytes(("OfflinePlayer:" + username).getBytes(Charsets.UTF_8));

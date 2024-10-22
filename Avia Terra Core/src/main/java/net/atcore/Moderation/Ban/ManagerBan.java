@@ -1,6 +1,7 @@
 package net.atcore.Moderation.Ban;
 
 import net.atcore.AviaTerraCore;
+import net.atcore.BaseCommand.Config;
 import net.atcore.Data.DataBaseBan;
 import net.atcore.Messages.CategoryMessages;
 import net.atcore.Messages.TypeMessages;
@@ -68,7 +69,7 @@ public class ManagerBan extends DataBaseBan {
             checkName = true;//Se Busca por su UUID de usuario, si está baneado
         }
 
-        if (ip != null && listDataBanByIP.containsKey(ip)) {
+        if (ip != null && listDataBanByIP.containsKey(ip) && Config.isCheckBanByIp()) {
             dataBans = getDataBan(ip);
             checkIp = true;//Se Busca por su ip, si está baneado
         }

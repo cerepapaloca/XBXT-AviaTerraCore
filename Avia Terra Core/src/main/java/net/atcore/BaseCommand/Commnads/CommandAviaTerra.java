@@ -2,6 +2,7 @@ package net.atcore.BaseCommand.Commnads;
 
 import net.atcore.BaseCommand.BaseTabCommand;
 import net.atcore.BaseCommand.CommandUtils;
+import net.atcore.BaseCommand.Config;
 import net.atcore.Messages.TypeMessages;
 import net.atcore.Moderation.Ban.CheckAutoBan;
 import net.atcore.Section;
@@ -59,26 +60,26 @@ public class CommandAviaTerra extends BaseTabCommand {
             case "antiilegalitems" -> {
                 if (args.length >= 2) {
                     if (CommandUtils.isTrueOrFalse(args[1])){
-                        CheckAutoBan.setCheckAntiIllegalItems(true);
+                        Config.setCheckAntiIllegalItems(true);
                         sendMessage(sender,"Anti Items Ilegales <|Activado|>", TypeMessages.INFO);
                     }else{
-                        CheckAutoBan.setCheckAntiIllegalItems(false);
+                        Config.setCheckAntiIllegalItems(false);
                         sendMessage(sender,"Anti Items Ilegales <|Desactivado|>", TypeMessages.INFO);
                         sendMessage(sender,"****************************", TypeMessages.WARNING);
                         sendMessage(sender,"DESACTIVAR SOLO PARA PRUEBAS", TypeMessages.WARNING);
                         sendMessage(sender,"****************************", TypeMessages.WARNING);
                     }
                 }else{
-                    sendMessage(sender,"el Anti Items Ilegales esta" + CommandUtils.booleanToString(CheckAutoBan.isCheckAntiIllegalItems()), TypeMessages.INFO);
+                    sendMessage(sender,"el Anti Items Ilegales esta" + CommandUtils.booleanToString(Config.isCheckAntiIllegalItems()), TypeMessages.INFO);
                 }
             }
             case "mixmode" -> {
                 if (args.length >= 2) {
                     if (CommandUtils.isTrueOrFalse(args[1])){
-                        SimulateOnlineMode.setMixedMode(true);
+                        Config.setMixedMode(true);
                         sendMessage(sender,"El Modo Mixto <|Activado|>", TypeMessages.INFO);
                     }else{
-                        SimulateOnlineMode.setMixedMode(false);
+                        Config.setMixedMode(false);
                         sendMessage(sender,"El Modo Mixto <|Desactivado|>", TypeMessages.INFO);
                         sendMessage(sender,"********************************************************", TypeMessages.WARNING);
                         sendMessage(sender,"SOLO PARA PRUEBAS O/Y PROBLEMAS CON LOS SERVIDOR DE AUTH", TypeMessages.WARNING);
@@ -92,7 +93,7 @@ public class CommandAviaTerra extends BaseTabCommand {
                     }
 
                 }else{
-                    sendMessage(sender,"El modo mixto esta " + CommandUtils.booleanToString(SimulateOnlineMode.isMixedMode()), TypeMessages.INFO);
+                    sendMessage(sender,"El modo mixto esta " + CommandUtils.booleanToString(Config.isMixedMode()), TypeMessages.INFO);
                 }
             }
         }

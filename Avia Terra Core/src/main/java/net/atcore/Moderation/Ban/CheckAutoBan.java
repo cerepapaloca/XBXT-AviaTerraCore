@@ -3,6 +3,7 @@ package net.atcore.Moderation.Ban;
 import lombok.Getter;
 import lombok.Setter;
 import net.atcore.AviaTerraCore;
+import net.atcore.BaseCommand.Config;
 import net.atcore.Messages.TypeMessages;
 import net.atcore.Moderation.ModerationSection;
 import net.atcore.Utils.GlobalUtils;
@@ -101,15 +102,11 @@ public class CheckAutoBan {
         }
     }
 
-    @Getter
-    @Setter
-    private static boolean checkAntiIllegalItems = true;
-
     private static final Set<Material> ILEGAL_ITEMS = Set.of(BEDROCK, END_PORTAL_FRAME, COMMAND_BLOCK, BARRIER,
             STRUCTURE_VOID, STRUCTURE_BLOCK, REPEATING_COMMAND_BLOCK, CHAIN_COMMAND_BLOCK, COMMAND_BLOCK_MINECART, SPAWNER, REINFORCED_DEEPSLATE);
 
     public static void checkAntiIlegalItems(Player player) {
-        if (!checkAntiIllegalItems)return;
+        if (Config.isCheckAntiIllegalItems())return;
         boolean b = false;
         for (ItemStack item: player.getInventory().getContents()){
             if (ILEGAL_ITEMS.contains(item.getType())){

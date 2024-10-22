@@ -37,7 +37,7 @@ public final class CommandUtils {
         List<Character> chars = List.of('s','m','h','d');
         if (!arg.isEmpty() && Character.isDigit(arg.charAt(0))){
             if (chars.contains(arg.charAt(arg.length() - 1))){
-                List<String> list = new ArrayList<>(List.of(arg.replaceAll("\\d", "#").toUpperCase()));
+                List<String> list = new ArrayList<>(List.of(arg));
                 list.addAll(Arrays.asList(others));
                 return list;
             }else{
