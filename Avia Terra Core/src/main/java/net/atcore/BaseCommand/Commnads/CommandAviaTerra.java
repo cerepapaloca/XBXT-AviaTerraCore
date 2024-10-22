@@ -51,7 +51,7 @@ public class CommandAviaTerra extends BaseTabCommand {
                     }
 
                 }else{
-                    sendMessage(sender,"El anti Op esta" + CommandUtils.booleanToString(Config.isCheckAntiOp()), TypeMessages.INFO);
+                    sendMessage(sender,"El anti Op esta " + CommandUtils.booleanToString(Config.isCheckAntiOp()), TypeMessages.INFO);
                 }
 
             }
@@ -68,7 +68,7 @@ public class CommandAviaTerra extends BaseTabCommand {
                         sendMessage(sender,"****************************", TypeMessages.WARNING);
                     }
                 }else{
-                    sendMessage(sender,"el Anti Items Ilegales esta" + CommandUtils.booleanToString(Config.isCheckAntiIllegalItems()), TypeMessages.INFO);
+                    sendMessage(sender,"el Anti Items Ilegales esta " + CommandUtils.booleanToString(Config.isCheckAntiIllegalItems()), TypeMessages.INFO);
                 }
             }
             case "mixmode" -> {
@@ -99,7 +99,7 @@ public class CommandAviaTerra extends BaseTabCommand {
 
     @Override
     public List<String> onTab(CommandSender sender, String[] args) {
-        String[] argsRoot = new String[]{"Reload", "AntiOp", "AntiIllegalItems", "MixMode"};
+        String[] argsRoot = new String[]{"Reload", "AntiOp", "AntiIlegalItems", "MixMode"};
         if (args.length >= 2) {
             switch (args[0].toLowerCase()) {
                 case "antiop", "antiilegalitems", "mixmode" -> {

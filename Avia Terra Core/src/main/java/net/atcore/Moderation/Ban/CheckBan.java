@@ -1,7 +1,6 @@
 package net.atcore.Moderation.Ban;
 
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.jetbrains.annotations.NotNull;
 
@@ -17,8 +16,7 @@ public class CheckBan {
         }
     }
 
-    public static boolean checkChat(@NotNull AsyncPlayerChatEvent event) {
-        Player player = event.getPlayer();
+    public static boolean checkChat(@NotNull Player player) {
         String s = ManagerBan.checkBan(player, ContextBan.CHAT);
         return s != null && !s.isEmpty();
     }

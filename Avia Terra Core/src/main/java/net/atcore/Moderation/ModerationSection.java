@@ -12,6 +12,7 @@ public class ModerationSection implements Section {
     @Override
     public void enable() {
         banManager = new ManagerBan();
+        ChatModeration.tickEvent();
     }
 
     @Override

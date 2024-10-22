@@ -39,7 +39,7 @@ public class CheckAutoBan {
                         if (ChatBotTime.size() > 1) {
                             for (Player player : ChatBotTime) {
                                 assert player != null;
-                                ModerationSection.getBanManager().banPlayer(player, "Por Bot",1000 * 60 * 60 * 24 * 5L, ContextBan.CHAT, "Servidor");
+                                ModerationSection.getBanManager().banPlayer(player, "Uso de bots",1000 * 60 * 60 * 24 * 5L, ContextBan.CHAT, "Servidor");
                             }
                             sendMessageConsole("Purga terminada", TypeMessages.SUCCESS);
                             ChatBotTime.clear();
@@ -63,7 +63,7 @@ public class CheckAutoBan {
                 sendMessageConsole("Este jugador usa AutoBotChat: (" + timeDifferenceCount.get(player.getUniqueId()) + "/3) " + "Tiene una precision de "
                         + (DifferenceOld - DifferenceNew) + " ms", TypeMessages.WARNING);
                 if (timeDifferenceCount.get(player.getUniqueId()) >= 3){
-                    ModerationSection.getBanManager().banPlayer(player, "Por Bot",1000 * 60 * 60 * 24 * 5L, ContextBan.CHAT, "Servidor");
+                    ModerationSection.getBanManager().banPlayer(player, "Por enviar mensajes automatizado en el chat",1000 * 60 * 60 * 24 * 5L, ContextBan.CHAT, "Servidor");
                     timeDifferenceCount.remove(player.getUniqueId());
                     timeDifferenceOld.remove(player.getUniqueId());
                     timeDifferenceNew.remove(player.getUniqueId());
