@@ -34,17 +34,19 @@ public final class CommandUtils {
     }
 
     public List<String> listTabTime(String arg, String...others){
+        List<String> listOthers = new ArrayList<>(Arrays.stream(others).toList());
         List<Character> chars = List.of('s','m','h','d');
         if (!arg.isEmpty() && Character.isDigit(arg.charAt(0))){
             if (chars.contains(arg.charAt(arg.length() - 1))){
                 List<String> list = new ArrayList<>(List.of(arg));
-                list.addAll(Arrays.asList(others));
+                list.addAll(listOthers);
                 return list;
             }else{
                 return List.of(ChatColor.translateAlternateColorCodes('&', COLOR_ERROR + "Error. no tiene s, m, h, d. al final del argumento"));
             }
         }else {
-            return listTab(arg, others);
+            listOthers.add("##x");
+            return listTab(arg, listOthers.toArray(new String[0]));
         }
     }
 

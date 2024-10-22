@@ -3,6 +3,7 @@ package net.atcore.BaseCommand.Commnads;
 import net.atcore.BaseCommand.BaseTabCommand;
 import net.atcore.BaseCommand.CommandUtils;
 import net.atcore.Messages.TypeMessages;
+import net.atcore.Moderation.Ban.IsBan;
 import net.atcore.Moderation.Ban.ManagerBan;
 import net.atcore.Moderation.Ban.ContextBan;
 import net.atcore.Moderation.Ban.DataBan;
@@ -50,7 +51,7 @@ public class CommandCheckBan extends BaseTabCommand {
                     return;
                 }
                 for (DataBan dataBan : ManagerBan.getDataBan(args[0])){
-                    getStringTime(sender, dataBan);
+                    sendDataBan(sender, dataBan);
                 }
             }else {
                 if (args.length >= 3) {
@@ -65,21 +66,22 @@ public class CommandCheckBan extends BaseTabCommand {
 
                     Player player = Bukkit.getPlayer(args[0]);
                     if (player != null) {
-                        String reason = ManagerBan.checkBan(player, contextBan);
-                        if (reason == null){
-                            sendMessage(sender, "el jugador no esta banedo de ningún contexto", TypeMessages.SUCCESS);;
-                        }else if (reason.isEmpty()){
-                            sendMessage(sender, "el jugador esta baneado pero no del contexto seleccionado pero esta baneado de:", TypeMessages.SUCCESS);
-                            if (ManagerBan.getDataBan(player.getName()) == null) {
-                                sendMessage(sender, "No esta baneado", TypeMessages.INFO);
-                                return;
+                        IsBan reason = ManagerBan.checkBan(player, contextBan);
+                        switch (reason) {
+                            case NOT -> sendMessage(sender, "el jugador no esta banedo de ningún contexto", TypeMessages.SUCCESS);
+                            case NOT_BY_CONTEXT -> {
+                                sendMessage(sender, "el jugador esta baneado pero no del contexto seleccionado pero esta baneado de:", TypeMessages.SUCCESS);
+                                if (ManagerBan.getDataBan(player.getName()) == null) {
+                                    sendMessage(sender, "No esta baneado", TypeMessages.INFO);
+                                    return;
+                                }
+                                for (DataBan dataBan : ManagerBan.getDataBan(player.getName())){
+                                    sendDataBan(sender, dataBan);
+                                }
                             }
-                            for (DataBan dataBan : ManagerBan.getDataBan(player.getName())){
-                                getStringTime(sender, dataBan);
-                            }
-                        }else {
-                            sendMessage(sender, "El jugador <|" + player.getName() + "|> fue echo del contexto <| " + contextBan +
+                            case YES -> sendMessage(sender, "El jugador <|" + player.getName() + "|> fue echo del contexto <| " + contextBan +
                                     "|> seleccionado", TypeMessages.SUCCESS);
+
                         }
                     }else {
                         sendMessage(sender, "el jugador no existe o esta desconectado", TypeMessages.ERROR);
@@ -91,7 +93,7 @@ public class CommandCheckBan extends BaseTabCommand {
         }
     }
 
-    private void getStringTime(CommandSender sender, DataBan dataBan) {
+    private void sendDataBan(CommandSender sender, DataBan dataBan) {
         String time;
         if (dataBan.getUnbanDate() == 0){
             time = "Perma";

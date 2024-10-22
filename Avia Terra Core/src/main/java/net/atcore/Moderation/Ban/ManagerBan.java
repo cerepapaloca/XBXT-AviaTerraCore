@@ -1,5 +1,6 @@
 package net.atcore.Moderation.Ban;
 
+import lombok.Getter;
 import net.atcore.AviaTerraCore;
 import net.atcore.Config;
 import net.atcore.Data.DataBaseBan;
@@ -47,7 +48,7 @@ public class ManagerBan extends DataBaseBan {
      * Version simplificada del {@link #checkBan(Player, InetAddress, ContextBan)}
      */
 
-    public static String checkBan(@NotNull Player player, @Nullable ContextBan context) {
+    public static IsBan checkBan(@NotNull Player player, @Nullable ContextBan context) {
         return checkBan(player, Objects.requireNonNull(player.getAddress()).getAddress(), context);
     }
 
@@ -59,7 +60,7 @@ public class ManagerBan extends DataBaseBan {
      * @return da true cuando esta banea y falso si no está baneado
      */
 
-    public static String checkBan(@NotNull Player player, @Nullable InetAddress ip, @Nullable ContextBan context) {
+    public static IsBan checkBan(@NotNull Player player, @Nullable InetAddress ip, @Nullable ContextBan context) {
         boolean checkName = false;
         boolean checkIp = false;
         HashSet<DataBan> dataBans = null;
@@ -92,7 +93,7 @@ public class ManagerBan extends DataBaseBan {
                 context = ContextBan.GLOBAL;
             }
 
-            if (dataBans == null) return null;//Otro "por si acaso del por si acaso"
+            if (dataBans == null) return IsBan.NOT;//Otro "por si acaso del por si acaso"
             //quiere decir que el DataBan dio nulo y que la base datos explotó
             for (DataBan ban : dataBans) {//mira cada DataBan del jugador para saber exactamente de que está baneado
                 if (ban.getContext().equals(context)) {//saber si el contexto del check le corresponde al baneo
@@ -108,22 +109,25 @@ public class ManagerBan extends DataBaseBan {
                         sendMessageConsole(player.getName() + " se echo por que estar baneado de: " + context.name() +
                                 ". Se detecto por Nombre: <|" + checkName + "|> por ip: <|" + checkIp + "|>. tiempo restante " +
                                 "<|" +  time + "|>", TypeMessages.INFO, CategoryMessages.BAN);
-                        return kickBan(ban);
+                        kickBan(ban);
+                        return IsBan.YES;
                     } else {//eliminar él baneó cuando expiro y realiza en un hilo aparte para que no pete el servidor
                         Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(), () -> ModerationSection.getBanManager().removeBanPlayer(player.getName(), ban.getContext(), "Servidor (Expiro)"));
-                        return null;
+                        return IsBan.NOT;
                     }
                 } else{
-                    return "";
+                    return IsBan.NOT_BY_CONTEXT;
                 }
             }
         } else {
-            return null;
+            return IsBan.NOT;
         }
-        return null;
+        return IsBan.NOT;
     }
+    @Getter
+    private static String reasonBan;
 
-    private static String kickBan(DataBan dataBan) {
+    private static void kickBan(DataBan dataBan) {
         String contextName = dataBan.getContext().name().toLowerCase().replace("_", " ");
         if (Objects.equals(dataBan.getContext().name(), "GLOBAL")) contextName = "Avia Terra";
         String time;
@@ -141,11 +145,11 @@ public class ManagerBan extends DataBaseBan {
                         "&c" + "Apelación de ban: " +  "&4" + LINK_DISCORD + "\n\n" +
                         "&c" + "&m &r &c&m                                 &r &c&m "
                 );
+        reasonBan = reasonFinal;
         Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> {
             Player player = null;
             if (dataBan.getUuid() != null) player = Bukkit.getPlayer(dataBan.getUuid());
             if (player != null) player.kickPlayer(reasonFinal);
         });
-        return reasonFinal;
     }
 }
