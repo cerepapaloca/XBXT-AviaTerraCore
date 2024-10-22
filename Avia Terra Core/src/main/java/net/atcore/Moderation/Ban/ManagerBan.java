@@ -1,7 +1,7 @@
 package net.atcore.Moderation.Ban;
 
 import net.atcore.AviaTerraCore;
-import net.atcore.BaseCommand.Config;
+import net.atcore.Config;
 import net.atcore.Data.DataBaseBan;
 import net.atcore.Messages.CategoryMessages;
 import net.atcore.Messages.TypeMessages;

@@ -1,5 +1,6 @@
 package net.atcore.ListenerManager;
 
+import net.atcore.Config;
 import net.atcore.Moderation.Ban.CheckBan;
 import net.atcore.Security.AntiTwoPlayer;
 import net.atcore.Security.Login.DataRegister;
@@ -33,7 +34,7 @@ public class JoinAndExitListener implements Listener {
 
         DataRegister dataRegister = LoginManager.getListRegister().get(player.getName());
         if (dataRegister != null) {
-            if (dataRegister.getStateLogins() == StateLogins.CRACKED || !SimulateOnlineMode.isMixedMode()){
+            if (dataRegister.getStateLogins() == StateLogins.CRACKED || !Config.isMixedMode()){
                 if (dataRegister.getPasswordShaded() != null) {//tiene contraseña o no
                     if (!LoginManager.checkLoginIn(player, false)) {//si tiene una session valida o no
                         LoginManager.startMessage(player, "login porfa. /login <Contraseña>");

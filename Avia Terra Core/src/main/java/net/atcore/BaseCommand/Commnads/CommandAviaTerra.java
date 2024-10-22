@@ -2,14 +2,12 @@ package net.atcore.BaseCommand.Commnads;
 
 import net.atcore.BaseCommand.BaseTabCommand;
 import net.atcore.BaseCommand.CommandUtils;
-import net.atcore.BaseCommand.Config;
+import net.atcore.Config;
 import net.atcore.Messages.TypeMessages;
-import net.atcore.Moderation.Ban.CheckAutoBan;
 import net.atcore.Section;
 import net.atcore.Security.AntiExploit;
 import net.atcore.Security.Login.LoginManager;
 import net.atcore.Security.Login.StateLogins;
-import net.atcore.Service.SimulateOnlineMode;
 import net.atcore.Utils.GlobalUtils;
 import net.atcore.Utils.RegisterManager;
 import org.bukkit.Bukkit;
@@ -42,10 +40,10 @@ public class CommandAviaTerra extends BaseTabCommand {
             case "antiop" -> {
                 if (args.length >= 2) {
                     if (CommandUtils.isTrueOrFalse(args[1])){
-                        AntiExploit.setCheckAntiOP(true);
+                        Config.setCheckAntiOp(true);
                         sendMessage(sender,"Anti Op <|Activado|>", TypeMessages.INFO);
                     }else{
-                        AntiExploit.setCheckAntiOP(false);
+                        Config.setCheckAntiOp(false);
                         sendMessage(sender,"Anti Op <|Desactivado|>", TypeMessages.INFO);
                         sendMessage(sender,"****************************", TypeMessages.WARNING);
                         sendMessage(sender,"DESACTIVAR SOLO PARA PRUEBAS", TypeMessages.WARNING);
@@ -53,7 +51,7 @@ public class CommandAviaTerra extends BaseTabCommand {
                     }
 
                 }else{
-                    sendMessage(sender,"El anti Op esta" + CommandUtils.booleanToString(AntiExploit.isCheckAntiOP()), TypeMessages.INFO);
+                    sendMessage(sender,"El anti Op esta" + CommandUtils.booleanToString(Config.isCheckAntiOp()), TypeMessages.INFO);
                 }
 
             }

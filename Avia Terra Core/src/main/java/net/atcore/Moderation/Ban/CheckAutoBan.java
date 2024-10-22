@@ -1,16 +1,13 @@
 package net.atcore.Moderation.Ban;
 
-import lombok.Getter;
-import lombok.Setter;
 import net.atcore.AviaTerraCore;
-import net.atcore.BaseCommand.Config;
+import net.atcore.Config;
 import net.atcore.Messages.TypeMessages;
 import net.atcore.Moderation.ModerationSection;
 import net.atcore.Utils.GlobalUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;

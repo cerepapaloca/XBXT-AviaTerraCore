@@ -1,6 +1,7 @@
 package net.atcore.BaseCommand.Commnads;
 
 import net.atcore.BaseCommand.BaseCommand;
+import net.atcore.Config;
 import net.atcore.Messages.TypeMessages;
 import net.atcore.Security.Login.DataRegister;
 import net.atcore.Security.Login.DataSession;
@@ -34,7 +35,7 @@ public class CommandRegister extends BaseCommand {
         if (sender instanceof Player player){
             DataRegister register = LoginManager.getListRegister().get(player.getName());
             if (register.getPasswordShaded() == null){
-                if (register.getStateLogins() == StateLogins.CRACKED || !SimulateOnlineMode.isMixedMode()){
+                if (register.getStateLogins() == StateLogins.CRACKED || !Config.isMixedMode()){
                     if (args.length >= 2){
                         if (Objects.equals(args[0], args[1])){
                             sendMessage(player, "la contraseña se guardo exitosamente y registraste exitosamente", TypeMessages.SUCCESS);
