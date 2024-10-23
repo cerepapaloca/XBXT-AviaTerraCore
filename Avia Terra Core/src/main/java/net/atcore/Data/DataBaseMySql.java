@@ -65,17 +65,13 @@ public abstract class DataBaseMySql {
      * de la base de datos
      */
 
-    protected static Connection getConnection() {
+    protected static Connection getConnection() throws SQLException {
         if (Bukkit.isPrimaryThread()){
             throw new ConnedDataBaseMainThread("No usar el hilo principal para la base de datos");
         }
-        try {
-            if (connection == null || connection.isClosed()) {
-                sendMessageConsole("Conexión perdida Reconectando...", TypeMessages.WARNING);
-                connect();
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        if (connection == null || connection.isClosed()) {
+            sendMessageConsole("Conexión perdida Reconectando...", TypeMessages.WARNING);
+            connect();
         }
         return connection;
     }

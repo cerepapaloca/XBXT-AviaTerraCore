@@ -15,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public final class MessagesManager {
 
-    public static final String COLOR_SUCCESS = "&a";
+    public static final String COLOR_SUCCESS = "&2";
     public static final String COLOR_INFO = "&3";
     public static final String COLOR_WARING = "&e";
     public static final String COLOR_ERROR = "&c";
@@ -126,7 +126,14 @@ public final class MessagesManager {
             }
             message = message + " &c[R]";
         }
-        return message.replace("<|", COLOR_ESPECIAL).replace("|>",selectColore(type)).replace("|!>", selectColore(type));
+        char color = '8';
+        switch (type) {
+            case SUCCESS -> color = 'a';
+            case INFO -> color = 'b';
+            case WARNING -> color = '6';
+            case ERROR -> color = '4';
+        }
+        return message.replace("<|","&" + color).replace("|>",selectColore(type)).replace("|!>", selectColore(type));
     }
 
     private static void sendMessageLogDiscord(TypeMessages type, CategoryMessages categoryMessages, String message) {
@@ -139,7 +146,7 @@ public final class MessagesManager {
             }
         }
         Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(), () -> {
-            String finalMessage = "";
+            String finalMessage;
             switch (type) {
                 case SUCCESS -> finalMessage = "『🟩』 " + message;
                 case INFO -> finalMessage = "『🟦』 " + message;
@@ -149,7 +156,9 @@ public final class MessagesManager {
                     return;
                 }
             }
-            // Obtén el canal por su ID
+            //no parece que tenga sentido, pero sí lo tiene, es por qué asi puede quitar los códigos de color del texto
+            finalMessage = ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&', finalMessage));
+            //obtén el canal por su ID
             TextChannel channel = AviaTerraCore.BOT_DISCORD.getTextChannelById(channelId);
             if (channel !=  null) {
                 channel.sendMessage(finalMessage.replace("<|", "**").replace("|>", "**").replace("|!>", "")).queue();

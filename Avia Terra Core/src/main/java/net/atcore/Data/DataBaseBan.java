@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.net.InetAddress;
+import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.sql.*;
 import java.util.*;
@@ -160,19 +161,12 @@ public class DataBaseBan extends DataBaseMySql {
             }
         } catch (UnknownHostException e) {
             throw new RuntimeException(e);
-        } finally {
-            if (statement != null) {
-                statement.close(); // Asegúrate de cerrar el PreparedStatement después de usarlo
-            }
-            if (connection != null) {
-                connection.close(); // Cierra la conexión también
-            }
         }
 
         return banList;
     }
 
-    public DataBan addBanPlayer(String name, String uuid, String ip, String reason, long unbanDate, long banDate, String context, String author) {
+    public void addBanPlayer(DataBan dataBan) {
         String sql = "INSERT INTO bans (name, uuid, ip, reason, unban_date, ban_date, context, author) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?) " +
                 "ON DUPLICATE KEY UPDATE " +
@@ -180,33 +174,31 @@ public class DataBaseBan extends DataBaseMySql {
                 "unban_date = VALUES(unban_date), ban_date = VALUES(ban_date), context = VALUES(context), author = VALUES(author)";
         try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setString(1, name);
-            statement.setString(2, uuid);
-            statement.setString(3, ip);
-            statement.setString(4, reason);
-            statement.setLong(5, unbanDate);
-            statement.setLong(6, banDate);
-            statement.setString(7, context);
-            statement.setString(8, author);
+            statement.setString(1, dataBan.getName());
+            statement.setString(2, dataBan.getUuid().toString());
+            statement.setString(3, dataBan.getAddress().getHostAddress());
+            statement.setString(4, dataBan.getReason());
+            statement.setLong(5, dataBan.getUnbanDate());
+            statement.setLong(6, dataBan.getBanDate());
+            statement.setString(7, dataBan.getContext().toString());
+            statement.setString(8, dataBan.getAuthor());
             statement.executeUpdate();
             String tiempoDeBaneo;
-            if (unbanDate == 0){
+            if (dataBan.getUnbanDate() == 0){
                 tiempoDeBaneo = "Permanente";
             }else {
-                tiempoDeBaneo = GlobalUtils.TimeToString(unbanDate - banDate, 2);
+                tiempoDeBaneo = GlobalUtils.TimeToString(dataBan.getUnbanDate() - dataBan.getBanDate(), 2);
             }
             reloadDatabase();
-            sendMessageConsole("el jugador <|" + name + "|> fue baneado de <|" + context + "|> durante <|" +
-                    tiempoDeBaneo + "|> por el jugador <|" + author +
-                    "|> y la razón es <|" + reason + "|> ", TypeMessages.SUCCESS, CategoryMessages.BAN);
-            UUID uuids;
-            if (uuid == null){
-                uuids = null;
-            }else {
-                uuids = UUID.fromString(uuid);
-            }
-            return new DataBan(name, uuids, InetAddress.getByName(ip), reason, unbanDate, banDate, ContextBan.valueOf(context), author);
-        } catch (SQLException | UnknownHostException e) {
+            sendMessageConsole("el jugador <|" + dataBan.getName() + "|> fue baneado de <|" + dataBan.getContext() + "|> durante <|" +
+                    tiempoDeBaneo + "|> por el jugador <|" + dataBan.getAuthor() +
+                    "|> y la razón es <|" + dataBan.getReason() + "|> ", TypeMessages.SUCCESS, CategoryMessages.BAN);
+
+        } catch (SQLException e) {
+            sendMessageConsole("Error al banear al jugador <|" + dataBan.getName() + "|>, razón de baneo: <|" + dataBan.getReason() + "|>, Contexto: "
+                            + dataBan.getContext().name() + " Autor: " + dataBan.getAuthor() + " Tiempo de baneo: " +
+                            GlobalUtils.TimeToString(dataBan.getUnbanDate() - System.currentTimeMillis(), 1)
+                    , TypeMessages.ERROR, CategoryMessages.BAN);
             throw new RuntimeException(e);
         }
     }
@@ -222,6 +214,8 @@ public class DataBaseBan extends DataBaseMySql {
             sendMessageConsole("Se Desbano el jugador <|" + name + "|> en el contexto <|" + context.name() + "|> " +
                     "por <|" + author + "|>", TypeMessages.INFO, CategoryMessages.BAN);
         } catch (SQLException e) {
+            sendMessageConsole("Error al desbanear al jugador <|" + name + "|> del contexto: <|" + context.name() + "|> por <|" + author
+                    , TypeMessages.ERROR, CategoryMessages.BAN);
             throw new RuntimeException(e);
         }
     }

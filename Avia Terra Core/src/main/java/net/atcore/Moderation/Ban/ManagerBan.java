@@ -18,6 +18,7 @@ import java.net.InetAddress;
 import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Objects;
+import java.util.UUID;
 
 import static net.atcore.Messages.MessagesManager.*;
 
@@ -25,23 +26,17 @@ public class ManagerBan extends DataBaseBan {
 
     public void banPlayer(Player player, String reason, long time, ContextBan contextBan, String nameAuthor) {
         banPlayer(player.getName(),
-                player.getUniqueId().toString(),
-                Objects.requireNonNull(player.getAddress()).getHostName(),
+                player.getUniqueId(),
+                player.getAddress().getAddress(),
                 reason, time, contextBan,
                 nameAuthor);
     }
 
-    public void banPlayer(String name, String uuid, String ip, String reason, long time, ContextBan context, String nameAuthor) {
+    public void banPlayer(String name, UUID uuid, InetAddress ip, String reason, long time, ContextBan context, String nameAuthor) {
         long finalTime = time == 0 ? 0 : time + System.currentTimeMillis();
-        kickBan(addBanPlayer(name,
-                uuid,
-                ip,
-                reason,
-                (finalTime),
-                System.currentTimeMillis(),
-                context.name(),
-                nameAuthor)
-        );
+        DataBan dataBan = new DataBan(name, uuid, ip, reason, finalTime, System.currentTimeMillis(), context, nameAuthor);
+        kickBan(dataBan);
+        Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(), () -> addBanPlayer(dataBan));
     }
 
     /**
@@ -93,7 +88,7 @@ public class ManagerBan extends DataBaseBan {
                 context = ContextBan.GLOBAL;
             }
 
-            if (dataBans == null) return IsBan.NOT;//Otro "por si acaso del por si acaso"
+            if (dataBans == null) return IsBan.UNKNOWN;//Otro "por si acaso del por si acaso"
             //quiere decir que el DataBan dio nulo y que la base datos explotó
             for (DataBan ban : dataBans) {//mira cada DataBan del jugador para saber exactamente de que está baneado
                 if (ban.getContext().equals(context)) {//saber si el contexto del check le corresponde al baneo
@@ -116,7 +111,7 @@ public class ManagerBan extends DataBaseBan {
                         return IsBan.NOT;
                     }
                 } else{
-                    return IsBan.NOT_BY_CONTEXT;
+                    return IsBan.NOT_THIS_CONTEXT;
                 }
             }
         } else {

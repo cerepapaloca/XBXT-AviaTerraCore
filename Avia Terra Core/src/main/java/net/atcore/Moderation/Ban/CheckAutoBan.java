@@ -14,6 +14,7 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
+import java.net.SocketException;
 import java.util.*;
 
 import static net.atcore.Messages.MessagesManager.sendMessageConsole;
@@ -28,7 +29,7 @@ public class CheckAutoBan {
     private static String lastMessage = "";
     private static final ArrayList<Player> ChatBotTime = new ArrayList<>();
 
-    public static void checkAutoBanChat(Player player, String message) {
+    public static void checkAutoBanChat(Player player, String message) throws SocketException {
         long currentTime = System.currentTimeMillis();
         if (Objects.equals(lastMessage, message)){
             ChatBotTime.add(player);
@@ -93,7 +94,9 @@ public class CheckAutoBan {
         for (Map.Entry<String, Integer> entry : itemCounts.entrySet()) {
             if (entry.getValue() > 1) {
                 player.getInventory().clear();
-                Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(), () -> ModerationSection.getBanManager().banPlayer(player, "Por estar dupeando",1000 * 60 * 60 * 24 * 5L, ContextBan.GLOBAL, "Servidor"));
+                Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(), () -> {
+                    ModerationSection.getBanManager().banPlayer(player, "Por estar dupeando",1000 * 60 * 60 * 24 * 5L, ContextBan.GLOBAL, "Servidor");
+                });
 
             }
         }
@@ -102,7 +105,7 @@ public class CheckAutoBan {
     private static final Set<Material> ILEGAL_ITEMS = Set.of(BEDROCK, END_PORTAL_FRAME, COMMAND_BLOCK, BARRIER,
             STRUCTURE_VOID, STRUCTURE_BLOCK, REPEATING_COMMAND_BLOCK, CHAIN_COMMAND_BLOCK, COMMAND_BLOCK_MINECART, SPAWNER, REINFORCED_DEEPSLATE);
 
-    public static void checkAntiIlegalItems(Player player) {
+    public static void checkAntiIlegalItems(Player player) throws SocketException {
         if (Config.isCheckAntiIllegalItems())return;
         boolean b = false;
         for (ItemStack item: player.getInventory().getContents()){

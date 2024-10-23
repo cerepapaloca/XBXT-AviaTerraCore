@@ -53,14 +53,18 @@ public class CommandBan extends BaseTabCommand {
                 }
                 String finalReason = reason;
                 Player player = Bukkit.getPlayer(args[0]);
-                Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance() , () -> {//hilo aparte por si no Boom!!
+                try {
                     if (player != null) {
                         ModerationSection.getBanManager().banPlayer(player, finalReason, time, contextBan, sender.getName());
                     }else {
                         ModerationSection.getBanManager().banPlayer(args[0], null, null, finalReason, time, contextBan, sender.getName());
                     }
-                    sendMessage(sender, "El jugador fue baneado", TypeMessages.SUCCESS);
-                });
+                }catch (Exception ignored) {
+                    sendMessage(sender, "Hubo un problema con las base de datos vuelva a ejecutar el comando", TypeMessages.ERROR);
+                }
+
+                sendMessage(sender, "El jugador fue baneado", TypeMessages.SUCCESS);
+
             }
         }
     }

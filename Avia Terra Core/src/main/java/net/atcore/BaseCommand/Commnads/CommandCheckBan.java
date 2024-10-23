@@ -69,7 +69,7 @@ public class CommandCheckBan extends BaseTabCommand {
                         IsBan reason = ManagerBan.checkBan(player, contextBan);
                         switch (reason) {
                             case NOT -> sendMessage(sender, "el jugador no esta banedo de ningún contexto", TypeMessages.SUCCESS);
-                            case NOT_BY_CONTEXT -> {
+                            case NOT_THIS_CONTEXT -> {
                                 sendMessage(sender, "el jugador esta baneado pero no del contexto seleccionado pero esta baneado de:", TypeMessages.SUCCESS);
                                 if (ManagerBan.getDataBan(player.getName()) == null) {
                                     sendMessage(sender, "No esta baneado", TypeMessages.INFO);
@@ -81,6 +81,8 @@ public class CommandCheckBan extends BaseTabCommand {
                             }
                             case YES -> sendMessage(sender, "El jugador <|" + player.getName() + "|> fue echo del contexto <| " + contextBan +
                                     "|> seleccionado", TypeMessages.SUCCESS);
+                            case UNKNOWN -> sendMessage(sender, "Hubo un problema al encontrar la información del jugador <|" + player.getName()
+                                    , TypeMessages.ERROR);
 
                         }
                     }else {

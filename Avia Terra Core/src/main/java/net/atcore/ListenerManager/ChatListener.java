@@ -25,6 +25,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
+import java.net.SocketException;
 import java.util.UUID;
 
 import static net.atcore.Messages.MessagesManager.*;
@@ -55,7 +56,12 @@ public class ChatListener implements Listener {
         if (user != null) {
             String prefix = user.getCachedData().getMetaData().getPrefix();
 
-            checkAutoBanChat(player , event.getMessage());//se le va a banear?
+            try {
+                checkAutoBanChat(player , event.getMessage());//se le va a banear?
+            } catch (SocketException e) {
+                sendMessageConsole("Hubo un problema con las bases de datos al banear " + player.getName(), TypeMessages.ERROR);
+                throw new RuntimeException(e);
+            }
 
             if (CheckBan.checkChat(player)){//está baneado?
                 event.setCancelled(true);

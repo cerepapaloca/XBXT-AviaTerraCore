@@ -32,7 +32,8 @@ public class CommandUnban extends BaseCommand {
             sendMessage(sender, "contexto no valido", TypeMessages.ERROR);
             return;
         }
-        Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(), () -> ModerationSection.getBanManager().removeBanPlayer(args[0], contextBan, sender.getName()));//en un hilo aparte por qué explota el servidor
+        //en un hilo aparte por qué explota el servidor
+        Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(), () -> ModerationSection.getBanManager().removeBanPlayer(args[0], contextBan, sender.getName()));
         sendMessage(sender, "El jugador fue desbaneado", TypeMessages.SUCCESS);
     }
 }

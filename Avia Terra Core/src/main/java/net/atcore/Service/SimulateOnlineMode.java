@@ -13,7 +13,6 @@ import com.comphenix.protocol.wrappers.*;
 import com.github.games647.craftapi.model.auth.Verification;
 import com.github.games647.craftapi.model.skin.Textures;
 import lombok.Getter;
-import lombok.Setter;
 import net.atcore.AviaTerraCore;
 import net.atcore.Config;
 import net.atcore.Messages.TypeMessages;
