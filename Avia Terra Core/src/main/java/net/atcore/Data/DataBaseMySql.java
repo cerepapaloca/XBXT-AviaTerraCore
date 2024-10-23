@@ -1,5 +1,6 @@
 package net.atcore.Data;
 
+import net.atcore.AviaTerraCore;
 import org.bukkit.Bukkit;
 
 import java.sql.Connection;
@@ -30,7 +31,7 @@ public abstract class DataBaseMySql {
         String url = "jdbc:mysql://" + HOST + ":" + PORT + "/" + DATABASE;
         try {
             connection = DriverManager.getConnection(url, USER, PASSWORD);
-            sendMessageConsole("Conexión a MySQL establecida", TypeMessages.SUCCESS);
+            if (!AviaTerraCore.isStarting()) sendMessageConsole("Conexión a MySQL establecida", TypeMessages.SUCCESS);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -66,11 +67,11 @@ public abstract class DataBaseMySql {
      */
 
     protected static Connection getConnection() throws SQLException {
-        if (Bukkit.isPrimaryThread()){
+        if (Bukkit.isPrimaryThread() && !AviaTerraCore.isStarting()){
             throw new ConnedDataBaseMainThread("No usar el hilo principal para la base de datos");
         }
         if (connection == null || connection.isClosed()) {
-            sendMessageConsole("Conexión perdida Reconectando...", TypeMessages.WARNING);
+            if (!AviaTerraCore.isStarting()) sendMessageConsole("Conexión perdida Reconectando...", TypeMessages.WARNING);
             connect();
         }
         return connection;

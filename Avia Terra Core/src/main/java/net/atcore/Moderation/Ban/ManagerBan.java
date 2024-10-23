@@ -3,6 +3,7 @@ package net.atcore.Moderation.Ban;
 import lombok.Getter;
 import net.atcore.AviaTerraCore;
 import net.atcore.Config;
+import net.atcore.Utils.GlobalConstantes;
 import net.atcore.Data.DataBaseBan;
 import net.atcore.Messages.CategoryMessages;
 import net.atcore.Messages.TypeMessages;
@@ -33,7 +34,7 @@ public class ManagerBan extends DataBaseBan {
     }
 
     public void banPlayer(String name, UUID uuid, InetAddress ip, String reason, long time, ContextBan context, String nameAuthor) {
-        long finalTime = time == 0 ? 0 : time + System.currentTimeMillis();
+        long finalTime = time == GlobalConstantes.NUMERO_PERMA ? GlobalConstantes.NUMERO_PERMA : time == Long.MAX_VALUE ? Long.MAX_VALUE : time + System.currentTimeMillis();
         DataBan dataBan = new DataBan(name, uuid, ip, reason, finalTime, System.currentTimeMillis(), context, nameAuthor);
         kickBan(dataBan);
         Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(), () -> addBanPlayer(dataBan));
@@ -95,12 +96,8 @@ public class ManagerBan extends DataBaseBan {
                     long unbanDate = ban.getUnbanDate();
                     long currentTime = System.currentTimeMillis();
                     String time;
-                    if (unbanDate == 0){
-                        time = "Permanente";
-                    }else {
-                        time = GlobalUtils.TimeToString(unbanDate - currentTime,1);
-                    }
-                    if (unbanDate == 0 || currentTime < unbanDate) {//para saber si él baneo ya expiro
+                    time = GlobalUtils.timeToString(unbanDate,1, true);
+                    if (unbanDate == GlobalConstantes.NUMERO_PERMA || currentTime < unbanDate) {//para saber si él baneo ya expiro
                         sendMessageConsole(player.getName() + " se echo por que estar baneado de: " + context.name() +
                                 ". Se detecto por Nombre: <|" + checkName + "|> por ip: <|" + checkIp + "|>. tiempo restante " +
                                 "<|" +  time + "|>", TypeMessages.INFO, CategoryMessages.BAN);
@@ -126,11 +123,12 @@ public class ManagerBan extends DataBaseBan {
         String contextName = dataBan.getContext().name().toLowerCase().replace("_", " ");
         if (Objects.equals(dataBan.getContext().name(), "GLOBAL")) contextName = "Avia Terra";
         String time;
-        if (dataBan.getUnbanDate() == 0){
+        /*if (dataBan.getUnbanDate() == GlobalConstantes.NUMERO_PERMA){
             time = "&lPermanente";
         }else {
-            time =GlobalUtils.TimeToString(dataBan.getUnbanDate() - System.currentTimeMillis(), 1) ;
-        }
+
+        }*/
+        time =GlobalUtils.timeToString(dataBan.getUnbanDate(), 1, true);
 
         String reasonFinal = ChatColor.translateAlternateColorCodes('&',
                         "&c&m &r &c&m       &r  &4&lAviaBans&c  &m        &r &c&m \n\n&r"+

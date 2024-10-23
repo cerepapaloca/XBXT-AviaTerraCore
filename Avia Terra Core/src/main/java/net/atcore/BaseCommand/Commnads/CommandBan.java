@@ -41,10 +41,11 @@ public class CommandBan extends BaseTabCommand {
                     return;
                 }
                 long time;
-                if (args[2].equalsIgnoreCase("perma")){
-                    time = 0;
-                }else{
-                    time = GlobalUtils.StringToMilliseconds(args[2]);
+                try {
+                    time = CommandUtils.StringToMilliseconds(args[2], true);
+                }catch (RuntimeException e){
+                    sendMessage(sender, "formato de fecha incorrecto", TypeMessages.ERROR);
+                    return;
                 }
 
                 String reason = "";
@@ -76,7 +77,7 @@ public class CommandBan extends BaseTabCommand {
                 return CommandUtils.listTab(args[1], GlobalUtils.EnumsToStrings(ContextBan.values()));
             }
             case 3 -> {
-                return CommandUtils.listTabTime(args[2], "perma");
+                return CommandUtils.listTabTime(args[2], true);
             }
             case 4 -> {
                 return List.of("razón del baneo...");

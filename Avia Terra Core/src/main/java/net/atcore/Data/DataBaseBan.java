@@ -1,18 +1,19 @@
 package net.atcore.Data;
 
+import net.atcore.AviaTerraCore;
 import net.atcore.Messages.CategoryMessages;
 import net.atcore.Messages.MessagesManager;
 import net.atcore.Messages.TypeMessages;
 import net.atcore.Moderation.Ban.ContextBan;
 import net.atcore.Moderation.Ban.DataBan;
 import net.atcore.Moderation.Ban.SearchBanBy;
+import net.atcore.Utils.GlobalConstantes;
 import net.atcore.Utils.GlobalUtils;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.net.InetAddress;
-import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.sql.*;
 import java.util.*;
@@ -60,7 +61,7 @@ public class DataBaseBan extends DataBaseMySql {
             throw new RuntimeException(e);
         }
 
-        sendMessageConsole("Baneos Recargado", TypeMessages.SUCCESS);
+        if (!AviaTerraCore.isStarting()) sendMessageConsole("Baneos Recargado", TypeMessages.SUCCESS);
     }
 
     @Override
@@ -75,8 +76,8 @@ public class DataBaseBan extends DataBaseMySql {
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     if (rs.getInt(1) > 0) {
-                        sendMessageConsole("DataBase Bans " + MessagesManager.COLOR_SUCCESS + "Ok", TypeMessages.INFO);
                         reloadDatabase();
+                        sendMessageConsole("DataBase Bans " + MessagesManager.COLOR_SUCCESS + "Ok", TypeMessages.INFO, false);
                         return;//si existe, se detiene
                     }
                 }
@@ -175,8 +176,8 @@ public class DataBaseBan extends DataBaseMySql {
         try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, dataBan.getName());
-            statement.setString(2, dataBan.getUuid().toString());
-            statement.setString(3, dataBan.getAddress().getHostAddress());
+            statement.setString(2, dataBan.getUuid() != null ? dataBan.getUuid().toString() : null);
+            statement.setString(3, dataBan.getAddress() != null ? dataBan.getAddress().toString() : null);
             statement.setString(4, dataBan.getReason());
             statement.setLong(5, dataBan.getUnbanDate());
             statement.setLong(6, dataBan.getBanDate());
@@ -184,10 +185,10 @@ public class DataBaseBan extends DataBaseMySql {
             statement.setString(8, dataBan.getAuthor());
             statement.executeUpdate();
             String tiempoDeBaneo;
-            if (dataBan.getUnbanDate() == 0){
+            if (dataBan.getUnbanDate() == GlobalConstantes.NUMERO_PERMA){
                 tiempoDeBaneo = "Permanente";
             }else {
-                tiempoDeBaneo = GlobalUtils.TimeToString(dataBan.getUnbanDate() - dataBan.getBanDate(), 2);
+                tiempoDeBaneo = GlobalUtils.timeToString(dataBan.getUnbanDate() - dataBan.getBanDate(), 2);
             }
             reloadDatabase();
             sendMessageConsole("el jugador <|" + dataBan.getName() + "|> fue baneado de <|" + dataBan.getContext() + "|> durante <|" +
@@ -195,9 +196,14 @@ public class DataBaseBan extends DataBaseMySql {
                     "|> y la razón es <|" + dataBan.getReason() + "|> ", TypeMessages.SUCCESS, CategoryMessages.BAN);
 
         } catch (SQLException e) {
-            sendMessageConsole("Error al banear al jugador <|" + dataBan.getName() + "|>, razón de baneo: <|" + dataBan.getReason() + "|>, Contexto: "
-                            + dataBan.getContext().name() + " Autor: " + dataBan.getAuthor() + " Tiempo de baneo: " +
-                            GlobalUtils.TimeToString(dataBan.getUnbanDate() - System.currentTimeMillis(), 1)
+            String tiempoDeBaneo;
+            if (dataBan.getUnbanDate() == GlobalConstantes.NUMERO_PERMA){
+                tiempoDeBaneo = "Permanente";
+            }else {
+                tiempoDeBaneo = GlobalUtils.timeToString(dataBan.getUnbanDate() - dataBan.getBanDate(), 2);
+            }
+            sendMessageConsole("Error al banear al jugador <|" + dataBan.getName() + "|>, razón de baneo: <|" + dataBan.getReason() + "|>, Contexto: <|"
+                            + dataBan.getContext().name() + "|> Autor: <|" + dataBan.getAuthor() + "|> Tiempo de baneo: <|" + tiempoDeBaneo + "|>"
                     , TypeMessages.ERROR, CategoryMessages.BAN);
             throw new RuntimeException(e);
         }

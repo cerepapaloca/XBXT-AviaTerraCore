@@ -23,6 +23,12 @@ para que se vea el rangos tienes que copiar el carater que lo resepresenta, los 
 > Lo que tiene que poner en el codigo
 > ```java
 > Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(), () -> {
->       //toda la logica que tenga una base de datos            
+>   //toda la logica que tenga una base de datos            
+> });
+> ````
+> y para volver al hilo principal
+> ```java
+> Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> {
+>    //toda la logica que interactúe con el sevidor
 > });
 > ````

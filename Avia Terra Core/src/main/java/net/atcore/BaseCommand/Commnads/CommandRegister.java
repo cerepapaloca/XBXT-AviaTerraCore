@@ -9,6 +9,7 @@ import net.atcore.Security.Login.LoginManager;
 import net.atcore.Security.Login.StateLogins;
 import net.atcore.Service.SimulateOnlineMode;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -43,6 +44,7 @@ public class CommandRegister extends BaseCommand {
                             LoginManager.newRegisterCracked(player.getName(), player.getAddress().getAddress(),  args[0]);
                             player.sendTitle(ChatColor.translateAlternateColorCodes('&',COLOR_ESPECIAL + "Te haz registrado!"), "", 20, 20*3, 40);
                             session.setEndTimeLogin(System.currentTimeMillis() + 1000*60);
+                            player.setGameMode(GameMode.SURVIVAL);
                             register.setTemporary(false);
                             try {
                                 session.setPasswordShaded(LoginManager.hashPassword(player.getName(), args[0]));

@@ -18,4 +18,5 @@ commands:
   checkban:
   login:
   register:
+  addrange:
 

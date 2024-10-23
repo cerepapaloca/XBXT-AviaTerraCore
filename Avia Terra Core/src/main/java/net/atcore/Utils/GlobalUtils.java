@@ -9,10 +9,14 @@ import lombok.experimental.UtilityClass;
 import net.atcore.AviaTerraCore;
 import net.atcore.Messages.MessagesManager;
 import net.md_5.bungee.api.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
+import org.bukkit.Sound;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
@@ -74,12 +78,11 @@ public final class GlobalUtils {
     }
 
     /**
-     * lo mismo que {@link #TimeToString(long, int)} pero se maneja segundos
-     * @param second el tiempo en segundos y en un int
+     * Lo mismo que {@link #timeToString(long, int, boolean)}
      */
 
-    public String TimeToString(int second, int format){
-        return TimeToString(second*1000L, format);
+    public String timeToString(long time, int format){
+        return timeToString(time, format, false);
     }
 
     /**
@@ -95,10 +98,13 @@ public final class GlobalUtils {
      * <ul>
      * @param time tiempo en MS y long
      * @param format un int que comienza del 0
+     * @param isGlobalDate indica si se tiene que restar con el tiempo actual
      * @return el formato del seleccionado
      */
 
-    public String TimeToString(long time, int format) {
+    public String timeToString(long time, int format, boolean isGlobalDate) {
+        if (time == GlobalConstantes.NUMERO_PERMA) return "permanente";
+        if (isGlobalDate) time = time - System.currentTimeMillis();
         long days = TimeUnit.MILLISECONDS.toDays(time);
         time -= TimeUnit.DAYS.toMillis(days);
         long hours = TimeUnit.MILLISECONDS.toHours(time);
@@ -152,43 +158,47 @@ public final class GlobalUtils {
     }
 
     /**
-     * Convierte un string de este estilo {@code 20d} en ms
-     * @param time el string que quieres convertir a long
-     * @return el tiempo en ms
-     */
-
-    public long StringToMilliseconds(@NotNull String time) {
-        time = time.toLowerCase();
-        char unit = time.charAt(time.length() - 1);
-        long value = Long.parseLong(time.substring(0, time.length() - 1));
-
-        return switch (unit) {
-            case 's' -> // Segundos
-                    value * 1000;
-            case 'm' -> // Minutos
-                    value * 1000 * 60;
-            case 'h' -> // Horas
-                    value * 1000 * 60 * 60;
-            case 'd' -> // Días
-                    value * 1000 * 60 * 60 * 24;
-            default -> throw new IllegalArgumentException("Unidad de tiempo no válida: " + unit);
-        };
-    }
-
-    /**
      * Añade una protección anti dupe básicamente se le asigna una uuid al item esto
      * hace que el item no se pueda estakear y si lo se pone en 1
+     *
      * @param item el item que le quieres aplicar la protección
-     * @return el mismo item pero con la protección
      */
 
-    public ItemStack addProtectionAntiDupe(ItemStack item){
+    public void addProtectionAntiDupe(@NotNull ItemStack item){
         ItemMeta meta = item.getItemMeta();
-        if (meta == null) return item;
+        if (meta == null) return;
         meta.getPersistentDataContainer().set(KEY_ANTI_DUPE, PersistentDataType.STRING, UUID.randomUUID().toString());
         item.setItemMeta(meta);
         item.setAmount(1);//se pone uno por qué si el jugador lo divide va a ser baneado accidentalmente
-        return item;
+    }
+
+    public void addPersistentDataItem(@NotNull ItemStack itemStack, String nameKey, PersistentDataType type, Object data){
+        ItemMeta meta = itemStack.getItemMeta();
+        if (meta == null) return;
+        NamespacedKey key = new NamespacedKey(AviaTerraCore.getInstance(), nameKey);
+        meta.getPersistentDataContainer().set(key, type, data);
+        itemStack.setItemMeta(meta);
+    }
+
+    public Object getPersistenData(@NotNull ItemStack item, String nameKey, PersistentDataType type){
+        ItemMeta meta = item.getItemMeta();
+        PersistentDataContainer dataContainer = meta.getPersistentDataContainer();
+        NamespacedKey key = new NamespacedKey(AviaTerraCore.getInstance(), nameKey);
+        if (dataContainer.has(key)){
+            return dataContainer.get(key, type);
+        }else{
+            return null;
+        }
+    }
+
+    public static void addItemPlayer(@NotNull ItemStack item, @NotNull Player player, boolean isSilent){
+        if (!isSilent) player.playSound(player, Sound.ENTITY_ITEM_PICKUP, 1,1);
+        if (player.getInventory().addItem(item).isEmpty()) {
+            return;
+        }
+        Location location = player.getLocation();
+        World world = player.getWorld();
+        world.dropItemNaturally(location, item);
     }
 
     /**

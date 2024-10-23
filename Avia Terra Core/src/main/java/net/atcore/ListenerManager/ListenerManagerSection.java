@@ -1,16 +1,21 @@
 package net.atcore.ListenerManager;
 
+import lombok.Getter;
 import net.atcore.Section;
 import net.atcore.Utils.RegisterManager;
 
 public class ListenerManagerSection implements Section {
 
+    @Getter
+    private static ChatListener chatListener;
+
     @Override
     public void enable() {
-        RegisterManager.register(new ChatListener());
+        RegisterManager.register(chatListener = new ChatListener());
         RegisterManager.register(new InventoryListener());
         RegisterManager.register(new JoinAndExitListener());
         RegisterManager.register(new PlayerListener());
+        new PacketListener();
     }
 
     @Override

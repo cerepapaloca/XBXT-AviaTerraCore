@@ -18,9 +18,7 @@ public class DataSection implements Section {
     public void enable() {
         register(mySQLConnection = new DataBaseBan());
         register(new DataBaseRegister());
-        Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(), () -> {
-            for (DataBaseMySql db : dataBases) db.createTable();
-        });
+        for (DataBaseMySql db : dataBases) db.createTable();
     }
 
     @Override

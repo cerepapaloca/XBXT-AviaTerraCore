@@ -7,6 +7,7 @@ import net.atcore.Moderation.Ban.IsBan;
 import net.atcore.Moderation.Ban.ManagerBan;
 import net.atcore.Moderation.Ban.ContextBan;
 import net.atcore.Moderation.Ban.DataBan;
+import net.atcore.Utils.GlobalConstantes;
 import net.atcore.Utils.GlobalUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -97,12 +98,12 @@ public class CommandCheckBan extends BaseTabCommand {
 
     private void sendDataBan(CommandSender sender, DataBan dataBan) {
         String time;
-        if (dataBan.getUnbanDate() == 0){
+        if (dataBan.getUnbanDate() == GlobalConstantes.NUMERO_PERMA){
             time = "Perma";
         }else if (dataBan.getUnbanDate() < System.currentTimeMillis()){
             time = "Ya expiro";
         }else {
-            time = GlobalUtils.TimeToString(dataBan.getUnbanDate() - System.currentTimeMillis(), 1);
+            time = GlobalUtils.timeToString(dataBan.getUnbanDate(), 1, true);
         }
         sendMessage(sender, "&f-|!> Esta baneado de <|" + dataBan.getContext() + "|> y expira <|" + time + "|> la razón <|" + dataBan.getReason() + "|>", TypeMessages.INFO);
     }

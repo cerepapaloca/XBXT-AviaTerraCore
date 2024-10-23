@@ -27,15 +27,11 @@ public final class AviaTerraCore extends JavaPlugin {
     public static JDA BOT_DISCORD;
     @Getter private static LuckPerms LP;
     @Getter private static MojangResolver resolver;
-
+    @Getter private static boolean isStarting;
 
     @Override
     public void onLoad(){
         instance = this;
-        RegisteredServiceProvider<LuckPerms> provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
-        if (provider != null) {
-            LP = provider.getProvider();
-        }
         resolver = new MojangResolver();
     }
 
@@ -44,6 +40,11 @@ public final class AviaTerraCore extends JavaPlugin {
     public void onEnable() {
         long timeCurrent = System.currentTimeMillis();
         sendMessageConsole("AviaTerra Iniciando...", TypeMessages.INFO, false);
+        isStarting = true;
+        RegisteredServiceProvider<LuckPerms> provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
+        if (provider != null) {
+            LP = provider.getProvider();
+        }
         if (Bukkit.getOnlineMode()){
             throw new IllegalStateException("modo online esta activo");
         }
@@ -62,7 +63,8 @@ public final class AviaTerraCore extends JavaPlugin {
         RegisterManager.register(new ListenerManagerSection());
         RegisterManager.register(new ServiceSection());
         //enableModules();
-        sendMessageConsole("AviaTerra Iniciado. <|" + (System.currentTimeMillis() - timeCurrent) + "ms", TypeMessages.SUCCESS, false);
+        isStarting = false;
+        sendMessageConsole("AviaTerra Iniciado en <|" + (System.currentTimeMillis() - timeCurrent) + "ms", TypeMessages.SUCCESS, false);
     }
 
     @Override

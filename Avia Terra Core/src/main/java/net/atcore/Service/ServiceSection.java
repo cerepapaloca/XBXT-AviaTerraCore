@@ -10,7 +10,6 @@ public class ServiceSection implements Section {
     @Getter
     private static SimulateOnlineMode simulateOnlineMode;
 
-
     @Override
     public void enable() {
         encrypt = new Encrypt();

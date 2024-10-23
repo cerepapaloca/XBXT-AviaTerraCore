@@ -1,6 +1,6 @@
 package net.atcore.Data;
 
-import com.comphenix.protocol.events.PacketContainer;
+import net.atcore.AviaTerraCore;
 import net.atcore.Messages.MessagesManager;
 import net.atcore.Messages.TypeMessages;
 import net.atcore.Security.Login.DataSession;
@@ -23,7 +23,6 @@ public class DataBaseRegister extends DataBaseMySql {
     protected void reloadDatabase() {
         String sql = "SELECT name, uuidPremium, uuidCracked, ipRegister, ipLogin, isPremium, password, lastLoginDate, registerDate FROM register";
         LoginManager.getListRegister().clear();//se limpia los datos
-        LoginManager.getListPlayerLoginIn().clear();
         //no está LoginManager.getListSession() por que si no tendría que obligar a todos los usuarios a loguearse de nuevo
 
         try (Connection connection = getConnection();
@@ -51,7 +50,6 @@ public class DataBaseRegister extends DataBaseMySql {
                 dataRegister.setRegisterDate(registerDate);
                 DataSession session = LoginManager.getListSession().get(name);//Se obtiene las sesiones guardadas y se modifica con los datos nuevos
                 //////////////////////////////////////////////////////////////
-
                 if (session == null) continue;//si tenia una session actualiza los datos si no lo ignora
                 session.setIp(InetAddress.getByName(ipLogin));
                 session.setPasswordShaded(password);
@@ -59,23 +57,22 @@ public class DataBaseRegister extends DataBaseMySql {
                 if (uuidPremium != null) {
                     session.setUuidPremium(UUID.fromString(uuidPremium));
                 }
-
                 //////////////////////////////////////////////////////////////
 
-                Player player = Bukkit.getPlayer(uuidCracked);
+                Player player = Bukkit.getPlayer(UUID.fromString(uuidCracked));
                 if (player == null){//si el jugador está desconectado se borra la session
                     LoginManager.getListSession().remove(name);
                     continue;
                 }
                 if (!LoginManager.checkLoginIn(player, true)){//si es valida
-                    GlobalUtils.kickPlayer(player, "Hay una discrepancia es tu session, vuelve a iniciar sessión");
+                    Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> GlobalUtils.kickPlayer(player, "Hay una discrepancia es tu session, vuelve a iniciar sessión"));
                 }
             }
         } catch (SQLException | UnknownHostException e) {
             throw new RuntimeException(e);
         }
 
-        sendMessageConsole("Registros Recargado", TypeMessages.SUCCESS);
+        if (!AviaTerraCore.isStarting()) sendMessageConsole("Registros Recargado", TypeMessages.SUCCESS);
     }
 
     @Override
@@ -90,8 +87,8 @@ public class DataBaseRegister extends DataBaseMySql {
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     if (rs.getInt(1) > 0) {
-                        sendMessageConsole("DataBase Registro " + MessagesManager.COLOR_SUCCESS + "Ok", TypeMessages.INFO);
                         reloadDatabase();
+                        sendMessageConsole("DataBase Registro " + MessagesManager.COLOR_SUCCESS + "Ok", TypeMessages.INFO, false);
                         return;//si existe, se detiene
                     }
                 }

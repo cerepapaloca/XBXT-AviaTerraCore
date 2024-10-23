@@ -6,6 +6,7 @@ import com.github.games647.craftapi.resolver.RateLimitException;
 import lombok.Getter;
 import net.atcore.AviaTerraCore;
 import net.atcore.Data.DataBaseRegister;
+import net.atcore.Exception.ConnedDataBaseMainThread;
 import net.atcore.Messages.TypeMessages;
 import net.atcore.Utils.GlobalUtils;
 import org.bukkit.Bukkit;
@@ -147,14 +148,25 @@ public class LoginManager {
                     if (ignoreTime || dataSession.getEndTimeLogin() > System.currentTimeMillis()){//expiro? o no se tiene en cuenta
                         listPlayerLoginIn.add(player.getUniqueId());//por si acaso
                         //en caso de que sea op no se le cambia el modo de juego y se hace en el hilo principal por si acaso
-                        if (!player.isOp()) Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(), () -> player.setGameMode(GameMode.SURVIVAL));
+                        if (!player.isOp()) {
+                            if (Bukkit.isPrimaryThread()){
+                                player.setGameMode(GameMode.SURVIVAL);
+                            }else{
+                                Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> player.setGameMode(GameMode.SURVIVAL));
+                            }
+                        }
                         return true;
                     }
                 }
             }
         }
         //en caso que no sea valida
-        player.setGameMode(GameMode.SPECTATOR);
+        if (Bukkit.isPrimaryThread()){
+            player.setGameMode(GameMode.SPECTATOR);
+        }else{
+            Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> player.setGameMode(GameMode.SPECTATOR));
+        }
+
         listPlayerLoginIn.remove(player.getUniqueId());
         listSession.remove(player.getName());
         return false;

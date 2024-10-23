@@ -35,4 +35,14 @@ public class Config {
 
     @Getter @Setter private static boolean checkBanByIp = false;
 
+    /**
+     * Indica a partir de que fecha los tag de rango son validós
+     * si los tag son más antiguo que la fecha marcada se borraran
+     * del mundo, es mejor dejar en 0
+     */
+
+    @Getter @Setter private static long purgeTagRange = 0;
+
+
+
 }

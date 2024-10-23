@@ -8,6 +8,7 @@ import net.atcore.Utils.GlobalUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
@@ -76,10 +77,10 @@ public class CheckAutoBan {
         timePunishChat.put(player.getUniqueId(), currentTime);
     }
 
-    public static void checkDupe(@NotNull Player player) {
+    public static void checkDupe(@NotNull Player player, Inventory inventory) {
         Map<String, Integer> itemCounts = new HashMap<>();
 
-        for (ItemStack item : player.getInventory()) {
+        for (ItemStack item : inventory) {
             if (item == null) continue;
             if (item.getItemMeta() == null) continue;
 
@@ -93,7 +94,7 @@ public class CheckAutoBan {
 
         for (Map.Entry<String, Integer> entry : itemCounts.entrySet()) {
             if (entry.getValue() > 1) {
-                player.getInventory().clear();
+                inventory.clear();
                 Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(), () -> {
                     ModerationSection.getBanManager().banPlayer(player, "Por estar dupeando",1000 * 60 * 60 * 24 * 5L, ContextBan.GLOBAL, "Servidor");
                 });
@@ -105,15 +106,20 @@ public class CheckAutoBan {
     private static final Set<Material> ILEGAL_ITEMS = Set.of(BEDROCK, END_PORTAL_FRAME, COMMAND_BLOCK, BARRIER,
             STRUCTURE_VOID, STRUCTURE_BLOCK, REPEATING_COMMAND_BLOCK, CHAIN_COMMAND_BLOCK, COMMAND_BLOCK_MINECART, SPAWNER, REINFORCED_DEEPSLATE);
 
-    public static void checkAntiIlegalItems(Player player) throws SocketException {
-        if (Config.isCheckAntiIllegalItems())return;
+    public static void checkAntiIlegalItems(Player player ,Inventory inventory) {
+        if (!Config.isCheckAntiIllegalItems())return;
+        if (player.isOp()) return;
+
         boolean b = false;
-        for (ItemStack item: player.getInventory().getContents()){
+        for (ItemStack item: inventory.getContents()){
+            if (item == null) continue;
             if (ILEGAL_ITEMS.contains(item.getType())){
                 item.setType(Material.AIR);
                 b = true;
             }
         }
-        if (b) ModerationSection.getBanManager().banPlayer(player, "Obtención de item ilegal",1000 * 60 * 60 * 24 * 10L, ContextBan.CHAT, "Servidor");
+        if (!b)return;
+        ModerationSection.getBanManager().banPlayer(player, "Obtención de item ilegal",1000 * 60 * 60 * 24 * 10L, ContextBan.GLOBAL, "Servidor");
+        player.getInventory().clear();
     }
 }

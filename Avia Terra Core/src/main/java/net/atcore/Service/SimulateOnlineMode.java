@@ -15,6 +15,7 @@ import com.github.games647.craftapi.model.skin.Textures;
 import lombok.Getter;
 import net.atcore.AviaTerraCore;
 import net.atcore.Config;
+import net.atcore.ListenerManager.PlayerListener;
 import net.atcore.Messages.TypeMessages;
 import net.atcore.Security.Login.LoginManager;
 import net.atcore.Security.Login.DataSession;
@@ -35,15 +36,6 @@ import static net.atcore.Messages.MessagesManager.sendMessageConsole;
 
 public class SimulateOnlineMode {
 
-    public SimulateOnlineMode() {
-        super();
-        try {
-            registerEvents();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     private static Method encryptMethod;
     private static Method encryptKeyMethod;
 
@@ -53,77 +45,45 @@ public class SimulateOnlineMode {
     public static final HashMap<String, String> verifyTokens = new HashMap<>();
     public static final HashMap<String, Verification> listUUIDPremium = new HashMap<>();
 
-    private void registerEvents(){
-        /*NO BORRAR POR SI ACASO
-        ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(AviaTerraCore.getInstance(),PacketType.values()
-        ){
-            @Override
-            public void onPacketReceiving(PacketEvent event) {
-                Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&6Cliente " + "Names " + event.getPacketType()));
-                Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&6datos " + event.getPacket().getModifier().getValues().toString()));
-            }
-            @Override
-            public void onPacketSending(PacketEvent event) {
-                Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&bServer " + "Names " + event.getPacketType()));
-                Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&bdatos " + event.getPacket().getModifier().getValues().toString()));
-            }
-        });*/
+    public void startEncryption(Player player, PacketContainer packet){
 
-        ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(AviaTerraCore.getInstance(),
-                PacketType.Login.Client.ENCRYPTION_BEGIN
-        ) {
-            @Override
-            public void onPacketReceiving(PacketEvent event) {
-                event.setCancelled(true);//se cancela por qué si no el servidor le tira error al cliente por enviar un paquete que no debería
+        if (player.getAddress() == null){
+            GlobalUtils.kickPlayer(player, "Error de connexion vuele a intentar");
+            return;
+        }
 
-                PacketContainer packet = event.getPacket();
-                Player player = event.getPlayer();
+        VerificationPremium.checkPremium(packet, player);
+    }
 
-                if (player.getAddress() == null){
-                    GlobalUtils.kickPlayer(event.getPlayer(), "Error de connexion vuele a intentar");
-                    return;
+    public boolean preStartLogin(Player player, PacketContainer packet){
+
+        if (player.getAddress() == null){
+            GlobalUtils.kickPlayer(player, "Error de connexion vuele a intentar");
+            return false;
+        }
+
+        UUID uuid = packet.getUUIDs().read(0);
+        String name = packet.getStrings().read(0);
+
+        DataSession session = LoginManager.getListSession().get(name);
+        if (session == null || session.getEndTimeLogin() < System.currentTimeMillis()) {
+            StateLogins state = LoginManager.getState(player.getAddress().getAddress() ,name);
+            switch (Config.isMixedMode() ? state : StateLogins.CRACKED){//revisa entre las sesiones o los registro del los jugadores
+                case PREMIUM -> {
+                    StartLoginPremium(name, uuid, player);
+                    return true; //se cancela por que asi el servidor no se da cuenta de que a recibido un paquete
                 }
-
-                VerificationPremium.checkPremium(packet, player);
+                case CRACKED -> StartLoginCracked(name, uuid);
+                case UNKNOWN -> GlobalUtils.kickPlayer(player, "Error de connexion vuele a intentar");
             }
-        });
-
-        ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(AviaTerraCore.getInstance(),
-                PacketType.Login.Client.START
-        ){
-            @Override
-            public void onPacketReceiving(PacketEvent event) {
-
-                Player player = event.getPlayer();
-
-                if (player.getAddress() == null){
-                    GlobalUtils.kickPlayer(player, "Error de connexion vuele a intentar");
-                    return;
-                }
-
-                UUID uuid = event.getPacket().getUUIDs().read(0);
-                String name = event.getPacket().getStrings().read(0);
-
-                DataSession session = LoginManager.getListSession().get(name);
-                if (session == null || session.getEndTimeLogin() < System.currentTimeMillis()) {
-                    StateLogins state = LoginManager.getState(player.getAddress().getAddress() ,name);
-                    switch (Config.isMixedMode() ? state : StateLogins.CRACKED){//revisa entre las sesiones o los registro del los jugadores
-                        case PREMIUM -> {
-                            event.setCancelled(true);//se cancela por que asi el servidor no se da cuenta de que a recibido un paquete
-                            StartLoginPremium(name, uuid, player);
-                        }
-                        case CRACKED -> StartLoginCracked(name, uuid);
-                        case UNKNOWN -> GlobalUtils.kickPlayer(player, "Error de connexion vuele a intentar");
-                    }
-                    if (Config.isMixedMode()){
-                        sendMessageConsole("Iniciando login: <|" + state.name().toLowerCase() + "|>", TypeMessages.INFO);
-                    }else{
-                        sendMessageConsole("Login omitido por qué el modo mixto esta desactivado", TypeMessages.INFO);
-                    }
-
-                }
+            if (Config.isMixedMode()){
+                sendMessageConsole("Iniciando login: <|" + state.name().toLowerCase() + "|>", TypeMessages.INFO);
+            }else{
+                sendMessageConsole("Login omitido por qué el modo mixto esta desactivado", TypeMessages.INFO);
             }
-        });
+
+        }
+        return false;
     }
 
     private void StartLoginCracked(String name, UUID uuid) {

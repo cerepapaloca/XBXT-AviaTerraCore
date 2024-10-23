@@ -1,16 +1,18 @@
 package net.atcore.BaseCommand;
 
 import lombok.experimental.UtilityClass;
+import net.atcore.Utils.GlobalConstantes;
 import net.atcore.Utils.ModeTab;
 import net.md_5.bungee.api.ChatColor;
+import org.checkerframework.checker.units.qual.A;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.toList;
 import static net.atcore.Messages.MessagesManager.COLOR_ERROR;
 
 @UtilityClass
@@ -33,8 +35,9 @@ public final class CommandUtils {
         return bool ? "<|Activo|>" : "<|Desactivado|>";
     }
 
-    public List<String> listTabTime(String arg, String...others){
-        List<String> listOthers = new ArrayList<>(Arrays.stream(others).toList());
+    public List<String> listTabTime(String arg, boolean numberSpecial){
+        List<String> listOthers = new ArrayList<>();
+        if (numberSpecial) listOthers = new ArrayList<>(Arrays.stream(new String[]{"permanente", "maximo"}).toList());
         List<Character> chars = List.of('s','m','h','d');
         if (!arg.isEmpty() && Character.isDigit(arg.charAt(0))){
             if (chars.contains(arg.charAt(arg.length() - 1))){
@@ -50,14 +53,18 @@ public final class CommandUtils {
         }
     }
 
+    public @Nullable List<String> listTab(String arg, List<String> args){
+        return listTab(arg, args, ModeTab.StartWithIgnoreCase);
+    }
+
     /**
-     * Es realiza la misma función que {@link #listTab(String, String[], ModeTab)}. Pero
+     * Es realiza la misma función que {@link #listTab(String, List, ModeTab)}. Pero
      * elimina el parámetro {@code ModeTab} y pone como por defecto {@code ModeTab.StartWithIgnoreCase}
      *
      */
 
     public @Nullable List<String> listTab(String arg, String[] args){
-        return listTab(arg, args, ModeTab.StartWithIgnoreCase);
+        return listTab(arg, Arrays.stream(args).toList(), ModeTab.StartWithIgnoreCase);
     }
 
     /**
@@ -69,34 +76,58 @@ public final class CommandUtils {
      * escribiendo actualmente
      */
 
-    public @Nullable List<String> listTab(String arg, String[] args, @NotNull ModeTab mode){
+    public @Nullable List<String> listTab(String arg,  List<String> args, @NotNull ModeTab mode){
         switch (mode){
             case Contains -> {
-                return Arrays.stream(args)
-                        .toList().stream()
+                return args.stream()
                         .filter(name -> name.contains(arg))
-                        .collect(Collectors.toList());
+                        .collect(toList());
             }
             case ContainsIgnoreCase -> {
-                return Arrays.stream(args)
-                        .toList().stream()
+                return args.stream()
                         .filter(name -> name.toLowerCase().contains(arg.toLowerCase()))
-                        .collect(Collectors.toList());
+                        .collect(toList());
             }
             case StartWith -> {
-                return Arrays.stream(args)
-                        .toList().stream()
+                return args.stream()
                         .filter(name -> name.startsWith(arg))
-                        .collect(Collectors.toList());
+                        .collect(toList());
             }
             case StartWithIgnoreCase -> {
-                return Arrays.stream(args)
-                        .toList().stream()
+                return args.stream()
                         .filter(name -> name.toLowerCase().startsWith(arg.toLowerCase()))
-                        .collect(Collectors.toList());
+                        .collect(toList());
             }
         }
         return null;
+    }
+
+    /**
+     * Convierte un string de este estilo {@code 20d} en ms
+     * @param time el string que quieres convertir a long
+     * @return el tiempo en ms
+     */
+
+    public long StringToMilliseconds(@NotNull String time, boolean numberSpecial) throws IllegalArgumentException{
+        if (numberSpecial){
+            if (time.equalsIgnoreCase("permanente")) return GlobalConstantes.NUMERO_PERMA;
+            if (time.equalsIgnoreCase("maximo")) return Long.MAX_VALUE;
+        }
+        time = time.toLowerCase();
+        char unit = time.charAt(time.length() - 1);
+        long value = Long.parseLong(time.substring(0, time.length() - 1));
+
+        return switch (unit) {
+            case 's' -> // Segundos
+                    value * 1000;
+            case 'm' -> // Minutos
+                    value * 1000 * 60;
+            case 'h' -> // Horas
+                    value * 1000 * 60 * 60;
+            case 'd' -> // Días
+                    value * 1000 * 60 * 60 * 24;
+            default -> throw new IllegalArgumentException("Unidad de tiempo no válida: " + unit);
+        };
     }
 
 }
