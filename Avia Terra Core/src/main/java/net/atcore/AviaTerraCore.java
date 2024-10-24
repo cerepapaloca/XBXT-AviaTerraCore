@@ -22,6 +22,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import static net.atcore.Messages.MessagesManager.COLOR_SUCCESS;
 import static net.atcore.Messages.MessagesManager.sendMessageConsole;
+import static net.atcore.Security.Login.LoginManager.getDataLogin;
 
 public final class AviaTerraCore extends JavaPlugin {
     @Getter
@@ -77,7 +78,7 @@ public final class AviaTerraCore extends JavaPlugin {
         }
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (!LoginManager.getListPlayerLoginIn().contains(player.getUniqueId())) {
-                player.getInventory().setContents(LoginManager.getInventories().get(player.getUniqueId()).getItems());
+                player.getInventory().setContents(getDataLogin(player).getLimbo().getItems());
             }
             GlobalUtils.kickPlayer(player, "El servidor va a cerrar, volveremos pronto...");
         }

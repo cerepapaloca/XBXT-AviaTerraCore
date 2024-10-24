@@ -3,10 +3,7 @@ package net.atcore.Data;
 import net.atcore.AviaTerraCore;
 import net.atcore.Messages.MessagesManager;
 import net.atcore.Messages.TypeMessages;
-import net.atcore.Security.Login.DataSession;
-import net.atcore.Security.Login.LoginManager;
-import net.atcore.Security.Login.DataRegister;
-import net.atcore.Security.Login.StateLogins;
+import net.atcore.Security.Login.*;
 import net.atcore.Utils.GlobalUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -14,6 +11,7 @@ import org.bukkit.entity.Player;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.sql.*;
+import java.util.HashMap;
 import java.util.UUID;
 
 import static net.atcore.Messages.MessagesManager.sendMessageConsole;
@@ -22,8 +20,9 @@ public class DataBaseRegister extends DataBaseMySql {
     @Override
     protected void reloadDatabase() {
         String sql = "SELECT name, uuidPremium, uuidCracked, ipRegister, ipLogin, isPremium, password, lastLoginDate, registerDate FROM register";
-        LoginManager.getListRegister().clear();//se limpia los datos
-        //no está LoginManager.getListSession() por que si no tendría que obligar a todos los usuarios a loguearse de nuevo
+        HashMap<UUID, DataSession> sessions = new HashMap<>();
+        LoginManager.getDataLogin().forEach(dataLogin -> sessions.put(dataLogin.getRegister().getUuidCracked(),dataLogin.getSession()));//rescata las sesiones
+        LoginManager.clearDataLogin();//se limpia los datos
 
         try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(sql);
@@ -40,7 +39,9 @@ public class DataBaseRegister extends DataBaseMySql {
                 long lastLoginDate = resultSet.getLong("lastLoginDate");
                 long registerDate = resultSet.getLong("registerDate");
 
-                DataRegister dataRegister = new DataRegister(name, UUID.fromString(uuidCracked),
+                UUID uuid = UUID.fromString(uuidCracked);
+
+                DataRegister dataRegister = new DataRegister(name, uuid,
                         uuidPremium != null ? UUID.fromString(uuidPremium) : null, isPremium == 1 ? StateLogins.PREMIUM : StateLogins.CRACKED,
                         true);
                 dataRegister.setAddressRegister(InetAddress.getByName(ipRegister));
@@ -48,26 +49,23 @@ public class DataBaseRegister extends DataBaseMySql {
                 dataRegister.setPasswordShaded(password);
                 dataRegister.setLastLoginDate(lastLoginDate);
                 dataRegister.setRegisterDate(registerDate);
-                DataSession session = LoginManager.getListSession().get(name);//Se obtiene las sesiones guardadas y se modifica con los datos nuevos
-                //////////////////////////////////////////////////////////////
-                if (session == null) continue;//si tenia una session actualiza los datos si no lo ignora
-                session.setIp(InetAddress.getByName(ipLogin));
-                session.setPasswordShaded(password);
-                session.setUuidCracked(UUID.fromString(uuidCracked));
-                if (uuidPremium != null) {
-                    session.setUuidPremium(UUID.fromString(uuidPremium));
-                }
-                //////////////////////////////////////////////////////////////
 
-                Player player = Bukkit.getPlayer(UUID.fromString(uuidCracked));
-                if (player == null){//si el jugador está desconectado se borra la session
-                    LoginManager.getListSession().remove(name);
-                    continue;
-                }
-                if (!LoginManager.checkLoginIn(player, true)){//si es valida
+                DataLogin dataLogin = LoginManager.addDataLogin(name, dataRegister);
+                DataSession session = sessions.get(uuid);//Se obtiene las sesiones rescatas
+                Player player = Bukkit.getPlayer(uuid);
+
+                if (session == null || player == null) continue;
+
+                //se modifica los datos de la session
+                session.setAddress(InetAddress.getByName(ipLogin));
+                session.setStartTimeLogin(lastLoginDate);
+                dataLogin.setSession(session);//añade la sesión rescatada
+
+                if (!LoginManager.checkLoginIn(player, true)){//revisa si son validas las sesiones
                     Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> GlobalUtils.kickPlayer(player, "Hay una discrepancia es tu session, vuelve a iniciar sessión"));
                 }
             }
+            sessions.clear();
         } catch (SQLException | UnknownHostException e) {
             throw new RuntimeException(e);
         }

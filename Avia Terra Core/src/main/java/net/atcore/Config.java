@@ -44,4 +44,6 @@ public class Config {
 
     @Getter @Setter private static long purgeTagRange = 0;
 
+    @Getter @Setter private static long expirationSession = 1000*20;
+
 }

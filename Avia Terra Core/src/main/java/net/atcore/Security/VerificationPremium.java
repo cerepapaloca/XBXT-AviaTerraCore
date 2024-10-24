@@ -9,7 +9,9 @@ import net.atcore.AviaTerraCore;
 import net.atcore.Exception.ExceptionPackageConnection;
 import net.atcore.Messages.CategoryMessages;
 import net.atcore.Messages.TypeMessages;
+import net.atcore.Security.Login.DataLogin;
 import net.atcore.Security.Login.DataSession;
+import net.atcore.Security.Login.LoginManager;
 import net.atcore.Security.Login.StateLogins;
 import net.atcore.Service.ServiceSection;
 import net.atcore.Service.SimulateOnlineMode;
@@ -71,9 +73,10 @@ public class VerificationPremium {
                                         name + "|>", TypeMessages.SUCCESS, CategoryMessages.LOGIN);
                                 String userName = verification.getName();
                                 listUUIDPremium.put(userName, verification);
-                                DataSession session = new DataSession(name, GlobalUtils.getUUIDByName(name), verification.getId(), StateLogins.PREMIUM, player.getAddress().getAddress());
-                                session.setIp(player.getAddress().getAddress());
+                                DataLogin dataLogin = LoginManager.getDataLogin(userName);
+                                DataSession session = new DataSession(player, StateLogins.PREMIUM, player.getAddress().getAddress());
                                 session.setEndTimeLogin(System.currentTimeMillis() + 1000*20);
+                                dataLogin.setSession(session);
                             }else{
                                 GlobalUtils.kickPlayer(player, "Se detecto una discrepancia. Reinicie su cliente");
                                 sendMessageConsole("la ip que se envío el paquete no es la misma que se envío al primer paquete por el jugador <|"

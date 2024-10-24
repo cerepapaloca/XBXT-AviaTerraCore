@@ -83,7 +83,7 @@ public class CommandAviaTerra extends BaseTabCommand {
                         sendMessage(sender,"********************************************************", TypeMessages.WARNING);
 
                         for (Player player : Bukkit.getOnlinePlayers()){
-                            if (LoginManager.getListSession().get(player.getName()).getStateLogins().equals(StateLogins.PREMIUM)){
+                            if (LoginManager.getDataLogin(player).getSession().getState().equals(StateLogins.PREMIUM)){
                                 GlobalUtils.kickPlayer(player, "Se Tiene que registrar/iniciar sesión con la contraseña");
                             }
                         }
@@ -110,20 +110,35 @@ public class CommandAviaTerra extends BaseTabCommand {
                     sendMessage(sender,"El check de baneo por ip esta " + CommandUtils.booleanToString(Config.isCheckBanByIp()), TypeMessages.INFO);
                 }
             }
-            case "purgarangos" ->{
+            case "purgarangos" -> {
                 Config.setPurgeTagRange(System.currentTimeMillis());
                 sendMessage(sender,"Todas los tags de rango ya no son validas y comenzara su eliminación", TypeMessages.INFO);
+            }
+            case "tiempodesesion" -> {
+                if (args.length >= 2) {
+                    try {
+                        CommandUtils.StringToMilliseconds(args[1], true);
+                    }catch (RuntimeException e){
+                        sendMessage(sender, "formato de fecha incorrecto", TypeMessages.ERROR);
+                    }
+                }else{
+                    sendMessage(sender,"el tiempo de expiración de expiration esta en " +
+                            GlobalUtils.timeToString(Config.getExpirationSession(), 2), TypeMessages.INFO);
+                }
             }
         }
     }
 
     @Override
     public List<String> onTab(CommandSender sender, String[] args) {
-        String[] argsRoot = new String[]{"reload", "anti_Op", "anti_Ilegal_Items", "mix_Mode", "check_Ban_Por_Ip", "purga_Rangos",};
+        String[] argsRoot = new String[]{"reload", "anti_Op", "anti_Ilegal_Items", "mix_Mode", "check_Ban_Por_Ip", "purga_Rangos","Tiempo_De_Sesión"};
         if (args.length >= 2) {
             switch (args[0].toLowerCase().replace("_","")) {
                 case "antiop", "antiilegalitems", "mixmode" -> {
                     return CommandUtils.listTab(args[1], new String[]{"true", "false"});
+                }
+                case "tiempodesesion" -> {
+                    return CommandUtils.listTabTime(args[1], false);
                 }
             }
         }

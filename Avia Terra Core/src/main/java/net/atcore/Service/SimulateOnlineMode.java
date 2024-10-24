@@ -13,9 +13,7 @@ import com.comphenix.protocol.wrappers.*;
 import com.github.games647.craftapi.model.auth.Verification;
 import com.github.games647.craftapi.model.skin.Textures;
 import lombok.Getter;
-import net.atcore.AviaTerraCore;
 import net.atcore.Config;
-import net.atcore.ListenerManager.PlayerListener;
 import net.atcore.Messages.TypeMessages;
 import net.atcore.Security.Login.LoginManager;
 import net.atcore.Security.Login.DataSession;
@@ -65,9 +63,9 @@ public class SimulateOnlineMode {
         UUID uuid = packet.getUUIDs().read(0);
         String name = packet.getStrings().read(0);
 
-        DataSession session = LoginManager.getListSession().get(name);
+        DataSession session = LoginManager.getDataLogin(name).getSession();
         if (session == null || session.getEndTimeLogin() < System.currentTimeMillis()) {
-            StateLogins state = LoginManager.getState(player.getAddress().getAddress() ,name);
+            StateLogins state = LoginManager.getStateAndRegister(player.getAddress().getAddress() ,name);
             switch (Config.isMixedMode() ? state : StateLogins.CRACKED){//revisa entre las sesiones o los registro del los jugadores
                 case PREMIUM -> {
                     StartLoginPremium(name, uuid, player);

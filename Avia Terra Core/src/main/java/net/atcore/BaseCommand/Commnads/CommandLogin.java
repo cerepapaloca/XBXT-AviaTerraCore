@@ -4,10 +4,7 @@ import com.comphenix.protocol.PacketType;
 import net.atcore.BaseCommand.BaseCommand;
 import net.atcore.ListenerManager.JoinAndExitListener;
 import net.atcore.Messages.TypeMessages;
-import net.atcore.Security.Login.DataLimbo;
-import net.atcore.Security.Login.DataSession;
-import net.atcore.Security.Login.LoginManager;
-import net.atcore.Security.Login.StateLogins;
+import net.atcore.Security.Login.*;
 import net.atcore.Utils.GlobalUtils;
 import org.apache.commons.collections4.BagUtils;
 import org.bukkit.Bukkit;
@@ -23,6 +20,7 @@ import java.security.spec.InvalidKeySpecException;
 
 import static net.atcore.Messages.MessagesManager.COLOR_ESPECIAL;
 import static net.atcore.Messages.MessagesManager.sendMessage;
+import static net.atcore.Security.Login.LoginManager.startPlaySessionCracked;
 
 public class CommandLogin extends BaseCommand {
 
@@ -39,22 +37,17 @@ public class CommandLogin extends BaseCommand {
     public void execute(CommandSender sender, String[] args) {
         if (sender instanceof Player player) {
             try {
-                if (LoginManager.getListRegister().get(player.getName()).getPasswordShaded() != null) {
+                DataLogin dataLogin = LoginManager.getDataLogin(player);
+                if (dataLogin.getRegister().getPasswordShaded() != null) {
                     if (LoginManager.isEqualPassword(player.getName(), args[0])){
                         if (LoginManager.checkLoginIn(player, true)) {
                             sendMessage(player, "Ya estas logueado", TypeMessages.ERROR);
                             return;
                         }
-                        DataSession session = new DataSession(player.getName(), player.getUniqueId(), StateLogins.CRACKED, player.getAddress().getAddress());
-                        session.setEndTimeLogin(System.currentTimeMillis() + 1000*10);
-                        session.setPasswordShaded(LoginManager.hashPassword(player.getName(), args[0]));
+                        startPlaySessionCracked(player);
+                        LoginManager.updateLoginDataBase(player.getName(), player.getAddress().getAddress());
                         player.sendTitle(ChatColor.translateAlternateColorCodes('&',COLOR_ESPECIAL + "Te haz logueado!"), "", 20, 20*3, 40);
                         sendMessage(player, "Has iniciado session exitosamente", TypeMessages.SUCCESS);
-                        DataLimbo dataLimbo = LoginManager.getInventories().get(player.getUniqueId());
-                        player.getInventory().setContents(dataLimbo.getItems());
-                        player.teleport(dataLimbo.getLocation());
-                        player.setGameMode(GameMode.SURVIVAL);
-                        LoginManager.updateLoginDataBase(player.getName(), player.getAddress().getAddress());
                     }else{
                         GlobalUtils.kickPlayer(player, "contraseña incorrecta, vuele a intentarlo");
                     }

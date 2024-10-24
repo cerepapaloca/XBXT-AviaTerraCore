@@ -8,6 +8,7 @@ import net.atcore.Security.Login.LoginManager;
 import net.atcore.Utils.GlobalConstantes;
 import net.atcore.Utils.GlobalUtils;
 import net.luckperms.api.node.types.InheritanceNode;
+import org.apache.commons.collections4.BagUtils;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -61,6 +62,7 @@ public class PlayerListener implements Listener {
         }
 
         if (!LoginManager.checkLoginIn(player, true)) {
+            Bukkit.getLogger().warning(LoginManager.getDataLogin(player).getSession().getPlayer().getName());
             sendMessage(player,"Primero inicia sessión usando /login", TypeMessages.ERROR);
             event.setCancelled(true);
         }

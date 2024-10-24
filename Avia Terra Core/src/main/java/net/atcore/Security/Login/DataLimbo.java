@@ -15,4 +15,5 @@ public class DataLimbo {
 
     private final ItemStack[] items;
     private final Location location;
+
 }
