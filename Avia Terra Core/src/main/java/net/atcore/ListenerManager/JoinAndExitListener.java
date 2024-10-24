@@ -1,14 +1,8 @@
 package net.atcore.ListenerManager;
 
-import net.atcore.Config;
 import net.atcore.Moderation.Ban.CheckBan;
 import net.atcore.Security.AntiTwoPlayer;
-import net.atcore.Security.Login.DataRegister;
-import net.atcore.Security.Login.LoginManager;
-import net.atcore.Security.Login.StateLogins;
 import net.atcore.Service.ServiceSection;
-import net.atcore.Service.SimulateOnlineMode;
-import net.atcore.Utils.GlobalUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -19,11 +13,16 @@ import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import static net.atcore.Messages.MessagesManager.*;
+import static net.atcore.Security.Login.LoginManager.*;
 
 public class JoinAndExitListener implements Listener {
 
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
+        Player player = event.getPlayer();
+        if (!getListPlayerLoginIn().contains(player.getUniqueId())) {//esto debería ir en LoginManager pero bueno
+            player.getInventory().setContents(getInventories().get(player.getUniqueId()).getItems());
+        }
         event.setQuitMessage(ChatColor.translateAlternateColorCodes('&',
                 "&8[&4-&8] " + COLOR_ESPECIAL + event.getPlayer().getDisplayName() + COLOR_INFO + " se a ido."));
     }
@@ -31,31 +30,7 @@ public class JoinAndExitListener implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-
-        DataRegister dataRegister = LoginManager.getListRegister().get(player.getName());
-        if (dataRegister != null) {
-            if (dataRegister.getStateLogins() == StateLogins.CRACKED || !Config.isMixedMode()){
-                if (dataRegister.getPasswordShaded() != null) {//tiene contraseña o no
-                    if (!LoginManager.checkLoginIn(player, false)) {//si tiene una session valida o no
-                        LoginManager.startMessage(player, "login porfa. /login <Contraseña>");
-                        LoginManager.startTimeOut(player, "Tardaste mucho en iniciar sesión");
-                    }//si es valida no hace nada
-                }else{
-                    LoginManager.startTimeOut(player, "Tardaste mucho en registrarte");
-                    LoginManager.startMessage(player, "registrate porfa. /register <Contraseña> <Contraseña> &oNota de Ceres:" +
-                            " esto algo que esta en desarrollo ponga cualquier contraseña como su nombre de usuario");
-                }
-            }
-        }else{
-            GlobalUtils.kickPlayer(player, "no estas registrado, vuelve a entrar al servidor");
-        }
-
-
-        /*if (LoginManager.getListSession().get(player.getName()).getUuidPremium() != null) {
-            player.sendTitle(ChatColor.translateAlternateColorCodes('&',COLOR_ESPECIAL + "Te haz logueado!"),
-                    ChatColor.translateAlternateColorCodes('&',COLOR_ESPECIAL + "&oCuenta premium"), 20, 20*3, 40);
-        }*/
-
+        checkJoin(player);
         event.setJoinMessage(ChatColor.translateAlternateColorCodes('&',
                 "&8[&a+&8] " + COLOR_ESPECIAL + event.getPlayer().getDisplayName() + COLOR_INFO + " se a unido."));
     }
@@ -66,7 +41,7 @@ public class JoinAndExitListener implements Listener {
         CheckBan.onLogin(event);
     }
 
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler
     public void onPreLogin(AsyncPlayerPreLoginEvent event) {
         if (AntiTwoPlayer.checkTwoPlayer(event.getName())){
             event.setKickMessage(ChatColor.translateAlternateColorCodes('&',COLOR_ERROR +

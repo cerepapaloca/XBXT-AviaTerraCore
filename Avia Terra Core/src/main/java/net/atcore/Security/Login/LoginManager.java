@@ -5,12 +5,13 @@ import com.github.games647.craftapi.resolver.MojangResolver;
 import com.github.games647.craftapi.resolver.RateLimitException;
 import lombok.Getter;
 import net.atcore.AviaTerraCore;
+import net.atcore.Config;
 import net.atcore.Data.DataBaseRegister;
-import net.atcore.Exception.ConnedDataBaseMainThread;
 import net.atcore.Messages.TypeMessages;
 import net.atcore.Utils.GlobalUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
@@ -28,6 +29,8 @@ import static net.atcore.Data.DataBaseRegister.*;
 import static net.atcore.Messages.MessagesManager.sendMessage;
 
 public class LoginManager {
+
+    @Getter private static final HashMap<UUID, DataLimbo> inventories = new HashMap<>();
 
     //la llave es el nombre de usuario
     @Getter private static final HashMap<String, DataSession> listSession = new HashMap<>();
@@ -144,7 +147,7 @@ public class LoginManager {
             //revisa si tiene una contraseña la cuenta cracked o si es un usuario premium
             if ((dataSession.getStateLogins() == StateLogins.CRACKED && dataSession.getPasswordShaded() != null) || dataSession.getStateLogins() == StateLogins.PREMIUM){
                 //mira si la ip son iguales
-                if (Objects.equals(dataSession.getIp().getHostName().split(":")[0], Objects.requireNonNull(player.getAddress()).getAddress().getHostName().split(":")[0])){
+                if (Objects.equals(dataSession.getIp().getHostName().split(":")[0], player.getAddress().getAddress().getHostName().split(":")[0])){
                     if (ignoreTime || dataSession.getEndTimeLogin() > System.currentTimeMillis()){//expiro? o no se tiene en cuenta
                         listPlayerLoginIn.add(player.getUniqueId());//por si acaso
                         //en caso de que sea op no se le cambia el modo de juego y se hace en el hilo principal por si acaso
@@ -170,6 +173,36 @@ public class LoginManager {
         listPlayerLoginIn.remove(player.getUniqueId());
         listSession.remove(player.getName());
         return false;
+    }
+
+    public static void checkJoin(@NotNull Player player){
+        getInventories().put(player.getUniqueId(), new DataLimbo(player));
+        DataRegister dataRegister = getListRegister().get(player.getName());
+        if (dataRegister != null) {
+            if (dataRegister.getStateLogins() == StateLogins.CRACKED || !Config.isMixedMode()){
+                if (dataRegister.getPasswordShaded() != null) {//tiene contraseña o no
+                    if (!checkLoginIn(player, false)) {//si tiene una session valida o no
+                        player.getInventory().clear();
+                        player.teleport(new Location(player.getWorld(),0,100,0));
+                        startMessage(player, "login porfa. /login <Contraseña>");
+                        startTimeOut(player, "Tardaste mucho en iniciar sesión");
+                    }else {
+                        getInventories().remove(player.getUniqueId());
+                    }
+                }else{
+                    startTimeOut(player, "Tardaste mucho en registrarte");
+                    startMessage(player, "registrate porfa. /register <Contraseña> <Contraseña> &oNota de Ceres:" +
+                            " esto algo que esta en desarrollo ponga cualquier contraseña como su nombre de usuario");
+                }
+            }
+        }else{
+            GlobalUtils.kickPlayer(player, "no estas registrado, vuelve a entrar al servidor");
+        }
+
+        /*if (LoginManager.getListSession().get(player.getName()).getUuidPremium() != null) {
+            player.sendTitle(ChatColor.translateAlternateColorCodes('&',COLOR_ESPECIAL + "Te haz logueado!"),
+                    ChatColor.translateAlternateColorCodes('&',COLOR_ESPECIAL + "&oCuenta premium"), 20, 20*3, 40);
+        }*/
     }
 
     public static void startTimeOut(Player player, String reason){

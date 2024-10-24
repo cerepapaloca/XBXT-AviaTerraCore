@@ -7,7 +7,7 @@ public class Config {
 
     /**
      * Comprueba si tiene items ilegales en su inventario cuando
-     * está en survival
+     * no es Op
      */
 
     @Getter @Setter private static boolean checkAntiIllegalItems = false;
@@ -21,9 +21,10 @@ public class Config {
 
     /**
      * Habilitará el protocolo de encriptación de minecraft
-     * para los usuarios premium mientras los cracked no tiene
+     * para los usuarios premium. Mientras los cracked no tiene
      * que pasar por este protocolo. Sí se deshabilita todos los
-     * usuarios aparecerán como cracked en su sesión
+     * usuarios aparecerán como cracked en su sesión esto hace
+     * que todos tenga que usar el /login para iniciar sesión
      */
 
     @Getter @Setter private static boolean mixedMode = false;
@@ -42,7 +43,5 @@ public class Config {
      */
 
     @Getter @Setter private static long purgeTagRange = 0;
-
-
 
 }

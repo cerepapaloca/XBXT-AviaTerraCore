@@ -7,13 +7,16 @@ import net.atcore.BaseCommand.CommandSection;
 import net.atcore.Data.DataSection;
 import net.atcore.Messages.TypeMessages;
 import net.atcore.ListenerManager.ListenerManagerSection;
+import net.atcore.Security.Login.LoginManager;
 import net.atcore.Service.ServiceSection;
+import net.atcore.Utils.GlobalUtils;
 import net.atcore.Utils.RegisterManager;
 import net.atcore.Moderation.ModerationSection;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.luckperms.api.LuckPerms;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -52,7 +55,7 @@ public final class AviaTerraCore extends JavaPlugin {
             BOT_DISCORD = JDABuilder.createDefault(TOKEN_BOT).build();
             try {
                 BOT_DISCORD.awaitReady();
-                sendMessageConsole("discord bot" + COLOR_SUCCESS + " Ok", TypeMessages.INFO, true);
+                sendMessageConsole("discord bot" + COLOR_SUCCESS + " Ok", TypeMessages.INFO, false);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -71,6 +74,12 @@ public final class AviaTerraCore extends JavaPlugin {
     public void onDisable() {
         for (Section section : RegisterManager.sections){
             section.disable();
+        }
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            if (!LoginManager.getListPlayerLoginIn().contains(player.getUniqueId())) {
+                player.getInventory().setContents(LoginManager.getInventories().get(player.getUniqueId()).getItems());
+            }
+            GlobalUtils.kickPlayer(player, "El servidor va a cerrar, volveremos pronto...");
         }
         //disableModules();
         sendMessageConsole("AviaTerra Se fue a mimir.", TypeMessages.INFO, false);

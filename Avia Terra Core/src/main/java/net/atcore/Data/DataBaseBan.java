@@ -114,14 +114,15 @@ public class DataBaseBan extends DataBaseMySql {
         if (uuids != null){
             uuid = UUID.fromString(uuids);
         }
-        InetAddress ipAddress = InetAddress.getByName(ip);
-        DataBan dataBan = new DataBan(name, uuid, InetAddress.getByName(ip), reason, dateUnban, dateBan, ContextBan.valueOf(context), author);
+        InetAddress ipAddress = null;
+        if (ip != null) ipAddress = InetAddress.getByName(ip.split("/")[0]);
+        DataBan dataBan = new DataBan(name, uuid, ipAddress, reason, dateUnban, dateBan, ContextBan.valueOf(context), author);
 
         HashSet <DataBan> listUUID = listDataBanByNAME.getOrDefault(name,  new HashSet<>());//busca si hay una lista de DataBan si no hay crea una
         listUUID.add(dataBan);//Añade el DataBan a la lista
         listDataBanByNAME.put(name, listUUID);//Añade la lista de DataBan Remplazando el dato
 
-        if (ip == null) return;
+        if (ipAddress == null) return;
 
         HashSet <DataBan> listIP = listDataBanByIP.getOrDefault(ipAddress,  new HashSet<>());
         listIP.add(dataBan);
@@ -177,7 +178,7 @@ public class DataBaseBan extends DataBaseMySql {
              PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, dataBan.getName());
             statement.setString(2, dataBan.getUuid() != null ? dataBan.getUuid().toString() : null);
-            statement.setString(3, dataBan.getAddress() != null ? dataBan.getAddress().toString() : null);
+            statement.setString(3, dataBan.getAddress() != null ? dataBan.getAddress().toString().split("/")[0] : null);
             statement.setString(4, dataBan.getReason());
             statement.setLong(5, dataBan.getUnbanDate());
             statement.setLong(6, dataBan.getBanDate());

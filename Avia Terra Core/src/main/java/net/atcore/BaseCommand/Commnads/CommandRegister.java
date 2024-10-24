@@ -2,11 +2,9 @@ package net.atcore.BaseCommand.Commnads;
 
 import net.atcore.BaseCommand.BaseCommand;
 import net.atcore.Config;
+import net.atcore.ListenerManager.JoinAndExitListener;
 import net.atcore.Messages.TypeMessages;
-import net.atcore.Security.Login.DataRegister;
-import net.atcore.Security.Login.DataSession;
-import net.atcore.Security.Login.LoginManager;
-import net.atcore.Security.Login.StateLogins;
+import net.atcore.Security.Login.*;
 import net.atcore.Service.SimulateOnlineMode;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -44,6 +42,9 @@ public class CommandRegister extends BaseCommand {
                             LoginManager.newRegisterCracked(player.getName(), player.getAddress().getAddress(),  args[0]);
                             player.sendTitle(ChatColor.translateAlternateColorCodes('&',COLOR_ESPECIAL + "Te haz registrado!"), "", 20, 20*3, 40);
                             session.setEndTimeLogin(System.currentTimeMillis() + 1000*60);
+                            DataLimbo dataLimbo = LoginManager.getInventories().get(player.getUniqueId());
+                            player.getInventory().setContents(dataLimbo.getItems());
+                            player.teleport(dataLimbo.getLocation());
                             player.setGameMode(GameMode.SURVIVAL);
                             register.setTemporary(false);
                             try {

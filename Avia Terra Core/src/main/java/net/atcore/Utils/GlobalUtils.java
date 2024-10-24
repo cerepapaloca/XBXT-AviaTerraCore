@@ -160,7 +160,6 @@ public final class GlobalUtils {
     /**
      * Añade una protección anti dupe básicamente se le asigna una uuid al item esto
      * hace que el item no se pueda estakear y si lo se pone en 1
-     *
      * @param item el item que le quieres aplicar la protección
      */
 
@@ -171,6 +170,14 @@ public final class GlobalUtils {
         item.setItemMeta(meta);
         item.setAmount(1);//se pone uno por qué si el jugador lo divide va a ser baneado accidentalmente
     }
+
+    /**
+     * Añade variable a items, las variables que se manejan {@code PersistentDataType}
+     * @param itemStack el item que quieres añadir
+     * @param nameKey nombre de la variable
+     * @param type el tipo de la variable
+     * @param data la variable
+     */
 
     public void addPersistentDataItem(@NotNull ItemStack itemStack, String nameKey, PersistentDataType type, Object data){
         ItemMeta meta = itemStack.getItemMeta();
