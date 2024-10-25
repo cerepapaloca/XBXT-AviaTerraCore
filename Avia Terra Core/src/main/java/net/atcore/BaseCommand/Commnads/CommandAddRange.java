@@ -25,7 +25,6 @@ public class CommandAddRange extends BaseTabCommand {
     public CommandAddRange() {
         super("addRange",
                 "/addRange <Rango> <Tiempo> <Jugador>",
-                "aviaterra.command.addrangos",
                 true,
                 "das una tags donde se puede dar un rango durante un tiempo determinado"
         );

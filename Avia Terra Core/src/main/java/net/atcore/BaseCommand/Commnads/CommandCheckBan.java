@@ -22,7 +22,6 @@ public class CommandCheckBan extends BaseTabCommand {
     public CommandCheckBan() {
         super("checkban",
                 "/CheckBan <jugador> <! | ?> <Contexto>",
-                "aviaterra.command.checkban",
                 true,
                 "Compruebas que el jugador este baneado usando ? o !. con ? solo miras que contexto esta baneado y no requiere especificar " +
                         "el contexto mientras el ! se usa cuando quieres echar un jugador baneado de un contexto especificado (esto por si se llega a " +

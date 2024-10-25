@@ -1,6 +1,7 @@
 package net.atcore.BaseCommand;
 
 import lombok.Getter;
+import net.atcore.AviaTerraCore;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -13,36 +14,25 @@ public abstract class BaseCommand {
     private final String[] permissions;
     private final String description;
     private final Boolean isHide;
-    private final String[] subCommands;
 
-    public BaseCommand(@NotNull String name, @NotNull  String usage, @NotNull  String[] permission, @NotNull Boolean isHide, @Nullable String description) {
-        this(name, usage, permission, isHide, description ,null);
+    public BaseCommand(@NotNull String name, @NotNull  String usage, @NotNull Boolean isHide, @Nullable String description) {
+        this(name, usage, (AviaTerraCore.getInstance().getName() + ".command." + name).toLowerCase(), isHide, description);
     }
 
-    public BaseCommand(@NotNull String name, @NotNull  String usage, @NotNull  String permission, @NotNull Boolean isHide, @Nullable String description) {
-        this(name, usage, permission, isHide, description ,null);
-    }
-
-    public BaseCommand(@NotNull String name, @NotNull  String usage, @NotNull String permission, @Nullable String description) {
-        this(name, usage, permission,false , description ,null);
-    }
-
-    public BaseCommand(@NotNull String name, @NotNull  String usage, @NotNull  String[] permissions, @NotNull  Boolean isHide, @Nullable String description, @Nullable String[] subCommands) {
+    public BaseCommand(@NotNull String name, @NotNull  String usage, @NotNull  String[] permissions, @NotNull  Boolean isHide, @Nullable String description) {
         this.name = name;
         this.usage = usage;
         this.permissions = permissions;
         this.description = description == null || description.isEmpty() ? "&oSin Descripción" : description;
         this.isHide = isHide;
-        this.subCommands = subCommands;
     }
 
-    public BaseCommand(@NotNull String name, @NotNull  String usage, @NotNull  String permissions, @NotNull  Boolean isHide, @Nullable String description, @Nullable String[] subCommands) {
+    public BaseCommand(@NotNull String name, @NotNull  String usage, @Nullable  String permissions, @NotNull  Boolean isHide, @Nullable String description) {
         this.name = name;
         this.usage = usage;
         this.permissions = new String[]{permissions};
         this.description = description == null || description.isEmpty() ? "&oSin Descripción" : description;
         this.isHide = isHide;
-        this.subCommands = subCommands;
     }
 
     public abstract void execute(CommandSender sender, String[] args);

@@ -22,7 +22,6 @@ public class CommandUnban extends BaseTabCommand {
     public CommandUnban() {
         super("unban",
                 "/unban <Jugador> <Contexto>",
-                "aviaterra.command.unban",
                 true,
                 "desbanea a al jugador que le caes bien"
         );
@@ -39,7 +38,7 @@ public class CommandUnban extends BaseTabCommand {
         }
         //en un hilo aparte por qué explota el servidor
         Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(), () -> ModerationSection.getBanManager().removeBanPlayer(args[0], contextBan, sender.getName()));
-        sendMessage(sender, "El jugador fue desbaneado", TypeMessages.SUCCESS);
+        sendMessage(sender, "El jugador va ser desbaneado mira la los logs para confirmar", TypeMessages.INFO);
     }
 
     @Override

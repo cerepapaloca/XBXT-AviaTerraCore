@@ -19,6 +19,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -213,9 +214,9 @@ public final class GlobalUtils {
      * y respetando el formato de razón del kick
      */
 
-    public void kickPlayer(Player player, String reason) {
-        reason =ChatColor.translateAlternateColorCodes('&', MessagesManager.PREFIX_AND_SUFFIX_KICK[0]
-                + "&4" + reason + "&c" + MessagesManager.PREFIX_AND_SUFFIX_KICK[1]);
+    public void kickPlayer(@NotNull Player player,@Nullable String reason) {
+        reason = ChatColor.translateAlternateColorCodes('&', MessagesManager.PREFIX_AND_SUFFIX_KICK[0]
+                + "&4" + (reason == null ? "Has sido expulsado" : reason) + "&c" + MessagesManager.PREFIX_AND_SUFFIX_KICK[1]);
         try {
             if (player.getName().startsWith("UNKNOWN[")){
                 PacketContainer kickPack = new PacketContainer(PacketType.Login.Server.DISCONNECT);

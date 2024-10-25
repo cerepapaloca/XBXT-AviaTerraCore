@@ -219,7 +219,7 @@ public class DataBaseBan extends DataBaseMySql {
             statement.executeUpdate();
             reloadDatabase();
             sendMessageConsole("Se Desbano el jugador <|" + name + "|> en el contexto <|" + context.name() + "|> " +
-                    "por <|" + author + "|>", TypeMessages.INFO, CategoryMessages.BAN);
+                    "por <|" + author + "|>", TypeMessages.SUCCESS, CategoryMessages.BAN);
         } catch (SQLException e) {
             sendMessageConsole("Error al desbanear al jugador <|" + name + "|> del contexto: <|" + context.name() + "|> por <|" + author
                     , TypeMessages.ERROR, CategoryMessages.BAN);

@@ -1,19 +1,12 @@
 package net.atcore.BaseCommand.Commnads;
 
-import com.comphenix.protocol.PacketType;
 import net.atcore.BaseCommand.BaseCommand;
-import net.atcore.ListenerManager.JoinAndExitListener;
 import net.atcore.Messages.TypeMessages;
 import net.atcore.Security.Login.*;
 import net.atcore.Utils.GlobalUtils;
-import org.apache.commons.collections4.BagUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.GameMode;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
@@ -27,7 +20,6 @@ public class CommandLogin extends BaseCommand {
     public CommandLogin() {
         super("login",
                 "/login <contraseña>",
-                "",
                 false,
                 "Te logueas"
         );

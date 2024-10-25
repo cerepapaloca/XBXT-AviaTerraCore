@@ -30,7 +30,7 @@ public class CommandHandler implements TabExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {
         for (BaseCommand command : commands) {
             if (!(cmd.getName().equalsIgnoreCase(command.getName()))) continue;
-            boolean hasPermission = command.getPermissions()[0].isEmpty();
+            boolean hasPermission = command.getPermissions()[0].equals("*");
             for (String permission : command.getPermissions()) {
                 if (sender.hasPermission(permission)) {
                     hasPermission = true;

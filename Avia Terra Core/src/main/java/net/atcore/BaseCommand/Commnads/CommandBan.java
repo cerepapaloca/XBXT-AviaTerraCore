@@ -1,6 +1,5 @@
 package net.atcore.BaseCommand.Commnads;
 
-import net.atcore.AviaTerraCore;
 import net.atcore.BaseCommand.BaseTabCommand;
 import net.atcore.BaseCommand.CommandUtils;
 import net.atcore.Messages.TypeMessages;
@@ -20,7 +19,6 @@ public class CommandBan extends BaseTabCommand {
     public CommandBan() {
         super("ban",
                 "/ban <jugador> <Contexto> <Tiempo> <Ranzón...",
-                "aviaterra.command.ban",
                 true,
                 "Baneas a los jugadores que te miran feo"
         );
@@ -64,7 +62,7 @@ public class CommandBan extends BaseTabCommand {
                     sendMessage(sender, "Hubo un problema con las base de datos vuelva a ejecutar el comando", TypeMessages.ERROR);
                 }
 
-                sendMessage(sender, "El jugador fue baneado", TypeMessages.SUCCESS);
+                sendMessage(sender, "El jugador sera baneado mira los logs para confirmar", TypeMessages.INFO);
 
             }
         }

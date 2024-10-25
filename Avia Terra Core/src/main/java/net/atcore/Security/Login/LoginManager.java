@@ -236,7 +236,7 @@ public class LoginManager {
     public static DataLogin startPlaySessionCracked(@NotNull Player player){
         DataLogin dataLogin = getDataLogin(player);
         DataSession dataSession = new DataSession(player, StateLogins.CRACKED);
-        dataSession.setEndTimeLogin(1000*20);
+        dataSession.setEndTimeLogin(System.currentTimeMillis() + Config.getExpirationSession());
         dataSession.setLoggedDiscord(false);
         dataLogin.setSession(dataSession);
         player.getInventory().setContents(dataLogin.getLimbo().getItems());

@@ -76,12 +76,13 @@ public final class AviaTerraCore extends JavaPlugin {
         for (Section section : RegisterManager.sections){
             section.disable();
         }
-        for (Player player : Bukkit.getOnlinePlayers()) {
+        Bukkit.getOnlinePlayers().forEach(player -> {
             if (!LoginManager.getListPlayerLoginIn().contains(player.getUniqueId())) {
                 player.getInventory().setContents(getDataLogin(player).getLimbo().getItems());
+                player.teleport(getDataLogin(player).getLimbo().getLocation());
             }
             GlobalUtils.kickPlayer(player, "El servidor va a cerrar, volveremos pronto...");
-        }
+        });
         //disableModules();
         sendMessageConsole("AviaTerra Se fue a mimir.", TypeMessages.INFO, false);
     }

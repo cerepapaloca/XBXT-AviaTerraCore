@@ -6,6 +6,7 @@ import com.github.games647.craftapi.resolver.MojangResolver;
 import com.google.common.hash.Hasher;
 import com.google.common.hash.Hashing;
 import net.atcore.AviaTerraCore;
+import net.atcore.Config;
 import net.atcore.Exception.ExceptionPackageConnection;
 import net.atcore.Messages.CategoryMessages;
 import net.atcore.Messages.TypeMessages;
@@ -75,7 +76,7 @@ public class VerificationPremium {
                                 listUUIDPremium.put(userName, verification);
                                 DataLogin dataLogin = LoginManager.getDataLogin(userName);
                                 DataSession session = new DataSession(player, StateLogins.PREMIUM, player.getAddress().getAddress());
-                                session.setEndTimeLogin(System.currentTimeMillis() + 1000*20);
+                                session.setEndTimeLogin(System.currentTimeMillis() + Config.getExpirationSession());
                                 dataLogin.setSession(session);
                             }else{
                                 GlobalUtils.kickPlayer(player, "Se detecto una discrepancia. Reinicie su cliente");

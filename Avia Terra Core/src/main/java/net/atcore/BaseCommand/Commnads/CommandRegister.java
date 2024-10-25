@@ -24,7 +24,7 @@ public class CommandRegister extends BaseCommand {
     public CommandRegister() {
         super("register",
                 "/register <contraseña> <contraseña>",
-                "",
+                "*",
                 false,
                 "Te registras"
         );

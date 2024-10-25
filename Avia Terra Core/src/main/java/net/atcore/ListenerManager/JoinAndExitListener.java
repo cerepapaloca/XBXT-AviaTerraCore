@@ -22,6 +22,7 @@ public class JoinAndExitListener implements Listener {
         Player player = event.getPlayer();
         if (!getListPlayerLoginIn().contains(player.getUniqueId())) {//esto debería ir en LoginManager pero bueno
             player.getInventory().setContents(getDataLogin(player).getLimbo().getItems());
+            player.teleport(getDataLogin(player).getLimbo().getLocation());
         }
         event.setQuitMessage(ChatColor.translateAlternateColorCodes('&',
                 "&8[&4-&8] " + COLOR_ESPECIAL + event.getPlayer().getDisplayName() + COLOR_INFO + " se a ido."));

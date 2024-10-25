@@ -22,7 +22,6 @@ public class CommandAviaTerra extends BaseTabCommand {
     public CommandAviaTerra() {
         super("AviaTerra",
                 "/AviaTerra",
-                "aviaterra.command.AviaTerra",
                 true,
                 "Es un comando en cargador de todas la funciones de básicas del servidor para el staff"
         );

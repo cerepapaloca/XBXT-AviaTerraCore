@@ -20,7 +20,6 @@ public class CommandFreeze extends BaseTabCommand {
     public CommandFreeze() {
         super("freeze",
                 "/freeze <player> <on | off>",
-                "aviaterra.command.freeze",
                 true,
                 "Este comando congelas a un jugador por actividad sospechosa"
         );
