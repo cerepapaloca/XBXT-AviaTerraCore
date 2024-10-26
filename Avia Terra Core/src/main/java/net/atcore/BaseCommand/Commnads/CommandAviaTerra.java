@@ -48,7 +48,7 @@ public class CommandAviaTerra extends BaseTabCommand {
                     }
 
                 }else{
-                    sendMessage(sender,"El anti Op esta " + CommandUtils.booleanToString(Config.isCheckAntiOp()), TypeMessages.INFO);
+                    sendMessage(sender,"El anti Op esta <|" + CommandUtils.booleanToString(Config.isCheckAntiOp()) + "|>", TypeMessages.INFO);
                 }
 
             }
@@ -65,7 +65,7 @@ public class CommandAviaTerra extends BaseTabCommand {
                         sendMessage(sender,"****************************", TypeMessages.WARNING);
                     }
                 }else{
-                    sendMessage(sender,"el Anti Items Ilegales esta " + CommandUtils.booleanToString(Config.isCheckAntiIllegalItems()), TypeMessages.INFO);
+                    sendMessage(sender,"el Anti Items Ilegales esta <|" + CommandUtils.booleanToString(Config.isCheckAntiIllegalItems()) + "|>", TypeMessages.INFO);
                 }
             }
             case "servermode" -> {
@@ -109,7 +109,7 @@ public class CommandAviaTerra extends BaseTabCommand {
                     }
 
                 }else{
-                    sendMessage(sender,"El modo mixto esta " + Config.getServerMode().name().toLowerCase(), TypeMessages.INFO);
+                    sendMessage(sender,"El modo mixto esta <|" + Config.getServerMode().name().toLowerCase() + "|>", TypeMessages.INFO);
                 }
             }
             case "checkbanporip" -> {
@@ -126,7 +126,7 @@ public class CommandAviaTerra extends BaseTabCommand {
                     }
 
                 }else{
-                    sendMessage(sender,"El check de baneo por ip esta " + CommandUtils.booleanToString(Config.isCheckBanByIp()), TypeMessages.INFO);
+                    sendMessage(sender,"El check de baneo por ip esta <|" + CommandUtils.booleanToString(Config.isCheckBanByIp()) + "|>", TypeMessages.INFO);
                 }
             }
             case "purgarangos" -> {
@@ -142,8 +142,8 @@ public class CommandAviaTerra extends BaseTabCommand {
                         sendMessage(sender, "formato de fecha incorrecto", TypeMessages.ERROR);
                     }
                 }else{
-                    sendMessage(sender,"el tiempo de expiración de expiration esta en " +
-                            GlobalUtils.timeToString(Config.getExpirationSession(), 2), TypeMessages.INFO);
+                    sendMessage(sender,"el tiempo de expiración de expiration esta en <|" +
+                            GlobalUtils.timeToString(Config.getExpirationSession(), 2) + "|>", TypeMessages.INFO);
                 }
             }
             case "levelmoderationchat" -> {
@@ -163,10 +163,10 @@ public class CommandAviaTerra extends BaseTabCommand {
 
     @Override
     public List<String> onTab(CommandSender sender, String[] args) {
-        String[] argsRoot = new String[]{"Reload", "Anti_Op", "Anti_Ilegal_Items", "Server_Mode", "Check_Ban_Por_Ip", "Purga_Rangos","Tiempo_De_Sesion", "Level_Moderation_Chat"};
+        String[] argsRoot = new String[]{"reload", "antiOp", "antiIlegalItems", "serverMode", "checkBanPorIp", "purgaRangos","tiempoDeSesion", "levelModerationChat"};
         if (args.length >= 2) {
             switch (args[0].toLowerCase().replace("_","")) {
-                case "antiop", "antiilegalitems" -> {
+                case "antiop", "antiilegalitems", "checkbanporip" -> {
                     return CommandUtils.listTab(args[1], new String[]{"true", "false"});
                 }
                 case "servermode" -> {

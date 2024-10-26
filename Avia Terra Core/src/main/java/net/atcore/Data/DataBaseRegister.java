@@ -1,7 +1,6 @@
 package net.atcore.Data;
 
 import net.atcore.AviaTerraCore;
-import net.atcore.BaseCommand.CommandSection;
 import net.atcore.Messages.CategoryMessages;
 import net.atcore.Messages.MessagesManager;
 import net.atcore.Messages.TypeMessages;
@@ -161,7 +160,7 @@ public class DataBaseRegister extends DataBaseMySql {
             sendMessageConsole("Se actualizó la fecha del ultimo login del jugador <|" + name + "|> exitosamente", TypeMessages.SUCCESS, CategoryMessages.LOGIN);
         } catch (SQLException e) {
             sendMessageConsole("No se pudo actualizar la fecha del ultimo login del jugador <|" + name+ "|>", TypeMessages.ERROR, CategoryMessages.LOGIN);
-            throw new RuntimeException(e);
+            Bukkit.getLogger().warning(e.getMessage());
         }
     }
 
@@ -176,7 +175,7 @@ public class DataBaseRegister extends DataBaseMySql {
             sendMessageConsole("Se actualizó la contraseña del jugador <|" + name + "|> exitosamente", TypeMessages.SUCCESS, CategoryMessages.LOGIN);
         } catch (SQLException e) {
             sendMessageConsole("No se pudo actualizar la contraseña del jugador <|" + name + "|>", TypeMessages.ERROR, CategoryMessages.LOGIN);
-            throw new RuntimeException(e);
+            Bukkit.getLogger().warning(e.getMessage());
         }
     }
 
@@ -191,7 +190,7 @@ public class DataBaseRegister extends DataBaseMySql {
             sendMessageConsole("Se actualizó la ip del jugador <|" + name + "|> exitosamente", TypeMessages.SUCCESS, CategoryMessages.LOGIN);
         } catch (SQLException e) {
             sendMessageConsole("No se pudo actualizar la ip del jugador <|" + name + "|>", TypeMessages.ERROR, CategoryMessages.LOGIN);
-            throw new RuntimeException(e);
+            Bukkit.getLogger().warning(e.getMessage());
         }
     }
 
@@ -204,7 +203,7 @@ public class DataBaseRegister extends DataBaseMySql {
             sendMessageConsole("Se borro el registro del jugador <|" + name + "|> por <|" + author + "|>", TypeMessages.SUCCESS, CategoryMessages.LOGIN);
         }catch(SQLException e){
             sendMessageConsole("Hubo un error al borrar el registro del jugador <|" + name + "|> por <|" + author + "|>", TypeMessages.ERROR, CategoryMessages.LOGIN);
-            throw new RuntimeException(e);
+            Bukkit.getLogger().warning(e.getMessage());
         }
     }
 }

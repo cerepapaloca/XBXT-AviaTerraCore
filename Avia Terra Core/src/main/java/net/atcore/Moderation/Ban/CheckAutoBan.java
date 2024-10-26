@@ -105,9 +105,9 @@ public class CheckAutoBan {
         for (Map.Entry<String, Integer> entry : itemCounts.entrySet()) {
             if (entry.getValue() > 1) {
                 inventory.clear();
-                Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(), () -> {
-                    ModerationSection.getBanManager().banPlayer(player, "Por estar dupeando",1000 * 60 * 60 * 24 * 5L, ContextBan.GLOBAL, "Servidor");
-                });
+                Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(), () ->
+                        ModerationSection.getBanManager().banPlayer(player, "Por estar dupeando",
+                                1000 * 60 * 60 * 24 * 5L, ContextBan.GLOBAL, "Servidor"));
 
             }
         }

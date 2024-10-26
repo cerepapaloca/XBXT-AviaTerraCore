@@ -233,12 +233,12 @@ public final class LoginManager {
                     }else {
                         player.getInventory().clear();
                         player.teleport(new Location(player.getWorld(),0,100,0));
-                        startMessage(player, "login porfa. /login <Contraseña>");
+                        startMessage(player, "login porfa. <|/login <Contraseña>|>");
                         startTimeOut(player, "Tardaste mucho en iniciar sesión");
                     }
                 }else{
                     startTimeOut(player, "Tardaste mucho en registrarte");
-                    startMessage(player, "registrate porfa. /register <Contraseña> <Contraseña> &oNota de Ceres:" +
+                    startMessage(player, "registrate porfa. <|/register <Contraseña> <Contraseña>|> &oNota de Ceres:" +
                             " esto algo que esta en desarrollo ponga cualquier contraseña como su nombre de usuario");
                 }
             }
