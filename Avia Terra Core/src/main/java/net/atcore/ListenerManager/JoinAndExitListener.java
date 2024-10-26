@@ -2,6 +2,9 @@ package net.atcore.ListenerManager;
 
 import net.atcore.Moderation.Ban.CheckBan;
 import net.atcore.Security.AntiTwoPlayer;
+import net.atcore.Security.Login.DataLimbo;
+import net.atcore.Security.Login.DataLogin;
+import net.atcore.Security.Login.LoginManager;
 import net.atcore.Service.ServiceSection;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -21,8 +24,14 @@ public class JoinAndExitListener implements Listener {
     public void onQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
         if (!getListPlayerLoginIn().contains(player.getUniqueId())) {//esto debería ir en LoginManager pero bueno
-            player.getInventory().setContents(getDataLogin(player).getLimbo().getItems());
-            player.teleport(getDataLogin(player).getLimbo().getLocation());
+            DataLogin login = LoginManager.getDataLogin(player);
+            if (login == null)return;
+            DataLimbo limbo = login.getLimbo();
+            if (limbo == null)return;
+
+            player.getInventory().setContents(limbo.getItems());
+            player.teleport(limbo.getLocation());
+            player.setGameMode(limbo.getGameMode());
         }
         event.setQuitMessage(ChatColor.translateAlternateColorCodes('&',
                 "&8[&4-&8] " + COLOR_ESPECIAL + event.getPlayer().getDisplayName() + COLOR_INFO + " se a ido."));

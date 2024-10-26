@@ -15,9 +15,7 @@ import com.github.games647.craftapi.model.skin.Textures;
 import lombok.Getter;
 import net.atcore.Config;
 import net.atcore.Messages.TypeMessages;
-import net.atcore.Security.Login.LoginManager;
-import net.atcore.Security.Login.DataSession;
-import net.atcore.Security.Login.StateLogins;
+import net.atcore.Security.Login.*;
 import net.atcore.Security.VerificationPremium;
 import net.atcore.Utils.GlobalUtils;
 import org.bukkit.Bukkit;
@@ -62,11 +60,14 @@ public class SimulateOnlineMode {
 
         UUID uuid = packet.getUUIDs().read(0);
         String name = packet.getStrings().read(0);
-
-        DataSession session = LoginManager.getDataLogin(name).getSession();
-        if (session == null || session.getEndTimeLogin() < System.currentTimeMillis()) {
+        DataLogin dataLogin = LoginManager.getDataLogin(name);
+        if ((dataLogin == null || dataLogin.getSession() == null) || dataLogin.getSession().getEndTimeLogin() < System.currentTimeMillis()) {
             StateLogins state = LoginManager.getStateAndRegister(player.getAddress().getAddress() ,name);
-            switch (Config.isMixedMode() ? state : StateLogins.CRACKED){//revisa entre las sesiones o los registro del los jugadores
+            switch (Config.getServerMode()){
+                case OFFLINE_MODE -> state = StateLogins.CRACKED;
+                case ONLINE_MODE -> state = StateLogins.PREMIUM;
+            }
+            switch (state){//revisa entre las sesiones o los registro del los jugadores
                 case PREMIUM -> {
                     StartLoginPremium(name, uuid, player);
                     return true; //se cancela por que asi el servidor no se da cuenta de que a recibido un paquete
@@ -74,7 +75,7 @@ public class SimulateOnlineMode {
                 case CRACKED -> StartLoginCracked(name, uuid);
                 case UNKNOWN -> GlobalUtils.kickPlayer(player, "Error de connexion vuele a intentar");
             }
-            if (Config.isMixedMode()){
+            if (Config.getServerMode().equals(ServerMode.MIX_MODE)){
                 sendMessageConsole("Iniciando login: <|" + state.name().toLowerCase() + "|>", TypeMessages.INFO);
             }else{
                 sendMessageConsole("Login omitido por qué el modo mixto esta desactivado", TypeMessages.INFO);
@@ -89,7 +90,6 @@ public class SimulateOnlineMode {
     }
 
     private void StartLoginPremium(String name, UUID uuid, Player sender) {
-
         PacketContainer packetEncryption = new PacketContainer(PacketType.Login.Server.ENCRYPTION_BEGIN);
         byte[] token = new byte[4];
         new java.security.SecureRandom().nextBytes(token);

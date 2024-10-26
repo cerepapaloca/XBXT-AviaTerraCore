@@ -16,7 +16,7 @@ import static net.atcore.Messages.MessagesManager.sendMessage;
 
 @Getter
 @RequiredArgsConstructor //esta anotación crea un constructor con las variables que tenga el final
-public class CommandHandler implements TabExecutor {
+public final class CommandHandler implements TabExecutor {
     private final HashSet<BaseCommand> commands = new HashSet<>();
 
     /**

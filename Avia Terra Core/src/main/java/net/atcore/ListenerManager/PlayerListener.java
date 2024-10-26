@@ -62,7 +62,6 @@ public class PlayerListener implements Listener {
         }
 
         if (!LoginManager.checkLoginIn(player, true)) {
-            Bukkit.getLogger().warning(LoginManager.getDataLogin(player).getSession().getPlayer().getName());
             sendMessage(player,"Primero inicia sessión usando /login", TypeMessages.ERROR);
             event.setCancelled(true);
         }

@@ -2,6 +2,7 @@ package net.atcore;
 
 import lombok.Getter;
 import lombok.Setter;
+import net.atcore.Security.Login.ServerMode;
 
 public class Config {
 
@@ -27,7 +28,7 @@ public class Config {
      * que todos tenga que usar el /login para iniciar sesión
      */
 
-    @Getter @Setter private static boolean mixedMode = false;
+    @Getter @Setter private static ServerMode serverMode = ServerMode.OFFLINE_MODE;
 
     /**
      * Si está habilitado al momento de revisar si un jugador
@@ -45,5 +46,7 @@ public class Config {
     @Getter @Setter private static long purgeTagRange = 0;
 
     @Getter @Setter private static long expirationSession = 1000*20;
+
+    @Getter @Setter private static float levelModerationChat = 1;
 
 }

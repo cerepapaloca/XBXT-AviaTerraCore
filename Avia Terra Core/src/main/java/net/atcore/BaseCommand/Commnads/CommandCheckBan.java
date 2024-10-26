@@ -117,7 +117,7 @@ public class CommandCheckBan extends BaseTabCommand {
                 return CommandUtils.listTab(args[1], new String[]{"?","!"});
             }
             case 3 -> {
-                return CommandUtils.listTab(args[2], GlobalUtils.EnumsToStrings(ContextBan.values()));
+                return CommandUtils.listTab(args[2], CommandUtils.EnumsToStrings(ContextBan.values()));
             }
         }
         return List.of("");

@@ -28,7 +28,7 @@ import java.util.*;
 import static net.atcore.Data.DataBaseRegister.*;
 import static net.atcore.Messages.MessagesManager.sendMessage;
 
-public class LoginManager {
+public final class LoginManager {
 
     private static final HashMap<UUID, DataLogin> listDataLogin = new HashMap<>();
 
@@ -52,6 +52,10 @@ public class LoginManager {
         DataLogin dataLogin = new DataLogin(dataRegister);
         listDataLogin.put(GlobalUtils.getUUIDByName(name) ,dataLogin);
         return dataLogin;
+    }
+
+    public static void removeDataLogin(UUID uuid) {
+        listDataLogin.remove(uuid);
     }
 
     public static void clearDataLogin() {
@@ -121,26 +125,26 @@ public class LoginManager {
      * y la "sal" que sería la como la semilla del mundo es la contraseña en byte
      */
 
-    public static String hashPassword(@NotNull String name, @NotNull String password) throws InvalidKeySpecException, NoSuchAlgorithmException {
+    public static String hashPassword(@NotNull String name, @NotNull String password) {
         String s = name + password;//combina el nombre de usuario y la contraseña
         PBEKeySpec spec = new PBEKeySpec(s.toCharArray(), password.getBytes(), ITERATIONS, KEY_LENGTH);
-        SecretKeyFactory skf = SecretKeyFactory.getInstance(ALGORITHM);
-        byte[] hash = skf.generateSecret(spec).getEncoded();
+        byte[] hash = null;
+        try {
+            SecretKeyFactory skf = SecretKeyFactory.getInstance(ALGORITHM);
+            hash = skf.generateSecret(spec).getEncoded();
+        } catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
         return Base64.getEncoder().encodeToString(hash);
     }
 
-    public static boolean isEqualPassword(@NotNull String name, @NotNull String password) throws InvalidKeySpecException, NoSuchAlgorithmException {
+    public static boolean isEqualPassword(@NotNull String name, @NotNull String password)  {
         return hashPassword(name, password).equals(getDataLogin(name).getRegister().getPasswordShaded());
     }
 
     public static void newRegisterCracked(@NotNull String name, @NotNull InetAddress inetAddress , @NotNull String password){
-        String s;
-        try {
-            s = hashPassword(name ,password);
-            getDataLogin(name).getRegister().setPasswordShaded(s);
-        } catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        }
+        String s = hashPassword(name ,password);
+        getDataLogin(name).getRegister().setPasswordShaded(s);
         DataRegister data = getDataLogin(name).getRegister();;
         data.setIp(inetAddress);
         data.setLastLoginDate(System.currentTimeMillis());
@@ -170,6 +174,16 @@ public class LoginManager {
 
     public static boolean checkLoginIn(Player player, boolean ignoreTime){//nota tengo que optimizar esto
         DataLogin dataLogin = getDataLogin(player);
+        if (dataLogin == null){
+            if (Bukkit.isPrimaryThread()){
+                GlobalUtils.kickPlayer(player, "Hubo un problema con tu registro, vuelve a registrarte");
+            }else{
+                Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () ->
+                        GlobalUtils.kickPlayer(player, "Hubo un problema con tu registro, vuelve a registrarte"));
+            }
+            return false;
+        }
+
         if (dataLogin.hasSession()){//mira si tiene una session
             //revisa si tiene una contraseña la cuenta cracked o si es un usuario premium
             if ((dataLogin.getSession().getState() == StateLogins.CRACKED && dataLogin.getRegister().getPasswordShaded() != null) ||
@@ -177,7 +191,7 @@ public class LoginManager {
                 //mira si la ip son iguales
                 if (Objects.equals(dataLogin.getSession().getAddress().getHostName().split(":")[0], player.getAddress().getAddress().getHostName().split(":")[0])){
                     if (ignoreTime || dataLogin.getSession().getEndTimeLogin() > System.currentTimeMillis()){//expiro? o no se tiene en cuenta
-                        listPlayerLoginIn.add(player.getUniqueId());//por si acaso
+                        listPlayerLoginIn.add(player.getUniqueId());
                         //en caso de que sea op no se le cambia el modo de juego y se hace en el hilo principal por si acaso
                         if (!player.isOp()) {
                             if (Bukkit.isPrimaryThread()){
@@ -199,6 +213,11 @@ public class LoginManager {
         }
         listPlayerLoginIn.remove(player.getUniqueId());
         dataLogin.setSession(null);//esto lo borra
+
+        if (ServerMode.OFFLINE_MODE != Config.getServerMode() && LoginManager.getDataLogin(player).getRegister().getStateLogins().equals(StateLogins.PREMIUM)){
+            GlobalUtils.kickPlayer(player, "Vuelve a entrar para obtener una sesión nueva");
+        }
+
         return false;
     }
 
@@ -207,15 +226,15 @@ public class LoginManager {
         dataLogin.setLimbo(new DataLimbo(player));
         DataRegister dataRegister = dataLogin.getRegister();
         if (dataRegister != null) {
-            if (dataRegister.getStateLogins() == StateLogins.CRACKED || !Config.isMixedMode()){
+            if (Config.getServerMode().equals(ServerMode.OFFLINE_MODE) || dataRegister.getStateLogins() == StateLogins.CRACKED){
                 if (dataRegister.getPasswordShaded() != null) {//tiene contraseña o no
-                    if (!checkLoginIn(player, false)) {//si tiene una session valida o no
+                    if (checkLoginIn(player, false)) {//si tiene una session valida o no
+                        dataLogin.setLimbo(null);
+                    }else {
                         player.getInventory().clear();
                         player.teleport(new Location(player.getWorld(),0,100,0));
                         startMessage(player, "login porfa. /login <Contraseña>");
                         startTimeOut(player, "Tardaste mucho en iniciar sesión");
-                    }else {
-                        dataLogin.setLimbo(null);
                     }
                 }else{
                     startTimeOut(player, "Tardaste mucho en registrarte");
@@ -241,7 +260,11 @@ public class LoginManager {
         dataLogin.setSession(dataSession);
         player.getInventory().setContents(dataLogin.getLimbo().getItems());
         player.teleport(dataLogin.getLimbo().getLocation());
-        player.setGameMode(GameMode.SURVIVAL);
+        if (player.isOp()) {
+            player.setGameMode(dataLogin.getLimbo().getGameMode());
+        } else {
+            player.setGameMode(GameMode.SURVIVAL);
+        }
         return dataLogin;
     }
 

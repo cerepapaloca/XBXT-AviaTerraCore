@@ -9,6 +9,7 @@ import net.atcore.Messages.TypeMessages;
 import net.atcore.ListenerManager.ListenerManagerSection;
 import net.atcore.Security.Login.LoginManager;
 import net.atcore.Service.ServiceSection;
+import net.atcore.Utils.GlobalConstantes;
 import net.atcore.Utils.GlobalUtils;
 import net.atcore.Utils.RegisterManager;
 import net.atcore.Moderation.ModerationSection;
@@ -16,7 +17,6 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.luckperms.api.LuckPerms;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -45,6 +45,7 @@ public final class AviaTerraCore extends JavaPlugin {
         long timeCurrent = System.currentTimeMillis();
         sendMessageConsole("AviaTerra Iniciando...", TypeMessages.INFO, false);
         isStarting = true;
+        new GlobalConstantes();
         RegisteredServiceProvider<LuckPerms> provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
         if (provider != null) {
             LP = provider.getProvider();
@@ -77,9 +78,11 @@ public final class AviaTerraCore extends JavaPlugin {
             section.disable();
         }
         Bukkit.getOnlinePlayers().forEach(player -> {
-            if (!LoginManager.getListPlayerLoginIn().contains(player.getUniqueId())) {
-                player.getInventory().setContents(getDataLogin(player).getLimbo().getItems());
-                player.teleport(getDataLogin(player).getLimbo().getLocation());
+            if (LoginManager.getDataLogin(player) != null){
+                if (!LoginManager.getListPlayerLoginIn().contains(player.getUniqueId())) {
+                    player.getInventory().setContents(getDataLogin(player).getLimbo().getItems());
+                    player.teleport(getDataLogin(player).getLimbo().getLocation());
+                }
             }
             GlobalUtils.kickPlayer(player, "El servidor va a cerrar, volveremos pronto...");
         });

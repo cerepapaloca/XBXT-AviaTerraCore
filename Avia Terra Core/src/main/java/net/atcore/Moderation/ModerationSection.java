@@ -13,6 +13,7 @@ public class ModerationSection implements Section {
     public void enable() {
         banManager = new ManagerBan();
         ChatModeration.tickEvent();
+        CheckAutoBan.startTimeRemove();
     }
 
     @Override

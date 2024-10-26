@@ -19,4 +19,8 @@ commands:
   login:
   register:
   addrange:
+  kick:
+  changepassword:
+  removeregister:
+  removesession:
 

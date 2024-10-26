@@ -8,9 +8,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
-
 import static net.atcore.Messages.MessagesManager.COLOR_ESPECIAL;
 import static net.atcore.Messages.MessagesManager.sendMessage;
 import static net.atcore.Security.Login.LoginManager.startPlaySessionCracked;
@@ -28,26 +25,22 @@ public class CommandLogin extends BaseCommand {
     @Override
     public void execute(CommandSender sender, String[] args) {
         if (sender instanceof Player player) {
-            try {
-                DataLogin dataLogin = LoginManager.getDataLogin(player);
-                if (dataLogin.getRegister().getPasswordShaded() != null) {
-                    if (LoginManager.isEqualPassword(player.getName(), args[0])){
-                        if (LoginManager.checkLoginIn(player, true)) {
-                            sendMessage(player, "Ya estas logueado", TypeMessages.ERROR);
-                            return;
-                        }
-                        startPlaySessionCracked(player);
-                        LoginManager.updateLoginDataBase(player.getName(), player.getAddress().getAddress());
-                        player.sendTitle(ChatColor.translateAlternateColorCodes('&',COLOR_ESPECIAL + "Te haz logueado!"), "", 20, 20*3, 40);
-                        sendMessage(player, "Has iniciado session exitosamente", TypeMessages.SUCCESS);
-                    }else{
-                        GlobalUtils.kickPlayer(player, "contraseña incorrecta, vuele a intentarlo");
+            DataLogin dataLogin = LoginManager.getDataLogin(player);
+            if (dataLogin.getRegister().getPasswordShaded() != null) {
+                if (LoginManager.isEqualPassword(player.getName(), args[0])){
+                    if (LoginManager.checkLoginIn(player, true)) {
+                        sendMessage(player, "Ya estas logueado", TypeMessages.ERROR);
+                        return;
                     }
-                }else {
-                    sendMessage(player, "No estas registrado usa el /register", TypeMessages.ERROR);
+                    startPlaySessionCracked(player);
+                    LoginManager.updateLoginDataBase(player.getName(), player.getAddress().getAddress());
+                    player.sendTitle(ChatColor.translateAlternateColorCodes('&',COLOR_ESPECIAL + "Te haz logueado!"), "", 20, 20*3, 40);
+                    sendMessage(player, "Has iniciado session exitosamente", TypeMessages.SUCCESS);
+                }else{
+                    GlobalUtils.kickPlayer(player, "contraseña incorrecta, vuele a intentarlo");
                 }
-            } catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
-                throw new RuntimeException(e);
+            }else {
+                sendMessage(player, "No estas registrado usa el /register", TypeMessages.ERROR);
             }
         }
     }

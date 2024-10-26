@@ -9,15 +9,13 @@ import lombok.experimental.UtilityClass;
 import net.atcore.AviaTerraCore;
 import net.atcore.Messages.MessagesManager;
 import net.md_5.bungee.api.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.NamespacedKey;
-import org.bukkit.Sound;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -70,9 +68,11 @@ public final class GlobalUtils {
                 String hexColor = String.format("#%02x%02x%02x", red, green, blue);
                 if (in =='r'){
                     gradientText.append(ChatColor.of(hexColor)).append(text.charAt(i));
+                }else{
+                    gradientText.append(ChatColor.of(hexColor)).append("&").append(in).append(text.charAt(i));
                 }
-                gradientText.append(ChatColor.of(hexColor)).append("&").append(in).append(text.charAt(i));
-                ChatColor.of("#" + hexColor);
+
+                //ChatColor.of(hexColor);
             }
         }
         return  gradientText.toString();
@@ -147,17 +147,6 @@ public final class GlobalUtils {
         return null;
     }
 
-    @SuppressWarnings("rawtypes")
-    public String[] EnumsToStrings(Enum[] raw){
-        String[] strings = new String[raw.length];
-        int i = 0 ;
-        for (Enum e : raw){
-            strings[i] = e.name().toLowerCase();
-            i++;
-        }
-        return strings;
-    }
-
     /**
      * Añade una protección anti dupe básicamente se le asigna una uuid al item esto
      * hace que el item no se pueda estakear y si lo se pone en 1
@@ -217,15 +206,33 @@ public final class GlobalUtils {
     public void kickPlayer(@NotNull Player player,@Nullable String reason) {
         reason = ChatColor.translateAlternateColorCodes('&', MessagesManager.PREFIX_AND_SUFFIX_KICK[0]
                 + "&4" + (reason == null ? "Has sido expulsado" : reason) + "&c" + MessagesManager.PREFIX_AND_SUFFIX_KICK[1]);
-        try {
-            if (player.getName().startsWith("UNKNOWN[")){
-                PacketContainer kickPack = new PacketContainer(PacketType.Login.Server.DISCONNECT);
-                kickPack.getChatComponents().write(0, WrappedChatComponent.fromText(reason));
-                ProtocolLibrary.getProtocolManager().sendServerPacket(player, kickPack);
+        if (Bukkit.isPrimaryThread()){
+            try {
+                if (player.getName().startsWith("UNKNOWN[")){
+                    PacketContainer kickPack = new PacketContainer(PacketType.Login.Server.DISCONNECT);
+                    kickPack.getChatComponents().write(0, WrappedChatComponent.fromText(reason));
+                    ProtocolLibrary.getProtocolManager().sendServerPacket(player, kickPack);
+                }
+            }finally {
+                player.kickPlayer(reason);
+
             }
-        }finally {
-            player.kickPlayer(reason);
+        }else{
+            @Nullable String finalReason = reason;
+            Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> {
+                try {
+                    if (player.getName().startsWith("UNKNOWN[")){
+                        PacketContainer kickPack = new PacketContainer(PacketType.Login.Server.DISCONNECT);
+                        kickPack.getChatComponents().write(0, WrappedChatComponent.fromText(finalReason));
+                        ProtocolLibrary.getProtocolManager().sendServerPacket(player, kickPack);
+                    }
+                }finally {
+                    player.kickPlayer(finalReason);
+                }
+            });
         }
+
+
     }
 
     /**
@@ -237,5 +244,12 @@ public final class GlobalUtils {
 
     public UUID getUUIDByName(String username) {
         return UUID.nameUUIDFromBytes(("OfflinePlayer:" + username).getBytes(Charsets.UTF_8));
+    }
+
+    public String colorToStringHex(Color color) {
+        String r = color.getRed() > 9 ?  Integer.toString(color.getRed(), 16) : "0" + Integer.toString(color.getRed(), 16);
+        String g = color.getGreen() > 9 ?  Integer.toString(color.getGreen(), 16) : "0" + Integer.toString(color.getGreen(), 16);
+        String B = color.getBlue() > 9 ?  Integer.toString(color.getBlue(), 16) : "0" + Integer.toString(color.getBlue(), 16);
+        return "#" + r + g + B;
     }
 }

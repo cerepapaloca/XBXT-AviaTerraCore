@@ -17,7 +17,7 @@ public class CommandKick extends BaseTabCommand {
         super("kick",
                 "/kick <player> <razón>",
                 true,
-                "Este comando congelas a un jugador por actividad sospechosa"
+                "echas al jugador del servidor por actividad sospechosa"
         );
     }
 
@@ -29,7 +29,7 @@ public class CommandKick extends BaseTabCommand {
                 Player player = Bukkit.getPlayer(args[0]);
                 if (player != null) {
                     String reason = "";
-                    for (int i = 3; i < args.length; i++){
+                    for (int i = 2; i < args.length; i++){
                         reason = reason.concat(args[i] + " ");
                     }
 

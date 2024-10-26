@@ -44,7 +44,7 @@ public class CommandUnban extends BaseTabCommand {
     @Override
     public List<String> onTab(CommandSender sender, String[] args) {
         if (args.length == 2){
-            return CommandUtils.listTab(args[1], GlobalUtils.EnumsToStrings(ContextBan.values()));
+            return CommandUtils.listTab(args[1], CommandUtils.EnumsToStrings(ContextBan.values()));
         }
         return null;
     }

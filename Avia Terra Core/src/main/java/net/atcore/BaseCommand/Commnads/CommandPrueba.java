@@ -3,6 +3,7 @@ package net.atcore.BaseCommand.Commnads;
 import com.google.common.base.Charsets;
 import net.atcore.BaseCommand.BaseCommand;
 import net.atcore.Messages.TypeMessages;
+import net.atcore.Security.Login.LoginManager;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -24,14 +25,9 @@ public class CommandPrueba extends BaseCommand {
     @Override
     public void execute(CommandSender sender, String[] args) {
         sendMessage(sender, "Hola Mundo!", TypeMessages.SUCCESS);
-        sendMessage(sender, "es premium: " + isPremium((Player) sender), TypeMessages.SUCCESS);
+        LoginManager.getDataLogin().forEach(login -> {
+            sendMessage(sender,"name: <|" + login.getSession().getPlayer().getName() + "|> " + "state: <|" + login.getSession().getState().name() + "|>", TypeMessages.INFO);
+        });
     }
 
-    public boolean isPremium(Player player) {
-        // La UUID de un jugador en modo offline se basa en el nombre del jugador.
-        String offlineUUID = UUID.nameUUIDFromBytes(("OfflinePlayer:" + player.getName()).getBytes(Charsets.UTF_8)).toString();
-
-        // Comparar la UUID del jugador actual con la UUID generada para un jugador en modo offline.
-        return !player.getUniqueId().toString().equals(offlineUUID);
-    }
 }

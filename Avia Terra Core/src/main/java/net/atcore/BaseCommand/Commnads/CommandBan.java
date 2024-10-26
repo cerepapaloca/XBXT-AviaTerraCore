@@ -72,7 +72,7 @@ public class CommandBan extends BaseTabCommand {
     public List<String> onTab(CommandSender sender, String[] args) {
         switch (args.length) {
             case 2 -> {
-                return CommandUtils.listTab(args[1], GlobalUtils.EnumsToStrings(ContextBan.values()));
+                return CommandUtils.listTab(args[1], CommandUtils.EnumsToStrings(ContextBan.values()));
             }
             case 3 -> {
                 return CommandUtils.listTabTime(args[2], true);

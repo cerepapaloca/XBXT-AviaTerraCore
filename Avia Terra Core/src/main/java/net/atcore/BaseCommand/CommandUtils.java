@@ -4,7 +4,6 @@ import lombok.experimental.UtilityClass;
 import net.atcore.Utils.GlobalConstantes;
 import net.atcore.Utils.ModeTab;
 import net.md_5.bungee.api.ChatColor;
-import org.checkerframework.checker.units.qual.A;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -17,6 +16,23 @@ import static net.atcore.Messages.MessagesManager.COLOR_ERROR;
 
 @UtilityClass
 public final class CommandUtils {
+
+    /**
+     * Crea una lista para el tab usando un enum
+     * @param raw la clase de enum
+     * @return lista de enum en string
+     */
+
+    @SuppressWarnings("rawtypes")
+    public String[] EnumsToStrings(Enum[] raw){
+        String[] strings = new String[raw.length];
+        int i = 0 ;
+        for (Enum e : raw){
+            strings[i] = e.name().toLowerCase();
+            i++;
+        }
+        return strings;
+    }
 
     public boolean isTrueOrFalse(String ars) {
         ars = ars.toLowerCase();

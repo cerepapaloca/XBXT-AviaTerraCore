@@ -5,8 +5,7 @@ import net.atcore.BaseCommand.CommandUtils;
 import net.atcore.Config;
 import net.atcore.Messages.TypeMessages;
 import net.atcore.Section;
-import net.atcore.Security.Login.LoginManager;
-import net.atcore.Security.Login.StateLogins;
+import net.atcore.Security.Login.*;
 import net.atcore.Utils.GlobalUtils;
 import net.atcore.Utils.RegisterManager;
 import org.bukkit.Bukkit;
@@ -69,27 +68,48 @@ public class CommandAviaTerra extends BaseTabCommand {
                     sendMessage(sender,"el Anti Items Ilegales esta " + CommandUtils.booleanToString(Config.isCheckAntiIllegalItems()), TypeMessages.INFO);
                 }
             }
-            case "mixmode" -> {
+            case "servermode" -> {
                 if (args.length >= 2) {
+                    ServerMode mode;
+                    try {
+                        mode = ServerMode.valueOf(args[1].toUpperCase());
+                    }catch (Exception e){
+                        sendMessage(sender, "Modo no valido", TypeMessages.ERROR);
+                        return;
+                    }
                     if (CommandUtils.isTrueOrFalse(args[1])){
-                        Config.setMixedMode(true);
-                        sendMessage(sender,"El Modo Mixto <|Activado|>", TypeMessages.INFO);
+                        Config.setServerMode(mode);
+                        sendMessage(sender,"El modo del servidor esta en " + Config.getServerMode().name().toLowerCase().replace("_"," "), TypeMessages.INFO);
                     }else{
-                        Config.setMixedMode(false);
-                        sendMessage(sender,"El Modo Mixto <|Desactivado|>", TypeMessages.INFO);
-                        sendMessage(sender,"********************************************************", TypeMessages.WARNING);
-                        sendMessage(sender,"SOLO PARA PRUEBAS O/Y PROBLEMAS CON LOS SERVIDOR DE AUTH", TypeMessages.WARNING);
-                        sendMessage(sender,"********************************************************", TypeMessages.WARNING);
-
-                        for (Player player : Bukkit.getOnlinePlayers()){
-                            if (LoginManager.getDataLogin(player).getSession().getState().equals(StateLogins.PREMIUM)){
-                                GlobalUtils.kickPlayer(player, "Se Tiene que registrar/iniciar sesión con la contraseña");
+                        Config.setServerMode(mode);
+                        sendMessage(sender,"El modo del servidor esta en " + Config.getServerMode().name().toLowerCase().replace("_"," "), TypeMessages.INFO);
+                        switch (Config.getServerMode()){
+                            case OFFLINE_MODE -> {
+                                for (Player player : Bukkit.getOnlinePlayers()){
+                                    DataLogin login = LoginManager.getDataLogin(player);
+                                    if (!login.hasSession()) {
+                                        GlobalUtils.kickPlayer(player, "Se tiene que registrar/iniciar sesión con la contraseña code: 1");
+                                        return;
+                                    }
+                                    if (login.getSession().getState().equals(StateLogins.PREMIUM)){
+                                        login.setSession(null);
+                                        GlobalUtils.kickPlayer(player, "Se tiene que registrar/iniciar sesión con la contraseña code: 2");
+                                    }
+                                }
+                            }
+                            case ONLINE_MODE -> {
+                                for (Player player : Bukkit.getOnlinePlayers()){
+                                    if (!LoginManager.getDataLogin(player).hasSession()) continue;
+                                    if (LoginManager.getDataLogin(player).getSession().getState().equals(StateLogins.CRACKED)){
+                                        GlobalUtils.kickPlayer(player, "El servidor entro en Online Mode");
+                                    }
+                                }
                             }
                         }
                     }
 
                 }else{
-                    sendMessage(sender,"El modo mixto esta " + CommandUtils.booleanToString(Config.isMixedMode()), TypeMessages.INFO);
+                    sendMessage(sender,"El modo mixto esta " + Config.getServerMode().name().toLowerCase(), TypeMessages.INFO);
                 }
             }
             case "checkbanporip" -> {
@@ -116,7 +136,8 @@ public class CommandAviaTerra extends BaseTabCommand {
             case "tiempodesesion" -> {
                 if (args.length >= 2) {
                     try {
-                        CommandUtils.StringToMilliseconds(args[1], true);
+                        Config.setExpirationSession(CommandUtils.StringToMilliseconds(args[1], true));
+                        sendMessage(sender, "se cambio el la duración de la sesión", TypeMessages.SUCCESS);
                     }catch (RuntimeException e){
                         sendMessage(sender, "formato de fecha incorrecto", TypeMessages.ERROR);
                     }
@@ -125,22 +146,40 @@ public class CommandAviaTerra extends BaseTabCommand {
                             GlobalUtils.timeToString(Config.getExpirationSession(), 2), TypeMessages.INFO);
                 }
             }
+            case "levelmoderationchat" -> {
+                if (args.length >= 2) {
+                    try {
+                        Config.setLevelModerationChat(Float.parseFloat(args[1]));
+                        sendMessage(sender, "se cambio el nivel de moderación", TypeMessages.SUCCESS);
+                    }catch (RuntimeException e){
+                        sendMessage(sender, "solo números con decimales", TypeMessages.ERROR);
+                    }
+                }else{
+                    sendMessage(sender,"el nivel de moderación en el chat esta en <|" + Config.getLevelModerationChat() + "|>", TypeMessages.INFO);
+                }
+            }
         }
     }
 
     @Override
     public List<String> onTab(CommandSender sender, String[] args) {
-        String[] argsRoot = new String[]{"reload", "anti_Op", "anti_Ilegal_Items", "mix_Mode", "check_Ban_Por_Ip", "purga_Rangos","Tiempo_De_Sesión"};
+        String[] argsRoot = new String[]{"Reload", "Anti_Op", "Anti_Ilegal_Items", "Server_Mode", "Check_Ban_Por_Ip", "Purga_Rangos","Tiempo_De_Sesion", "Level_Moderation_Chat"};
         if (args.length >= 2) {
             switch (args[0].toLowerCase().replace("_","")) {
-                case "antiop", "antiilegalitems", "mixmode" -> {
+                case "antiop", "antiilegalitems" -> {
                     return CommandUtils.listTab(args[1], new String[]{"true", "false"});
+                }
+                case "servermode" -> {
+                    return CommandUtils.listTab(args[1], CommandUtils.EnumsToStrings(ServerMode.values()));
                 }
                 case "tiempodesesion" -> {
                     return CommandUtils.listTabTime(args[1], false);
                 }
+                case "levelmoderationchat" -> {
+                    return List.of("#.#");
+                }
             }
         }
-        return Arrays.stream(argsRoot).toList();
+        return CommandUtils.listTab(args[0], argsRoot);
     }
 }

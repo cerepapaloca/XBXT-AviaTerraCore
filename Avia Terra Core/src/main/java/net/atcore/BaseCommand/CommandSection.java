@@ -4,6 +4,8 @@ import lombok.Getter;
 import net.atcore.BaseCommand.Commnads.*;
 import net.atcore.Section;
 
+import java.rmi.Remote;
+
 import static net.atcore.Utils.RegisterManager.register;
 
 
@@ -24,6 +26,9 @@ public class CommandSection implements Section {
         register(new CommandRegister());
         register(new CommandAddRange());
         register(new CommandKick());
+        register(new CommandRemoveRegister());
+        register(new CommandChangePassword());
+        register(new CommandRemoveSession());
     }
 
     @Override

@@ -2,6 +2,7 @@ package net.atcore.Moderation.Ban;
 
 import net.atcore.AviaTerraCore;
 import net.atcore.Config;
+import net.atcore.Messages.CategoryMessages;
 import net.atcore.Messages.TypeMessages;
 import net.atcore.Moderation.ModerationSection;
 import net.atcore.Utils.GlobalUtils;
@@ -60,12 +61,12 @@ public class CheckAutoBan {
             long DifferenceOld = timeDifferenceOld.getOrDefault(player.getUniqueId(), -1000L);
             long DifferenceNew = timeDifferenceNew.getOrDefault(player.getUniqueId(), 1000L);
 
-            if ((DifferenceOld - DifferenceNew) < 50 && (DifferenceOld - DifferenceNew) > -50) {
+            if ((DifferenceOld - DifferenceNew) < 30 && (DifferenceOld - DifferenceNew) > -30) {
                 timeDifferenceCount.put(player.getUniqueId(), timeDifferenceCount.getOrDefault(player.getUniqueId(), 0) + 1);
-                sendMessageConsole("Este jugador usa AutoBotChat: (" + timeDifferenceCount.get(player.getUniqueId()) + "/3) " + "Tiene una precision de "
-                        + (DifferenceOld - DifferenceNew) + " ms", TypeMessages.WARNING);
-                if (timeDifferenceCount.get(player.getUniqueId()) >= 3){
-                    ModerationSection.getBanManager().banPlayer(player, "Por enviar mensajes automatizado en el chat",1000 * 60 * 60 * 24 * 5L, ContextBan.CHAT, "Servidor");
+                sendMessageConsole("Este jugador usa AutoBotChat: <|(" + timeDifferenceCount.get(player.getUniqueId()) + "/5)|> " + "Tiene una precision de <|"
+                        + (DifferenceOld - DifferenceNew) + " ms|>", TypeMessages.WARNING, CategoryMessages.MODERATION);
+                if (timeDifferenceCount.get(player.getUniqueId()) >= 5){
+                    ModerationSection.getBanManager().banPlayer(player, "Por enviar mensajes automatizado en el chat",1000 * 60 * 60 * 24 * 2L, ContextBan.CHAT, "Servidor");
                     timeDifferenceCount.remove(player.getUniqueId());
                     timeDifferenceOld.remove(player.getUniqueId());
                     timeDifferenceNew.remove(player.getUniqueId());
@@ -75,6 +76,15 @@ public class CheckAutoBan {
             timeDifferenceOld.put(player.getUniqueId(), DifferenceNew);
         }
         timePunishChat.put(player.getUniqueId(), currentTime);
+    }
+
+    public static void startTimeRemove() {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                timeDifferenceCount.replaceAll((uuid, count) -> count > 0 ? count - 1 : 0);
+            }
+        }.runTaskTimer(AviaTerraCore.getInstance(), 20, 20*60);
     }
 
     public static void checkDupe(@NotNull Player player, Inventory inventory) {

@@ -1,6 +1,8 @@
 package net.atcore.Data;
 
 import net.atcore.AviaTerraCore;
+import net.atcore.BaseCommand.CommandSection;
+import net.atcore.Messages.CategoryMessages;
 import net.atcore.Messages.MessagesManager;
 import net.atcore.Messages.TypeMessages;
 import net.atcore.Security.Login.*;
@@ -156,12 +158,14 @@ public class DataBaseRegister extends DataBaseMySql {
             stmt.setString(2, name);
 
             stmt.executeUpdate();
+            sendMessageConsole("Se actualizó la fecha del ultimo login del jugador <|" + name + "|> exitosamente", TypeMessages.SUCCESS, CategoryMessages.LOGIN);
         } catch (SQLException e) {
+            sendMessageConsole("No se pudo actualizar la fecha del ultimo login del jugador <|" + name+ "|>", TypeMessages.ERROR, CategoryMessages.LOGIN);
             throw new RuntimeException(e);
         }
     }
 
-    public static void updatePassword(String name ,String password){
+    public static void updatePassword(String name, String password){
         String sql = "UPDATE register SET password = ? WHERE name = ?";
 
         try (PreparedStatement stmt = getConnection().prepareStatement(sql)) {
@@ -169,12 +173,14 @@ public class DataBaseRegister extends DataBaseMySql {
             stmt.setString(2, name);
 
             stmt.executeUpdate();
+            sendMessageConsole("Se actualizó la contraseña del jugador <|" + name + "|> exitosamente", TypeMessages.SUCCESS, CategoryMessages.LOGIN);
         } catch (SQLException e) {
+            sendMessageConsole("No se pudo actualizar la contraseña del jugador <|" + name + "|>", TypeMessages.ERROR, CategoryMessages.LOGIN);
             throw new RuntimeException(e);
         }
     }
 
-    public static void updateAddress(String name ,String ip){
+    public static void updateAddress(String name, String ip){
         String sql = "UPDATE register SET ipLogin = ? WHERE name = ?";
 
         try (PreparedStatement stmt = getConnection().prepareStatement(sql)) {
@@ -182,7 +188,22 @@ public class DataBaseRegister extends DataBaseMySql {
             stmt.setString(2, name);
 
             stmt.executeUpdate();
+            sendMessageConsole("Se actualizó la ip del jugador <|" + name + "|> exitosamente", TypeMessages.SUCCESS, CategoryMessages.LOGIN);
         } catch (SQLException e) {
+            sendMessageConsole("No se pudo actualizar la ip del jugador <|" + name + "|>", TypeMessages.ERROR, CategoryMessages.LOGIN);
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void removeRegister(String name, String author){
+        String sql = "DELETE FROM register WHERE name = ?";
+        try (PreparedStatement stmt = getConnection().prepareStatement(sql)){
+            stmt.setString(1, name);
+
+            stmt.executeUpdate();
+            sendMessageConsole("Se borro el registro del jugador <|" + name + "|> por <|" + author + "|>", TypeMessages.SUCCESS, CategoryMessages.LOGIN);
+        }catch(SQLException e){
+            sendMessageConsole("Hubo un error al borrar el registro del jugador <|" + name + "|> por <|" + author + "|>", TypeMessages.ERROR, CategoryMessages.LOGIN);
             throw new RuntimeException(e);
         }
     }

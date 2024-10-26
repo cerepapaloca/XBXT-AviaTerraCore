@@ -22,6 +22,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.crypto.spec.SecretKeySpec;
 import java.math.BigInteger;
+import java.nio.Buffer;
 import java.nio.charset.StandardCharsets;
 import java.security.PublicKey;
 import java.util.Arrays;
@@ -78,6 +79,7 @@ public class VerificationPremium {
                                 DataSession session = new DataSession(player, StateLogins.PREMIUM, player.getAddress().getAddress());
                                 session.setEndTimeLogin(System.currentTimeMillis() + Config.getExpirationSession());
                                 dataLogin.setSession(session);
+                                LoginManager.getListPlayerLoginIn().add(GlobalUtils.getUUIDByName(userName));
                             }else{
                                 GlobalUtils.kickPlayer(player, "Se detecto una discrepancia. Reinicie su cliente");
                                 sendMessageConsole("la ip que se envío el paquete no es la misma que se envío al primer paquete por el jugador <|"

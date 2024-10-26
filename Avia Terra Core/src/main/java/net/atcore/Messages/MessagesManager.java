@@ -141,6 +141,7 @@ public final class MessagesManager {
         switch (categoryMessages) {
             case BAN -> channelId = "1294324328401207389";
             case MODERATION -> channelId = "1294324285602795550";
+            case LOGIN -> channelId = "1299444352409669746";
             default -> {
                 return;
             }

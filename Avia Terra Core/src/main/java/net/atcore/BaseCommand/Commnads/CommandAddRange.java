@@ -4,7 +4,10 @@ import net.atcore.AviaTerraCore;
 import net.atcore.BaseCommand.BaseTabCommand;
 import net.atcore.BaseCommand.CommandUtils;
 import net.atcore.Messages.TypeMessages;
+import net.atcore.Utils.GlobalConstantes;
 import net.atcore.Utils.GlobalUtils;
+import net.atcore.Utils.Range;
+import net.atcore.Utils.RangeList;
 import net.luckperms.api.model.group.Group;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -36,9 +39,9 @@ public class CommandAddRange extends BaseTabCommand {
             case 0 -> sendMessage(sender, this.getUsage(), TypeMessages.ERROR);
             case 1 -> sendMessage(sender, "Te falta especificar el tiempo de duración", TypeMessages.ERROR);
             default -> {
-                List<Group> range = AviaTerraCore.getLP().getGroupManager().getLoadedGroups().stream().toList();
+                List<Group> groups = AviaTerraCore.getLP().getGroupManager().getLoadedGroups().stream().toList();
                 List<String> nameRage = new ArrayList<>();
-                for (Group group : range) nameRage.add(group.getName());
+                for (Group group : groups) nameRage.add(group.getName());
 
                 if (nameRage.contains(args[0])){
                     long time;
@@ -55,7 +58,10 @@ public class CommandAddRange extends BaseTabCommand {
                     GlobalUtils.addProtectionAntiDupe(item);
                     ItemMeta meta = item.getItemMeta();
                     assert meta != null;
-                    meta.setDisplayName("Rango " + args[0] + " por " + GlobalUtils.timeToString(time, 2));
+                    Range range = GlobalConstantes.RANGOS_COLORS.get(RangeList.valueOf(args[0].toUpperCase()));
+                    //meta.setDisplayName(GlobalUtils.applyGradient("<#f0f0f0>asdas<#404040>"));
+                    meta.setDisplayName(range.getIcon() + GlobalUtils.applyGradient( "<" + GlobalUtils.colorToStringHex(range.getColor()) + ">"
+                             + " Duración: " + GlobalUtils.timeToString(time, 2) + "<#696969>"));
                     item.setItemMeta(meta);
                     if(args.length == 2){
                         if (sender instanceof Player playerSender){
