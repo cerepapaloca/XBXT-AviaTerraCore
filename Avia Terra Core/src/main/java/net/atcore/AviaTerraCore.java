@@ -3,16 +3,16 @@ package net.atcore;
 import com.github.games647.craftapi.resolver.MojangResolver;
 import lombok.Getter;
 import lombok.SneakyThrows;
-import net.atcore.BaseCommand.CommandSection;
-import net.atcore.Data.DataSection;
-import net.atcore.Messages.TypeMessages;
-import net.atcore.ListenerManager.ListenerManagerSection;
-import net.atcore.Security.Login.LoginManager;
-import net.atcore.Service.ServiceSection;
-import net.atcore.Utils.GlobalConstantes;
-import net.atcore.Utils.GlobalUtils;
-import net.atcore.Utils.RegisterManager;
-import net.atcore.Moderation.ModerationSection;
+import net.atcore.baseCommand.CommandSection;
+import net.atcore.data.DataSection;
+import net.atcore.messages.TypeMessages;
+import net.atcore.listenerManager.ListenerManagerSection;
+import net.atcore.security.Login.LoginManager;
+import net.atcore.service.ServiceSection;
+import net.atcore.utils.GlobalConstantes;
+import net.atcore.utils.GlobalUtils;
+import net.atcore.utils.RegisterManager;
+import net.atcore.moderation.ModerationSection;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.luckperms.api.LuckPerms;
@@ -20,9 +20,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import static net.atcore.Messages.MessagesManager.COLOR_SUCCESS;
-import static net.atcore.Messages.MessagesManager.sendMessageConsole;
-import static net.atcore.Security.Login.LoginManager.getDataLogin;
+import static net.atcore.messages.MessagesManager.COLOR_SUCCESS;
+import static net.atcore.messages.MessagesManager.sendMessageConsole;
+import static net.atcore.security.Login.LoginManager.getDataLogin;
 
 public final class AviaTerraCore extends JavaPlugin {
     @Getter

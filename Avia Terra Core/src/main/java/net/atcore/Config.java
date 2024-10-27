@@ -2,7 +2,7 @@ package net.atcore;
 
 import lombok.Getter;
 import lombok.Setter;
-import net.atcore.Security.Login.ServerMode;
+import net.atcore.security.Login.ServerMode;
 
 public class Config {
 
