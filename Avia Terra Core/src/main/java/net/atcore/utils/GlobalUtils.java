@@ -179,6 +179,7 @@ public final class GlobalUtils {
 
     public Object getPersistenData(@NotNull ItemStack item, String nameKey, PersistentDataType type){
         ItemMeta meta = item.getItemMeta();
+        assert meta != null;
         PersistentDataContainer dataContainer = meta.getPersistentDataContainer();
         NamespacedKey key = new NamespacedKey(AviaTerraCore.getInstance(), nameKey);
         if (dataContainer.has(key)){
@@ -188,11 +189,10 @@ public final class GlobalUtils {
         }
     }
 
-    public static void addItemPlayer(@NotNull ItemStack item, @NotNull Player player, boolean isSilent){
-        if (!isSilent) player.playSound(player, Sound.ENTITY_ITEM_PICKUP, 1,1);
-        if (player.getInventory().addItem(item).isEmpty()) {
-            return;
-        }
+    public static void addItemPlayer(@NotNull ItemStack item, @NotNull Player player, boolean silent, boolean protection){
+        if (!silent) player.playSound(player, Sound.ENTITY_ITEM_PICKUP, 1,1);
+        if (protection) GlobalUtils.addProtectionAntiDupe(item);
+        if (player.getInventory().addItem(item).isEmpty()) return;
         Location location = player.getLocation();
         World world = player.getWorld();
         world.dropItemNaturally(location, item);
@@ -207,32 +207,23 @@ public final class GlobalUtils {
         reason = ChatColor.translateAlternateColorCodes('&', MessagesManager.PREFIX_AND_SUFFIX_KICK[0]
                 + "&4" + (reason == null ? "Has sido expulsado" : reason) + "&c" + MessagesManager.PREFIX_AND_SUFFIX_KICK[1]);
         if (Bukkit.isPrimaryThread()){
-            try {
-                if (player.getName().startsWith("UNKNOWN[")){
-                    PacketContainer kickPack = new PacketContainer(PacketType.Login.Server.DISCONNECT);
-                    kickPack.getChatComponents().write(0, WrappedChatComponent.fromText(reason));
-                    ProtocolLibrary.getProtocolManager().sendServerPacket(player, kickPack);
-                }
-            }finally {
-                player.kickPlayer(reason);
-
-            }
+            kickFinal(player, reason);
         }else{
             @Nullable String finalReason = reason;
-            Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> {
-                try {
-                    if (player.getName().startsWith("UNKNOWN[")){
-                        PacketContainer kickPack = new PacketContainer(PacketType.Login.Server.DISCONNECT);
-                        kickPack.getChatComponents().write(0, WrappedChatComponent.fromText(finalReason));
-                        ProtocolLibrary.getProtocolManager().sendServerPacket(player, kickPack);
-                    }
-                }finally {
-                    player.kickPlayer(finalReason);
-                }
-            });
+            Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> kickFinal(player, finalReason));
         }
+    }
 
-
+    private static void kickFinal(@NotNull Player player, @Nullable String finalReason) {
+        try {
+            if (player.getName().startsWith("UNKNOWN[")){
+                PacketContainer kickPack = new PacketContainer(PacketType.Login.Server.DISCONNECT);
+                kickPack.getChatComponents().write(0, WrappedChatComponent.fromText(finalReason));
+                ProtocolLibrary.getProtocolManager().sendServerPacket(player, kickPack);
+            }
+        }finally {
+            player.kickPlayer(finalReason);
+        }
     }
 
     /**

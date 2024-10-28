@@ -4,11 +4,8 @@ import net.atcore.command.BaseCommand;
 import net.atcore.guns.GunsSection;
 import net.atcore.messages.TypeMessages;
 import net.atcore.utils.GlobalUtils;
-import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.persistence.PersistentDataType;
 
 import static net.atcore.messages.MessagesManager.sendMessage;
 
@@ -27,11 +24,12 @@ public class CommandPrueba extends BaseCommand {
     public void execute(CommandSender sender, String[] args) {
         sendMessage(sender, "Hola Mundo!", TypeMessages.SUCCESS);
         GunsSection.baseWeapons.forEach((list, baseWeapon) -> {
-            GlobalUtils.addItemPlayer(baseWeapon.getItemWeapon(), (Player) sender , true);
+            GlobalUtils.addItemPlayer(baseWeapon.getItemWeapon(), (Player) sender , true, true);
         });
         GunsSection.dataChargers.forEach((list, dataCharger) -> {
-            GlobalUtils.addItemPlayer(dataCharger.getItemCharger(), (Player) sender , true);
-        })
+            GlobalUtils.addItemPlayer(dataCharger.getItemCharger(), (Player) sender , true, true);
+            GlobalUtils.addItemPlayer(dataCharger.getItemCharger(), (Player) sender , true, true);
+        });
     }
 
 }

@@ -18,15 +18,15 @@ import java.util.List;
 
 @Getter
 @Setter
-public class BaseWeapon {
+public abstract class BaseWeapon {
 
-    public BaseWeapon(WeaponList list, List<ChargerList> chargerLists, float maxDistance, String displayName) {
+    public BaseWeapon(WeaponList type, List<ChargerList> chargerLists, float maxDistance, String displayName) {
         this.MAX_DISTANCE = maxDistance;
         this.CHARGERS_TYPE = chargerLists;
+        this.weaponType = type;
         itemWeapon = new ItemStack(Material.NAME_TAG);
-        GlobalUtils.addProtectionAntiDupe(itemWeapon);
         GlobalUtils.setPersistentDataItem(itemWeapon, "weaponAmmo", PersistentDataType.INTEGER, 0);
-        GlobalUtils.setPersistentDataItem(itemWeapon, "weaponName", PersistentDataType.STRING, list.name());
+        GlobalUtils.setPersistentDataItem(itemWeapon, "weaponName", PersistentDataType.STRING, type.name());
         GlobalUtils.setPersistentDataItem(itemWeapon, "chargerTypeNow", PersistentDataType.STRING, "null");
         ItemMeta meta = itemWeapon.getItemMeta();
         if (meta == null) return;
@@ -34,23 +34,31 @@ public class BaseWeapon {
         itemWeapon.setItemMeta(meta);
     }
 
-    public BaseWeapon(WeaponList list, ChargerList chargerTypes, float maxDistance, String displayName) {
-        this(list, List.of(chargerTypes), maxDistance, displayName);
+    public BaseWeapon(WeaponList type, ChargerList chargerTypes, float maxDistance, String displayName) {
+        this(type, List.of(chargerTypes), maxDistance, displayName);
     }
 
     private final ItemStack itemWeapon;
     private final List<ChargerList> CHARGERS_TYPE;
     private final float MAX_DISTANCE;
+    private final WeaponList weaponType;
 
     public void shoot(Player player) {
         ItemStack itemWeapon = player.getInventory().getItemInMainHand();
-
-        ChargerList chargerList = ChargerList.valueOf((String) GlobalUtils.getPersistenData(itemWeapon, "chargerTypeNow", PersistentDataType.STRING));
+        String chargerName = (String) GlobalUtils.getPersistenData(itemWeapon, "chargerTypeNow", PersistentDataType.STRING);
+        if (chargerName == null) return;
+        ChargerList chargerList = ChargerList.valueOf(chargerName);
         if (!CHARGERS_TYPE.contains(chargerList))return;
-        DataCharger dataCharger = GunsSection.dataChargers.get(chargerList);
+        BaseCharger baseCharger = GunsSection.dataChargers.get(chargerList);
 
         Integer ammo = (Integer) GlobalUtils.getPersistenData(itemWeapon, "weaponAmmo", PersistentDataType.INTEGER);
-        if (ammo != null && ammo > 0) {
+        if (ammo != null) {
+
+            if (ammo <= 0){
+                GlobalUtils.setPersistentDataItem(itemWeapon, "chargerTypeNow", PersistentDataType.STRING, "null");
+                return;
+            }
+
             ammo--;
             Bukkit.getLogger().warning("ammo: " + ammo);
             GlobalUtils.setPersistentDataItem(itemWeapon, "weaponAmmo", PersistentDataType.INTEGER, ammo);
@@ -68,34 +76,40 @@ public class BaseWeapon {
                 Entity entity = result.getHitEntity();
                 if (entity != null) {
                     if (!(entity instanceof Player)) {
-                        if (entity instanceof LivingEntity livingEntity) {
-                            livingEntity.damage(dataCharger.getDamage());
-                        }
                         double distance = player.getEyeLocation().distance(entity.getLocation());
-                        drawParticleLine(player.getEyeLocation(), getPlayerLookLocation(player, distance, dataCharger.getDensityTrace()),
-                                Color.fromRGB(40, 240, 40), true);
+                        if (entity instanceof LivingEntity livingEntity) {
+                            livingEntity.damage(baseCharger.getDamage());
+                            DataShoot dataShoot = new DataShoot(livingEntity, player, this, baseCharger, distance);
+                            onShoot(dataShoot);
+                            baseCharger.onShoot(dataShoot);
+                        }
+                        drawParticleLine(player.getEyeLocation(), getPlayerLookLocation(player, distance, baseCharger.getDensityTrace()),
+                                baseCharger.getColor(), true);
                     }
                 }
             }else{
-                drawParticleLine(player.getEyeLocation(), getPlayerLookLocation(player, MAX_DISTANCE, dataCharger.getDensityTrace()),
-                        Color.fromRGB(40, 240, 40), false);
+                drawParticleLine(player.getEyeLocation(), getPlayerLookLocation(player, MAX_DISTANCE, baseCharger.getDensityTrace()),
+                        baseCharger.getColor(), false);
             }
         }
     }
 
     public void reload(Player player) {
+        onReloading(player);
         ItemStack itemWeapon = player.getInventory().getItemInMainHand();
         Integer ammo = (Integer) GlobalUtils.getPersistenData(itemWeapon, "weaponAmmo", PersistentDataType.INTEGER);
         if (ammo == null)return;
 
         for (ItemStack itemStack : player.getInventory().getStorageContents()) {//hay que remplasar el itemWeapon por qué se obtiene una copia pero no el itemWeapon real
             if (itemStack == null) continue;
-            ChargerList chargerType = ChargerList.valueOf((String) GlobalUtils.getPersistenData(itemWeapon, "chargerType", PersistentDataType.STRING));
+            String chargerName = (String) GlobalUtils.getPersistenData(itemStack, "chargerType", PersistentDataType.STRING);
+            if (chargerName == null) continue;
+            ChargerList chargerType = ChargerList.valueOf(chargerName);
             if (!CHARGERS_TYPE.contains(chargerType))continue;
             Integer ammoCharger = (Integer) GlobalUtils.getPersistenData(itemStack, "chargerAmmo", PersistentDataType.INTEGER);
             if (ammoCharger == null) continue;
-            DataCharger dataCharger = GunsSection.dataChargers.get(chargerType);
-            int delta = dataCharger.getAmmoMax() - ammo;
+            BaseCharger baseCharger = GunsSection.dataChargers.get(chargerType);
+            int delta = baseCharger.getAmmoMax() - ammo;
             int result = ammoCharger - delta;
             if (result > 0){
                 GlobalUtils.setPersistentDataItem(itemStack, "chargerAmmo", PersistentDataType.INTEGER, result);
@@ -104,6 +118,7 @@ public class BaseWeapon {
                 GlobalUtils.setPersistentDataItem(itemWeapon, "weaponAmmo", PersistentDataType.INTEGER, delta + ammo + result);
                 itemStack.setAmount(0);
             }
+            GlobalUtils.setPersistentDataItem(itemWeapon, "chargerTypeNow", PersistentDataType.STRING,  chargerType.toString());
 
             break;
         }
@@ -134,7 +149,7 @@ public class BaseWeapon {
         Vector direction = eyeLocation.getDirection().normalize();
 
         Location currentLocation = eyeLocation.clone();
-
+        if (stepSize <= 0) throw new IllegalArgumentException("No puede ser menor que cero");
         for (double i = 0; i < maxDistance; i += stepSize) {
             currentLocation.add(direction.clone().multiply(stepSize));
 
@@ -145,5 +160,9 @@ public class BaseWeapon {
 
         return eyeLocation.add(direction.multiply(maxDistance));
     }
+
+    public abstract void onShoot(DataShoot dataShoot);
+
+    public abstract void onReloading(Player player);
 
 }

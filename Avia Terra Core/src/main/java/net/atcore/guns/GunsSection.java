@@ -1,19 +1,23 @@
 package net.atcore.guns;
 
 import net.atcore.Section;
+import net.atcore.guns.chargers.M4_30;
+import net.atcore.guns.weapons.M4;
 
 import java.util.HashMap;
 
+import static net.atcore.utils.RegisterManager.register;
+
 public class GunsSection implements Section {
 
-    public static final HashMap<ChargerList, DataCharger> dataChargers = new HashMap<>();
+    public static final HashMap<ChargerList, BaseCharger> dataChargers = new HashMap<>();
     public static final HashMap<WeaponList, BaseWeapon> baseWeapons = new HashMap<>();
 
     @Override
     public void enable() {
-        dataChargers.put(ChargerList.M4_30, new DataCharger(ChargerList.M4_30, AmmoCaliber.MM45_OTAN, 30, 3, "5.21cd"));
-        ////////////////////////////////
-        baseWeapons.put(WeaponList.M4, new BaseWeapon(WeaponList.M4, ChargerList.M4_30, 50, "La M4"));
+        register(new M4_30());
+        /////////////////
+        register(new M4());
     }
 
     @Override

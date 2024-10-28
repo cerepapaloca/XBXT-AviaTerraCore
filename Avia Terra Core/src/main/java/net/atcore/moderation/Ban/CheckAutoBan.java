@@ -88,29 +88,34 @@ public class CheckAutoBan {
     }
 
     public static void checkDupe(@NotNull Player player, Inventory inventory) {
-        Map<String, Integer> itemCounts = new HashMap<>();
+        new BukkitRunnable(){
+            public void run() {
+                Map<String, Integer> itemCounts = new HashMap<>();
 
-        for (ItemStack item : inventory) {
-            if (item == null) continue;
-            if (item.getItemMeta() == null) continue;
+                for (ItemStack item : inventory) {
+                    if (item == null) continue;
+                    if (item.getItemMeta() == null) continue;
 
-            PersistentDataContainer dataContainer = item.getItemMeta().getPersistentDataContainer();
-            if (dataContainer.has(GlobalUtils.KEY_ANTI_DUPE, PersistentDataType.STRING)) {
-                String uniqueId = dataContainer.get(GlobalUtils.KEY_ANTI_DUPE, PersistentDataType.STRING);
+                    PersistentDataContainer dataContainer = item.getItemMeta().getPersistentDataContainer();
+                    if (dataContainer.has(GlobalUtils.KEY_ANTI_DUPE, PersistentDataType.STRING)) {
+                        String uniqueId = dataContainer.get(GlobalUtils.KEY_ANTI_DUPE, PersistentDataType.STRING);
 
-                itemCounts.put(uniqueId, itemCounts.getOrDefault(uniqueId, 0) + 1);
+                        itemCounts.put(uniqueId, itemCounts.getOrDefault(uniqueId, 0) + 1);
+                    }
+                }
+
+                for (Map.Entry<String, Integer> entry : itemCounts.entrySet()) {
+                    if (entry.getValue() > 1) {
+                        inventory.clear();
+                        Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(), () ->
+                                ModerationSection.getBanManager().banPlayer(player, "Por estar dupeando",
+                                        1000 * 60 * 60 * 24 * 5L, ContextBan.GLOBAL, "Servidor"));
+
+                    }
+                }
             }
-        }
+        }.runTaskLater(AviaTerraCore.getInstance(), 1);
 
-        for (Map.Entry<String, Integer> entry : itemCounts.entrySet()) {
-            if (entry.getValue() > 1) {
-                inventory.clear();
-                Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(), () ->
-                        ModerationSection.getBanManager().banPlayer(player, "Por estar dupeando",
-                                1000 * 60 * 60 * 24 * 5L, ContextBan.GLOBAL, "Servidor"));
-
-            }
-        }
     }
 
     private static final Set<Material> ILEGAL_ITEMS = Set.of(BEDROCK, END_PORTAL_FRAME, COMMAND_BLOCK, BARRIER,

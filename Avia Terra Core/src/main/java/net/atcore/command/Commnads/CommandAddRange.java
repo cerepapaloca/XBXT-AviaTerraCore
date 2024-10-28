@@ -65,7 +65,7 @@ public class CommandAddRange extends BaseTabCommand {
                     item.setItemMeta(meta);
                     if(args.length == 2){
                         if (sender instanceof Player playerSender){
-                            addItemPlayer(item, playerSender, false);
+                            addItemPlayer(item, playerSender, false, false);
                         }else{
                             sendMessage(sender, "no eres un jugador para recibir el rango", TypeMessages.ERROR);
                         }
@@ -75,7 +75,7 @@ public class CommandAddRange extends BaseTabCommand {
                             sendMessage(sender, "El jugador no existe o esta desconectado", TypeMessages.ERROR);
 
                         }else{
-                            GlobalUtils.addItemPlayer(item, player, false);
+                            GlobalUtils.addItemPlayer(item, player, false, false);
                             sendMessage(sender, "El item se le dio exitosamente", TypeMessages.SUCCESS);
                         }
                     }
