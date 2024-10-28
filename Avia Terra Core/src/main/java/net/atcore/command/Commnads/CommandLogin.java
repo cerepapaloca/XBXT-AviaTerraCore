@@ -1,6 +1,6 @@
-package net.atcore.baseCommand.Commnads;
+package net.atcore.command.Commnads;
 
-import net.atcore.baseCommand.BaseCommand;
+import net.atcore.command.BaseCommand;
 import net.atcore.messages.TypeMessages;
 import net.atcore.security.Login.*;
 import net.atcore.utils.GlobalUtils;

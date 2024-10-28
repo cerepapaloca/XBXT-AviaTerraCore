@@ -1,6 +1,6 @@
-package net.atcore.baseCommand.Commnads;
+package net.atcore.command.Commnads;
 
-import net.atcore.baseCommand.BaseTabCommand;
+import net.atcore.command.BaseTabCommand;
 import net.atcore.messages.TypeMessages;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.Bukkit;

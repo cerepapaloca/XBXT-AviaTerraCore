@@ -2,6 +2,7 @@ package net.atcore.listenerManager;
 
 import net.atcore.AviaTerraCore;
 import net.atcore.Config;
+import net.atcore.guns.BaseWeapon;
 import net.atcore.messages.TypeMessages;
 import net.atcore.moderation.Freeze;
 import net.atcore.security.Login.LoginManager;
@@ -12,17 +13,18 @@ import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import static net.atcore.messages.MessagesManager.COLOR_ESPECIAL;
-import static net.atcore.messages.MessagesManager.sendMessage;
+import static net.atcore.messages.MessagesManager.*;
 
 public class PlayerListener implements Listener {
 
@@ -42,9 +44,16 @@ public class PlayerListener implements Listener {
             event.setCancelled(true);
             return;
         }
+
         if (Freeze.isFreeze(player)){
             event.setCancelled(true);
             return;
+        }
+
+        if (event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+            BaseWeapon weapon = GlobalUtils.getWeapon(player);
+            if (weapon == null) return;
+            weapon.shoot(player);
         }
         addRange(player);
     }
@@ -66,12 +75,21 @@ public class PlayerListener implements Listener {
         }
     }
 
+    @EventHandler
+    public void onSwap(PlayerSwapHandItemsEvent event) {
+        Player player = event.getPlayer();
+        BaseWeapon weapon = GlobalUtils.getWeapon(player);
+        if (weapon == null)return;
+        event.setCancelled(true);
+        weapon.reload(player);
+    }
+
     public void addRange(Player player){
         ItemStack item = player.getInventory().getItemInMainHand();
         if (item.getType().equals(Material.NAME_TAG)){
-            String range = (String) GlobalUtils.getPersistenData(item, "range", PersistentDataType.STRING);
-            Long time = (Long) GlobalUtils.getPersistenData(item, "duration", PersistentDataType.LONG);
-            Long date = (Long) GlobalUtils.getPersistenData(item, "dateCreation", PersistentDataType.LONG);
+            String range = (String) GlobalUtils.getPersistenData(item, "rangeName", PersistentDataType.STRING);
+            Long time = (Long) GlobalUtils.getPersistenData(item, "durationRange", PersistentDataType.LONG);
+            Long date = (Long) GlobalUtils.getPersistenData(item, "dateCreationRange", PersistentDataType.LONG);
             if (date == null)return;
             if (range == null)return;
 

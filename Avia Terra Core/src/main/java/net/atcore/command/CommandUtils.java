@@ -1,4 +1,4 @@
-package net.atcore.baseCommand;
+package net.atcore.command;
 
 import lombok.experimental.UtilityClass;
 import net.atcore.utils.GlobalConstantes;

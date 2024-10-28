@@ -1,9 +1,14 @@
-package net.atcore.baseCommand.Commnads;
+package net.atcore.command.Commnads;
 
-import net.atcore.baseCommand.BaseCommand;
+import net.atcore.command.BaseCommand;
+import net.atcore.guns.GunsSection;
 import net.atcore.messages.TypeMessages;
-import net.atcore.security.Login.LoginManager;
+import net.atcore.utils.GlobalUtils;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataType;
 
 import static net.atcore.messages.MessagesManager.sendMessage;
 
@@ -21,9 +26,12 @@ public class CommandPrueba extends BaseCommand {
     @Override
     public void execute(CommandSender sender, String[] args) {
         sendMessage(sender, "Hola Mundo!", TypeMessages.SUCCESS);
-        LoginManager.getDataLogin().forEach(login -> {
-            sendMessage(sender,"name: <|" + login.getSession().getPlayer().getName() + "|> " + "state: <|" + login.getSession().getState().name() + "|>", TypeMessages.INFO);
+        GunsSection.baseWeapons.forEach((list, baseWeapon) -> {
+            GlobalUtils.addItemPlayer(baseWeapon.getItemWeapon(), (Player) sender , true);
         });
+        GunsSection.dataChargers.forEach((list, dataCharger) -> {
+            GlobalUtils.addItemPlayer(dataCharger.getItemCharger(), (Player) sender , true);
+        })
     }
 
 }

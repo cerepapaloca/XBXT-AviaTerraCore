@@ -60,7 +60,7 @@ public class ChatModeration {
         }.runTaskTimer(AviaTerraCore.getInstance(), 0, 20*60*2);
     }
 
-    private static final Set<String> badWords = Set.of(".xyz", ".net", ".org", ".com", ".lat", ".gg", ".tv", "http", "nigga", "nazi");
+    private static final Set<String> badWords = Set.of(".xyz", ".net", ".org", ".com", ".lat", ".gg", ".tv", "http", "nigga", "nazi", "卐");
 
     public static boolean antiBanWord(Player player, String message){
         message = message.toLowerCase();

@@ -1,4 +1,4 @@
-package net.atcore.baseCommand;
+package net.atcore.command;
 
 import lombok.Getter;
 import net.atcore.AviaTerraCore;

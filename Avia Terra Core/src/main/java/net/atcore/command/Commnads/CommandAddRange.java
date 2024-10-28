@@ -1,8 +1,8 @@
-package net.atcore.baseCommand.Commnads;
+package net.atcore.command.Commnads;
 
 import net.atcore.AviaTerraCore;
-import net.atcore.baseCommand.BaseTabCommand;
-import net.atcore.baseCommand.CommandUtils;
+import net.atcore.command.BaseTabCommand;
+import net.atcore.command.CommandUtils;
 import net.atcore.messages.TypeMessages;
 import net.atcore.utils.GlobalConstantes;
 import net.atcore.utils.GlobalUtils;
@@ -52,9 +52,9 @@ public class CommandAddRange extends BaseTabCommand {
                         return;
                     }
                     ItemStack item = new ItemStack(Material.NAME_TAG);
-                    GlobalUtils.addPersistentDataItem(item, "duration", PersistentDataType.LONG, time);
-                    GlobalUtils.addPersistentDataItem(item, "range", PersistentDataType.STRING, args[0]);
-                    GlobalUtils.addPersistentDataItem(item, "dateCreation", PersistentDataType.LONG, System.currentTimeMillis());
+                    GlobalUtils.setPersistentDataItem(item, "durationRange", PersistentDataType.LONG, time);
+                    GlobalUtils.setPersistentDataItem(item, "rangeName", PersistentDataType.STRING, args[0]);
+                    GlobalUtils.setPersistentDataItem(item, "dateCreationRange", PersistentDataType.LONG, System.currentTimeMillis());
                     GlobalUtils.addProtectionAntiDupe(item);
                     ItemMeta meta = item.getItemMeta();
                     assert meta != null;

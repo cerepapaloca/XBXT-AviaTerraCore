@@ -1,7 +1,7 @@
 package net.atcore.utils;
 import net.atcore.AviaTerraCore;
-import net.atcore.baseCommand.BaseCommand;
-import net.atcore.baseCommand.CommandSection;
+import net.atcore.command.BaseCommand;
+import net.atcore.command.CommandSection;
 import net.atcore.data.DataBaseMySql;
 import net.atcore.data.DataSection;
 import net.atcore.messages.TypeMessages;

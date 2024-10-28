@@ -1,7 +1,7 @@
-package net.atcore.baseCommand.Commnads;
+package net.atcore.command.Commnads;
 
-import net.atcore.baseCommand.BaseTabCommand;
-import net.atcore.baseCommand.CommandUtils;
+import net.atcore.command.BaseTabCommand;
+import net.atcore.command.CommandUtils;
 import net.atcore.Config;
 import net.atcore.messages.TypeMessages;
 import net.atcore.Section;

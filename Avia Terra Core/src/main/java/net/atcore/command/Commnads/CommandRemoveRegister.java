@@ -1,6 +1,8 @@
-package net.atcore.baseCommand.Commnads;
+package net.atcore.command.Commnads;
 
-import net.atcore.baseCommand.BaseCommand;
+import net.atcore.AviaTerraCore;
+import net.atcore.command.BaseCommand;
+import net.atcore.data.DataBaseRegister;
 import net.atcore.messages.TypeMessages;
 import net.atcore.security.Login.LoginManager;
 import org.bukkit.Bukkit;
@@ -9,13 +11,13 @@ import org.bukkit.entity.Player;
 
 import static net.atcore.messages.MessagesManager.sendMessage;
 
-public class CommandRemoveSession extends BaseCommand {
+public class CommandRemoveRegister extends BaseCommand {
 
-    public CommandRemoveSession() {
-        super("removeSession",
-                "/removeSession <Jugador>",
+    public CommandRemoveRegister() {
+        super("removeRegister",
+                "/removeRegister <Jugador>",
                 true,
-                "le borras la sesión al jugador"
+                "le borras el registro al jugador"
         );
     }
 
@@ -24,7 +26,8 @@ public class CommandRemoveSession extends BaseCommand {
         if (args.length == 1) {
             Player player = Bukkit.getPlayer(args[0]);
             if (player != null) {
-                LoginManager.getDataLogin(player).setSession(null);
+                Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(), () -> DataBaseRegister.removeRegister(args[0], sender.getName()));
+                LoginManager.removeDataLogin(player.getUniqueId());
                 sendMessage(sender, "va ser borrado el registro del jugador revisa los logs", TypeMessages.INFO);
             }else {
                 sendMessage(sender ,"el jugador no existe o no esta conectado", TypeMessages.ERROR);

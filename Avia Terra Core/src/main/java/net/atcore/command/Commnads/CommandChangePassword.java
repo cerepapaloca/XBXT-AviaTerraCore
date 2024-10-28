@@ -1,7 +1,7 @@
-package net.atcore.baseCommand.Commnads;
+package net.atcore.command.Commnads;
 
 import net.atcore.AviaTerraCore;
-import net.atcore.baseCommand.BaseCommand;
+import net.atcore.command.BaseCommand;
 import net.atcore.data.DataBaseRegister;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.TypeMessages;

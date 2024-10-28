@@ -3,7 +3,8 @@ package net.atcore;
 import com.github.games647.craftapi.resolver.MojangResolver;
 import lombok.Getter;
 import lombok.SneakyThrows;
-import net.atcore.baseCommand.CommandSection;
+import net.atcore.guns.GunsSection;
+import net.atcore.command.CommandSection;
 import net.atcore.data.DataSection;
 import net.atcore.messages.TypeMessages;
 import net.atcore.listenerManager.ListenerManagerSection;
@@ -67,6 +68,7 @@ public final class AviaTerraCore extends JavaPlugin {
         RegisterManager.register(new DataSection());
         RegisterManager.register(new ListenerManagerSection());
         RegisterManager.register(new ServiceSection());
+        RegisterManager.register(new GunsSection());
         //enableModules();
         isStarting = false;
         sendMessageConsole("AviaTerra Iniciado en <|" + (System.currentTimeMillis() - timeCurrent) + "ms", TypeMessages.SUCCESS, false);

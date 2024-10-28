@@ -7,6 +7,7 @@ import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import com.google.common.base.Charsets;
 import lombok.experimental.UtilityClass;
 import net.atcore.AviaTerraCore;
+import net.atcore.guns.*;
 import net.atcore.messages.MessagesManager;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.*;
@@ -168,7 +169,7 @@ public final class GlobalUtils {
      * @param data la variable
      */
 
-    public void addPersistentDataItem(@NotNull ItemStack itemStack, String nameKey, PersistentDataType type, Object data){
+    public void setPersistentDataItem(@NotNull ItemStack itemStack, String nameKey, PersistentDataType type, Object data){
         ItemMeta meta = itemStack.getItemMeta();
         if (meta == null) return;
         NamespacedKey key = new NamespacedKey(AviaTerraCore.getInstance(), nameKey);
@@ -250,5 +251,12 @@ public final class GlobalUtils {
         String g = color.getGreen() > 9 ?  Integer.toString(color.getGreen(), 16) : "0" + Integer.toString(color.getGreen(), 16);
         String B = color.getBlue() > 9 ?  Integer.toString(color.getBlue(), 16) : "0" + Integer.toString(color.getBlue(), 16);
         return "#" + r + g + B;
+    }
+
+    public BaseWeapon getWeapon(@NotNull Player player) {
+        ItemStack item = player.getInventory().getItemInMainHand();
+        String weaponName = (String) GlobalUtils.getPersistenData(item, "weaponName", PersistentDataType.STRING);
+        if (weaponName == null) return null;
+        return GunsSection.baseWeapons.get(WeaponList.valueOf(weaponName));
     }
 }
