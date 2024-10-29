@@ -260,13 +260,16 @@ public final class GlobalUtils {
         return "#" + r + g + B;
     }
 
+    public BaseWeapon getWeapon(@NotNull Player player){
+        return getWeapon(player.getInventory().getItemInMainHand());
+    }
+
     /**
      * Obtienes la clase {@link BaseWeapon} si es un arma si no regresa
      * nulo en caso de que no
      */
 
-    public BaseWeapon getWeapon(@NotNull Player player) {
-        ItemStack item = player.getInventory().getItemInMainHand();
+    public BaseWeapon getWeapon(@NotNull ItemStack item) {
         if (item.getItemMeta() == null) return null;
         String weaponName = (String) GlobalUtils.getPersistenData(item, "weaponName", PersistentDataType.STRING);
         if (weaponName == null) return null;

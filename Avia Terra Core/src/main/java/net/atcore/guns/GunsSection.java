@@ -6,6 +6,10 @@ import net.atcore.guns.ammo.MM45_OTAN_VERDE;
 import net.atcore.guns.chargers.M4_30;
 import net.atcore.guns.chargers.M4_60;
 import net.atcore.guns.weapons.M4;
+import net.atcore.utils.GlobalUtils;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -93,5 +97,29 @@ public class GunsSection implements Section {
             return null;
         }
         return baseWeapons.get(list);
+    }
+
+    public static boolean sacarElCargador(Player player, ItemStack ItemWeapon){
+        if (ItemWeapon != null){
+            BaseWeapon baseWeapon = GlobalUtils.getWeapon(ItemWeapon);
+            if (baseWeapon != null) {
+                String chargerNameInside = (String) GlobalUtils.getPersistenData(ItemWeapon, "chargerTypeInside", PersistentDataType.STRING);
+                if (chargerNameInside != null && !chargerNameInside.equals("null")) {
+                    BaseCharger charger = GunsSection.getCharger(chargerNameInside);
+                    if (charger != null) {
+                        ItemStack itemCarger = new ItemStack(charger.getItemCharger());
+                        String stringAmmo = (String) GlobalUtils.getPersistenData(ItemWeapon, "chargerAmmo", PersistentDataType.STRING);
+                        GlobalUtils.setPersistentDataItem(ItemWeapon, "chargerTypeInside", PersistentDataType.STRING, "null");
+                        GlobalUtils.setPersistentDataItem(ItemWeapon, "chargerAmmo", PersistentDataType.STRING, "");
+                        GlobalUtils.setPersistentDataItem(itemCarger, "chargerAmmo", PersistentDataType.STRING, stringAmmo);
+                        GlobalUtils.addProtectionAntiDupe(itemCarger);
+                        baseWeapon.updateLore(ItemWeapon, itemCarger);
+                        player.setItemOnCursor(itemCarger);
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 }

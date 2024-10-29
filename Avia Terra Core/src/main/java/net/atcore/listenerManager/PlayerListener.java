@@ -14,12 +14,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.player.PlayerCommandPreprocessEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.event.player.PlayerSwapHandItemsEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -113,4 +111,14 @@ public class PlayerListener implements Listener {
         }
     }
 
+    @EventHandler
+    public void onDrop(PlayerDropItemEvent event) {
+        Player player = event.getPlayer();
+        if (BaseWeapon.inReload.containsKey(player.getUniqueId())){
+            BaseWeapon.inReload.remove(player.getUniqueId()).cancel();
+            player.sendTitle("", ChatColor.RED + "Recarga Cancelada", 0, 20, 40);
+            player.removePotionEffect(PotionEffectType.SLOWNESS);
+            event.setCancelled(true);
+        }
+    }
 }

@@ -61,9 +61,8 @@ public abstract class BaseCharger {
         if (meta == null) return "?";
         String stringAmmo = (String) GlobalUtils.getPersistenData(item, "chargerAmmo", PersistentDataType.STRING);
         List<BaseAmmo> AmmoBaseList = new ArrayList<>();
-
         if (stringAmmo != null) {
-            for (String nameAmmo : GunsSection.stringToList(stringAmmo)) AmmoBaseList.add(GunsSection.baseAmmo.get(ListAmmo.valueOf(nameAmmo)));
+            for (String nameAmmo : GunsSection.stringToList(stringAmmo)) AmmoBaseList.add(GunsSection.getAmmon(nameAmmo));
             int amountAmmo = AmmoBaseList.size();
             String loreCargador = String.format("""
                     %s
