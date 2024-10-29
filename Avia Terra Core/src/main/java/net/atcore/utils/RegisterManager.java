@@ -4,6 +4,7 @@ import net.atcore.command.BaseCommand;
 import net.atcore.command.CommandSection;
 import net.atcore.data.DataBaseMySql;
 import net.atcore.data.DataSection;
+import net.atcore.guns.BaseAmmo;
 import net.atcore.guns.BaseWeapon;
 import net.atcore.guns.BaseCharger;
 import net.atcore.guns.GunsSection;
@@ -61,6 +62,10 @@ public class RegisterManager {
 
     public static void register(@NotNull BaseWeapon baseWeapon) {
         GunsSection.baseWeapons.put(baseWeapon.getWeaponType(), baseWeapon);
+    }
+
+    public static void register(@NotNull BaseAmmo baseAmmo) {
+        GunsSection.baseAmmo.put(baseAmmo.getList(), baseAmmo);
     }
 
     public static void register(@NotNull DataBaseMySql database) {

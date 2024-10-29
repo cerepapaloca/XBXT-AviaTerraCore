@@ -14,11 +14,14 @@ import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.ListPersistentDataTypeProvider;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -189,6 +192,14 @@ public final class GlobalUtils {
         }
     }
 
+    public static void removePersistenData(@NotNull ItemStack item, String nameKey){
+        ItemMeta meta = item.getItemMeta();
+        assert meta != null;
+        PersistentDataContainer dataContainer = meta.getPersistentDataContainer();
+        NamespacedKey key = new NamespacedKey(AviaTerraCore.getInstance(), nameKey);
+        meta.getPersistentDataContainer().remove(key);
+    }
+
     public static void addItemPlayer(@NotNull ItemStack item, @NotNull Player player, boolean silent, boolean protection){
         if (!silent) player.playSound(player, Sound.ENTITY_ITEM_PICKUP, 1,1);
         if (protection) GlobalUtils.addProtectionAntiDupe(item);
@@ -248,6 +259,47 @@ public final class GlobalUtils {
         ItemStack item = player.getInventory().getItemInMainHand();
         String weaponName = (String) GlobalUtils.getPersistenData(item, "weaponName", PersistentDataType.STRING);
         if (weaponName == null) return null;
-        return GunsSection.baseWeapons.get(WeaponList.valueOf(weaponName));
+        return GunsSection.baseWeapons.get(ListWeapon.valueOf(weaponName));
+    }
+
+    public static @NotNull ArrayList<String> StringToLoreString(@NotNull String texto, boolean space) {
+        return StringToLoreString(texto, 40, space, '7');
+    }
+
+    public static @NotNull ArrayList<String> StringToLoreString(@NotNull String texto, int longitud, boolean space) {
+        return StringToLoreString(texto, longitud, space, '7');
+    }
+
+    public static @NotNull ArrayList<String> StringToLoreString(@NotNull String texto, boolean space, char color) {
+        return StringToLoreString(texto, 40, space, color);
+    }
+
+    public static @NotNull ArrayList<String> StringToLoreString(@NotNull String texto, int longitud, boolean space, char color) {
+        texto = ChatColor.translateAlternateColorCodes('&', texto);
+        ArrayList<String> lineas = new ArrayList<>();
+        if (space) lineas.add(" ");
+
+        String[] partes = texto.split("\n"); // Dividimos el texto en líneas si contiene \n
+
+        for (String parte : partes) {
+            int inicio = 0;
+            while (inicio < parte.length()) {
+                int fin = Math.min(inicio + longitud, parte.length());
+
+                // Si el substring no termina en espacio, buscar el último espacio dentro del rango
+                if (fin < parte.length() && parte.charAt(fin) != ' ') {
+                    int ultimoEspacio = parte.lastIndexOf(' ', fin);
+                    if (ultimoEspacio > inicio) {
+                        fin = ultimoEspacio; // Ajusta el fin al último espacio encontrado
+                    }
+                }
+
+                lineas.add(ChatColor.translateAlternateColorCodes('&', "&" + color + parte.substring(inicio, fin).trim()));
+                inicio = fin + 1; // Salta el espacio
+            }
+        }
+
+        if (space && !lineas.isEmpty()) lineas.add(" ");
+        return lineas;
     }
 }

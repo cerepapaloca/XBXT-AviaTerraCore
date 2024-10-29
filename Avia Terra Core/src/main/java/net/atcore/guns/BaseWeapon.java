@@ -14,82 +14,93 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Getter
 @Setter
 public abstract class BaseWeapon {
 
-    public BaseWeapon(WeaponList type, List<ChargerList> chargerLists, float maxDistance, String displayName) {
+    protected BaseWeapon(ListWeapon type, List<ListCharger> listChargers, float maxDistance, String displayName) {
         this.MAX_DISTANCE = maxDistance;
-        this.CHARGERS_TYPE = chargerLists;
+        this.CHARGERS_TYPE = listChargers;
         this.weaponType = type;
         itemWeapon = new ItemStack(Material.NAME_TAG);
-        GlobalUtils.setPersistentDataItem(itemWeapon, "weaponAmmo", PersistentDataType.INTEGER, 0);
+        //GlobalUtils.setPersistentDataItem(itemWeapon, "chargerAmmo", PersistentDataType.STRING, "");
         GlobalUtils.setPersistentDataItem(itemWeapon, "weaponName", PersistentDataType.STRING, type.name());
         GlobalUtils.setPersistentDataItem(itemWeapon, "chargerTypeNow", PersistentDataType.STRING, "null");
         ItemMeta meta = itemWeapon.getItemMeta();
         if (meta == null) return;
         meta.setDisplayName(displayName);
         itemWeapon.setItemMeta(meta);
+        updateLore(null, null);
     }
 
-    public BaseWeapon(WeaponList type, ChargerList chargerTypes, float maxDistance, String displayName) {
+    protected BaseWeapon(ListWeapon type, ListCharger chargerTypes, float maxDistance, String displayName) {
         this(type, List.of(chargerTypes), maxDistance, displayName);
     }
 
     private final ItemStack itemWeapon;
-    private final List<ChargerList> CHARGERS_TYPE;
+    private final List<ListCharger> CHARGERS_TYPE;
     private final float MAX_DISTANCE;
-    private final WeaponList weaponType;
+    private final ListWeapon weaponType;
 
     public void shoot(Player player) {
         ItemStack itemWeapon = player.getInventory().getItemInMainHand();
         String chargerName = (String) GlobalUtils.getPersistenData(itemWeapon, "chargerTypeNow", PersistentDataType.STRING);
-        if (chargerName == null) return;
-        ChargerList chargerList = ChargerList.valueOf(chargerName);
-        if (!CHARGERS_TYPE.contains(chargerList))return;
-        BaseCharger baseCharger = GunsSection.dataChargers.get(chargerList);
+        if (chargerName == null || Objects.equals(chargerName, "null")) return;//en caso que no tenga un cargador
+        ListCharger listCharger = ListCharger.valueOf(chargerName);
+        if (!CHARGERS_TYPE.contains(listCharger))return;//el cargador es compatible (técnicamente siempre tiene que sé compatible)
+        BaseCharger baseCharger = GunsSection.dataChargers.get(listCharger);
+        String stringAmmo = (String) GlobalUtils.getPersistenData(itemWeapon, "chargerAmmo", PersistentDataType.STRING);
+        if (stringAmmo != null) {
+            List<String> listAmmo = GunsSection.stringToList(stringAmmo);
 
-        Integer ammo = (Integer) GlobalUtils.getPersistenData(itemWeapon, "weaponAmmo", PersistentDataType.INTEGER);
-        if (ammo != null) {
-
-            if (ammo <= 0){
-                GlobalUtils.setPersistentDataItem(itemWeapon, "chargerTypeNow", PersistentDataType.STRING, "null");
+            Bukkit.getLogger().warning(listAmmo.getFirst());/////////////////////////////
+            if (listAmmo.getFirst().isBlank()){
+                updateLore(player, itemWeapon);
                 return;
             }
-
-            ammo--;
-            Bukkit.getLogger().warning("ammo: " + ammo);
-            GlobalUtils.setPersistentDataItem(itemWeapon, "weaponAmmo", PersistentDataType.INTEGER, ammo);
+            BaseAmmo ammon = GunsSection.baseAmmo.get(ListAmmo.valueOf(listAmmo.getFirst()));
+            listAmmo.removeFirst();
+            updateLore(player, itemWeapon);
+            if (listAmmo.isEmpty()) {
+                Bukkit.getLogger().warning("Borrado");
+                GlobalUtils.setPersistentDataItem(itemWeapon, "chargerAmmo", PersistentDataType.STRING, "");
+                //GlobalUtils.setPersistentDataItem(itemWeapon, "chargerTypeNow", PersistentDataType.STRING, "null");
+            }else{
+                GlobalUtils.setPersistentDataItem(itemWeapon, "chargerAmmo", PersistentDataType.STRING, GunsSection.listToString(listAmmo));//guarda la munición actual
+            }
             Vector direction = player.getLocation().getDirection();
             Location location = player.getEyeLocation();
 
-            RayTraceResult result = player.getWorld().rayTraceEntities(
+            RayTraceResult result = player.getWorld().rayTraceEntities(//se crea un rayTrace
                     location,
                     direction,
                     MAX_DISTANCE,
-                    0.5,
-                    entity -> entity != player
+                    0.5,//el margen para detectar a las entidades
+                    entity -> entity != player//se descarta el protio jugador
             );
             if (result != null) {
                 Entity entity = result.getHitEntity();
                 if (entity != null) {
                     if (!(entity instanceof Player)) {
                         double distance = player.getEyeLocation().distance(entity.getLocation());
-                        if (entity instanceof LivingEntity livingEntity) {
-                            livingEntity.damage(baseCharger.getDamage());
-                            DataShoot dataShoot = new DataShoot(livingEntity, player, this, baseCharger, distance);
+                        if (entity instanceof LivingEntity livingEntity) {//se tiene que hacer instance por qué no la variable entity no sirve en esta caso
+                            livingEntity.damage(ammon.getDamage());//se aplica el daño
+                            DataShoot dataShoot = new DataShoot(livingEntity, player, this, baseCharger, distance);//se crea los datos del disparo
                             onShoot(dataShoot);
                             baseCharger.onShoot(dataShoot);
+                            ammon.onShoot(dataShoot);
                         }
-                        drawParticleLine(player.getEyeLocation(), getPlayerLookLocation(player, distance, baseCharger.getDensityTrace()),
-                                baseCharger.getColor(), true);
+                        drawParticleLine(player.getEyeLocation(), getPlayerLookLocation(player, distance, ammon.getDamage()),
+                                ammon.getColor(), true, ammon.getDensityTrace());
                     }
                 }
-            }else{
-                drawParticleLine(player.getEyeLocation(), getPlayerLookLocation(player, MAX_DISTANCE, baseCharger.getDensityTrace()),
-                        baseCharger.getColor(), false);
+            }else{//en caso qué no halla impactado con algo
+                drawParticleLine(player.getEyeLocation(), getPlayerLookLocation(player, MAX_DISTANCE, ammon.getDensityTrace()),
+                        ammon.getColor(), false, ammon.getDensityTrace());
             }
         }
     }
@@ -97,34 +108,77 @@ public abstract class BaseWeapon {
     public void reload(Player player) {
         onReloading(player);
         ItemStack itemWeapon = player.getInventory().getItemInMainHand();
-        Integer ammo = (Integer) GlobalUtils.getPersistenData(itemWeapon, "weaponAmmo", PersistentDataType.INTEGER);
-        if (ammo == null)return;
+        String ammo1 = (String) GlobalUtils.getPersistenData(itemWeapon, "chargerAmmo", PersistentDataType.STRING);
+        List<String> ammoWeapon;
+        if (ammo1 == null || ammo1.isBlank()) {
+            ammoWeapon = new ArrayList<>();
+        }else{
+            ammoWeapon = GunsSection.stringToList(ammo1);
+        }
 
-        for (ItemStack itemStack : player.getInventory().getStorageContents()) {//hay que remplasar el itemWeapon por qué se obtiene una copia pero no el itemWeapon real
-            if (itemStack == null) continue;
-            String chargerName = (String) GlobalUtils.getPersistenData(itemStack, "chargerType", PersistentDataType.STRING);
+        for (ItemStack itemCharger : player.getInventory().getStorageContents()) {
+            //realiza todas las comprobaciones
+            if (itemCharger == null) continue;
+
+            String chargerName = (String) GlobalUtils.getPersistenData(itemCharger, "chargerType", PersistentDataType.STRING);
             if (chargerName == null) continue;
-            ChargerList chargerType = ChargerList.valueOf(chargerName);
-            if (!CHARGERS_TYPE.contains(chargerType))continue;
-            Integer ammoCharger = (Integer) GlobalUtils.getPersistenData(itemStack, "chargerAmmo", PersistentDataType.INTEGER);
-            if (ammoCharger == null) continue;
+            String chargerNameNow = (String) GlobalUtils.getPersistenData(itemWeapon, "chargerTypeNow", PersistentDataType.STRING);
+            if (chargerNameNow == null) continue;
+            ListCharger chargerType = ListCharger.valueOf(chargerName);
+            if (!CHARGERS_TYPE.contains(chargerType))continue;//es un cargador compatible?
+            String ammo2 = (String) GlobalUtils.getPersistenData(itemCharger, "chargerAmmo", PersistentDataType.STRING);
+            if (ammo2 == null) continue;
             BaseCharger baseCharger = GunsSection.dataChargers.get(chargerType);
-            int delta = baseCharger.getAmmoMax() - ammo;
-            int result = ammoCharger - delta;
-            if (result > 0){
-                GlobalUtils.setPersistentDataItem(itemStack, "chargerAmmo", PersistentDataType.INTEGER, result);
-                GlobalUtils.setPersistentDataItem(itemWeapon, "weaponAmmo", PersistentDataType.INTEGER, delta + ammo);
-            }else{
-                GlobalUtils.setPersistentDataItem(itemWeapon, "weaponAmmo", PersistentDataType.INTEGER, delta + ammo + result);
-                itemStack.setAmount(0);
-            }
-            GlobalUtils.setPersistentDataItem(itemWeapon, "chargerTypeNow", PersistentDataType.STRING,  chargerType.toString());
+            List<String> ammoCharger = GunsSection.stringToList(ammo2);
+            Bukkit.getLogger().warning(ammoWeapon + " Arma");
+            Bukkit.getLogger().warning(ammoCharger + " Cargador");
 
+            int delta = baseCharger.getAmmoMax() - ammoWeapon.size();//la diferencia de munición entre cantidad de munición actual y la maxima
+            int result = Math.min(ammoCharger.size(), delta);
+            for (int i = 0; i < result; i++) {
+                ammoWeapon.add(ammoCharger.removeFirst());
+            }
+            if (ammoCharger.isEmpty()) {
+                itemCharger.setAmount(0);
+            }else{
+                GlobalUtils.setPersistentDataItem(itemCharger, "chargerAmmo", PersistentDataType.STRING, GunsSection.listToString(ammoCharger));
+            }
+            GlobalUtils.setPersistentDataItem(itemWeapon, "chargerAmmo", PersistentDataType.STRING, GunsSection.listToString(ammoWeapon));
+            GlobalUtils.setPersistentDataItem(itemWeapon, "chargerTypeNow", PersistentDataType.STRING,  chargerNameNow);
+            updateLore(player, itemCharger);
+            updateLore(player, itemWeapon);
             break;
         }
     }
 
-    private void drawParticleLine(Location start, Location end, Color color, boolean impacted) {
+    private void updateLore(Player player, ItemStack charger){
+        String s;
+        ItemMeta itemMeta;
+        ItemStack itemStack;
+        if (player != null){
+            itemStack = player.getInventory().getItemInMainHand();
+        }else {
+            itemStack = itemWeapon;
+        }
+        itemMeta = itemStack.getItemMeta();
+        if (itemMeta == null) return;
+        s = "ARMA\n" +
+                "Rango máximo: " + Math.round(MAX_DISTANCE) + "\n" +
+                "Candencia: ? \n \n";
+        String chargerName = (String) GlobalUtils.getPersistenData(itemStack, "chargerTypeNow", PersistentDataType.STRING);
+        if (chargerName == null || Objects.equals(chargerName, "null") || charger == null){
+            itemMeta.setLore(GlobalUtils.StringToLoreString(s, true));
+            itemStack.setItemMeta(itemMeta);
+            return;
+        }
+        ListCharger listCharger = ListCharger.valueOf(chargerName);
+        if (!CHARGERS_TYPE.contains(listCharger))return;
+        s = s + GunsSection.dataChargers.get(listCharger).getProperties(charger);
+        itemMeta.setLore(GlobalUtils.StringToLoreString(s, true));
+        itemStack.setItemMeta(itemMeta);
+    }
+
+    private void drawParticleLine(Location start, Location end, Color color, boolean impacted, double density) {
         World world = start.getWorld();
         if (world == null || !world.equals(end.getWorld())) {
             return;
@@ -132,11 +186,10 @@ public abstract class BaseWeapon {
 
         Vector direction = end.toVector().subtract(start.toVector()).normalize();
         double distance = start.distance(end);
-        double particleSpacing = 0.2;
 
         Particle.DustOptions dustOptions = new Particle.DustOptions(color, 1);
         Location point = start;
-        for (double d = 0; d < distance; d += particleSpacing) {
+        for (double d = 0; d < distance; d += density) {
             point = start.clone().add(direction.clone().multiply(d));
             world.spawnParticle(Particle.DUST, point, 1, dustOptions);
         }

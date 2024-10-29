@@ -1,5 +1,5 @@
 package net.atcore.guns;
 
-public enum WeaponList {
+public enum ListWeapon {
     M4
 }

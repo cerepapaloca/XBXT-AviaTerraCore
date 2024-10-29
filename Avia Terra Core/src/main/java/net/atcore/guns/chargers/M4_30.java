@@ -1,18 +1,18 @@
 package net.atcore.guns.chargers;
 
-import net.atcore.guns.AmmoCaliber;
-import net.atcore.guns.ChargerList;
+import net.atcore.guns.ListAmmo;
+import net.atcore.guns.ListCharger;
 import net.atcore.guns.BaseCharger;
 import net.atcore.guns.DataShoot;
+
+import java.util.List;
 
 public class M4_30 extends BaseCharger {
 
     public M4_30() {
-        super(ChargerList.M4_30,
-                AmmoCaliber.MM45_OTAN,
+        super(ListCharger.M4_30,
+                List.of(ListAmmo.MM45_OTAN, ListAmmo.MM45_OTAN, ListAmmo.MM45_OTAN_VERDE),
                 30,
-                3,
-                "xxx",
                 "M4 30"
         );
     }
