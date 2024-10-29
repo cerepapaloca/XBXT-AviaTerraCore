@@ -14,9 +14,9 @@ import static net.atcore.messages.MessagesManager.COLOR_ESPECIAL;
 import static net.atcore.messages.MessagesManager.sendMessage;
 import static net.atcore.security.Login.LoginManager.startPlaySessionCracked;
 
-public class CommandRegister extends BaseCommand {
+public class RegisterCommand extends BaseCommand {
 
-    public CommandRegister() {
+    public RegisterCommand() {
         super("register",
                 "/register <contraseña> <contraseña>",
                 "*",

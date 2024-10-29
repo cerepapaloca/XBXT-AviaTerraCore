@@ -57,7 +57,7 @@ public class RegisterManager {
     }
 
     public static void register(@NotNull BaseCharger baseCharger) {
-        GunsSection.dataChargers.put(baseCharger.getChargerType(), baseCharger);
+        GunsSection.baseChargers.put(baseCharger.getChargerType(), baseCharger);
     }
 
     public static void register(@NotNull BaseWeapon baseWeapon) {

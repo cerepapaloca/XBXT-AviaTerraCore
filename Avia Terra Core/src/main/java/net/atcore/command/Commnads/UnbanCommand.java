@@ -13,9 +13,9 @@ import java.util.List;
 
 import static net.atcore.messages.MessagesManager.sendMessage;
 
-public class CommandUnban extends BaseTabCommand {
+public class UnbanCommand extends BaseTabCommand {
 
-    public CommandUnban() {
+    public UnbanCommand() {
         super("unban",
                 "/unban <Jugador> <Contexto>",
                 true,

@@ -16,8 +16,8 @@ import java.util.UUID;
 
 import static net.atcore.messages.MessagesManager.sendMessage;
 
-public class CommandFreeze extends BaseTabCommand {
-    public CommandFreeze() {
+public class FreezeCommand extends BaseTabCommand {
+    public FreezeCommand() {
         super("freeze",
                 "/freeze <player> <on | off>",
                 true,

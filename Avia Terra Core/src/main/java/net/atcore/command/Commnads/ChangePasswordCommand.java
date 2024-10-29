@@ -13,9 +13,9 @@ import org.bukkit.entity.Player;
 import static net.atcore.messages.MessagesManager.sendMessage;
 import static net.atcore.messages.MessagesManager.sendMessageConsole;
 
-public class CommandChangePassword extends BaseCommand {
+public class ChangePasswordCommand extends BaseCommand {
 
-    public CommandChangePassword(){
+    public ChangePasswordCommand(){
         super("changePassword",
                 "/changePassword <Tu Contraseña> <Nueva Contraseña>",
                 "*",

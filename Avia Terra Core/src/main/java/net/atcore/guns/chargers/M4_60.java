@@ -11,8 +11,8 @@ public class M4_60 extends BaseCharger {
         super(ListCharger.M4_60,
                 ListAmmo.MM45_OTAN_VERDE,
                 60,
-                "M4 60T"
-        );
+                "M4 60T",
+                60);
     }
 
     @Override

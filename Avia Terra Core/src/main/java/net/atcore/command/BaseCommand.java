@@ -35,6 +35,6 @@ public abstract class BaseCommand {
         this.isHide = isHide;
     }
 
-    public abstract void execute(CommandSender sender, String[] args);
+    public abstract void execute(CommandSender sender, String[] args) throws Exception;
 
 }

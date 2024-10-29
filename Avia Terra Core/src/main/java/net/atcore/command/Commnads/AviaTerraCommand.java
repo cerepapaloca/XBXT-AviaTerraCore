@@ -16,9 +16,9 @@ import java.util.*;
 
 import static net.atcore.messages.MessagesManager.sendMessage;
 
-public class CommandAviaTerra extends BaseTabCommand {
+public class AviaTerraCommand extends BaseTabCommand {
 
-    public CommandAviaTerra() {
+    public AviaTerraCommand() {
         super("AviaTerra",
                 "/AviaTerra",
                 true,

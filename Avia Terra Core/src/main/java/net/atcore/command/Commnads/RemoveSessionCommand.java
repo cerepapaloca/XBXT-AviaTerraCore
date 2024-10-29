@@ -9,9 +9,9 @@ import org.bukkit.entity.Player;
 
 import static net.atcore.messages.MessagesManager.sendMessage;
 
-public class CommandRemoveSession extends BaseCommand {
+public class RemoveSessionCommand extends BaseCommand {
 
-    public CommandRemoveSession() {
+    public RemoveSessionCommand() {
         super("removeSession",
                 "/removeSession <Jugador>",
                 true,

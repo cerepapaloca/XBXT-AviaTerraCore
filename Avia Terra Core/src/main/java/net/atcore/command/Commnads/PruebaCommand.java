@@ -9,9 +9,9 @@ import org.bukkit.entity.Player;
 
 import static net.atcore.messages.MessagesManager.sendMessage;
 
-public class CommandPrueba extends BaseCommand {
+public class PruebaCommand extends BaseCommand {
 
-    public CommandPrueba() {
+    public PruebaCommand() {
         super("prueba",//Aquí va el comando que va ejecutar
                 "/prueba",//esto es una información extra de como tiene que ejecutar un comando
                 "aviaterra.command.prueba", //el permiso o los permisos suele comenzar con el nombre del plugin luego categoría y por último el comando
@@ -26,7 +26,7 @@ public class CommandPrueba extends BaseCommand {
         GunsSection.baseWeapons.forEach((list, baseWeapon) -> {
             GlobalUtils.addItemPlayer(baseWeapon.getItemWeapon(), (Player) sender , true, true);
         });
-        GunsSection.dataChargers.forEach((list, dataCharger) -> {
+        GunsSection.baseChargers.forEach((list, dataCharger) -> {
             GlobalUtils.addItemPlayer(dataCharger.getItemCharger(), (Player) sender , true, true);
             GlobalUtils.addItemPlayer(dataCharger.getItemCharger(), (Player) sender , true, true);
         });

@@ -11,9 +11,9 @@ import java.util.List;
 
 import static net.atcore.messages.MessagesManager.sendMessage;
 
-public class CommandKick extends BaseTabCommand {
+public class KickCommand extends BaseTabCommand {
 
-    public CommandKick() {
+    public KickCommand() {
         super("kick",
                 "/kick <player> <razón>",
                 true,

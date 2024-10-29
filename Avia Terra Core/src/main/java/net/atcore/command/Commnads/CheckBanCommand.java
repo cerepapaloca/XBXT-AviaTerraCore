@@ -17,9 +17,9 @@ import java.util.List;
 
 import static net.atcore.messages.MessagesManager.sendMessage;
 
-public class CommandCheckBan extends BaseTabCommand {
+public class CheckBanCommand extends BaseTabCommand {
 
-    public CommandCheckBan() {
+    public CheckBanCommand() {
         super("checkban",
                 "/CheckBan <jugador> <! | ?> <Contexto>",
                 true,

@@ -13,9 +13,9 @@ import java.util.List;
 
 import static net.atcore.messages.MessagesManager.*;
 
-public class CommandBan extends BaseTabCommand {
+public class BanCommand extends BaseTabCommand {
 
-    public CommandBan() {
+    public BanCommand() {
         super("ban",
                 "/ban <jugador> <Contexto> <Tiempo> <Ranzón...",
                 true,

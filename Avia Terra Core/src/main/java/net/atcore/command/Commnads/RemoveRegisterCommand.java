@@ -11,9 +11,9 @@ import org.bukkit.entity.Player;
 
 import static net.atcore.messages.MessagesManager.sendMessage;
 
-public class CommandRemoveRegister extends BaseCommand {
+public class RemoveRegisterCommand extends BaseCommand {
 
-    public CommandRemoveRegister() {
+    public RemoveRegisterCommand() {
         super("removeRegister",
                 "/removeRegister <Jugador>",
                 true,

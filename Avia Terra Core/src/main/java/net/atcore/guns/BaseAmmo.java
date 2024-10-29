@@ -3,7 +3,6 @@ package net.atcore.guns;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Color;
-import org.bukkit.entity.Player;
 
 @Getter
 @Setter

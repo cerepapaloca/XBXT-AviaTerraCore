@@ -23,9 +23,9 @@ import java.util.List;
 import static net.atcore.messages.MessagesManager.sendMessage;
 import static net.atcore.utils.GlobalUtils.addItemPlayer;
 
-public class CommandAddRange extends BaseTabCommand {
+public class AddRangeCommand extends BaseTabCommand {
 
-    public CommandAddRange() {
+    public AddRangeCommand() {
         super("addRange",
                 "/addRange <Rango> <Tiempo> <Jugador>",
                 true,

@@ -3,26 +3,24 @@ package net.atcore.guns;
 import lombok.Getter;
 import lombok.Setter;
 import net.atcore.utils.GlobalUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Getter
 @Setter
 public abstract class BaseCharger {
 
-    public BaseCharger(ListCharger type, ListAmmo caliber, int ammoMax, String displayName){
-        this(type, Collections.nCopies(ammoMax, caliber), ammoMax, displayName);
+    public BaseCharger(ListCharger type, ListAmmo caliber, int ammoMax, String displayName, int reloadTime){
+        this(type, Collections.nCopies(ammoMax, caliber), ammoMax, displayName, reloadTime);
 
     }
 
-    public BaseCharger(ListCharger type, List<ListAmmo> caliber, int ammoMax, String displayName) {
+    public BaseCharger(ListCharger type, List<ListAmmo> caliber, int ammoMax, String displayName, int reloadTime) {
         List<ListAmmo> list = new ArrayList<>();
         for (int i = 0; i < ammoMax; i++) {
             list.add(caliber.get(i % caliber.size()));
@@ -35,6 +33,7 @@ public abstract class BaseCharger {
         for (ListAmmo ammo : list) {
             listAmmoName.add(ammo.name());
         }
+        this.reloadTime = reloadTime;
         this.chargerType = type;
         this.ammonList = listAmmo;
         this.ammoMax = ammoMax;
@@ -55,34 +54,63 @@ public abstract class BaseCharger {
     private final ItemStack itemCharger;
     private final List<BaseAmmo> ammonList;
     private final int ammoMax;
+    private final int reloadTime;//en TICK
 
     public String getProperties(ItemStack item, boolean setLore){
         ItemMeta meta = item.getItemMeta();
         if (meta == null) return "?";
         String stringAmmo = (String) GlobalUtils.getPersistenData(item, "chargerAmmo", PersistentDataType.STRING);
-        List<String> list;
+        List<BaseAmmo> AmmoBaseList = new ArrayList<>();
+
         if (stringAmmo != null) {
-            list = GunsSection.stringToList(stringAmmo);
-            int amountAmmo = list.size();
-            if (list.getFirst().isBlank()) amountAmmo = 0;
-            String s = "CARGADOR\n" +
-                    "Nombre: " + displayName + "\n" +
-                    "Munición: " + amountAmmo + "\n" +
-                    "Munición maxima: " + ammoMax + "\n" +
-                    "Velocidad de carga: ? \n \n" +
-                    (amountAmmo != 0 ?
-                            "MUNICIÓN \n" +
-                                    "Calibre: " + ammonList.getFirst().getNameAmmo() + "\n" +
-                                    "Daño: " + ammonList.getFirst().getDamage() +
-                                    "Trazadora: " + (ammonList.getFirst().isTrace() ? "si": "no") + "\n" +
-                                    (ammonList.getFirst().isTrace() ?
-                                            "Color: " + GlobalUtils.colorToStringHex(ammonList.getFirst().getColor()) + "\n" +
-                                                    "Densidad del trazo: " + ammonList.getFirst().getDensityTrace(): "") : "SIN BALAS");
+            for (String nameAmmo : GunsSection.stringToList(stringAmmo)) AmmoBaseList.add(GunsSection.baseAmmo.get(ListAmmo.valueOf(nameAmmo)));
+            int amountAmmo = AmmoBaseList.size();
+            String loreCargador = String.format("""
+                    %s
+                    CARGADOR
+                    Nombre %s
+                    Municion %s
+                    Munición maxima %s
+                    Velocidad de recarga %ss
+                    """,
+                    setLore ? "" : " \n",
+                    displayName,
+                    amountAmmo,
+                    ammoMax,
+                    (reloadTime/20)
+            );
+            StringBuilder loreAmmo = new StringBuilder();
+            if (!AmmoBaseList.isEmpty()) {
+                Set<BaseAmmo> uniqueAmmo = new HashSet<>(AmmoBaseList);
+                for(BaseAmmo ammo : uniqueAmmo){
+                    loreAmmo.append(String.format("""
+                                     \n
+                                    MUNICIÓN
+                                    Calibre: %s
+                                    Daño: %s
+                                    Trazador: %s
+                                    """,
+                            ammo.getNameAmmo(),
+                            ammo.getDamage(),
+                            ammo.isTrace() ? "si" : "no"
+                    ));
+                    if (!ammo.isTrace()) continue;
+                    loreAmmo.append(String.format("""
+                                    Color: %s
+                                    Densidad del trazo: %s
+                                    """,
+                            GlobalUtils.colorToStringHex(ammo.getColor()),
+                            ammo.getDensityTrace()
+                    ));
+                }
+            }
+
+            String finalLore = loreCargador + (amountAmmo > 0 ? loreAmmo.toString() : "");
             if (setLore){
-                meta.setLore(GlobalUtils.StringToLoreString(s, true));
+                meta.setLore(GlobalUtils.StringToLoreString(finalLore, true));
                 item.setItemMeta(meta);
             }
-            return s;
+            return finalLore;
         }
         return "?";
     }

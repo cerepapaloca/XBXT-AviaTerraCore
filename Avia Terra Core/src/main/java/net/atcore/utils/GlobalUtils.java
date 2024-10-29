@@ -14,14 +14,12 @@ import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.ListPersistentDataTypeProvider;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -248,12 +246,24 @@ public final class GlobalUtils {
         return UUID.nameUUIDFromBytes(("OfflinePlayer:" + username).getBytes(Charsets.UTF_8));
     }
 
+    /**
+     * De la variable {@code Color} de bukkit lo convierte en el
+     * clasico formato hex, así {@code #FFEEDD}
+     * @param color
+     * @return
+     */
+
     public String colorToStringHex(Color color) {
         String r = color.getRed() > 9 ?  Integer.toString(color.getRed(), 16) : "0" + Integer.toString(color.getRed(), 16);
         String g = color.getGreen() > 9 ?  Integer.toString(color.getGreen(), 16) : "0" + Integer.toString(color.getGreen(), 16);
         String B = color.getBlue() > 9 ?  Integer.toString(color.getBlue(), 16) : "0" + Integer.toString(color.getBlue(), 16);
         return "#" + r + g + B;
     }
+
+    /**
+     * Obtienes la clase {@link BaseWeapon} si es un arma si no regresa
+     * nulo en caso de que no
+     */
 
     public BaseWeapon getWeapon(@NotNull Player player) {
         ItemStack item = player.getInventory().getItemInMainHand();

@@ -12,9 +12,9 @@ import static net.atcore.messages.MessagesManager.COLOR_ESPECIAL;
 import static net.atcore.messages.MessagesManager.sendMessage;
 import static net.atcore.security.Login.LoginManager.startPlaySessionCracked;
 
-public class CommandLogin extends BaseCommand {
+public class LoginCommand extends BaseCommand {
 
-    public CommandLogin() {
+    public LoginCommand() {
         super("login",
                 "/login <contraseña>",
                 false,

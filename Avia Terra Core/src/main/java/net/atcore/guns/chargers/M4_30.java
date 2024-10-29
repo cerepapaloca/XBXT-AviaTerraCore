@@ -13,8 +13,8 @@ public class M4_30 extends BaseCharger {
         super(ListCharger.M4_30,
                 List.of(ListAmmo.MM45_OTAN, ListAmmo.MM45_OTAN, ListAmmo.MM45_OTAN_VERDE),
                 30,
-                "M4 30"
-        );
+                "M4 30",
+                40);
     }
 
     @Override
