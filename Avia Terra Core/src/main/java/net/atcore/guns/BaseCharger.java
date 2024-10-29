@@ -47,7 +47,7 @@ public abstract class BaseCharger {
         GlobalUtils.setPersistentDataItem(itemCharger, "chargerAmmo", PersistentDataType.STRING, GunsSection.listToString(listAmmoName));
         GlobalUtils.setPersistentDataItem(itemCharger, "chargerType", PersistentDataType.STRING, type.name());
 
-        getProperties(itemCharger);
+        getProperties(itemCharger, true);
     }
 
     private final String displayName;
@@ -56,29 +56,35 @@ public abstract class BaseCharger {
     private final List<BaseAmmo> ammonList;
     private final int ammoMax;
 
-    public String getProperties(ItemStack item){
+    public String getProperties(ItemStack item, boolean setLore){
         ItemMeta meta = item.getItemMeta();
         if (meta == null) return "?";
-        List<String> list = GunsSection.stringToList((String) GlobalUtils.getPersistenData(item, "chargerAmmo", PersistentDataType.STRING));
-        int amountAmmo = list.size();
-        if (list.getFirst().isBlank()) amountAmmo = 0;
-        String s = "CARGADOR\n" +
-                "Nombre: " + displayName + "\n" +
-                "Munición: " + amountAmmo + "\n" +
-                "Munición maxima: " + ammoMax + "\n" +
-                "Velocidad de carga: ? \n \n" +
-                (amountAmmo != 0 ?
-                "MUNICIÓN \n" +
-                "Calibre: " + ammonList.getFirst().getNameAmmo() + "\n" +
-                "Daño: " + ammonList.getFirst().getDamage() +
-                "Trazadora: " + (ammonList.getFirst().isTrace() ? "si": "no") + "\n" +
-                (ammonList.getFirst().isTrace() ?
-                "Color: " + GlobalUtils.colorToStringHex(ammonList.getFirst().getColor()) + "\n" +
-                "Densidad del trazo: " + ammonList.getFirst().getDensityTrace(): "") : "SIN BALAS");
-
-        meta.setLore(GlobalUtils.StringToLoreString(s, true));
-        item.setItemMeta(meta);
-        return s;
+        String stringAmmo = (String) GlobalUtils.getPersistenData(item, "chargerAmmo", PersistentDataType.STRING);
+        List<String> list;
+        if (stringAmmo != null) {
+            list = GunsSection.stringToList(stringAmmo);
+            int amountAmmo = list.size();
+            if (list.getFirst().isBlank()) amountAmmo = 0;
+            String s = "CARGADOR\n" +
+                    "Nombre: " + displayName + "\n" +
+                    "Munición: " + amountAmmo + "\n" +
+                    "Munición maxima: " + ammoMax + "\n" +
+                    "Velocidad de carga: ? \n \n" +
+                    (amountAmmo != 0 ?
+                            "MUNICIÓN \n" +
+                                    "Calibre: " + ammonList.getFirst().getNameAmmo() + "\n" +
+                                    "Daño: " + ammonList.getFirst().getDamage() +
+                                    "Trazadora: " + (ammonList.getFirst().isTrace() ? "si": "no") + "\n" +
+                                    (ammonList.getFirst().isTrace() ?
+                                            "Color: " + GlobalUtils.colorToStringHex(ammonList.getFirst().getColor()) + "\n" +
+                                                    "Densidad del trazo: " + ammonList.getFirst().getDensityTrace(): "") : "SIN BALAS");
+            if (setLore){
+                meta.setLore(GlobalUtils.StringToLoreString(s, true));
+                item.setItemMeta(meta);
+            }
+            return s;
+        }
+        return "?";
     }
 
     public abstract void onShoot(DataShoot dataShoot);

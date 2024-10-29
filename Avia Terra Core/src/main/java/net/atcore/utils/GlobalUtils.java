@@ -257,6 +257,7 @@ public final class GlobalUtils {
 
     public BaseWeapon getWeapon(@NotNull Player player) {
         ItemStack item = player.getInventory().getItemInMainHand();
+        if (item.getItemMeta() == null) return null;
         String weaponName = (String) GlobalUtils.getPersistenData(item, "weaponName", PersistentDataType.STRING);
         if (weaponName == null) return null;
         return GunsSection.baseWeapons.get(ListWeapon.valueOf(weaponName));
