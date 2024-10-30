@@ -2,6 +2,8 @@ package net.atcore.listenerManager;
 
 import net.atcore.AviaTerraCore;
 import net.atcore.Config;
+import net.atcore.armament.ArmamentUtils;
+import net.atcore.armament.BaseCompartment;
 import net.atcore.armament.BaseWeapon;
 import net.atcore.messages.TypeMessages;
 import net.atcore.moderation.Freeze;
@@ -17,11 +19,11 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.potion.PotionEffectType;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import static net.atcore.armament.BaseWeapon.checkReload;
 import static net.atcore.messages.MessagesManager.*;
 
 public class PlayerListener implements Listener {
@@ -49,7 +51,7 @@ public class PlayerListener implements Listener {
         }
 
         if (event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
-            BaseWeapon weapon = GlobalUtils.getWeapon(player);
+            BaseWeapon weapon = ArmamentUtils.getWeapon(player);
             if (weapon == null) return;
             weapon.shoot(player);
         }
@@ -76,10 +78,17 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onSwap(PlayerSwapHandItemsEvent event) {
         Player player = event.getPlayer();
-        BaseWeapon weapon = GlobalUtils.getWeapon(player);
-        if (weapon == null)return;
-        event.setCancelled(true);
-        weapon.reload(player);
+        BaseCompartment compartment = ArmamentUtils.getCompartment(event.getOffHandItem());
+        if (compartment != null){
+            compartment.reload(player);
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onDrop(PlayerDropItemEvent event) {
+        Player player = event.getPlayer();
+        event.setCancelled(checkReload(player));
     }
 
     public void addRange(Player player){
@@ -108,17 +117,6 @@ public class PlayerListener implements Listener {
             player.sendTitle(ChatColor.translateAlternateColorCodes('&',COLOR_ESPECIAL + "Se te dio el rango " + range)
                     ,"", 20, 60, 40);
 
-        }
-    }
-
-    @EventHandler
-    public void onDrop(PlayerDropItemEvent event) {
-        Player player = event.getPlayer();
-        if (BaseWeapon.inReload.containsKey(player.getUniqueId())){
-            BaseWeapon.inReload.remove(player.getUniqueId()).cancel();
-            player.sendTitle("", ChatColor.RED + "Recarga Cancelada", 0, 20, 40);
-            player.removePotionEffect(PotionEffectType.SLOWNESS);
-            event.setCancelled(true);
         }
     }
 }

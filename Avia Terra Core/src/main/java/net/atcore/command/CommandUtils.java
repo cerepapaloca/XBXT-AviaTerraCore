@@ -18,17 +18,27 @@ import static net.atcore.messages.MessagesManager.COLOR_ERROR;
 public final class CommandUtils {
 
     /**
+     * Variación del {@link #enumsToStrings(Enum[], boolean)}
+     */
+
+    @SuppressWarnings("rawtypes")
+    public String[] enumsToStrings(Enum[] raw){
+        return enumsToStrings(raw, true);
+    }
+
+    /**
      * Crea una lista para el tab usando un enum
      * @param raw la clase de enum
+     * @param b ¿Se modifica las mayúsculas?
      * @return lista de enum en string
      */
 
     @SuppressWarnings("rawtypes")
-    public String[] EnumsToStrings(Enum[] raw){
+    public String[] enumsToStrings(Enum[] raw, boolean b){
         String[] strings = new String[raw.length];
         int i = 0 ;
         for (Enum e : raw){
-            strings[i] = e.name().toLowerCase();
+            strings[i] = b ? e.name().toLowerCase() : e.name();
             i++;
         }
         return strings;
@@ -69,6 +79,18 @@ public final class CommandUtils {
         }
     }
 
+    /**
+     * Variación de {@link #listTab(String, List, ModeTab)}
+     */
+
+    public @Nullable List<String> listTab(String arg, String[] args, ModeTab modeTab){
+        return listTab(arg, Arrays.asList(args), modeTab);
+    }
+
+    /**
+     * Variación de {@link #listTab(String, List, ModeTab)}
+     */
+
     public @Nullable List<String> listTab(String arg, List<String> args){
         return listTab(arg, args, ModeTab.StartWithIgnoreCase);
     }
@@ -76,7 +98,6 @@ public final class CommandUtils {
     /**
      * Es realiza la misma función que {@link #listTab(String, List, ModeTab)}. Pero
      * elimina el parámetro {@code ModeTab} y pone como por defecto {@code ModeTab.StartWithIgnoreCase}
-     *
      */
 
     public @Nullable List<String> listTab(String arg, String[] args){

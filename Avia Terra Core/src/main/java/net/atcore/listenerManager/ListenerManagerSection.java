@@ -30,6 +30,6 @@ public class ListenerManagerSection implements Section {
 
     @Override
     public String getName() {
-        return "Listener Manager";
+        return "Listener";
     }
 }

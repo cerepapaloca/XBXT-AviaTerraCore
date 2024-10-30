@@ -28,6 +28,6 @@ public class ModerationSection implements Section {
 
     @Override
     public String getName() {
-        return "Moderation";
+        return "Moderación";
     }
 }

@@ -1,7 +1,6 @@
 package net.atcore.armament.chargers;
 
 import net.atcore.armament.ListCharger;
-import net.atcore.armament.DataShoot;
 
 import java.util.List;
 

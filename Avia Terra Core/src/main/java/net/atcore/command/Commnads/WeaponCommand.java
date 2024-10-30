@@ -1,14 +1,16 @@
 package net.atcore.command.Commnads;
 
-import net.atcore.armament.BaseArmament;
-import net.atcore.armament.TypeArmament;
+import net.atcore.armament.*;
 import net.atcore.command.BaseTabCommand;
-import net.atcore.armament.GunsSection;
+import net.atcore.command.CommandUtils;
 import net.atcore.messages.TypeMessages;
 import net.atcore.utils.GlobalUtils;
+import net.atcore.utils.ModeTab;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
 import java.util.List;
 
 import static net.atcore.messages.MessagesManager.sendMessage;
@@ -17,7 +19,7 @@ public class WeaponCommand extends BaseTabCommand {
 
     public WeaponCommand() {
         super("weapon",
-                "/weapon <Jugador> <Tipo de armamento> <Nombre del armamento> <Cantidad> <Munición \"solo para los cargadores\">",
+                "/weapon <Jugador> <Tipo de armamento> <Nombre del armamento> <Cantidad>",
                 true,
                 "desbanea a al jugador que le caes bien"
         );
@@ -35,15 +37,15 @@ public class WeaponCommand extends BaseTabCommand {
                     BaseArmament BaseArmament = null;
                     TypeArmament typeArmament;
                     try {
-                        typeArmament = TypeArmament.valueOf(args[1]);
+                        typeArmament = TypeArmament.valueOf(args[1].toUpperCase());
                     }catch (Exception e) {
                         sendMessage(sender, "El tipo de armamento no existe", TypeMessages.ERROR);
                         return;
                     }
                     switch (typeArmament) {
-                        case WEAPON -> BaseArmament = GunsSection.getWeapon(args[2]);
-                        case CHARGER -> BaseArmament = GunsSection.getCharger(args[2]);
-                        case AMMO -> BaseArmament = GunsSection.getAmmon(args[2]);
+                        case WEAPON -> BaseArmament = ArmamentUtils.getWeapon(args[2]);
+                        case CHARGER -> BaseArmament = ArmamentUtils.getCharger(args[2]);
+                        case AMMO -> BaseArmament = ArmamentUtils.getAmmon(args[2]);
                     }
                     if (BaseArmament != null){
                         int cantidad;
@@ -67,7 +69,37 @@ public class WeaponCommand extends BaseTabCommand {
 
     @Override
     public List<String> onTab(CommandSender sender, String[] args) {
-        return List.of();
+        switch (args.length){
+            case 1 -> {
+                return null;
+            }
+            case 2 -> {
+                return CommandUtils.listTab(args[1] ,CommandUtils.enumsToStrings(TypeArmament.values()));
+            }
+            case 3 -> {
+                TypeArmament typeArmament;
+                try {
+                    typeArmament = TypeArmament.valueOf(args[1].toUpperCase());
+                }catch (Exception e) {
+                    return List.of(ChatColor.RED + "En tipo de armamento no existe");
+                }
+                switch (typeArmament) {
+                    case WEAPON -> {
+                        return CommandUtils.listTab(args[2] ,CommandUtils.enumsToStrings(ListWeapon.values(), false), ModeTab.StartWith);
+                    }
+                    case CHARGER -> {
+                        return CommandUtils.listTab(args[2] ,CommandUtils.enumsToStrings(ListCharger.values(), false), ModeTab.StartWith);
+                    }
+                    case AMMO -> {
+                        return CommandUtils.listTab(args[2] ,CommandUtils.enumsToStrings(ListAmmo.values(), false), ModeTab.StartWith);
+                    }
+                }
+            }
+            case 4 -> {
+                return List.of("#");
+            }
+        }
+        return null;
     }
 
 }

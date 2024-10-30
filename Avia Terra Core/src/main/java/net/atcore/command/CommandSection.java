@@ -42,6 +42,6 @@ public class CommandSection implements Section {
 
     @Override
     public String getName() {
-        return "Commands";
+        return "Comandos";
     }
 }

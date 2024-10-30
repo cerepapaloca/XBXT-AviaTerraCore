@@ -170,7 +170,7 @@ public class AviaTerraCommand extends BaseTabCommand {
                     return CommandUtils.listTab(args[1], new String[]{"true", "false"});
                 }
                 case "servermode" -> {
-                    return CommandUtils.listTab(args[1], CommandUtils.EnumsToStrings(ServerMode.values()));
+                    return CommandUtils.listTab(args[1], CommandUtils.enumsToStrings(ServerMode.values()));
                 }
                 case "tiempodesesion" -> {
                     return CommandUtils.listTabTime(args[1], false);

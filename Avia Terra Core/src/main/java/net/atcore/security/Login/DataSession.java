@@ -14,9 +14,6 @@ public class DataSession {
         this.player = player;
         this.address = player.getAddress().getAddress();
         this.setState(state);
-        //LoginManager.getListSession().put(username, this);
-        //LoginManager.getListPlayerLoginIn().add(uuidCracked);
-        //.updateLoginDataBase(username, inetAddress);
         startTimeLogin = System.currentTimeMillis();
     }
 
@@ -24,9 +21,6 @@ public class DataSession {
         this.player = player;
         this.address = address;
         this.setState(state);
-        //LoginManager.getListSession().put(username, this);
-        //LoginManager.getListPlayerLoginIn().add(uuidCracked);
-        //.updateLoginDataBase(username, inetAddress);
         startTimeLogin = System.currentTimeMillis();
     }
 

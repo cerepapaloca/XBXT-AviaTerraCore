@@ -2,17 +2,26 @@ package net.atcore.armament;
 
 import lombok.Getter;
 import lombok.Setter;
+import net.atcore.AviaTerraCore;
 import net.atcore.utils.GlobalUtils;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.util.*;
 
 @Getter
 @Setter
-public abstract class BaseCharger extends BaseArmament{
+public abstract class BaseCharger extends BaseCompartment {
 
     public BaseCharger(ListCharger type, List<ListAmmo> compatibleCaliber, ListAmmo defaultCaliber, int ammoMax, String displayName, int reloadTime){
         this(type, compatibleCaliber, Collections.nCopies(ammoMax, defaultCaliber), ammoMax, displayName, reloadTime);
@@ -21,8 +30,6 @@ public abstract class BaseCharger extends BaseArmament{
 
     public BaseCharger(ListCharger type, List<ListAmmo> compatibleCaliber, List<ListAmmo> defaultCaliber, int ammoMax, String displayName, int reloadTime) {
         super(displayName, new ItemStack(Material.SUGAR));
-        List<String> listAmmoName = new ArrayList<>();
-        for (BaseAmmo ammo : listAmmoFill(defaultCaliber))listAmmoName.add(ammo.getList().name());
         this.displayName = displayName;
         this.chargerType = type;
         this.DefaultammonList = listAmmoFill(defaultCaliber);
@@ -33,7 +40,9 @@ public abstract class BaseCharger extends BaseArmament{
         assert itemMeta != null;
         itemMeta.setDisplayName(displayName);
         itemArmament.setItemMeta(itemMeta);
-        GlobalUtils.setPersistentDataItem(itemArmament, "chargerAmmo", PersistentDataType.STRING, GunsSection.listToString(listAmmoName));
+        List<String> listAmmoName = new ArrayList<>();
+        for (BaseAmmo ammo : listAmmoFill(defaultCaliber)) listAmmoName.add(ammo.getListAmmon().name());
+        GlobalUtils.setPersistentDataItem(itemArmament, "chargerAmmo", PersistentDataType.STRING, ArmamentUtils.listToString(listAmmoName));
         GlobalUtils.setPersistentDataItem(itemArmament, "chargerType", PersistentDataType.STRING, type.name());
         getProperties(itemArmament, true);
     }
@@ -52,7 +61,7 @@ public abstract class BaseCharger extends BaseArmament{
         String stringAmmo = (String) GlobalUtils.getPersistenData(item, "chargerAmmo", PersistentDataType.STRING);
         List<BaseAmmo> AmmoBaseList = new ArrayList<>();
         if (stringAmmo != null) {
-            for (String nameAmmo : GunsSection.stringToList(stringAmmo)) AmmoBaseList.add(GunsSection.getAmmon(nameAmmo));
+            for (String nameAmmo : ArmamentUtils.stringToList(stringAmmo)) AmmoBaseList.add(ArmamentUtils.getAmmon(nameAmmo));
             int amountAmmo = AmmoBaseList.size();
             String loreCargador = String.format("""
                     %s
@@ -72,25 +81,8 @@ public abstract class BaseCharger extends BaseArmament{
             if (!AmmoBaseList.isEmpty()) {
                 Set<BaseAmmo> uniqueAmmo = new HashSet<>(AmmoBaseList);
                 for(BaseAmmo ammo : uniqueAmmo){
-                    loreAmmo.append(String.format("""
-                                     \n
-                                    MUNICIÓN
-                                    Calibre: %s
-                                    Daño: %s
-                                    Trazador: %s
-                                    """,
-                            ammo.getDisplayName(),
-                            ammo.getDamage(),
-                            ammo.isTrace() ? "si" : "no"
-                    ));
-                    if (!ammo.isTrace()) continue;
-                    loreAmmo.append(String.format("""
-                                    Color: %s
-                                    Densidad del trazo: %s
-                                    """,
-                            GlobalUtils.colorToStringHex(ammo.getColor()),
-                            ammo.getDensityTrace()
-                    ));
+                    if (ammo == null) continue;
+                    loreAmmo.append(ammo.getProperties());
                 }
             }
 
@@ -103,12 +95,102 @@ public abstract class BaseCharger extends BaseArmament{
         }
         return "?";
     }
+
+    private static HashMap<UUID, BukkitTask> reloadTask = new HashMap<>();
+
+    @Override
+    public void reload(Player player){
+        ItemStack charger = player.getInventory().getItemInMainHand();
+        if (charger.getItemMeta() == null) return;
+        if (reloadTask.containsKey(player.getUniqueId())) return;
+        BukkitTask task = new BukkitRunnable() {
+            public void run() {
+                if (charger.getItemMeta() != null){
+                    String ammoNameList = (String) GlobalUtils.getPersistenData(charger, "chargerAmmo", PersistentDataType.STRING);
+                    if (ammoNameList != null) {
+                        if (ArmamentUtils.stringToList(ammoNameList).size() < ammoMax) {
+                            OnReload(player);
+                        }else {
+                            player.sendTitle("", ChatColor.GREEN + "Recargado Completada", 0, 0,30);
+                            player.removePotionEffect(PotionEffectType.SLOWNESS);
+                            reloadTask.remove(player.getUniqueId());
+                            cancel();
+                        }
+                    }else{
+                        Bukkit.getLogger().warning("test");
+                        cancel();
+                    }
+                }else {
+                    player.sendTitle("", ChatColor.RED + "Recargado Cancelada", 0, 0,30);
+                    player.removePotionEffect(PotionEffectType.SLOWNESS);
+                    reloadTask.remove(player.getUniqueId());
+                    cancel();
+                }
+            }
+        }.runTaskTimer(AviaTerraCore.getInstance(), 3, 3);
+        player.sendTitle("", ChatColor.RED + "Recargando...", 0, 0,30);
+        player.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, Integer.MAX_VALUE, 3, true, false, false));
+        reloadTask.put(player.getUniqueId(), task);
+    }
+
+    private void OnReload(Player player){
+        PlayerInventory inv = player.getInventory();
+        ItemStack ItemCharger = inv.getItemInMainHand();
+        if (ItemCharger.getItemMeta() != null) {
+            for (ItemStack ItemAmmo : inv.getStorageContents()) {
+                if (ItemAmmo == null) continue;
+                if (ItemAmmo.getItemMeta() == null) continue;
+                String ammoName = (String) GlobalUtils.getPersistenData(ItemAmmo, "nameAmmo", PersistentDataType.STRING);
+                BaseAmmo baseAmmo = ArmamentUtils.getAmmon(ammoName);
+                if (baseAmmo == null) continue;
+                if (!compatibleAmmonList.contains(baseAmmo)) continue;
+                String ammoNameList = (String) GlobalUtils.getPersistenData(ItemCharger, "chargerAmmo", PersistentDataType.STRING);
+                if (ammoNameList == null) continue;
+                List<String> ammoList = ArmamentUtils.stringToList(ammoNameList);
+                ammoList.add(baseAmmo.getListAmmon().name());
+                ItemAmmo.setAmount(ItemAmmo.getAmount() - 1);
+                GlobalUtils.setPersistentDataItem(ItemCharger, "chargerAmmo", PersistentDataType.STRING, ArmamentUtils.listToString(ammoList));
+                getProperties(ItemCharger, true);
+                return;
+            }
+            reloadTask.get(player.getUniqueId()).cancel();
+            player.sendTitle("", ChatColor.GREEN + "Recargado Completada", 0, 0,30);
+            player.removePotionEffect(PotionEffectType.SLOWNESS);
+            reloadTask.remove(player.getUniqueId());
+        }else{
+            reloadTask.get(player.getUniqueId()).cancel();
+            player.sendTitle("", ChatColor.RED + "Recargado Cancelada", 0, 0,30);
+            player.removePotionEffect(PotionEffectType.SLOWNESS);
+            reloadTask.remove(player.getUniqueId());
+        }
+    }
+
+    @Override
+    public boolean outCompartment(Player player, ItemStack ItemCharger){
+        if (ItemCharger != null && itemArmament.getItemMeta() != null){
+            BaseCharger baseCharger = ArmamentUtils.getCharger(ItemCharger);
+            if (baseCharger != null) {
+                String ammonName = (String) GlobalUtils.getPersistenData(ItemCharger, "chargerType", PersistentDataType.STRING);
+                if (ammonName != null) {
+                    String stringAmmo = (String) GlobalUtils.getPersistenData(ItemCharger, "chargerAmmo", PersistentDataType.STRING);
+                    GlobalUtils.setPersistentDataItem(ItemCharger, "chargerAmmo", PersistentDataType.STRING, "");
+                    if (stringAmmo == null)return false;
+                    for (String name : ArmamentUtils.stringToList(stringAmmo)){
+                        BaseAmmo baseAmmo = ArmamentUtils.getAmmon(name);
+                        if (baseAmmo == null) continue;
+                        GlobalUtils.addItemPlayer(baseAmmo.getItemArmament(), player, true, false);
+                    }
+                    baseCharger.getProperties(ItemCharger, true);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     private List<BaseAmmo> listAmmoToBaseAmmo(List<ListAmmo> baseAmmoList){
         List<BaseAmmo> listAmmo = new ArrayList<>();
-        for (ListAmmo ammo : baseAmmoList) {
-            listAmmo.add(GunsSection.baseAmmo.get(ammo));
-        }
-
+        for (ListAmmo ammo : baseAmmoList) listAmmo.add(ArmamentUtils.baseAmmo.get(ammo));
         return listAmmo;
     }
     

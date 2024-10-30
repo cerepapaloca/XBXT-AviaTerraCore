@@ -163,7 +163,8 @@ public final class GlobalUtils {
     }
 
     /**
-     * Añade variable a items, las variables que se manejan {@code PersistentDataType}
+     * Añade variable a items, las variables que se manejan son de {@code PersistentDataType}
+     * Se tiene que usar en antes o después de asignar el item meta si no se guardara
      * @param itemStack el item que quieres añadir
      * @param nameKey nombre de la variable
      * @param type el tipo de la variable
@@ -258,22 +259,6 @@ public final class GlobalUtils {
         String g = color.getGreen() > 9 ?  Integer.toString(color.getGreen(), 16) : "0" + Integer.toString(color.getGreen(), 16);
         String B = color.getBlue() > 9 ?  Integer.toString(color.getBlue(), 16) : "0" + Integer.toString(color.getBlue(), 16);
         return "#" + r + g + B;
-    }
-
-    public BaseWeapon getWeapon(@NotNull Player player){
-        return getWeapon(player.getInventory().getItemInMainHand());
-    }
-
-    /**
-     * Obtienes la clase {@link BaseWeapon} si es un arma si no regresa
-     * nulo en caso de que no
-     */
-
-    public BaseWeapon getWeapon(@NotNull ItemStack item) {
-        if (item.getItemMeta() == null) return null;
-        String weaponName = (String) GlobalUtils.getPersistenData(item, "weaponName", PersistentDataType.STRING);
-        if (weaponName == null) return null;
-        return GunsSection.baseWeapons.get(ListWeapon.valueOf(weaponName));
     }
 
     public static @NotNull ArrayList<String> StringToLoreString(@NotNull String texto, boolean space) {

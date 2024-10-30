@@ -1,6 +1,6 @@
 package net.atcore.listenerManager;
 
-import net.atcore.armament.GunsSection;
+import net.atcore.armament.*;
 import net.atcore.moderation.Ban.CheckAutoBan;
 import net.atcore.moderation.Freeze;
 import net.atcore.security.AntiExploit;
@@ -24,8 +24,11 @@ public class InventoryListener implements Listener {
         CheckAutoBan.checkDupe(player, inventory);
         AntiExploit.checkRangePurge(inventory);
         event.setCancelled(Freeze.isFreeze(player));
-        if (clickType == ClickType.SHIFT_LEFT) {
-           event.setCancelled(GunsSection.sacarElCargador(player, event.getCurrentItem()));
+        if (clickType == ClickType.SWAP_OFFHAND) {
+            BaseCompartment compartment = ArmamentUtils.getCompartment(event.getCurrentItem());
+            if (compartment != null) {
+                event.setCancelled(compartment.outCompartment(player, event.getCurrentItem()));
+            }
         }
     }
 

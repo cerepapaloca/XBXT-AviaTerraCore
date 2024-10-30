@@ -62,7 +62,6 @@ public class BanCommand extends BaseTabCommand {
                 }
 
                 sendMessage(sender, "El jugador sera baneado mira los logs para confirmar", TypeMessages.INFO);
-
             }
         }
     }
@@ -71,7 +70,7 @@ public class BanCommand extends BaseTabCommand {
     public List<String> onTab(CommandSender sender, String[] args) {
         switch (args.length) {
             case 2 -> {
-                return CommandUtils.listTab(args[1], CommandUtils.EnumsToStrings(ContextBan.values()));
+                return CommandUtils.listTab(args[1], CommandUtils.enumsToStrings(ContextBan.values()));
             }
             case 3 -> {
                 return CommandUtils.listTabTime(args[2], true);

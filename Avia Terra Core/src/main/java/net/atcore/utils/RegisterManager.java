@@ -1,13 +1,10 @@
 package net.atcore.utils;
 import net.atcore.AviaTerraCore;
+import net.atcore.armament.*;
 import net.atcore.command.BaseCommand;
 import net.atcore.command.CommandSection;
 import net.atcore.data.DataBaseMySql;
 import net.atcore.data.DataSection;
-import net.atcore.armament.BaseAmmo;
-import net.atcore.armament.BaseWeapon;
-import net.atcore.armament.BaseCharger;
-import net.atcore.armament.GunsSection;
 import net.atcore.messages.TypeMessages;
 import net.atcore.Section;
 import org.bukkit.command.CommandException;
@@ -57,15 +54,15 @@ public class RegisterManager {
     }
 
     public static void register(@NotNull BaseCharger baseCharger) {
-        GunsSection.baseChargers.put(baseCharger.getChargerType(), baseCharger);
+        ArmamentUtils.baseChargers.put(baseCharger.getChargerType(), baseCharger);
     }
 
     public static void register(@NotNull BaseWeapon baseWeapon) {
-        GunsSection.baseWeapons.put(baseWeapon.getWeaponType(), baseWeapon);
+        ArmamentUtils.baseWeapons.put(baseWeapon.getWeaponType(), baseWeapon);
     }
 
     public static void register(@NotNull BaseAmmo baseAmmo) {
-        GunsSection.baseAmmo.put(baseAmmo.getList(), baseAmmo);
+        ArmamentUtils.baseAmmo.put(baseAmmo.getListAmmon(), baseAmmo);
     }
 
     public static void register(@NotNull DataBaseMySql database) {
