@@ -2,7 +2,7 @@ package net.atcore.listenerManager;
 
 import net.atcore.AviaTerraCore;
 import net.atcore.Config;
-import net.atcore.guns.BaseWeapon;
+import net.atcore.armament.BaseWeapon;
 import net.atcore.messages.TypeMessages;
 import net.atcore.moderation.Freeze;
 import net.atcore.security.Login.LoginManager;

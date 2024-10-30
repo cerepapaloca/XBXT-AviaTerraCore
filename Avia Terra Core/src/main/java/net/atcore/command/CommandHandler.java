@@ -2,6 +2,7 @@ package net.atcore.command;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import net.atcore.security.AntiExploit;
 import org.bukkit.command.Command;
@@ -57,9 +58,17 @@ public final class CommandHandler implements TabExecutor {
                 }
             }catch (Exception e) {
                 sendMessage(sender, "Ops!! Hubo un error al ejecutar el comando contacta con el desarrollador", TypeMessages.ERROR);
-                throw new RuntimeException(e);
+                if(sender instanceof Player player){
+                    StringBuilder s = new StringBuilder();
+                    s.append("/").append(cmd.getName());
+                    for (String a : args){
+                        s.append(" ").append(a);
+                    }
+                    MessagesManager.sendExceptionWhitInfoPlayer(player, "comando ejecutado: " + s, e);
+                }else {
+                    throw new RuntimeException(e);
+                }
             }
-
             break;
         }
         return true;

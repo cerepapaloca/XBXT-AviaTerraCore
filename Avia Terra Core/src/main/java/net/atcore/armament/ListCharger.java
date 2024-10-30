@@ -1,4 +1,4 @@
-package net.atcore.guns;
+package net.atcore.armament;
 
 public enum ListCharger {
     M4_30,

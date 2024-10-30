@@ -1,8 +1,8 @@
-package net.atcore.guns.ammo;
+package net.atcore.armament.ammo;
 
-import net.atcore.guns.BaseAmmo;
-import net.atcore.guns.DataShoot;
-import net.atcore.guns.ListAmmo;
+import net.atcore.armament.BaseAmmo;
+import net.atcore.armament.DataShoot;
+import net.atcore.armament.ListAmmo;
 import org.bukkit.Color;
 
 public class MM45_OTAN_VERDE extends BaseAmmo {

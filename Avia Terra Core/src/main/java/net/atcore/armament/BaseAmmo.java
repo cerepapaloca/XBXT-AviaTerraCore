@@ -1,19 +1,21 @@
-package net.atcore.guns;
+package net.atcore.armament;
 
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Color;
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 
 @Getter
 @Setter
-public abstract class BaseAmmo {
+public abstract class BaseAmmo extends BaseArmament {
 
     protected BaseAmmo(ListAmmo list, double damage, String name) {
         this(list, damage, name, Color.fromRGB(80,80,80), false, 1F);
     }
 
     protected BaseAmmo(ListAmmo list, double damage, String name, Color color, boolean isTrace, float densityTrace) {
-        this.nameAmmo = name;
+        super(name, new ItemStack(Material.SNOWBALL));
         this.damage = damage;
         this.list = list;
         this.color = color;
@@ -22,7 +24,6 @@ public abstract class BaseAmmo {
     }
 
     private final ListAmmo list;
-    private final String nameAmmo;
     private double damage;
     private Color color;
     private boolean isTrace;

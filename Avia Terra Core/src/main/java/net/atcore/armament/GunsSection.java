@@ -1,11 +1,11 @@
-package net.atcore.guns;
+package net.atcore.armament;
 
 import net.atcore.Section;
-import net.atcore.guns.ammo.MM45_OTAN;
-import net.atcore.guns.ammo.MM45_OTAN_VERDE;
-import net.atcore.guns.chargers.M4_30;
-import net.atcore.guns.chargers.M4_60;
-import net.atcore.guns.weapons.M4;
+import net.atcore.armament.ammo.MM45_OTAN;
+import net.atcore.armament.ammo.MM45_OTAN_VERDE;
+import net.atcore.armament.chargers.M4_30;
+import net.atcore.armament.chargers.M4_60;
+import net.atcore.armament.weapons.M4;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -107,7 +107,7 @@ public class GunsSection implements Section {
                 if (chargerNameInside != null && !chargerNameInside.equals("null")) {
                     BaseCharger charger = GunsSection.getCharger(chargerNameInside);
                     if (charger != null) {
-                        ItemStack itemCarger = new ItemStack(charger.getItemCharger());
+                        ItemStack itemCarger = new ItemStack(charger.getItemArmament());
                         String stringAmmo = (String) GlobalUtils.getPersistenData(ItemWeapon, "chargerAmmo", PersistentDataType.STRING);
                         GlobalUtils.setPersistentDataItem(ItemWeapon, "chargerTypeInside", PersistentDataType.STRING, "null");
                         GlobalUtils.setPersistentDataItem(ItemWeapon, "chargerAmmo", PersistentDataType.STRING, "");

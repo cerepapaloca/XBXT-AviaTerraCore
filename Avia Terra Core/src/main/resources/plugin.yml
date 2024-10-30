@@ -23,4 +23,5 @@ commands:
   changepassword:
   removeregister:
   removesession:
+  weapon:
 

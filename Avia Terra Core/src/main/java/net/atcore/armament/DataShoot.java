@@ -1,4 +1,4 @@
-package net.atcore.guns;
+package net.atcore.armament;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,6 +13,7 @@ public class DataShoot {
     private final Player shooter;
     private final BaseWeapon weapon;
     private final BaseCharger charger;
+    private final BaseAmmo ammo;
     private final double Distance;
 
 }

@@ -1,4 +1,4 @@
-package net.atcore.guns;
+package net.atcore.armament;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -27,19 +27,20 @@ import java.util.*;
 
 @Getter
 @Setter
-public abstract class BaseWeapon {
+public abstract class BaseWeapon extends BaseArmament {
 
     protected BaseWeapon(ListWeapon type, List<ListCharger> listChargers, float maxDistance, String displayName) {
+        super(displayName, new ItemStack(Material.IRON_HORSE_ARMOR));
         this.MAX_DISTANCE = maxDistance;
         this.CHARGERS_TYPE = listChargers;
         this.weaponType = type;
-        itemWeapon = new ItemStack(Material.IRON_HORSE_ARMOR);
-        GlobalUtils.setPersistentDataItem(itemWeapon, "weaponName", PersistentDataType.STRING, type.name());
-        GlobalUtils.setPersistentDataItem(itemWeapon, "chargerTypeInside", PersistentDataType.STRING, "null");
-        ItemMeta meta = itemWeapon.getItemMeta();
+
+        GlobalUtils.setPersistentDataItem(itemArmament, "weaponName", PersistentDataType.STRING, type.name());
+        GlobalUtils.setPersistentDataItem(itemArmament, "chargerTypeInside", PersistentDataType.STRING, "null");
+        ItemMeta meta = itemArmament.getItemMeta();
         if (meta == null) return;
         meta.setDisplayName(displayName);
-        itemWeapon.setItemMeta(meta);
+        itemArmament.setItemMeta(meta);
         updateLore(null, null);
     }
 
@@ -47,7 +48,6 @@ public abstract class BaseWeapon {
         this(type, List.of(chargerTypes), maxDistance, displayName);
     }
 
-    private final ItemStack itemWeapon;
     private final List<ListCharger> CHARGERS_TYPE;
     private final float MAX_DISTANCE;
     private final ListWeapon weaponType;
@@ -88,7 +88,7 @@ public abstract class BaseWeapon {
                     if (!(entity instanceof Player)) {
                         if (entity instanceof LivingEntity livingEntity) {//se tiene que hacer instance por qué no la variable entity no sirve en este caso
                             livingEntity.damage(ammon.getDamage());//se aplica el daño
-                            DataShoot dataShoot = new DataShoot(livingEntity, player, this, baseCharger, distance);//se crea los datos del disparo
+                            DataShoot dataShoot = new DataShoot(livingEntity, player, this, baseCharger, ammon, distance);//se crea los datos del disparo
                             onShoot(dataShoot);
                             baseCharger.onShoot(dataShoot);
                             ammon.onShoot(dataShoot);
@@ -184,7 +184,7 @@ public abstract class BaseWeapon {
         String s;
         ItemMeta itemMeta;
         if (weapon == null){
-            weapon = itemWeapon;
+            weapon = itemArmament;
         }
 
         itemMeta = weapon.getItemMeta();

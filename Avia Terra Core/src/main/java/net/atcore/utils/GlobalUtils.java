@@ -7,7 +7,7 @@ import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import com.google.common.base.Charsets;
 import lombok.experimental.UtilityClass;
 import net.atcore.AviaTerraCore;
-import net.atcore.guns.*;
+import net.atcore.armament.*;
 import net.atcore.messages.MessagesManager;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.*;

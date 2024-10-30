@@ -27,6 +27,7 @@ public class CommandSection implements Section {
         register(new RemoveRegisterCommand());
         register(new ChangePasswordCommand());
         register(new RemoveSessionCommand());
+        register(new WeaponCommand());
     }
 
     @Override

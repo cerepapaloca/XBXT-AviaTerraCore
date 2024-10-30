@@ -3,7 +3,7 @@ package net.atcore;
 import com.github.games647.craftapi.resolver.MojangResolver;
 import lombok.Getter;
 import lombok.SneakyThrows;
-import net.atcore.guns.GunsSection;
+import net.atcore.armament.GunsSection;
 import net.atcore.command.CommandSection;
 import net.atcore.data.DataSection;
 import net.atcore.messages.TypeMessages;

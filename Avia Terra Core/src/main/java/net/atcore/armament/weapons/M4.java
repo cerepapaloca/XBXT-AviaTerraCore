@@ -1,9 +1,9 @@
-package net.atcore.guns.weapons;
+package net.atcore.armament.weapons;
 
-import net.atcore.guns.BaseWeapon;
-import net.atcore.guns.ListCharger;
-import net.atcore.guns.DataShoot;
-import net.atcore.guns.ListWeapon;
+import net.atcore.armament.BaseWeapon;
+import net.atcore.armament.ListCharger;
+import net.atcore.armament.DataShoot;
+import net.atcore.armament.ListWeapon;
 import org.bukkit.entity.Player;
 
 import java.util.List;

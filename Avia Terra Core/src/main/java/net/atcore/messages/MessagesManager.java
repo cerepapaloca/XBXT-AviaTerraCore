@@ -1,7 +1,9 @@
 package net.atcore.messages;
 
+import lombok.Getter;
 import net.atcore.AviaTerraCore;
 import net.atcore.exception.DiscordChannelNotFound;
+import net.atcore.security.Login.LoginManager;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
@@ -167,5 +169,42 @@ public final class MessagesManager {
                 throw new DiscordChannelNotFound("No se encontró canal de discord para los registro " + type.name());
             }
         });
+    }
+
+    public static void sendExceptionWhitInfoPlayer(Player player, String message, Exception e) {
+        String finalMessage = String.format("""
+                
+                    %s
+                
+                  ************************
+                
+                    Nombre: %s
+                    UUID: %s
+                    Localización: %s
+                    Mundo: %s
+                    IP: %s
+                    Cuenta: %s
+                    OP: %s
+                    Modo: %s
+                
+                  ************************
+                
+                    %s
+                
+                  ************************
+                """,
+                message,
+                player.getName(),
+                player.getUniqueId(),
+                "XYZ: " + Math.round(player.getLocation().getX()) + " | " + Math.round(player.getLocation().getY()) + " | " + Math.round(player.getLocation().getZ()),
+                player.getWorld().getName(),
+                player.getAddress().getHostName(),
+                LoginManager.getDataLogin(player).getRegister().getStateLogins().name(),
+                player.isOp(),
+                player.getGameMode().name(),
+                e.getMessage()
+
+        );
+        Bukkit.getLogger().severe(finalMessage);
     }
 }

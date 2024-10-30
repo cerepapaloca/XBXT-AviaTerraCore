@@ -1,9 +1,8 @@
-package net.atcore.guns;
+package net.atcore.armament;
 
 import lombok.Getter;
 import lombok.Setter;
 import net.atcore.utils.GlobalUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -13,48 +12,39 @@ import java.util.*;
 
 @Getter
 @Setter
-public abstract class BaseCharger {
+public abstract class BaseCharger extends BaseArmament{
 
-    public BaseCharger(ListCharger type, ListAmmo caliber, int ammoMax, String displayName, int reloadTime){
-        this(type, Collections.nCopies(ammoMax, caliber), ammoMax, displayName, reloadTime);
+    public BaseCharger(ListCharger type, List<ListAmmo> compatibleCaliber, ListAmmo defaultCaliber, int ammoMax, String displayName, int reloadTime){
+        this(type, compatibleCaliber, Collections.nCopies(ammoMax, defaultCaliber), ammoMax, displayName, reloadTime);
 
     }
 
-    public BaseCharger(ListCharger type, List<ListAmmo> caliber, int ammoMax, String displayName, int reloadTime) {
-        List<ListAmmo> list = new ArrayList<>();
-        for (int i = 0; i < ammoMax; i++) {
-            list.add(caliber.get(i % caliber.size()));
-        }
-        List<BaseAmmo> listAmmo = new ArrayList<>();
-        for (ListAmmo ammo : list) {
-            listAmmo.add(GunsSection.baseAmmo.get(ammo));
-        }
+    public BaseCharger(ListCharger type, List<ListAmmo> compatibleCaliber, List<ListAmmo> defaultCaliber, int ammoMax, String displayName, int reloadTime) {
+        super(displayName, new ItemStack(Material.SUGAR));
         List<String> listAmmoName = new ArrayList<>();
-        for (ListAmmo ammo : list) {
-            listAmmoName.add(ammo.name());
-        }
-        this.reloadTime = reloadTime;
-        this.chargerType = type;
-        this.ammonList = listAmmo;
-        this.ammoMax = ammoMax;
+        for (BaseAmmo ammo : listAmmoFill(defaultCaliber))listAmmoName.add(ammo.getList().name());
         this.displayName = displayName;
-        itemCharger = new ItemStack(Material.SUGAR);
-        ItemMeta itemMeta = itemCharger.getItemMeta();
+        this.chargerType = type;
+        this.DefaultammonList = listAmmoFill(defaultCaliber);
+        this.compatibleAmmonList = listAmmoToBaseAmmo(compatibleCaliber);
+        this.ammoMax = ammoMax;
+        this.reloadTime = reloadTime;
+        ItemMeta itemMeta = itemArmament.getItemMeta();
         assert itemMeta != null;
         itemMeta.setDisplayName(displayName);
-        itemCharger.setItemMeta(itemMeta);
-        GlobalUtils.setPersistentDataItem(itemCharger, "chargerAmmo", PersistentDataType.STRING, GunsSection.listToString(listAmmoName));
-        GlobalUtils.setPersistentDataItem(itemCharger, "chargerType", PersistentDataType.STRING, type.name());
-
-        getProperties(itemCharger, true);
+        itemArmament.setItemMeta(itemMeta);
+        GlobalUtils.setPersistentDataItem(itemArmament, "chargerAmmo", PersistentDataType.STRING, GunsSection.listToString(listAmmoName));
+        GlobalUtils.setPersistentDataItem(itemArmament, "chargerType", PersistentDataType.STRING, type.name());
+        getProperties(itemArmament, true);
     }
 
     private final String displayName;
     private final ListCharger chargerType;
-    private final ItemStack itemCharger;
-    private final List<BaseAmmo> ammonList;
+    private final List<BaseAmmo> DefaultammonList;
+    private final List<BaseAmmo> compatibleAmmonList;
     private final int ammoMax;
     private final int reloadTime;//en TICK
+
 
     public String getProperties(ItemStack item, boolean setLore){
         ItemMeta meta = item.getItemMeta();
@@ -89,7 +79,7 @@ public abstract class BaseCharger {
                                     Daño: %s
                                     Trazador: %s
                                     """,
-                            ammo.getNameAmmo(),
+                            ammo.getDisplayName(),
                             ammo.getDamage(),
                             ammo.isTrace() ? "si" : "no"
                     ));
@@ -112,6 +102,22 @@ public abstract class BaseCharger {
             return finalLore;
         }
         return "?";
+    }
+    private List<BaseAmmo> listAmmoToBaseAmmo(List<ListAmmo> baseAmmoList){
+        List<BaseAmmo> listAmmo = new ArrayList<>();
+        for (ListAmmo ammo : baseAmmoList) {
+            listAmmo.add(GunsSection.baseAmmo.get(ammo));
+        }
+
+        return listAmmo;
+    }
+    
+    private List<BaseAmmo> listAmmoFill(List<ListAmmo> ammoList){
+        List<ListAmmo> listAmmonFill = new ArrayList<>();
+        for (int i = 0; i < ammoMax; i++) {
+            listAmmonFill.add(ammoList.get(i % ammoList.size()));
+        }
+        return listAmmoToBaseAmmo(listAmmonFill);
     }
 
     public abstract void onShoot(DataShoot dataShoot);

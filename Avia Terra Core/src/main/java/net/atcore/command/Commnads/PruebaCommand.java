@@ -1,7 +1,7 @@
 package net.atcore.command.Commnads;
 
 import net.atcore.command.BaseCommand;
-import net.atcore.guns.GunsSection;
+import net.atcore.armament.GunsSection;
 import net.atcore.messages.TypeMessages;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.command.CommandSender;
@@ -24,11 +24,11 @@ public class PruebaCommand extends BaseCommand {
     public void execute(CommandSender sender, String[] args) {
         sendMessage(sender, "Hola Mundo!", TypeMessages.SUCCESS);
         GunsSection.baseWeapons.forEach((list, baseWeapon) -> {
-            GlobalUtils.addItemPlayer(baseWeapon.getItemWeapon(), (Player) sender , true, true);
+            GlobalUtils.addItemPlayer(baseWeapon.getItemArmament(), (Player) sender , true, true);
         });
         GunsSection.baseChargers.forEach((list, dataCharger) -> {
-            GlobalUtils.addItemPlayer(dataCharger.getItemCharger(), (Player) sender , true, true);
-            GlobalUtils.addItemPlayer(dataCharger.getItemCharger(), (Player) sender , true, true);
+            GlobalUtils.addItemPlayer(dataCharger.getItemArmament(), (Player) sender , true, true);
+            GlobalUtils.addItemPlayer(dataCharger.getItemArmament(), (Player) sender , true, true);
         });
     }
 
