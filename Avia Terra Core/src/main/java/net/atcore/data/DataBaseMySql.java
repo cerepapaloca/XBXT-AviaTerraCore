@@ -16,11 +16,11 @@ import net.atcore.messages.TypeMessages;
 public abstract class DataBaseMySql {
     private static Connection connection;
 
-    private static final String HOST = "147.185.221.20";
-    private static final String PORT = "2149";
+    private static final String HOST = "192.168.1.55";
+    private static final String PORT = "3306";
     private static final String DATABASE = "AviaTerra";
-    private static final String USER = "azurex";
-    private static final String PASSWORD = "AdeptusAzurex1313#waos";
+    private static final String USER = "root";
+    private static final String PASSWORD = "";
 
     /**
      * No usar este method para tener la conexión con la base de datos

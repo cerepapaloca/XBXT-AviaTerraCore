@@ -3,6 +3,8 @@ package net.atcore.armament;
 import lombok.Getter;
 import lombok.Setter;
 import net.atcore.AviaTerraCore;
+import net.atcore.messages.CategoryMessages;
+import net.atcore.messages.MessagesManager;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -66,10 +68,10 @@ public abstract class BaseCharger extends BaseCompartment {
             String loreCargador = String.format("""
                     %s
                     CARGADOR
-                    Nombre %s
-                    Municion %s
-                    Munición maxima %s
-                    Velocidad de recarga %ss
+                    Nombre <|%s|>
+                    Municion <|%s|>
+                    Munición maxima <|%s|>
+                    Velocidad de recarga <|%ss|>
                     """,
                     setLore ? "" : " \n",
                     displayName,
@@ -88,7 +90,7 @@ public abstract class BaseCharger extends BaseCompartment {
 
             String finalLore = loreCargador + (amountAmmo > 0 ? loreAmmo.toString() : "");
             if (setLore){
-                meta.setLore(GlobalUtils.StringToLoreString(finalLore, true));
+                meta.setLore(GlobalUtils.StringToLoreString(MessagesManager.addProprieties(finalLore, null, CategoryMessages.PRIVATE), true));
                 item.setItemMeta(meta);
             }
             return finalLore;

@@ -2,6 +2,7 @@ package net.atcore;
 
 import lombok.Getter;
 import lombok.Setter;
+import net.atcore.armament.WeaponMode;
 import net.atcore.security.Login.ServerMode;
 
 public class Config {
@@ -28,7 +29,7 @@ public class Config {
      * que todos tenga que usar el /login para iniciar sesión
      */
 
-    @Getter @Setter private static ServerMode serverMode = ServerMode.ONLINE_MODE;
+    @Getter @Setter private static ServerMode serverMode = ServerMode.OFFLINE_MODE;
 
     /**
      * Si está habilitado al momento de revisar si un jugador
@@ -45,8 +46,25 @@ public class Config {
 
     @Getter @Setter private static long purgeTagRange = 0;
 
+    /**
+     * El tiempo de expiración de la session de los jugadores a loguearse
+     * esto solo tiene sentido con las sesiones no premium por qué los
+     * jugadores premium cuando se le agota la sesión sé crea una nueva
+     * automáticamente y obviamente el servidor tiene que estar mixMode u
+     * OnlineMode si no esto último no aplica
+     */
+
     @Getter @Setter private static long expirationSession = 1000*20;
 
+    /**
+     * Índica la cantidad de punto de chat genera un jugador en un tick
+     * si lo pones en 0 el jugador no podría regenerar sus puntos de chat y
+     * lo pones muy alto los jugadores no tentarían límites a escribir en el
+     * chat
+     */
+
     @Getter @Setter private static float levelModerationChat = 1;
+
+    @Getter @Setter private static WeaponMode weaponMode = WeaponMode.ULTRA_KILL;
 
 }

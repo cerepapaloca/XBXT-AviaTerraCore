@@ -2,6 +2,8 @@ package net.atcore.armament;
 
 import lombok.Getter;
 import lombok.Setter;
+import net.atcore.messages.CategoryMessages;
+import net.atcore.messages.MessagesManager;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -27,7 +29,7 @@ public abstract class BaseAmmo extends BaseArmament {
         ItemMeta itemMeta = itemArmament.getItemMeta();
         assert itemMeta != null;
         itemMeta.setDisplayName(displayName);
-        itemMeta.setLore(GlobalUtils.StringToLoreString(getProperties(), true));
+        itemMeta.setLore(GlobalUtils.StringToLoreString(MessagesManager.addProprieties(getProperties(), null, CategoryMessages.PRIVATE), true));
         itemArmament.setItemMeta(itemMeta);
         GlobalUtils.setPersistentDataItem(itemArmament, "nameAmmo", PersistentDataType.STRING, listAmmon.name());
     }
@@ -43,18 +45,18 @@ public abstract class BaseAmmo extends BaseArmament {
         properties.append(String.format("""
                   \n
                  MUNICIÓN
-                 Calibre: %s
-                 Daño: %s
-                 Trazador: %s
+                 Calibre: <|%s|>
+                 Daño: <|%s|>
+                 Trazador: <|%s|>
                  """,
                 displayName,
                 damage,
-                isTrace ? "si" : "no"
+                isTrace ? "<|si|>" : "<|no|>"
         ));
         if (!isTrace) return properties.toString();
         properties.append(String.format("""
-                                    Color: %s
-                                    Densidad del trazo: %s
+                                    Color: <|%s|>
+                                    Densidad del trazo: <|%s|>
                                     """,
                 GlobalUtils.colorToStringHex(color),
                 densityTrace

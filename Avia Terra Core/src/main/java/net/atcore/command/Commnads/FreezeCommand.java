@@ -1,5 +1,7 @@
 package net.atcore.command.Commnads;
 
+import net.atcore.AviaTerraCore;
+import net.atcore.AviaTerraPlayer;
 import net.atcore.command.BaseTabCommand;
 import net.atcore.command.CommandUtils;
 import net.atcore.messages.TypeMessages;
@@ -37,19 +39,19 @@ public class FreezeCommand extends BaseTabCommand {
             return;
         }
         if (player != null) {
-            HashSet<UUID> listFreeze = Freeze.getPlayerFreeze();
             if (sender instanceof Player p) {
                 if (p == player) {
                     sendMessage(sender, "No puedes congelarte a tí mismo", TypeMessages.ERROR);
                     return;
                 }
             }
+            AviaTerraPlayer aviaTerraPlayer = AviaTerraCore.getPlayer(player);
             switch (args[1].toLowerCase()){
                 case "on" -> {
-                    if (listFreeze.contains(player.getUniqueId())) {
+                    if (aviaTerraPlayer.isFreeze()) {
                         sendMessage(sender, "El jugador ya esta congelado", TypeMessages.ERROR);
                     }else {
-                        Freeze.getPlayerFreeze().add(player.getUniqueId());
+                        aviaTerraPlayer.setFreeze(true);
                         player.closeInventory();
                         player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, Integer.MAX_VALUE, 1));
                         sendMessage(player, "Te an congelado, por favor habla con el staff", TypeMessages.INFO);
@@ -58,8 +60,8 @@ public class FreezeCommand extends BaseTabCommand {
 
                 }
                 case "off" -> {
-                    if (listFreeze.contains(player.getUniqueId())) {
-                        Freeze.getPlayerFreeze().remove(player.getUniqueId());
+                    if (aviaTerraPlayer.isFreeze()) {
+                        aviaTerraPlayer.setFreeze(false);
                         player.removePotionEffect(PotionEffectType.BLINDNESS);
                         sendMessage(sender, "El jugador ya fue descongelado", TypeMessages.SUCCESS);
                         sendMessage(player, "Te descongelado", TypeMessages.INFO);

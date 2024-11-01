@@ -121,19 +121,20 @@ public final class MessagesManager {
         return color;
     }
 
-    private static String addProprieties(String message, TypeMessages type, CategoryMessages categoryMessages) {
+    public static String addProprieties(String message,@Nullable TypeMessages type, CategoryMessages categoryMessages) {
         if (categoryMessages != CategoryMessages.PRIVATE) {
             while (Character.isSpaceChar(message.charAt(message.length()-1))){
                 message = message.substring(0, message.length()-1);
             }
             message = message + " &c[R]";
         }
-        char color = '8';
+        char color;
         switch (type) {
             case SUCCESS -> color = 'a';
             case INFO -> color = 'b';
             case WARNING -> color = '6';
             case ERROR -> color = '4';
+            case null , default -> color = '8';
         }
         return message.replace("<|","&" + color).replace("|>",selectColore(type)).replace("|!>", selectColore(type));
     }

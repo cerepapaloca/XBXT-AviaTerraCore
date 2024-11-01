@@ -18,8 +18,12 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.luckperms.api.LuckPerms;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.HashMap;
+import java.util.UUID;
 
 import static net.atcore.messages.MessagesManager.COLOR_SUCCESS;
 import static net.atcore.messages.MessagesManager.sendMessageConsole;
@@ -28,6 +32,7 @@ import static net.atcore.security.Login.LoginManager.getDataLogin;
 public final class AviaTerraCore extends JavaPlugin {
     @Getter
     private static AviaTerraCore instance;
+    private static HashMap<UUID, AviaTerraPlayer> players = new HashMap<>();
     public static final String TOKEN_BOT = "MTI5MTUzODM1MjY0NjEzMTc3NA.GDwtcq.azwlvX6fWKbusXk8sOyzRMK78Qe9CwbHy_pmWk";
     public static JDA BOT_DISCORD;
     @Getter private static LuckPerms LP;
@@ -130,4 +135,16 @@ public final class AviaTerraCore extends JavaPlugin {
         }
     }
     */
+
+    public static AviaTerraPlayer getPlayer(UUID uuid){
+        return players.get(uuid);
+    }
+
+    public static AviaTerraPlayer getPlayer(Player player){
+        return players.get(player.getUniqueId());
+    }
+
+    public static void addPlayer(Player player){
+        players.put(player.getUniqueId(), new AviaTerraPlayer(player));
+    }
 }

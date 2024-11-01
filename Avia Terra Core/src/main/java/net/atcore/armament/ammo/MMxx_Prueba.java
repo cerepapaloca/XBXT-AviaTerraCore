@@ -14,7 +14,7 @@ public class MMxx_Prueba extends BaseAmmo {
                 Color.fromRGB(255,255,255),
                 false,
                 2
-                );
+        );
     }
 
     @Override

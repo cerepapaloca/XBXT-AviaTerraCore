@@ -3,6 +3,9 @@ package net.atcore.armament;
 import lombok.Getter;
 import lombok.Setter;
 import net.atcore.AviaTerraCore;
+import net.atcore.messages.CategoryMessages;
+import net.atcore.messages.MessagesManager;
+import net.atcore.messages.TypeMessages;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.*;
 import org.bukkit.Color;
@@ -37,6 +40,7 @@ public abstract class BaseWeapon extends BaseCompartment {
 
         GlobalUtils.setPersistentDataItem(itemArmament, "weaponName", PersistentDataType.STRING, type.name());
         GlobalUtils.setPersistentDataItem(itemArmament, "chargerTypeInside", PersistentDataType.STRING, "null");
+        GlobalUtils.setPersistentDataItem(itemArmament, "chargerTypeOutside", PersistentDataType.STRING, "null");
         ItemMeta meta = itemArmament.getItemMeta();
         if (meta == null) return;
         meta.setDisplayName(displayName);
@@ -193,8 +197,8 @@ public abstract class BaseWeapon extends BaseCompartment {
         //si o si tiene que tener este lore el arma
         s = String.format("""
                 ARMA
-                Rango máximo: %s
-                Candencia: ?
+                Rango máximo: <|%s|>
+                Candencia: <|?|>
                 """,
                 Math.round(MAX_DISTANCE)
         );
@@ -215,7 +219,7 @@ public abstract class BaseWeapon extends BaseCompartment {
             }
         }
 
-        itemMeta.setLore(GlobalUtils.StringToLoreString(s, true));
+        itemMeta.setLore(GlobalUtils.StringToLoreString(MessagesManager.addProprieties(s, null, CategoryMessages.PRIVATE), true));
         weapon.setItemMeta(itemMeta);
     }
 
