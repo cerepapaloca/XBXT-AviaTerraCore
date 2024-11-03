@@ -76,20 +76,14 @@ public class DataBaseRegister extends DataBaseMySql {
 
     @Override
     protected void createTable() {
-        String checkTableSQL = "SELECT COUNT(*) FROM information_schema.tables " +
-                "WHERE table_schema = ? AND table_name = ?";
 
-        try (PreparedStatement stmt = getConnection().prepareStatement(checkTableSQL)) {//revisa si la tabla existe
-            stmt.setString(1, "aviaterra");
-            stmt.setString(2, "register");
-
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    if (rs.getInt(1) > 0) {
-                        reloadDatabase();
-                        sendMessageConsole("DataBase Registro " + MessagesManager.COLOR_SUCCESS + "Ok", TypeMessages.INFO, false);
-                        return;//si existe, se detiene
-                    }
+        try (Connection connection = getConnection()) {//revisa si la tabla existe
+            DatabaseMetaData dbMetaData = connection.getMetaData();
+            try (ResultSet resultSet = dbMetaData.getTables(null, null, "register", null)) {
+                if (resultSet.next()){
+                    reloadDatabase();
+                    sendMessageConsole("DataBase Registro " + MessagesManager.COLOR_SUCCESS + "Ok", TypeMessages.INFO, false);
+                    return;
                 }
             }
         } catch (SQLException e) {

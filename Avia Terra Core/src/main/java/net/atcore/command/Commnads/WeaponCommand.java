@@ -59,6 +59,8 @@ public class WeaponCommand extends BaseTabCommand {
                             GlobalUtils.addItemPlayer(BaseArmament.getItemArmament(), player, true, typeArmament != TypeArmament.AMMO);
                         }
                         sendMessage(sender, "Se dio el armamento de manera exitosa", TypeMessages.SUCCESS);
+                    }else{
+                        sendMessage(sender, "El tipo de armamento no existe 11", TypeMessages.ERROR);
                     }
                 }else {
                     sendMessage(sender, "El jugador no existe o no esta conectado", TypeMessages.ERROR);

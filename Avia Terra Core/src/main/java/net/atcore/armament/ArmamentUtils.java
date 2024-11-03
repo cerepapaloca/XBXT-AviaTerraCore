@@ -40,7 +40,16 @@ public class ArmamentUtils {
 
     @Nullable
     public Compartment getCompartment(ItemStack itemStack){
-        return getCharger(itemStack);
+        BaseWeapon s = getWeapon(itemStack);//es muy feo pero funciona
+        if (s != null){
+            if (s instanceof Compartment compartment){
+                return compartment;
+            }else{
+                return null;
+            }
+        }else {
+            return getCharger(itemStack);
+        }
     }
 
     @Nullable
@@ -102,13 +111,16 @@ public class ArmamentUtils {
 
     @Nullable
     public BaseWeapon getWeapon(@Nullable String s){
-        ListWeaponTarvok list;
         try{
-            list = ListWeaponTarvok.valueOf(s);
+            return baseWeaponsTarkov.get(ListWeaponTarvok.valueOf(s));
         }catch (Exception e){
-            return null;
+            try {
+                return baseWeaponsUltraKill.get(ListWeaponUltraKill.valueOf(s));
+            }catch (Exception i){
+                return null;
+            }
         }
-        return baseWeaponsTarkov.get(list);
+
     }
 
     public void drawParticleLine(Location start, Location end, Color color, boolean impacted, double density) {
