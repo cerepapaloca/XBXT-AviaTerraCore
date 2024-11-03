@@ -43,7 +43,7 @@ public class WeaponCommand extends BaseTabCommand {
                         return;
                     }
                     switch (typeArmament) {
-                        case WEAPON -> BaseArmament = ArmamentUtils.getWeapon(args[2]);
+                        case WEAPON_ULTRA_KILL, WEAPON_TARKOV -> BaseArmament = ArmamentUtils.getWeapon(args[2]);
                         case CHARGER -> BaseArmament = ArmamentUtils.getCharger(args[2]);
                         case AMMO -> BaseArmament = ArmamentUtils.getAmmon(args[2]);
                     }
@@ -84,8 +84,11 @@ public class WeaponCommand extends BaseTabCommand {
                     return List.of(ChatColor.RED + "En tipo de armamento no existe");
                 }
                 switch (typeArmament) {
-                    case WEAPON -> {
-                        return CommandUtils.listTab(args[2] ,CommandUtils.enumsToStrings(ListWeapon.values(), false), ModeTab.StartWith);
+                    case WEAPON_TARKOV -> {
+                        return CommandUtils.listTab(args[2], CommandUtils.enumsToStrings(ListWeaponTarvok.values(), false), ModeTab.StartWith);
+                    }
+                    case WEAPON_ULTRA_KILL -> {
+                        return CommandUtils.listTab(args[2] ,CommandUtils.enumsToStrings(ListWeaponUltraKill.values(), false), ModeTab.StartWith);
                     }
                     case CHARGER -> {
                         return CommandUtils.listTab(args[2] ,CommandUtils.enumsToStrings(ListCharger.values(), false), ModeTab.StartWith);

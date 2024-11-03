@@ -57,8 +57,12 @@ public class RegisterManager {
         ArmamentUtils.baseChargers.put(baseCharger.getChargerType(), baseCharger);
     }
 
-    public static void register(@NotNull BaseWeapon baseWeapon) {
-        ArmamentUtils.baseWeapons.put(baseWeapon.getWeaponType(), baseWeapon);
+    public static void register(@NotNull BaseWeaponTarkov baseWeaponTarkov) {
+        ArmamentUtils.baseWeaponsTarkov.put(baseWeaponTarkov.getWeaponType(), baseWeaponTarkov);
+    }
+
+    public static void register(@NotNull BaseWeaponUltraKill baseWeaponUltraKill){
+        ArmamentUtils.baseWeaponsUltraKill.put(baseWeaponUltraKill.getWeaponType(), baseWeaponUltraKill);
     }
 
     public static void register(@NotNull BaseAmmo baseAmmo) {

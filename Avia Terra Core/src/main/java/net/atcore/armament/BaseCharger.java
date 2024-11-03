@@ -23,7 +23,7 @@ import java.util.*;
 
 @Getter
 @Setter
-public abstract class BaseCharger extends BaseCompartment {
+public abstract class BaseCharger extends BaseArmament implements Compartment {
 
     public BaseCharger(ListCharger type, List<ListAmmo> compatibleCaliber, ListAmmo defaultCaliber, int ammoMax, String displayName, int reloadTime){
         this(type, compatibleCaliber, Collections.nCopies(ammoMax, defaultCaliber), ammoMax, displayName, reloadTime);

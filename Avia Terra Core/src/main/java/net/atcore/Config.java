@@ -2,7 +2,6 @@ package net.atcore;
 
 import lombok.Getter;
 import lombok.Setter;
-import net.atcore.armament.WeaponMode;
 import net.atcore.security.Login.ServerMode;
 
 public class Config {
@@ -64,7 +63,5 @@ public class Config {
      */
 
     @Getter @Setter private static float levelModerationChat = 1;
-
-    @Getter @Setter private static WeaponMode weaponMode = WeaponMode.ULTRA_KILL;
 
 }

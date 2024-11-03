@@ -25,7 +25,7 @@ public class InventoryListener implements Listener {
         AntiExploit.checkRangePurge(inventory);
         event.setCancelled(Freeze.isFreeze(player));
         if (clickType == ClickType.SWAP_OFFHAND) {
-            BaseCompartment compartment = ArmamentUtils.getCompartment(event.getCurrentItem());
+            Compartment compartment = ArmamentUtils.getCompartment(event.getCurrentItem());
             if (compartment != null) {
                 event.setCancelled(compartment.outCompartment(player, event.getCurrentItem()));
             }

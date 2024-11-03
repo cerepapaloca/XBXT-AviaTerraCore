@@ -3,8 +3,9 @@ package net.atcore.listenerManager;
 import net.atcore.AviaTerraCore;
 import net.atcore.Config;
 import net.atcore.armament.ArmamentUtils;
-import net.atcore.armament.BaseCompartment;
 import net.atcore.armament.BaseWeapon;
+import net.atcore.armament.Compartment;
+import net.atcore.armament.BaseWeaponTarkov;
 import net.atcore.messages.TypeMessages;
 import net.atcore.moderation.Freeze;
 import net.atcore.security.Login.LoginManager;
@@ -23,7 +24,7 @@ import org.bukkit.persistence.PersistentDataType;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import static net.atcore.armament.BaseWeapon.checkReload;
+import static net.atcore.armament.BaseWeaponTarkov.checkReload;
 import static net.atcore.messages.MessagesManager.*;
 
 public class PlayerListener implements Listener {
@@ -78,7 +79,7 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onSwap(PlayerSwapHandItemsEvent event) {
         Player player = event.getPlayer();
-        BaseCompartment compartment = ArmamentUtils.getCompartment(event.getOffHandItem());
+        Compartment compartment = ArmamentUtils.getCompartment(event.getOffHandItem());
         if (compartment != null){
             compartment.reload(player);
             event.setCancelled(true);

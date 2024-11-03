@@ -112,7 +112,7 @@ public class DataBaseRegister extends DataBaseMySql {
              Statement statement = connection.createStatement()) {
             statement.executeUpdate(createTableSQL);
             reloadDatabase();
-            sendMessageConsole("DataBase Registro " + MessagesManager.COLOR_SUCCESS + "Ok", TypeMessages.INFO);
+            sendMessageConsole("DataBase Registro " + MessagesManager.COLOR_SUCCESS + "Creada", TypeMessages.INFO, false);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

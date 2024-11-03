@@ -2,6 +2,8 @@ package net.atcore.armament;
 
 public enum TypeArmament {
     AMMO,
-    WEAPON,
-    CHARGER
+    WEAPON_ULTRA_KILL,
+    WEAPON_TARKOV,
+    CHARGER,
+
 }

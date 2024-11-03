@@ -1,5 +1,5 @@
 package net.atcore.armament;
 
-public enum ListWeapon {
+public enum ListWeaponTarvok {
     M4
 }

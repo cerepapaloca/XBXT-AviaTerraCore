@@ -2,10 +2,12 @@ package net.atcore.armament;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
 @Getter
+@Setter
 @AllArgsConstructor
 public class DataShoot {
 
@@ -14,6 +16,7 @@ public class DataShoot {
     private final BaseWeapon weapon;
     private final BaseCharger charger;
     private final BaseAmmo ammo;
-    private final double Distance;
+    private final double distance;
+    private double damage;
 
 }

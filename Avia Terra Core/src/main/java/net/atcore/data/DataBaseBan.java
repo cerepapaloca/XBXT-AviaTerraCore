@@ -101,7 +101,7 @@ public class DataBaseBan extends DataBaseMySql {
              Statement statement = connection.createStatement()) {
             statement.executeUpdate(createTableSQL);
             statement.executeUpdate(addUniqueKeySQL);
-            sendMessageConsole("DataBase Bans " + MessagesManager.COLOR_SUCCESS + "Ok", TypeMessages.INFO);
+            sendMessageConsole("DataBase Bans " + MessagesManager.COLOR_SUCCESS + "Creada", TypeMessages.INFO, false);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
