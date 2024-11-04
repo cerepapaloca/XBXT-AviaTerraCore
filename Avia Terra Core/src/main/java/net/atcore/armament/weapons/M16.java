@@ -12,6 +12,8 @@ public class M16 extends BaseWeaponUltraKill {
                 60,
                 Color.fromRGB(20,255,20),
                 20,
+                10,
+                30,
                 10
         );
     }

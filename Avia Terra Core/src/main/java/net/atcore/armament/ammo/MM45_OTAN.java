@@ -13,7 +13,8 @@ public class MM45_OTAN extends BaseAmmo {
                 "prueba",
                 Color.fromRGB(20,20,20),
                 true,
-                5
+                5,
+                10
         );
     }
 

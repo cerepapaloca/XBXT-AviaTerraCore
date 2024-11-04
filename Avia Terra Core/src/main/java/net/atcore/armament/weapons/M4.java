@@ -15,7 +15,8 @@ public class M4 extends BaseWeaponTarkov {
         super(ListWeaponTarvok.M4,
                 List.of(ListCharger.M4_30, ListCharger.M4_60),
                 50,
-                "m4"
+                "m4",
+                0
         );
     }
 

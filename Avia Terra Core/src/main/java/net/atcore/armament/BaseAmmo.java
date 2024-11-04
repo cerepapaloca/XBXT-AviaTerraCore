@@ -5,6 +5,7 @@ import lombok.Setter;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.MessagesManager;
 import net.atcore.utils.GlobalUtils;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -15,17 +16,18 @@ import org.bukkit.persistence.PersistentDataType;
 @Setter
 public abstract class BaseAmmo extends BaseArmament {
 
-    protected BaseAmmo(ListAmmo listAmmon, double damage, String name) {
-        this(listAmmon, damage, name, Color.fromRGB(80,80,80), false, 1F);
+    protected BaseAmmo(ListAmmo listAmmon, double damage, String name, float penetration) {
+        this(listAmmon, damage, name, Color.fromRGB(80,80,80), false, 1F, penetration);
     }
 
-    protected BaseAmmo(ListAmmo listAmmon, double damage, String name, Color color, boolean isTrace, float densityTrace) {
+    protected BaseAmmo(ListAmmo listAmmon, double damage, String name, Color color, boolean isTrace, float densityTrace, float penetration) {
         super(name, new ItemStack(Material.SNOWBALL));
         this.damage = damage;
         this.listAmmon = listAmmon;
         this.color = color;
         this.isTrace = isTrace;
         this.densityTrace = densityTrace;
+        this.penetration = penetration;
         ItemMeta itemMeta = itemArmament.getItemMeta();
         assert itemMeta != null;
         itemMeta.setDisplayName(displayName);
@@ -34,11 +36,12 @@ public abstract class BaseAmmo extends BaseArmament {
         GlobalUtils.setPersistentDataItem(itemArmament, "nameAmmo", PersistentDataType.STRING, listAmmon.name());
     }
 
+    private final float penetration;
     private final ListAmmo listAmmon;
-    private double damage;
-    private Color color;
-    private boolean isTrace;
-    private float densityTrace;
+    private final double damage;
+    private final Color color;
+    private final boolean isTrace;
+    private final float densityTrace;
 
     public String getProperties(){
         StringBuilder properties = new StringBuilder();
@@ -58,7 +61,7 @@ public abstract class BaseAmmo extends BaseArmament {
                                     Color: <|%s|>
                                     Densidad del trazo: <|%s|>
                                     """,
-                GlobalUtils.colorToStringHex(color),
+                ChatColor.of(GlobalUtils.colorToStringHex(color)) + GlobalUtils.colorToStringHex(color),
                 densityTrace
         ));
         return properties.toString();

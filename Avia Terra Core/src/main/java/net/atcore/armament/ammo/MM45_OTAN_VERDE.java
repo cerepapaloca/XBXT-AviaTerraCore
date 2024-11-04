@@ -13,7 +13,8 @@ public class MM45_OTAN_VERDE extends BaseAmmo {
                 "trazado verde",
                 Color.fromRGB(20,180,20),
                 true,
-                1
+                1,
+                10
         );
     }
 

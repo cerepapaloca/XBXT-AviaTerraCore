@@ -3,6 +3,7 @@ package net.atcore;
 import com.github.games647.craftapi.resolver.MojangResolver;
 import lombok.Getter;
 import lombok.SneakyThrows;
+import me.neznamy.tab.api.TabAPI;
 import net.atcore.armament.ArmamentSection;
 import net.atcore.command.CommandSection;
 import net.atcore.data.DataSection;
@@ -77,6 +78,7 @@ public final class AviaTerraCore extends JavaPlugin {
         //enableModules();
         isStarting = false;
         sendMessageConsole("AviaTerra Iniciado en <|" + (System.currentTimeMillis() - timeCurrent) + "ms", TypeMessages.SUCCESS, false);
+        messageOn();
     }
 
     @Override
@@ -102,6 +104,22 @@ public final class AviaTerraCore extends JavaPlugin {
         for (Section section : RegisterManager.sections){
             section.reloadConfig();
         }
+    }
+
+    private void messageOn(){
+        Bukkit.getLogger().info("\n" +
+                "\n" +
+                " ________  ___      ___ ___  ________          _________  _______   ________  ________  ________     \n" +
+                "|\\   __  \\|\\  \\    /  /|\\  \\|\\   __  \\        |\\___   ___\\\\  ___ \\ |\\   __  \\|\\   __  \\|\\   __  \\    \n" +
+                "\\ \\  \\|\\  \\ \\  \\  /  / | \\  \\ \\  \\|\\  \\       \\|___ \\  \\_\\ \\   __/|\\ \\  \\|\\  \\ \\  \\|\\  \\ \\  \\|\\  \\   \n" +
+                " \\ \\   __  \\ \\  \\/  / / \\ \\  \\ \\   __  \\           \\ \\  \\ \\ \\  \\_|/_\\ \\   _  _\\ \\   _  _\\ \\   __  \\  \n" +
+                "  \\ \\  \\ \\  \\ \\    / /   \\ \\  \\ \\  \\ \\  \\           \\ \\  \\ \\ \\  \\_|\\ \\ \\  \\\\  \\\\ \\  \\\\  \\\\ \\  \\ \\  \\ \n" +
+                "   \\ \\__\\ \\__\\ \\__/ /     \\ \\__\\ \\__\\ \\__\\           \\ \\__\\ \\ \\_______\\ \\__\\\\ _\\\\ \\__\\\\ _\\\\ \\__\\ \\__\\\n" +
+                "    \\|__|\\|__|\\|__|/       \\|__|\\|__|\\|__|            \\|__|  \\|_______|\\|__|\\|__|\\|__|\\|__|\\|__|\\|__|\n" +
+                "                                                                                                     \n" +
+                "                                                                                                     \n" +
+                "                                                                                                     \n" +
+                "\n");
     }
 
 
@@ -145,6 +163,8 @@ public final class AviaTerraCore extends JavaPlugin {
     }
 
     public static void addPlayer(Player player){
-        players.put(player.getUniqueId(), new AviaTerraPlayer(player));
+        if (!players.containsKey(player.getUniqueId())){
+            players.put(player.getUniqueId(), new AviaTerraPlayer(player));
+        }
     }
 }

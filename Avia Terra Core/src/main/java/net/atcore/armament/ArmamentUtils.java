@@ -142,19 +142,14 @@ public class ArmamentUtils {
         if (impacted)world.spawnParticle(Particle.CRIT, point, 2, 0.1, 0.1, 0.1, 0.5, null, true);
     }
 
-    public Location getPlayerLookLocation(Player player, double maxDistance, double stepSize) {
+    public Location getPlayerLookLocation(Vector direction, Player player, double maxDistance, double stepSize) {
 
         Location eyeLocation = player.getEyeLocation();
-        Vector direction = eyeLocation.getDirection().normalize();
 
         Location currentLocation = eyeLocation.clone();
         if (stepSize <= 0) throw new IllegalArgumentException("No puede ser menor que cero");
         for (double i = 0; i < maxDistance; i += stepSize) {
             currentLocation.add(direction.clone().multiply(stepSize));
-
-            if (currentLocation.getBlock().getType().isSolid()) {
-                return currentLocation;
-            }
         }
 
         return eyeLocation.add(direction.multiply(maxDistance));

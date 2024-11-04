@@ -13,7 +13,8 @@ public class MMxx_Prueba extends BaseAmmo {
                 "prueba",
                 Color.fromRGB(255,255,255),
                 false,
-                2
+                2,
+                10
         );
     }
 

@@ -7,9 +7,11 @@ import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.MessagesManager;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.*;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
@@ -17,6 +19,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
+import org.bukkit.util.BlockIterator;
 import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
 
@@ -30,8 +33,8 @@ import java.util.*;
 @Setter
 public abstract class BaseWeaponTarkov extends BaseWeapon implements Compartment {
 
-    protected BaseWeaponTarkov(ListWeaponTarvok type, List<ListCharger> listChargers, int maxDistance, String displayName) {
-        super(displayName, new ItemStack(Material.IRON_HORSE_ARMOR), maxDistance, type.name());
+    protected BaseWeaponTarkov(ListWeaponTarvok type, List<ListCharger> listChargers, int maxDistance, String displayName, double precision) {
+        super(displayName, new ItemStack(Material.IRON_HORSE_ARMOR), maxDistance, type.name(), precision);
         this.CHARGERS_TYPE = listChargers;
         this.weaponType = type;
         GlobalUtils.setPersistentDataItem(itemArmament, "chargerTypeInside", PersistentDataType.STRING, "null");
@@ -39,13 +42,18 @@ public abstract class BaseWeaponTarkov extends BaseWeapon implements Compartment
         ItemMeta meta = itemArmament.getItemMeta();
         if (meta == null) return;
         meta.setDisplayName(displayName);
+        meta.removeItemFlags(ItemFlag.HIDE_ATTRIBUTES);//se oculta datos del item para que no se vea feo
+        meta.removeItemFlags(ItemFlag.HIDE_ENCHANTS);
+        meta.removeItemFlags(ItemFlag.HIDE_UNBREAKABLE);
+        meta.removeItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
         itemArmament.setItemMeta(meta);
         updateLore(null, null);
     }
 
-    protected BaseWeaponTarkov(ListWeaponTarvok type, ListCharger chargerTypes, int maxDistance, String displayName) {
-        this(type, List.of(chargerTypes), maxDistance, displayName);
+    protected BaseWeaponTarkov(ListWeaponTarvok type, ListCharger chargerTypes, int maxDistance, String displayName, double precision) {
+        this(type, List.of(chargerTypes), maxDistance, displayName, precision);
     }
+
 
     private final List<ListCharger> CHARGERS_TYPE;
     private final ListWeaponTarvok weaponType;
@@ -71,34 +79,60 @@ public abstract class BaseWeaponTarkov extends BaseWeapon implements Compartment
             updateLore(itemWeapon, null);
             Vector direction = player.getLocation().getDirection();
             Location location = player.getEyeLocation();
+            Vector directionRandom = direction.add(new Vector((Math.random() - 0.5)*precision*0.002, (Math.random() - 0.5)*precision*0.002, (Math.random() - 0.5)*precision*0.002));//añade la imprecision del arma
 
             RayTraceResult result = player.getWorld().rayTraceEntities(//se crea un rayTrace
                     location,
-                    direction,
+                    directionRandom,
                     maxDistance,
                     0.5,//el margen para detectar a las entidades
                     entity -> entity != player//se descarta el protio jugador
             );
+            double distance = maxDistance;
+            boolean b = false;
+            Block lastBlock = null;
             if (ammon == null) throw new IllegalArgumentException("Las balas dio nulo!?");
             if (result != null) {
                 Entity entity = result.getHitEntity();
-                double distance = player.getEyeLocation().distance(result.getHitPosition().toLocation(player.getWorld()));
+                distance = player.getEyeLocation().distance(result.getHitPosition().toLocation(player.getWorld()));
                 if (entity != null) {
                     if (!(entity instanceof Player)) {
                         if (entity instanceof LivingEntity livingEntity) {//se tiene que hacer instance por qué no la variable entity no sirve en este caso
+                            BlockIterator blockIterator = new BlockIterator(
+                                    player.getWorld(),
+                                    player.getEyeLocation().toVector(),
+                                    direction,
+                                    0,
+                                    (int) distance
+                            );
                             DataShoot dataShoot = new DataShoot(livingEntity, player, this, baseCharger, ammon, distance, ammon.getDamage());//se crea los datos del disparo
-                            onShoot(dataShoot);
-                            baseCharger.onShoot(dataShoot);
-                            ammon.onShoot(dataShoot);
-                            livingEntity.damage(dataShoot.getDamage());//se aplica el daño
-                            ArmamentUtils.drawParticleLine(player.getEyeLocation(), ArmamentUtils.getPlayerLookLocation(player, distance, ammon.getDamage()),
-                                    ammon.getColor(), true, ammon.getDensityTrace());
+                            float f = 0;
+
+                            while (blockIterator.hasNext()) {
+                                Block block = blockIterator.next();
+                                f += block.getType().getHardness();
+                                Bukkit.getLogger().warning(block.getType().name() + " | " + block.getType().getHardness());
+                                if (f < ammon.getPenetration()){
+                                    lastBlock = block;
+                                }
+                            }
+                            if (f < ammon.getPenetration()){
+                                onShoot(dataShoot);
+                                baseCharger.onShoot(dataShoot);
+                                ammon.onShoot(dataShoot);
+                                livingEntity.damage(dataShoot.getDamage());//se aplica el daño
+                                b = true;
+                            }
                         }
                     }
                 }
             }
-            ArmamentUtils.drawParticleLine(player.getEyeLocation(), ArmamentUtils.getPlayerLookLocation(player, maxDistance, ammon.getDensityTrace()),
-                    ammon.getColor(), false, ammon.getDensityTrace());
+            Location finalLocation =  ArmamentUtils.getPlayerLookLocation(directionRandom, player, distance, 0.25);
+            if (lastBlock != null) {
+                finalLocation = lastBlock.getLocation();
+            }
+            ArmamentUtils.drawParticleLine(player.getEyeLocation(),finalLocation,
+                    ammon.getColor(), b, ammon.getDensityTrace());
         }
     }
 
@@ -192,10 +226,11 @@ public abstract class BaseWeaponTarkov extends BaseWeapon implements Compartment
         //si o si tiene que tener este lore el arma
         s = String.format("""
                 ARMA
-                Rango máximo: <|%s|>
-                Candencia: <|?|>
+                Rango máximo: <|%s|>m
+                Presión: <|%s|>
                 """,
-                Math.round(maxDistance)
+                Math.round(maxDistance),
+                (100 - precision) + "%"
         );
         if (charger != null){//en caso de que tenga un cargador
             if (charger.getItemMeta() != null) {
