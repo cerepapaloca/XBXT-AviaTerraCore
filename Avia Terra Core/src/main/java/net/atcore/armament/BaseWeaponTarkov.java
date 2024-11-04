@@ -7,9 +7,6 @@ import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.MessagesManager;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.*;
-import org.bukkit.block.Block;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -19,9 +16,6 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
-import org.bukkit.util.BlockIterator;
-import org.bukkit.util.RayTraceResult;
-import org.bukkit.util.Vector;
 
 import java.util.*;
 
@@ -73,10 +67,12 @@ public abstract class BaseWeaponTarkov extends BaseWeapon implements Compartment
                 updateLore(itemWeapon, null);
                 return;
             }
-            BaseAmmo ammon = ArmamentUtils.getAmmon(listAmmo.getFirst());
+            BaseAmmo ammon = ArmamentUtils.getAmmo(listAmmo.getFirst());
+            if (ammon == null) return;
             listAmmo.removeFirst();//se elimina la bala del cargador
             GlobalUtils.setPersistentDataItem(itemWeapon, "chargerAmmo", PersistentDataType.STRING, ArmamentUtils.listToString(listAmmo));//guarda la munición actual
             updateLore(itemWeapon, null);
+            /*
             Vector direction = player.getLocation().getDirection();
             Location location = player.getEyeLocation();
             Vector directionRandom = direction.add(new Vector((Math.random() - 0.5)*precision*0.002, (Math.random() - 0.5)*precision*0.002, (Math.random() - 0.5)*precision*0.002));//añade la imprecision del arma
@@ -88,9 +84,25 @@ public abstract class BaseWeaponTarkov extends BaseWeapon implements Compartment
                     0.5,//el margen para detectar a las entidades
                     entity -> entity != player//se descarta el protio jugador
             );
-            double distance = maxDistance;
-            boolean b = false;
             Block lastBlock = null;
+            float f = 0;
+            double distance = maxDistance;
+            BlockIterator blockIterator = new BlockIterator(
+                    player.getWorld(),
+                    player.getEyeLocation().toVector(),
+                    direction,
+                    0,
+                    (int) distance
+            );
+            while (blockIterator.hasNext() ) {
+                Block block = blockIterator.next();
+                f += block.getType().getHardness();
+                Bukkit.getLogger().warning(block.getType().name() + " | " + block.getType().getHardness());
+                if (f < ammon.getPenetration() && block.getType() != Material.AIR) {
+                    lastBlock = block;
+                }
+            }
+            boolean b = false;
             if (ammon == null) throw new IllegalArgumentException("Las balas dio nulo!?");
             if (result != null) {
                 Entity entity = result.getHitEntity();
@@ -98,24 +110,7 @@ public abstract class BaseWeaponTarkov extends BaseWeapon implements Compartment
                 if (entity != null) {
                     if (!(entity instanceof Player)) {
                         if (entity instanceof LivingEntity livingEntity) {//se tiene que hacer instance por qué no la variable entity no sirve en este caso
-                            BlockIterator blockIterator = new BlockIterator(
-                                    player.getWorld(),
-                                    player.getEyeLocation().toVector(),
-                                    direction,
-                                    0,
-                                    (int) distance
-                            );
                             DataShoot dataShoot = new DataShoot(livingEntity, player, this, baseCharger, ammon, distance, ammon.getDamage());//se crea los datos del disparo
-                            float f = 0;
-
-                            while (blockIterator.hasNext()) {
-                                Block block = blockIterator.next();
-                                f += block.getType().getHardness();
-                                Bukkit.getLogger().warning(block.getType().name() + " | " + block.getType().getHardness());
-                                if (f < ammon.getPenetration()){
-                                    lastBlock = block;
-                                }
-                            }
                             if (f < ammon.getPenetration()){
                                 onShoot(dataShoot);
                                 baseCharger.onShoot(dataShoot);
@@ -133,6 +128,11 @@ public abstract class BaseWeaponTarkov extends BaseWeapon implements Compartment
             }
             ArmamentUtils.drawParticleLine(player.getEyeLocation(),finalLocation,
                     ammon.getColor(), b, ammon.getDensityTrace());
+             */
+            DataShoot dataShoot = executeShoot(player, ammon, baseCharger);
+            onShoot(dataShoot);
+            baseCharger.onShoot(dataShoot);
+            ammon.onShoot(dataShoot);
         }
     }
 

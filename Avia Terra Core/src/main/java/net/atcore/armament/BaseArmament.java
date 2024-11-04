@@ -3,6 +3,7 @@ package net.atcore.armament;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.Nullable;
 
 @Getter
 @Setter
@@ -15,4 +16,6 @@ public abstract class BaseArmament {
 
     protected final String displayName;
     protected final ItemStack itemArmament;
+
+    protected abstract void updateLore(ItemStack item,@Nullable ItemStack itemAuxiliar);
 }

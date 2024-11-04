@@ -45,7 +45,7 @@ public class WeaponCommand extends BaseTabCommand {
                     switch (typeArmament) {
                         case WEAPON_ULTRA_KILL, WEAPON_TARKOV -> BaseArmament = ArmamentUtils.getWeapon(args[2]);
                         case CHARGER -> BaseArmament = ArmamentUtils.getCharger(args[2]);
-                        case AMMO -> BaseArmament = ArmamentUtils.getAmmon(args[2]);
+                        case AMMO -> BaseArmament = ArmamentUtils.getAmmo(args[2]);
                     }
                     if (BaseArmament != null){
                         int cantidad;
@@ -60,7 +60,7 @@ public class WeaponCommand extends BaseTabCommand {
                         }
                         sendMessage(sender, "Se dio el armamento de manera exitosa", TypeMessages.SUCCESS);
                     }else{
-                        sendMessage(sender, "El tipo de armamento no existe 11", TypeMessages.ERROR);
+                        sendMessage(sender, "El tipo de armamento no existe", TypeMessages.ERROR);
                     }
                 }else {
                     sendMessage(sender, "El jugador no existe o no esta conectado", TypeMessages.ERROR);

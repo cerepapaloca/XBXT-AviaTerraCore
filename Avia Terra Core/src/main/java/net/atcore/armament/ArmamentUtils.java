@@ -52,8 +52,12 @@ public class ArmamentUtils {
         }
     }
 
+    public BaseAmmo getAmmo(Player player){
+        return getAmmo((String) GlobalUtils.getPersistenData(player.getInventory().getItemInMainHand(), "nameAmmo", PersistentDataType.STRING));
+    }
+
     @Nullable
-    public BaseAmmo getAmmon(@Nullable String s){
+    public BaseAmmo getAmmo(@Nullable String s){
         ListAmmo list;
         if (s == null){
             return null;
@@ -64,6 +68,10 @@ public class ArmamentUtils {
             return null;
         }
         return baseAmmo.get(list);
+    }
+
+    public BaseAmmo getAmmo(@NotNull ListAmmo ammo){
+        return baseAmmo.get(ammo);
     }
 
     public BaseCharger getCharger(@NotNull Player player){
@@ -110,17 +118,16 @@ public class ArmamentUtils {
     }
 
     @Nullable
-    public BaseWeapon getWeapon(@Nullable String s){
-        try{
+    public BaseWeapon getWeapon(@Nullable String s) {
+        try {
             return baseWeaponsTarkov.get(ListWeaponTarvok.valueOf(s));
-        }catch (Exception e){
+        } catch (Exception e) {
             try {
                 return baseWeaponsUltraKill.get(ListWeaponUltraKill.valueOf(s));
-            }catch (Exception i){
+            } catch (Exception i) {
                 return null;
             }
         }
-
     }
 
     public void drawParticleLine(Location start, Location end, Color color, boolean impacted, double density) {
@@ -139,19 +146,16 @@ public class ArmamentUtils {
             //los ceros representa como de aleatorio aran spawn en el mundo en cada eje, primer numeró es la calidad de particular y el ultimo la velocidad
             world.spawnParticle(Particle.DUST, point, 2, 0, 0, 0,0.3, dustOptions ,false);
         }
-        if (impacted)world.spawnParticle(Particle.CRIT, point, 2, 0.1, 0.1, 0.1, 0.5, null, true);
+        if (impacted)world.spawnParticle(Particle.CRIT, point, 2, 0.1, 0.1, 0.1, 0.2, null, true);
     }
 
-    public Location getPlayerLookLocation(Vector direction, Player player, double maxDistance, double stepSize) {
-
-        Location eyeLocation = player.getEyeLocation();
-
-        Location currentLocation = eyeLocation.clone();
+    public Location getLookLocation(Vector direction, Location location, double maxDistance, double stepSize) {
+        Location currentLocation = location.clone();
         if (stepSize <= 0) throw new IllegalArgumentException("No puede ser menor que cero");
         for (double i = 0; i < maxDistance; i += stepSize) {
             currentLocation.add(direction.clone().multiply(stepSize));
         }
 
-        return eyeLocation.add(direction.multiply(maxDistance));
+        return location.add(direction.multiply(maxDistance));
     }
 }

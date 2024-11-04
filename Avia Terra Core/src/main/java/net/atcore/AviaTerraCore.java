@@ -19,6 +19,7 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.luckperms.api.LuckPerms;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -107,7 +108,7 @@ public final class AviaTerraCore extends JavaPlugin {
     }
 
     private void messageOn(){
-        Bukkit.getLogger().info("\n" +
+        Bukkit.getConsoleSender().sendMessage(ChatColor.BLUE +
                 "\n" +
                 " ________  ___      ___ ___  ________          _________  _______   ________  ________  ________     \n" +
                 "|\\   __  \\|\\  \\    /  /|\\  \\|\\   __  \\        |\\___   ___\\\\  ___ \\ |\\   __  \\|\\   __  \\|\\   __  \\    \n" +
@@ -116,9 +117,6 @@ public final class AviaTerraCore extends JavaPlugin {
                 "  \\ \\  \\ \\  \\ \\    / /   \\ \\  \\ \\  \\ \\  \\           \\ \\  \\ \\ \\  \\_|\\ \\ \\  \\\\  \\\\ \\  \\\\  \\\\ \\  \\ \\  \\ \n" +
                 "   \\ \\__\\ \\__\\ \\__/ /     \\ \\__\\ \\__\\ \\__\\           \\ \\__\\ \\ \\_______\\ \\__\\\\ _\\\\ \\__\\\\ _\\\\ \\__\\ \\__\\\n" +
                 "    \\|__|\\|__|\\|__|/       \\|__|\\|__|\\|__|            \\|__|  \\|_______|\\|__|\\|__|\\|__|\\|__|\\|__|\\|__|\n" +
-                "                                                                                                     \n" +
-                "                                                                                                     \n" +
-                "                                                                                                     \n" +
                 "\n");
     }
 

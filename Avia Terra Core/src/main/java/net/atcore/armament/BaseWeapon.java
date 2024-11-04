@@ -3,10 +3,18 @@ package net.atcore.armament;
 import lombok.Getter;
 import lombok.Setter;
 import net.atcore.utils.GlobalUtils;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.util.BlockIterator;
+import org.bukkit.util.RayTraceResult;
+import org.bukkit.util.Vector;
 
 @Getter
 @Setter
@@ -20,6 +28,64 @@ public abstract class BaseWeapon extends BaseArmament implements ShootWeapon{
 
     protected final int maxDistance;
     protected final double precision;
+
+    protected DataShoot executeShoot(Player player, BaseAmmo ammo, BaseCharger charger) {
+        Vector direction = player.getEyeLocation().getDirection();
+        Location location = player.getEyeLocation();
+        Vector directionRandom = direction.add(new Vector((Math.random() - 0.5)*precision*0.002, (Math.random() - 0.5)*precision*0.002, (Math.random() - 0.5)*precision*0.002));//añade la imprecision del arma
+
+        RayTraceResult result = player.getWorld().rayTraceEntities(//se crea un rayTrace
+                location,
+                directionRandom,
+                maxDistance,
+                0.5,//el margen para detectar a las entidades
+                entity -> entity != player//se descarta el protio jugador
+        );
+        Block lastBlock = null;
+        float f = 0;
+        double distance = maxDistance;
+
+
+        boolean b = false;
+        LivingEntity livingEntity = null;
+        if (result != null) {
+            Entity entity = result.getHitEntity();
+            distance = location.distance(result.getHitPosition().toLocation(player.getWorld()));
+            if (entity != null) {
+                if (entity instanceof LivingEntity) {//se tiene que hacer instance por qué no la variable entity no sirve en este caso
+                    livingEntity = (LivingEntity) entity;
+                }
+            }
+        }
+        BlockIterator blockIterator = new BlockIterator(
+                player.getWorld(),
+                location.toVector(),
+                directionRandom,
+                0,
+                (int) distance
+        );
+        while (blockIterator.hasNext() ) {
+            Block block = blockIterator.next();
+            f += block.getType().getHardness();
+            if (block.getType() == Material.VOID_AIR) break;
+            if ((f < ammo.getPenetration() || lastBlock == null) && block.getType() != Material.AIR) {
+                lastBlock = block;
+            }
+        }
+        if (f < ammo.getPenetration() && livingEntity != null) {
+            livingEntity.damage(ammo.getDamage(), player);//se aplica el daño
+            b = true;
+        }
+        Location finalLocation;
+        if (lastBlock != null) {
+            finalLocation = ArmamentUtils.getLookLocation(directionRandom, location, location.distance(lastBlock.getLocation()), 0.25);
+        }else {
+            finalLocation = ArmamentUtils.getLookLocation(directionRandom, location, distance, 0.25);;
+        }
+        ArmamentUtils.drawParticleLine(player.getEyeLocation(),finalLocation,
+                ammo.getColor(), b, ammo.getDensityTrace());
+        return new DataShoot(livingEntity, player, this, charger, ammo, distance, ammo.getDamage());//se crea los datos del disparo
+    }
 
     @Override
     public abstract void shoot(Player player);

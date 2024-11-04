@@ -12,7 +12,7 @@ public class M4_60 extends M4Family {
         super(ListCharger.M4_60,
                 List.of(MM45_OTAN_VERDE),
                 60,
-                "M4 60T",
+                "M4 60E",
                 60
         );
     }

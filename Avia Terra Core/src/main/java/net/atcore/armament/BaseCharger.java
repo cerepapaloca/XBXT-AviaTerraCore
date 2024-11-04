@@ -63,7 +63,7 @@ public abstract class BaseCharger extends BaseArmament implements Compartment {
         String stringAmmo = (String) GlobalUtils.getPersistenData(item, "chargerAmmo", PersistentDataType.STRING);
         List<BaseAmmo> AmmoBaseList = new ArrayList<>();
         if (stringAmmo != null) {
-            for (String nameAmmo : ArmamentUtils.stringToList(stringAmmo)) AmmoBaseList.add(ArmamentUtils.getAmmon(nameAmmo));
+            for (String nameAmmo : ArmamentUtils.stringToList(stringAmmo)) AmmoBaseList.add(ArmamentUtils.getAmmo(nameAmmo));
             int amountAmmo = AmmoBaseList.size();
             String loreCargador = String.format("""
                     %s
@@ -143,7 +143,7 @@ public abstract class BaseCharger extends BaseArmament implements Compartment {
                 if (ItemAmmo == null) continue;
                 if (ItemAmmo.getItemMeta() == null) continue;
                 String ammoName = (String) GlobalUtils.getPersistenData(ItemAmmo, "nameAmmo", PersistentDataType.STRING);
-                BaseAmmo baseAmmo = ArmamentUtils.getAmmon(ammoName);
+                BaseAmmo baseAmmo = ArmamentUtils.getAmmo(ammoName);
                 if (baseAmmo == null) continue;
                 if (!compatibleAmmonList.contains(baseAmmo)) continue;
                 String ammoNameList = (String) GlobalUtils.getPersistenData(ItemCharger, "chargerAmmo", PersistentDataType.STRING);
@@ -178,7 +178,7 @@ public abstract class BaseCharger extends BaseArmament implements Compartment {
                     GlobalUtils.setPersistentDataItem(ItemCharger, "chargerAmmo", PersistentDataType.STRING, "");
                     if (stringAmmo == null)return false;
                     for (String name : ArmamentUtils.stringToList(stringAmmo)){
-                        BaseAmmo baseAmmo = ArmamentUtils.getAmmon(name);
+                        BaseAmmo baseAmmo = ArmamentUtils.getAmmo(name);
                         if (baseAmmo == null) continue;
                         GlobalUtils.addItemPlayer(baseAmmo.getItemArmament(), player, true, false);
                     }
@@ -188,6 +188,11 @@ public abstract class BaseCharger extends BaseArmament implements Compartment {
             }
         }
         return false;
+    }
+
+    @Override
+    public void updateLore(ItemStack itemStack, ItemStack Auxiliar){
+        getProperties(itemArmament, true);
     }
 
     private List<BaseAmmo> listAmmoToBaseAmmo(List<ListAmmo> baseAmmoList){
