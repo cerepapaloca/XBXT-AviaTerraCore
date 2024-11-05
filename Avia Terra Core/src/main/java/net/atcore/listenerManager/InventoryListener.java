@@ -25,6 +25,7 @@ public class InventoryListener implements Listener {
         CheckAutoBan.checkDupe(player, inventory);
         AntiExploit.checkRangePurge(inventory);
         event.setCancelled(Freeze.isFreeze(player));
+
         if (clickType == ClickType.SWAP_OFFHAND) {
             Compartment compartment = ArmamentUtils.getCompartment(event.getCurrentItem());
             if (compartment != null) {

@@ -8,8 +8,14 @@ import me.neznamy.tab.api.bossbar.BarColor;
 import me.neznamy.tab.api.bossbar.BarStyle;
 import me.neznamy.tab.api.bossbar.BossBar;
 import net.atcore.moderation.ChatModeration;
+import net.atcore.inventory.InventorySectionList;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -17,8 +23,6 @@ public class AviaTerraPlayer {
 
     public AviaTerraPlayer(Player player) {
         this.player = player;
-
-
         new BukkitRunnable() {
             boolean b = false;
             public void run() {
@@ -49,19 +53,38 @@ public class AviaTerraPlayer {
         }.runTaskTimer(AviaTerraCore.getInstance(), 5, 5);
     }
 
+    private static HashMap<UUID, AviaTerraPlayer> players = new HashMap<>();
+
     private BossBar bossBar;
     public static final double MAX_AMMO = 100;
     private final Player player;
     private float pointChat = ChatModeration.MAX_PUNTOS;
     private int sanctionsChat = 1;//por circunstancias matemáticas tiene que ser 1
     //private final DataLogin dataLogin;
-    private double ammo;
+    private double ammo = MAX_AMMO;
     private boolean isFreeze = false;
+    private InventorySectionList inventorySectionList = null;
+    private List<Player> manipulatorInventoryPlayer = new ArrayList<>();
+    private Player manipulatedInventoryPlayer = null;
 
     private void createBossBar(){
         bossBar = TabAPI.getInstance().getBossBarManager().createBossBar("timerBossBar" + player.getName(), 1f, BarColor.GREEN, BarStyle.NOTCHED_10);
         bossBar.setTitle("Cantidad De Munición: " + ammo);
         bossBar.setProgress((float) ((ammo / MAX_AMMO)*100));
+    }
+
+    public static AviaTerraPlayer getPlayer(UUID uuid){
+        return players.get(uuid);
+    }
+
+    public static AviaTerraPlayer getPlayer(Player player){
+        return players.get(player.getUniqueId());
+    }
+
+    public static void addPlayer(Player player){
+        if (!players.containsKey(player.getUniqueId())){
+            players.put(player.getUniqueId(), new AviaTerraPlayer(player));
+        }
     }
 
 }

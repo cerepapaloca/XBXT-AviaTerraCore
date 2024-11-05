@@ -4,9 +4,7 @@ import net.atcore.AviaTerraCore;
 import net.atcore.command.BaseTabCommand;
 import net.atcore.command.CommandUtils;
 import net.atcore.messages.TypeMessages;
-import net.atcore.utils.GlobalConstantes;
 import net.atcore.utils.GlobalUtils;
-import net.atcore.utils.Range;
 import net.atcore.utils.RangeList;
 import net.luckperms.api.model.group.Group;
 import org.bukkit.Bukkit;
@@ -58,7 +56,7 @@ public class AddRangeCommand extends BaseTabCommand {
                     GlobalUtils.addProtectionAntiDupe(item);
                     ItemMeta meta = item.getItemMeta();
                     assert meta != null;
-                    Range range = GlobalConstantes.RANGOS_COLORS.get(RangeList.valueOf(args[0].toUpperCase()));
+                    RangeList range = RangeList.valueOf(args[0].toUpperCase());
                     //meta.setDisplayName(GlobalUtils.applyGradient("<#f0f0f0>asdas<#404040>"));
                     meta.setDisplayName(range.getIcon() + GlobalUtils.applyGradient( "<" + GlobalUtils.colorToStringHex(range.getColor()) + ">"
                              + " Duración: " + GlobalUtils.timeToString(time, 2) + "<#696969>"));

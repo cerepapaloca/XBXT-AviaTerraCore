@@ -1,6 +1,7 @@
 package net.atcore.listenerManager;
 
 import net.atcore.AviaTerraCore;
+import net.atcore.AviaTerraPlayer;
 import net.atcore.moderation.Ban.CheckBan;
 import net.atcore.security.AntiTwoPlayer;
 import net.atcore.security.Login.DataLimbo;
@@ -48,7 +49,7 @@ public class JoinAndExitListener implements Listener {
 
     @EventHandler
     public void onLogin(PlayerLoginEvent event) {
-        AviaTerraCore.addPlayer(event.getPlayer());
+        AviaTerraPlayer.addPlayer(event.getPlayer());
         ServiceSection.getSimulateOnlineMode().applySkin(event.getPlayer());
         CheckBan.onLogin(event);
     }

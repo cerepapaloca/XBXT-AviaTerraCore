@@ -73,4 +73,8 @@ public class RegisterManager {
         DataSection.getDataBases().add(database);
     }
 
+    public static void register(@NotNull DataBaseMySql database, String name) {
+
+    }
+
 }

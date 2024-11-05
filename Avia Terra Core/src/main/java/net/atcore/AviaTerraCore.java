@@ -150,18 +150,4 @@ public final class AviaTerraCore extends JavaPlugin {
         }
     }
     */
-
-    public static AviaTerraPlayer getPlayer(UUID uuid){
-        return players.get(uuid);
-    }
-
-    public static AviaTerraPlayer getPlayer(Player player){
-        return players.get(player.getUniqueId());
-    }
-
-    public static void addPlayer(Player player){
-        if (!players.containsKey(player.getUniqueId())){
-            players.put(player.getUniqueId(), new AviaTerraPlayer(player));
-        }
-    }
 }
