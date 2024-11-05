@@ -250,8 +250,6 @@ public final class GlobalUtils {
     /**
      * De la variable {@code Color} de bukkit lo convierte en el
      * clasico formato hex, así {@code #FFEEDD}
-     * @param color
-     * @return
      */
 
     public String colorToStringHex(Color color) {
@@ -272,6 +270,18 @@ public final class GlobalUtils {
     public static @NotNull ArrayList<String> StringToLoreString(@NotNull String texto, boolean space, char color) {
         return StringToLoreString(texto, 40, space, color);
     }
+
+    /**
+     * Crea un lore a partir de un texto sin salto de línea esto es por qué minecraft el lore se ase con un {@code ArrayList<String>}
+     * donde cada String es una liena es decir tiene dos String en la List solo se muestra dos líneas en el item para crear un cuerpo
+     * de un texto con el salto de liena cuando le corresponde se usa esto.
+     * @param texto el texto que se va a transformar
+     * @param longitud cada cuantas letras tiene que hacer el salto de linéa. Si usa {@code \n} crear un salo de linéa
+     *                 sin importar si á llegado a la cantidad de letras
+     * @param space si el lore tiene un espacio por arriba y por abajo es solo por qué el lore se ve mejor con el espacio
+     * @param color el color por defecto que va a tener el lore
+     * @return regresa una List conde cada elemento de la lista es un salto de liena del texto
+     */
 
     public static @NotNull ArrayList<String> StringToLoreString(@NotNull String texto, int longitud, boolean space, char color) {
         texto = ChatColor.translateAlternateColorCodes('&', texto);

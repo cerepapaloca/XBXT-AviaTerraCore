@@ -31,7 +31,7 @@ public abstract class BaseAmmo extends BaseArmament {
         ItemMeta itemMeta = itemArmament.getItemMeta();
         assert itemMeta != null;
         itemMeta.setDisplayName(displayName);
-        itemMeta.setLore(GlobalUtils.StringToLoreString(MessagesManager.addProprieties(getProperties(), null, CategoryMessages.PRIVATE), true));
+        itemMeta.setLore(GlobalUtils.StringToLoreString(MessagesManager.addProprieties(getProperties(), null, CategoryMessages.PRIVATE, false), true));
         itemArmament.setItemMeta(itemMeta);
         GlobalUtils.setPersistentDataItem(itemArmament, "nameAmmo", PersistentDataType.STRING, listAmmon.name());
     }
@@ -71,7 +71,7 @@ public abstract class BaseAmmo extends BaseArmament {
     public void updateLore(ItemStack itemStack, ItemStack itemStack2) {
         ItemMeta itemMeta = itemStack.getItemMeta();
         assert itemMeta != null;
-        itemMeta.setLore(GlobalUtils.StringToLoreString(MessagesManager.addProprieties(getProperties(), null, CategoryMessages.PRIVATE), true));
+        itemMeta.setLore(GlobalUtils.StringToLoreString(MessagesManager.addProprieties(getProperties(), null, CategoryMessages.PRIVATE, false), true));
         itemArmament.setItemMeta(itemMeta);
     }
 

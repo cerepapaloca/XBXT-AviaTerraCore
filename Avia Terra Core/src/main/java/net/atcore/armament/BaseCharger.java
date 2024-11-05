@@ -90,7 +90,7 @@ public abstract class BaseCharger extends BaseArmament implements Compartment {
 
             String finalLore = loreCargador + (amountAmmo > 0 ? loreAmmo.toString() : "");
             if (setLore){
-                meta.setLore(GlobalUtils.StringToLoreString(MessagesManager.addProprieties(finalLore, null, CategoryMessages.PRIVATE), true));
+                meta.setLore(GlobalUtils.StringToLoreString(MessagesManager.addProprieties(finalLore, null, CategoryMessages.PRIVATE, false), true));
                 item.setItemMeta(meta);
             }
             return finalLore;
@@ -107,9 +107,11 @@ public abstract class BaseCharger extends BaseArmament implements Compartment {
         if (reloadTask.containsKey(player.getUniqueId())) return;
         BukkitTask task = new BukkitRunnable() {
             public void run() {
+                ItemStack charger = player.getInventory().getItemInMainHand();
                 if (charger.getItemMeta() != null){
                     String ammoNameList = (String) GlobalUtils.getPersistenData(charger, "chargerAmmo", PersistentDataType.STRING);
                     if (ammoNameList != null) {
+                        Bukkit.getLogger().warning(ArmamentUtils.stringToList(ammoNameList).size() + " cantidad");
                         if (ArmamentUtils.stringToList(ammoNameList).size() < ammoMax) {
                             OnReload(player);
                         }else {
@@ -119,7 +121,6 @@ public abstract class BaseCharger extends BaseArmament implements Compartment {
                             cancel();
                         }
                     }else{
-                        Bukkit.getLogger().warning("test");
                         cancel();
                     }
                 }else {

@@ -109,6 +109,13 @@ public class PacketListener {
             }
         });
 
+        /*ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(
+                AviaTerraCore.getInstance(),
+                PacketType.Play.Server.NAMED_ENTITY_SPAWN
+        ) {
+
+        });*/
+
         ///////////////////////////////////////////////////////////////////////////////
     }
 }

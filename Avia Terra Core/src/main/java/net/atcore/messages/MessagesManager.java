@@ -1,9 +1,9 @@
 package net.atcore.messages;
 
-import lombok.Getter;
 import net.atcore.AviaTerraCore;
 import net.atcore.exception.DiscordChannelNotFound;
 import net.atcore.security.Login.LoginManager;
+import net.atcore.utils.GlobalUtils;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
@@ -27,10 +27,7 @@ public final class MessagesManager {
     public static final String COLOR_ESPECIAL = "&b";
     public static final String LINK_DISCORD = "&a&nhttps://discord.gg/azurex";
 
-    private static final String prefix = "&6[" + ChatColor.of("#00FFFF") + "&lA" + ChatColor.of("#55FFFF")
-            + "&lv" + ChatColor.of("#AAFFFF") + "&li" + ChatColor.of("#FFFFFF") + "&la" + ChatColor.of("#FFFFFF")
-            + "&lT" + ChatColor.of("#FFFFFF") + "&le" + ChatColor.of("#FFAAFF") + "&lr" + ChatColor.of("#FF55FF")
-            + "&lr" + ChatColor.of("#FF00FF") + "&la" +  "&6]&r " ;
+    private static final String PREFIX = "&8[" + GlobalUtils.applyGradient("<#00CCCC>AviaTerra<#00FFFF>",'l') + "&8]&r " ;
 
     ///////////////////////////
     ///////////////////////////
@@ -62,18 +59,26 @@ public final class MessagesManager {
         sendMessage(player, message, type,  categoryMessages,true);
     }
 
+    /**
+     * Todos los mensajes del plugin tiene que pasar por este metodo o por el metodo
+     * {@link #sendMessageConsole(String, TypeMessages, CategoryMessages, boolean) sendMessageConsole}.
+     * Para que todos los mensajes tenga el mismo formato de color y diseño
+     * @param player al jugador que le vas a enviar el mensaje
+     * @param message el mensaje
+     * @param type indica que mensaje va a ser informativo o error o un proceso exitoso lo qu varia es su color
+     *             y su colo secundario
+     * @param categoryMessages es si el mensaje se tiene que enviar a un canal de discord se usara {@link #sendMessageLogDiscord}
+     *                         para enviar el mensaje, ojo asegurar que el canal de discord exista
+     * @param isPrefix si se le añade el prefijo al mensaje
+     * @see #addProprieties
+     */
+
     public static void sendMessage(Player player, String message, @Nullable TypeMessages type, CategoryMessages categoryMessages, boolean isPrefix) {
         if (categoryMessages != CategoryMessages.PRIVATE){
             sendMessageLogDiscord(type, categoryMessages, message);
         }
-        String s;
-        if (isPrefix){
-            s = prefix;
-        }else {
-            s = "";
-        }
-        message = addProprieties(message, type, categoryMessages);
-        player.sendMessage(ChatColor.translateAlternateColorCodes('&', s + selectColore(type) + message));
+        message = addProprieties(message, type, categoryMessages, isPrefix);
+        player.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
     }
 
     ///////////////////////////
@@ -95,21 +100,16 @@ public final class MessagesManager {
         if (categoryMessages != CategoryMessages.PRIVATE){
             sendMessageLogDiscord(type, categoryMessages, message);
         }
-        String s;
-        if (isPrefix){
-            s = prefix;
-        }else {
-            s = "";
-        }
-        message = addProprieties(message, type, categoryMessages);
-        Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', s + selectColore(type) + message));
+
+        message = addProprieties(message, type, categoryMessages, isPrefix);
+        Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', message));
     }
 
     ///////////////////////////
     ///////////////////////////
 
     private static String selectColore(@Nullable TypeMessages type) {
-        String color = "&8";
+        String color = "&7";
         if (type != null) {
             switch (type) {
                 case SUCCESS -> color = COLOR_SUCCESS;
@@ -121,12 +121,36 @@ public final class MessagesManager {
         return color;
     }
 
-    public static String addProprieties(String message,@Nullable TypeMessages type, CategoryMessages categoryMessages) {
+    /**
+     * Le añade el formato de colores a los mensajes. Para recalcar una parte de un mensaje
+     * se usa {@code <|} para abrir y para cerrar {@code |>} esto aplica el color y añade la
+     * negrilla en el mensaje del discord y si un mensaje tiene un color específico y quieres
+     * volver al colo origina usa {@code |!>} para que vuelva a color origina sin añadir el doble
+     * asterisco para la negrilla de discord
+     * @param message el mensaje que quieres modificar
+     * @param type si en un mensaje informativo o de un error etc. esto soporta nulo si lo pones nulo
+     *             mostrar un color gris
+     * @param categoryMessages en este indica si se tiene que registrar si es diferente a
+     *                         {@code CategoryMessages.PRIVATE} le añade este sufijo al mensaje
+     *                         {@code [R]} indíca que ese mensaje se tiene que registrar en
+     *                         un canal de discord
+     * @param isPrefix se tiene que poner él {@link #PREFIX} en el mensaje en casi en todos los casos hay que
+     *                 poner le prefijo al mensaje para que sea más fácil de identificar
+     * @return regresa el
+     */
+
+    public static String addProprieties(String message,@Nullable TypeMessages type, CategoryMessages categoryMessages, boolean isPrefix) {
         if (categoryMessages != CategoryMessages.PRIVATE) {
             while (Character.isSpaceChar(message.charAt(message.length()-1))){
                 message = message.substring(0, message.length()-1);
             }
             message = message + " &c[R]";
+        }
+        String s;
+        if (isPrefix){
+            s = PREFIX;
+        }else {
+            s = "";
         }
         char color;
         switch (type) {
@@ -136,7 +160,8 @@ public final class MessagesManager {
             case ERROR -> color = '4';
             case null , default -> color = '8';
         }
-        return message.replace("<|","&" + color).replace("|>",selectColore(type)).replace("|!>", selectColore(type));
+        String colorMain = selectColore(type);
+        return s + colorMain +  message.replace("<|", "&" + color).replace("|>", colorMain).replace("|!>", colorMain);
     }
 
     private static void sendMessageLogDiscord(TypeMessages type, CategoryMessages categoryMessages, String message) {

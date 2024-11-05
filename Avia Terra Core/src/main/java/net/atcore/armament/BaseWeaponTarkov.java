@@ -48,7 +48,6 @@ public abstract class BaseWeaponTarkov extends BaseWeapon implements Compartment
         this(type, List.of(chargerTypes), maxDistance, displayName, precision);
     }
 
-
     private final List<ListCharger> CHARGERS_TYPE;
     private final ListWeaponTarvok weaponType;
     public static final HashMap<UUID, BukkitTask> inReload = new HashMap<>();
@@ -72,63 +71,6 @@ public abstract class BaseWeaponTarkov extends BaseWeapon implements Compartment
             listAmmo.removeFirst();//se elimina la bala del cargador
             GlobalUtils.setPersistentDataItem(itemWeapon, "chargerAmmo", PersistentDataType.STRING, ArmamentUtils.listToString(listAmmo));//guarda la munición actual
             updateLore(itemWeapon, null);
-            /*
-            Vector direction = player.getLocation().getDirection();
-            Location location = player.getEyeLocation();
-            Vector directionRandom = direction.add(new Vector((Math.random() - 0.5)*precision*0.002, (Math.random() - 0.5)*precision*0.002, (Math.random() - 0.5)*precision*0.002));//añade la imprecision del arma
-
-            RayTraceResult result = player.getWorld().rayTraceEntities(//se crea un rayTrace
-                    location,
-                    directionRandom,
-                    maxDistance,
-                    0.5,//el margen para detectar a las entidades
-                    entity -> entity != player//se descarta el protio jugador
-            );
-            Block lastBlock = null;
-            float f = 0;
-            double distance = maxDistance;
-            BlockIterator blockIterator = new BlockIterator(
-                    player.getWorld(),
-                    player.getEyeLocation().toVector(),
-                    direction,
-                    0,
-                    (int) distance
-            );
-            while (blockIterator.hasNext() ) {
-                Block block = blockIterator.next();
-                f += block.getType().getHardness();
-                Bukkit.getLogger().warning(block.getType().name() + " | " + block.getType().getHardness());
-                if (f < ammon.getPenetration() && block.getType() != Material.AIR) {
-                    lastBlock = block;
-                }
-            }
-            boolean b = false;
-            if (ammon == null) throw new IllegalArgumentException("Las balas dio nulo!?");
-            if (result != null) {
-                Entity entity = result.getHitEntity();
-                distance = player.getEyeLocation().distance(result.getHitPosition().toLocation(player.getWorld()));
-                if (entity != null) {
-                    if (!(entity instanceof Player)) {
-                        if (entity instanceof LivingEntity livingEntity) {//se tiene que hacer instance por qué no la variable entity no sirve en este caso
-                            DataShoot dataShoot = new DataShoot(livingEntity, player, this, baseCharger, ammon, distance, ammon.getDamage());//se crea los datos del disparo
-                            if (f < ammon.getPenetration()){
-                                onShoot(dataShoot);
-                                baseCharger.onShoot(dataShoot);
-                                ammon.onShoot(dataShoot);
-                                livingEntity.damage(dataShoot.getDamage());//se aplica el daño
-                                b = true;
-                            }
-                        }
-                    }
-                }
-            }
-            Location finalLocation =  ArmamentUtils.getPlayerLookLocation(directionRandom, player, distance, 0.25);
-            if (lastBlock != null) {
-                finalLocation = lastBlock.getLocation();
-            }
-            ArmamentUtils.drawParticleLine(player.getEyeLocation(),finalLocation,
-                    ammon.getColor(), b, ammon.getDensityTrace());
-             */
             DataShoot dataShoot = executeShoot(player, ammon, baseCharger);
             onShoot(dataShoot);
             baseCharger.onShoot(dataShoot);
@@ -179,31 +121,32 @@ public abstract class BaseWeaponTarkov extends BaseWeapon implements Compartment
             if (chargerNameExternal == null) continue;
             if (chargerNameInside == null) continue;
             if (!isCompatible(chargerNameExternal))continue;//es un cargador compatible?
-            boolean hasCharger = !chargerNameInside.equals("null");
+            boolean hasCharger = !chargerNameInside.equals("null");//tiene un cargador el arma
             BaseCharger baseCharger = ArmamentUtils.getCharger(hasCharger ? chargerNameInside : chargerNameExternal);//el cargador interno-
-            if (baseCharger == null) throw new IllegalArgumentException("baseCharger dio nulo cuando debe ser imposible");//creo que nunca va a suceder o eso creo
             // -puede ser el mismo cargador o el externo en caso de que no tenga uno asignado
+            if (baseCharger == null) throw new IllegalArgumentException("baseCharger dio nulo cuando debe ser imposible");//creo que nunca va a suceder o eso creo
             BaseCharger baseChargerInside = ArmamentUtils.getCharger(chargerNameInside);
             boolean b;
-            if (!ammoWeapon.isEmpty() && baseChargerInside != null){//es cargador está vacío?
+            if (!ammoWeapon.isEmpty() && baseChargerInside != null){//el cargador del arma está vacío?
                 b = baseChargerInside.getAmmoMax() >= baseCharger.getAmmoMax();//obtiene cuál es el cargador más grande
-                if (b){//en caso de que sea el más grnade
+                if (b){//en caso de que sea el más grande
                     baseCharger = baseChargerInside;//se usa el cargador interno para calcular la capacidad
                 }
             }else{
                 b = true;//se usa el cargador externo
             }
             int delta = baseCharger.getAmmoMax() - ammoWeapon.size();//la diferencia de munición entre cantidad de munición actual y la maxima
-            String ammo = (String) GlobalUtils.getPersistenData(itemCharger, "chargerAmmo", PersistentDataType.STRING);
+            String ammo = (String) GlobalUtils.getPersistenData(itemCharger, "chargerAmmo", PersistentDataType.STRING);//se obtiene la munición del cargador
             if (ammo == null) continue;
             List<String> ammoCharger = ArmamentUtils.stringToList(ammo);
+            if (ammoCharger.isEmpty())continue;//si el cargador está vacío busca otro cargador
             int result = Math.min(ammoCharger.size(), delta);//la cantidad de balas que se tiene que mover
 
             for (int i = 0; i < result; i++) {
                 ammoWeapon.addFirst(ammoCharger.removeFirst());//mueve las balas de una lista a la otra
             }
-            if (!hasCharger) {//si el cargador está vacío se elimina del mundo
-                itemCharger.setAmount(0);
+            if (!hasCharger) {//si el arma no tiene cargador lo "guarda" dentro del arma
+                itemCharger.setAmount(0);//lo que hace es desperecer del mundo
             }
             GlobalUtils.setPersistentDataItem(itemCharger, "chargerAmmo", PersistentDataType.STRING, ArmamentUtils.listToString(ammoCharger));
             GlobalUtils.setPersistentDataItem(itemWeapon, "chargerAmmo", PersistentDataType.STRING, ArmamentUtils.listToString(ammoWeapon));
@@ -229,7 +172,7 @@ public abstract class BaseWeaponTarkov extends BaseWeapon implements Compartment
                 Rango máximo: <|%s|>m
                 Presión: <|%s|>
                 """,
-                Math.round(maxDistance),
+                maxDistance,
                 (100 - precision) + "%"
         );
         if (charger != null){//en caso de que tenga un cargador
@@ -249,7 +192,7 @@ public abstract class BaseWeaponTarkov extends BaseWeapon implements Compartment
             }
         }
 
-        itemMeta.setLore(GlobalUtils.StringToLoreString(MessagesManager.addProprieties(s, null, CategoryMessages.PRIVATE), true));
+        itemMeta.setLore(GlobalUtils.StringToLoreString(MessagesManager.addProprieties(s, null, CategoryMessages.PRIVATE, false), true));
         weapon.setItemMeta(itemMeta);
     }
 

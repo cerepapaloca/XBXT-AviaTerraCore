@@ -1,14 +1,13 @@
 package net.atcore.armament;
 
 import lombok.experimental.UtilityClass;
+import net.atcore.AviaTerraCore;
 import net.atcore.utils.GlobalUtils;
-import org.bukkit.Color;
-import org.bukkit.Location;
-import org.bukkit.Particle;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -130,7 +129,7 @@ public class ArmamentUtils {
         }
     }
 
-    public void drawParticleLine(Location start, Location end, Color color, boolean impacted, double density) {
+    public void drawParticleLine(@NotNull Location start, Location end, Color color, boolean impacted, double density) {
         World world = start.getWorld();
         if (world == null || !world.equals(end.getWorld())) {
             return;
@@ -138,15 +137,30 @@ public class ArmamentUtils {
 
         Vector direction = end.toVector().subtract(start.toVector()).normalize();
         double distance = start.distance(end);
-
-        Particle.DustOptions dustOptions = new Particle.DustOptions(color, 0.5F);
-        Location point = start;
-        for (double d = 0; d < distance; d += density) {
+        Particle.DustOptions dustOptions = new Particle.DustOptions(color, 0.6F);
+        //Location point = start;
+        new BukkitRunnable() {
+            Location point = start;
+            double d = 0;
+            public void run() {
+                for (int i = 0; i < 3; i++){// crear las partículas en 3 en 3
+                    d += density;
+                    point = start.clone().add(direction.clone().multiply(d));
+                    //los ceros representa como de aleatorio aran spawn en el mundo en cada eje, primer numeró es la calidad de particular y el ultimo la velocidad
+                    world.spawnParticle(Particle.DUST, point, 2, 0, 0, 0,0.3, dustOptions ,false);
+                    if (d > distance){
+                        if (impacted)world.spawnParticle(Particle.CRIT, point, 4, 0.3, 0.3, 0.3, 0.2, null, true);
+                        cancel();
+                        break;
+                    }
+                }
+            }
+        }.runTaskTimer(AviaTerraCore.getInstance(), 1, 1);
+        /*for (double d = 0; d < distance; d += density) {
             point = start.clone().add(direction.clone().multiply(d));
             //los ceros representa como de aleatorio aran spawn en el mundo en cada eje, primer numeró es la calidad de particular y el ultimo la velocidad
             world.spawnParticle(Particle.DUST, point, 2, 0, 0, 0,0.3, dustOptions ,false);
-        }
-        if (impacted)world.spawnParticle(Particle.CRIT, point, 2, 0.1, 0.1, 0.1, 0.2, null, true);
+        }*/
     }
 
     public Location getLookLocation(Vector direction, Location location, double maxDistance, double stepSize) {

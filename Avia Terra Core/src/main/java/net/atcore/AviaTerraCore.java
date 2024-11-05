@@ -78,8 +78,7 @@ public final class AviaTerraCore extends JavaPlugin {
         RegisterManager.register(new ArmamentSection());
         //enableModules();
         isStarting = false;
-        sendMessageConsole("AviaTerra Iniciado en <|" + (System.currentTimeMillis() - timeCurrent) + "ms", TypeMessages.SUCCESS, false);
-        messageOn();
+        messageOn(timeCurrent);
     }
 
     @Override
@@ -107,8 +106,8 @@ public final class AviaTerraCore extends JavaPlugin {
         }
     }
 
-    private void messageOn(){
-        Bukkit.getConsoleSender().sendMessage(ChatColor.BLUE +
+    private void messageOn(long timeCurrent){
+        sendMessageConsole("AviaTerra Iniciado en <|" + (System.currentTimeMillis() - timeCurrent) + "ms" +
                 "\n" +
                 " ________  ___      ___ ___  ________          _________  _______   ________  ________  ________     \n" +
                 "|\\   __  \\|\\  \\    /  /|\\  \\|\\   __  \\        |\\___   ___\\\\  ___ \\ |\\   __  \\|\\   __  \\|\\   __  \\    \n" +
@@ -116,8 +115,8 @@ public final class AviaTerraCore extends JavaPlugin {
                 " \\ \\   __  \\ \\  \\/  / / \\ \\  \\ \\   __  \\           \\ \\  \\ \\ \\  \\_|/_\\ \\   _  _\\ \\   _  _\\ \\   __  \\  \n" +
                 "  \\ \\  \\ \\  \\ \\    / /   \\ \\  \\ \\  \\ \\  \\           \\ \\  \\ \\ \\  \\_|\\ \\ \\  \\\\  \\\\ \\  \\\\  \\\\ \\  \\ \\  \\ \n" +
                 "   \\ \\__\\ \\__\\ \\__/ /     \\ \\__\\ \\__\\ \\__\\           \\ \\__\\ \\ \\_______\\ \\__\\\\ _\\\\ \\__\\\\ _\\\\ \\__\\ \\__\\\n" +
-                "    \\|__|\\|__|\\|__|/       \\|__|\\|__|\\|__|            \\|__|  \\|_______|\\|__|\\|__|\\|__|\\|__|\\|__|\\|__|\n" +
-                "\n");
+                "    \\|__|\\|__|\\|__|/       \\|__|\\|__|\\|__|            \\|__|  \\|_______|\\|__|\\|__|\\|__|\\|__|\\|__|\\|__|\n",
+                TypeMessages.SUCCESS, false);
     }
 
 

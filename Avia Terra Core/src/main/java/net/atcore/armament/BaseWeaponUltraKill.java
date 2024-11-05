@@ -18,30 +18,30 @@ import org.bukkit.inventory.meta.ItemMeta;
 @Setter
 public abstract class BaseWeaponUltraKill extends BaseWeapon {
 
-    public BaseWeaponUltraKill(ListWeaponUltraKill weaponType, String displayName, int maxDistance, int manaCost, double precision, ListAmmo ammo) {
+    public BaseWeaponUltraKill(ListWeaponUltraKill weaponType, String displayName, int maxDistance, int cost, double precision, ListAmmo ammo) {
         super(displayName, new ItemStack(Material.GOLDEN_HORSE_ARMOR), maxDistance, weaponType.name(), precision);
-        this.manaCost = manaCost;
+        this.cost = cost;
         this.ammo = ArmamentUtils.getAmmo(ammo);
         this.weaponType = weaponType;
         updateLore(getItemArmament(), null);
     }
 
     private final BaseAmmo ammo;
-    private final int manaCost;
+    private final int cost;
     private final ListWeaponUltraKill weaponType;
 
     @Override
     public void shoot(Player player) {
         AviaTerraPlayer atp = AviaTerraCore.getPlayer(player);
-        double manaPlayer = atp.getMana();
-        if (manaCost < manaPlayer){
-            atp.setMana(manaPlayer - manaCost);
+        double ammoPlayer = atp.getAmmo();
+        if (cost < ammoPlayer){
+            atp.setAmmo(ammoPlayer - cost);
             DataShoot dataShoot = executeShoot(player, ammo, null);
             onShoot(dataShoot);
             ammo.onShoot(dataShoot);
             updateLore(player.getInventory().getItemInMainHand(), null);
         }else{
-            MessagesManager.sendMessage(player, "No tiene mana suficiente", TypeMessages.ERROR);
+            MessagesManager.sendMessage(player, "No tienes munición suficiente", TypeMessages.ERROR);
         }
     }
 
@@ -56,14 +56,16 @@ public abstract class BaseWeaponUltraKill extends BaseWeapon {
                 Rango máximo: <|%s|>m
                 """,
                 this.ammo.getDamage(),
-                manaCost,
+                cost,
                 (100 - precision) + "%",
                 maxDistance
-        ), null, CategoryMessages.PRIVATE), true));
+        ), null, CategoryMessages.PRIVATE, false), true));
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
         meta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
+        meta.addItemFlags(ItemFlag.HIDE_ARMOR_TRIM);
+        meta.addItemFlags(ItemFlag.HIDE_DESTROYS);
         meta.setDisplayName(displayName);
         itemStack.setItemMeta(meta);
     }
