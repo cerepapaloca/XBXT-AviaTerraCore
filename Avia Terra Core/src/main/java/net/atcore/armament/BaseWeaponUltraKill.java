@@ -21,7 +21,7 @@ public abstract class BaseWeaponUltraKill extends BaseWeapon {
     public BaseWeaponUltraKill(ListWeaponUltraKill weaponType, String displayName, int maxDistance, int cost, double precision, ListAmmo ammo) {
         super(displayName, new ItemStack(Material.GOLDEN_HORSE_ARMOR), maxDistance, weaponType.name(), precision);
         this.cost = cost;
-        this.ammo = ArmamentUtils.getAmmo(ammo);
+        this.ammo = ammo.getAmmo();
         this.weaponType = weaponType;
         updateLore(getItemArmament(), null);
     }
@@ -32,7 +32,7 @@ public abstract class BaseWeaponUltraKill extends BaseWeapon {
 
     @Override
     public void shoot(Player player) {
-        AviaTerraPlayer atp = AviaTerraCore.getPlayer(player);
+        AviaTerraPlayer atp = AviaTerraPlayer.getPlayer(player);
         double ammoPlayer = atp.getAmmo();
         if (cost < ammoPlayer){
             atp.setAmmo(ammoPlayer - cost);

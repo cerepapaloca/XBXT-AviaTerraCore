@@ -24,4 +24,5 @@ commands:
   removeregister:
   removesession:
   weapon:
+  seeinventory:
 

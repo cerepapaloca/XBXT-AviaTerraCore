@@ -1,0 +1,43 @@
+package net.atcore.armament;
+
+import lombok.experimental.UtilityClass;
+import org.bukkit.entity.Player;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.inventory.ClickType;
+import org.bukkit.inventory.ItemStack;
+
+@UtilityClass
+public class ArmamentActions {
+
+    public boolean shootAction(Action action, Player player) {
+        if (action.equals(Action.RIGHT_CLICK_AIR) ||action.equals(Action.RIGHT_CLICK_BLOCK)) {
+            BaseWeapon weapon = ArmamentUtils.getWeapon(player);
+            if (weapon == null) return false;
+            weapon.shoot(player);
+            return true;
+        }else {
+            return false;
+        }
+    }
+
+    public boolean outAction(ClickType clickType, Player player, ItemStack currentItem) {
+        if (clickType == ClickType.SWAP_OFFHAND) {
+            Compartment compartment = ArmamentUtils.getCompartment(currentItem);
+            if (compartment != null) {
+                return compartment.outCompartment(player, currentItem);
+            }
+        }
+        return false;
+    }
+
+    public boolean reloadAction(Player player, ItemStack offHandItem) {
+        Compartment compartment = ArmamentUtils.getCompartment(offHandItem);
+        if (compartment != null){
+            compartment.reload(player);
+            return true;
+        }else {
+            return false;
+        }
+    }
+
+}

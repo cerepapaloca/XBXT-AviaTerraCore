@@ -1,16 +1,14 @@
 package net.atcore.listenerManager;
 
 import net.atcore.armament.*;
+import net.atcore.inventory.ActionsInventoryManager;
 import net.atcore.moderation.Ban.CheckAutoBan;
 import net.atcore.moderation.Freeze;
 import net.atcore.security.AntiExploit;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.ClickType;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
 
@@ -25,13 +23,8 @@ public class InventoryListener implements Listener {
         CheckAutoBan.checkDupe(player, inventory);
         AntiExploit.checkRangePurge(inventory);
         event.setCancelled(Freeze.isFreeze(player));
-
-        if (clickType == ClickType.SWAP_OFFHAND) {
-            Compartment compartment = ArmamentUtils.getCompartment(event.getCurrentItem());
-            if (compartment != null) {
-                event.setCancelled(compartment.outCompartment(player, event.getCurrentItem()));
-            }
-        }
+        event.setCancelled(ActionsInventoryManager.clickEvent(event));
+        event.setCancelled(ArmamentActions.outAction(clickType, player, event.getCurrentItem()));
     }
 
     @EventHandler
@@ -42,5 +35,15 @@ public class InventoryListener implements Listener {
         CheckAutoBan.checkDupe(player, inventory);
         AntiExploit.checkRangePurge(inventory);
         event.setCancelled(Freeze.isFreeze(player));
+    }
+
+    @EventHandler
+    public void onInventoryClose(@NotNull InventoryCloseEvent event) {
+        ActionsInventoryManager.closeEvent(event);
+    }
+
+    @EventHandler
+    public void onInventoryDrag(@NotNull InventoryDragEvent event) {
+        event.setCancelled(ActionsInventoryManager.dragEvent(event));
     }
 }

@@ -22,7 +22,7 @@ public class ChatModeration {
     public static final float MAX_PUNTOS = 200;
 
     public static boolean antiSpam(Player bukkitPlayer, String message) {
-        AviaTerraPlayer aviaTerraPlayer = AviaTerraCore.getPlayer(bukkitPlayer);
+        AviaTerraPlayer aviaTerraPlayer = AviaTerraPlayer.getPlayer(bukkitPlayer);
         float puntos = aviaTerraPlayer.getPointChat();
         if (puntos < 0) {//si su puntos son negativos se lo hace saber
             aviaTerraPlayer.setPointChat(puntos);
@@ -48,7 +48,7 @@ public class ChatModeration {
             @Override
             public void run() {
                 Bukkit.getOnlinePlayers().forEach(player -> {
-                    AviaTerraPlayer aviaTerraPlayer = AviaTerraCore.getPlayer(player);
+                    AviaTerraPlayer aviaTerraPlayer = AviaTerraPlayer.getPlayer(player);
                     float f = aviaTerraPlayer.getPointChat();
                     aviaTerraPlayer.setPointChat(f > MAX_PUNTOS ? MAX_PUNTOS : f + Config.getLevelModerationChat());
                 });
@@ -59,7 +59,7 @@ public class ChatModeration {
             @Override
             public void run() {
                 Bukkit.getOnlinePlayers().forEach(player -> {
-                    AviaTerraPlayer aviaTerraPlayer = AviaTerraCore.getPlayer(player);
+                    AviaTerraPlayer aviaTerraPlayer = AviaTerraPlayer.getPlayer(player);
                     int i = aviaTerraPlayer.getSanctionsChat();
                     aviaTerraPlayer.setSanctionsChat(i > 1 ? i - 1 : 1);
                 });

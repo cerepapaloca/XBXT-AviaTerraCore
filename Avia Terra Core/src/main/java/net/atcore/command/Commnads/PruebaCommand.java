@@ -23,15 +23,6 @@ public class PruebaCommand extends BaseCommand {
     @Override
     public void execute(CommandSender sender, String[] args) {
         sendMessage(sender, "Hola Mundo!", TypeMessages.SUCCESS);
-        ArmamentUtils.baseWeaponsTarkov.forEach((list, baseWeapon) -> {
-            GlobalUtils.addItemPlayer(baseWeapon.getItemArmament(), (Player) sender , true, true);
-        });
-        ArmamentUtils.baseChargers.forEach((list, dataCharger) -> {
-            GlobalUtils.addItemPlayer(dataCharger.getItemArmament(), (Player) sender , true, true);
-        });
-        ArmamentUtils.baseAmmo.forEach((list, baseAmmo) -> {
-            GlobalUtils.addItemPlayer(baseAmmo.getItemArmament(), (Player) sender , true, true);
-        });
     }
 
 }

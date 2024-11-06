@@ -1,31 +1,22 @@
 package net.atcore.inventory;
 
-import net.atcore.Section;
-import net.atcore.command.Commnads.seeInventoryCommand;
+import lombok.Getter;
+import net.atcore.inventory.Action.ManipulatedAction;
+import net.atcore.inventory.Action.ManipulatorAction;
+import net.atcore.inventory.inventors.ManipulatorInventory;
 
-import java.io.Serializable;
+@Getter
+public enum InventorySection {
+    MANIPULATOR(new ManipulatorAction(), new ManipulatorInventory(), false),
+    MANIPULATED(new ManipulatedAction(), null, false);
 
-import static net.atcore.utils.RegisterManager.register;
-
-public class InventorySection implements Section {
-
-    @Override
-    public void enable() {
-        register(new seeInventoryCommand());
+    InventorySection(BaseActions baseActions, BaseInventors baseInventory, boolean isProtected) {
+        this.baseActions = baseActions;
+        this.baseInventors = baseInventory;
+        this.protectedInventory = isProtected;
     }
 
-    @Override
-    public void disable() {
-
-    }
-
-    @Override
-    public void reloadConfig() {
-
-    }
-
-    @Override
-    public String getName() {
-        return "";
-    }
+    private final BaseActions baseActions;
+    private final BaseInventors baseInventors;
+    private final boolean protectedInventory;
 }

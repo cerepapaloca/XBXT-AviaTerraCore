@@ -198,7 +198,7 @@ public abstract class BaseCharger extends BaseArmament implements Compartment {
 
     private List<BaseAmmo> listAmmoToBaseAmmo(List<ListAmmo> baseAmmoList){
         List<BaseAmmo> listAmmo = new ArrayList<>();
-        for (ListAmmo ammo : baseAmmoList) listAmmo.add(ArmamentUtils.baseAmmo.get(ammo));
+        for (ListAmmo ammo : baseAmmoList) listAmmo.add(ammo.getAmmo());
         return listAmmo;
     }
     

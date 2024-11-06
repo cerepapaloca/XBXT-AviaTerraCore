@@ -2,11 +2,9 @@ package net.atcore.listenerManager;
 
 import net.atcore.AviaTerraCore;
 import net.atcore.Config;
-import net.atcore.armament.ArmamentUtils;
-import net.atcore.armament.BaseWeapon;
-import net.atcore.armament.Compartment;
-import net.atcore.armament.BaseWeaponTarkov;
+import net.atcore.armament.*;
 import net.atcore.messages.TypeMessages;
+import net.atcore.moderation.BlockCommands;
 import net.atcore.moderation.Freeze;
 import net.atcore.security.Login.LoginManager;
 import net.atcore.utils.GlobalConstantes;
@@ -50,12 +48,7 @@ public class PlayerListener implements Listener {
             event.setCancelled(true);
             return;
         }
-
-        if (event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
-            BaseWeapon weapon = ArmamentUtils.getWeapon(player);
-            if (weapon == null) return;
-            weapon.shoot(player);
-        }
+        event.setCancelled(ArmamentActions.shootAction(event.getAction(), player));
         addRange(player);
     }
 
@@ -74,16 +67,13 @@ public class PlayerListener implements Listener {
             sendMessage(player,"Primero inicia sessión usando /login", TypeMessages.ERROR);
             event.setCancelled(true);
         }
+        event.setCancelled(BlockCommands.checkCommand(command, player));
     }
 
     @EventHandler
     public void onSwap(PlayerSwapHandItemsEvent event) {
         Player player = event.getPlayer();
-        Compartment compartment = ArmamentUtils.getCompartment(event.getOffHandItem());
-        if (compartment != null){
-            compartment.reload(player);
-            event.setCancelled(true);
-        }
+        event.setCancelled(ArmamentActions.reloadAction(player, event.getOffHandItem()));
     }
 
     @EventHandler

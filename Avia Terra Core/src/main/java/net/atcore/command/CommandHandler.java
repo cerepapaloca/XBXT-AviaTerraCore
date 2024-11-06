@@ -14,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 
 import static net.atcore.messages.MessagesManager.sendMessage;
+import static net.atcore.messages.MessagesManager.sendMessageConsole;
 
 @Getter
 @RequiredArgsConstructor //esta anotación crea un constructor con las variables que tenga el final
@@ -58,16 +59,7 @@ public final class CommandHandler implements TabExecutor {
                 }
             }catch (Exception e) {
                 sendMessage(sender, "Ops!! Hubo un error al ejecutar el comando contacta con el desarrollador", TypeMessages.ERROR);
-                if(sender instanceof Player player){
-                    StringBuilder s = new StringBuilder();
-                    s.append("/").append(cmd.getName());
-                    for (String a : args){
-                        s.append(" ").append(a);
-                    }
-                    MessagesManager.sendExceptionWhitInfoPlayer(player, "comando ejecutado: " + s, e);
-                }else {
-                    throw new RuntimeException(e);
-                }
+                e.printStackTrace();
             }
             break;
         }

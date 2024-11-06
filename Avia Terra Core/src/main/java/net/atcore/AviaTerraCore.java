@@ -3,8 +3,6 @@ package net.atcore;
 import com.github.games647.craftapi.resolver.MojangResolver;
 import lombok.Getter;
 import lombok.SneakyThrows;
-import me.neznamy.tab.api.TabAPI;
-import net.atcore.armament.ArmamentSection;
 import net.atcore.command.CommandSection;
 import net.atcore.data.DataSection;
 import net.atcore.messages.TypeMessages;
@@ -19,8 +17,6 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.luckperms.api.LuckPerms;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -75,7 +71,6 @@ public final class AviaTerraCore extends JavaPlugin {
         RegisterManager.register(new DataSection());
         RegisterManager.register(new ListenerManagerSection());
         RegisterManager.register(new ServiceSection());
-        RegisterManager.register(new ArmamentSection());
         //enableModules();
         isStarting = false;
         messageOn(timeCurrent);

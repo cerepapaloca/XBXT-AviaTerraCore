@@ -1,20 +1,16 @@
 package net.atcore.command.Commnads;
 
-import net.atcore.AviaTerraCore;
 import net.atcore.AviaTerraPlayer;
 import net.atcore.command.BaseTabCommand;
 import net.atcore.command.CommandUtils;
 import net.atcore.messages.TypeMessages;
-import net.atcore.moderation.Freeze;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.UUID;
 
 import static net.atcore.messages.MessagesManager.sendMessage;
 
@@ -45,7 +41,7 @@ public class FreezeCommand extends BaseTabCommand {
                     return;
                 }
             }
-            AviaTerraPlayer aviaTerraPlayer = AviaTerraCore.getPlayer(player);
+            AviaTerraPlayer aviaTerraPlayer = AviaTerraPlayer.getPlayer(player);
             switch (args[1].toLowerCase()){
                 case "on" -> {
                     if (aviaTerraPlayer.isFreeze()) {

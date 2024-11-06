@@ -8,7 +8,7 @@ import me.neznamy.tab.api.bossbar.BarColor;
 import me.neznamy.tab.api.bossbar.BarStyle;
 import me.neznamy.tab.api.bossbar.BossBar;
 import net.atcore.moderation.ChatModeration;
-import net.atcore.inventory.InventorySectionList;
+import net.atcore.inventory.InventorySection;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -63,7 +63,7 @@ public class AviaTerraPlayer {
     //private final DataLogin dataLogin;
     private double ammo = MAX_AMMO;
     private boolean isFreeze = false;
-    private InventorySectionList inventorySectionList = null;
+    private InventorySection inventorySection = null;
     private List<Player> manipulatorInventoryPlayer = new ArrayList<>();
     private Player manipulatedInventoryPlayer = null;
 

@@ -5,6 +5,8 @@ import net.atcore.command.BaseCommand;
 import net.atcore.command.CommandSection;
 import net.atcore.data.DataBaseMySql;
 import net.atcore.data.DataSection;
+import net.atcore.inventory.BaseActions;
+import net.atcore.inventory.ActionsInventoryManager;
 import net.atcore.messages.TypeMessages;
 import net.atcore.Section;
 import org.bukkit.command.CommandException;
@@ -51,22 +53,6 @@ public class RegisterManager {
         }
         pluginCommand.setExecutor(CommandSection.getCommandHandler());
         pluginCommand.setTabCompleter(CommandSection.getCommandHandler());
-    }
-
-    public static void register(@NotNull BaseCharger baseCharger) {
-        ArmamentUtils.baseChargers.put(baseCharger.getChargerType(), baseCharger);
-    }
-
-    public static void register(@NotNull BaseWeaponTarkov baseWeaponTarkov) {
-        ArmamentUtils.baseWeaponsTarkov.put(baseWeaponTarkov.getWeaponType(), baseWeaponTarkov);
-    }
-
-    public static void register(@NotNull BaseWeaponUltraKill baseWeaponUltraKill){
-        ArmamentUtils.baseWeaponsUltraKill.put(baseWeaponUltraKill.getWeaponType(), baseWeaponUltraKill);
-    }
-
-    public static void register(@NotNull BaseAmmo baseAmmo) {
-        ArmamentUtils.baseAmmo.put(baseAmmo.getListAmmon(), baseAmmo);
     }
 
     public static void register(@NotNull DataBaseMySql database) {

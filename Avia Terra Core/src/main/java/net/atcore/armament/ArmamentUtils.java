@@ -5,6 +5,8 @@ import net.atcore.AviaTerraCore;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -14,15 +16,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 @UtilityClass
 public class ArmamentUtils {
-
-    public static final HashMap<ListCharger, BaseCharger> baseChargers = new HashMap<>();
-    public static final HashMap<ListWeaponTarvok, BaseWeaponTarkov> baseWeaponsTarkov = new HashMap<>();
-    public static final HashMap<ListWeaponUltraKill, BaseWeaponUltraKill> baseWeaponsUltraKill = new HashMap<>();
-    public static final HashMap<ListAmmo, BaseAmmo> baseAmmo = new HashMap<>();
 
     public String listToString(List<String> list){
         return list.toString().replace(" ", "").replace("[", "").replace("]", "");
@@ -66,11 +62,7 @@ public class ArmamentUtils {
         }catch (Exception e){
             return null;
         }
-        return baseAmmo.get(list);
-    }
-
-    public BaseAmmo getAmmo(@NotNull ListAmmo ammo){
-        return baseAmmo.get(ammo);
+        return list.getAmmo();
     }
 
     public BaseCharger getCharger(@NotNull Player player){
@@ -97,7 +89,7 @@ public class ArmamentUtils {
         }catch (Exception e){
             return null;
         }
-        return baseChargers.get(list);
+        return list.getCharger();
     }
 
     public BaseWeapon getWeapon(@NotNull Player player){
@@ -119,10 +111,10 @@ public class ArmamentUtils {
     @Nullable
     public BaseWeapon getWeapon(@Nullable String s) {
         try {
-            return baseWeaponsTarkov.get(ListWeaponTarvok.valueOf(s));
+            return ListWeaponTarvok.valueOf(s).getWeapon();
         } catch (Exception e) {
             try {
-                return baseWeaponsUltraKill.get(ListWeaponUltraKill.valueOf(s));
+                return ListWeaponUltraKill.valueOf(s).getWeapon();
             } catch (Exception i) {
                 return null;
             }
