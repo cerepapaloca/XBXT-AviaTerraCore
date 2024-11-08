@@ -2,8 +2,11 @@ package net.atcore.inventory.inventors;
 
 import net.atcore.AviaTerraPlayer;
 import net.atcore.inventory.BaseInventors;
-import net.atcore.inventory.InventorySection;
+import net.atcore.inventory.InventoryUtils;
+import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
+
+import static net.atcore.inventory.Action.ManipulatorAction.updateInventory;
 
 public class ManipulatorInventory extends BaseInventors {
 
@@ -14,8 +17,8 @@ public class ManipulatorInventory extends BaseInventors {
     @Override
     public Inventory createInventory(AviaTerraPlayer player) {
         Inventory inv = createNewInventory(player);
-        //InventoryUtils.fillItems(inv, InventoryUtils.newItems(Material.STRUCTURE_VOID, "&l&bHotBar", 1, null), 0, 9);
-        inv.setContents(player.getManipulatedInventoryPlayer().getInventory().getContents());
+        updateInventory(player);
+        InventoryUtils.fillItems(inv, InventoryUtils.newItems(Material.GRAY_STAINED_GLASS_PANE, " ", 1, null), 36, 45);
         return inv;
     }
 }

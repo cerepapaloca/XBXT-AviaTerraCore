@@ -6,8 +6,8 @@ import net.atcore.armament.chargers.M4_60;
 
 @Getter
 public enum ListCharger {
-    M4_30(new M4_30()),
-    M4_60(new M4_60());
+    M4_30(new M4_30("M4_30")),
+    M4_60(new M4_60("M4_60"));
 
     ListCharger(BaseCharger baseCharger) {
         this.charger = baseCharger;

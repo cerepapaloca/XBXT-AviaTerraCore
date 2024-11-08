@@ -105,8 +105,8 @@ public class PlayerListener implements Listener {
             }
             item.setType(Material.AIR);
             player.playSound(player, Sound.ENTITY_PLAYER_LEVELUP, 0.8F, 1);
-            player.sendTitle(ChatColor.translateAlternateColorCodes('&',COLOR_ESPECIAL + "Se te dio el rango " + range)
-                    ,"", 20, 60, 40);
+            player.sendTitle(ChatColor.translateAlternateColorCodes('&',COLOR_ESPECIAL + "Nuevo Rango")
+                    , range, 20, 60, 40);
 
         }
     }

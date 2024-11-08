@@ -25,15 +25,13 @@ import java.util.*;
 @Setter
 public abstract class BaseCharger extends BaseArmament implements Compartment {
 
-    public BaseCharger(ListCharger type, List<ListAmmo> compatibleCaliber, ListAmmo defaultCaliber, int ammoMax, String displayName, int reloadTime){
-        this(type, compatibleCaliber, Collections.nCopies(ammoMax, defaultCaliber), ammoMax, displayName, reloadTime);
-
+    public BaseCharger(String name, List<ListAmmo> compatibleCaliber, ListAmmo defaultCaliber, int ammoMax, String displayName, int reloadTime){
+        this(name, compatibleCaliber, Collections.nCopies(ammoMax, defaultCaliber), ammoMax, displayName, reloadTime);
     }
 
-    public BaseCharger(ListCharger type, List<ListAmmo> compatibleCaliber, List<ListAmmo> defaultCaliber, int ammoMax, String displayName, int reloadTime) {
-        super(displayName, new ItemStack(Material.SUGAR));
+    public BaseCharger(String name, List<ListAmmo> compatibleCaliber, List<ListAmmo> defaultCaliber, int ammoMax, String displayName, int reloadTime) {
+        super(displayName, new ItemStack(Material.SUGAR), name);
         this.displayName = displayName;
-        this.chargerType = type;
         this.DefaultammonList = listAmmoFill(defaultCaliber);
         this.compatibleAmmonList = listAmmoToBaseAmmo(compatibleCaliber);
         this.ammoMax = ammoMax;
@@ -43,14 +41,13 @@ public abstract class BaseCharger extends BaseArmament implements Compartment {
         itemMeta.setDisplayName(displayName);
         itemArmament.setItemMeta(itemMeta);
         List<String> listAmmoName = new ArrayList<>();
-        for (BaseAmmo ammo : listAmmoFill(defaultCaliber)) listAmmoName.add(ammo.getListAmmon().name());
+        for (BaseAmmo ammo : listAmmoFill(defaultCaliber)) listAmmoName.add(ammo.getDisplayName());
         GlobalUtils.setPersistentDataItem(itemArmament, "chargerAmmo", PersistentDataType.STRING, ArmamentUtils.listToString(listAmmoName));
-        GlobalUtils.setPersistentDataItem(itemArmament, "chargerType", PersistentDataType.STRING, type.name());
+        GlobalUtils.setPersistentDataItem(itemArmament, "chargerType", PersistentDataType.STRING, name);
         getProperties(itemArmament, true);
     }
 
     private final String displayName;
-    private final ListCharger chargerType;
     private final List<BaseAmmo> DefaultammonList;
     private final List<BaseAmmo> compatibleAmmonList;
     private final int ammoMax;
@@ -150,7 +147,7 @@ public abstract class BaseCharger extends BaseArmament implements Compartment {
                 String ammoNameList = (String) GlobalUtils.getPersistenData(ItemCharger, "chargerAmmo", PersistentDataType.STRING);
                 if (ammoNameList == null) continue;
                 List<String> ammoList = ArmamentUtils.stringToList(ammoNameList);
-                ammoList.add(baseAmmo.getListAmmon().name());
+                ammoList.add(baseAmmo.getName());
                 ItemAmmo.setAmount(ItemAmmo.getAmount() - 1);
                 GlobalUtils.setPersistentDataItem(ItemCharger, "chargerAmmo", PersistentDataType.STRING, ArmamentUtils.listToString(ammoList));
                 getProperties(ItemCharger, true);

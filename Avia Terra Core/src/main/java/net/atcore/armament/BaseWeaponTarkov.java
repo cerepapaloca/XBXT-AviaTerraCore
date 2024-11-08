@@ -27,10 +27,9 @@ import java.util.*;
 @Setter
 public abstract class BaseWeaponTarkov extends BaseWeapon implements Compartment {
 
-    protected BaseWeaponTarkov(ListWeaponTarvok type, List<ListCharger> listChargers, int maxDistance, String displayName, double precision) {
-        super(displayName, new ItemStack(Material.IRON_HORSE_ARMOR), maxDistance, type.name(), precision);
+    protected BaseWeaponTarkov(String name, List<ListCharger> listChargers, int maxDistance, String displayName, double precision) {
+        super(displayName, new ItemStack(Material.IRON_HORSE_ARMOR), maxDistance, name, precision);
         this.CHARGERS_TYPE = listChargers;
-        this.weaponType = type;
         GlobalUtils.setPersistentDataItem(itemArmament, "chargerTypeInside", PersistentDataType.STRING, "null");
         GlobalUtils.setPersistentDataItem(itemArmament, "chargerTypeOutside", PersistentDataType.STRING, "null");
         ItemMeta meta = itemArmament.getItemMeta();
@@ -44,12 +43,7 @@ public abstract class BaseWeaponTarkov extends BaseWeapon implements Compartment
         updateLore(null, null);
     }
 
-    protected BaseWeaponTarkov(ListWeaponTarvok type, ListCharger chargerTypes, int maxDistance, String displayName, double precision) {
-        this(type, List.of(chargerTypes), maxDistance, displayName, precision);
-    }
-
     private final List<ListCharger> CHARGERS_TYPE;
-    private final ListWeaponTarvok weaponType;
     public static final HashMap<UUID, BukkitTask> inReload = new HashMap<>();
 
     @Override
@@ -151,7 +145,7 @@ public abstract class BaseWeaponTarkov extends BaseWeapon implements Compartment
             GlobalUtils.setPersistentDataItem(itemCharger, "chargerAmmo", PersistentDataType.STRING, ArmamentUtils.listToString(ammoCharger));
             GlobalUtils.setPersistentDataItem(itemWeapon, "chargerAmmo", PersistentDataType.STRING, ArmamentUtils.listToString(ammoWeapon));
             GlobalUtils.setPersistentDataItem(itemWeapon, "chargerTypeInside", PersistentDataType.STRING,
-                    b ?  baseCharger.getChargerType().name() : chargerNameExternal);//se decide que cargador se va a usar el mismo o él ultimó que se usó para recargar
+                    b ?  baseCharger.getName() : chargerNameExternal);//se decide que cargador se va a usar el mismo o él ultimó que se usó para recargar
             updateLore(itemWeapon, itemCharger);
             break;
         }
@@ -234,7 +228,7 @@ public abstract class BaseWeaponTarkov extends BaseWeapon implements Compartment
     private boolean isCompatible(String s){
         BaseCharger charger = ArmamentUtils.getCharger(s);
         if (charger == null) return false;
-        return CHARGERS_TYPE.contains(charger.getChargerType());
+        return CHARGERS_TYPE.contains(ListCharger.valueOf(charger.getName()));
     }
 
     public abstract void onShoot(DataShoot dataShoot);

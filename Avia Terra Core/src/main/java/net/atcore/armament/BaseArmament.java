@@ -9,12 +9,14 @@ import org.jetbrains.annotations.Nullable;
 @Setter
 public abstract class BaseArmament {
 
-    public BaseArmament(String name, ItemStack item) {
-        this.displayName = name;
+    public BaseArmament(String displayName, ItemStack item, String name) {
+        this.displayName = displayName;
+        this.name = name;
         this.itemArmament = item;
     }
 
     protected final String displayName;
+    protected final String name;
     protected final ItemStack itemArmament;
 
     protected abstract void updateLore(ItemStack item,@Nullable ItemStack itemAuxiliar);

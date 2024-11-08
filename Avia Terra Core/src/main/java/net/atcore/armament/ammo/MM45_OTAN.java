@@ -7,8 +7,8 @@ import org.bukkit.Color;
 
 public class MM45_OTAN extends BaseAmmo {
 
-    public MM45_OTAN() {
-        super(ListAmmo.MM45_OTAN,
+    public MM45_OTAN(String name) {
+        super(name,
                 5,
                 "prueba",
                 Color.fromRGB(20,20,20),

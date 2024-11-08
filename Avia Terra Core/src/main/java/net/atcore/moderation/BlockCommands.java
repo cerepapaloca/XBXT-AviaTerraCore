@@ -1,5 +1,7 @@
 package net.atcore.moderation;
 
+import net.atcore.messages.MessagesManager;
+import net.atcore.messages.TypeMessages;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
@@ -28,7 +30,12 @@ public class BlockCommands {//nose si poner en esta clase aquí la verdad
             if (permission == null){
                 return false;
             }else{
-                return !player.hasPermission(permission);
+                if (player.hasPermission(permission)){
+                    MessagesManager.sendMessage(player, "No tienes permisos para ejecutar ese comando", TypeMessages.ERROR);
+                    return true;
+                }else{
+                    return false;
+                }
             }
         }else{
             return true;

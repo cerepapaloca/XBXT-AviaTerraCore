@@ -15,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 public class InventoryUtils {
 
     public void fillItems(Inventory inventory, ItemStack items, int a, int b) {
-        for (int i = a; i < b; i++) {
+        for (int i = a; i <= b; i++) {
             inventory.setItem(i, items);
         }
     }

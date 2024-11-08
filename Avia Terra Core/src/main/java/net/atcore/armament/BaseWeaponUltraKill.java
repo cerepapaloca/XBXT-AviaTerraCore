@@ -18,17 +18,15 @@ import org.bukkit.inventory.meta.ItemMeta;
 @Setter
 public abstract class BaseWeaponUltraKill extends BaseWeapon {
 
-    public BaseWeaponUltraKill(ListWeaponUltraKill weaponType, String displayName, int maxDistance, int cost, double precision, ListAmmo ammo) {
-        super(displayName, new ItemStack(Material.GOLDEN_HORSE_ARMOR), maxDistance, weaponType.name(), precision);
+    public BaseWeaponUltraKill(String name, String displayName, int maxDistance, int cost, double precision, ListAmmo ammo) {
+        super(displayName, new ItemStack(Material.GOLDEN_HORSE_ARMOR), maxDistance, name, precision);
         this.cost = cost;
         this.ammo = ammo.getAmmo();
-        this.weaponType = weaponType;
         updateLore(getItemArmament(), null);
     }
 
     private final BaseAmmo ammo;
     private final int cost;
-    private final ListWeaponUltraKill weaponType;
 
     @Override
     public void shoot(Player player) {

@@ -16,14 +16,13 @@ import org.bukkit.persistence.PersistentDataType;
 @Setter
 public abstract class BaseAmmo extends BaseArmament {
 
-    protected BaseAmmo(ListAmmo listAmmon, double damage, String name, float penetration) {
-        this(listAmmon, damage, name, Color.fromRGB(80,80,80), false, 1F, penetration);
+    protected BaseAmmo(String name, double damage, String displayName, float penetration) {
+        this(name, damage, displayName, Color.fromRGB(80,80,80), false, 1F, penetration);
     }
 
-    protected BaseAmmo(ListAmmo listAmmon, double damage, String name, Color color, boolean isTrace, float densityTrace, float penetration) {
-        super(name, new ItemStack(Material.SNOWBALL));
+    protected BaseAmmo(String name, double damage, String displayName, Color color, boolean isTrace, float densityTrace, float penetration) {
+        super(displayName, new ItemStack(Material.SNOWBALL), name);
         this.damage = damage;
-        this.listAmmon = listAmmon;
         this.color = color;
         this.isTrace = isTrace;
         this.densityTrace = densityTrace;
@@ -33,11 +32,10 @@ public abstract class BaseAmmo extends BaseArmament {
         itemMeta.setDisplayName(displayName);
         itemMeta.setLore(GlobalUtils.StringToLoreString(MessagesManager.addProprieties(getProperties(), null, CategoryMessages.PRIVATE, false), true));
         itemArmament.setItemMeta(itemMeta);
-        GlobalUtils.setPersistentDataItem(itemArmament, "nameAmmo", PersistentDataType.STRING, listAmmon.name());
+        GlobalUtils.setPersistentDataItem(itemArmament, "nameAmmo", PersistentDataType.STRING, name);
     }
 
     private final float penetration;
-    private final ListAmmo listAmmon;
     private final double damage;
     private final Color color;
     private final boolean isTrace;

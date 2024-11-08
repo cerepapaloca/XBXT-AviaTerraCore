@@ -7,8 +7,8 @@ import org.bukkit.Color;
 
 public class MMxx_Prueba extends BaseAmmo {
 
-    public MMxx_Prueba() {
-        super(ListAmmo.MMxx_Prueba,
+    public MMxx_Prueba(String name) {
+        super(name,
                 10,
                 "prueba",
                 Color.fromRGB(255,255,255),

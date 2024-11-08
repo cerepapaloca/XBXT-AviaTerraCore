@@ -6,8 +6,8 @@ import net.atcore.armament.ListAmmo;
 import net.atcore.armament.ListWeaponUltraKill;
 
 public class M16 extends BaseWeaponUltraKill {
-    public M16() {
-        super(ListWeaponUltraKill.M16,
+    public M16(String name) {
+        super(name,
                 "M16",
                 60,
                 10,

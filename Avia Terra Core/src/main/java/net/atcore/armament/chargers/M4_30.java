@@ -8,8 +8,8 @@ import static net.atcore.armament.ListAmmo.*;
 
 public class M4_30 extends M4Family {
 
-    public M4_30() {
-        super(ListCharger.M4_30,
+    public M4_30(String s) {
+        super(s,
                 List.of(MM45_OTAN, MM45_OTAN, MM45_OTAN_VERDE),
                 30,
                 "M4 30",

@@ -19,11 +19,11 @@ import org.bukkit.util.Vector;
 @Getter
 @Setter
 public abstract class BaseWeapon extends BaseArmament implements ShootWeapon{
-    public BaseWeapon(String name, ItemStack item, int MaxDistance, String nameListe, double precision) {
-        super(name, item);
+    public BaseWeapon(String name, ItemStack item, int MaxDistance, String displayName, double precision) {
+        super(displayName, item, name);
         this.maxDistance = MaxDistance;
         this.precision = precision;
-        GlobalUtils.setPersistentDataItem(itemArmament, "weaponName", PersistentDataType.STRING, nameListe);
+        GlobalUtils.setPersistentDataItem(itemArmament, "weaponName", PersistentDataType.STRING, displayName);
     }
 
     protected final int maxDistance;

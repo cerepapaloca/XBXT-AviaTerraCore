@@ -1,16 +1,22 @@
 package net.atcore.inventory;
 
+import lombok.Getter;
+import lombok.Setter;
 import net.atcore.AviaTerraPlayer;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 
-public interface BaseActions {
+@Getter
+@Setter
+public abstract class BaseActions {
 
-    void clickInventory(InventoryClickEvent event, AviaTerraPlayer player);
+    private InventorySection section;
 
-    void closeInventory(InventoryCloseEvent event, AviaTerraPlayer player);
+    public abstract void clickInventory(InventoryClickEvent event, AviaTerraPlayer player);
 
-    void dragInventory(InventoryDragEvent event, AviaTerraPlayer player);
+    public abstract void closeInventory(InventoryCloseEvent event, AviaTerraPlayer player);
+
+    public abstract void dragInventory(InventoryDragEvent event, AviaTerraPlayer player);
 
 }

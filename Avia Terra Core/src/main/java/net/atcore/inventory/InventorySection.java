@@ -19,4 +19,19 @@ public enum InventorySection {
     private final BaseActions baseActions;
     private final BaseInventors baseInventors;
     private final boolean protectedInventory;
+
+    public void init() {
+        if (baseActions != null) {
+            baseActions.setSection(this);
+        }
+        if (baseInventors != null) {
+            baseInventors.setSection(this);
+        }
+    }
+
+    static {
+        for (InventorySection section : values()) {
+            section.init();
+        }
+    }
 }

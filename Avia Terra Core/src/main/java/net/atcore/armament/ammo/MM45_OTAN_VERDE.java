@@ -7,8 +7,8 @@ import org.bukkit.Color;
 
 public class MM45_OTAN_VERDE extends BaseAmmo {
 
-    public MM45_OTAN_VERDE() {
-        super(ListAmmo.MM45_OTAN_VERDE,
+    public MM45_OTAN_VERDE(String name) {
+        super(name,
                 5,
                 "trazado verde",
                 Color.fromRGB(20,180,20),
