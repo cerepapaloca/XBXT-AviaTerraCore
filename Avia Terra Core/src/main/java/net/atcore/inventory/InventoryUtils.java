@@ -20,6 +20,12 @@ public class InventoryUtils {
         }
     }
 
+    public void setItems(Inventory inventory, ItemStack items, int... i) {
+        for (int a : i){
+            inventory.setItem(a, items);
+        }
+    }
+
     public ItemStack newItems(Material material, String name, int amount, @Nullable String lore) {
         ItemStack item = new ItemStack(material, amount);
         ItemMeta meta = item.getItemMeta();

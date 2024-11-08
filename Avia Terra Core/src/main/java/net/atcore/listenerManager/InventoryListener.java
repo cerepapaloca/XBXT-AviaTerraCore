@@ -8,6 +8,7 @@ import net.atcore.security.AntiExploit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
@@ -22,9 +23,10 @@ public class InventoryListener implements Listener {
         CheckAutoBan.checkAntiIlegalItems(player, inventory);
         CheckAutoBan.checkDupe(player, inventory);
         AntiExploit.checkRangePurge(inventory);
-        event.setCancelled(Freeze.isFreeze(player));
-        event.setCancelled(ActionsInventoryManager.clickEvent(event));
-        event.setCancelled(ArmamentActions.outAction(clickType, player, event.getCurrentItem()));
+        event.setCancelled(Freeze.isFreeze(player) ||
+                ActionsInventoryManager.clickEvent(event) ||
+                ArmamentActions.outAction(clickType, player, event.getCurrentItem())
+        );
     }
 
     @EventHandler
@@ -45,5 +47,10 @@ public class InventoryListener implements Listener {
     @EventHandler
     public void onInventoryDrag(@NotNull InventoryDragEvent event) {
         event.setCancelled(ActionsInventoryManager.dragEvent(event));
+    }
+
+    @EventHandler
+    public void onPickupItem(@NotNull EntityPickupItemEvent event) {
+        event.setCancelled(ActionsInventoryManager.pickupItem(event));
     }
 }

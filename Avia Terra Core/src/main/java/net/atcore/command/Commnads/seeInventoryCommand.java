@@ -1,16 +1,12 @@
 package net.atcore.command.Commnads;
 
 import net.atcore.AviaTerraPlayer;
-import net.atcore.Section;
 import net.atcore.command.BaseCommand;
 import net.atcore.inventory.InventorySection;
-import net.atcore.inventory.inventors.ManipulatorInventory;
 import net.atcore.messages.TypeMessages;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.PlayerInventory;
 
 import static net.atcore.messages.MessagesManager.sendMessage;
 
@@ -27,7 +23,7 @@ public class seeInventoryCommand extends BaseCommand {
     @Override
     public void execute(CommandSender sender, String[] args) {
         if (sender instanceof Player player) {
-            if (args.length <= 1) {
+            if (args.length > 0) {
                 Player vitim = Bukkit.getPlayer(args[0]);
                 if (vitim != null) {
                     //PlayerInventory inv = vitim.getInventory();
@@ -36,7 +32,7 @@ public class seeInventoryCommand extends BaseCommand {
 
                     AviaTerraPlayer atp = AviaTerraPlayer.getPlayer(player);
                     atp.setManipulatedInventoryPlayer(vitim);
-                    player.openInventory(InventorySection.MANIPULATOR.getBaseInventors().createInventory(atp));
+                    player.openInventory(InventorySection.MANIPULATOR.getBaseInventory().createInventory(atp));
                     atp.setInventorySection(InventorySection.MANIPULATOR);
                     AviaTerraPlayer atp2 = AviaTerraPlayer.getPlayer(vitim);
                     atp2.setInventorySection(InventorySection.MANIPULATED);

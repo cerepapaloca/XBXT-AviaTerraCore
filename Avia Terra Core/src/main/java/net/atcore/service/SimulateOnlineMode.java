@@ -70,7 +70,6 @@ public class SimulateOnlineMode {
             switch (state){//revisa entre las sesiones o los registro del los jugadores
                 case PREMIUM -> {
                     StartLoginPremium(name, uuid, player);
-                    return true; //se cancela por que asi el servidor no se da cuenta de que a recibido un paquete
                 }
                 case CRACKED -> StartLoginCracked(name, uuid);
                 case UNKNOWN -> GlobalUtils.kickPlayer(player, "Error de connexion vuele a intentar");
@@ -80,6 +79,8 @@ public class SimulateOnlineMode {
             }else{
                 sendMessageConsole("Login omitido por qué el modo mixto esta desactivado", TypeMessages.INFO);
             }
+            return state == StateLogins.PREMIUM; //se cancela por que asi el servidor no se da cuenta de que a recibido un paquete
+
 
         }
         return false;

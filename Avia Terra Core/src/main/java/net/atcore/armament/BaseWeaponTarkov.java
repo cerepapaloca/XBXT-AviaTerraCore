@@ -209,14 +209,14 @@ public abstract class BaseWeaponTarkov extends BaseWeapon implements Compartment
                 if (chargerNameInside != null && !chargerNameInside.equals("null")) {
                     BaseCharger charger = ArmamentUtils.getCharger(chargerNameInside);
                     if (charger != null) {
-                        ItemStack itemCarger = new ItemStack(charger.getItemArmament());
+                        ItemStack itemCharger = new ItemStack(charger.getItemArmament());
                         String stringAmmo = (String) GlobalUtils.getPersistenData(ItemWeapon, "chargerAmmo", PersistentDataType.STRING);
                         GlobalUtils.setPersistentDataItem(ItemWeapon, "chargerTypeInside", PersistentDataType.STRING, "null");
                         GlobalUtils.setPersistentDataItem(ItemWeapon, "chargerAmmo", PersistentDataType.STRING, "");
-                        GlobalUtils.setPersistentDataItem(itemCarger, "chargerAmmo", PersistentDataType.STRING, stringAmmo);
-                        GlobalUtils.addProtectionAntiDupe(itemCarger);
-                        updateLore(ItemWeapon, itemCarger);
-                        player.setItemOnCursor(itemCarger);
+                        GlobalUtils.setPersistentDataItem(itemCharger, "chargerAmmo", PersistentDataType.STRING, stringAmmo);
+                        GlobalUtils.addProtectionAntiDupe(itemCharger);
+                        updateLore(ItemWeapon, itemCharger);
+                        player.setItemOnCursor(itemCharger);
                         return true;
                     }
                 }

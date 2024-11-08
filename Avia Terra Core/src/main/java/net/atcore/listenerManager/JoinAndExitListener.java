@@ -8,6 +8,7 @@ import net.atcore.security.Login.DataLimbo;
 import net.atcore.security.Login.DataLogin;
 import net.atcore.security.Login.LoginManager;
 import net.atcore.service.ServiceSection;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -16,6 +17,9 @@ import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static net.atcore.messages.MessagesManager.*;
 import static net.atcore.security.Login.LoginManager.*;
@@ -35,6 +39,12 @@ public class JoinAndExitListener implements Listener {
             player.teleport(limbo.getLocation());
             player.setGameMode(limbo.getGameMode());
         }
+        //AviaTerraPlayer.getPlayer(player).getInventorySection().getBaseActions().closeInventory(AviaTerraPlayer.getPlayer(player));
+        List<Player> players = List.copyOf(AviaTerraPlayer.getPlayer(player).getManipulatorInventoryPlayer());
+        players.forEach(p -> {
+            p.closeInventory();
+            Bukkit.getLogger().warning(p.getName() + " cierre");
+        });
         event.setQuitMessage(ChatColor.translateAlternateColorCodes('&',
                 "&8[&4-&8] " + COLOR_ESPECIAL + event.getPlayer().getDisplayName() + COLOR_INFO + " se a ido."));
     }

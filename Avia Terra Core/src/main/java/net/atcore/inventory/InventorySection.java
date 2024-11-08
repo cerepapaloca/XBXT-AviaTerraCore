@@ -10,22 +10,22 @@ public enum InventorySection {
     MANIPULATOR(new ManipulatorAction(), new ManipulatorInventory(), false),
     MANIPULATED(new ManipulatedAction(), null, false);
 
-    InventorySection(BaseActions baseActions, BaseInventors baseInventory, boolean isProtected) {
+    InventorySection(BaseActions baseActions, BaseInventory baseInventory, boolean isProtected) {
         this.baseActions = baseActions;
-        this.baseInventors = baseInventory;
+        this.baseInventory = baseInventory;
         this.protectedInventory = isProtected;
     }
 
     private final BaseActions baseActions;
-    private final BaseInventors baseInventors;
+    private final BaseInventory baseInventory;
     private final boolean protectedInventory;
 
     public void init() {
         if (baseActions != null) {
             baseActions.setSection(this);
         }
-        if (baseInventors != null) {
-            baseInventors.setSection(this);
+        if (baseInventory != null) {
+            baseInventory.setSection(this);
         }
     }
 
