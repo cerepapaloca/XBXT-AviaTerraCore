@@ -123,11 +123,6 @@ public class ManagerBan extends DataBaseBan {
         String contextName = dataBan.getContext().name().toLowerCase().replace("_", " ");
         if (Objects.equals(dataBan.getContext().name(), "GLOBAL")) contextName = "Avia Terra";
         String time;
-        /*if (dataBan.getUnbanDate() == GlobalConstantes.NUMERO_PERMA){
-            time = "&lPermanente";
-        }else {
-
-        }*/
         time =GlobalUtils.timeToString(dataBan.getUnbanDate(), 1, true);
 
         String reasonFinal = ChatColor.translateAlternateColorCodes('&',

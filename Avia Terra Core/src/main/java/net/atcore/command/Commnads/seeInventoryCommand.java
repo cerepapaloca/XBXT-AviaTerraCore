@@ -26,17 +26,18 @@ public class seeInventoryCommand extends BaseCommand {
             if (args.length > 0) {
                 Player vitim = Bukkit.getPlayer(args[0]);
                 if (vitim != null) {
-                    //PlayerInventory inv = vitim.getInventory();
-                    //Inventory inventory = Bukkit.createInventory(player, 54, "seeInventory");
-                    //inventory.setContents(inv.getContents());
-
-                    AviaTerraPlayer atp = AviaTerraPlayer.getPlayer(player);
-                    atp.setManipulatedInventoryPlayer(vitim);
-                    player.openInventory(InventorySection.MANIPULATOR.getBaseInventory().createInventory(atp));
-                    atp.setInventorySection(InventorySection.MANIPULATOR);
                     AviaTerraPlayer atp2 = AviaTerraPlayer.getPlayer(vitim);
-                    atp2.setInventorySection(InventorySection.MANIPULATED);
-                    atp2.getManipulatorInventoryPlayer().add(player);
+                    if (atp2.getManipulatedInventoryPlayer() == null){
+                        AviaTerraPlayer atp = AviaTerraPlayer.getPlayer(player);
+                        atp.setManipulatedInventoryPlayer(vitim.getUniqueId());
+                        player.openInventory(InventorySection.MANIPULATOR.getBaseInventory().createInventory(atp));
+                        atp.setInventorySection(InventorySection.MANIPULATOR);
+
+                        atp2.setInventorySection(InventorySection.MANIPULATED);
+                        atp2.getManipulatorInventoryPlayer().add(player.getUniqueId());
+                    }else {
+                        sendMessage(sender, "No puedes ver el inventarió de otro jugador que también este mirando un inventarió", TypeMessages.ERROR);
+                    }
                 }else{
                     sendMessage(sender, "el jugador no existe o no esta conectado", TypeMessages.ERROR);
                 }

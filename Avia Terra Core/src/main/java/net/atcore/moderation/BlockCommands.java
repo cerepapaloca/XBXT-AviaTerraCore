@@ -38,6 +38,7 @@ public class BlockCommands {//nose si poner en esta clase aquí la verdad
                 }
             }
         }else{
+            MessagesManager.sendMessage(player, "No tienes permisos para ejecutar ese comando", TypeMessages.ERROR);
             return true;
         }
     }

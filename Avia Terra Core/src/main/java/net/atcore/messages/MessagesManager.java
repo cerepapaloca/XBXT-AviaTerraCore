@@ -134,12 +134,12 @@ public final class MessagesManager {
      *                         {@code CategoryMessages.PRIVATE} le añade este sufijo al mensaje
      *                         {@code [R]} indíca que ese mensaje se tiene que registrar en
      *                         un canal de discord
-     * @param isPrefix se tiene que poner él {@link #PREFIX} en el mensaje en casi en todos los casos hay que
+     * @param showPrefix se tiene que poner él {@link #PREFIX} en el mensaje en casi en todos los casos hay que
      *                 poner le prefijo al mensaje para que sea más fácil de identificar
      * @return regresa el
      */
 
-    public static String addProprieties(String message,@Nullable TypeMessages type, CategoryMessages categoryMessages, boolean isPrefix) {
+    public static String addProprieties(String message,@Nullable TypeMessages type, CategoryMessages categoryMessages, boolean showPrefix) {
         if (categoryMessages != CategoryMessages.PRIVATE) {
             while (Character.isSpaceChar(message.charAt(message.length()-1))){
                 message = message.substring(0, message.length()-1);
@@ -147,7 +147,7 @@ public final class MessagesManager {
             message = message + " &c[R]";
         }
         String s;
-        if (isPrefix){
+        if (showPrefix){
             s = PREFIX;
         }else {
             s = "";
@@ -195,5 +195,14 @@ public final class MessagesManager {
                 throw new DiscordChannelNotFound("No se encontró canal de discord para los registro " + type.name());
             }
         });
+    }
+
+    /**
+     * Le manda un título a jugador respetando el formato de {@link #addProprieties(String, TypeMessages, CategoryMessages, boolean) addProprieties}
+     */
+
+    public static void sendTitle(Player player, String title, String subtitle, int fadeIn, int stay, int fadeOut, TypeMessages type) {
+        player.sendTitle(ChatColor.translateAlternateColorCodes('&', addProprieties(title, type, CategoryMessages.PRIVATE, false)),
+                ChatColor.translateAlternateColorCodes('&', addProprieties(subtitle, type, CategoryMessages.PRIVATE, false)), fadeIn, stay, fadeOut);
     }
 }

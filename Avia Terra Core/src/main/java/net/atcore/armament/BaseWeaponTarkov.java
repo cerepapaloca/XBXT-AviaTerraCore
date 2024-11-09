@@ -1,5 +1,6 @@
 package net.atcore.armament;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import net.atcore.AviaTerraCore;
@@ -52,24 +53,30 @@ public abstract class BaseWeaponTarkov extends BaseWeapon implements Compartment
         ItemStack itemWeapon = player.getInventory().getItemInMainHand();
         String chargerName = (String) GlobalUtils.getPersistenData(itemWeapon, "chargerTypeInside", PersistentDataType.STRING);
         BaseCharger baseCharger = ArmamentUtils.getCharger(chargerName);
-        if (baseCharger == null) return;
-        String stringAmmo = (String) GlobalUtils.getPersistenData(itemWeapon, "chargerAmmo", PersistentDataType.STRING);
-        if (stringAmmo != null) {
-            List<String> listAmmo = ArmamentUtils.stringToList(stringAmmo);
-            if (listAmmo.isEmpty()){//se vació el cargador
-                updateLore(itemWeapon, null);
-                return;
+        if (baseCharger != null){
+            String stringAmmo = (String) GlobalUtils.getPersistenData(itemWeapon, "chargerAmmo", PersistentDataType.STRING);
+            if (stringAmmo != null) {
+                List<String> listAmmo = ArmamentUtils.stringToList(stringAmmo);
+                if (!listAmmo.isEmpty()){//se vació el cargador
+                    BaseAmmo ammon = ArmamentUtils.getAmmo(listAmmo.getFirst());
+                    if (ammon != null) {
+                        DataShoot dataShoot = executeShoot(player, ammon, baseCharger);
+                        if (dataShoot.isCancelled()) return;
+                        listAmmo.removeFirst();//se elimina la bala del cargador
+                        GlobalUtils.setPersistentDataItem(itemWeapon, "chargerAmmo", PersistentDataType.STRING, ArmamentUtils.listToString(listAmmo));//guarda la munición actual
+                        updateLore(itemWeapon, null);
+                        baseCharger.onShoot(dataShoot);
+                        ammon.onShoot(dataShoot);
+                    }
+                }else {
+                    updateLore(itemWeapon, null);
+                    player.sendTitle("", ChatColor.RED + "sin munición", 0, 10, 30);
+                }
             }
-            BaseAmmo ammon = ArmamentUtils.getAmmo(listAmmo.getFirst());
-            if (ammon == null) return;
-            listAmmo.removeFirst();//se elimina la bala del cargador
-            GlobalUtils.setPersistentDataItem(itemWeapon, "chargerAmmo", PersistentDataType.STRING, ArmamentUtils.listToString(listAmmo));//guarda la munición actual
-            updateLore(itemWeapon, null);
-            DataShoot dataShoot = executeShoot(player, ammon, baseCharger);
-            onShoot(dataShoot);
-            baseCharger.onShoot(dataShoot);
-            ammon.onShoot(dataShoot);
+        }else {
+            player.sendTitle("", ChatColor.RED + "sin cargador", 0, 10, 30);
         }
+
     }
 
 
@@ -230,8 +237,6 @@ public abstract class BaseWeaponTarkov extends BaseWeapon implements Compartment
         if (charger == null) return false;
         return CHARGERS_TYPE.contains(ListCharger.valueOf(charger.getName()));
     }
-
-    public abstract void onShoot(DataShoot dataShoot);
 
     public abstract void onReloading(Player player);
 

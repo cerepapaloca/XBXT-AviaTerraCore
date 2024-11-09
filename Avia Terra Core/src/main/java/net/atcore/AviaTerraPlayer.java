@@ -64,8 +64,8 @@ public class AviaTerraPlayer {
     private double ammo = MAX_AMMO;
     private boolean isFreeze = false;
     private InventorySection inventorySection = null;
-    private List<Player> manipulatorInventoryPlayer = new ArrayList<>();
-    private Player manipulatedInventoryPlayer = null;
+    private List<UUID> manipulatorInventoryPlayer = new ArrayList<>();
+    private UUID manipulatedInventoryPlayer = null;
 
     private void createBossBar(){
         bossBar = TabAPI.getInstance().getBossBarManager().createBossBar("timerBossBar" + player.getName(), 1f, BarColor.GREEN, BarStyle.NOTCHED_10);

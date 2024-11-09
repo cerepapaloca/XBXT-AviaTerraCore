@@ -67,6 +67,4 @@ public abstract class BaseWeaponUltraKill extends BaseWeapon {
         meta.setDisplayName(displayName);
         itemStack.setItemMeta(meta);
     }
-
-    public abstract void onShoot(DataShoot dataShoot);
 }

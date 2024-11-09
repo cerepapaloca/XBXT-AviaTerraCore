@@ -41,7 +41,7 @@ public abstract class BaseCharger extends BaseArmament implements Compartment {
         itemMeta.setDisplayName(displayName);
         itemArmament.setItemMeta(itemMeta);
         List<String> listAmmoName = new ArrayList<>();
-        for (BaseAmmo ammo : listAmmoFill(defaultCaliber)) listAmmoName.add(ammo.getDisplayName());
+        for (BaseAmmo ammo : listAmmoFill(defaultCaliber)) listAmmoName.add(ammo.getName());
         GlobalUtils.setPersistentDataItem(itemArmament, "chargerAmmo", PersistentDataType.STRING, ArmamentUtils.listToString(listAmmoName));
         GlobalUtils.setPersistentDataItem(itemArmament, "chargerType", PersistentDataType.STRING, name);
         getProperties(itemArmament, true);

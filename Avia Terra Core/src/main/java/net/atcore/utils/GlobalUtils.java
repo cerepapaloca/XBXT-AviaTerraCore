@@ -311,4 +311,28 @@ public final class GlobalUtils {
         if (space && !lineas.isEmpty()) lineas.add(" ");
         return lineas;
     }
+
+    /**
+     * Para buscar un jugador de manera segura sin que bukkit esté jodiendo con el {@code @Nullable}
+     * usar solo cuando el jugador no debería dar nulo. No usar para comando o parecidos
+     * @param uuid la uuid del jugador
+     * @return regresa el jugador con un 100% de probabilidades de que no sea nulo
+     */
+
+    public @NotNull Player getPlayer(UUID uuid){
+        Player player = Bukkit.getPlayer(uuid);
+        if (player != null) return player;
+        throw new IllegalArgumentException("Dio nulo cuando no debería  " + uuid);
+    }
+
+    /**
+     * @see #getPlayer(UUID) Mira esto 
+     */
+
+    public @NotNull Player getPlayer(String name){
+        Player player = Bukkit.getPlayer(name);
+        if (player != null) return player;
+        throw new IllegalArgumentException("Dio nulo cuando no debería  " + name);
+    }
+
 }

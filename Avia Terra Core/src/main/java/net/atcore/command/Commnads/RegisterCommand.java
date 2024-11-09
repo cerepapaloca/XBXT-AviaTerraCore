@@ -2,6 +2,7 @@ package net.atcore.command.Commnads;
 
 import net.atcore.command.BaseCommand;
 import net.atcore.Config;
+import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import net.atcore.security.Login.*;
 import org.bukkit.ChatColor;
@@ -35,7 +36,7 @@ public class RegisterCommand extends BaseCommand {
                         if (Objects.equals(args[0], args[1])){
                             sendMessage(player, "la contraseña se guardo exitosamente y registraste exitosamente", TypeMessages.SUCCESS);
                             LoginManager.newRegisterCracked(player.getName(), player.getAddress().getAddress(),  args[0]);
-                            player.sendTitle(ChatColor.translateAlternateColorCodes('&',COLOR_ESPECIAL + "Te haz registrado!"), "", 20, 20*3, 40);
+                            MessagesManager.sendTitle(player, "Bienvenido A AviaTerra", "<|&0" + player.getDisplayName() + "|>", 20, 20*3, 40, TypeMessages.INFO);
                             startPlaySessionCracked(player).getRegister().setTemporary(false);;
                             LoginManager.checkLoginIn(player, true);
                         }else{

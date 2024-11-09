@@ -5,6 +5,8 @@ import net.atcore.AviaTerraCore;
 import net.atcore.AviaTerraPlayer;
 import net.atcore.inventory.BaseActions;
 import net.atcore.inventory.InventorySection;
+import net.atcore.inventory.inventors.ManipulatorInventory;
+import net.atcore.utils.GlobalUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityPickupItemEvent;
@@ -31,12 +33,13 @@ public class ManipulatorAction extends BaseActions {
     @Override
     public void closeInventory(AviaTerraPlayer player) {
         player.setInventorySection(null);
-        Player victim = player.getManipulatedInventoryPlayer();
+        Player victim = GlobalUtils.getPlayer(player.getManipulatedInventoryPlayer());
         player.setManipulatedInventoryPlayer(null);
         AviaTerraPlayer atp = AviaTerraPlayer.getPlayer(victim);
-        atp.getManipulatorInventoryPlayer().remove(player.getPlayer());
+        atp.getManipulatorInventoryPlayer().remove(player.getPlayer().getUniqueId());
         if (atp.getManipulatorInventoryPlayer().isEmpty() || !atp.getPlayer().isOnline()){
             atp.setInventorySection(null);
+            ManipulatorInventory.inventories.remove(victim.getUniqueId());
         }
     }
 
@@ -52,13 +55,13 @@ public class ManipulatorAction extends BaseActions {
     }
 
     private void sendInventoryToOtherPlayersAndUpdate(AviaTerraPlayer p) {
-        Player victim = p.getManipulatedInventoryPlayer();
+        Player victim = GlobalUtils.getPlayer(p.getManipulatedInventoryPlayer());
         new BukkitRunnable() {
             final AviaTerraPlayer player = p;
             public void run() {
-                Inventory inv = Bukkit.createInventory(null, 54, player.getPlayer().getName());
+                Inventory inv = Bukkit.createInventory(null, 54, "temporal");
                 for (int i = 0; i < 54; i++){
-                    ItemStack item = player.getPlayer().getOpenInventory().getTopInventory().getItem(i);
+                    ItemStack item = ManipulatorInventory.inventories.get(victim.getUniqueId()).getItem(i);
                     if (item != null) {
                         if (i >= 45 && i <= 48){
                             inv.setItem(i - 9, item);
@@ -71,17 +74,15 @@ public class ManipulatorAction extends BaseActions {
                         }
                     }
                 }
-                Bukkit.getLogger().warning(player.getPlayer().getName() + " ->> " + victim.getName());
                 victim.setItemOnCursor(player.getPlayer().getOpenInventory().getTopInventory().getItem(52));
                 victim.getInventory().setContents(Arrays.stream(inv.getContents()).toList().subList(0, victim.getInventory().getSize()).toArray(ItemStack[]::new));
 
-                AviaTerraPlayer.getPlayer(player.getManipulatedInventoryPlayer()).getManipulatorInventoryPlayer().forEach(p -> {
+                /*AviaTerraPlayer.getPlayer(player.getManipulatedInventoryPlayer()).getManipulatorInventoryPlayer().forEach(p -> {
                     if (!p.getName().equals(player.getPlayer().getName())){
-                        Bukkit.getLogger().warning(player.getPlayer().getName() + " -> " + p.getName());
                         p.getOpenInventory().getTopInventory().setContents(InventorySection.MANIPULATOR.getBaseInventory().
                                 createInventory(AviaTerraPlayer.getPlayer(p)).getContents());
                     }
-                });
+                });*/
             }
         }.runTaskLater(AviaTerraCore.getInstance(), 1L);
     }

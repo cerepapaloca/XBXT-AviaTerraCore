@@ -1,6 +1,7 @@
 package net.atcore.command.Commnads;
 
 import net.atcore.command.BaseCommand;
+import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import net.atcore.security.Login.*;
 import net.atcore.utils.GlobalUtils;
@@ -34,7 +35,7 @@ public class LoginCommand extends BaseCommand {
                     }
                     startPlaySessionCracked(player);
                     LoginManager.updateLoginDataBase(player.getName(), player.getAddress().getAddress());
-                    player.sendTitle(ChatColor.translateAlternateColorCodes('&',COLOR_ESPECIAL + "Te haz logueado!"), "", 20, 20*3, 40);
+                    MessagesManager.sendTitle(player,"Bienvenido de vuelta", "<|&o" + player.getDisplayName() + "|>", 20, 20*3, 40, TypeMessages.INFO);
                     sendMessage(player, "Has iniciado session exitosamente", TypeMessages.SUCCESS);
                 }else{
                     GlobalUtils.kickPlayer(player, "contraseña incorrecta, vuele a intentarlo");

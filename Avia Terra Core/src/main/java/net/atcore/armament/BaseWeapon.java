@@ -72,8 +72,12 @@ public abstract class BaseWeapon extends BaseArmament implements ShootWeapon{
                 lastBlock = block;
             }
         }
+        DataShoot dataShoot = new DataShoot(livingEntity, player, this, charger, ammo, distance);//se crea los datos del disparo
+        dataShoot.setDamage(ammo.getDamage());
+        onShoot(dataShoot);
+        if (dataShoot.isCancelled()) return dataShoot;
         if (f < ammo.getPenetration() && livingEntity != null) {
-            livingEntity.damage(ammo.getDamage(), player);//se aplica el daño
+            livingEntity.damage(dataShoot.getDamage(), player);//se aplica el daño
             b = true;
         }
         Location finalLocation;
@@ -84,9 +88,12 @@ public abstract class BaseWeapon extends BaseArmament implements ShootWeapon{
         }
         ArmamentUtils.drawParticleLine(player.getEyeLocation(),finalLocation,
                 ammo.getColor(), b, ammo.getDensityTrace());
-        return new DataShoot(livingEntity, player, this, charger, ammo, distance, ammo.getDamage());//se crea los datos del disparo
+
+        return dataShoot;
     }
 
     @Override
     public abstract void shoot(Player player);
+
+    public abstract void onShoot(DataShoot dataShoot);
 }
