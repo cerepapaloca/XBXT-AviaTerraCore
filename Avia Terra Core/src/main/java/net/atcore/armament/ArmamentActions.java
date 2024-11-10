@@ -1,6 +1,8 @@
 package net.atcore.armament;
 
 import lombok.experimental.UtilityClass;
+import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.ClickType;
@@ -14,6 +16,7 @@ public class ArmamentActions {
             BaseWeapon weapon = ArmamentUtils.getWeapon(player);
             if (weapon == null) return false;
             weapon.shoot(player);
+
             return true;
         }else {
             return false;
@@ -24,7 +27,10 @@ public class ArmamentActions {
         if (clickType == ClickType.SWAP_OFFHAND) {
             Compartment compartment = ArmamentUtils.getCompartment(currentItem);
             if (compartment != null) {
-                return compartment.outCompartment(player, currentItem);
+                if (compartment.outCompartment(player, currentItem)){
+                    player.getWorld().playSound(player.getLocation(),Sound.ITEM_ARMOR_EQUIP_GENERIC, SoundCategory.PLAYERS, 1, 1);
+                    return true;
+                }
             }
         }
         return false;

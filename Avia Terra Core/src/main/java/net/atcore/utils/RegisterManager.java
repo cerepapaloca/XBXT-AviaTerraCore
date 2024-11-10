@@ -1,12 +1,9 @@
 package net.atcore.utils;
 import net.atcore.AviaTerraCore;
-import net.atcore.armament.*;
 import net.atcore.command.BaseCommand;
 import net.atcore.command.CommandSection;
 import net.atcore.data.DataBaseMySql;
 import net.atcore.data.DataSection;
-import net.atcore.inventory.BaseActions;
-import net.atcore.inventory.ActionsInventoryManager;
 import net.atcore.messages.TypeMessages;
 import net.atcore.Section;
 import org.bukkit.command.CommandException;
@@ -15,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 import org.bukkit.event.Listener;
 
+import java.util.HashMap;
 import java.util.HashSet;
 
 import static net.atcore.messages.MessagesManager.*;
@@ -57,10 +55,6 @@ public class RegisterManager {
 
     public static void register(@NotNull DataBaseMySql database) {
         DataSection.getDataBases().add(database);
-    }
-
-    public static void register(@NotNull DataBaseMySql database, String name) {
-
     }
 
 }

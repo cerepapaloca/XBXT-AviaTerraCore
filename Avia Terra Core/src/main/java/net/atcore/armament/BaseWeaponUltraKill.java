@@ -2,13 +2,14 @@ package net.atcore.armament;
 
 import lombok.Getter;
 import lombok.Setter;
-import net.atcore.AviaTerraCore;
 import net.atcore.AviaTerraPlayer;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.Material;
+import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -38,6 +39,7 @@ public abstract class BaseWeaponUltraKill extends BaseWeapon {
             onShoot(dataShoot);
             ammo.onShoot(dataShoot);
             updateLore(player.getInventory().getItemInMainHand(), null);
+            player.getWorld().playSound(player.getLocation(), Sound.BLOCK_NETHERITE_BLOCK_HIT, SoundCategory.PLAYERS, 1, 1.3f);
         }else{
             MessagesManager.sendMessage(player, "No tienes munición suficiente", TypeMessages.ERROR);
         }

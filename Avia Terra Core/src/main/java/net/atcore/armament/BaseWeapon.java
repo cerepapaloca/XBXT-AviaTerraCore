@@ -3,9 +3,7 @@ package net.atcore.armament;
 import lombok.Getter;
 import lombok.Setter;
 import net.atcore.utils.GlobalUtils;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -64,9 +62,11 @@ public abstract class BaseWeapon extends BaseArmament implements ShootWeapon{
                 0,
                 (int) distance
         );
-        while (blockIterator.hasNext() ) {
+        int i = 0;
+        while (blockIterator.hasNext() && i < maxDistance*2) {
+            i++;//esto es una mini protección con los bucles
             Block block = blockIterator.next();
-            f += block.getType().getHardness();
+            f += block.getType().getHardness();//suma la resistencia de todos los bloques que se encuentra
             if (block.getType() == Material.VOID_AIR) break;
             if ((f < ammo.getPenetration() || lastBlock == null) && block.getType() != Material.AIR) {
                 lastBlock = block;
@@ -78,10 +78,16 @@ public abstract class BaseWeapon extends BaseArmament implements ShootWeapon{
         if (dataShoot.isCancelled()) return dataShoot;
         if (f < ammo.getPenetration() && livingEntity != null) {
             livingEntity.damage(dataShoot.getDamage(), player);//se aplica el daño
+            livingEntity.getWorld().playSound(livingEntity.getLocation(), Sound.ITEM_TRIDENT_HIT, SoundCategory.PLAYERS, 1 ,1);
             b = true;
         }
         Location finalLocation;
         if (lastBlock != null) {
+            try {
+                lastBlock.getWorld().playSound(lastBlock.getLocation(), Sound.BLOCK_ANVIL_HIT, SoundCategory.BLOCKS, 0.5f,1);
+            }catch (NullPointerException e){//un por si acaso
+                e.printStackTrace();
+            }
             finalLocation = ArmamentUtils.getLookLocation(directionRandom, location, location.distance(lastBlock.getLocation()), 0.25);
         }else {
             finalLocation = ArmamentUtils.getLookLocation(directionRandom, location, distance, 0.25);;

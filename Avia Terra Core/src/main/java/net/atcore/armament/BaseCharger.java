@@ -6,9 +6,7 @@ import net.atcore.AviaTerraCore;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.MessagesManager;
 import net.atcore.utils.GlobalUtils;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -108,7 +106,6 @@ public abstract class BaseCharger extends BaseArmament implements Compartment {
                 if (charger.getItemMeta() != null){
                     String ammoNameList = (String) GlobalUtils.getPersistenData(charger, "chargerAmmo", PersistentDataType.STRING);
                     if (ammoNameList != null) {
-                        Bukkit.getLogger().warning(ArmamentUtils.stringToList(ammoNameList).size() + " cantidad");
                         if (ArmamentUtils.stringToList(ammoNameList).size() < ammoMax) {
                             OnReload(player);
                         }else {
@@ -157,6 +154,7 @@ public abstract class BaseCharger extends BaseArmament implements Compartment {
             player.sendTitle("", ChatColor.GREEN + "Recargado Completada", 0, 0,30);
             player.removePotionEffect(PotionEffectType.SLOWNESS);
             reloadTask.remove(player.getUniqueId());
+            player.getWorld().playSound(player.getLocation(), Sound.ITEM_ARMOR_EQUIP_IRON, SoundCategory.PLAYERS, 1, 1);
         }else{
             reloadTask.get(player.getUniqueId()).cancel();
             player.sendTitle("", ChatColor.RED + "Recargado Cancelada", 0, 0,30);

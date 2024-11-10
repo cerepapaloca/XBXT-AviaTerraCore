@@ -7,8 +7,10 @@ import me.neznamy.tab.api.TabPlayer;
 import me.neznamy.tab.api.bossbar.BarColor;
 import me.neznamy.tab.api.bossbar.BarStyle;
 import me.neznamy.tab.api.bossbar.BossBar;
-import net.atcore.moderation.ChatModeration;
 import net.atcore.inventory.InventorySection;
+import net.atcore.messages.MessagesManager;
+import net.atcore.messages.TypeMessages;
+import net.atcore.moderation.ChatModeration;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -66,6 +68,10 @@ public class AviaTerraPlayer {
     private InventorySection inventorySection = null;
     private List<UUID> manipulatorInventoryPlayer = new ArrayList<>();
     private UUID manipulatedInventoryPlayer = null;
+
+    public void sendMessage(String message, TypeMessages type) {
+        MessagesManager.sendMessage(player, message, type);
+    }
 
     private void createBossBar(){
         bossBar = TabAPI.getInstance().getBossBarManager().createBossBar("timerBossBar" + player.getName(), 1f, BarColor.GREEN, BarStyle.NOTCHED_10);

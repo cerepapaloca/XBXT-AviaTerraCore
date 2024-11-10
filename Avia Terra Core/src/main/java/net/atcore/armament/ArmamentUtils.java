@@ -60,7 +60,6 @@ public class ArmamentUtils {
         try{
             list = ListAmmo.valueOf(s);
         }catch (Exception e){
-            Bukkit.getLogger().warning("x | " + s);
             return null;
         }
         return list.getAmmo();

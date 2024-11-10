@@ -1,6 +1,5 @@
 package net.atcore.armament;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import net.atcore.AviaTerraCore;
@@ -67,6 +66,7 @@ public abstract class BaseWeaponTarkov extends BaseWeapon implements Compartment
                         updateLore(itemWeapon, null);
                         baseCharger.onShoot(dataShoot);
                         ammon.onShoot(dataShoot);
+                        player.getWorld().playSound(player.getLocation(),Sound.BLOCK_NETHERITE_BLOCK_HIT, SoundCategory.PLAYERS, 1, 1.3f);
                     }
                 }else {
                     updateLore(itemWeapon, null);
@@ -149,6 +149,7 @@ public abstract class BaseWeaponTarkov extends BaseWeapon implements Compartment
             if (!hasCharger) {//si el arma no tiene cargador lo "guarda" dentro del arma
                 itemCharger.setAmount(0);//lo que hace es desperecer del mundo
             }
+            player.getWorld().playSound(player.getLocation(), Sound.ITEM_ARMOR_EQUIP_IRON, SoundCategory.PLAYERS, 1, 1);
             GlobalUtils.setPersistentDataItem(itemCharger, "chargerAmmo", PersistentDataType.STRING, ArmamentUtils.listToString(ammoCharger));
             GlobalUtils.setPersistentDataItem(itemWeapon, "chargerAmmo", PersistentDataType.STRING, ArmamentUtils.listToString(ammoWeapon));
             GlobalUtils.setPersistentDataItem(itemWeapon, "chargerTypeInside", PersistentDataType.STRING,

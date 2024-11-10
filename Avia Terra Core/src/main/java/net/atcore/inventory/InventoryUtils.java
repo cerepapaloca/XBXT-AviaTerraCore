@@ -1,7 +1,6 @@
 package net.atcore.inventory;
 
 import lombok.experimental.UtilityClass;
-import net.atcore.inventory.inventors.ManipulatorInventory;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;

@@ -12,6 +12,8 @@ commands:
     aliases: test
   aviaterra:
     aliases: at
+  aviaterrapruebas:
+    aliases: atp
   freeze:
   ban:
   unban:

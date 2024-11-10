@@ -4,21 +4,17 @@ import lombok.Getter;
 import net.atcore.AviaTerraCore;
 import net.atcore.AviaTerraPlayer;
 import net.atcore.inventory.BaseActions;
-import net.atcore.inventory.InventorySection;
 import net.atcore.inventory.inventors.ManipulatorInventory;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.jetbrains.annotations.NotNull;
 
-import java.awt.image.LookupOp;
 import java.util.Arrays;
 
 @Getter
@@ -74,7 +70,7 @@ public class ManipulatorAction extends BaseActions {
                         }
                     }
                 }
-                victim.setItemOnCursor(player.getPlayer().getOpenInventory().getTopInventory().getItem(52));
+                victim.setItemOnCursor(player.getPlayer().getOpenInventory().getTopInventory().getItem(52));//todo creo que no funciona esto
                 victim.getInventory().setContents(Arrays.stream(inv.getContents()).toList().subList(0, victim.getInventory().getSize()).toArray(ItemStack[]::new));
 
                 /*AviaTerraPlayer.getPlayer(player.getManipulatedInventoryPlayer()).getManipulatorInventoryPlayer().forEach(p -> {
