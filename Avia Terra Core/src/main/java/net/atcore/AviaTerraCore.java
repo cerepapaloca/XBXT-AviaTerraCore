@@ -22,12 +22,18 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
 import java.util.UUID;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import static net.atcore.messages.MessagesManager.COLOR_SUCCESS;
 import static net.atcore.messages.MessagesManager.sendMessageConsole;
 import static net.atcore.security.Login.LoginManager.getDataLogin;
 
 public final class AviaTerraCore extends JavaPlugin {
+
+    private final BlockingQueue<Runnable> taskQueue = new LinkedBlockingQueue<>();
+    private Thread workerThread;
+
     @Getter
     private static AviaTerraCore instance;
     private static HashMap<UUID, AviaTerraPlayer> players = new HashMap<>();
@@ -49,7 +55,8 @@ public final class AviaTerraCore extends JavaPlugin {
         long timeCurrent = System.currentTimeMillis();
         sendMessageConsole("AviaTerra Iniciando...", TypeMessages.INFO, false);
         isStarting = true;
-        new GlobalConstantes();
+        workerThread = new Thread(this::processQueue);
+        workerThread.start();
         RegisteredServiceProvider<LuckPerms> provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
         if (provider != null) {
             LP = provider.getProvider();
@@ -81,6 +88,7 @@ public final class AviaTerraCore extends JavaPlugin {
         for (Section section : RegisterManager.sections){
             section.disable();
         }
+        workerThread.interrupt();
         Bukkit.getOnlinePlayers().forEach(player -> {
             if (LoginManager.getDataLogin(player) != null){
                 if (!LoginManager.getListPlayerLoginIn().contains(player.getUniqueId())) {
@@ -112,6 +120,22 @@ public final class AviaTerraCore extends JavaPlugin {
                 "   \\ \\__\\ \\__\\ \\__/ /     \\ \\__\\ \\__\\ \\__\\           \\ \\__\\ \\ \\_______\\ \\__\\\\ _\\\\ \\__\\\\ _\\\\ \\__\\ \\__\\\n" +
                 "    \\|__|\\|__|\\|__|/       \\|__|\\|__|\\|__|            \\|__|  \\|_______|\\|__|\\|__|\\|__|\\|__|\\|__|\\|__|\n",
                 TypeMessages.SUCCESS, false);
+    }
+
+    public void enqueueTask(Runnable task) {
+        taskQueue.offer(task);
+    }
+
+    private void processQueue() {
+        try {
+            while (!Thread.currentThread().isInterrupted()) {
+                // Toma una tarea de la cola y la ejecuta
+                Runnable task = taskQueue.take();
+                task.run();
+            }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt(); // Si es interrumpido, detenemos el hilo
+        }
     }
 
 

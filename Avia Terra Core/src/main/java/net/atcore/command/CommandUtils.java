@@ -1,17 +1,24 @@
 package net.atcore.command;
 
+import com.comphenix.protocol.PacketType;
 import lombok.experimental.UtilityClass;
+import net.atcore.messages.MessagesManager;
+import net.atcore.messages.TypeMessages;
 import net.atcore.utils.GlobalConstantes;
 import net.atcore.utils.ModeTab;
 import net.md_5.bungee.api.ChatColor;
+import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toUnmodifiableList;
 import static net.atcore.messages.MessagesManager.COLOR_ERROR;
 
 @UtilityClass
@@ -167,4 +174,68 @@ public final class CommandUtils {
         };
     }
 
+    public void sendForPlayer(@Nullable CommandSender sender, String arg, boolean safeMode, Consumer<Player> action){
+        if (arg.charAt(0) == '*'){
+            Bukkit.getOnlinePlayers().forEach(action);
+            return;
+        }
+        List<String> names = new ArrayList<>(Arrays.stream(arg.replace("!", "").split(",")).toList());
+        for (Player player :  Bukkit.getOnlinePlayers()) {
+            if (arg.charAt(0) == '!') {
+                if (!names.contains(player.getName())) {
+                    action.accept(player);
+                }else {
+                    names.remove(player.getName());
+                }
+            } else {
+                if (names.contains(player.getName())) {
+                    names.remove(player.getName());
+                    action.accept(player);
+                }
+            }
+        }
+        if (sender == null) return;
+        if (names.isEmpty()) return;
+        if (safeMode) {
+            MessagesManager.sendMessage(sender, String.format("El jugador/es <|%s|> no esta conectado o no existe", names), TypeMessages.WARNING);
+        }else {
+            for (String name : names){
+                action.accept(Bukkit.getPlayer(name));//tiene que dar uno si no yo me dio nulo
+            }
+        }
+    }
+
+    public List<String> tabForPlayer(String arg){
+        if (arg.startsWith("*")){
+            return List.of("*");
+        }
+        boolean b = arg.startsWith("!");
+        List<String> namesList = new ArrayList<>();
+        Bukkit.getOnlinePlayers().forEach(player -> namesList.add(player.getName()));
+        if (arg.isEmpty()){
+            namesList.add("*");
+            namesList.add("!");
+            return namesList;
+        }
+        String argNormalize = arg.endsWith(",") ? "" : Arrays.stream(arg.split(",")).toList().getLast().toLowerCase().replace("!", "");
+        List<String> finalNamesList = namesList.stream()
+                .filter(name -> name.toLowerCase().contains(argNormalize))
+                .collect(toList());
+        if (finalNamesList.isEmpty() || finalNamesList.getFirst().equals(argNormalize)) {
+            if (arg.endsWith(",")){
+                namesList.replaceAll(s -> arg + "," + s);
+                return namesList;
+            }else {
+                return List.of(arg + ",");
+            }
+        }else {
+            if (arg.contains(",")){
+                finalNamesList.replaceAll(s -> arg.substring(0, arg.lastIndexOf(",")) + "," + s);
+            }
+            if (b && !finalNamesList.getLast().startsWith("!")){
+                finalNamesList.replaceAll(s -> "!" + s);
+            }
+            return finalNamesList;
+        }
+    }
 }

@@ -50,16 +50,18 @@ public class BanCommand extends BaseTabCommand {
                     reason = reason.concat(args[i] + " ");
                 }
                 String finalReason = reason;
-                Player player = Bukkit.getPlayer(args[0]);
-                try {
-                    if (player != null) {
-                        ModerationSection.getBanManager().banPlayer(player, finalReason, time, contextBan, sender.getName());
-                    }else {
-                        ModerationSection.getBanManager().banPlayer(args[0], null, null, finalReason, time, contextBan, sender.getName());
+                CommandUtils.sendForPlayer(sender, args[0], false, player1 -> {
+
+                    try {
+                        if (player1 != null) {
+                            ModerationSection.getBanManager().banPlayer(player1, finalReason, time, contextBan, sender.getName());
+                        }else {//todo arregla el args[0] antes de que se me olvide
+                            ModerationSection.getBanManager().banPlayer(args[0], null, null, finalReason, time, contextBan, sender.getName());
+                        }
+                    }catch (Exception ignored) {
+                        sendMessage(sender, "Hubo un problema con las base de datos vuelva a ejecutar el comando", TypeMessages.ERROR);
                     }
-                }catch (Exception ignored) {
-                    sendMessage(sender, "Hubo un problema con las base de datos vuelva a ejecutar el comando", TypeMessages.ERROR);
-                }
+                });
 
                 sendMessage(sender, "El jugador sera baneado mira los logs para confirmar", TypeMessages.INFO);
             }
@@ -69,6 +71,9 @@ public class BanCommand extends BaseTabCommand {
     @Override
     public List<String> onTab(CommandSender sender, String[] args) {
         switch (args.length) {
+            case 1 -> {
+                return CommandUtils.tabForPlayer(args[0]);
+            }
             case 2 -> {
                 return CommandUtils.listTab(args[1], CommandUtils.enumsToStrings(ContextBan.values()));
             }
