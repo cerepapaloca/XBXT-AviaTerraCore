@@ -7,11 +7,12 @@ import net.atcore.armament.ammo.MMxx_Prueba;
 
 @Getter
 public enum ListAmmo {
-    MM45_OTAN(new MM45_OTAN("MM45_OTAN")),
-    MM45_OTAN_VERDE(new MM45_OTAN_VERDE("MM45_OTAN_VERDE")),
-    MMxx_Prueba(new MMxx_Prueba("MMxx_Prueba"));
+    MM45_OTAN(new MM45_OTAN()),
+    MM45_OTAN_VERDE(new MM45_OTAN_VERDE()),
+    MMxx_Prueba(new MMxx_Prueba());
 
     ListAmmo(BaseAmmo ammo) {
+        ammo.setName(name());
         this.ammo = ammo;
     }
 

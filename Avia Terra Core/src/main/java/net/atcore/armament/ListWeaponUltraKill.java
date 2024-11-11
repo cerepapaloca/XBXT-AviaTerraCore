@@ -5,9 +5,10 @@ import net.atcore.armament.weapons.M16;
 
 @Getter
 public enum ListWeaponUltraKill {
-    M16(new M16("M16"));
+    M16(new M16());
 
     ListWeaponUltraKill(BaseWeaponUltraKill weaponUltraKill){
+        weaponUltraKill.setName(name());
         this.weapon = weaponUltraKill;
     }
 

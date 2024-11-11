@@ -7,7 +7,7 @@ import org.bukkit.Color;
 public enum RangeList {
     SEPHIRAH(Color.fromRGB(0,0,0), "Sephirah", '\uDFEC'),
     DEVELOPER(Color.fromRGB(255,0,220), "Developer", '\uDFED'),
-    SERAPHINE(Color.fromRGB(0,0,0), "Seraphine", '\uDFEE'),
+    SERAPHINE(Color.fromRGB(255,0,0), "Seraphine", '\uDFEE'),
     VIRTUE(Color.fromRGB(255,0,0), "Virtue", '\uDFEF'),
     ARBITRO(Color.fromRGB(255,106,0), "Arbitro", '\uDFF1'),
     GUARDIAN(Color.fromRGB(38,127,0), "Guardian", '\uDFF2'),
@@ -21,16 +21,18 @@ public enum RangeList {
     TIKTOKER(Color.fromRGB(0,0,0), "TikTok", '\uDFFA');
 
     private final Color color;
-    private final String name;
+    private final String displayName;
     private final char icon;
+    private final String name;
 
-    RangeList(Color color, String name, char icon) {
+    RangeList(Color color, String displayName, char icon) {
         this.color = color;
-        this.name = name;
+        this.displayName = displayName;
         this.icon = icon;
+        this.name = this.name();
     }
 
     public String getPermission(){
-        return "aviaterra.range." + name.toLowerCase();
+        return "aviaterra.range." + displayName.toLowerCase();
     }
 }

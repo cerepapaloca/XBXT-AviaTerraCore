@@ -11,7 +11,6 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -19,8 +18,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 @Setter
 public abstract class BaseWeaponUltraKill extends BaseWeapon {
 
-    public BaseWeaponUltraKill(String name, String displayName, int maxDistance, int cost, double precision, ListAmmo ammo) {
-        super(displayName, new ItemStack(Material.GOLDEN_HORSE_ARMOR), maxDistance, name, precision);
+    public BaseWeaponUltraKill(String displayName, int maxDistance, int cost, double precision, ListAmmo ammo) {
+        super(new ItemStack(Material.GOLDEN_HORSE_ARMOR), maxDistance, displayName, precision);
         this.cost = cost;
         this.ammo = ammo.getAmmo();
         updateLore(getItemArmament(), null);
@@ -60,13 +59,6 @@ public abstract class BaseWeaponUltraKill extends BaseWeapon {
                 (100 - precision) + "%",
                 maxDistance
         ), null, CategoryMessages.PRIVATE, false), true));
-        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-        meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
-        meta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
-        meta.addItemFlags(ItemFlag.HIDE_ARMOR_TRIM);
-        meta.addItemFlags(ItemFlag.HIDE_DESTROYS);
-        meta.setDisplayName(displayName);
         itemStack.setItemMeta(meta);
     }
 }

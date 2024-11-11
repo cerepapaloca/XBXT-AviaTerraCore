@@ -2,6 +2,7 @@ package net.atcore.armament;
 
 import lombok.Getter;
 import lombok.Setter;
+import net.atcore.AviaTerraCore;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.MessagesManager;
 import net.atcore.utils.GlobalUtils;
@@ -11,28 +12,30 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.scheduler.BukkitRunnable;
 
 @Getter
 @Setter
 public abstract class BaseAmmo extends BaseArmament {
 
-    protected BaseAmmo(String name, double damage, String displayName, float penetration) {
-        this(name, damage, displayName, Color.fromRGB(80,80,80), false, 1F, penetration);
+    protected BaseAmmo(double damage, String displayName, float penetration) {
+        this(damage, displayName, Color.fromRGB(80,80,80), false, 1F, penetration);
     }
 
-    protected BaseAmmo(String name, double damage, String displayName, Color color, boolean isTrace, float densityTrace, float penetration) {
-        super(displayName, new ItemStack(Material.SNOWBALL), name);
+    protected BaseAmmo(double damage, String displayName, Color color, boolean isTrace, float densityTrace, float penetration) {
+        super(displayName, new ItemStack(Material.SNOWBALL));
         this.damage = damage;
         this.color = color;
         this.isTrace = isTrace;
         this.densityTrace = densityTrace;
         this.penetration = penetration;
-        ItemMeta itemMeta = itemArmament.getItemMeta();
-        assert itemMeta != null;
-        itemMeta.setDisplayName(displayName);
-        itemMeta.setLore(GlobalUtils.StringToLoreString(MessagesManager.addProprieties(getProperties(), null, CategoryMessages.PRIVATE, false), true));
-        itemArmament.setItemMeta(itemMeta);
-        GlobalUtils.setPersistentDataItem(itemArmament, "nameAmmo", PersistentDataType.STRING, name);
+        updateLore(itemArmament, null);
+        new BukkitRunnable() {
+            @Override
+            public void run() {//no se me ocurre de hacer esto
+                GlobalUtils.setPersistentDataItem(itemArmament, "nameAmmo", PersistentDataType.STRING, name);
+            }
+        }.runTaskLater(AviaTerraCore.getInstance(), 1);
     }
 
     private final float penetration;

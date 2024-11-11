@@ -2,14 +2,18 @@ package net.atcore.armament;
 
 import lombok.Getter;
 import lombok.Setter;
+import net.atcore.AviaTerraCore;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.BlockIterator;
 import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
@@ -17,11 +21,17 @@ import org.bukkit.util.Vector;
 @Getter
 @Setter
 public abstract class BaseWeapon extends BaseArmament implements ShootWeapon{
-    public BaseWeapon(String name, ItemStack item, int MaxDistance, String displayName, double precision) {
-        super(displayName, item, name);
+    public BaseWeapon(ItemStack item, int MaxDistance, String displayName, double precision) {
+        super(displayName, item);
         this.maxDistance = MaxDistance;
         this.precision = precision;
-        GlobalUtils.setPersistentDataItem(itemArmament, "weaponName", PersistentDataType.STRING, displayName);
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                GlobalUtils.setPersistentDataItem(itemArmament, "weaponName", PersistentDataType.STRING, name);
+            }
+        }.runTaskLater(AviaTerraCore.getInstance(), 1);
+
     }
 
     protected final int maxDistance;

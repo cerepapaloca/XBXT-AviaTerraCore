@@ -11,9 +11,8 @@ import java.util.List;
 public class M4 extends BaseWeaponTarkov {
 
 
-    public M4(String s) {
-        super(s,
-                List.of(ListCharger.M4_30, ListCharger.M4_60),
+    public M4() {
+        super(List.of(ListCharger.M4_30, ListCharger.M4_60),
                 50,
                 "m4",
                 0

@@ -28,19 +28,11 @@ import java.util.*;
 @Setter
 public abstract class BaseWeaponTarkov extends BaseWeapon implements Compartment {
 
-    protected BaseWeaponTarkov(String name, List<ListCharger> listChargers, int maxDistance, String displayName, double precision) {
-        super(displayName, new ItemStack(Material.IRON_HORSE_ARMOR), maxDistance, name, precision);
+    protected BaseWeaponTarkov(List<ListCharger> listChargers, int maxDistance, String displayName, double precision) {
+        super(new ItemStack(Material.IRON_HORSE_ARMOR), maxDistance, displayName, precision);
         this.CHARGERS_TYPE = listChargers;
         GlobalUtils.setPersistentDataItem(itemArmament, "chargerTypeInside", PersistentDataType.STRING, "null");
         GlobalUtils.setPersistentDataItem(itemArmament, "chargerTypeOutside", PersistentDataType.STRING, "null");
-        ItemMeta meta = itemArmament.getItemMeta();
-        if (meta == null) return;
-        meta.setDisplayName(displayName);
-        meta.removeItemFlags(ItemFlag.HIDE_ATTRIBUTES);//se oculta datos del item para que no se vea feo
-        meta.removeItemFlags(ItemFlag.HIDE_ENCHANTS);
-        meta.removeItemFlags(ItemFlag.HIDE_UNBREAKABLE);
-        meta.removeItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
-        itemArmament.setItemMeta(meta);
         updateLore(null, null);
     }
 

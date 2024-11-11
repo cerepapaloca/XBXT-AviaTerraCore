@@ -3,12 +3,14 @@ package net.atcore.listenerManager;
 import net.atcore.AviaTerraCore;
 import net.atcore.Config;
 import net.atcore.armament.*;
+import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import net.atcore.moderation.BlockCommands;
 import net.atcore.moderation.Freeze;
 import net.atcore.security.Login.LoginManager;
 import net.atcore.utils.GlobalConstantes;
 import net.atcore.utils.GlobalUtils;
+import net.atcore.utils.RangeList;
 import net.luckperms.api.node.types.InheritanceNode;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
@@ -105,8 +107,13 @@ public class PlayerListener implements Listener {
             }
             item.setType(Material.AIR);
             player.playSound(player, Sound.ENTITY_PLAYER_LEVELUP, 0.8F, 1);
-            player.sendTitle(ChatColor.translateAlternateColorCodes('&',COLOR_ESPECIAL + "Nuevo Rango")
-                    , range, 20, 60, 40);
+            RangeList rangeList = RangeList.valueOf(range.toUpperCase());
+            MessagesManager.sendTitle(player,"Nuevo Rango", GlobalUtils.applyGradient(
+                    "<" + GlobalUtils.modifyColorHexWithHLS(GlobalUtils.colorToStringHex(rangeList.getColor()), 0f, 0.3f, -0.1f) + ">" +
+                            rangeList.getDisplayName() +
+                            "<" + GlobalUtils.modifyColorHexWithHLS(GlobalUtils.colorToStringHex(rangeList.getColor()), 0, -0.2f, 0.1f) + ">",
+                    'l'
+            ), 20, 60, 40, TypeMessages.INFO);
 
         }
     }

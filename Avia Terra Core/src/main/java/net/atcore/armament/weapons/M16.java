@@ -3,12 +3,10 @@ package net.atcore.armament.weapons;
 import net.atcore.armament.BaseWeaponUltraKill;
 import net.atcore.armament.DataShoot;
 import net.atcore.armament.ListAmmo;
-import net.atcore.armament.ListWeaponUltraKill;
 
 public class M16 extends BaseWeaponUltraKill {
-    public M16(String name) {
-        super(name,
-                "M16",
+    public M16() {
+        super("M16",
                 60,
                 10,
                 0,

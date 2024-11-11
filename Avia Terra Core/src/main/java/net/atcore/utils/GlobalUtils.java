@@ -16,6 +16,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.checkerframework.dataflow.qual.Pure;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -43,6 +45,7 @@ public final class GlobalUtils {
      * @return te da el texto con los degradados y formato
      */
 
+    @Contract(pure = true)
     public @NotNull String applyGradient(@NotNull String input, char in) {
         if (input.contains("</#"))input = input.replace("/","");
         input = input.replace("##","#");
@@ -104,6 +107,7 @@ public final class GlobalUtils {
      * @return el formato del seleccionado
      */
 
+    @Contract(pure = true)
     public String timeToString(long time, int format, boolean isGlobalDate) {
         if (time == GlobalConstantes.NUMERO_PERMA) return "permanente";
         if (isGlobalDate) time = time - System.currentTimeMillis();
@@ -179,6 +183,7 @@ public final class GlobalUtils {
         itemStack.setItemMeta(meta);
     }
 
+    @Contract(pure = true)
     public Object getPersistenData(@NotNull ItemStack item, String nameKey, PersistentDataType type){
         ItemMeta meta = item.getItemMeta();
         assert meta != null;
@@ -243,6 +248,7 @@ public final class GlobalUtils {
      * @return la uuid del jugador
      */
 
+    @Contract(pure = true)
     public UUID getUUIDByName(String username) {
         return UUID.nameUUIDFromBytes(("OfflinePlayer:" + username).getBytes(Charsets.UTF_8));
     }
@@ -252,6 +258,7 @@ public final class GlobalUtils {
      * clasico formato hex, así {@code #FFEEDD}
      */
 
+    @Contract(pure = true)
     public String colorToStringHex(Color color) {
         String r = color.getRed() > 9 ?  Integer.toString(color.getRed(), 16) : "0" + Integer.toString(color.getRed(), 16);
         String g = color.getGreen() > 9 ?  Integer.toString(color.getGreen(), 16) : "0" + Integer.toString(color.getGreen(), 16);
@@ -283,6 +290,7 @@ public final class GlobalUtils {
      * @return regresa una List conde cada elemento de la lista es un salto de liena del texto
      */
 
+    @Contract(pure = true)
     public static @NotNull ArrayList<String> StringToLoreString(@NotNull String texto, int longitud, boolean space, char color) {
         texto = ChatColor.translateAlternateColorCodes('&', texto);
         ArrayList<String> lineas = new ArrayList<>();
@@ -319,6 +327,7 @@ public final class GlobalUtils {
      * @return regresa el jugador con un 100% de probabilidades de que no sea nulo
      */
 
+    @Contract(pure = true)
     public @NotNull Player getPlayer(UUID uuid){
         Player player = Bukkit.getPlayer(uuid);
         if (player != null) return player;
@@ -333,6 +342,100 @@ public final class GlobalUtils {
         Player player = Bukkit.getPlayer(name);
         if (player != null) return player;
         throw new IllegalArgumentException("Dio nulo cuando no debería  " + name);
+    }
+
+    /**
+     * Modifica los colores hex usando hls para que sea más fácil de modificar. Los
+     * parametros del hls son diferencia entre si es decir si no lo quieres modificar
+     * usa el 0
+     * @param hexColor El hex
+     * @param hueDelta se maneja -1 a 1
+     * @param lightnessDelta se maneja -1 a 1
+     * @param saturationDelta se maneja -1 a 1
+     * @return el hex con las modification
+     */
+
+    public static @NotNull String modifyColorHexWithHLS(@NotNull String hexColor, float hueDelta, float lightnessDelta, float saturationDelta) {
+        if(hexColor.startsWith("#")){
+            hexColor = hexColor.substring(1);
+        }
+
+        int r = Integer.valueOf(hexColor.substring(0, 2), 16);
+        int g = Integer.valueOf(hexColor.substring(2, 4), 16);
+        int b = Integer.valueOf(hexColor.substring(4, 6), 16);
+
+        float[] hls = rgbToHLS(r, g, b);
+
+        hls[0] = (hls[0] + hueDelta) % 1.0f;
+        hls[1] = clamp(hls[1] + lightnessDelta, 0, 1);
+        hls[2] = clamp(hls[2] + saturationDelta, 0, 1);
+
+        int[] rgb = hlsToRGB(hls[0], hls[1], hls[2]);
+
+        return String.format("#%02x%02x%02x", rgb[0], rgb[1], rgb[2]).toUpperCase();
+    }
+
+    @Contract("_, _, _ -> new")
+    private static float @NotNull [] rgbToHLS(int r, int g, int b) {
+        float rf = r / 255.0f;
+        float gf = g / 255.0f;
+        float bf = b / 255.0f;
+
+        float max = Math.max(rf, Math.max(gf, bf));
+        float min = Math.min(rf, Math.min(gf, bf));
+
+        float h = 0, s, l = (max + min) / 2;
+
+        if (max == min) {
+            h = s = 0;
+        } else {
+            float delta = max - min;
+            s = l > 0.5 ? delta / (2 - max - min) : delta / (max + min);
+            if (max == rf) {
+                h = (gf - bf) / delta + (gf < bf ? 6 : 0);
+            } else if (max == gf) {
+                h = (bf - rf) / delta + 2;
+            } else {
+                h = (rf - gf) / delta + 4;
+            }
+            h /= 6;
+        }
+
+        return new float[]{h, l, s};
+    }
+
+    @Contract("_, _, _ -> new")
+    private static int @NotNull [] hlsToRGB(float h, float l, float s) {
+        double r, g, b;
+
+        if (s == 0) {
+            r = g = b = l;
+        } else {
+            float q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+            float p = 2 * l - q;
+            r = hueToRGB(p, q, h + 1.0f / 3);
+            g = hueToRGB(p, q, h);
+            b = hueToRGB(p, q, h - 1.0f / 3);
+        }
+
+        return new int[]{
+                (int) Math.round(r * 255),
+                (int) Math.round(g * 255),
+                (int) Math.round(b * 255)
+        };
+    }
+
+    private static double hueToRGB(float p, float q, float t) {
+        if (t < 0) t += 1;
+        if (t > 1) t -= 1;
+        if (t < 1.0 / 6) return p + (q - p) * 6 * t;
+        if (t < 1.0 / 2) return q;
+        if (t < 2.0 / 3) return (p + (q - p) * (2.0 / 3 - t) * 6);
+        return p;
+    }
+
+    private static float clamp(float value, float min, float max) {
+        return Math.max(min, Math.min(max, value));
     }
 
 }

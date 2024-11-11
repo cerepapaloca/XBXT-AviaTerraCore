@@ -25,25 +25,22 @@ import java.util.*;
 @Setter
 public abstract class BaseCharger extends BaseArmament implements Compartment {
 
-    public BaseCharger(String name, List<ListAmmo> compatibleCaliber, ListAmmo defaultCaliber, int ammoMax, String displayName, int reloadTime){
-        this(name, compatibleCaliber, Collections.nCopies(ammoMax, defaultCaliber), ammoMax, displayName, reloadTime);
-    }
-
-    public BaseCharger(String name, List<ListAmmo> compatibleCaliber, List<ListAmmo> defaultCaliber, int ammoMax, String displayName, int reloadTime) {
-        super(displayName, new ItemStack(Material.SUGAR), name);
+    public BaseCharger(List<ListAmmo> compatibleCaliber, List<ListAmmo> defaultCaliber, int ammoMax, String displayName, int reloadTime) {
+        super(displayName, new ItemStack(Material.SUGAR));
         this.displayName = displayName;
         this.DefaultammonList = listAmmoFill(defaultCaliber);
         this.compatibleAmmonList = listAmmoToBaseAmmo(compatibleCaliber);
         this.ammoMax = ammoMax;
         this.reloadTime = reloadTime;
-        ItemMeta itemMeta = itemArmament.getItemMeta();
-        assert itemMeta != null;
-        itemMeta.setDisplayName(displayName);
-        itemArmament.setItemMeta(itemMeta);
         List<String> listAmmoName = new ArrayList<>();
         for (BaseAmmo ammo : listAmmoFill(defaultCaliber)) listAmmoName.add(ammo.getName());
         GlobalUtils.setPersistentDataItem(itemArmament, "chargerAmmo", PersistentDataType.STRING, ArmamentUtils.listToString(listAmmoName));
-        GlobalUtils.setPersistentDataItem(itemArmament, "chargerType", PersistentDataType.STRING, name);
+        new BukkitRunnable(){
+            @Override
+            public void run() {//todo modificar el chargerType a chargerName
+                GlobalUtils.setPersistentDataItem(itemArmament, "chargerType", PersistentDataType.STRING, name);
+            }
+        }.runTaskLater(AviaTerraCore.getInstance(), 1);
         getProperties(itemArmament, true);
     }
 

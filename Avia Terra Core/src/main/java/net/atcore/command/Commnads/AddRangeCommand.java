@@ -3,12 +3,11 @@ package net.atcore.command.Commnads;
 import net.atcore.AviaTerraCore;
 import net.atcore.command.BaseTabCommand;
 import net.atcore.command.CommandUtils;
-import net.atcore.messages.CategoryMessages;
-import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import net.atcore.utils.GlobalUtils;
 import net.atcore.utils.RangeList;
 import net.luckperms.api.model.group.Group;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -50,18 +49,19 @@ public class AddRangeCommand extends BaseTabCommand {
                         sendMessage(sender, "formato de fecha incorrecto", TypeMessages.ERROR);
                         return;
                     }
+                    RangeList range = RangeList.valueOf(args[0].toUpperCase());
                     ItemStack item = new ItemStack(Material.NAME_TAG);
                     GlobalUtils.setPersistentDataItem(item, "durationRange", PersistentDataType.LONG, time);
-                    GlobalUtils.setPersistentDataItem(item, "rangeName", PersistentDataType.STRING, args[0]);
+                    GlobalUtils.setPersistentDataItem(item, "rangeName", PersistentDataType.STRING, range.getName());
                     GlobalUtils.setPersistentDataItem(item, "dateCreationRange", PersistentDataType.LONG, System.currentTimeMillis());
                     ItemMeta meta = item.getItemMeta();
                     assert meta != null;
-                    RangeList range = RangeList.valueOf(args[0].toUpperCase());
                     //meta.setDisplayName(GlobalUtils.applyGradient("<#f0f0f0>asdas<#404040>"));
-                    String displayName = MessagesManager.addProprieties("&l" + range.getName() +
-                            GlobalUtils.applyGradient( "<" + GlobalUtils.colorToStringHex(range.getColor()) + ">"
-                            + " Duración: " + GlobalUtils.timeToString(time, 2) + "<#696969>"), null, CategoryMessages.PRIVATE, false);
-                    meta.setDisplayName();
+                    String displayName = GlobalUtils.applyGradient(
+                                    "<" + GlobalUtils.modifyColorHexWithHLS(GlobalUtils.colorToStringHex(range.getColor()), 0f, 0.35f, -0.f) + ">" +
+                                             "Rango " + range.getDisplayName() + " por " + GlobalUtils.timeToString(time, 2) +
+                                            "<" + GlobalUtils.modifyColorHexWithHLS(GlobalUtils.colorToStringHex(range.getColor()), 0f, -0.2f, 0.1f) + ">");
+                    meta.setDisplayName(displayName);
                     item.setItemMeta(meta);
                     if(args.length == 2){
                         if (sender instanceof Player playerSender){
