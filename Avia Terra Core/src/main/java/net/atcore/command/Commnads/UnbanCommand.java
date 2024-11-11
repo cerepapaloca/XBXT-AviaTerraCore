@@ -6,7 +6,6 @@ import net.atcore.command.CommandUtils;
 import net.atcore.messages.TypeMessages;
 import net.atcore.moderation.Ban.ContextBan;
 import net.atcore.moderation.ModerationSection;
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 
 import java.util.List;
@@ -33,7 +32,9 @@ public class UnbanCommand extends BaseTabCommand {
             return;
         }
         //en un hilo aparte por qué explota el servidor
-        Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(), () -> ModerationSection.getBanManager().removeBanPlayer(args[0], contextBan, sender.getName()));
+        CommandUtils.excuteForPlayer(sender, args[0], false, dataTemporalPlayer ->
+                AviaTerraCore.getInstance().enqueueTaskDataBase(() ->
+                        ModerationSection.getBanManager().removeBanPlayer(dataTemporalPlayer.name(), contextBan, sender.getName())));
         sendMessage(sender, "El jugador va ser desbaneado mira la los logs para confirmar", TypeMessages.INFO);
     }
 
@@ -41,6 +42,8 @@ public class UnbanCommand extends BaseTabCommand {
     public List<String> onTab(CommandSender sender, String[] args) {
         if (args.length == 2){
             return CommandUtils.listTab(args[1], CommandUtils.enumsToStrings(ContextBan.values()));
+        }else if (args.length == 1){
+            return CommandUtils.tabForPlayer(args[0]);
         }
         return null;
     }

@@ -2,7 +2,6 @@ package net.atcore.moderation.Ban;
 
 import lombok.Getter;
 import net.atcore.AviaTerraCore;
-import net.atcore.AviaTerraPlayer;
 import net.atcore.Config;
 import net.atcore.utils.GlobalConstantes;
 import net.atcore.data.DataBaseBan;
@@ -38,7 +37,7 @@ public class ManagerBan extends DataBaseBan {
         long finalTime = time == GlobalConstantes.NUMERO_PERMA ? GlobalConstantes.NUMERO_PERMA : time == Long.MAX_VALUE ? Long.MAX_VALUE : time + System.currentTimeMillis();
         DataBan dataBan = new DataBan(name, uuid, ip, reason, finalTime, System.currentTimeMillis(), context, nameAuthor);
         kickBan(dataBan);
-        AviaTerraCore.getInstance().enqueueTask(() -> addBanPlayer(dataBan));
+        AviaTerraCore.getInstance().enqueueTaskDataBase(() -> addBanPlayer(dataBan));
     }
 
     /**

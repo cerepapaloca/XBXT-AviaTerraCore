@@ -1,6 +1,5 @@
 package net.atcore.command;
 
-import com.comphenix.protocol.PacketType;
 import lombok.experimental.UtilityClass;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
@@ -15,10 +14,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Consumer;
-import java.util.function.Predicate;
 
 import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toUnmodifiableList;
 import static net.atcore.messages.MessagesManager.COLOR_ERROR;
 
 @UtilityClass
@@ -174,23 +171,23 @@ public final class CommandUtils {
         };
     }
 
-    public void sendForPlayer(@Nullable CommandSender sender, String arg, boolean safeMode, Consumer<Player> action){
+    public void excuteForPlayer(@Nullable CommandSender sender, String arg, boolean safeMode, Consumer<DataTemporalPlayer> action){
         if (arg.charAt(0) == '*'){
-            Bukkit.getOnlinePlayers().forEach(action);
+            Bukkit.getOnlinePlayers().forEach(player ->  action.accept(new DataTemporalPlayer(player.getName(), player)));
             return;
         }
         List<String> names = new ArrayList<>(Arrays.stream(arg.replace("!", "").split(",")).toList());
         for (Player player :  Bukkit.getOnlinePlayers()) {
             if (arg.charAt(0) == '!') {
                 if (!names.contains(player.getName())) {
-                    action.accept(player);
+                    action.accept(new DataTemporalPlayer(player.getName(), player));
                 }else {
                     names.remove(player.getName());
                 }
             } else {
                 if (names.contains(player.getName())) {
                     names.remove(player.getName());
-                    action.accept(player);
+                    action.accept(new DataTemporalPlayer(player.getName(), player));
                 }
             }
         }
@@ -200,7 +197,7 @@ public final class CommandUtils {
             MessagesManager.sendMessage(sender, String.format("El jugador/es <|%s|> no esta conectado o no existe", names), TypeMessages.WARNING);
         }else {
             for (String name : names){
-                action.accept(Bukkit.getPlayer(name));//tiene que dar uno si no yo me dio nulo
+                action.accept(new DataTemporalPlayer(name, null));//tiene que dar uno si no yo me dio nulo
             }
         }
     }

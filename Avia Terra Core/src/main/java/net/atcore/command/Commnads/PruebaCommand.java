@@ -1,13 +1,9 @@
 package net.atcore.command.Commnads;
 
-import net.atcore.armament.ArmamentUtils;
-import net.atcore.command.BaseCommand;
 import net.atcore.command.BaseTabCommand;
 import net.atcore.command.CommandUtils;
 import net.atcore.messages.TypeMessages;
-import net.atcore.utils.GlobalUtils;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import java.util.List;
 
@@ -28,8 +24,8 @@ public class PruebaCommand extends BaseTabCommand {
     public void execute(CommandSender sender, String[] args) {
         sendMessage(sender, "Hola Mundo!", TypeMessages.SUCCESS);
 
-        CommandUtils.sendForPlayer(sender, args[0], true, player -> {
-            player.sendMessage("Test");
+        CommandUtils.excuteForPlayer(sender, args[0], true, player -> {
+            player.player().sendMessage("Test");
         });
     }
 

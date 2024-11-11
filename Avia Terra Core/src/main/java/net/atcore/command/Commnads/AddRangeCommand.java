@@ -3,11 +3,12 @@ package net.atcore.command.Commnads;
 import net.atcore.AviaTerraCore;
 import net.atcore.command.BaseTabCommand;
 import net.atcore.command.CommandUtils;
+import net.atcore.messages.CategoryMessages;
+import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import net.atcore.utils.GlobalUtils;
 import net.atcore.utils.RangeList;
 import net.luckperms.api.model.group.Group;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -53,29 +54,24 @@ public class AddRangeCommand extends BaseTabCommand {
                     GlobalUtils.setPersistentDataItem(item, "durationRange", PersistentDataType.LONG, time);
                     GlobalUtils.setPersistentDataItem(item, "rangeName", PersistentDataType.STRING, args[0]);
                     GlobalUtils.setPersistentDataItem(item, "dateCreationRange", PersistentDataType.LONG, System.currentTimeMillis());
-                    GlobalUtils.addProtectionAntiDupe(item);
                     ItemMeta meta = item.getItemMeta();
                     assert meta != null;
                     RangeList range = RangeList.valueOf(args[0].toUpperCase());
                     //meta.setDisplayName(GlobalUtils.applyGradient("<#f0f0f0>asdas<#404040>"));
-                    meta.setDisplayName(range.getIcon() + GlobalUtils.applyGradient( "<" + GlobalUtils.colorToStringHex(range.getColor()) + ">"
-                             + " Duración: " + GlobalUtils.timeToString(time, 2) + "<#696969>"));
+                    String displayName = MessagesManager.addProprieties("&l" + range.getName() +
+                            GlobalUtils.applyGradient( "<" + GlobalUtils.colorToStringHex(range.getColor()) + ">"
+                            + " Duración: " + GlobalUtils.timeToString(time, 2) + "<#696969>"), null, CategoryMessages.PRIVATE, false);
+                    meta.setDisplayName();
                     item.setItemMeta(meta);
                     if(args.length == 2){
                         if (sender instanceof Player playerSender){
-                            addItemPlayer(item, playerSender, false, false);
+                            addItemPlayer(item, playerSender, false, true);
                         }else{
                             sendMessage(sender, "no eres un jugador para recibir el rango", TypeMessages.ERROR);
                         }
                     }else{
-                        Player player = Bukkit.getPlayer(args[2]);
-                        if (player == null){
-                            sendMessage(sender, "El jugador no existe o esta desconectado", TypeMessages.ERROR);
-
-                        }else{
-                            GlobalUtils.addItemPlayer(item, player, false, false);
-                            sendMessage(sender, "El item se le dio exitosamente", TypeMessages.SUCCESS);
-                        }
+                        CommandUtils.excuteForPlayer(sender, args[2], true, fakePlayer -> GlobalUtils.addItemPlayer(item, fakePlayer.player(), false, true));
+                        sendMessage(sender, "El item se le dio exitosamente", TypeMessages.SUCCESS);
                     }
                 }else{
                     sendMessage(sender, "El rango no existe", TypeMessages.ERROR);
@@ -97,6 +93,9 @@ public class AddRangeCommand extends BaseTabCommand {
             }
             case 2 -> {
                 return CommandUtils.listTabTime(args[1], true);
+            }
+            case 3 -> {
+                return CommandUtils.tabForPlayer(args[2]);
             }
         }
         return null;

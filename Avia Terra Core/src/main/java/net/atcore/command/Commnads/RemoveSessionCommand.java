@@ -1,6 +1,9 @@
 package net.atcore.command.Commnads;
 
+import net.atcore.AviaTerraCore;
+import net.atcore.AviaTerraPlayer;
 import net.atcore.command.BaseCommand;
+import net.atcore.command.CommandUtils;
 import net.atcore.messages.TypeMessages;
 import net.atcore.security.Login.LoginManager;
 import org.bukkit.Bukkit;
@@ -22,13 +25,9 @@ public class RemoveSessionCommand extends BaseCommand {
     @Override
     public void execute(CommandSender sender, String[] args) {
         if (args.length == 1) {
-            Player player = Bukkit.getPlayer(args[0]);
-            if (player != null) {
-                LoginManager.getDataLogin(player).setSession(null);
-                sendMessage(sender, "va ser borrado el registro del jugador revisa los logs", TypeMessages.INFO);
-            }else {
-                sendMessage(sender ,"el jugador no existe o no esta conectado", TypeMessages.ERROR);
-            }
+            CommandUtils.excuteForPlayer(sender, args[0], true, dataTemporalPlayer ->
+                    AviaTerraCore.getInstance().enqueueTaskDataBase(() -> LoginManager.getDataLogin(dataTemporalPlayer.player()).setSession(null)));
+            sendMessage(sender, "se le borro la sesión al jugador", TypeMessages.SUCCESS);
         }else{
             sendMessage(sender, this.getUsage(), TypeMessages.ERROR);
         }

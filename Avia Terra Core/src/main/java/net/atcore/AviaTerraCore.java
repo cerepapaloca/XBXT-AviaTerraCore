@@ -9,7 +9,6 @@ import net.atcore.messages.TypeMessages;
 import net.atcore.listenerManager.ListenerManagerSection;
 import net.atcore.security.Login.LoginManager;
 import net.atcore.service.ServiceSection;
-import net.atcore.utils.GlobalConstantes;
 import net.atcore.utils.GlobalUtils;
 import net.atcore.utils.RegisterManager;
 import net.atcore.moderation.ModerationSection;
@@ -122,7 +121,13 @@ public final class AviaTerraCore extends JavaPlugin {
                 TypeMessages.SUCCESS, false);
     }
 
-    public void enqueueTask(Runnable task) {
+    /**
+     * Se tiene usar cuando se va a hacer algo relacionado con los bans
+     * esto para evitar problemás de ejecutar varias peticiones simultáneas
+     * a la base de datos
+     */
+
+    public void enqueueTaskDataBase(Runnable task) {
         taskQueue.offer(task);
     }
 

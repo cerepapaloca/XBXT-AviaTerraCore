@@ -1,11 +1,12 @@
 package net.atcore.command.Commnads;
 
 import net.atcore.command.BaseTabCommand;
+import net.atcore.command.CommandUtils;
 import net.atcore.messages.TypeMessages;
 import net.atcore.utils.GlobalUtils;
+import org.apache.commons.collections4.BagUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import java.util.List;
 
@@ -26,23 +27,24 @@ public class KickCommand extends BaseTabCommand {
         switch (args.length){
             case 0, 1 -> sendMessage(sender, this.getUsage(), TypeMessages.ERROR);
             default -> {
-                Player player = Bukkit.getPlayer(args[0]);
-                if (player != null) {
-                    String reason = "";
-                    for (int i = 2; i < args.length; i++){
-                        reason = reason.concat(args[i] + " ");
-                    }
-
-                    GlobalUtils.kickPlayer(player, reason.isEmpty() ? null : reason);
-                }else{
-                    sendMessage(sender, "El jugador no existe o no esta conectado", TypeMessages.ERROR);
+                String reason = "";
+                for (int i = 1; i < args.length; i++){
+                    reason = reason.concat(args[i] + " ");
                 }
+
+                String finalReason = reason;//esto porque no puede se una variable reasignada
+                CommandUtils.excuteForPlayer(sender, args[0], true, dataTemporalPlayer -> {
+                    GlobalUtils.kickPlayer(dataTemporalPlayer.player(), finalReason);
+                });
             }
         }
     }
 
     @Override
     public List<String> onTab(CommandSender sender, String[] args) {
-        return List.of();
+        if (args.length == 1) {
+            return CommandUtils.tabForPlayer(args[0]);
+        }
+        return List.of("Razón del kick...");
     }
 }

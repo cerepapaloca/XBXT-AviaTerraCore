@@ -29,19 +29,20 @@ public class FreezeCommand extends BaseTabCommand {
             sendMessage(sender, this.getUsage(), TypeMessages.ERROR);
             return;
         }
-        Player player = Bukkit.getPlayer(args[0]);
         if (args.length == 1) {
             sendMessage(sender, "tienes que poner on o off", TypeMessages.ERROR);
             return;
         }
-        if (player != null) {
+
+        CommandUtils.excuteForPlayer(sender, args[0], true, dataTemporalPlayer -> {
+            AviaTerraPlayer aviaTerraPlayer = AviaTerraPlayer.getPlayer(dataTemporalPlayer.player());
+            Player player = dataTemporalPlayer.player();
             if (sender instanceof Player p) {
                 if (p == player) {
                     sendMessage(sender, "No puedes congelarte a tí mismo", TypeMessages.ERROR);
                     return;
                 }
             }
-            AviaTerraPlayer aviaTerraPlayer = AviaTerraPlayer.getPlayer(player);
             switch (args[1].toLowerCase()){
                 case "on" -> {
                     if (aviaTerraPlayer.isFreeze()) {
@@ -66,15 +67,15 @@ public class FreezeCommand extends BaseTabCommand {
                     }
                 }
             }
-        }else {
-            sendMessage(sender, "El jugador No existe o no esta conectado", TypeMessages.ERROR);
-        }
+        });
     }
 
     @Override
     public List<String> onTab(CommandSender sender, String[] args) {
         if (args.length == 2) {
-            return CommandUtils.listTab(args[1], new String[]{"on", "off"});
+            return CommandUtils.listTab(args[1], new String[]{"true", "off"});
+        }else if (args.length == 1) {
+            return CommandUtils.tabForPlayer(args[0]);
         }
         return null;
     }

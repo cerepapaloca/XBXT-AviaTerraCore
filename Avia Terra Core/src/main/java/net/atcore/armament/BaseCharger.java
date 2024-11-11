@@ -5,6 +5,7 @@ import lombok.Setter;
 import net.atcore.AviaTerraCore;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.MessagesManager;
+import net.atcore.messages.TypeMessages;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
@@ -16,6 +17,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -100,40 +102,55 @@ public abstract class BaseCharger extends BaseArmament implements Compartment {
         ItemStack charger = player.getInventory().getItemInMainHand();
         if (charger.getItemMeta() == null) return;
         if (reloadTask.containsKey(player.getUniqueId())) return;
-        BukkitTask task = new BukkitRunnable() {
-            public void run() {
-                ItemStack charger = player.getInventory().getItemInMainHand();
-                if (charger.getItemMeta() != null){
-                    String ammoNameList = (String) GlobalUtils.getPersistenData(charger, "chargerAmmo", PersistentDataType.STRING);
-                    if (ammoNameList != null) {
-                        if (ArmamentUtils.stringToList(ammoNameList).size() < ammoMax) {
-                            OnReload(player);
-                        }else {
-                            player.sendTitle("", ChatColor.GREEN + "Recargado Completada", 0, 0,30);
-                            player.removePotionEffect(PotionEffectType.SLOWNESS);
-                            reloadTask.remove(player.getUniqueId());
+        boolean b = false;
+        for (ItemStack item : player.getInventory().getContents()) {//busca si tienes al menos una bala en el inventario
+            if (item == null) continue;
+            String ammoName = (String) GlobalUtils.getPersistenData(item, "nameAmmo", PersistentDataType.STRING);
+            if (ammoName == null) continue;
+            BaseAmmo baseAmmo = ArmamentUtils.getAmmo(ammoName);
+            if (baseAmmo == null) continue;
+            b = true;//se confirma que tiene al menos un bala
+            break;
+        }
+        if (b){
+            BukkitTask task = new BukkitRunnable() {
+                public void run() {
+                    ItemStack charger = player.getInventory().getItemInMainHand();
+                    if (charger.getItemMeta() != null){
+                        String ammoNameList = (String) GlobalUtils.getPersistenData(charger, "chargerAmmo", PersistentDataType.STRING);
+                        if (ammoNameList != null) {
+                            if (ArmamentUtils.stringToList(ammoNameList).size() < ammoMax) {
+                                onReload(player);
+                            }else {
+                                player.sendTitle("", ChatColor.GREEN + "Recargado Completada", 0, 0,30);
+                                player.removePotionEffect(PotionEffectType.SLOWNESS);
+                                reloadTask.remove(player.getUniqueId());
+                                cancel();
+                            }
+                        }else{
                             cancel();
                         }
-                    }else{
+                    }else {
+                        player.sendTitle("", ChatColor.RED + "Recargado Cancelada", 0, 0,30);
+                        player.removePotionEffect(PotionEffectType.SLOWNESS);
+                        reloadTask.remove(player.getUniqueId());
                         cancel();
                     }
-                }else {
-                    player.sendTitle("", ChatColor.RED + "Recargado Cancelada", 0, 0,30);
-                    player.removePotionEffect(PotionEffectType.SLOWNESS);
-                    reloadTask.remove(player.getUniqueId());
-                    cancel();
                 }
-            }
-        }.runTaskTimer(AviaTerraCore.getInstance(), 3, 3);
-        player.sendTitle("", ChatColor.RED + "Recargando...", 0, 0,30);
-        player.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, Integer.MAX_VALUE, 3, true, false, false));
-        reloadTask.put(player.getUniqueId(), task);
+            }.runTaskTimer(AviaTerraCore.getInstance(), 3, 3);
+            MessagesManager.sendTitle(player,"", "Recargando...", 0, 0,30, TypeMessages.INFO);
+            player.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, Integer.MAX_VALUE, 3, true, false, false));
+            reloadTask.put(player.getUniqueId(), task);
+        }else {
+            MessagesManager.sendTitle(player,"", "No tiene balas en el inventario", 0, 0,30, TypeMessages.ERROR);
+        }
     }
 
-    private void OnReload(Player player){
+    private void onReload(@NotNull Player player){
         PlayerInventory inv = player.getInventory();
         ItemStack ItemCharger = inv.getItemInMainHand();
-        if (ItemCharger.getItemMeta() != null) {
+        String s = (String) GlobalUtils.getPersistenData(ItemCharger,"weaponName", PersistentDataType.STRING);
+        if (ItemCharger.getItemMeta() != null && s == null) {//se mira que no sea un arma o que sea aire
             for (ItemStack ItemAmmo : inv.getStorageContents()) {
                 if (ItemAmmo == null) continue;
                 if (ItemAmmo.getItemMeta() == null) continue;

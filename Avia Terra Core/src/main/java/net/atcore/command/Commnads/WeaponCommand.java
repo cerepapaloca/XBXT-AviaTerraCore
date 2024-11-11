@@ -6,11 +6,8 @@ import net.atcore.command.CommandUtils;
 import net.atcore.messages.TypeMessages;
 import net.atcore.utils.GlobalUtils;
 import net.atcore.utils.ModeTab;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import java.util.List;
 
@@ -55,9 +52,9 @@ public class WeaponCommand extends BaseTabCommand {
                         return;
                     }
                     for (int i = 0; i < cantidad; i++) {
-                        CommandUtils.sendForPlayer(sender, args[0], true, player -> {
-                            GlobalUtils.addItemPlayer(baseArmament.getItemArmament(), player, true, typeArmament != TypeArmament.AMMO);
-                        });
+                        CommandUtils.excuteForPlayer(sender, args[0], true, dataTemporalPlayer ->
+                                GlobalUtils.addItemPlayer(baseArmament.getItemArmament(), dataTemporalPlayer.player(),
+                                        true, typeArmament != TypeArmament.AMMO));
                     }
                     sendMessage(sender, "Se dio el armamento de manera exitosa", TypeMessages.SUCCESS);
                 }else{

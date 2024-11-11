@@ -22,7 +22,7 @@ para que se vea el rangos tienes que copiar el carater que lo resepresenta, los 
 > Todo lo que implique las base datos hagalo en un hilo aparte por que si no el hace BOON!!
 > Lo que tiene que poner en el codigo
 > ```java
-> Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(), () -> {
+> AviaTerraCore.getInstance().enqueueTaskDataBase(() -> {
 >   //toda la logica que tenga una base de datos            
 > });
 > ````

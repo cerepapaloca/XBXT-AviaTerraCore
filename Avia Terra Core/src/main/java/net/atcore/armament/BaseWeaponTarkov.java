@@ -5,6 +5,7 @@ import lombok.Setter;
 import net.atcore.AviaTerraCore;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.MessagesManager;
+import net.atcore.messages.TypeMessages;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
@@ -70,37 +71,55 @@ public abstract class BaseWeaponTarkov extends BaseWeapon implements Compartment
                     }
                 }else {
                     updateLore(itemWeapon, null);
-                    player.sendTitle("", ChatColor.RED + "sin munición", 0, 10, 30);
+                    MessagesManager.sendTitle(player, "", ChatColor.RED + "sin munición", 0, 10, 30, TypeMessages.ERROR);
                 }
             }
         }else {
-            player.sendTitle("", ChatColor.RED + "sin cargador", 0, 10, 30);
+            MessagesManager.sendTitle(player, "", ChatColor.RED + "sin cargador", 0, 10, 30, TypeMessages.ERROR);
         }
-
     }
 
 
     @Override
     public void reload(Player player) {
         ItemStack itemWeapon = player.getInventory().getItemInMainHand();
-        if (itemWeapon.getItemMeta() == null) return;
+        if (itemWeapon.getItemMeta() == null) return;//por si acasó
         String chargerName = (String) GlobalUtils.getPersistenData(itemWeapon, "chargerTypeInside", PersistentDataType.STRING);
         BaseCharger charger = ArmamentUtils.getCharger(chargerName);
-        if (charger != null){
-            if (inReload.containsKey(player.getUniqueId())) return;
-            BukkitTask bukkitTask = new BukkitRunnable() {
-                @Override
-                public void run() {
-                    if (player.isOnline() && itemWeapon.getItemMeta() != null) onReload(itemWeapon, player);
-                    inReload.remove(player.getUniqueId());
-                }
-            }.runTaskLater(AviaTerraCore.getInstance(), charger.getReloadTime());
-            player.sendTitle("", ChatColor.RED + "Recargando...", 0, charger.getReloadTime(),0);
-            player.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, charger.getReloadTime(), 2, true, false, false));
-            inReload.put(player.getUniqueId(), bukkitTask);
-        }else {
-            onReload(itemWeapon, player);
-            player.sendTitle("", ChatColor.RED + "Recargado", 0, 0,30);
+        boolean b = false;//el jugador tiene un cargador con que cambiar o no
+        for (ItemStack itemCharger : player.getInventory().getStorageContents()){//Esto es un poco redundante
+            if (itemCharger == null) continue;
+            String ammo = (String) GlobalUtils.getPersistenData(itemCharger, "chargerAmmo", PersistentDataType.STRING);//se obtiene la munición del cargador
+            if (ammo == null) continue;
+            List<String> ammoCharger = ArmamentUtils.stringToList(ammo);
+            if (ammoCharger.isEmpty() || itemCharger.equals(itemWeapon))continue;//si el cargador está vacío busca otro cargador o el cargador es la propia arma
+            b = true;//sí hay un cargador
+            break;
+        }
+
+        if (charger != null){//el arma tiene un cargador?
+            if (b){//hay un cargador que se puede cambiar?
+                if (inReload.containsKey(player.getUniqueId())) return;
+                BukkitTask bukkitTask = new BukkitRunnable() {
+                    @Override//no se si es buena idea ese @Override
+                    public void run() {
+                        if (player.isOnline() && itemWeapon.getItemMeta() != null) onReload(itemWeapon, player);
+                        inReload.remove(player.getUniqueId());
+                    }
+                }.runTaskLater(AviaTerraCore.getInstance(), charger.getReloadTime());
+                MessagesManager.sendTitle(player,"", "Recargado...", 10, charger.getReloadTime(),10, TypeMessages.INFO);
+                player.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, charger.getReloadTime(), 2, true, false, false));
+                inReload.put(player.getUniqueId(), bukkitTask);
+            }else {
+                MessagesManager.sendTitle(player, "", "No tienes cargadores con munición", 0,20,60, TypeMessages.ERROR);
+            }
+        }else {//en caso de que el arma no tiene cargador, cargaría de manera instantánea
+            if (b){//hay un cargador que se puede cambiar?
+                onReload(itemWeapon, player);
+                MessagesManager.sendTitle(player,"", "Recargado", 0, 0,30, TypeMessages.SUCCESS);
+            }else {
+                MessagesManager.sendTitle(player, "", "No tienes cargadores con munición", 0,20,60, TypeMessages.ERROR);
+            }
         }
     }
 

@@ -2,6 +2,7 @@ package net.atcore.command.Commnads;
 
 import net.atcore.AviaTerraCore;
 import net.atcore.command.BaseCommand;
+import net.atcore.command.CommandUtils;
 import net.atcore.data.DataBaseRegister;
 import net.atcore.messages.TypeMessages;
 import net.atcore.security.Login.LoginManager;
@@ -24,14 +25,9 @@ public class RemoveRegisterCommand extends BaseCommand {
     @Override
     public void execute(CommandSender sender, String[] args) {
         if (args.length == 1) {
-            Player player = Bukkit.getPlayer(args[0]);
-            if (player != null) {
-                Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(), () -> DataBaseRegister.removeRegister(args[0], sender.getName()));
-                LoginManager.removeDataLogin(player.getUniqueId());
-                sendMessage(sender, "va ser borrado el registro del jugador revisa los logs", TypeMessages.INFO);
-            }else {
-                sendMessage(sender ,"el jugador no existe o no esta conectado", TypeMessages.ERROR);
-            }
+            CommandUtils.excuteForPlayer(sender, args[0], false, dataTemporalPlayer ->
+                    AviaTerraCore.getInstance().enqueueTaskDataBase(() -> DataBaseRegister.removeRegister(dataTemporalPlayer.name(), sender.getName())));
+            sendMessage(sender, "va ser borrado el registro del jugador revisa los logs", TypeMessages.INFO);
         }else{
             sendMessage(sender, this.getUsage(), TypeMessages.ERROR);
         }
