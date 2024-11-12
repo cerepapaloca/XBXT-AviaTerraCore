@@ -94,11 +94,11 @@ public final class GlobalUtils {
      *
      * Convierte los ms en una String más bonita hay 3 formatos comenzando del 0
      * <ul>
-     * <li> 0 te muestra el tiempo al estilo reloj digital un ejemplo {@code 12:10}
+     * <li> {@code 0} te muestra el tiempo al estilo reloj digital un ejemplo {@code 12:10}
      * donde muestra los minutos y segundo
-     * <li> 1 lo muestra todas las unidades de tiempo de esta manera {@code 2d 0h 20m 12s}
+     * <li> {@code 1} lo muestra todas las unidades de tiempo de esta manera {@code 2d 0h 20m 12s}
      * ideal para fechas largas
-     * <li> 2 solo muestra él las unidades de tiempo que no sea ceros ejemplo {@code 2 dias 30 minutos}
+     * <li> {@code 2} solo muestra él las unidades de tiempo que no sea ceros ejemplo {@code 2 dias 30 minutos}
      * ideal para marcar el tiempo máximo para algo
      * <ul>
      * @param time tiempo en MS y long

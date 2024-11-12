@@ -1,6 +1,5 @@
 package net.atcore.listenerManager;
 
-import net.atcore.AviaTerraCore;
 import net.atcore.AviaTerraPlayer;
 import net.atcore.moderation.Ban.CheckBan;
 import net.atcore.security.AntiTwoPlayer;
@@ -10,7 +9,6 @@ import net.atcore.security.Login.LoginManager;
 import net.atcore.service.ServiceSection;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -19,7 +17,6 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;

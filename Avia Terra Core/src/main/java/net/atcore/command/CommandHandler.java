@@ -76,7 +76,17 @@ public final class CommandHandler implements TabExecutor {
         for (BaseCommand command : commands) {
             if (!(cmd.getName().equalsIgnoreCase(command.getName()))) continue;
             if (command instanceof BaseTabCommand tabCommand)return tabCommand.onTab(sender, args);
-            return CommandUtils.tabForPlayer(args[0]);
+            switch (command.getModeAutoTab()){
+                case NONE -> {
+                    return List.of();
+                }
+                case NORMAL -> {
+                    return null;
+                }
+                case ADVANCED -> {
+                    return CommandUtils.tabForPlayer(args[0]);
+                }
+            }
         }
         return null;
     }

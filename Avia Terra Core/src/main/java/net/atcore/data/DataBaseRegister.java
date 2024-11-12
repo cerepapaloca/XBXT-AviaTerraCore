@@ -20,7 +20,7 @@ import static net.atcore.messages.MessagesManager.sendMessageConsole;
 public class DataBaseRegister extends DataBaseMySql {
     @Override
     protected void reloadDatabase() {
-        String sql = "SELECT name, uuidPremium, uuidCracked, ipRegister, ipLogin, isPremium, password, lastLoginDate, registerDate FROM register";
+        String sql = "SELECT name, uuidPremium, uuidCracked, ipRegister, ipLogin, isPremium, password, lastLoginDate, registerDate, gmail, discord FROM register";
         HashMap<UUID, DataSession> sessions = new HashMap<>();
         LoginManager.getDataLogin().forEach(dataLogin -> sessions.put(dataLogin.getRegister().getUuidCracked(),dataLogin.getSession()));//rescata las sesiones
         LoginManager.clearDataLogin();//se limpia los datos
@@ -39,6 +39,8 @@ public class DataBaseRegister extends DataBaseMySql {
                 String password = resultSet.getString("password");
                 long lastLoginDate = resultSet.getLong("lastLoginDate");
                 long registerDate = resultSet.getLong("registerDate");
+                String gmail = resultSet.getString("gmail");
+                String discord = resultSet.getString("discord");
 
                 UUID uuid = UUID.fromString(uuidCracked);
 
@@ -50,6 +52,8 @@ public class DataBaseRegister extends DataBaseMySql {
                 dataRegister.setPasswordShaded(password);
                 dataRegister.setLastLoginDate(lastLoginDate);
                 dataRegister.setRegisterDate(registerDate);
+                dataRegister.setGmail(gmail);
+                dataRegister.setDiscord(discord);
 
                 DataLogin dataLogin = LoginManager.addDataLogin(name, dataRegister);
                 DataSession session = sessions.get(uuid);//Se obtiene las sesiones rescatas
@@ -99,8 +103,10 @@ public class DataBaseRegister extends DataBaseMySql {
                 "password VARCHAR(100), " +
                 "lastLoginDate BIGINT NOT NULL, " +
                 "registerDate BIGINT NOT NULL, " +
+                "gmail VARCHAR(100)," +
+                "discord VARCHAR(100)" +
                 "PRIMARY KEY (name)," +
-                "UNIQUE (name)" +
+                "UNIQUE (name)," +
                 ");";
         try (Connection connection = getConnection();
              Statement statement = connection.createStatement()) {
@@ -117,12 +123,12 @@ public class DataBaseRegister extends DataBaseMySql {
                                    String ipLogin, Boolean isPremium,
                                    String password, long lastLoginDate,
                                    long registerDate) {
-        String sql = "INSERT INTO register (name, uuidPremium, uuidCracked, ipRegister, ipLogin, isPremium, password, lastLoginDate, registerDate) " +
+        String sql = "INSERT INTO register (name, uuidPremium, uuidCracked, ipRegister, ipLogin, isPremium, password, lastLoginDate, registerDate, gmail, discord) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) " +
                 "ON DUPLICATE KEY UPDATE " +
                 "name = VALUES(name), uuidPremium = VALUES(uuidPremium), uuidCracked = VALUES(uuidCracked), ipRegister = VALUES(ipRegister), " +
                 "ipLogin = VALUES(ipLogin), isPremium = VALUES(isPremium), password = VALUES(password), lastLoginDate = VALUES(lastLoginDate)," +
-                "registerDate = VALUES(registerDate) ";
+                "registerDate = VALUES(registerDate), gmail = VALUES(gmail), discord = VALUES(discord) ";
         try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, name);
@@ -134,6 +140,8 @@ public class DataBaseRegister extends DataBaseMySql {
             statement.setString(7, password);
             statement.setLong(8, lastLoginDate);
             statement.setLong(9, registerDate);
+            statement.setString(10, null);
+            statement.setString(11, null);
             statement.executeUpdate();
             /*sendMessageConsole("el jugador <|" + name + "|> fue baneado de <|" + context + "|> durante <|" +
                     tiempoDeBaneo + "|> por el jugador <|" + author +
@@ -154,6 +162,21 @@ public class DataBaseRegister extends DataBaseMySql {
             sendMessageConsole("Se actualizó la fecha del ultimo login del jugador <|" + name + "|> exitosamente", TypeMessages.SUCCESS, CategoryMessages.LOGIN);
         } catch (SQLException e) {
             sendMessageConsole("No se pudo actualizar la fecha del ultimo login del jugador <|" + name+ "|>", TypeMessages.ERROR, CategoryMessages.LOGIN);
+            Bukkit.getLogger().warning(e.getMessage());
+        }
+    }
+
+    public static void updateGmail(String name ,String gmail){
+        String sql = "UPDATE register SET gmail = ? WHERE name = ?";
+
+        try (PreparedStatement stmt = getConnection().prepareStatement(sql)) {
+            stmt.setString(1, gmail);
+            stmt.setString(2, name);
+
+            stmt.executeUpdate();
+            sendMessageConsole("Se actualizó el gmail del jugador <|" + name + "|> exitosamente", TypeMessages.SUCCESS, CategoryMessages.LOGIN);
+        } catch (SQLException e) {
+            sendMessageConsole("No se pudo actualizar gmail del jugador <|" + name+ "|>", TypeMessages.ERROR, CategoryMessages.LOGIN);
             Bukkit.getLogger().warning(e.getMessage());
         }
     }

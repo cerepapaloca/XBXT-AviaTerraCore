@@ -14,10 +14,6 @@ import org.jetbrains.annotations.TestOnly;
 @TestOnly
 public class BanTest implements RunTest {
 
-    public BanTest(){
-        Bukkit.getLogger().warning("Test");
-    }
-
     boolean isFinished = true;
 
     @Override

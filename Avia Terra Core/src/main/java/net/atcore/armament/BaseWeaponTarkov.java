@@ -181,7 +181,7 @@ public abstract class BaseWeaponTarkov extends BaseWeapon implements Compartment
         //si o si tiene que tener este lore el arma
         s = String.format("""
                 ARMA
-                Rango máximo: <|%s|>m
+                Rango máximo: <|%sm|>
                 Presión: <|%s|>
                 """,
                 maxDistance,

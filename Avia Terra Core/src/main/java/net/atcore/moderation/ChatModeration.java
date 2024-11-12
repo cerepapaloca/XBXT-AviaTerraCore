@@ -9,9 +9,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.HashMap;
 import java.util.Set;
-import java.util.UUID;
 
 import static net.atcore.messages.MessagesManager.sendMessage;
 import static net.atcore.messages.MessagesManager.sendMessageConsole;

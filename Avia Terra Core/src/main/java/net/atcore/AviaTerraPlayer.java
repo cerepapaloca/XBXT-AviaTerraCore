@@ -11,8 +11,12 @@ import net.atcore.inventory.InventorySection;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import net.atcore.moderation.ChatModeration;
+import net.atcore.utils.GlobalUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.checkerframework.dataflow.qual.Pure;
+import org.jetbrains.annotations.Contract;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,7 +28,7 @@ import java.util.UUID;
 public class AviaTerraPlayer {
 
     public AviaTerraPlayer(Player player) {
-        this.player = player;
+        this.uuid = player.getUniqueId();
         new BukkitRunnable() {
             boolean b = false;
             public void run() {
@@ -59,7 +63,7 @@ public class AviaTerraPlayer {
 
     private BossBar bossBar;
     public static final double MAX_AMMO = 100;
-    private final Player player;
+    private final UUID uuid;
     private float pointChat = ChatModeration.MAX_PUNTOS;
     private int sanctionsChat = 1;//por circunstancias matemáticas tiene que ser 1
     //private final DataLogin dataLogin;
@@ -70,21 +74,31 @@ public class AviaTerraPlayer {
     private UUID manipulatedInventoryPlayer = null;
 
     public void sendMessage(String message, TypeMessages type) {
-        MessagesManager.sendMessage(player, message, type);
+        MessagesManager.sendMessage(GlobalUtils.getPlayer(uuid), message, type);
     }
 
     private void createBossBar(){
-        bossBar = TabAPI.getInstance().getBossBarManager().createBossBar("timerBossBar" + player.getName(), 1f, BarColor.GREEN, BarStyle.NOTCHED_10);
-        bossBar.setTitle("Cantidad De Munición: " + ammo);
-        bossBar.setProgress((float) ((ammo / MAX_AMMO)*100));
+        Player player = Bukkit.getPlayer(uuid);
+        if (player != null) {
+            bossBar = TabAPI.getInstance().getBossBarManager().createBossBar("timerBossBar" + player, 1f, BarColor.GREEN, BarStyle.NOTCHED_10);
+            bossBar.setTitle("Cantidad De Munición: " + ammo);
+            bossBar.setProgress((float) ((ammo / MAX_AMMO)*100));
+        }
     }
 
+    @Contract(pure = true)
     public static AviaTerraPlayer getPlayer(UUID uuid){
         return players.get(uuid);
     }
 
+    @Contract(pure = true)
     public static AviaTerraPlayer getPlayer(Player player){
         return players.get(player.getUniqueId());
+    }
+
+    @Contract(pure = true)
+    public Player getPlayer(){
+        return GlobalUtils.getPlayer(uuid);
     }
 
     public static void addPlayer(Player player){

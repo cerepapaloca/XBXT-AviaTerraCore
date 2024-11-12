@@ -7,7 +7,8 @@ import org.jetbrains.annotations.TestOnly;
 @TestOnly
 public enum TypeTest {
     BAN(new BanTest()),
-    MESSAGE(new MessageTest());
+    MESSAGE(new MessageTest()),
+    PERSISTENT_DATA(new ItemPersistenDataTest());
 
     TypeTest(RunTest runTest) {
         this.runTest = runTest;

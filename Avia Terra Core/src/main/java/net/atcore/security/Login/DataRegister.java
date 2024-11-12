@@ -31,6 +31,8 @@ public class DataRegister {
     private UUID uuidCracked;
     private InetAddress ip;
     private String passwordShaded;
+    private String gmail;
+    private String discord;
 
     private boolean isTemporary;
     private long lastLoginDate;

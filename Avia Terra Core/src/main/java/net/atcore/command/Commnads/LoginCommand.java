@@ -1,6 +1,7 @@
 package net.atcore.command.Commnads;
 
 import net.atcore.command.BaseCommand;
+import net.atcore.command.ModeAutoTab;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import net.atcore.security.Login.*;
@@ -19,7 +20,8 @@ public class LoginCommand extends BaseCommand {
         super("login",
                 "/login <contraseña>",
                 false,
-                "Te logueas"
+                "Te logueas",
+                ModeAutoTab.NONE
         );
     }
 

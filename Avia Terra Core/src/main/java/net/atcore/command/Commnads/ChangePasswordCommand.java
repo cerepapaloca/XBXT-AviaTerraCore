@@ -2,6 +2,7 @@ package net.atcore.command.Commnads;
 
 import net.atcore.AviaTerraCore;
 import net.atcore.command.BaseCommand;
+import net.atcore.command.ModeAutoTab;
 import net.atcore.data.DataBaseRegister;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.TypeMessages;
@@ -20,7 +21,8 @@ public class ChangePasswordCommand extends BaseCommand {
                 "/changePassword <Tu Contraseña> <Nueva Contraseña>",
                 "*",
                 false,
-                "cambias tu contras "
+                "cambias tu contras ",
+                ModeAutoTab.NONE
         );
     }
 

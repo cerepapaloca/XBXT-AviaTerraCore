@@ -4,6 +4,7 @@ import net.atcore.AviaTerraCore;
 import net.atcore.AviaTerraPlayer;
 import net.atcore.command.BaseCommand;
 import net.atcore.command.CommandUtils;
+import net.atcore.command.ModeAutoTab;
 import net.atcore.messages.TypeMessages;
 import net.atcore.security.Login.LoginManager;
 import org.bukkit.Bukkit;
@@ -18,7 +19,8 @@ public class RemoveSessionCommand extends BaseCommand {
         super("removeSession",
                 "/removeSession <Jugador>",
                 true,
-                "le borras la sesión al jugador"
+                "le borras la sesión al jugador",
+                ModeAutoTab.ADVANCED
         );
     }
 

@@ -3,6 +3,7 @@ package net.atcore.command.Commnads;
 import net.atcore.AviaTerraCore;
 import net.atcore.command.BaseCommand;
 import net.atcore.command.CommandUtils;
+import net.atcore.command.ModeAutoTab;
 import net.atcore.data.DataBaseRegister;
 import net.atcore.messages.TypeMessages;
 import net.atcore.security.Login.LoginManager;
@@ -18,7 +19,8 @@ public class RemoveRegisterCommand extends BaseCommand {
         super("removeRegister",
                 "/removeRegister <Jugador>",
                 true,
-                "le borras el registro al jugador"
+                "le borras el registro al jugador",
+                ModeAutoTab.ADVANCED
         );
     }
 

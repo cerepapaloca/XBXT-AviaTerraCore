@@ -2,6 +2,7 @@ package net.atcore.command.Commnads;
 
 import net.atcore.command.BaseCommand;
 import net.atcore.Config;
+import net.atcore.command.ModeAutoTab;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import net.atcore.security.Login.*;
@@ -22,7 +23,8 @@ public class RegisterCommand extends BaseCommand {
                 "/register <contraseña> <contraseña>",
                 "*",
                 false,
-                "Te registras"
+                "Te registras",
+                ModeAutoTab.NONE
         );
     }
 
