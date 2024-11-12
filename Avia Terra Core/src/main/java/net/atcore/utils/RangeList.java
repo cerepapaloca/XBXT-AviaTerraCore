@@ -23,13 +23,11 @@ public enum RangeList {
     private final Color color;
     private final String displayName;
     private final char icon;
-    private final String name;
 
     RangeList(Color color, String displayName, char icon) {
         this.color = color;
         this.displayName = displayName;
         this.icon = icon;
-        this.name = this.name();
     }
 
     public String getPermission(){

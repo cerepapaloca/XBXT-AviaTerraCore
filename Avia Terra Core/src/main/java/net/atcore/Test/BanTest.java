@@ -50,6 +50,8 @@ public class BanTest implements RunTest {
                 new BukkitRunnable() {
                     public void run() {
                         ModerationSection.getBanManager().removeBanPlayer("JugadorX", ContextBan.GLOBAL, "Servidor");
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "aviaterra:ban jugadorA,JugadorB global 100d Es una prueba automatizada seras de desbaneado");
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "aviaterra:unban jugadorA,JugadorB global");
                         MessagesManager.sendMessageConsole("la prueba ha finalizado", TypeMessages.SUCCESS);
                         isFinished = true;
                     }

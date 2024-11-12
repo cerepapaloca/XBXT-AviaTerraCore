@@ -48,7 +48,7 @@ public class ArmamentUtils {
     }
 
     public BaseAmmo getAmmo(Player player){
-        return getAmmo((String) GlobalUtils.getPersistenData(player.getInventory().getItemInMainHand(), "nameAmmo", PersistentDataType.STRING));
+        return getAmmo((String) GlobalUtils.getPersistenData(player.getInventory().getItemInMainHand(), "ammoName", PersistentDataType.STRING));
     }
 
     @Nullable
@@ -76,7 +76,7 @@ public class ArmamentUtils {
 
     public BaseCharger getCharger(@NotNull ItemStack item) {
         if (item.getItemMeta() == null) return null;
-        String chargeName = (String) GlobalUtils.getPersistenData(item, "chargerType", PersistentDataType.STRING);
+        String chargeName = (String) GlobalUtils.getPersistenData(item, "chargerName", PersistentDataType.STRING);
         if (chargeName == null) return null;
         return getCharger(chargeName);
     }
@@ -148,11 +148,6 @@ public class ArmamentUtils {
                 }
             }
         }.runTaskTimer(AviaTerraCore.getInstance(), 1, 1);
-        /*for (double d = 0; d < distance; d += density) {
-            point = start.clone().add(direction.clone().multiply(d));
-            //los ceros representa como de aleatorio aran spawn en el mundo en cada eje, primer numeró es la calidad de particular y el ultimo la velocidad
-            world.spawnParticle(Particle.DUST, point, 2, 0, 0, 0,0.3, dustOptions ,false);
-        }*/
     }
 
     public Location getLookLocation(Vector direction, Location location, double maxDistance, double stepSize) {

@@ -26,7 +26,7 @@ import java.util.*;
 public abstract class BaseCharger extends BaseArmament implements Compartment {
 
     public BaseCharger(List<ListAmmo> compatibleCaliber, List<ListAmmo> defaultCaliber, int ammoMax, String displayName, int reloadTime) {
-        super(displayName, new ItemStack(Material.SUGAR));
+        super(displayName, new ItemStack(Material.SUGAR), "charger");
         this.displayName = displayName;
         this.DefaultammonList = listAmmoFill(defaultCaliber);
         this.compatibleAmmonList = listAmmoToBaseAmmo(compatibleCaliber);
@@ -35,12 +35,6 @@ public abstract class BaseCharger extends BaseArmament implements Compartment {
         List<String> listAmmoName = new ArrayList<>();
         for (BaseAmmo ammo : listAmmoFill(defaultCaliber)) listAmmoName.add(ammo.getName());
         GlobalUtils.setPersistentDataItem(itemArmament, "chargerAmmo", PersistentDataType.STRING, ArmamentUtils.listToString(listAmmoName));
-        new BukkitRunnable(){
-            @Override
-            public void run() {//todo modificar el chargerType a chargerName
-                GlobalUtils.setPersistentDataItem(itemArmament, "chargerType", PersistentDataType.STRING, name);
-            }
-        }.runTaskLater(AviaTerraCore.getInstance(), 1);
         getProperties(itemArmament, true);
     }
 
@@ -57,7 +51,7 @@ public abstract class BaseCharger extends BaseArmament implements Compartment {
         String stringAmmo = (String) GlobalUtils.getPersistenData(item, "chargerAmmo", PersistentDataType.STRING);
         List<BaseAmmo> AmmoBaseList = new ArrayList<>();
         if (stringAmmo != null) {
-            for (String nameAmmo : ArmamentUtils.stringToList(stringAmmo)) AmmoBaseList.add(ArmamentUtils.getAmmo(nameAmmo));
+            for (String ammoName : ArmamentUtils.stringToList(stringAmmo)) AmmoBaseList.add(ArmamentUtils.getAmmo(ammoName));
             int amountAmmo = AmmoBaseList.size();
             String loreCargador = String.format("""
                     %s
@@ -102,7 +96,7 @@ public abstract class BaseCharger extends BaseArmament implements Compartment {
         boolean b = false;
         for (ItemStack item : player.getInventory().getContents()) {//busca si tienes al menos una bala en el inventario
             if (item == null) continue;
-            String ammoName = (String) GlobalUtils.getPersistenData(item, "nameAmmo", PersistentDataType.STRING);
+            String ammoName = (String) GlobalUtils.getPersistenData(item, "ammoName", PersistentDataType.STRING);
             if (ammoName == null) continue;
             BaseAmmo baseAmmo = ArmamentUtils.getAmmo(ammoName);
             if (baseAmmo == null) continue;
@@ -151,7 +145,7 @@ public abstract class BaseCharger extends BaseArmament implements Compartment {
             for (ItemStack ItemAmmo : inv.getStorageContents()) {
                 if (ItemAmmo == null) continue;
                 if (ItemAmmo.getItemMeta() == null) continue;
-                String ammoName = (String) GlobalUtils.getPersistenData(ItemAmmo, "nameAmmo", PersistentDataType.STRING);
+                String ammoName = (String) GlobalUtils.getPersistenData(ItemAmmo, "ammoName", PersistentDataType.STRING);
                 BaseAmmo baseAmmo = ArmamentUtils.getAmmo(ammoName);
                 if (baseAmmo == null) continue;
                 if (!compatibleAmmonList.contains(baseAmmo)) continue;
@@ -182,7 +176,7 @@ public abstract class BaseCharger extends BaseArmament implements Compartment {
         if (ItemCharger != null && itemArmament.getItemMeta() != null){
             BaseCharger baseCharger = ArmamentUtils.getCharger(ItemCharger);
             if (baseCharger != null) {
-                String ammonName = (String) GlobalUtils.getPersistenData(ItemCharger, "chargerType", PersistentDataType.STRING);
+                String ammonName = (String) GlobalUtils.getPersistenData(ItemCharger, "chargerName", PersistentDataType.STRING);
                 if (ammonName != null) {
                     String stringAmmo = (String) GlobalUtils.getPersistenData(ItemCharger, "chargerAmmo", PersistentDataType.STRING);
                     GlobalUtils.setPersistentDataItem(ItemCharger, "chargerAmmo", PersistentDataType.STRING, "");

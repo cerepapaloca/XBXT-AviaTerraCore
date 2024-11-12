@@ -52,7 +52,7 @@ public class AddRangeCommand extends BaseTabCommand {
                     RangeList range = RangeList.valueOf(args[0].toUpperCase());
                     ItemStack item = new ItemStack(Material.NAME_TAG);
                     GlobalUtils.setPersistentDataItem(item, "durationRange", PersistentDataType.LONG, time);
-                    GlobalUtils.setPersistentDataItem(item, "rangeName", PersistentDataType.STRING, range.getName());
+                    GlobalUtils.setPersistentDataItem(item, "rangeName", PersistentDataType.STRING, range.name());
                     GlobalUtils.setPersistentDataItem(item, "dateCreationRange", PersistentDataType.LONG, System.currentTimeMillis());
                     ItemMeta meta = item.getItemMeta();
                     assert meta != null;

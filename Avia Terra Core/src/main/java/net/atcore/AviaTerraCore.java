@@ -122,7 +122,7 @@ public final class AviaTerraCore extends JavaPlugin {
     }
 
     /**
-     * Se tiene usar cuando se va a hacer algo relacionado con los bans
+     * Se tiene usar cuando se va a hacer algo relacionado con la base de datos
      * esto para evitar problemás de ejecutar varias peticiones simultáneas
      * a la base de datos
      */

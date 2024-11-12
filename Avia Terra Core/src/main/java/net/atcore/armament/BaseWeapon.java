@@ -2,18 +2,12 @@ package net.atcore.armament;
 
 import lombok.Getter;
 import lombok.Setter;
-import net.atcore.AviaTerraCore;
-import net.atcore.utils.GlobalUtils;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.BlockIterator;
 import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
@@ -22,15 +16,9 @@ import org.bukkit.util.Vector;
 @Setter
 public abstract class BaseWeapon extends BaseArmament implements ShootWeapon{
     public BaseWeapon(ItemStack item, int MaxDistance, String displayName, double precision) {
-        super(displayName, item);
+        super(displayName, item, "weapon");
         this.maxDistance = MaxDistance;
         this.precision = precision;
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                GlobalUtils.setPersistentDataItem(itemArmament, "weaponName", PersistentDataType.STRING, name);
-            }
-        }.runTaskLater(AviaTerraCore.getInstance(), 1);
 
     }
 
@@ -93,14 +81,10 @@ public abstract class BaseWeapon extends BaseArmament implements ShootWeapon{
         }
         Location finalLocation;
         if (lastBlock != null) {
-            try {
-                lastBlock.getWorld().playSound(lastBlock.getLocation(), Sound.BLOCK_ANVIL_HIT, SoundCategory.BLOCKS, 0.5f,1);
-            }catch (NullPointerException e){//un por si acaso
-                e.printStackTrace();
-            }
+            lastBlock.getWorld().playSound(lastBlock.getLocation(), Sound.BLOCK_ANVIL_HIT, SoundCategory.BLOCKS, 0.5f,1);
             finalLocation = ArmamentUtils.getLookLocation(directionRandom, location, location.distance(lastBlock.getLocation()), 0.25);
         }else {
-            finalLocation = ArmamentUtils.getLookLocation(directionRandom, location, distance, 0.25);;
+            finalLocation = ArmamentUtils.getLookLocation(directionRandom, location, distance, 0.25);
         }
         ArmamentUtils.drawParticleLine(player.getEyeLocation(),finalLocation,
                 ammo.getColor(), b, ammo.getDensityTrace());

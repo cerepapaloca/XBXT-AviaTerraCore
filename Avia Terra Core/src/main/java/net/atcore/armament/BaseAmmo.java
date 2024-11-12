@@ -23,19 +23,13 @@ public abstract class BaseAmmo extends BaseArmament {
     }
 
     protected BaseAmmo(double damage, String displayName, Color color, boolean isTrace, float densityTrace, float penetration) {
-        super(displayName, new ItemStack(Material.SNOWBALL));
+        super(displayName, new ItemStack(Material.SNOWBALL), "ammo");
         this.damage = damage;
         this.color = color;
         this.isTrace = isTrace;
         this.densityTrace = densityTrace;
         this.penetration = penetration;
         updateLore(itemArmament, null);
-        new BukkitRunnable() {
-            @Override
-            public void run() {//no se me ocurre de hacer esto
-                GlobalUtils.setPersistentDataItem(itemArmament, "nameAmmo", PersistentDataType.STRING, name);
-            }
-        }.runTaskLater(AviaTerraCore.getInstance(), 1);
     }
 
     private final float penetration;

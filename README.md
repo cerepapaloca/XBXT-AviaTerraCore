@@ -19,8 +19,8 @@ para que se vea el rangos tienes que copiar el carater que lo resepresenta, los 
 ----
 
 > [!IMPORTANT]
-> Todo lo que implique las base datos hagalo en un hilo aparte por que si no el hace BOON!!
-> Lo que tiene que poner en el codigo
+> Todo lo que implique las base datos hágalo en un hilo aparte porque si no él hace BOON!!
+> Lo que tiene que poner en el código
 > ```java
 > AviaTerraCore.getInstance().enqueueTaskDataBase(() -> {
 >   //toda la logica que tenga una base de datos            

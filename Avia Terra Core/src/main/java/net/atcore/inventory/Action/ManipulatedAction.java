@@ -34,12 +34,13 @@ public class ManipulatedAction extends BaseActions {
     }
 
     public static void updateInventory(AviaTerraPlayer player) {
+        /*
         new BukkitRunnable() {
             public void run() {
                 if (InventorySection.MANIPULATOR.getBaseInventory() instanceof ManipulatorInventory manipulatorInventory) {
-                    manipulatorInventory.transformInventory(player.getPlayer());
+                    manipulatorInventory.updateInventory(player.getPlayer());
                 }
             }
-        }.runTaskLater(AviaTerraCore.getInstance(), 1);
+        }.runTaskLater(AviaTerraCore.getInstance(), 1);*/
     }
 }
