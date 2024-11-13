@@ -32,7 +32,7 @@ public class LinkCommand extends BaseTabCommand {
                 case "gmail" -> {
                     if (args.length >= 2) {
                         if (args[1].contains("@")){
-                            CodeAuth codeAuth = new CodeAuth(UUID.randomUUID(), System.currentTimeMillis()+(1000*60*60), uuid, args[1].toLowerCase());
+                            CodeAuth codeAuth = new CodeAuth(UUID.randomUUID(), System.currentTimeMillis()+(1000*60*2), uuid, args[1].toLowerCase());
                             TwoFactorAuth.getCodes().put(uuid, codeAuth);
                             sendMessage(sender, "Se envió un correo a " + args[1] + " con el código", TypeMessages.INFO);
                             if (dataLogin.getRegister().getGmail() != null){
@@ -55,7 +55,7 @@ public class LinkCommand extends BaseTabCommand {
                         }
                     }else {
                         if (dataLogin.getRegister().getGmail() != null){
-                            CodeAuth codeAuth = new CodeAuth(UUID.randomUUID(), System.currentTimeMillis()+(1000*60*60), uuid, dataLogin.getRegister().getGmail());
+                            CodeAuth codeAuth = new CodeAuth(UUID.randomUUID(), System.currentTimeMillis()+(1000*60*2), uuid, dataLogin.getRegister().getGmail());
                             TwoFactorAuth.getCodes().put(uuid, codeAuth);
                             sendMessage(sender, "Se esta enviando un correo con el código", TypeMessages.INFO);
                             AviaTerraCore.getInstance().enqueueTaskAsynchronously(() -> {
@@ -70,7 +70,7 @@ public class LinkCommand extends BaseTabCommand {
                 case "discord" -> {
                     if (args.length >= 2) {
                         if (args[1].length() == 18){
-                            CodeAuth codeAuth = new CodeAuth(UUID.randomUUID(), System.currentTimeMillis()+(1000*60*60), uuid, args[1].toLowerCase());
+                            CodeAuth codeAuth = new CodeAuth(UUID.randomUUID(), System.currentTimeMillis()+(1000*60*2), uuid, args[1].toLowerCase());
                             TwoFactorAuth.getCodes().put(uuid, codeAuth);
                             sendMessage(sender, "Se esta enviando un mensaje directo con el código", TypeMessages.INFO);
                             if (dataLogin.getRegister().getGmail() != null){
@@ -90,7 +90,7 @@ public class LinkCommand extends BaseTabCommand {
                         }
                     }else {
                         if (dataLogin.getRegister().getDiscord() != null){
-                            CodeAuth codeAuth = new CodeAuth(UUID.randomUUID(), System.currentTimeMillis()+(1000*60*60), uuid, dataLogin.getRegister().getDiscord());
+                            CodeAuth codeAuth = new CodeAuth(UUID.randomUUID(), System.currentTimeMillis()+(1000*60*2), uuid, dataLogin.getRegister().getDiscord());
                             TwoFactorAuth.getCodes().put(uuid, codeAuth);
                             sendMessage(sender, "Se esta enviando un mensaje directo con el código", TypeMessages.INFO);
                             AviaTerraCore.getInstance().enqueueTaskAsynchronously(() ->

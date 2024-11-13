@@ -8,11 +8,13 @@ import me.neznamy.tab.api.bossbar.BarColor;
 import me.neznamy.tab.api.bossbar.BarStyle;
 import me.neznamy.tab.api.bossbar.BossBar;
 import net.atcore.inventory.InventorySection;
+import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import net.atcore.moderation.ChatModeration;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.checkerframework.dataflow.qual.Pure;
@@ -42,13 +44,13 @@ public class AviaTerraPlayer {
                     if (MAX_AMMO < ammo) {
                         if (b) return;
                         b = true;
-                        bossBar.setTitle("Cantidad De Munición: " + MAX_AMMO + "%");
+                        bossBar.setTitle(ChatColor.translateAlternateColorCodes('&', "&3&lCantidad De Munición: &6&l" + MAX_AMMO + "%"));
                         bossBar.setProgress((float) ((ammo / MAX_AMMO)*100));
                         TabAPI.getInstance().getBossBarManager().sendBossBarTemporarily(tabPlayer, bossBar.getName(), 3);
                     }else{
                         b = false;
                         bossBar.setProgress((float) ((ammo / MAX_AMMO)*100));
-                        bossBar.setTitle("Cantidad De Munición: " + ammo + "%");
+                        bossBar.setTitle(ChatColor.translateAlternateColorCodes('&', "&3&lCantidad De Munición: &6&l" + ammo + "%"));
                         ammo += 2;
                         TabAPI.getInstance().getBossBarManager().sendBossBarTemporarily(tabPlayer, bossBar.getName(), 4000);
                     }
@@ -66,7 +68,6 @@ public class AviaTerraPlayer {
     private final UUID uuid;
     private float pointChat = ChatModeration.MAX_PUNTOS;
     private int sanctionsChat = 1;//por circunstancias matemáticas tiene que ser 1
-    //private final DataLogin dataLogin;
     private double ammo = MAX_AMMO;
     private boolean isFreeze = false;
     private InventorySection inventorySection = null;
@@ -80,8 +81,8 @@ public class AviaTerraPlayer {
     private void createBossBar(){
         Player player = Bukkit.getPlayer(uuid);
         if (player != null) {
-            bossBar = TabAPI.getInstance().getBossBarManager().createBossBar("timerBossBar" + player, 1f, BarColor.GREEN, BarStyle.NOTCHED_10);
-            bossBar.setTitle("Cantidad De Munición: " + ammo);
+            bossBar = TabAPI.getInstance().getBossBarManager().createBossBar("timerBossBar" + player, 1f, BarColor.BLUE, BarStyle.NOTCHED_10);
+            bossBar.setTitle(ChatColor.translateAlternateColorCodes('&', "&3&lCantidad De Munición: &6&l" + ammo + "%"));
             bossBar.setProgress((float) ((ammo / MAX_AMMO)*100));
         }
     }

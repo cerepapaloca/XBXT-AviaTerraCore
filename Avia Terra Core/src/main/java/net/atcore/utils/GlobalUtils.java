@@ -79,7 +79,7 @@ public final class GlobalUtils {
                 //ChatColor.of(hexColor);
             }
         }
-        return  gradientText.toString();
+        return org.bukkit.ChatColor.translateAlternateColorCodes('&', gradientText.toString());
     }
 
     /**

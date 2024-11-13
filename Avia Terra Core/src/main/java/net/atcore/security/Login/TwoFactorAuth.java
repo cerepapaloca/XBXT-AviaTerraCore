@@ -44,15 +44,16 @@ public class TwoFactorAuth {
         });
 
         try {
+            String name = GlobalUtils.getPlayer(code.getUuidPlayer()).getName();
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(EMAIL));
             message.setRecipients(
                     Message.RecipientType.TO, InternetAddress.parse(recipientEmail));
             message.setSubject("Código de verificación en dos pasos de AviaTerra");
-            message.setContent(String.format(formatMessage.gmail, GlobalUtils.getPlayer(code.getUuidPlayer()).getName(), code.getCode()), "text/html; charset=utf-8");
+            message.setContent(String.format(formatMessage.gmail, name, code.getCode()), "text/html; charset=utf-8");
 
             Transport.send(message);
-            MessagesManager.sendMessageConsole("código de verificación a " + recipientEmail, TypeMessages.INFO);
+            MessagesManager.sendMessageConsole("Se envió código de verificación a <|" + recipientEmail + "|>(" + name + ")", TypeMessages.INFO);
 
         } catch (MessagingException e) {
             throw new RuntimeException(e);
@@ -68,7 +69,7 @@ public class TwoFactorAuth {
                 .flatMap(channel -> channel.sendMessage(String.format(formatMessage.discord,
                         player.getName(), TwoFactorAuth.getCodes().get(player.getUniqueId()).getCode())))
                 .queue(success -> sendMessage(player, "Revise su discord ya tuvo que haber llegado el mensaje", TypeMessages.SUCCESS));
-        MessagesManager.sendMessageConsole("código de verificación a " + id, TypeMessages.INFO);
+        MessagesManager.sendMessageConsole("Se envió código de verificación a <|" + id + "|>(" + player.getName() + ")", TypeMessages.INFO);
     }
 
     public boolean checkCode(Player player, String code) {

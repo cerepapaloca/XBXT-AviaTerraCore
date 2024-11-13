@@ -5,8 +5,6 @@ import net.atcore.AviaTerraCore;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -147,7 +145,7 @@ public class ArmamentUtils {
                     }
                 }
             }
-        }.runTaskTimer(AviaTerraCore.getInstance(), 1, 1);
+        }.runTaskTimer(AviaTerraCore.getInstance(), 1, 1);//TODO optimiza esto por favor. El problema es el envió del paquete
     }
 
     public Location getLookLocation(Vector direction, Location location, double maxDistance, double stepSize) {

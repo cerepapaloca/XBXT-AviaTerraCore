@@ -1,18 +1,12 @@
 package net.atcore.command.Commnads;
 
 import net.atcore.AviaTerraCore;
-import net.atcore.command.BaseCommand;
 import net.atcore.command.BaseTabCommand;
-import net.atcore.command.CommandUtils;
-import net.atcore.command.ModeAutoTab;
 import net.atcore.data.DataBaseRegister;
 import net.atcore.messages.CategoryMessages;
-import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
-import net.atcore.security.Login.CodeAuth;
 import net.atcore.security.Login.LoginManager;
 import net.atcore.security.Login.TwoFactorAuth;
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -44,14 +38,14 @@ public class ChangePasswordCommand extends BaseTabCommand {
                         AviaTerraCore.getInstance().enqueueTaskAsynchronously(() ->
                                 DataBaseRegister.updatePassword(player.getName(), password));
                         sendMessage(sender, "La contraseña se cambio correctamente", TypeMessages.SUCCESS);
-                        sendMessageConsole("el jugador " + player.getName() + " se cambio la contraseña con su <|código|>", TypeMessages.INFO, CategoryMessages.LOGIN);
+                        sendMessageConsole("el jugador <|" + player.getName() + "|> se cambio la contraseña con su <|código|>", TypeMessages.INFO, CategoryMessages.LOGIN);
                         TwoFactorAuth.getCodes().remove(player.getUniqueId());
                     }
                 }else {
                     if (LoginManager.isEqualPassword(player.getName(), args[0])){
                         LoginManager.getDataLogin(player).getRegister().setPasswordShaded(password);
                         sendMessage(sender, "La contraseña se cambio correctamente", TypeMessages.SUCCESS);
-                        sendMessageConsole("el jugador " + player.getName() + " se cambio la contraseña con su <|contraseña|>", TypeMessages.INFO, CategoryMessages.LOGIN);
+                        sendMessageConsole("el jugador <|" + player.getName() + "|> se cambio la contraseña con su <|contraseña|>", TypeMessages.INFO, CategoryMessages.LOGIN);
                         TwoFactorAuth.getCodes().remove(player.getUniqueId());
                     }else{
                         sendMessage(sender, "Contraseña incorrecta. Si no se acuerda de su contraseña y tiene un corro o un discord vinculado puede" +

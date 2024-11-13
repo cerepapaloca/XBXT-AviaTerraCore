@@ -48,8 +48,7 @@ public class WeaponCommand extends BaseTabCommand {
                     try {
                         cantidad = Integer.parseInt(args[3]);
                     }catch (Exception e) {
-                        sendMessage(sender, "Numero no valido", TypeMessages.ERROR);
-                        return;
+                        cantidad = 1;
                     }
                     for (int i = 0; i < cantidad; i++) {
                         CommandUtils.excuteForPlayer(sender, args[0], true, dataTemporalPlayer ->

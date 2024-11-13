@@ -52,7 +52,7 @@ public abstract class BaseWeaponUltraKill extends BaseWeapon {
                 Daño: <|%s|>
                 Coste: <|%s|>
                 Presión: <|%s|>
-                Rango máximo: <|%s|>m
+                Rango máximo: <|%sm|>
                 """,
                 this.ammo.getDamage(),
                 cost,

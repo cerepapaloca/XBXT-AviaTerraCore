@@ -6,6 +6,7 @@ import net.atcore.inventory.BaseInventory;
 import net.atcore.inventory.InventorySection;
 import net.atcore.inventory.InventoryUtils;
 import net.atcore.utils.GlobalUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -30,10 +31,9 @@ public class ManipulatorInventory extends BaseInventory {
             UUID uuid = player.getManipulatedInventoryPlayer();
             BukkitTask task = new BukkitRunnable() {
                 private int previousHash = getInventoryHash(player); // Obtener el estado inicial del inventario
-
                 @Override
                 public void run() {
-                    if (player.getPlayer().isOnline() && player.getManipulatedInventoryPlayer() != null) {
+                    if (player.getPlayer().isOnline() && player.getManipulatedInventoryPlayer() != null && Bukkit.getPlayer(uuid) != null) {
                         int currentHash = getInventoryHash(player);
                         if (currentHash != previousHash) {
                             previousHash = currentHash;

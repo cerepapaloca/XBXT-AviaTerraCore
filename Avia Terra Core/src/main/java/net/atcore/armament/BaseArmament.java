@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import net.atcore.AviaTerraCore;
 import net.atcore.utils.GlobalUtils;
+import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -20,16 +21,18 @@ public abstract class BaseArmament {
         this.itemArmament = item;
         ItemMeta meta = itemArmament.getItemMeta();
         if (meta == null) return;
-        meta.setDisplayName(displayName);
-        meta.removeItemFlags(ItemFlag.HIDE_ATTRIBUTES);//se oculta datos del item para que no se vea feo
-        meta.removeItemFlags(ItemFlag.HIDE_ENCHANTS);
-        meta.removeItemFlags(ItemFlag.HIDE_UNBREAKABLE);
-        meta.removeItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
+        meta.setDisplayName(GlobalUtils.applyGradient("<#BCBCBC>" + displayName + "<#777777>", 'l'));
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);//se oculta datos del item para que no se vea feo
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
+        meta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
+        meta.addItemFlags(ItemFlag.HIDE_ARMOR_TRIM);
+        meta.addItemFlags(ItemFlag.HIDE_DESTROYS);
         itemArmament.setItemMeta(meta);
         new BukkitRunnable(){
             @Override
             public void run() {
-                GlobalUtils.setPersistentDataItem(itemArmament,  armament + "Name", PersistentDataType.STRING, name);
+                GlobalUtils.setPersistentDataItem(itemArmament,armament + "Name", PersistentDataType.STRING, name);
             }
         }.runTaskLater(AviaTerraCore.getInstance(), 1);
     }

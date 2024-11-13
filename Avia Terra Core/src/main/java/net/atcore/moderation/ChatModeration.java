@@ -51,7 +51,7 @@ public class ChatModeration {
                     aviaTerraPlayer.setPointChat(f > MAX_PUNTOS ? MAX_PUNTOS : f + Config.getLevelModerationChat());
                 });
             }
-        }.runTaskTimer(AviaTerraCore.getInstance(), 1, 1);
+        }.runTaskTimer(AviaTerraCore.getInstance(), 1, 1);//TODO optimiza esto por favor
 
         new BukkitRunnable() {
             @Override

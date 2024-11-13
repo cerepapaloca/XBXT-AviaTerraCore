@@ -113,20 +113,18 @@ public abstract class BaseCharger extends BaseArmament implements Compartment {
                             if (ArmamentUtils.stringToList(ammoNameList).size() < ammoMax) {
                                 onReload(player);
                             }else {
-                                player.sendTitle("", ChatColor.GREEN + "Recargado Completada", 0, 0,30);
+                                MessagesManager.sendTitle(player,"", "Recargado Completada", 0, 0,30, TypeMessages.SUCCESS);
                                 player.removePotionEffect(PotionEffectType.SLOWNESS);
                                 reloadTask.remove(player.getUniqueId());
                                 cancel();
                             }
-                        }else{
-                            cancel();
+                            return;
                         }
-                    }else {
-                        player.sendTitle("", ChatColor.RED + "Recargado Cancelada", 0, 0,30);
-                        player.removePotionEffect(PotionEffectType.SLOWNESS);
-                        reloadTask.remove(player.getUniqueId());
-                        cancel();
                     }
+                    player.sendTitle("", ChatColor.RED + "Recargado Cancelada", 0, 0,30);
+                    player.removePotionEffect(PotionEffectType.SLOWNESS);
+                    reloadTask.remove(player.getUniqueId());
+                    cancel();
                 }
             }.runTaskTimer(AviaTerraCore.getInstance(), 3, 3);
             MessagesManager.sendTitle(player,"", "Recargando...", 0, 0,30, TypeMessages.INFO);
