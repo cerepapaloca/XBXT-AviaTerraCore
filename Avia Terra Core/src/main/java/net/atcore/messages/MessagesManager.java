@@ -174,7 +174,7 @@ public final class MessagesManager {
                 return;
             }
         }
-        Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(), () -> {
+        AviaTerraCore.getInstance().enqueueTaskAsynchronously(() -> {
             String finalMessage;
             switch (type) {
                 case SUCCESS -> finalMessage = "『🟩』 " + message;

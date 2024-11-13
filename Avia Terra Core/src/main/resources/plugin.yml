@@ -27,4 +27,5 @@ commands:
   removesession:
   weapon:
   seeinventory:
+  link:
 

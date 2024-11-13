@@ -127,7 +127,7 @@ public final class AviaTerraCore extends JavaPlugin {
      * a la base de datos
      */
 
-    public void enqueueTaskDataBase(Runnable task) {
+    public void enqueueTaskAsynchronously(Runnable task) {
         taskQueue.offer(task);
     }
 

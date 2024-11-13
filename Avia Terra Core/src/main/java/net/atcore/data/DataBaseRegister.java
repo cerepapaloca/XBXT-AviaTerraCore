@@ -104,9 +104,9 @@ public class DataBaseRegister extends DataBaseMySql {
                 "lastLoginDate BIGINT NOT NULL, " +
                 "registerDate BIGINT NOT NULL, " +
                 "gmail VARCHAR(100)," +
-                "discord VARCHAR(100)" +
+                "discord VARCHAR(100)," +
                 "PRIMARY KEY (name)," +
-                "UNIQUE (name)," +
+                "UNIQUE (name)" +
                 ");";
         try (Connection connection = getConnection();
              Statement statement = connection.createStatement()) {
@@ -124,7 +124,7 @@ public class DataBaseRegister extends DataBaseMySql {
                                    String password, long lastLoginDate,
                                    long registerDate) {
         String sql = "INSERT INTO register (name, uuidPremium, uuidCracked, ipRegister, ipLogin, isPremium, password, lastLoginDate, registerDate, gmail, discord) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) " +
                 "ON DUPLICATE KEY UPDATE " +
                 "name = VALUES(name), uuidPremium = VALUES(uuidPremium), uuidCracked = VALUES(uuidCracked), ipRegister = VALUES(ipRegister), " +
                 "ipLogin = VALUES(ipLogin), isPremium = VALUES(isPremium), password = VALUES(password), lastLoginDate = VALUES(lastLoginDate)," +
@@ -143,9 +143,6 @@ public class DataBaseRegister extends DataBaseMySql {
             statement.setString(10, null);
             statement.setString(11, null);
             statement.executeUpdate();
-            /*sendMessageConsole("el jugador <|" + name + "|> fue baneado de <|" + context + "|> durante <|" +
-                    tiempoDeBaneo + "|> por el jugador <|" + author +
-                    "|> y la razón es <|" + reason + "|> ", TypeMessages.SUCCESS, CategoryMessages.BAN);*/
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -159,9 +156,9 @@ public class DataBaseRegister extends DataBaseMySql {
             stmt.setString(2, name);
 
             stmt.executeUpdate();
-            sendMessageConsole("Se actualizó la fecha del ultimo login del jugador <|" + name + "|> exitosamente", TypeMessages.SUCCESS, CategoryMessages.LOGIN);
+            sendMessageConsole("Se actualizó la <|fecha del ultimo login|> del jugador <|" + name + "|> exitosamente", TypeMessages.SUCCESS, CategoryMessages.LOGIN);
         } catch (SQLException e) {
-            sendMessageConsole("No se pudo actualizar la fecha del ultimo login del jugador <|" + name+ "|>", TypeMessages.ERROR, CategoryMessages.LOGIN);
+            sendMessageConsole("No se pudo actualizar la <|fecha del ultimo login|> del jugador <|" + name+ "|>", TypeMessages.ERROR, CategoryMessages.LOGIN);
             Bukkit.getLogger().warning(e.getMessage());
         }
     }
@@ -174,9 +171,24 @@ public class DataBaseRegister extends DataBaseMySql {
             stmt.setString(2, name);
 
             stmt.executeUpdate();
-            sendMessageConsole("Se actualizó el gmail del jugador <|" + name + "|> exitosamente", TypeMessages.SUCCESS, CategoryMessages.LOGIN);
+            sendMessageConsole("Se actualizó el <|gmail|> del jugador <|" + name + "|> exitosamente", TypeMessages.SUCCESS, CategoryMessages.LOGIN);
         } catch (SQLException e) {
-            sendMessageConsole("No se pudo actualizar gmail del jugador <|" + name+ "|>", TypeMessages.ERROR, CategoryMessages.LOGIN);
+            sendMessageConsole("No se pudo actualizar <|gmail|> del jugador <|" + name+ "|>", TypeMessages.ERROR, CategoryMessages.LOGIN);
+            Bukkit.getLogger().warning(e.getMessage());
+        }
+    }
+
+    public static void updateDiscord(String name ,String discord){
+        String sql = "UPDATE register SET discord = ? WHERE name = ?";
+
+        try (PreparedStatement stmt = getConnection().prepareStatement(sql)) {
+            stmt.setString(1, discord);
+            stmt.setString(2, name);
+
+            stmt.executeUpdate();
+            sendMessageConsole("Se actualizó el <|discord|> del jugador <|" + name + "|> exitosamente", TypeMessages.SUCCESS, CategoryMessages.LOGIN);
+        } catch (SQLException e) {
+            sendMessageConsole("No se pudo actualizar <|discord|> del jugador <|" + name+ "|>", TypeMessages.ERROR, CategoryMessages.LOGIN);
             Bukkit.getLogger().warning(e.getMessage());
         }
     }
@@ -189,9 +201,9 @@ public class DataBaseRegister extends DataBaseMySql {
             stmt.setString(2, name);
 
             stmt.executeUpdate();
-            sendMessageConsole("Se actualizó la contraseña del jugador <|" + name + "|> exitosamente", TypeMessages.SUCCESS, CategoryMessages.LOGIN);
+            sendMessageConsole("Se actualizó la <|contraseña|> del jugador <|" + name + "|> exitosamente", TypeMessages.SUCCESS, CategoryMessages.LOGIN);
         } catch (SQLException e) {
-            sendMessageConsole("No se pudo actualizar la contraseña del jugador <|" + name + "|>", TypeMessages.ERROR, CategoryMessages.LOGIN);
+            sendMessageConsole("No se pudo actualizar la <|contraseña|> del jugador <|" + name + "|>", TypeMessages.ERROR, CategoryMessages.LOGIN);
             Bukkit.getLogger().warning(e.getMessage());
         }
     }
@@ -204,9 +216,9 @@ public class DataBaseRegister extends DataBaseMySql {
             stmt.setString(2, name);
 
             stmt.executeUpdate();
-            sendMessageConsole("Se actualizó la ip del jugador <|" + name + "|> exitosamente", TypeMessages.SUCCESS, CategoryMessages.LOGIN);
+            sendMessageConsole("Se actualizó la <|ip|> del jugador <|" + name + "|> exitosamente", TypeMessages.SUCCESS, CategoryMessages.LOGIN);
         } catch (SQLException e) {
-            sendMessageConsole("No se pudo actualizar la ip del jugador <|" + name + "|>", TypeMessages.ERROR, CategoryMessages.LOGIN);
+            sendMessageConsole("No se pudo actualizar la <|ip|> del jugador <|" + name + "|>", TypeMessages.ERROR, CategoryMessages.LOGIN);
             Bukkit.getLogger().warning(e.getMessage());
         }
     }
@@ -217,9 +229,9 @@ public class DataBaseRegister extends DataBaseMySql {
             stmt.setString(1, name);
 
             stmt.executeUpdate();
-            sendMessageConsole("Se borro el registro del jugador <|" + name + "|> por <|" + author + "|>", TypeMessages.SUCCESS, CategoryMessages.LOGIN);
+            sendMessageConsole("Se borro el <|registro|> del jugador <|" + name + "|> por <|" + author + "|>", TypeMessages.SUCCESS, CategoryMessages.LOGIN);
         }catch(SQLException e){
-            sendMessageConsole("Hubo un error al borrar el registro del jugador <|" + name + "|> por <|" + author + "|>", TypeMessages.ERROR, CategoryMessages.LOGIN);
+            sendMessageConsole("Hubo un error al borrar el <|registro|> del jugador <|" + name + "|> por <|" + author + "|>", TypeMessages.ERROR, CategoryMessages.LOGIN);
             Bukkit.getLogger().warning(e.getMessage());
         }
     }

@@ -14,6 +14,7 @@ import com.github.games647.craftapi.model.auth.Verification;
 import com.github.games647.craftapi.model.skin.Textures;
 import lombok.Getter;
 import net.atcore.Config;
+import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.TypeMessages;
 import net.atcore.security.Login.*;
 import net.atcore.security.VerificationPremium;
@@ -68,20 +69,12 @@ public class SimulateOnlineMode {
                 case ONLINE_MODE -> state = StateLogins.PREMIUM;
             }
             switch (state){//revisa entre las sesiones o los registro del los jugadores
-                case PREMIUM -> {
-                    StartLoginPremium(name, uuid, player);
-                }
+                case PREMIUM -> StartLoginPremium(name, uuid, player);
                 case CRACKED -> StartLoginCracked(name, uuid);
                 case UNKNOWN -> GlobalUtils.kickPlayer(player, "Error de connexion vuele a intentar");
             }
-            if (Config.getServerMode().equals(ServerMode.MIX_MODE)){
-                sendMessageConsole("Iniciando login: <|" + state.name().toLowerCase() + "|>", TypeMessages.INFO);
-            }else{
-                sendMessageConsole("Login omitido por qué el modo mixto esta desactivado", TypeMessages.INFO);
-            }
+            sendMessageConsole("Iniciando login: <|" + state.name().toLowerCase() + "|> para el jugador: <|" + name + "|>", TypeMessages.INFO, CategoryMessages.LOGIN);
             return state == StateLogins.PREMIUM; //se cancela por que asi el servidor no se da cuenta de que a recibido un paquete
-
-
         }
         return false;
     }

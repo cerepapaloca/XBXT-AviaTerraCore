@@ -1,6 +1,9 @@
 package net.atcore.listenerManager;
 
 import net.atcore.AviaTerraPlayer;
+import net.atcore.messages.CategoryMessages;
+import net.atcore.messages.MessagesManager;
+import net.atcore.messages.TypeMessages;
 import net.atcore.moderation.Ban.CheckBan;
 import net.atcore.security.AntiTwoPlayer;
 import net.atcore.security.Login.DataLimbo;
@@ -17,6 +20,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+import javax.mail.Message;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -24,7 +28,7 @@ import java.util.UUID;
 import static net.atcore.messages.MessagesManager.*;
 import static net.atcore.security.Login.LoginManager.*;
 
-public class JoinAndExitListener implements Listener {
+public class JoinAndQuitListener implements Listener {
 
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
@@ -39,11 +43,12 @@ public class JoinAndExitListener implements Listener {
             player.teleport(limbo.getLocation());
             player.setGameMode(limbo.getGameMode());
         }
-        //AviaTerraPlayer.getPlayer(player).getInventorySection().getBaseActions().closeInventory(AviaTerraPlayer.getPlayer(player));
+
         List<UUID> UUIDPlayers = List.copyOf(AviaTerraPlayer.getPlayer(player).getManipulatorInventoryPlayer());
         UUIDPlayers.forEach(UUID -> Objects.requireNonNull(Bukkit.getPlayer(UUID)).closeInventory());
         event.setQuitMessage(ChatColor.translateAlternateColorCodes('&',
                 "&8[&4-&8] " + COLOR_ESPECIAL + event.getPlayer().getDisplayName() + COLOR_INFO + " se a ido."));
+        MessagesManager.addProprieties(String.format("El jugador %s se a desconecto", event.getPlayer().getName()), TypeMessages.INFO, CategoryMessages.LOGIN, false);
     }
 
     @EventHandler
@@ -52,6 +57,7 @@ public class JoinAndExitListener implements Listener {
         checkJoin(player);
         event.setJoinMessage(ChatColor.translateAlternateColorCodes('&',
                 "&8[&a+&8] " + COLOR_ESPECIAL + event.getPlayer().getDisplayName() + COLOR_INFO + " se a unido."));
+        MessagesManager.addProprieties(String.format("El jugador %s se a unido", event.getPlayer().getName()), TypeMessages.INFO, CategoryMessages.LOGIN, false);
     }
 
     @EventHandler

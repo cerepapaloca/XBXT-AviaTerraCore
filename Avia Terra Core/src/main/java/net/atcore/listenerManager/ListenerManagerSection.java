@@ -13,7 +13,7 @@ public class ListenerManagerSection implements Section {
     public void enable() {
         RegisterManager.register(chatListener = new ChatListener());
         RegisterManager.register(new InventoryListener());
-        RegisterManager.register(new JoinAndExitListener());
+        RegisterManager.register(new JoinAndQuitListener());
         RegisterManager.register(new PlayerListener());
         new PacketListener();
     }

@@ -2,6 +2,7 @@ package net.atcore.security.Login;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.jetbrains.annotations.Nullable;
 
 import java.net.InetAddress;
 import java.util.UUID;
@@ -31,7 +32,9 @@ public class DataRegister {
     private UUID uuidCracked;
     private InetAddress ip;
     private String passwordShaded;
+    @Nullable
     private String gmail;
+    @Nullable
     private String discord;
 
     private boolean isTemporary;

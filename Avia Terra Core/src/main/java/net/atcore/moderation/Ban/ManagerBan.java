@@ -37,7 +37,7 @@ public class ManagerBan extends DataBaseBan {
         long finalTime = time == GlobalConstantes.NUMERO_PERMA ? GlobalConstantes.NUMERO_PERMA : time == Long.MAX_VALUE ? Long.MAX_VALUE : time + System.currentTimeMillis();
         DataBan dataBan = new DataBan(name, uuid, ip, reason, finalTime, System.currentTimeMillis(), context, nameAuthor);
         kickBan(dataBan);
-        AviaTerraCore.getInstance().enqueueTaskDataBase(() -> addBanPlayer(dataBan));
+        AviaTerraCore.getInstance().enqueueTaskAsynchronously(() -> addBanPlayer(dataBan));
     }
 
     /**

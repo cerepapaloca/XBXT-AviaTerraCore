@@ -40,7 +40,9 @@ public class LoginCommand extends BaseCommand {
                     MessagesManager.sendTitle(player,"Bienvenido de vuelta", "<|&o" + player.getDisplayName() + "|>", 20, 20*3, 40, TypeMessages.INFO);
                     sendMessage(player, "Has iniciado session exitosamente", TypeMessages.SUCCESS);
                 }else{
-                    GlobalUtils.kickPlayer(player, "contraseña incorrecta, vuele a intentarlo");
+                    GlobalUtils.kickPlayer(player, "contraseña incorrecta, vuele a intentarlo. " +
+                            "Si no se acuerda su contraseña y tiene un corro o un discord vinculado puede" +
+                            "puede enviar un código de verificación usando <|/link <discord | gmail>|>");
                 }
             }else {
                 sendMessage(player, "No estas registrado usa el /register", TypeMessages.ERROR);

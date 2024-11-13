@@ -14,6 +14,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.checkerframework.dataflow.qual.Pure;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -138,6 +139,7 @@ public final class LoginManager {
         return Base64.getEncoder().encodeToString(hash);
     }
 
+    @Pure
     public static boolean isEqualPassword(@NotNull String name, @NotNull String password)  {
         return hashPassword(name, password).equals(getDataLogin(name).getRegister().getPasswordShaded());
     }
