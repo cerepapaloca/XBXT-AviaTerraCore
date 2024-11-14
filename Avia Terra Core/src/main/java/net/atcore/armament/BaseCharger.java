@@ -78,7 +78,7 @@ public abstract class BaseCharger extends BaseArmament implements Compartment {
 
             String finalLore = loreCargador + (amountAmmo > 0 ? loreAmmo.toString() : "");
             if (setLore){
-                meta.setLore(GlobalUtils.StringToLoreString(MessagesManager.addProprieties(finalLore, null, CategoryMessages.PRIVATE, false), true));
+                meta.setLore(GlobalUtils.StringToLoreString(MessagesManager.addProprieties(finalLore, null, false, false), true));
                 item.setItemMeta(meta);
             }
             return finalLore;

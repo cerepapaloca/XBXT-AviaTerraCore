@@ -4,6 +4,8 @@ import net.atcore.AviaTerraPlayer;
 import net.atcore.command.BaseTabCommand;
 import net.atcore.command.CommandUtils;
 import net.atcore.messages.TypeMessages;
+import org.apache.commons.collections4.BagUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -29,21 +31,14 @@ public class FreezeCommand extends BaseTabCommand {
             return;
         }
         if (args.length == 1) {
-            sendMessage(sender, "tienes que poner on o off", TypeMessages.ERROR);
+            sendMessage(sender, "tienes que poner true o false", TypeMessages.ERROR);
             return;
         }
-
         CommandUtils.excuteForPlayer(sender, args[0], true, dataTemporalPlayer -> {
             AviaTerraPlayer aviaTerraPlayer = AviaTerraPlayer.getPlayer(dataTemporalPlayer.player());
             Player player = dataTemporalPlayer.player();
-            if (sender instanceof Player p) {
-                if (p == player) {
-                    sendMessage(sender, "No puedes congelarte a tí mismo", TypeMessages.ERROR);
-                    return;
-                }
-            }
             switch (args[1].toLowerCase()){
-                case "on" -> {
+                case "true" -> {
                     if (aviaTerraPlayer.isFreeze()) {
                         sendMessage(sender, "El jugador ya esta congelado", TypeMessages.ERROR);
                     }else {
@@ -55,7 +50,7 @@ public class FreezeCommand extends BaseTabCommand {
                     }
 
                 }
-                case "off" -> {
+                case "false" -> {
                     if (aviaTerraPlayer.isFreeze()) {
                         aviaTerraPlayer.setFreeze(false);
                         player.removePotionEffect(PotionEffectType.BLINDNESS);
@@ -72,7 +67,7 @@ public class FreezeCommand extends BaseTabCommand {
     @Override
     public List<String> onTab(CommandSender sender, String[] args) {
         if (args.length == 2) {
-            return CommandUtils.listTab(args[1], new String[]{"true", "off"});
+            return CommandUtils.listTab(args[1], new String[]{"true", "false"});
         }else if (args.length == 1) {
             return CommandUtils.tabForPlayer(args[0]);
         }

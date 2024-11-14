@@ -58,7 +58,7 @@ public abstract class BaseWeaponUltraKill extends BaseWeapon {
                 cost,
                 (100 - precision) + "%",
                 maxDistance
-        ), null, CategoryMessages.PRIVATE, false), true));
+        ), null, false, false), true));
         itemStack.setItemMeta(meta);
     }
 }

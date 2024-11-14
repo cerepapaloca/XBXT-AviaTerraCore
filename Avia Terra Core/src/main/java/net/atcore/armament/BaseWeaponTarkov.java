@@ -140,6 +140,7 @@ public abstract class BaseWeaponTarkov extends BaseWeapon implements Compartment
             String ammo = (String) GlobalUtils.getPersistenData(itemCharger, "chargerAmmo", PersistentDataType.STRING);//se obtiene la munición del cargador
             if (ammo == null) continue;
             List<String> ammoCharger = ArmamentUtils.stringToList(ammo);
+            if (ammoCharger.isEmpty())continue;//si el cargador está vacío busca otro cargador
             itemCharger.setAmount(0);//lo que hace es desperecer del mundo
             ItemStack itemSwapCharger = new ItemStack(baseCharger.getItemArmament());
             GlobalUtils.setPersistentDataItem(itemSwapCharger, "chargerAmmo", PersistentDataType.STRING, ArmamentUtils.listToString(ammoWeapon));
@@ -190,7 +191,7 @@ public abstract class BaseWeaponTarkov extends BaseWeapon implements Compartment
             }
         }
 
-        itemMeta.setLore(GlobalUtils.StringToLoreString(MessagesManager.addProprieties(s, null, CategoryMessages.PRIVATE, false), true));
+        itemMeta.setLore(GlobalUtils.StringToLoreString(MessagesManager.addProprieties(s, null, false, false), true));
         weapon.setItemMeta(itemMeta);
     }
 

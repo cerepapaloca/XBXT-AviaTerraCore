@@ -66,7 +66,7 @@ public abstract class BaseAmmo extends BaseArmament {
     public void updateLore(ItemStack itemStack, ItemStack itemStack2) {
         ItemMeta itemMeta = itemStack.getItemMeta();
         assert itemMeta != null;
-        itemMeta.setLore(GlobalUtils.StringToLoreString(MessagesManager.addProprieties(getProperties(), null, CategoryMessages.PRIVATE, false), true));
+        itemMeta.setLore(GlobalUtils.StringToLoreString(MessagesManager.addProprieties(getProperties(), null, false, false), true));
         itemArmament.setItemMeta(itemMeta);
     }
 

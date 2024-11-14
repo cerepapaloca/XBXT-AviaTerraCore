@@ -21,8 +21,8 @@ import static net.atcore.messages.MessagesManager.sendMessage;
 @UtilityClass
 public class TwoFactorAuth {
 
-    private final String EMAIL = "cagutierrezpayares@gmail.com"; //no me doxeén porfi
-    private final String PASSWORD = "mpqw kpbl pary qfsw"; //esto si lo puede doxear pro que una contraseña que puede cambiar un click
+    private final String EMAIL = "contacto.ceres.yt@gmail.com";
+    private final String PASSWORD = "qxwg cioy ipzq dkif"; //esto si lo puede doxear por qué una contraseña que puede cambiar un click
     @Getter
     private static final HashMap<UUID, CodeAuth> codes = new HashMap<>();
 

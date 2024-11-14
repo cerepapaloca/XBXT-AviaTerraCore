@@ -18,6 +18,7 @@ public class LinkCommand extends BaseTabCommand {
     public LinkCommand() {
         super("link",
                 "/link <gmail | discord> <Cuenta>",
+                "*",
                 false,
                 "Vinculas una cuenta para que mayor seguridad en el servidor"
         );
@@ -28,6 +29,10 @@ public class LinkCommand extends BaseTabCommand {
         if (sender instanceof Player player) {
             UUID uuid = player.getUniqueId();
             DataLogin dataLogin = LoginManager.getDataLogin(player);
+            if (args.length == 0) {
+                sendMessage(sender, "Tiene que poner Gmail o discord", TypeMessages.ERROR);
+                return;
+            }
             switch (args[0].toLowerCase()) {
                 case "gmail" -> {
                     if (args.length >= 2) {

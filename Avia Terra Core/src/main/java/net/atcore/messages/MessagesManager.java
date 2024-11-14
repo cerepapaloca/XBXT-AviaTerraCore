@@ -2,7 +2,6 @@ package net.atcore.messages;
 
 import net.atcore.AviaTerraCore;
 import net.atcore.exception.DiscordChannelNotFound;
-import net.atcore.security.Login.LoginManager;
 import net.atcore.utils.GlobalUtils;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.md_5.bungee.api.ChatColor;
@@ -19,7 +18,6 @@ public final class MessagesManager {
 
     public static final String COLOR_SUCCESS = "&2";
     public static final String COLOR_INFO = "&3";
-    public static final String COLOR_WARING = "&e";
     public static final String COLOR_ERROR = "&c";
 
     public static final String[] PREFIX_AND_SUFFIX_KICK = new String[]{"&c&m &r &c&m       &r  &4&lAviaKick&c  &m        &r &c&m \n\n&r", "\n\n&m &r &c&m                               &r &c&m "};
@@ -77,7 +75,7 @@ public final class MessagesManager {
         if (categoryMessages != CategoryMessages.PRIVATE){
             sendMessageLogDiscord(type, categoryMessages, message);
         }
-        message = addProprieties(message, type, categoryMessages, isPrefix);
+        message = addProprieties(message, type, categoryMessages != CategoryMessages.PRIVATE, isPrefix);
         player.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
     }
 
@@ -101,25 +99,12 @@ public final class MessagesManager {
             sendMessageLogDiscord(type, categoryMessages, message);
         }
 
-        message = addProprieties(message, type, categoryMessages, isPrefix);
+        message = addProprieties(message, type, categoryMessages != CategoryMessages.PRIVATE, isPrefix);
         Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', message));
     }
 
     ///////////////////////////
     ///////////////////////////
-
-    private static String selectColore(@Nullable TypeMessages type) {
-        String color = "&7";
-        if (type != null) {
-            switch (type) {
-                case SUCCESS -> color = COLOR_SUCCESS;
-                case INFO -> color = COLOR_INFO;
-                case WARNING -> color = COLOR_WARING;
-                case ERROR -> color = COLOR_ERROR;
-            }
-        }
-        return color;
-    }
 
     /**
      * Le añade el formato de colores a los mensajes. Para recalcar una parte de un mensaje
@@ -130,17 +115,16 @@ public final class MessagesManager {
      * @param message el mensaje que quieres modificar
      * @param type si en un mensaje informativo o de un error etc. esto soporta nulo si lo pones nulo
      *             mostrar un color gris
-     * @param categoryMessages en este indica si se tiene que registrar si es diferente a
-     *                         {@code CategoryMessages.PRIVATE} le añade este sufijo al mensaje
+     * @param isResister en este indica si se tiene que registrar en caso de que si se le añade este sufijo
      *                         {@code [R]} indíca que ese mensaje se tiene que registrar en
-     *                         un canal de discord
+     *                         un canal de discord OJO esto no hace que envié el mensaje
      * @param showPrefix se tiene que poner él {@link #PREFIX} en el mensaje en casi en todos los casos hay que
      *                 poner le prefijo al mensaje para que sea más fácil de identificar
      * @return regresa el
      */
 
-    public static String addProprieties(String message,@Nullable TypeMessages type, CategoryMessages categoryMessages, boolean showPrefix) {
-        if (categoryMessages != CategoryMessages.PRIVATE) {
+    public static String addProprieties(String message,@Nullable TypeMessages type, boolean isResister, boolean showPrefix) {
+        if (isResister) {
             while (Character.isSpaceChar(message.charAt(message.length()-1))){
                 message = message.substring(0, message.length()-1);
             }
@@ -152,16 +136,9 @@ public final class MessagesManager {
         }else {
             s = "";
         }
-        char color;
-        switch (type) {
-            case SUCCESS -> color = 'a';
-            case INFO -> color = 'b';
-            case WARNING -> color = '6';
-            case ERROR -> color = '4';
-            case null , default -> color = '8';
-        }
-        String colorMain = selectColore(type);
-        return s + colorMain +  message.replace("<|", "&" + color).replace("|>", colorMain).replace("|!>", colorMain);
+        if (type == null) type = TypeMessages.NULL;
+        String colorMain = type.getMainColor();
+        return s + colorMain +  message.replace("<|", type.getSecondColor()).replace("|>", colorMain).replace("|!>", colorMain);
     }
 
     private static void sendMessageLogDiscord(TypeMessages type, CategoryMessages categoryMessages, String message) {
@@ -198,11 +175,11 @@ public final class MessagesManager {
     }
 
     /**
-     * Le manda un título a jugador respetando el formato de {@link #addProprieties(String, TypeMessages, CategoryMessages, boolean) addProprieties}
+     * Le manda un título a jugador respetando el formato de {@link #addProprieties(String, TypeMessages, boolean, boolean) addProprieties}
      */
 
     public static void sendTitle(Player player, String title, String subtitle, int fadeIn, int stay, int fadeOut, TypeMessages type) {
-        player.sendTitle(ChatColor.translateAlternateColorCodes('&', addProprieties(title, type, CategoryMessages.PRIVATE, false)),
-                ChatColor.translateAlternateColorCodes('&', addProprieties(subtitle, type, CategoryMessages.PRIVATE, false)), fadeIn, stay, fadeOut);
+        player.sendTitle(ChatColor.translateAlternateColorCodes('&', addProprieties(title, type, false, false)),
+                ChatColor.translateAlternateColorCodes('&', addProprieties(subtitle, type, false, false)), fadeIn, stay, fadeOut);
     }
 }

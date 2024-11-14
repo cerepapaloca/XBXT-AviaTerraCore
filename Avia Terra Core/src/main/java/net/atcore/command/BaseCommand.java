@@ -12,7 +12,7 @@ public abstract class BaseCommand {
 
     private final String name;
     private final String usage;
-    private final String[] permissions;
+    private final String permissions;
     private final String description;
     private final Boolean isHide;
     private final ModeAutoTab modeAutoTab;
@@ -27,27 +27,13 @@ public abstract class BaseCommand {
 
     public BaseCommand(@NotNull String name,
                        @NotNull  String usage,
-                       @NotNull  String[] permissions,
-                       @NotNull  Boolean isHide,
-                       @Nullable String description,
-                       @NotNull ModeAutoTab modeAutoTab) {
-        this.name = name;
-        this.usage = usage;
-        this.permissions = permissions;
-        this.description = description == null || description.isEmpty() ? "&oSin Descripción" : description;
-        this.isHide = isHide;
-        this.modeAutoTab = modeAutoTab;
-    }
-
-    public BaseCommand(@NotNull String name,
-                       @NotNull  String usage,
                        @Nullable  String permissions,
                        @NotNull  Boolean isHide,
                        @Nullable String description,
                        @NotNull ModeAutoTab modeAutoTab) {
         this.name = name;
         this.usage = usage;
-        this.permissions = new String[]{permissions};
+        this.permissions = permissions;
         this.description = description == null || description.isEmpty() ? "&oSin Descripción" : description;
         this.isHide = isHide;
         this.modeAutoTab = modeAutoTab;

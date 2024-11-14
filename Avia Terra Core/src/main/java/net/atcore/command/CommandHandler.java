@@ -32,30 +32,20 @@ public final class CommandHandler implements TabExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {
         for (BaseCommand command : commands) {
             if (!(cmd.getName().equalsIgnoreCase(command.getName()))) continue;
-            boolean hasPermission = command.getPermissions()[0].equals("*");
-            for (String permission : command.getPermissions()) {
-                if (sender.hasPermission(permission)) {
-                    hasPermission = true;
-                    break;
-                }
-            }
             if (sender instanceof Player player) {
                if (AntiExploit.checkOpAndCreative(player))return false;// mirar si el jugador tiene creativo o es OP)
             }
             try {
-                if (command.getIsHide()) {
-                    if (sender.isOp()){
+                if (sender instanceof Player player) {
+                    if (CommandUtils.hasPermission(command.getPermissions(), player)) {
                         command.execute(sender, args);
-                    } else {
+                        return true;
+                    }else{
                         sendMessage(sender, "No tienes Permisos", TypeMessages.ERROR);
                     }
-                    break;
-                }
-
-                if (hasPermission) {
+                }else {
                     command.execute(sender, args);
-                }else{
-                    sendMessage(sender, "No tienes Permisos", TypeMessages.ERROR);
+                    return true;
                 }
             }catch (Exception e) {
                 sendMessage(sender, "Ops!! Hubo un error al ejecutar el comando contacta con el desarrollador", TypeMessages.ERROR);

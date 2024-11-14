@@ -70,7 +70,7 @@ public class ManipulatorAction extends BaseActions {
                         }
                     }
                 }
-                victim.setItemOnCursor(player.getPlayer().getOpenInventory().getTopInventory().getItem(52));//todo creo que no funciona esto
+                victim.setItemOnCursor(player.getPlayer().getOpenInventory().getTopInventory().getItem(52));
                 victim.getInventory().setContents(Arrays.stream(inv.getContents()).toList().subList(0, victim.getInventory().getSize()).toArray(ItemStack[]::new));
             }
         }.runTaskLater(AviaTerraCore.getInstance(), 1L);

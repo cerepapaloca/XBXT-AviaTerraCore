@@ -5,10 +5,12 @@ import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import net.atcore.utils.GlobalConstantes;
 import net.atcore.utils.ModeTab;
+import net.dv8tion.jda.api.interactions.callbacks.IPremiumRequiredReplyCallback;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -234,5 +236,40 @@ public final class CommandUtils {
             }
             return finalNamesList;
         }
+    }
+
+    /**
+     * Comprueba que si el jugador tiene los permisos. Si el permiso tiene {@code *}
+     * todos los jugadores tienen permiso, si el permiso comienza con {@code !} el
+     * jugador no debe tener ese permiso. Se puede unir varios permisos con {@code ,}
+     * estó permisos extras hace de "o" es decir la condición será verdadera cuando
+     * cumpla uno de los permisos
+     * @param permission Los permisos suele ser así {@code aviaterra.command.prueba}
+     * @param player el jugador que le va hace el check
+     * @return verdadero sí tiene permiso
+     */
+
+    public boolean hasPermission(String permission, Player player){
+        if (permission.equals("*")){
+            return true;
+        }else {
+            if (permission.charAt(0) == '!'){
+                if (permission.substring(1).equalsIgnoreCase("op")){
+                    return !player.isOp();
+                }
+            }else {
+                if (permission.equalsIgnoreCase("op")){
+                    return player.isOp();
+                }
+            }
+        }
+        for (String s : permission.replace("!","").split(",")){
+            if (permission.charAt(0) == '!') {
+                return !player.hasPermission(s);
+            } else {
+                return player.hasPermission(s);
+            }
+        }
+        return false;
     }
 }

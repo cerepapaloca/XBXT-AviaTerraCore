@@ -48,7 +48,7 @@ public class JoinAndQuitListener implements Listener {
         UUIDPlayers.forEach(UUID -> Objects.requireNonNull(Bukkit.getPlayer(UUID)).closeInventory());
         event.setQuitMessage(ChatColor.translateAlternateColorCodes('&',
                 "&8[&4-&8] " + COLOR_ESPECIAL + event.getPlayer().getDisplayName() + COLOR_INFO + " se a ido."));
-        MessagesManager.addProprieties(String.format("El jugador %s se a desconecto", event.getPlayer().getName()), TypeMessages.INFO, CategoryMessages.LOGIN, false);
+        MessagesManager.sendMessageConsole(String.format("El jugador <|%s|> se a desconecto", event.getPlayer().getName()), TypeMessages.INFO, CategoryMessages.LOGIN);
     }
 
     @EventHandler
@@ -57,7 +57,7 @@ public class JoinAndQuitListener implements Listener {
         checkJoin(player);
         event.setJoinMessage(ChatColor.translateAlternateColorCodes('&',
                 "&8[&a+&8] " + COLOR_ESPECIAL + event.getPlayer().getDisplayName() + COLOR_INFO + " se a unido."));
-        MessagesManager.addProprieties(String.format("El jugador %s se a unido", event.getPlayer().getName()), TypeMessages.INFO, CategoryMessages.LOGIN, false);
+        MessagesManager.addProprieties(String.format("El jugador <|%s|> se a unido", event.getPlayer().getName()), TypeMessages.INFO, true, false);
     }
 
     @EventHandler
@@ -69,10 +69,6 @@ public class JoinAndQuitListener implements Listener {
 
     @EventHandler
     public void onPreLogin(AsyncPlayerPreLoginEvent event) {
-        if (AntiTwoPlayer.checkTwoPlayer(event.getName())){
-            event.setKickMessage(ChatColor.translateAlternateColorCodes('&',COLOR_ERROR +
-                    "¡¡Ya Este Jugador Esta Jugando!!"));
-            event.setLoginResult(AsyncPlayerPreLoginEvent.Result.KICK_BANNED);
-        }
+        if (AntiTwoPlayer.checkTwoPlayer(event.getName())) return;
     }
 }

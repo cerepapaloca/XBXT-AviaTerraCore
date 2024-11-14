@@ -5,7 +5,7 @@ import net.atcore.Config;
 import net.atcore.armament.*;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
-import net.atcore.moderation.BlockCommands;
+import net.atcore.command.BlockCommands;
 import net.atcore.moderation.Freeze;
 import net.atcore.security.Login.LoginManager;
 import net.atcore.utils.GlobalConstantes;
@@ -16,11 +16,11 @@ import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -69,7 +69,18 @@ public class PlayerListener implements Listener {
             sendMessage(player,"Primero inicia sessión usando /login", TypeMessages.ERROR);
             event.setCancelled(true);
         }
-        event.setCancelled(BlockCommands.checkCommand(command, player));
+        event.setCancelled(BlockCommands.checkCommand(command, player, false));
+    }
+
+    @EventHandler
+    public void onCommand(PlayerCommandSendEvent event) {
+        List<String> commands = new ArrayList<>(event.getCommands());
+        event.getCommands().clear();
+        for (String command : commands){
+            if (!BlockCommands.checkCommand(command, event.getPlayer(), true)){
+                event.getCommands().add(command);
+            }
+        }
     }
 
     @EventHandler
