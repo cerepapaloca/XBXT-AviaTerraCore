@@ -17,7 +17,6 @@ public class KickCommand extends BaseTabCommand {
     public KickCommand() {
         super("kick",
                 "/kick <player> <razón>",
-                true,
                 "echas al jugador del servidor por actividad sospechosa"
         );
     }

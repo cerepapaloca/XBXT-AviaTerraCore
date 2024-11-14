@@ -3,9 +3,10 @@ package net.atcore.listenerManager;
 import net.atcore.AviaTerraCore;
 import net.atcore.Config;
 import net.atcore.armament.*;
+import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
-import net.atcore.command.BlockCommands;
+import net.atcore.command.CommandManager;
 import net.atcore.moderation.Freeze;
 import net.atcore.security.Login.LoginManager;
 import net.atcore.utils.GlobalConstantes;
@@ -60,16 +61,17 @@ public class PlayerListener implements Listener {
     public void onExecuteCommand(PlayerCommandPreprocessEvent event) {
         String command = event.getMessage().split(" ")[0].substring(1).toLowerCase();
         Player player = event.getPlayer();
-
         if (COMMANDS_PRE_LOGIN.contains(command)) {
+            MessagesManager.sendMessageConsole(String.format("<|%s|> ejecuto -> %s", player.getName(), "*Comando De Login*"), TypeMessages.INFO, CategoryMessages.COMMANDS, true);
             return;
         }
+        MessagesManager.sendMessageConsole(String.format("<|%s|> ejecuto -> %s", player.getName(), event.getMessage()), TypeMessages.INFO, CategoryMessages.COMMANDS, true);
 
         if (!LoginManager.checkLoginIn(player, true)) {
             sendMessage(player,"Primero inicia sessión usando /login", TypeMessages.ERROR);
             event.setCancelled(true);
         }
-        event.setCancelled(BlockCommands.checkCommand(command, player, false));
+        event.setCancelled(CommandManager.checkCommand(command, player, false));
     }
 
     @EventHandler
@@ -77,7 +79,7 @@ public class PlayerListener implements Listener {
         List<String> commands = new ArrayList<>(event.getCommands());
         event.getCommands().clear();
         for (String command : commands){
-            if (!BlockCommands.checkCommand(command, event.getPlayer(), true)){
+            if (!CommandManager.checkCommand(command, event.getPlayer(), true)){
                 event.getCommands().add(command);
             }
         }

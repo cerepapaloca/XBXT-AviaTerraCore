@@ -22,7 +22,6 @@ public class RegisterCommand extends BaseCommand {
         super("register",
                 "/register <contraseña> <contraseña>",
                 "*",
-                false,
                 "Te registras",
                 ModeAutoTab.NONE
         );

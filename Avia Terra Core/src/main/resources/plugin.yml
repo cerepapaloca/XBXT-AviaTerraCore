@@ -28,4 +28,9 @@ commands:
   weapon:
   seeinventory:
   link:
+  tell:
+    aliases:
+      - msg
+      - w
+      - r
 

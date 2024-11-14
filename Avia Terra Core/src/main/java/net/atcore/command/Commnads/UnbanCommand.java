@@ -17,7 +17,6 @@ public class UnbanCommand extends BaseTabCommand {
     public UnbanCommand() {
         super("unban",
                 "/unban <Jugador> <Contexto>",
-                true,
                 "desbanea a al jugador que le caes bien"
         );
     }

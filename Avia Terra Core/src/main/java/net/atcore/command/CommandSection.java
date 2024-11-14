@@ -31,6 +31,7 @@ public class CommandSection implements Section {
         register(new seeInventoryCommand());
         register(new AviaTerraPruebasCommand());
         register(new LinkCommand());
+        register(new TellCommand());
     }
 
     @Override

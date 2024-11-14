@@ -127,7 +127,7 @@ public final class LoginManager {
      */
 
     public static String hashPassword(@NotNull String name, @NotNull String password) {
-        String s = name + password;//combina el nombre de usuario y la contraseña
+        String s = name + password;// combina el nombre de usuario y la contraseña
         PBEKeySpec spec = new PBEKeySpec(s.toCharArray(), password.getBytes(), ITERATIONS, KEY_LENGTH);
         byte[] hash = null;
         try {

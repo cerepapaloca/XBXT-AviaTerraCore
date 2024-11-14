@@ -19,7 +19,6 @@ public class LinkCommand extends BaseTabCommand {
         super("link",
                 "/link <gmail | discord> <Cuenta>",
                 "*",
-                false,
                 "Vinculas una cuenta para que mayor seguridad en el servidor"
         );
     }

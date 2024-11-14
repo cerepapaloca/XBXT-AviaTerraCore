@@ -20,7 +20,6 @@ public class LoginCommand extends BaseCommand {
         super("login",
                 "/login <contraseña>",
                 "*",
-                false,
                 "Te logueas",
                 ModeAutoTab.NONE
         );

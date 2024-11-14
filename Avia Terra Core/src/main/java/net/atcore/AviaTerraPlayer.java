@@ -13,11 +13,12 @@ import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import net.atcore.moderation.ChatModeration;
 import net.atcore.utils.GlobalUtils;
+import net.atcore.utils.RangeList;
+import net.luckperms.api.model.user.User;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.checkerframework.dataflow.qual.Pure;
 import org.jetbrains.annotations.Contract;
 
 import java.util.ArrayList;
@@ -31,6 +32,9 @@ public class AviaTerraPlayer {
 
     public AviaTerraPlayer(Player player) {
         this.uuid = player.getUniqueId();
+        User user = AviaTerraCore.getLP().getUserManager().getUser(player.getUniqueId());
+        assert user != null;
+        this.rangeList = RangeList.valueOf(user.getPrimaryGroup().toUpperCase());
         new BukkitRunnable() {
             boolean b = false;
             public void run() {
@@ -73,6 +77,7 @@ public class AviaTerraPlayer {
     private InventorySection inventorySection = null;
     private List<UUID> manipulatorInventoryPlayer = new ArrayList<>();
     private UUID manipulatedInventoryPlayer = null;
+    private RangeList rangeList;
 
     public void sendMessage(String message, TypeMessages type) {
         MessagesManager.sendMessage(GlobalUtils.getPlayer(uuid), message, type);

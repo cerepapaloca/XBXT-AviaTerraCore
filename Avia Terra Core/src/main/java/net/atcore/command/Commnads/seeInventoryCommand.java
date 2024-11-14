@@ -16,7 +16,6 @@ public class seeInventoryCommand extends BaseCommand {
     public seeInventoryCommand() {
         super("seeInventory",
                 "/seeInventory <Jugador>",
-                true,
                 "puede ver y modificar el inventario del jugador a tiempo real y de manera remota",
                 ModeAutoTab.NORMAL
         );

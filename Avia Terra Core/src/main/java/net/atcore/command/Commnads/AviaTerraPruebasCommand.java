@@ -16,7 +16,6 @@ public class AviaTerraPruebasCommand extends BaseTabCommand {
     public AviaTerraPruebasCommand() {
         super("AviaTerraPruebas",
                 "/AviaTerraPruebas <Pruebas>",
-                true,
                 "puede ver y modificar el inventario del jugador"
         );
     }

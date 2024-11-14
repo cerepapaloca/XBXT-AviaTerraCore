@@ -5,12 +5,10 @@ import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import net.atcore.utils.GlobalConstantes;
 import net.atcore.utils.ModeTab;
-import net.dv8tion.jda.api.interactions.callbacks.IPremiumRequiredReplyCallback;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -173,23 +171,23 @@ public final class CommandUtils {
         };
     }
 
-    public void excuteForPlayer(@Nullable CommandSender sender, String arg, boolean safeMode, Consumer<DataTemporalPlayer> action){
+    public void excuteForPlayer(@Nullable CommandSender sender, String arg, boolean safeMode, Consumer<TemporalPlayerData> action){
         if (arg.charAt(0) == '*'){
-            Bukkit.getOnlinePlayers().forEach(player ->  action.accept(new DataTemporalPlayer(player.getName(), player)));
+            Bukkit.getOnlinePlayers().forEach(player ->  action.accept(new TemporalPlayerData(player.getName(), player)));
             return;
         }
         List<String> names = new ArrayList<>(Arrays.stream(arg.replace("!", "").split(",")).toList());
         for (Player player :  Bukkit.getOnlinePlayers()) {
             if (arg.charAt(0) == '!') {
                 if (!names.contains(player.getName())) {
-                    action.accept(new DataTemporalPlayer(player.getName(), player));
+                    action.accept(new TemporalPlayerData(player.getName(), player));
                 }else {
                     names.remove(player.getName());
                 }
             } else {
                 if (names.contains(player.getName())) {
                     names.remove(player.getName());
-                    action.accept(new DataTemporalPlayer(player.getName(), player));
+                    action.accept(new TemporalPlayerData(player.getName(), player));
                 }
             }
         }
@@ -199,7 +197,7 @@ public final class CommandUtils {
             MessagesManager.sendMessage(sender, String.format("El jugador/es <|%s|> no esta conectado o no existe", names), TypeMessages.WARNING);
         }else {
             for (String name : names){
-                action.accept(new DataTemporalPlayer(name, null));//tiene que dar uno si no yo me dio nulo
+                action.accept(new TemporalPlayerData(name, null));//tiene que dar uno si no yo me dio nulo
             }
         }
     }

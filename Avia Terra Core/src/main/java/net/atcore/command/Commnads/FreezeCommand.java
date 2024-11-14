@@ -19,7 +19,6 @@ public class FreezeCommand extends BaseTabCommand {
     public FreezeCommand() {
         super("freeze",
                 "/freeze <player> <on | off>",
-                true,
                 "Este comando congelas a un jugador por actividad sospechosa"
         );
     }

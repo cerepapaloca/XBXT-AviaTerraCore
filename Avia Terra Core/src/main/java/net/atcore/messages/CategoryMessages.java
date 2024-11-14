@@ -2,7 +2,7 @@ package net.atcore.messages;
 
 public enum CategoryMessages {
     PRIVATE,
-    GENERIC,
+    COMMANDS,
     BAN,
     MODERATION,
     LOGIN,

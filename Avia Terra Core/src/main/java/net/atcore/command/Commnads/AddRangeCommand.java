@@ -26,7 +26,6 @@ public class AddRangeCommand extends BaseTabCommand {
     public AddRangeCommand() {
         super("addRange",
                 "/addRange <Rango> <Tiempo> <Jugador>",
-                true,
                 "das una tags donde se puede dar un rango durante un tiempo determinado"
         );
     }//

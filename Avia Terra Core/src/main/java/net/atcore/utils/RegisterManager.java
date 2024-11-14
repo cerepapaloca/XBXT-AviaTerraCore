@@ -1,23 +1,19 @@
 package net.atcore.utils;
 import net.atcore.AviaTerraCore;
 import net.atcore.command.BaseCommand;
-import net.atcore.command.BlockCommands;
+import net.atcore.command.CommandManager;
 import net.atcore.command.CommandSection;
 import net.atcore.data.DataBaseMySql;
 import net.atcore.data.DataSection;
 import net.atcore.messages.TypeMessages;
 import net.atcore.Section;
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandException;
 import org.bukkit.command.PluginCommand;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import org.bukkit.event.Listener;
 
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.SplittableRandom;
 
 import static net.atcore.messages.MessagesManager.*;
 import static org.bukkit.Bukkit.getServer;
@@ -53,9 +49,9 @@ public class RegisterManager {
         if (pluginCommand == null) {
             throw new CommandException(command.getName() + " El comando no existe. tiene que añadirlo en plugin.yml");
         }
-        BlockCommands.COMMANDS.put(command.getName().toLowerCase(), command.getPermissions());
+        CommandManager.COMMANDS.put(command.getName().toLowerCase(), command.getPermissions());
         for (String s : pluginCommand.getAliases()){
-            BlockCommands.COMMANDS.put(command.getName().toLowerCase(), command.getPermissions());
+            CommandManager.COMMANDS.put(s.toLowerCase(), command.getPermissions());
         }
         pluginCommand.setExecutor(CommandSection.getCommandHandler());
         pluginCommand.setTabCompleter(CommandSection.getCommandHandler());

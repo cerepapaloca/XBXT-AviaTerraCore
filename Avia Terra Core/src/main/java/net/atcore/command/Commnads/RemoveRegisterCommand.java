@@ -15,7 +15,6 @@ public class RemoveRegisterCommand extends BaseCommand {
     public RemoveRegisterCommand() {
         super("removeRegister",
                 "/removeRegister <Jugador>",
-                true,
                 "le borras el registro al jugador",
                 ModeAutoTab.ADVANCED
         );
