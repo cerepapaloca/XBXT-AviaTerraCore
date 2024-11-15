@@ -4,6 +4,7 @@ import com.github.games647.craftapi.model.Profile;
 import com.github.games647.craftapi.resolver.MojangResolver;
 import com.github.games647.craftapi.resolver.RateLimitException;
 import lombok.Getter;
+import lombok.experimental.UtilityClass;
 import net.atcore.AviaTerraCore;
 import net.atcore.Config;
 import net.atcore.data.DataBaseRegister;
@@ -55,8 +56,8 @@ public final class LoginManager {
         return dataLogin;
     }
 
-    public static void removeDataLogin(UUID uuid) {
-        listDataLogin.remove(uuid);
+    public static boolean isNewPlayer(String name) {
+        return listPlayerLoginIn.contains(GlobalUtils.getUUIDByName(name));
     }
 
     public static void clearDataLogin() {
@@ -81,7 +82,7 @@ public final class LoginManager {
         }
     }
 
-    private static @Nullable DataRegister startRegister(InetAddress ip , @NotNull String name){
+    private static @Nullable DataRegister startRegister(InetAddress ip, @NotNull String name){
         try {
             MojangResolver resolver = AviaTerraCore.getResolver();
             Optional<Profile> profile = resolver.findProfile(name);
@@ -129,7 +130,7 @@ public final class LoginManager {
     public static String hashPassword(@NotNull String name, @NotNull String password) {
         String s = name + password;// combina el nombre de usuario y la contraseña
         PBEKeySpec spec = new PBEKeySpec(s.toCharArray(), password.getBytes(), ITERATIONS, KEY_LENGTH);
-        byte[] hash = null;
+        byte[] hash;
         try {
             SecretKeyFactory skf = SecretKeyFactory.getInstance(ALGORITHM);
             hash = skf.generateSecret(spec).getEncoded();
@@ -147,7 +148,8 @@ public final class LoginManager {
     public static void newRegisterCracked(@NotNull String name, @NotNull InetAddress inetAddress , @NotNull String password){
         String s = hashPassword(name ,password);
         getDataLogin(name).getRegister().setPasswordShaded(s);
-        DataRegister data = getDataLogin(name).getRegister();;
+        DataRegister data = getDataLogin(name).getRegister();
+        data.setTemporary(false);
         data.setIp(inetAddress);
         data.setLastLoginDate(System.currentTimeMillis());
         Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(), () -> {
@@ -187,14 +189,14 @@ public final class LoginManager {
         }
 
         if (dataLogin.hasSession()){//mira si tiene una session
-            //revisa si tiene una contraseña la cuenta cracked o si es un usuario premium
+            // revisa si tiene una contraseña la cuenta cracked o si es un usuario premium
             if ((dataLogin.getSession().getState() == StateLogins.CRACKED && dataLogin.getRegister().getPasswordShaded() != null) ||
                     dataLogin.getSession().getState() == StateLogins.PREMIUM){
-                //mira si la ip son iguales
-                if (Objects.equals(dataLogin.getSession().getAddress().getHostName().split(":")[0], player.getAddress().getAddress().getHostName().split(":")[0])){
+                // mira si la ip son iguales
+                if (Objects.equals(dataLogin.getSession().getAddress().getHostName().split(":")[0], Objects.requireNonNull(player.getAddress()).getAddress().getHostName().split(":")[0])){
                     if (ignoreTime || dataLogin.getSession().getEndTimeLogin() > System.currentTimeMillis()){//expiro? o no se tiene en cuenta
                         listPlayerLoginIn.add(player.getUniqueId());
-                        //en caso de que sea op no se le cambia el modo de juego y se hace en el hilo principal por si acaso
+                        // en caso de que sea op no se le cambia el modo de juego y se hace en el hilo principal por si acaso
                         if (!player.isOp()) {
                             if (Bukkit.isPrimaryThread()){
                                 player.setGameMode(GameMode.SURVIVAL);
@@ -207,14 +209,14 @@ public final class LoginManager {
                 }
             }
         }
-        //en caso que no sea valida
+        // en caso que no sea valida
         if (Bukkit.isPrimaryThread()){
             player.setGameMode(GameMode.SPECTATOR);
         }else{
             Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> player.setGameMode(GameMode.SPECTATOR));
         }
         listPlayerLoginIn.remove(player.getUniqueId());
-        dataLogin.setSession(null);//esto lo borra
+        dataLogin.setSession(null);// esto lo borra
 
         if (ServerMode.OFFLINE_MODE != Config.getServerMode() && LoginManager.getDataLogin(player).getRegister().getStateLogins().equals(StateLogins.PREMIUM)){
             GlobalUtils.kickPlayer(player, "Vuelve a entrar para obtener una sesión nueva");
@@ -258,7 +260,6 @@ public final class LoginManager {
         DataLogin dataLogin = getDataLogin(player);
         DataSession dataSession = new DataSession(player, StateLogins.CRACKED);
         dataSession.setEndTimeLogin(System.currentTimeMillis() + Config.getExpirationSession());
-        dataSession.setLoggedDiscord(false);
         dataLogin.setSession(dataSession);
         player.getInventory().setContents(dataLogin.getLimbo().getItems());
         player.teleport(dataLogin.getLimbo().getLocation());

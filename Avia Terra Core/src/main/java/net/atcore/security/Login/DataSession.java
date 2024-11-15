@@ -26,7 +26,6 @@ public class DataSession {
 
     private long startTimeLogin;
     private long endTimeLogin;
-    private boolean loggedDiscord;
     private StateLogins state;
     private InetAddress address;
     private final Player player;

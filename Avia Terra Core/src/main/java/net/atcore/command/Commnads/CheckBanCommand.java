@@ -4,7 +4,7 @@ import net.atcore.command.BaseTabCommand;
 import net.atcore.command.CommandUtils;
 import net.atcore.messages.TypeMessages;
 import net.atcore.moderation.Ban.IsBan;
-import net.atcore.moderation.Ban.ManagerBan;
+import net.atcore.moderation.Ban.BanManager;
 import net.atcore.moderation.Ban.ContextBan;
 import net.atcore.moderation.Ban.DataBan;
 import net.atcore.utils.GlobalConstantes;
@@ -45,11 +45,11 @@ public class CheckBanCommand extends BaseTabCommand {
             }
 
             if (isChecking) {
-                if (ManagerBan.getDataBan(args[0]) == null) {
+                if (BanManager.getDataBan(args[0]) == null) {
                     sendMessage(sender, "No esta baneado", TypeMessages.INFO);
                     return;
                 }
-                for (DataBan dataBan : ManagerBan.getDataBan(args[0])){
+                for (DataBan dataBan : BanManager.getDataBan(args[0])){
                     sendDataBan(sender, dataBan);
                 }
             }else {
@@ -65,16 +65,16 @@ public class CheckBanCommand extends BaseTabCommand {
 
                     Player player = Bukkit.getPlayer(args[0]);
                     if (player != null) {
-                        IsBan reason = ManagerBan.checkBan(player, contextBan);
+                        IsBan reason = BanManager.checkBan(player, contextBan);
                         switch (reason) {
                             case NOT -> sendMessage(sender, "el jugador no esta banedo de ningún contexto", TypeMessages.SUCCESS);
                             case NOT_THIS_CONTEXT -> {
                                 sendMessage(sender, "el jugador esta baneado pero no del contexto seleccionado pero esta baneado de:", TypeMessages.SUCCESS);
-                                if (ManagerBan.getDataBan(player.getName()) == null) {
+                                if (BanManager.getDataBan(player.getName()) == null) {
                                     sendMessage(sender, "No esta baneado", TypeMessages.INFO);
                                     return;
                                 }
-                                for (DataBan dataBan : ManagerBan.getDataBan(player.getName())){
+                                for (DataBan dataBan : BanManager.getDataBan(player.getName())){
                                     sendDataBan(sender, dataBan);
                                 }
                             }

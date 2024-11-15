@@ -16,6 +16,7 @@ import lombok.Getter;
 import net.atcore.Config;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.TypeMessages;
+import net.atcore.security.AntiBot;
 import net.atcore.security.Login.*;
 import net.atcore.security.VerificationPremium;
 import net.atcore.utils.GlobalUtils;
@@ -61,6 +62,10 @@ public class SimulateOnlineMode {
 
         UUID uuid = packet.getUUIDs().read(0);
         String name = packet.getStrings().read(0);
+        if (AntiBot.checkBot(player.getAddress().getAddress(), name)){
+            return true;
+        }
+
         DataLogin dataLogin = LoginManager.getDataLogin(name);
         if ((dataLogin == null || dataLogin.getSession() == null) || dataLogin.getSession().getEndTimeLogin() < System.currentTimeMillis()) {
             StateLogins state = LoginManager.getStateAndRegister(player.getAddress().getAddress() ,name);
@@ -69,8 +74,8 @@ public class SimulateOnlineMode {
                 case ONLINE_MODE -> state = StateLogins.PREMIUM;
             }
             switch (state){//revisa entre las sesiones o los registro del los jugadores
-                case PREMIUM -> StartLoginPremium(name, uuid, player);
-                case CRACKED -> StartLoginCracked(name, uuid);
+                case PREMIUM -> startLoginPremium(name, uuid, player);
+                case CRACKED -> startLoginCracked(name, uuid);
                 case UNKNOWN -> GlobalUtils.kickPlayer(player, "Error de connexion vuele a intentar");
             }
             sendMessageConsole("Iniciando login: <|" + state.name().toLowerCase() + "|> para el jugador: <|" + name + "|>", TypeMessages.INFO, CategoryMessages.LOGIN);
@@ -79,11 +84,11 @@ public class SimulateOnlineMode {
         return false;
     }
 
-    private void StartLoginCracked(String name, UUID uuid) {
+    private void startLoginCracked(String name, UUID uuid) {
         //de pronto en el futuro lo usaré o no
     }
 
-    private void StartLoginPremium(String name, UUID uuid, Player sender) {
+    private void startLoginPremium(String name, UUID uuid, Player sender) {
         PacketContainer packetEncryption = new PacketContainer(PacketType.Login.Server.ENCRYPTION_BEGIN);
         byte[] token = new byte[4];
         new java.security.SecureRandom().nextBytes(token);

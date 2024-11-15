@@ -2,16 +2,16 @@ package net.atcore.moderation;
 
 import lombok.Getter;
 import net.atcore.moderation.Ban.CheckAutoBan;
-import net.atcore.moderation.Ban.ManagerBan;
+import net.atcore.moderation.Ban.BanManager;
 import net.atcore.Section;
 
 public class ModerationSection implements Section {
 
-    @Getter private static ManagerBan banManager;
+    @Getter private static BanManager banManager;
 
     @Override
     public void enable() {
-        banManager = new ManagerBan();
+        banManager = new BanManager();
         ChatModeration.tickEvent();
         CheckAutoBan.startTimeRemove();
     }

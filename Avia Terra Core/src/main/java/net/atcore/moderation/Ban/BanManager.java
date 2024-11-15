@@ -23,7 +23,7 @@ import java.util.UUID;
 
 import static net.atcore.messages.MessagesManager.*;
 
-public class ManagerBan extends DataBaseBan {
+public class BanManager extends DataBaseBan {
 
     public void banPlayer(Player player, String reason, long time, ContextBan contextBan, String nameAuthor) {
         banPlayer(player.getName(),

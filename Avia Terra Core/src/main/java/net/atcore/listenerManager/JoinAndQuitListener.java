@@ -1,6 +1,8 @@
 package net.atcore.listenerManager;
 
+import net.atcore.AviaTerraCore;
 import net.atcore.AviaTerraPlayer;
+import net.atcore.data.DataBaseRegister;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
@@ -42,6 +44,11 @@ public class JoinAndQuitListener implements Listener {
             player.getInventory().setContents(limbo.getItems());
             player.teleport(limbo.getLocation());
             player.setGameMode(limbo.getGameMode());
+        }
+
+        if (LoginManager.getDataLogin(player.getUniqueId()).getRegister().isTemporary()){
+            AviaTerraCore.getInstance().enqueueTaskAsynchronously(() ->
+                    DataBaseRegister.removeRegister(player.getName(), "Servidor"));//borra a los jugadores no premium que no pudieron registrarse
         }
 
         List<UUID> UUIDPlayers = List.copyOf(AviaTerraPlayer.getPlayer(player).getManipulatorInventoryPlayer());

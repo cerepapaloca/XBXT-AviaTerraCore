@@ -46,7 +46,7 @@ public class DataBaseRegister extends DataBaseMySql {
 
                 DataRegister dataRegister = new DataRegister(name, uuid,
                         uuidPremium != null ? UUID.fromString(uuidPremium) : null, isPremium == 1 ? StateLogins.PREMIUM : StateLogins.CRACKED,
-                        true);
+                        false);
                 dataRegister.setAddressRegister(InetAddress.getByName(ipRegister));
                 dataRegister.setIp(InetAddress.getByName(ipLogin));
                 dataRegister.setPasswordShaded(password);

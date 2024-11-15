@@ -221,8 +221,8 @@ public final class GlobalUtils {
      */
 
     public void kickPlayer(@NotNull Player player,@Nullable String reason) {
-        reason = MessagesManager.addProprieties(MessagesManager.PREFIX_AND_SUFFIX_KICK[0]
-                + "&4" + (reason == null ? "Has sido expulsado" : reason) + "&c" + MessagesManager.PREFIX_AND_SUFFIX_KICK[1], TypeMessages.KICK, false, false);
+        reason = org.bukkit.ChatColor.translateAlternateColorCodes('&', MessagesManager.addProprieties(MessagesManager.PREFIX_AND_SUFFIX_KICK[0]
+                + "&4" + (reason == null ? "Has sido expulsado" : reason) + "&c" + MessagesManager.PREFIX_AND_SUFFIX_KICK[1], TypeMessages.KICK, false, false));
         if (Bukkit.isPrimaryThread()){
             kickFinal(player, reason);
         }else{

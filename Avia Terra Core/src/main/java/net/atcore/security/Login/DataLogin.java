@@ -2,6 +2,7 @@ package net.atcore.security.Login;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
