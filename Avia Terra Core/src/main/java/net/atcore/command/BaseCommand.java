@@ -20,17 +20,17 @@ public abstract class BaseCommand {
                        @NotNull  String usage,
                        @Nullable String description,
                        @NotNull ModeAutoTab modeAutoTab) {
-        this(name, usage, (AviaTerraCore.getInstance().getName() + ".command." + name).toLowerCase(), description, modeAutoTab);
+        this(name, usage, "", description, modeAutoTab);
     }
 
     public BaseCommand(@NotNull String name,
                        @NotNull  String usage,
-                       @Nullable  String permissions,
+                       @NotNull  String permissions,
                        @Nullable String description,
                        @NotNull ModeAutoTab modeAutoTab) {
         this.name = name;
         this.usage = usage;
-        this.permissions = permissions;
+        this.permissions = permissions.equals("*") ? "*" : AviaTerraCore.getInstance().getName().toLowerCase() + ".command." + name + "," + permissions;
         this.description = description == null || description.isEmpty() ? "&oSin Descripción" : description;
         this.modeAutoTab = modeAutoTab;
     }

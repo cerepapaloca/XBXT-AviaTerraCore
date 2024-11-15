@@ -20,8 +20,8 @@ public class CommandManager {//nose si poner en esta clase aquí la verdad
     public static boolean checkCommand(String command, Player player, boolean isSilent){
 
         if (player.isOp()) return false;
-        if (COMMANDS.containsKey(command)){
-            String permission = COMMANDS.get(command);
+        if (COMMANDS.containsKey(command.toLowerCase())){
+            String permission = COMMANDS.get(command.toLowerCase());
             if (permission == null){
                 return false;
             }else{

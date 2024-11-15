@@ -251,6 +251,9 @@ public final class CommandUtils {
         if (permission.equals("*")){
             return true;
         }else {
+            if (player.hasPermission("aviaterracore.command.*")){
+                return true;
+            }
             if (permission.charAt(0) == '!'){
                 if (permission.substring(1).equalsIgnoreCase("op")){
                     return !player.isOp();
@@ -261,13 +264,14 @@ public final class CommandUtils {
                 }
             }
         }
+        boolean b = false;
         for (String s : permission.replace("!","").split(",")){
             if (permission.charAt(0) == '!') {
-                return !player.hasPermission(s);
+                b = b || !player.hasPermission(s);
             } else {
-                return player.hasPermission(s);
+                b = b || player.hasPermission(s);
             }
         }
-        return false;
+        return b;
     }
 }

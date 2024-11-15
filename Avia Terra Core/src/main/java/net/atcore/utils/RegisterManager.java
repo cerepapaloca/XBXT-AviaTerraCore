@@ -7,8 +7,11 @@ import net.atcore.data.DataBaseMySql;
 import net.atcore.data.DataSection;
 import net.atcore.messages.TypeMessages;
 import net.atcore.Section;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandException;
 import org.bukkit.command.PluginCommand;
+import org.bukkit.permissions.Permission;
+import org.bukkit.plugin.PluginManager;
 import org.jetbrains.annotations.NotNull;
 
 import org.bukkit.event.Listener;
@@ -52,6 +55,10 @@ public class RegisterManager {
         CommandManager.COMMANDS.put(command.getName().toLowerCase(), command.getPermissions());
         for (String s : pluginCommand.getAliases()){
             CommandManager.COMMANDS.put(s.toLowerCase(), command.getPermissions());
+        }
+        if (!command.getPermissions().equals("*")){
+            Permission permission = new Permission(AviaTerraCore.getInstance().getName().toLowerCase() + ".command." + command.getName());
+            getServer().getPluginManager().addPermission(permission);
         }
         pluginCommand.setExecutor(CommandSection.getCommandHandler());
         pluginCommand.setTabCompleter(CommandSection.getCommandHandler());

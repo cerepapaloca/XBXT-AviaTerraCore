@@ -33,4 +33,6 @@ commands:
       - msg
       - w
       - r
-
+permissions:
+  aviaterracore.commnad.*:
+    description: Todos los permisos del comandos de AviaTerraCore

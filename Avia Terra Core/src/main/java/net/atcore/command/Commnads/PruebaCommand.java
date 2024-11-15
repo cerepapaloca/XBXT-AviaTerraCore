@@ -14,7 +14,7 @@ public class PruebaCommand extends BaseTabCommand {
     public PruebaCommand() {
         super("prueba",//Aquí va el comando que va ejecutar
                 "/prueba",//esto es una información extra de como tiene que ejecutar un comando
-                "aviaterra.command.prueba", //el permiso o los permisos suele comenzar con el nombre del plugin luego categoría y por último el comando
+                "aviaterracore.command.test", //el permiso o los permisos suele comenzar con el nombre del plugin luego categoría y por último el comando
                 "es un comando de prueba"//La descripción del comando
         );
     }
