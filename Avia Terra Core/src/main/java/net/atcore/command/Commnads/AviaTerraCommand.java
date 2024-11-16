@@ -157,15 +157,32 @@ public class AviaTerraCommand extends BaseTabCommand {
                     sendMessage(sender,"el nivel de moderación en el chat esta en <|" + Config.getLevelModerationChat() + "|>", TypeMessages.INFO);
                 }
             }
+
+            case "antibot" -> {
+                if (args.length >= 2) {
+                    if (CommandUtils.isTrueOrFalse(args[1])){
+                        Config.setAntiBot(true);
+                        sendMessage(sender,"AntiBot <|Activado|>", TypeMessages.INFO);
+                    }else{
+                        Config.setAntiBot(false);
+                        sendMessage(sender,"AntiBot <|Desactivado|>", TypeMessages.INFO);
+                        sendMessage(sender,"****************************", TypeMessages.WARNING);
+                        sendMessage(sender,"DESACTIVAR SOLO PARA PRUEBAS", TypeMessages.WARNING);
+                        sendMessage(sender,"****************************", TypeMessages.WARNING);
+                    }
+                }else{
+                    sendMessage(sender,"El sistema antiBot esta <|" + CommandUtils.booleanToString(Config.isAntiBot()) + "|>", TypeMessages.INFO);
+                }
+            }
         }
     }
 
     @Override
     public List<String> onTab(CommandSender sender, String[] args) {
-        String[] argsRoot = new String[]{"reload", "antiOp", "antiIlegalItems", "serverMode", "checkBanPorIp", "purgaRangos","tiempoDeSesion", "levelModerationChat"};
+        String[] argsRoot = new String[]{"antiBot","reload", "antiOp", "antiIlegalItems", "serverMode", "checkBanPorIp", "purgaRangos","tiempoDeSesion", "levelModerationChat"};
         if (args.length >= 2) {
             switch (args[0].toLowerCase().replace("_","")) {
-                case "antiop", "antiilegalitems", "checkbanporip" -> {
+                case "antiop", "antiilegalitems", "checkbanporip", "antiBot" -> {
                     return CommandUtils.listTab(args[1], new String[]{"true", "false"});
                 }
                 case "servermode" -> {

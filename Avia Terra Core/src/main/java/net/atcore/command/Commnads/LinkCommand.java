@@ -18,7 +18,7 @@ public class LinkCommand extends BaseTabCommand {
     public LinkCommand() {
         super("link",
                 "/link <gmail | discord> <Cuenta>",
-                "*",
+                "**",
                 "Vinculas una cuenta para que mayor seguridad en el servidor"
         );
     }
@@ -35,27 +35,31 @@ public class LinkCommand extends BaseTabCommand {
             switch (args[0].toLowerCase()) {
                 case "gmail" -> {
                     if (args.length >= 2) {
-                        if (args[1].contains("@")){
-                            CodeAuth codeAuth = new CodeAuth(UUID.randomUUID(), System.currentTimeMillis()+(1000*60*2), uuid, args[1].toLowerCase());
-                            TwoFactorAuth.getCodes().put(uuid, codeAuth);
-                            sendMessage(sender, "Se envió un correo a " + args[1] + " con el código", TypeMessages.INFO);
-                            if (dataLogin.getRegister().getGmail() != null){
-                                sendMessage(sender, "Ya Tiene un correo vinculado solo usar el comando para vincular un nuevo correo", TypeMessages.WARNING);
-                            }
-                            AviaTerraCore.getInstance().enqueueTaskAsynchronously(() -> {
-                                TwoFactorAuth.sendVerificationEmail(args[1], codeAuth, FormatMessage.LINK);
-                                sendMessage(sender, "Revisa su bandeja de recibidos, ya tuvo que haber llegado", TypeMessages.SUCCESS);
-                            });
-                        }else if (args[1].charAt(8) == '-'){
-                            if (TwoFactorAuth.checkCode(player, args[1])){
+                        if (LoginManager.checkLoginIn(player, true)){
+                            if (args[1].contains("@")){
+                                CodeAuth codeAuth = new CodeAuth(UUID.randomUUID(), System.currentTimeMillis()+(1000*60*2), uuid, args[1].toLowerCase());
+                                TwoFactorAuth.getCodes().put(uuid, codeAuth);
+                                sendMessage(sender, "Se envió un correo a " + args[1] + " con el código", TypeMessages.INFO);
+                                if (dataLogin.getRegister().getGmail() != null){
+                                    sendMessage(sender, "Ya Tiene un correo vinculado solo usar el comando para vincular un nuevo correo", TypeMessages.WARNING);
+                                }
                                 AviaTerraCore.getInstance().enqueueTaskAsynchronously(() -> {
-                                    DataBaseRegister.updateGmail(player.getName(), TwoFactorAuth.getCodes().get(uuid).getMedia());
-                                    TwoFactorAuth.getCodes().remove(uuid);
-                                    sendMessage(player, "Autenticación completa", TypeMessages.SUCCESS);
+                                    TwoFactorAuth.sendVerificationEmail(args[1], codeAuth, FormatMessage.LINK);
+                                    sendMessage(sender, "Revisa su bandeja de recibidos, ya tuvo que haber llegado", TypeMessages.SUCCESS);
                                 });
+                            }else if (args[1].charAt(8) == '-'){
+                                if (TwoFactorAuth.checkCode(player, args[1])){
+                                    AviaTerraCore.getInstance().enqueueTaskAsynchronously(() -> {
+                                        DataBaseRegister.updateGmail(player.getName(), TwoFactorAuth.getCodes().get(uuid).getMedia());
+                                        TwoFactorAuth.getCodes().remove(uuid);
+                                        sendMessage(player, "Autenticación completa", TypeMessages.SUCCESS);
+                                    });
+                                }
+                            }else {
+                                sendMessage(sender, "Tiene poner tu gmail o el código de validación", TypeMessages.ERROR);
                             }
                         }else {
-                            sendMessage(sender, "Tiene poner tu gmail o el código de validación", TypeMessages.ERROR);
+                            sendMessage(sender, "Para vincular tu gmail tiene que estar logueado", TypeMessages.ERROR);
                         }
                     }else {
                         if (dataLogin.getRegister().getGmail() != null){
@@ -67,30 +71,34 @@ public class LinkCommand extends BaseTabCommand {
                                 sendMessage(sender, "Revisa su bandeja de recibidos, ya tuvo que haber llegado", TypeMessages.SUCCESS);
                             });
                         }else {
-                            sendMessage(sender, "no tiene un Gmail vinculado", TypeMessages.ERROR);
+                            sendMessage(sender, "No tiene un Gmail vinculado", TypeMessages.ERROR);
                         }
                     }
                 }
                 case "discord" -> {
                     if (args.length >= 2) {
-                        if (args[1].length() == 18){
-                            CodeAuth codeAuth = new CodeAuth(UUID.randomUUID(), System.currentTimeMillis()+(1000*60*2), uuid, args[1].toLowerCase());
-                            TwoFactorAuth.getCodes().put(uuid, codeAuth);
-                            sendMessage(sender, "Se esta enviando un mensaje directo con el código", TypeMessages.INFO);
-                            if (dataLogin.getRegister().getGmail() != null){
-                                sendMessage(sender, "Ya Tiene un discord vinculado solo usar el comando para vincular un nuevo discord", TypeMessages.WARNING);
-                            }
-                            AviaTerraCore.getInstance().enqueueTaskAsynchronously(() -> TwoFactorAuth.sendVerificationDiscord(args[1], player, FormatMessage.LINK));
-                        }else if (args[1].charAt(8) == '-') {
-                            if (TwoFactorAuth.checkCode(player, args[1])){
-                                AviaTerraCore.getInstance().enqueueTaskAsynchronously(() -> {
-                                    DataBaseRegister.updateDiscord(player.getName(), TwoFactorAuth.getCodes().get(uuid).getMedia());
-                                    TwoFactorAuth.getCodes().remove(uuid);
-                                    sendMessage(player, "Autenticación completa", TypeMessages.SUCCESS);
-                                });
+                        if (LoginManager.checkLoginIn(player, true)){
+                            if (args[1].length() == 18){
+                                CodeAuth codeAuth = new CodeAuth(UUID.randomUUID(), System.currentTimeMillis()+(1000*60*2), uuid, args[1].toLowerCase());
+                                TwoFactorAuth.getCodes().put(uuid, codeAuth);
+                                sendMessage(sender, "Se esta enviando un mensaje directo con el código", TypeMessages.INFO);
+                                if (dataLogin.getRegister().getGmail() != null){
+                                    sendMessage(sender, "Ya Tiene un discord vinculado solo usar el comando para vincular un nuevo discord", TypeMessages.WARNING);
+                                }
+                                AviaTerraCore.getInstance().enqueueTaskAsynchronously(() -> TwoFactorAuth.sendVerificationDiscord(args[1], player, FormatMessage.LINK));
+                            }else if (args[1].charAt(8) == '-') {
+                                if (TwoFactorAuth.checkCode(player, args[1])){
+                                    AviaTerraCore.getInstance().enqueueTaskAsynchronously(() -> {
+                                        DataBaseRegister.updateDiscord(player.getName(), TwoFactorAuth.getCodes().get(uuid).getMedia());
+                                        TwoFactorAuth.getCodes().remove(uuid);
+                                        sendMessage(player, "Autenticación completa", TypeMessages.SUCCESS);
+                                    });
+                                }
+                            }else {
+                                sendMessage(player, "Tiene poner tu id del Discord o el código de validación", TypeMessages.ERROR);
                             }
                         }else {
-                            sendMessage(player, "Tiene poner tu id del discord o el código de validación", TypeMessages.ERROR);
+                            sendMessage(sender, "Para vincular tu Discord tiene que estar logueado", TypeMessages.ERROR);
                         }
                     }else {
                         if (dataLogin.getRegister().getDiscord() != null){

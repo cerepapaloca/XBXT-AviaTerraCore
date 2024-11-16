@@ -63,13 +63,8 @@ public class PlayerListener implements Listener {
         Player player = event.getPlayer();
         if (COMMANDS_PRE_LOGIN.contains(command)) {
             MessagesManager.sendMessageConsole(String.format("<|%s|> ejecuto -> %s", player.getName(), "*Comando De Login*"), TypeMessages.INFO, CategoryMessages.COMMANDS, true);
-            return;
-        }
-        MessagesManager.sendMessageConsole(String.format("<|%s|> ejecuto -> %s", player.getName(), event.getMessage()), TypeMessages.INFO, CategoryMessages.COMMANDS, true);
-
-        if (!LoginManager.checkLoginIn(player, true)) {
-            sendMessage(player,"Primero inicia sessión usando /login", TypeMessages.ERROR);
-            event.setCancelled(true);
+        }else {
+            MessagesManager.sendMessageConsole(String.format("<|%s|> ejecuto -> %s", player.getName(), event.getMessage()), TypeMessages.INFO, CategoryMessages.COMMANDS, true);
         }
         event.setCancelled(CommandManager.checkCommand(command, player, false));
     }

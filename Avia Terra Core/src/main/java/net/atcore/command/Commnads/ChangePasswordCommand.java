@@ -74,10 +74,10 @@ public class ChangePasswordCommand extends BaseTabCommand {
     public List<String> onTab(CommandSender sender, String[] args) {
         switch (args.length) {
             case 1 -> {
-                return List.of("Tu Contraseña actual", "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx");
+                return List.of("TuContraseñaActual", "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx");
             }
             case 2 -> {
-                return List.of("Nueva Contraseña");
+                return List.of("NuevaContraseña");
             }
             default -> {
                 return List.of();

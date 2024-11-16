@@ -1,13 +1,13 @@
 package net.atcore.command;
 
-import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
-import org.bukkit.Bukkit;
+import net.atcore.security.Login.LoginManager;
 import org.bukkit.entity.Player;
 
-import java.io.BufferedReader;
 import java.util.HashMap;
+
+import static net.atcore.messages.MessagesManager.sendMessage;
 
 public class CommandManager {//nose si poner en esta clase aquí la verdad
 
@@ -28,7 +28,13 @@ public class CommandManager {//nose si poner en esta clase aquí la verdad
                 if (CommandUtils.hasPermission(permission, player)){
                     return false;
                 }else{
-                    if (!isSilent) MessagesManager.sendMessage(player, "No tienes permisos para ejecutar ese comando", TypeMessages.ERROR);
+                    if (!isSilent){
+                        if (LoginManager.checkLoginIn(player, true)){
+                            sendMessage(player, "No tienes permisos para ejecutar ese comando", TypeMessages.ERROR);
+                        }else {
+                            sendMessage(player,"Primero inicia sessión usando /login", TypeMessages.ERROR);
+                        }
+                    }
                     return true;
                 }
             }

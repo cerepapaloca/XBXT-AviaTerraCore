@@ -1,8 +1,11 @@
 package net.atcore.command;
 
 import lombok.experimental.UtilityClass;
+import net.atcore.AviaTerraCore;
+import net.atcore.command.Commnads.AviaTerraCommand;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
+import net.atcore.security.Login.LoginManager;
 import net.atcore.utils.GlobalConstantes;
 import net.atcore.utils.ModeTab;
 import net.md_5.bungee.api.ChatColor;
@@ -17,6 +20,7 @@ import java.util.function.Consumer;
 
 import static java.util.stream.Collectors.toList;
 import static net.atcore.messages.MessagesManager.COLOR_ERROR;
+import static net.atcore.messages.MessagesManager.sendMessage;
 
 @UtilityClass
 public final class CommandUtils {
@@ -248,30 +252,43 @@ public final class CommandUtils {
      */
 
     public boolean hasPermission(String permission, Player player){
-        if (permission.equals("*")){
-            return true;
-        }else {
-            if (player.hasPermission("aviaterracore.command.*")){
+        //String permissionBase = AviaTerraCore.getInstance().getName().toLowerCase() + ".command." + command.toLowerCase();
+        //if (player.hasPermission(permissionBase)) return true;
+        //permission = permission.replace(permissionBase, "");
+        if (LoginManager.checkLoginIn(player, true)) {
+            if (permission.contains("!")) permission = "!" + permission.replace("!", "");
+            if (permission.equals("*") || permission.equals("**")) {
                 return true;
-            }
-            if (permission.charAt(0) == '!'){
-                if (permission.substring(1).equalsIgnoreCase("op")){
-                    return !player.isOp();
-                }
             }else {
-                if (permission.equalsIgnoreCase("op")){
-                    return player.isOp();
+                if (player.hasPermission("aviaterracore.command.*")){
+                    return true;
+                }
+                if (permission.startsWith("!")){
+                    if (permission.substring(1).equalsIgnoreCase("op")){
+                        return !player.isOp();
+                    }
+                }else {
+                    if (permission.equalsIgnoreCase("op")){
+                        return player.isOp();
+                    }
                 }
             }
-        }
-        boolean b = false;
-        for (String s : permission.replace("!","").split(",")){
-            if (permission.charAt(0) == '!') {
-                b = b || !player.hasPermission(s);
-            } else {
-                b = b || player.hasPermission(s);
+            boolean b = false;
+            for (String s : permission.replace("!","").split(",")){
+                if (permission.startsWith("!")) {
+                    b = b || !player.hasPermission(s);
+                } else {
+                    b = b || player.hasPermission(s);
+                }
+            }
+            return b;
+        }else {
+            if (permission.equals("**")){
+                return true;
+            }else {
+
+                return false;
             }
         }
-        return b;
     }
 }

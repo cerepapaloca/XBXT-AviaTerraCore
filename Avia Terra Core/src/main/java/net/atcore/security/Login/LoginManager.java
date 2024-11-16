@@ -73,6 +73,7 @@ public final class LoginManager {
             return getDataLogin(name).getRegister().getStateLogins();
         }else{//si no existe crea un registro
             DataRegister dataRegister = startRegister(ip, name);
+            Bukkit.getLogger().warning("Register successful");
             if (dataRegister != null){
                 addDataLogin(name, dataRegister);
                 return dataRegister.getStateLogins();
@@ -227,28 +228,33 @@ public final class LoginManager {
 
     public static void checkJoin(@NotNull Player player){
         DataLogin dataLogin = getDataLogin(player);
-        dataLogin.setLimbo(new DataLimbo(player));
-        DataRegister dataRegister = dataLogin.getRegister();
-        if (dataRegister != null) {
-            if (Config.getServerMode().equals(ServerMode.OFFLINE_MODE) || dataRegister.getStateLogins() == StateLogins.CRACKED){
-                if (dataRegister.getPasswordShaded() != null) {//tiene contraseña o no
-                    if (checkLoginIn(player, false)) {//si tiene una session valida o no
-                        dataLogin.setLimbo(null);
-                    }else {
-                        player.getInventory().clear();
-                        player.teleport(new Location(player.getWorld(),0,100,0));
-                        startMessage(player, "login porfa. <|/login <Contraseña>|>");
-                        startTimeOut(player, "Tardaste mucho en iniciar sesión");
+        if (dataLogin != null) {
+            dataLogin.setLimbo(new DataLimbo(player));
+            DataRegister dataRegister = dataLogin.getRegister();
+            if (dataRegister != null) {
+                if (Config.getServerMode().equals(ServerMode.OFFLINE_MODE) || dataRegister.getStateLogins() == StateLogins.CRACKED){
+                    if (dataRegister.getPasswordShaded() != null) {//tiene contraseña o no
+                        if (checkLoginIn(player, false)) {//si tiene una session valida o no
+                            dataLogin.setLimbo(null);
+                        }else {
+                            player.getInventory().clear();
+                            player.teleport(new Location(player.getWorld(),0,100,0));
+                            startMessage(player, "login porfa. <|/login <Contraseña>|>");
+                            startTimeOut(player, "Tardaste mucho en iniciar sesión");
+                        }
+                    }else{
+                        startTimeOut(player, "Tardaste mucho en registrarte");
+                        startMessage(player, "registrate porfa. <|/register <Contraseña> <Contraseña>|> &oNota de Ceres:" +
+                                " esto algo que esta en desarrollo ponga cualquier contraseña como su nombre de usuario");
                     }
-                }else{
-                    startTimeOut(player, "Tardaste mucho en registrarte");
-                    startMessage(player, "registrate porfa. <|/register <Contraseña> <Contraseña>|> &oNota de Ceres:" +
-                            " esto algo que esta en desarrollo ponga cualquier contraseña como su nombre de usuario");
                 }
+            }else{
+                GlobalUtils.kickPlayer(player, "no estas registrado, vuelve a entrar al servidor");
             }
-        }else{
+        }else {
             GlobalUtils.kickPlayer(player, "no estas registrado, vuelve a entrar al servidor");
         }
+
 
         /*if (LoginManager.getListSession().get(player.getName()).getUuidPremium() != null) {
             player.sendTitle(ChatColor.translateAlternateColorCodes('&',COLOR_ESPECIAL + "Te haz logueado!"),
@@ -278,7 +284,7 @@ public final class LoginManager {
                 if (checkLoginIn(player, true)) return;
                 GlobalUtils.kickPlayer(player, reason);
             }
-        }.runTaskLater(AviaTerraCore.getInstance(), 20*20);
+        }.runTaskLater(AviaTerraCore.getInstance(), 20*30);
     }
 
     public static void startMessage(Player player, String message){

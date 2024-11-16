@@ -3,7 +3,9 @@ package net.atcore.command.Commnads;
 import net.atcore.command.BaseTabCommand;
 import net.atcore.command.CommandUtils;
 import net.atcore.messages.TypeMessages;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import java.util.List;
 
@@ -23,17 +25,15 @@ public class PruebaCommand extends BaseTabCommand {
     public void execute(CommandSender sender, String[] args) {
         sendMessage(sender, "Hola Mundo!", TypeMessages.SUCCESS);
 
-        CommandUtils.excuteForPlayer(sender, args[0], true, player -> {
-            player.player().sendMessage("Test");
-        });
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            Bukkit.getLogger().severe(player.getName());
+        }
     }
 
     @Override
     public List<String> onTab(CommandSender sender, String[] args) {
-        switch (args.length){
-            case 1 -> {
-                return CommandUtils.tabForPlayer(args[0]);
-            }
+        if (args.length == 1) {
+            return CommandUtils.tabForPlayer(args[0]);
         }
         return List.of();
     }

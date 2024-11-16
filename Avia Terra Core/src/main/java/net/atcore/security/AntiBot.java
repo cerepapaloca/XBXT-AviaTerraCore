@@ -1,7 +1,9 @@
 package net.atcore.security;
 
+import net.atcore.Config;
+import net.atcore.messages.MessagesManager;
+import net.atcore.messages.TypeMessages;
 import net.atcore.security.Login.LoginManager;
-import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
 import java.net.InetAddress;
@@ -12,36 +14,67 @@ import java.util.Objects;
 public class AntiBot {
 
     private static double discrepancy = 0;
-    private static final List<String> names = new ArrayList<>();
-    private static final List<Long> timeDelta = new ArrayList<>();
-    private static final int lastes = 3;
-    private static final int tolerance = 1000*20;
+    private static final List<String> NAMES = new ArrayList<>();
+    private static final List<Long> LIST_DELTA = new ArrayList<>();
+    private static long lastTime = System.currentTimeMillis();
+    private static String lastName = "";
+    private static final int TOLERANCE = 50;
+    private static final long laste = 3;
 
-    public static boolean checkBot(InetAddress ip, @NotNull String name){
-        discrepancy /= lastes;// hasta que Net no arregle lo de la ip no implementar el sistema para la ip
+    public static boolean checkBot(InetAddress ip, @NotNull String name){// hasta que Net no arregle lo de la ip no implementar el sistema para la ip
+        if (!Config.isAntiBot()) return false;
+        if (lastName.equals(name)) return false;
+        lastName = name;
+        //Bukkit.getLogger().warning("A | " +  discrepancy);
+        double oldDiscrepancy = discrepancy;
         if (LoginManager.isNewPlayer(name)){
             discrepancy *= 1.2;
         }else {
             discrepancy *= 0.9;
         }
-        long delta = System.currentTimeMillis();
-        for (int i = 0; i < Math.min(lastes, names.size()); i++){
-            if (Objects.equals(names.get(i), name)){
-                return false;
-            }
-            discrepancy += calcularSimilitud(names.get(i), name);
-            if (i >= 1){
-                delta = timeDelta.get(i) - timeDelta.get(i - 1);
-                discrepancy += (tolerance - delta)*0.001;
-            }
+        long newDelta = (System.currentTimeMillis() - lastTime);
+        lastTime = System.currentTimeMillis();
+        LIST_DELTA.addLast(newDelta);
+        NAMES.addLast(name);
+
+        double result = 0;
+        for (int i = 0; i < Math.min(laste, LIST_DELTA.size()); i++){
+            if (LIST_DELTA.size() > 1)
+                if (i > 0) {
+                    double result1 = (TOLERANCE - (Math.abs(LIST_DELTA.get(i - 1) - LIST_DELTA.get(i)))) * 0.05;
+                    result1 = Math.max(result1, -0.5);
+                    //Bukkit.getLogger().warning("BA | " + result1 + " | " + LIST_DELTA.get(i - 1) + " = " + LIST_DELTA.get(i));
+                    result += result1;
+                    result += calcularSimilitud(NAMES.get(i - 1), name) - 0.2;
+                    //Bukkit.getLogger().warning(NAMES + " | " + name  + " = " + NAMES.get(i - 1));
+                    //Bukkit.getLogger().warning("BB | " + result + " | " + (calcularSimilitud(NAMES.get(i - 1), name) - 0.2)*0.8);
+                    result = Math.min(result, 1.5*(laste - 1));
+                    result = Math.max(result, -0.8*(laste - 1));
+                    result += (1 - Math.abs(NAMES.get(i).length() - name.length())) * 0.3;
+                    //Bukkit.getLogger().warning("BC | " + result + " | " + (2 - Math.abs(NAMES.get(i - 1).length() - name.length())) * 0.2);
+                    result = Math.min(result, 1.5*(laste - 1));
+                    result = Math.max(result, -0.8*(laste - 1));
+
+                }
         }
-        Bukkit.getLogger().warning("nivel de discrepancia" +  discrepancy + " | " + ((tolerance - delta)*0.001) + " | " + delta);
-        names.addFirst(name);
-        timeDelta.addFirst(System.currentTimeMillis());
-        if (timeDelta.size() > lastes){
-            timeDelta.removeLast();
-            names.removeLast();
+        discrepancy += (result/(laste - 1));
+        discrepancy = Math.min(discrepancy, 1.5);
+        discrepancy = Math.max(discrepancy, -0.5);
+        /*Bukkit.getLogger().warning("C | " + discrepancy + " | " + (result/(laste - 1)));
+        Bukkit.getLogger().warning("D | " + LIST_DELTA);*/
+        if (NAMES.size() >= laste){
+            NAMES.removeFirst();
+            LIST_DELTA.removeFirst();
+
         }
+
+
+        /*if (discrepancy > 1){
+            Bukkit.getLogger().warning("**BLOCK**");
+        }else {
+            Bukkit.getLogger().warning("**PASS**");
+        }*/
+        MessagesManager.sendMessageConsole(String.format("AntiBot <|%s|> -> <|%s|>", Math.round(oldDiscrepancy*100)+"%", Math.round(discrepancy*100))+"%", TypeMessages.INFO);
         return discrepancy > 1;
     }
 

@@ -30,7 +30,7 @@ public abstract class BaseCommand {
                        @NotNull ModeAutoTab modeAutoTab) {
         this.name = name;
         this.usage = usage;
-        this.permissions = permissions.equals("*") ? "*" : AviaTerraCore.getInstance().getName().toLowerCase() + ".command." + name + "," + permissions;
+        this.permissions = permissions.equals("*") || permissions.equals("**") ? permissions : AviaTerraCore.getInstance().getName().toLowerCase() + ".command." + name.toLowerCase() + "," + permissions;
         this.description = description == null || description.isEmpty() ? "&oSin Descripción" : description;
         this.modeAutoTab = modeAutoTab;
     }

@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import net.atcore.security.AntiExploit;
+import net.atcore.security.Login.LoginManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
@@ -41,7 +42,11 @@ public final class CommandHandler implements TabExecutor {
                         command.execute(sender, args);
                         return true;
                     }else{
-                        sendMessage(sender, "No tienes Permisos", TypeMessages.ERROR);
+                        if (LoginManager.checkLoginIn(player, true)){
+                            sendMessage(sender, "No tienes Permisos", TypeMessages.ERROR);
+                        }else {
+                            sendMessage(player,"Primero inicia sessión usando /login", TypeMessages.ERROR);
+                        }
                     }
                 }else {
                     command.execute(sender, args);
