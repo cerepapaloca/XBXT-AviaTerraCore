@@ -4,7 +4,9 @@ import net.atcore.command.BaseTabCommand;
 import net.atcore.command.CommandUtils;
 import net.atcore.messages.TypeMessages;
 import net.atcore.moderation.Ban.ContextBan;
+import net.atcore.moderation.Ban.action.Global;
 import net.atcore.moderation.ModerationSection;
+import net.atcore.utils.GlobalUtils;
 import org.bukkit.command.CommandSender;
 
 import java.util.List;
@@ -52,7 +54,7 @@ public class BanCommand extends BaseTabCommand {
                         if (player1.player() != null) {
                             ModerationSection.getBanManager().banPlayer(player1.player(), finalReason, time, contextBan, sender.getName());
                         }else {
-                            ModerationSection.getBanManager().banPlayer(player1.name(), null, null, finalReason, time, contextBan, sender.getName());
+                            ModerationSection.getBanManager().banPlayer(player1.name(), GlobalUtils.getUUIDByName(player1.name()), null, finalReason, time, contextBan, sender.getName());
                         }
                     }catch (Exception ignored) {
                         sendMessage(sender, "Hubo un problema con las base de datos vuelva a ejecutar el comando", TypeMessages.ERROR);

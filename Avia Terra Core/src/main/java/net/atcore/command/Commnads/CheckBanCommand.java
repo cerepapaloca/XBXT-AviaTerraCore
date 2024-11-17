@@ -49,7 +49,7 @@ public class CheckBanCommand extends BaseTabCommand {
                     sendMessage(sender, "No esta baneado", TypeMessages.INFO);
                     return;
                 }
-                for (DataBan dataBan : BanManager.getDataBan(args[0])){
+                for (DataBan dataBan : BanManager.getDataBan(args[0]).values()) {
                     sendDataBan(sender, dataBan);
                 }
             }else {
@@ -74,7 +74,7 @@ public class CheckBanCommand extends BaseTabCommand {
                                     sendMessage(sender, "No esta baneado", TypeMessages.INFO);
                                     return;
                                 }
-                                for (DataBan dataBan : BanManager.getDataBan(player.getName())){
+                                for (DataBan dataBan : BanManager.getDataBan(player.getName()).values()){
                                     sendDataBan(sender, dataBan);
                                 }
                             }

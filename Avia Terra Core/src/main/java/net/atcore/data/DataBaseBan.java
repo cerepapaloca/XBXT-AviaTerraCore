@@ -9,6 +9,7 @@ import net.atcore.moderation.Ban.DataBan;
 import net.atcore.moderation.Ban.SearchBanBy;
 import net.atcore.utils.GlobalConstantes;
 import net.atcore.utils.GlobalUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -22,15 +23,15 @@ import static net.atcore.messages.MessagesManager.sendMessageConsole;
 
 public class DataBaseBan extends DataBaseMySql {
 
-    protected static final HashMap<String, HashSet<DataBan>> listDataBanByNAME = new HashMap<>();
-    protected static final HashMap<InetAddress, HashSet<DataBan>> listDataBanByIP = new HashMap<>();
+    protected static final HashMap<String, HashMap<ContextBan, DataBan>> listDataBanByNAME = new HashMap<>();
+    protected static final HashMap<InetAddress, HashMap<ContextBan, DataBan>> listDataBanByIP = new HashMap<>();
 
 
-    public static HashSet<DataBan> getDataBan(String name) {
+    public static HashMap<ContextBan, DataBan> getDataBan(String name) {
         return listDataBanByNAME.get(name);
     }
 
-    public static HashSet<DataBan> getDataBan(InetAddress ip) {
+    public static HashMap<ContextBan, DataBan> getDataBan(InetAddress ip) {
         return listDataBanByIP.get(ip);
     }
 
@@ -114,20 +115,20 @@ public class DataBaseBan extends DataBaseMySql {
         if (ip != null) ipAddress = InetAddress.getByName(ip.split("/")[0]);
         DataBan dataBan = new DataBan(name, uuid, ipAddress, reason, dateUnban, dateBan, ContextBan.valueOf(context), author);
 
-        HashSet <DataBan> listUUID = listDataBanByNAME.getOrDefault(name,  new HashSet<>());//busca si hay una lista de DataBan si no hay crea una
-        listUUID.add(dataBan);//Añade el DataBan a la lista
+        HashMap<ContextBan, DataBan> listUUID = listDataBanByNAME.getOrDefault(name,  new HashMap<>());//busca si hay una lista de DataBan si no hay crea una
+        listUUID.put(ContextBan.valueOf(context), dataBan);//Añade el DataBan a la lista
         listDataBanByNAME.put(name, listUUID);//Añade la lista de DataBan Remplazando el dato
 
         if (ipAddress == null) return;
 
-        HashSet <DataBan> listIP = listDataBanByIP.getOrDefault(ipAddress,  new HashSet<>());
-        listIP.add(dataBan);
+        HashMap<ContextBan, DataBan> listIP = listDataBanByIP.getOrDefault(ipAddress,  new HashMap<>());
+        listIP.put(ContextBan.valueOf(context), dataBan);
         listDataBanByIP.put(ipAddress, listIP);
 
     }
 
     protected static @NotNull HashSet<DataBan> getDataBan(@NotNull Player player, InetAddress address, SearchBanBy searchBanBy) throws SQLException {
-        HashSet<DataBan> banList = new HashSet<>();
+
         PreparedStatement statement = null;
         Connection connection = getConnection();
         ResultSet resultSet;
@@ -142,8 +143,9 @@ public class DataBaseBan extends DataBaseMySql {
                 statement.setString(1, player.getName());
             }
         }
-
+        HashSet<DataBan> banList = new HashSet<>();
         try {
+
             resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 banList.add(new DataBan(

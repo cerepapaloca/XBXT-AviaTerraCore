@@ -7,6 +7,7 @@ import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import net.atcore.moderation.Ban.CheckBan;
+import net.atcore.moderation.Ban.ContextBan;
 import net.atcore.security.AntiTwoPlayer;
 import net.atcore.security.Login.DataLimbo;
 import net.atcore.security.Login.DataLogin;
@@ -23,6 +24,7 @@ import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import javax.mail.Message;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -71,7 +73,7 @@ public class JoinAndQuitListener implements Listener {
     public void onLogin(PlayerLoginEvent event) {
         AviaTerraPlayer.addPlayer(event.getPlayer());
         ServiceSection.getSimulateOnlineMode().applySkin(event.getPlayer());
-        CheckBan.onLogin(event);
+        ContextBan.GLOBAL.onContext(event.getPlayer(), event);
     }
 
     @EventHandler

@@ -9,7 +9,7 @@ public enum TypeMessages {
     INFO('3', "b"),
     WARNING('e', "6"),
     ERROR('c',"4"),
-    KICK('4',"4l"),
+    KICK('c',"4l"),
     NULL('7',"8");
 
     TypeMessages(char mainColor, String secondColor){

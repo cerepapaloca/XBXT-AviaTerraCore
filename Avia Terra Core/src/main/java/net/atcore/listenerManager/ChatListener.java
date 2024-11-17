@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import net.atcore.messages.TypeMessages;
 import net.atcore.moderation.Ban.CheckBan;
+import net.atcore.moderation.Ban.ContextBan;
 import net.atcore.moderation.ChatModeration;
 import net.atcore.security.Login.LoginManager;
 import net.luckperms.api.LuckPerms;
@@ -51,7 +52,7 @@ public class ChatListener implements Listener {
                 throw new RuntimeException(e);
             }
 
-            if (CheckBan.checkChat(player)){//está baneado?
+            if (ContextBan.CHAT.onContext(player, event)){//está baneado?
                 event.setCancelled(true);
                 return;
             }
