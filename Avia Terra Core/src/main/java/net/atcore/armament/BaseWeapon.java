@@ -75,7 +75,7 @@ public abstract class BaseWeapon extends BaseArmament implements ShootWeapon{
         onShoot(dataShoot);
         if (dataShoot.isCancelled()) return dataShoot;
         if (f < ammo.getPenetration() && livingEntity != null) {
-            livingEntity.damage(dataShoot.getDamage(), player);//se aplica el daño// TODO Esto consume mucho pero como le hago daño?
+            livingEntity.damage(dataShoot.getDamage(), player);
             livingEntity.getWorld().playSound(livingEntity.getLocation(), Sound.ITEM_TRIDENT_HIT, SoundCategory.PLAYERS, 1 ,1);
             b = true;
         }

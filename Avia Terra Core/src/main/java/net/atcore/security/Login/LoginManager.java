@@ -4,7 +4,6 @@ import com.github.games647.craftapi.model.Profile;
 import com.github.games647.craftapi.resolver.MojangResolver;
 import com.github.games647.craftapi.resolver.RateLimitException;
 import lombok.Getter;
-import lombok.experimental.UtilityClass;
 import net.atcore.AviaTerraCore;
 import net.atcore.Config;
 import net.atcore.data.DataBaseRegister;
@@ -62,6 +61,10 @@ public final class LoginManager {
 
     public static void clearDataLogin() {
         listDataLogin.clear();
+    }
+
+    public static void removeDataLogin(String name) {
+        listDataLogin.remove(GlobalUtils.getUUIDByName(name));
     }
 
     public static HashSet<DataLogin> getDataLogin() {
@@ -177,7 +180,7 @@ public final class LoginManager {
      * @return verdadero cuando esta logueado, falso cuando no lo está
      */
 
-    public static boolean checkLoginIn(Player player, boolean ignoreTime){//nota tengo que optimizar esto
+    public static boolean checkLoginIn(Player player, boolean ignoreTime){
         DataLogin dataLogin = getDataLogin(player);
         if (dataLogin == null){
             if (Bukkit.isPrimaryThread()){
@@ -226,7 +229,7 @@ public final class LoginManager {
         return false;
     }
 
-    public static void checkJoin(@NotNull Player player){
+    public static void checkJoin(@NotNull Player player){//TODO pasar esto al evento de Login
         DataLogin dataLogin = getDataLogin(player);
         if (dataLogin != null) {
             dataLogin.setLimbo(new DataLimbo(player));
@@ -235,17 +238,16 @@ public final class LoginManager {
                 if (Config.getServerMode().equals(ServerMode.OFFLINE_MODE) || dataRegister.getStateLogins() == StateLogins.CRACKED){
                     if (dataRegister.getPasswordShaded() != null) {//tiene contraseña o no
                         if (checkLoginIn(player, false)) {//si tiene una session valida o no
-                            dataLogin.setLimbo(null);
+                            dataLogin.setLimbo(null);//
                         }else {
                             player.getInventory().clear();
                             player.teleport(new Location(player.getWorld(),0,100,0));
-                            startMessage(player, "login porfa. <|/login <Contraseña>|>");
+                            startMessage(player, "Para Loguear utiliza el siguiente comando:\n <|/login <Contraseña>|>");
                             startTimeOut(player, "Tardaste mucho en iniciar sesión");
                         }
                     }else{
                         startTimeOut(player, "Tardaste mucho en registrarte");
-                        startMessage(player, "registrate porfa. <|/register <Contraseña> <Contraseña>|> &oNota de Ceres:" +
-                                " esto algo que esta en desarrollo ponga cualquier contraseña como su nombre de usuario");
+                        startMessage(player, "Para registrarte utiliza el siguiente comando:\n <|/register <Contraseña> <Contraseña>|>.");
                     }
                 }
             }else{
@@ -284,7 +286,7 @@ public final class LoginManager {
                 if (checkLoginIn(player, true)) return;
                 GlobalUtils.kickPlayer(player, reason);
             }
-        }.runTaskLater(AviaTerraCore.getInstance(), 20*30);
+        }.runTaskLater(AviaTerraCore.getInstance(), 20*60);
     }
 
     public static void startMessage(Player player, String message){

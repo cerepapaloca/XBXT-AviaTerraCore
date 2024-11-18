@@ -53,7 +53,7 @@ public class Config {
      * OnlineMode si no esto último no aplica
      */
 
-    @Getter @Setter private static long expirationSession = 1000*20;
+    @Getter @Setter private static long expirationSession = 1000;
 
     /**
      * Índica la cantidad de punto de chat genera un jugador en un tick
@@ -64,6 +64,6 @@ public class Config {
 
     @Getter @Setter private static float levelModerationChat = 1;
 
-    @Getter @Setter private static boolean antiBot = true;
+    @Getter @Setter private static boolean antiBot = false;
 
 }

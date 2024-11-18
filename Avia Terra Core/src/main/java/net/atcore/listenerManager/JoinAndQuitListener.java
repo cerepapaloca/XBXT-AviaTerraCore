@@ -48,9 +48,11 @@ public class JoinAndQuitListener implements Listener {
             player.setGameMode(limbo.getGameMode());
         }
 
-        if (LoginManager.getDataLogin(player.getUniqueId()).getRegister().isTemporary()){
-            AviaTerraCore.getInstance().enqueueTaskAsynchronously(() ->
-                    DataBaseRegister.removeRegister(player.getName(), "Servidor"));//borra a los jugadores no premium que no pudieron registrarse
+        if (LoginManager.getDataLogin(player) != null) {//si le llega a borrar el registro
+            if (LoginManager.getDataLogin(player.getUniqueId()).getRegister().isTemporary()){
+                AviaTerraCore.getInstance().enqueueTaskAsynchronously(() ->
+                        DataBaseRegister.removeRegister(player.getName(), "Servidor"));//borra a los jugadores no premium que no pudieron registrarse
+            }
         }
 
         List<UUID> UUIDPlayers = List.copyOf(AviaTerraPlayer.getPlayer(player).getManipulatorInventoryPlayer());

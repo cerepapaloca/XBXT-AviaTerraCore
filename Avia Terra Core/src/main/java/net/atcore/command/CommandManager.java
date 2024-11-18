@@ -14,7 +14,7 @@ public class CommandManager {//nose si poner en esta clase aquí la verdad
     public static final HashMap<String, String> COMMANDS = new HashMap<>();
 
     static {
-
+        //TODO añadir loas comandos para los builders
     }
 
     public static boolean checkCommand(String command, Player player, boolean isSilent){

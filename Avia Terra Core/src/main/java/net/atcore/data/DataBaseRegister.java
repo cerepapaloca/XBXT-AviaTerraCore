@@ -15,6 +15,7 @@ import java.sql.*;
 import java.util.HashMap;
 import java.util.UUID;
 
+import static net.atcore.command.Commnads.RemoveRegisterCommand.names;
 import static net.atcore.messages.MessagesManager.sendMessageConsole;
 
 public class DataBaseRegister extends DataBaseMySql {
@@ -74,6 +75,7 @@ public class DataBaseRegister extends DataBaseMySql {
         } catch (SQLException | UnknownHostException e) {
             throw new RuntimeException(e);
         }
+        LoginManager.getDataLogin().forEach(login -> names.add(login.getRegister().getUsername()));
 
         if (!AviaTerraCore.isStarting()) sendMessageConsole("Registros Recargado", TypeMessages.SUCCESS);
     }

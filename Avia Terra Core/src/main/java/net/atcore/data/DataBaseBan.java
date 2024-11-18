@@ -67,9 +67,6 @@ public class DataBaseBan extends DataBaseMySql {
 
     @Override
     protected void createTable() {
-        String checkTableSQL = "SELECT COUNT(*) FROM information_schema.tables " +
-                "WHERE table_schema = ? AND table_name = ?";
-
         try (Connection connection = getConnection()) {//revisa si la tabla existe
             DatabaseMetaData dbMetaData = connection.getMetaData();
             try (ResultSet resultSet = dbMetaData.getTables(null, null, "bans", null)) {
