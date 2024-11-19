@@ -37,7 +37,7 @@ public class RegisterCommand extends BaseCommand {
                             LoginManager.newRegisterCracked(player.getName(), player.getAddress().getAddress(),  args[0]);
                             MessagesManager.sendTitle(player, "Bienvenido A AviaTerra", "<|&0" + player.getDisplayName() + "|>", 20, 20*3, 40, TypeMessages.INFO);
                             startPlaySessionCracked(player).getRegister().setTemporary(false);;
-                            LoginManager.checkLoginIn(player, true);
+                            LoginManager.checkLoginIn(player);
                         }else{
                             sendMessage(player, "las contraseña no son iguales", TypeMessages.ERROR);
                         }

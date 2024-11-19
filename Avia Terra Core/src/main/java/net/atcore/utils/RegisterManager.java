@@ -5,6 +5,7 @@ import net.atcore.command.CommandManager;
 import net.atcore.command.CommandSection;
 import net.atcore.data.DataBaseMySql;
 import net.atcore.data.DataSection;
+import net.atcore.data.FileYaml;
 import net.atcore.messages.TypeMessages;
 import net.atcore.Section;
 import org.bukkit.Bukkit;
@@ -52,9 +53,9 @@ public class RegisterManager {
         if (pluginCommand == null) {
             throw new CommandException(command.getName() + " El comando no existe. tiene que añadirlo en plugin.yml");
         }
-        CommandManager.COMMANDS.put(command.getName().toLowerCase(), command.getPermissions());
+        CommandManager.COMMANDS_AVIA_TERRA.put(command.getName().toLowerCase(), command.getPermissions());
         for (String s : pluginCommand.getAliases()){
-            CommandManager.COMMANDS.put(s.toLowerCase(), command.getPermissions());
+            CommandManager.COMMANDS_AVIA_TERRA.put(s.toLowerCase(), command.getPermissions());
         }
         if (!command.getPermissions().equals("*")){
             Permission permission = new Permission(AviaTerraCore.getInstance().getName().toLowerCase() + ".command." + command.getName());
@@ -66,6 +67,10 @@ public class RegisterManager {
 
     public static void register(@NotNull DataBaseMySql database) {
         DataSection.getDataBases().add(database);
+    }
+
+    public static void register(@NotNull FileYaml database) {
+        DataSection.getFileYaml().add(database);
     }
 
 }

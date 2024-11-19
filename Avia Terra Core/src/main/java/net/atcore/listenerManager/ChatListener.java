@@ -3,7 +3,6 @@ package net.atcore.listenerManager;
 import lombok.Getter;
 import lombok.Setter;
 import net.atcore.messages.TypeMessages;
-import net.atcore.moderation.Ban.CheckBan;
 import net.atcore.moderation.Ban.ContextBan;
 import net.atcore.moderation.ChatModeration;
 import net.atcore.security.Login.LoginManager;
@@ -34,7 +33,7 @@ public class ChatListener implements Listener {
         String message = event.getMessage();
 
 
-        if (!LoginManager.checkLoginIn(player, true)) {
+        if (!LoginManager.checkLoginIn(player)) {
             sendMessage(player, "Te tienes que loguear para escribir en el chat", TypeMessages.ERROR);
             event.setCancelled(true);
             return;

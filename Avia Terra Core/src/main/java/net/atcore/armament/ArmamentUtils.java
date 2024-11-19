@@ -41,7 +41,7 @@ public class ArmamentUtils {
                 return null;
             }
         }else {
-            return getCharger(itemStack);
+            return getMagazine(itemStack);
         }
     }
 
@@ -63,31 +63,31 @@ public class ArmamentUtils {
         return list.getAmmo();
     }
 
-    public BaseCharger getCharger(@NotNull Player player){
-        return getCharger(player.getInventory().getItemInMainHand());
+    public BaseMagazine getMagazine(@NotNull Player player){
+        return getMagazine(player.getInventory().getItemInMainHand());
     }
 
     /**
-     * Obtienes la clase {@link BaseCharger} si es un arma si no regresa
+     * Obtienes la clase {@link BaseMagazine} si es un arma si no regresa
      * nulo en caso de que no
      */
 
-    public BaseCharger getCharger(@NotNull ItemStack item) {
+    public BaseMagazine getMagazine(@NotNull ItemStack item) {
         if (item.getItemMeta() == null) return null;
-        String chargeName = (String) GlobalUtils.getPersistenData(item, "chargerName", PersistentDataType.STRING);
+        String chargeName = (String) GlobalUtils.getPersistenData(item, "magazineName", PersistentDataType.STRING);
         if (chargeName == null) return null;
-        return getCharger(chargeName);
+        return getMagazine(chargeName);
     }
 
     @Nullable
-    public BaseCharger getCharger(@Nullable String s){
-        ListCharger list;
+    public BaseMagazine getMagazine(@Nullable String s){
+        ListMagazine list;
         try{
-            list = ListCharger.valueOf(s);
+            list = ListMagazine.valueOf(s);
         }catch (Exception e){
             return null;
         }
-        return list.getCharger();
+        return list.getMagazine();
     }
 
     public BaseWeapon getWeapon(@NotNull Player player){

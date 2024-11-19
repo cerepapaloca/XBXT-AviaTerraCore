@@ -20,7 +20,7 @@ import static net.atcore.messages.MessagesManager.sendMessageConsole;
 
 public class DataBaseRegister extends DataBaseMySql {
     @Override
-    protected void reloadDatabase() {
+    public void reloadDatabase() {
         String sql = "SELECT name, uuidPremium, uuidCracked, ipRegister, ipLogin, isPremium, password, lastLoginDate, registerDate, gmail, discord FROM register";
         HashMap<UUID, DataSession> sessions = new HashMap<>();
         LoginManager.getDataLogin().forEach(dataLogin -> sessions.put(dataLogin.getRegister().getUuidCracked(),dataLogin.getSession()));//rescata las sesiones
@@ -67,7 +67,7 @@ public class DataBaseRegister extends DataBaseMySql {
                 session.setStartTimeLogin(lastLoginDate);
                 dataLogin.setSession(session);//añade la sesión rescatada
 
-                if (!LoginManager.checkLoginIn(player, true)){//revisa si son validas las sesiones
+                if (!LoginManager.checkLoginIn(player)){//revisa si son validas las sesiones
                     Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> GlobalUtils.kickPlayer(player, "Hay una discrepancia es tu session, vuelve a iniciar sessión"));
                 }
             }

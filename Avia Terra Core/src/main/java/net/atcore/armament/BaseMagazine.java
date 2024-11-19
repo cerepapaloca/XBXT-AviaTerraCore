@@ -3,7 +3,6 @@ package net.atcore.armament;
 import lombok.Getter;
 import lombok.Setter;
 import net.atcore.AviaTerraCore;
-import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import net.atcore.utils.GlobalUtils;
@@ -23,10 +22,10 @@ import java.util.*;
 
 @Getter
 @Setter
-public abstract class BaseCharger extends BaseArmament implements Compartment {
+public abstract class BaseMagazine extends BaseArmament implements Compartment {
 
-    public BaseCharger(List<ListAmmo> compatibleCaliber, List<ListAmmo> defaultCaliber, int ammoMax, String displayName, int reloadTime) {
-        super(displayName, new ItemStack(Material.SUGAR), "charger");
+    public BaseMagazine(List<ListAmmo> compatibleCaliber, List<ListAmmo> defaultCaliber, int ammoMax, String displayName, int reloadTime) {
+        super(displayName, new ItemStack(Material.SUGAR), "magazine");
         this.displayName = displayName;
         this.DefaultammonList = listAmmoFill(defaultCaliber);
         this.compatibleAmmonList = listAmmoToBaseAmmo(compatibleCaliber);
@@ -34,7 +33,7 @@ public abstract class BaseCharger extends BaseArmament implements Compartment {
         this.reloadTime = reloadTime;
         List<String> listAmmoName = new ArrayList<>();
         for (BaseAmmo ammo : listAmmoFill(defaultCaliber)) listAmmoName.add(ammo.getName());
-        GlobalUtils.setPersistentDataItem(itemArmament, "chargerAmmo", PersistentDataType.STRING, ArmamentUtils.listToString(listAmmoName));
+        GlobalUtils.setPersistentDataItem(itemArmament, "magazineAmmo", PersistentDataType.STRING, ArmamentUtils.listToString(listAmmoName));
         getProperties(itemArmament, true);
     }
 
@@ -48,7 +47,7 @@ public abstract class BaseCharger extends BaseArmament implements Compartment {
     public String getProperties(ItemStack item, boolean setLore){
         ItemMeta meta = item.getItemMeta();
         if (meta == null) return "?";
-        String stringAmmo = (String) GlobalUtils.getPersistenData(item, "chargerAmmo", PersistentDataType.STRING);
+        String stringAmmo = (String) GlobalUtils.getPersistenData(item, "magazineAmmo", PersistentDataType.STRING);
         List<BaseAmmo> AmmoBaseList = new ArrayList<>();
         if (stringAmmo != null) {
             for (String ammoName : ArmamentUtils.stringToList(stringAmmo)) AmmoBaseList.add(ArmamentUtils.getAmmo(ammoName));
@@ -108,7 +107,7 @@ public abstract class BaseCharger extends BaseArmament implements Compartment {
                 public void run() {
                     ItemStack charger = player.getInventory().getItemInMainHand();
                     if (charger.getItemMeta() != null){
-                        String ammoNameList = (String) GlobalUtils.getPersistenData(charger, "chargerAmmo", PersistentDataType.STRING);
+                        String ammoNameList = (String) GlobalUtils.getPersistenData(charger, "magazineAmmo", PersistentDataType.STRING);
                         if (ammoNameList != null) {
                             if (ArmamentUtils.stringToList(ammoNameList).size() < ammoMax) {
                                 onReload(player);
@@ -147,12 +146,12 @@ public abstract class BaseCharger extends BaseArmament implements Compartment {
                 BaseAmmo baseAmmo = ArmamentUtils.getAmmo(ammoName);
                 if (baseAmmo == null) continue;
                 if (!compatibleAmmonList.contains(baseAmmo)) continue;
-                String ammoNameList = (String) GlobalUtils.getPersistenData(ItemCharger, "chargerAmmo", PersistentDataType.STRING);
+                String ammoNameList = (String) GlobalUtils.getPersistenData(ItemCharger, "magazineAmmo", PersistentDataType.STRING);
                 if (ammoNameList == null) continue;
                 List<String> ammoList = ArmamentUtils.stringToList(ammoNameList);
                 ammoList.add(baseAmmo.getName());
                 ItemAmmo.setAmount(ItemAmmo.getAmount() - 1);
-                GlobalUtils.setPersistentDataItem(ItemCharger, "chargerAmmo", PersistentDataType.STRING, ArmamentUtils.listToString(ammoList));
+                GlobalUtils.setPersistentDataItem(ItemCharger, "magazineAmmo", PersistentDataType.STRING, ArmamentUtils.listToString(ammoList));
                 getProperties(ItemCharger, true);
                 return;
             }
@@ -172,19 +171,19 @@ public abstract class BaseCharger extends BaseArmament implements Compartment {
     @Override
     public boolean outCompartment(Player player, ItemStack ItemCharger){
         if (ItemCharger != null && itemArmament.getItemMeta() != null){
-            BaseCharger baseCharger = ArmamentUtils.getCharger(ItemCharger);
-            if (baseCharger != null) {
-                String ammonName = (String) GlobalUtils.getPersistenData(ItemCharger, "chargerName", PersistentDataType.STRING);
+            BaseMagazine baseMagazine = ArmamentUtils.getMagazine(ItemCharger);
+            if (baseMagazine != null) {
+                String ammonName = (String) GlobalUtils.getPersistenData(ItemCharger, "magazineName", PersistentDataType.STRING);
                 if (ammonName != null) {
-                    String stringAmmo = (String) GlobalUtils.getPersistenData(ItemCharger, "chargerAmmo", PersistentDataType.STRING);
-                    GlobalUtils.setPersistentDataItem(ItemCharger, "chargerAmmo", PersistentDataType.STRING, "");
+                    String stringAmmo = (String) GlobalUtils.getPersistenData(ItemCharger, "magazineAmmo", PersistentDataType.STRING);
+                    GlobalUtils.setPersistentDataItem(ItemCharger, "magazineAmmo", PersistentDataType.STRING, "");
                     if (stringAmmo == null)return false;
                     for (String name : ArmamentUtils.stringToList(stringAmmo)){
                         BaseAmmo baseAmmo = ArmamentUtils.getAmmo(name);
                         if (baseAmmo == null) continue;
                         GlobalUtils.addItemPlayer(baseAmmo.getItemArmament(), player, true, false);
                     }
-                    baseCharger.getProperties(ItemCharger, true);
+                    baseMagazine.getProperties(ItemCharger, true);
                     return true;
                 }
             }

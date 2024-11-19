@@ -35,7 +35,7 @@ public class LinkCommand extends BaseTabCommand {
             switch (args[0].toLowerCase()) {
                 case "gmail" -> {
                     if (args.length >= 2) {
-                        if (LoginManager.checkLoginIn(player, true)){
+                        if (LoginManager.checkLoginIn(player)){
                             if (args[1].contains("@")){
                                 CodeAuth codeAuth = new CodeAuth(UUID.randomUUID(), System.currentTimeMillis()+(1000*60*2), uuid, args[1].toLowerCase());
                                 TwoFactorAuth.getCodes().put(uuid, codeAuth);
@@ -77,7 +77,7 @@ public class LinkCommand extends BaseTabCommand {
                 }
                 case "discord" -> {
                     if (args.length >= 2) {
-                        if (LoginManager.checkLoginIn(player, true)){
+                        if (LoginManager.checkLoginIn(player)){
                             if (args[1].length() == 18){
                                 CodeAuth codeAuth = new CodeAuth(UUID.randomUUID(), System.currentTimeMillis()+(1000*60*2), uuid, args[1].toLowerCase());
                                 TwoFactorAuth.getCodes().put(uuid, codeAuth);

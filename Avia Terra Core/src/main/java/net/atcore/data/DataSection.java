@@ -12,14 +12,16 @@ import static net.atcore.utils.RegisterManager.register;
 public class DataSection implements Section {
 
     @Getter private final static HashSet<DataBaseMySql> dataBases = new HashSet<>();
+    @Getter private final static HashSet<FileYaml> fileYaml = new HashSet<>();
     @Getter private static DataBaseMySql mySQLConnection;
 
     @Override
     public void enable() {
         register(mySQLConnection = new DataBaseBan());
         register(new DataBaseRegister());
-        new FilePermission();
+        register(new FilePermission());
         for (DataBaseMySql db : dataBases) db.createTable();
+        for (FileYaml fileYaml : fileYaml) fileYaml.loadData();
     }
 
     @Override
@@ -31,8 +33,9 @@ public class DataSection implements Section {
 
     @Override
     public void reloadConfig() {
-        Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(), () -> {
+        AviaTerraCore.getInstance().enqueueTaskAsynchronously(() -> {
             for (DataBaseMySql dataBaseMySql : dataBases) dataBaseMySql.reloadDatabase();
+            for (FileYaml filePermission : fileYaml) filePermission.reloadConfig();
         });
     }
 

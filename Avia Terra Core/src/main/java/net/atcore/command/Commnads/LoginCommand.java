@@ -40,7 +40,7 @@ public class LoginCommand extends BaseCommand {
                 if (dataLogin.getRegister().getPasswordShaded() != null) {
                     if (isUUID(args[0])){
                         if (TwoFactorAuth.checkCode(player, args[0])) {
-                            if (LoginManager.checkLoginIn(player, true)) {
+                            if (LoginManager.checkLoginIn(player)) {
                                 sendMessage(player, "Ya estas logueado", TypeMessages.ERROR);
                                 return;
                             }
@@ -50,7 +50,7 @@ public class LoginCommand extends BaseCommand {
                         }
                     }else {
                         if (LoginManager.isEqualPassword(player.getName(), args[0])){
-                            if (LoginManager.checkLoginIn(player, true)) {
+                            if (LoginManager.checkLoginIn(player)) {
                                 sendMessage(player, "Ya estas logueado", TypeMessages.ERROR);
                                 return;
                             }

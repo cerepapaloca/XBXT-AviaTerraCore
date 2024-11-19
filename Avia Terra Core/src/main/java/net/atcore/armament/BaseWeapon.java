@@ -25,7 +25,7 @@ public abstract class BaseWeapon extends BaseArmament implements ShootWeapon{
     protected final int maxDistance;
     protected final double precision;
 
-    protected DataShoot executeShoot(Player player, BaseAmmo ammo, BaseCharger charger) {
+    protected DataShoot executeShoot(Player player, BaseAmmo ammo, BaseMagazine charger) {
         Vector direction = player.getEyeLocation().getDirection();
         Location location = player.getEyeLocation();
         Vector directionRandom = direction.add(new Vector((Math.random() - 0.5)*precision*0.002, (Math.random() - 0.5)*precision*0.002, (Math.random() - 0.5)*precision*0.002));//añade la imprecision del arma

@@ -1,4 +1,4 @@
-package net.atcore.armament.chargers;
+package net.atcore.armament.magazines;
 
 import java.util.List;
 

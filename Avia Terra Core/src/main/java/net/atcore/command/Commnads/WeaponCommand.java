@@ -38,7 +38,7 @@ public class WeaponCommand extends BaseTabCommand {
                 BaseArmament baseArmament;
                 switch (typeArmament) {
                     case WEAPON_ULTRA_KILL, WEAPON_TARKOV -> baseArmament = ArmamentUtils.getWeapon(args[2]);
-                    case CHARGER -> baseArmament = ArmamentUtils.getCharger(args[2]);
+                    case MAGAZINE -> baseArmament = ArmamentUtils.getMagazine(args[2]);
                     case AMMO -> baseArmament = ArmamentUtils.getAmmo(args[2]);
                     default -> baseArmament = null;
                 }
@@ -85,8 +85,8 @@ public class WeaponCommand extends BaseTabCommand {
                     case WEAPON_ULTRA_KILL -> {
                         return CommandUtils.listTab(args[2] ,CommandUtils.enumsToStrings(ListWeaponUltraKill.values(), false), ModeTab.StartWith);
                     }
-                    case CHARGER -> {
-                        return CommandUtils.listTab(args[2] ,CommandUtils.enumsToStrings(ListCharger.values(), false), ModeTab.StartWith);
+                    case MAGAZINE -> {
+                        return CommandUtils.listTab(args[2] ,CommandUtils.enumsToStrings(ListMagazine.values(), false), ModeTab.StartWith);
                     }
                     case AMMO -> {
                         return CommandUtils.listTab(args[2] ,CommandUtils.enumsToStrings(ListAmmo.values(), false), ModeTab.StartWith);

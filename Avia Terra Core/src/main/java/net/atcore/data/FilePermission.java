@@ -6,21 +6,24 @@ import org.bukkit.configuration.ConfigurationSection;
 public class FilePermission extends FileYaml {
 
     public FilePermission() {
-        super("permisos", null);
+        super("comandos", null);
     }
 
     @Override
     public void loadData() {
-        ConfigurationSection section = fileConfiguration.getConfigurationSection("premisos");
+        ConfigurationSection section = fileConfiguration.getConfigurationSection("comandos");
         if (section != null) {
+            CommandManager.COMMANDS.clear();
             section.getKeys(false).forEach(key -> {
-                CommandManager.COMMANDS.put(key, section.getString(key));
+                CommandManager.COMMANDS.put(key, fileConfiguration.getString("comandos." + key));
             });
+            CommandManager.COMMANDS.putAll(CommandManager.COMMANDS_AVIA_TERRA);
         }
     }
 
     @Override
     public void saveData() {
-
+        //fileConfiguration.set("premisos", CommandManager.COMMANDS);
+        //saveConfig();
     }
 }

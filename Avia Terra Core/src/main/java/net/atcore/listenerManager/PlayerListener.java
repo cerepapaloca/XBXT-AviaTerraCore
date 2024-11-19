@@ -67,7 +67,7 @@ public class PlayerListener implements Listener {
         }else {
             MessagesManager.sendMessageConsole(String.format("<|%s|> ejecuto -> %s", player.getName(), "&9" + event.getMessage()), TypeMessages.INFO, CategoryMessages.COMMANDS, true);
         }
-        event.setCancelled(CommandManager.checkCommand(command, player, false));
+        event.setCancelled(CommandManager.checkCommand(command, player, false, true));
     }
 
     @EventHandler
@@ -75,7 +75,7 @@ public class PlayerListener implements Listener {
         List<String> commands = new ArrayList<>(event.getCommands());
         event.getCommands().clear();
         for (String command : commands){
-            if (!CommandManager.checkCommand(command, event.getPlayer(), true)){
+            if (!CommandManager.checkCommand(command, event.getPlayer(), true, false)){
                 event.getCommands().add(command);
             }
         }

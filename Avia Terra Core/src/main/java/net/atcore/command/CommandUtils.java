@@ -1,8 +1,6 @@
 package net.atcore.command;
 
 import lombok.experimental.UtilityClass;
-import net.atcore.AviaTerraCore;
-import net.atcore.command.Commnads.AviaTerraCommand;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import net.atcore.security.Login.LoginManager;
@@ -249,15 +247,16 @@ public final class CommandUtils {
      * cumpla uno de los permisos
      * @param permission Los permisos suele ser así {@code aviaterra.command.prueba}
      * @param player el jugador que le va hace el check
+     * @param limbo ¿Puede entrar en modo limbo?
      * @return verdadero sí tiene permiso
      */
 
-    public boolean hasPermission(String permission, Player player){
+    public boolean hasPermission(String permission, Player player, boolean limbo){
         //String permissionBase = AviaTerraCore.getInstance().getName().toLowerCase() + ".command." + command.toLowerCase();
         //if (player.hasPermission(permissionBase)) return true;
         //permission = permission.replace(permissionBase, "");
         if (permission.equals("!*"))return false;
-        if (LoginManager.checkLoginIn(player, true)) {
+        if (LoginManager.checkLoginIn(player, true, limbo)) {
             if (player.isOp()) return true;
             if (permission.contains("!")) permission = "!" + permission.replace("!", "");
             if (permission.equals("*") || permission.equals("**")) {
@@ -269,6 +268,7 @@ public final class CommandUtils {
             }
             boolean b = false;
             for (String s : permission.replace("!","").split(",")){
+
                 if (permission.startsWith("!")) {
                     b = b || !player.hasPermission(s);
                 } else {

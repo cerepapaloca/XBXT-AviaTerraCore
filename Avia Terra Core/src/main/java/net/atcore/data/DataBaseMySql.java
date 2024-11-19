@@ -77,7 +77,7 @@ public abstract class DataBaseMySql {
         return connection;
     }
 
-    protected abstract void reloadDatabase();
+    public abstract void reloadDatabase();
 
     protected abstract void createTable();
 

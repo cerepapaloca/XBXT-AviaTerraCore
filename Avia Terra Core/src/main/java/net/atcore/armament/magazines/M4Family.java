@@ -1,10 +1,10 @@
-package net.atcore.armament.chargers;
+package net.atcore.armament.magazines;
 
 import net.atcore.armament.*;
 
 import java.util.List;
 
-public class M4Family extends BaseCharger {
+public class M4Family extends BaseMagazine {
     public M4Family(List<ListAmmo> defaultCaliber, int ammoMax, String displayName, int reloadTime) {
         super(List.of(ListAmmo.MM45_OTAN, ListAmmo.MM45_OTAN_VERDE),
                 defaultCaliber,

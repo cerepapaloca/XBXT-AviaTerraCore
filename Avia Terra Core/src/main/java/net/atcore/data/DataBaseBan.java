@@ -36,7 +36,7 @@ public class DataBaseBan extends DataBaseMySql {
     }
 
     @Override
-    protected void reloadDatabase() {
+    public void reloadDatabase() {
         String sql = "SELECT uuid, name, ip, reason, unban_date, ban_date, context, author FROM bans";
         listDataBanByNAME.clear();
         listDataBanByIP.clear();

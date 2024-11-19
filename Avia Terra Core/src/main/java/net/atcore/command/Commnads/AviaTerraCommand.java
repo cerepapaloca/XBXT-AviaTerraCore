@@ -1,8 +1,12 @@
 package net.atcore.command.Commnads;
 
+import net.atcore.AviaTerraCore;
 import net.atcore.command.BaseTabCommand;
 import net.atcore.command.CommandUtils;
 import net.atcore.Config;
+import net.atcore.data.DataBaseMySql;
+import net.atcore.data.DataSection;
+import net.atcore.data.FileYaml;
 import net.atcore.messages.TypeMessages;
 import net.atcore.Section;
 import net.atcore.security.Login.*;
@@ -29,8 +33,24 @@ public class AviaTerraCommand extends BaseTabCommand {
     public void execute(CommandSender sender, String[] args) {
         switch (args[0].toLowerCase().replace("_","")) {
             case "reload" -> {
-                for (Section section : RegisterManager.sections){
-                    section.reloadConfig();
+                if (args.length >= 2) {
+                    switch (args[1].toLowerCase().replace("_","")) {
+                        case "yaml" -> AviaTerraCore.getInstance().enqueueTaskAsynchronously(() -> {
+
+                            for (FileYaml filePermission : DataSection.getFileYaml()) filePermission.reloadConfig();
+                            sendMessage(sender, "Archivos yaml recargado exitosamente", TypeMessages.SUCCESS);
+                        });
+                        case "sql" -> AviaTerraCore.getInstance().enqueueTaskAsynchronously(() -> {
+                            sendMessage(sender, "Comenzando con la recarga de las bases de datos...", TypeMessages.INFO);
+                            for (DataBaseMySql dataBaseMySql : DataSection.getDataBases()) dataBaseMySql.reloadDatabase();
+                            sendMessage(sender, "Base de datos sql recargado exitosamente", TypeMessages.SUCCESS);
+                        });
+                    }
+
+                }else{
+                    for (Section section : RegisterManager.sections){
+                        section.reloadConfig();
+                    }
                 }
             }
             case "antiop" -> {
@@ -193,6 +213,9 @@ public class AviaTerraCommand extends BaseTabCommand {
                 }
                 case "levelmoderationchat" -> {
                     return List.of("#.#");
+                }
+                case "reload" -> {
+                    return CommandUtils.listTab(args[1], new String[]{"yaml", "sql"});
                 }
             }
         }

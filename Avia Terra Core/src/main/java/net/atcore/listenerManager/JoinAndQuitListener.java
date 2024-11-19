@@ -16,6 +16,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -34,13 +35,13 @@ public class JoinAndQuitListener implements Listener {
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
+        DataLogin login = LoginManager.getDataLogin(player);
         if (LoginManager.isLimboMode(player)) {//Esto es para que los jugadores no logueados
-            DataLogin login = LoginManager.getDataLogin(player);
-            if (login == null)return;
             DataLimbo limbo = login.getLimbo();
             limbo.restorePlayer(player);//hace que el servidor guarde los datos del jugador como si tuviera logueado
             login.setLimbo(null);
         }
+
         if (LoginManager.getDataLogin(player) != null) {//si le llega a borrar el registro
             if (LoginManager.getDataLogin(player.getUniqueId()).getRegister().isTemporary()){
                 AviaTerraCore.getInstance().enqueueTaskAsynchronously(() ->
@@ -55,9 +56,9 @@ public class JoinAndQuitListener implements Listener {
         MessagesManager.sendMessageConsole(String.format("El jugador <|%s|> se a desconecto", event.getPlayer().getName()), TypeMessages.INFO, CategoryMessages.LOGIN);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
     public void onJoin(PlayerJoinEvent event) {
-        onEntryServer(event.getPlayer());
+        onEnteringServer(event.getPlayer());
         event.setJoinMessage(ChatColor.translateAlternateColorCodes('&',
                 "&8[&a+&8] " + COLOR_ESPECIAL + event.getPlayer().getName() + COLOR_INFO + " se a unido."));
         MessagesManager.addProprieties(String.format("El jugador <|%s|> se a unido", event.getPlayer().getName()), TypeMessages.INFO, true, false);
@@ -71,7 +72,7 @@ public class JoinAndQuitListener implements Listener {
         ContextBan.GLOBAL.onContext(player, event);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOW)
     public void onPreLogin(AsyncPlayerPreLoginEvent event) {
         if (AntiTwoPlayer.checkTwoPlayer(event.getName())) return;
     }

@@ -2,8 +2,9 @@ package net.atcore.data;
 
 import lombok.Getter;
 import net.atcore.AviaTerraCore;
+import net.atcore.messages.MessagesManager;
+import net.atcore.messages.TypeMessages;
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -11,8 +12,6 @@ import java.io.File;
 import java.io.IOException;
 
 import java.io.*;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 
 public abstract class FileYaml {
 
@@ -98,6 +97,9 @@ public abstract class FileYaml {
             YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(file);
             fileConfiguration.setDefaults(defConfig);
         }
+        loadData();
+        if (!AviaTerraCore.isStarting()) MessagesManager.sendMessageConsole(String.format("Archivo %s recargador exitosamente", file), TypeMessages.SUCCESS);
+
     }
 
     public abstract void loadData();

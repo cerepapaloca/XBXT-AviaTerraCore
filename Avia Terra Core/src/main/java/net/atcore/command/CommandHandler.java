@@ -2,7 +2,6 @@ package net.atcore.command;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import net.atcore.security.AntiExploit;
 import net.atcore.security.Login.LoginManager;
@@ -38,11 +37,11 @@ public final class CommandHandler implements TabExecutor {
             }
             try {
                 if (sender instanceof Player player) {
-                    if (CommandUtils.hasPermission(command.getPermissions(), player)) {
+                    if (CommandUtils.hasPermission(command.getPermissions(), player, true)) {
                         command.execute(sender, args);
                         return true;
                     }else{
-                        if (LoginManager.checkLoginIn(player, true)){
+                        if (LoginManager.checkLoginIn(player)){
                             sendMessage(sender, "No tienes Permisos", TypeMessages.ERROR);
                         }else {
                             sendMessage(player,"Primero inicia sessión usando /login", TypeMessages.ERROR);

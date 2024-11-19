@@ -12,7 +12,7 @@ public class DataShoot {
     private final LivingEntity victim;
     private final Player shooter;
     private final BaseWeapon weapon;
-    private final BaseCharger charger;
+    private final BaseMagazine charger;
     private final BaseAmmo ammo;
     private final double distance;
     private double damage;
