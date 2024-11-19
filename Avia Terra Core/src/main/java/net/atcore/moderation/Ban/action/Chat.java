@@ -1,6 +1,5 @@
 package net.atcore.moderation.Ban.action;
 
-import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import net.atcore.moderation.Ban.*;

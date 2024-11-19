@@ -18,6 +18,7 @@ public class DataSection implements Section {
     public void enable() {
         register(mySQLConnection = new DataBaseBan());
         register(new DataBaseRegister());
+        new FilePermission();
         for (DataBaseMySql db : dataBases) db.createTable();
     }
 

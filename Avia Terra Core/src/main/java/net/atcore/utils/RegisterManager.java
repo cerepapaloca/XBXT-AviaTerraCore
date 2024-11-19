@@ -54,7 +54,6 @@ public class RegisterManager {
         }
         CommandManager.COMMANDS.put(command.getName().toLowerCase(), command.getPermissions());
         for (String s : pluginCommand.getAliases()){
-            Bukkit.getLogger().warning(s + " | " + command.getPermissions());
             CommandManager.COMMANDS.put(s.toLowerCase(), command.getPermissions());
         }
         if (!command.getPermissions().equals("*")){
