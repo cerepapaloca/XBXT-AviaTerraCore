@@ -35,31 +35,35 @@ public class LoginCommand extends BaseCommand {
     @Override
     public void execute(CommandSender sender, String[] args) {
         if (sender instanceof Player player) {
-            DataLogin dataLogin = LoginManager.getDataLogin(player);
-            if (dataLogin.getRegister().getPasswordShaded() != null) {
-                if (isUUID(args[0])){
-                    if (TwoFactorAuth.checkCode(player, args[0])) {
-                        if (LoginManager.checkLoginIn(player, true)) {
-                            sendMessage(player, "Ya estas logueado", TypeMessages.ERROR);
-                            return;
+            if (args.length > 0) {
+                DataLogin dataLogin = LoginManager.getDataLogin(player);
+                if (dataLogin.getRegister().getPasswordShaded() != null) {
+                    if (isUUID(args[0])){
+                        if (TwoFactorAuth.checkCode(player, args[0])) {
+                            if (LoginManager.checkLoginIn(player, true)) {
+                                sendMessage(player, "Ya estas logueado", TypeMessages.ERROR);
+                                return;
+                            }
+                            startPlay(player);
+                        }else {
+                            fail(player);
                         }
-                        startPlay(player);
                     }else {
-                        fail(player);
+                        if (LoginManager.isEqualPassword(player.getName(), args[0])){
+                            if (LoginManager.checkLoginIn(player, true)) {
+                                sendMessage(player, "Ya estas logueado", TypeMessages.ERROR);
+                                return;
+                            }
+                            startPlay(player);
+                        }else{
+                            fail(player);
+                        }
                     }
                 }else {
-                    if (LoginManager.isEqualPassword(player.getName(), args[0])){
-                        if (LoginManager.checkLoginIn(player, true)) {
-                            sendMessage(player, "Ya estas logueado", TypeMessages.ERROR);
-                            return;
-                        }
-                        startPlay(player);
-                    }else{
-                        fail(player);
-                    }
+                    sendMessage(player, "No estas registrado usa el /register", TypeMessages.ERROR);
                 }
             }else {
-                sendMessage(player, "No estas registrado usa el /register", TypeMessages.ERROR);
+                sendMessage(player, "Tienes que poner tu contraseña", TypeMessages.ERROR);
             }
         }
     }
@@ -68,6 +72,7 @@ public class LoginCommand extends BaseCommand {
         startPlaySessionCracked(player);
         attempts.remove(player.getUniqueId());
         LoginManager.updateLoginDataBase(player.getName(), Objects.requireNonNull(player.getAddress()).getAddress());
+        player.updateCommands();
         MessagesManager.sendTitle(player,"Bienvenido de vuelta", "<|&o" + player.getDisplayName() + "|>", 20, 20*3, 40, TypeMessages.INFO);
         sendMessage(player, "Has iniciado session exitosamente", TypeMessages.SUCCESS);
     }

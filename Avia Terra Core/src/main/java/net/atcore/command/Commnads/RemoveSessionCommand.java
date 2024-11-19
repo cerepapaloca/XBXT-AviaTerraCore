@@ -26,7 +26,7 @@ public class RemoveSessionCommand extends BaseCommand {
         if (args.length == 1) {
             CommandUtils.excuteForPlayer(sender, args[0], true, dataTemporalPlayer -> {
                 LoginManager.getDataLogin(dataTemporalPlayer.player()).setSession(null);
-                GlobalUtils.kickPlayer(dataTemporalPlayer.player(), "Vuelve a iniciar sesión");
+                //GlobalUtils.kickPlayer(dataTemporalPlayer.player(), "Vuelve a iniciar sesión");
             });
             sendMessage(sender, "se le borro la sesión al jugador", TypeMessages.SUCCESS);
         }else{

@@ -42,13 +42,11 @@ public class CheckAutoBan {
                         if (ChatBotTime.size() > 1) {
                             for (Player player : ChatBotTime) {
                                 assert player != null;
-                                ModerationSection.getBanManager().banPlayer(player, "Uso de bots",1000 * 60 * 60 * 24 * 5L, ContextBan.CHAT, "Servidor");
+                                ModerationSection.getBanManager().banPlayer(player, "Uso de bots (Baneo Automático)",1000 * 60 * 60 * 24 * 5L, ContextBan.CHAT, "Servidor");
                             }
                             sendMessageConsole("Purga terminada", TypeMessages.SUCCESS);
-                            ChatBotTime.clear();
-                        }else{
-                            ChatBotTime.clear();
                         }
+                        ChatBotTime.clear();
                     });
                 }
             }.runTaskLater(AviaTerraCore.getInstance(), 2);
@@ -66,7 +64,7 @@ public class CheckAutoBan {
                 sendMessageConsole("Este jugador usa AutoBotChat: <|(" + timeDifferenceCount.get(player.getUniqueId()) + "/5)|> " + "Tiene una precision de <|"
                         + (DifferenceOld - DifferenceNew) + " ms|>", TypeMessages.WARNING, CategoryMessages.MODERATION);
                 if (timeDifferenceCount.get(player.getUniqueId()) >= 5){
-                    ModerationSection.getBanManager().banPlayer(player, "Por enviar mensajes automatizado en el chat",1000 * 60 * 60 * 24 * 2L, ContextBan.CHAT, "Servidor");
+                    ModerationSection.getBanManager().banPlayer(player, "Por enviar mensajes automatizado en el chat (Baneo Automático)",1000 * 60 * 60 * 24 * 2L, ContextBan.CHAT, "Servidor");
                     timeDifferenceCount.remove(player.getUniqueId());
                     timeDifferenceOld.remove(player.getUniqueId());
                     timeDifferenceNew.remove(player.getUniqueId());
@@ -108,7 +106,7 @@ public class CheckAutoBan {
                     if (entry.getValue() > 1) {
                         inventory.clear();
                         Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(), () ->
-                                ModerationSection.getBanManager().banPlayer(player, "Por estar dupeando",
+                                ModerationSection.getBanManager().banPlayer(player, "Uso de Dupes (Baneo Automático)",
                                         1000 * 60 * 60 * 24 * 5L, ContextBan.GLOBAL, "Servidor"));
 
                     }

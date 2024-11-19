@@ -15,7 +15,9 @@ import net.atcore.utils.RangeList;
 import net.luckperms.api.node.types.InheritanceNode;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
@@ -26,13 +28,12 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static net.atcore.armament.BaseWeaponTarkov.checkReload;
-import static net.atcore.messages.MessagesManager.*;
 
 public class PlayerListener implements Listener {
 
     @EventHandler
     public void onMove(PlayerMoveEvent event) {
-        if (!LoginManager.getListPlayerLoginIn().contains(event.getPlayer().getUniqueId())) {
+        if (LoginManager.isLimboMode(event.getPlayer())) {
             event.setCancelled(true);
             return;
         }
@@ -42,7 +43,7 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
-        if (!LoginManager.getListPlayerLoginIn().contains(event.getPlayer().getUniqueId())) {
+        if (LoginManager.isLimboMode(event.getPlayer())) {
             event.setCancelled(true);
             return;
         }
@@ -57,14 +58,14 @@ public class PlayerListener implements Listener {
 
     private final List<String> COMMANDS_PRE_LOGIN = List.of("login", "register", "log", "reg");
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onExecuteCommand(PlayerCommandPreprocessEvent event) {
         String command = event.getMessage().split(" ")[0].substring(1).toLowerCase();
         Player player = event.getPlayer();
         if (COMMANDS_PRE_LOGIN.contains(command)) {
-            MessagesManager.sendMessageConsole(String.format("<|%s|> ejecuto -> %s", player.getName(), "*Comando De Login*"), TypeMessages.INFO, CategoryMessages.COMMANDS, true);
+            MessagesManager.sendMessageConsole(String.format("<|%s|> ejecuto -> %s", player.getName(), "&9*Comando De Login*"), TypeMessages.INFO, CategoryMessages.COMMANDS, true);
         }else {
-            MessagesManager.sendMessageConsole(String.format("<|%s|> ejecuto -> %s", player.getName(), event.getMessage()), TypeMessages.INFO, CategoryMessages.COMMANDS, true);
+            MessagesManager.sendMessageConsole(String.format("<|%s|> ejecuto -> %s", player.getName(), "&9" + event.getMessage()), TypeMessages.INFO, CategoryMessages.COMMANDS, true);
         }
         event.setCancelled(CommandManager.checkCommand(command, player, false));
     }

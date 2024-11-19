@@ -1,7 +1,11 @@
 package net.atcore.utils;
 
 import lombok.Getter;
+import net.atcore.AviaTerraCore;
 import org.bukkit.Color;
+import org.bukkit.permissions.Permission;
+
+import static org.bukkit.Bukkit.getServer;
 
 @Getter
 public enum RangeList {
@@ -24,15 +28,15 @@ public enum RangeList {
     private final String displayName;
     private final char icon;
     private final boolean staff;
+    private final String permission;
 
     RangeList(Color color, String displayName, char icon, boolean staff) {
         this.color = color;
         this.displayName = displayName;
         this.icon = icon;
         this.staff = staff;
-    }
-
-    public String getPermission(){
-        return "aviaterra.range." + displayName.toLowerCase();
+        this.permission = "aviaterracore.range." + displayName.toLowerCase();
+        Permission permission = new Permission(this.permission);
+        getServer().getPluginManager().addPermission(permission);
     }
 }

@@ -3,13 +3,11 @@ package net.atcore.security;
 import net.atcore.Config;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
-import net.atcore.security.Login.LoginManager;
 import org.jetbrains.annotations.NotNull;
 
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class AntiBot {
 
@@ -27,11 +25,6 @@ public class AntiBot {
         lastName = name;
         //Bukkit.getLogger().warning("A | " +  discrepancy);
         double oldDiscrepancy = discrepancy;
-        if (LoginManager.isNewPlayer(name)){
-            discrepancy *= 1.2;
-        }else {
-            discrepancy *= 0.9;
-        }
         long newDelta = (System.currentTimeMillis() - lastTime);
         lastTime = System.currentTimeMillis();
         LIST_DELTA.addLast(newDelta);

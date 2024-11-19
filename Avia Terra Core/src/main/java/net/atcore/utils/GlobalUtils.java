@@ -7,8 +7,6 @@ import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import com.google.common.base.Charsets;
 import lombok.experimental.UtilityClass;
 import net.atcore.AviaTerraCore;
-import net.atcore.armament.*;
-import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import net.md_5.bungee.api.ChatColor;
@@ -18,12 +16,13 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
-import org.checkerframework.dataflow.qual.Pure;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.net.InetAddress;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -177,6 +176,7 @@ public final class GlobalUtils {
      * @param data la variable
      */
 
+    @SuppressWarnings("rawtypes")
     public void setPersistentDataItem(@NotNull ItemStack itemStack, String nameKey, PersistentDataType type, Object data){
         ItemMeta meta = itemStack.getItemMeta();
         if (meta == null) return;
@@ -186,6 +186,7 @@ public final class GlobalUtils {
     }
 
     @Contract(pure = true)
+    @SuppressWarnings("rawtypes")
     public Object getPersistenData(@NotNull ItemStack item, String nameKey, PersistentDataType type){
         ItemMeta meta = item.getItemMeta();
         assert meta != null;
@@ -346,6 +347,11 @@ public final class GlobalUtils {
         throw new IllegalArgumentException("Dio nulo cuando no debería  " + name);
     }
 
+    public boolean equalIp(@Nullable InetAddress ipA, @Nullable InetAddress ipB){
+        if (ipA == null || ipB == null) return false;
+        return Objects.equals(ipA.getHostAddress().split(":")[0], Objects.requireNonNull(ipB.getHostAddress().split(":")[0]));
+    }
+
     /**
      * Modifica los colores hex usando hls para que sea más fácil de modificar. Los
      * parametros del hls son diferencia entre si es decir si no lo quieres modificar
@@ -386,7 +392,7 @@ public final class GlobalUtils {
         float max = Math.max(rf, Math.max(gf, bf));
         float min = Math.min(rf, Math.min(gf, bf));
 
-        float h = 0, s, l = (max + min) / 2;
+        float h, s, l = (max + min) / 2;
 
         if (max == min) {
             h = s = 0;

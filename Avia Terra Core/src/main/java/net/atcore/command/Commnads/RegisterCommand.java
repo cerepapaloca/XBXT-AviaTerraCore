@@ -6,13 +6,11 @@ import net.atcore.command.ModeAutoTab;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import net.atcore.security.Login.*;
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.Objects;
 
-import static net.atcore.messages.MessagesManager.COLOR_ESPECIAL;
 import static net.atcore.messages.MessagesManager.sendMessage;
 import static net.atcore.security.Login.LoginManager.startPlaySessionCracked;
 

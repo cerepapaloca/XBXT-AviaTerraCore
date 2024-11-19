@@ -3,15 +3,12 @@ package net.atcore.security.Login;
 import com.github.games647.craftapi.model.Profile;
 import com.github.games647.craftapi.resolver.MojangResolver;
 import com.github.games647.craftapi.resolver.RateLimitException;
-import lombok.Getter;
 import net.atcore.AviaTerraCore;
 import net.atcore.Config;
 import net.atcore.data.DataBaseRegister;
 import net.atcore.messages.TypeMessages;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.checkerframework.dataflow.qual.Pure;
@@ -34,9 +31,6 @@ public final class LoginManager {
     private static final HashMap<UUID, DataLogin> listDataLogin = new HashMap<>();
 
     //la llave es el nombre de usuario
-
-    @Getter private static final HashSet<UUID> listPlayerLoginIn = new HashSet<>();//esto existe por qué más optimizado que los hashMap
-
     public static DataLogin getDataLogin(String name) {
         return listDataLogin.get(GlobalUtils.getUUIDByName(name));
     }
@@ -53,10 +47,6 @@ public final class LoginManager {
         DataLogin dataLogin = new DataLogin(dataRegister);
         listDataLogin.put(GlobalUtils.getUUIDByName(name) ,dataLogin);
         return dataLogin;
-    }
-
-    public static boolean isNewPlayer(String name) {
-        return listPlayerLoginIn.contains(GlobalUtils.getUUIDByName(name));
     }
 
     public static void clearDataLogin() {
@@ -76,7 +66,6 @@ public final class LoginManager {
             return getDataLogin(name).getRegister().getStateLogins();
         }else{//si no existe crea un registro
             DataRegister dataRegister = startRegister(ip, name);
-            Bukkit.getLogger().warning("Register successful");
             if (dataRegister != null){
                 addDataLogin(name, dataRegister);
                 return dataRegister.getStateLogins();
@@ -180,7 +169,7 @@ public final class LoginManager {
      * @return verdadero cuando esta logueado, falso cuando no lo está
      */
 
-    public static boolean checkLoginIn(Player player, boolean ignoreTime){
+    public static boolean checkLoginIn(@NotNull Player player, boolean ignoreTime){
         DataLogin dataLogin = getDataLogin(player);
         if (dataLogin == null){
             if (Bukkit.isPrimaryThread()){
@@ -193,33 +182,40 @@ public final class LoginManager {
         }
 
         if (dataLogin.hasSession()){//mira si tiene una session
+            DataSession dataSession = dataLogin.getSession();
             // revisa si tiene una contraseña la cuenta cracked o si es un usuario premium
-            if ((dataLogin.getSession().getState() == StateLogins.CRACKED && dataLogin.getRegister().getPasswordShaded() != null) ||
-                    dataLogin.getSession().getState() == StateLogins.PREMIUM){
+            if ((dataSession.getState() == StateLogins.CRACKED && dataLogin.getRegister().getPasswordShaded() != null) ||
+                    dataSession.getState() == StateLogins.PREMIUM){
+
                 // mira si la ip son iguales
-                if (Objects.equals(dataLogin.getSession().getAddress().getHostName().split(":")[0], Objects.requireNonNull(player.getAddress()).getAddress().getHostName().split(":")[0])){
+                if (player.getAddress() == null) return false;
+                if (GlobalUtils.equalIp(dataSession.getAddress(), player.getAddress().getAddress())){
                     if (ignoreTime || dataLogin.getSession().getEndTimeLogin() > System.currentTimeMillis()){//expiro? o no se tiene en cuenta
-                        listPlayerLoginIn.add(player.getUniqueId());
+                        if (dataLogin.isLimboMode()){
+                            dataLogin.getLimbo().restorePlayer(player);
+                            dataLogin.setLimbo(null);
+                        }
                         // en caso de que sea op no se le cambia el modo de juego y se hace en el hilo principal por si acaso
-                        if (!player.isOp()) {
+                        /*if (!player.isOp()) {
                             if (Bukkit.isPrimaryThread()){
                                 player.setGameMode(GameMode.SURVIVAL);
                             }else{
                                 Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> player.setGameMode(GameMode.SURVIVAL));
                             }
-                        }
+                        }*/
                         return true;
                     }
                 }
             }
         }
-        // en caso que no sea valida
-        if (Bukkit.isPrimaryThread()){
-            player.setGameMode(GameMode.SPECTATOR);
-        }else{
-            Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> player.setGameMode(GameMode.SPECTATOR));
+        if (!isLimboMode(player)){
+            // en caso que no sea valida
+            if (Bukkit.isPrimaryThread()){
+                dataLogin.setLimbo(new DataLimbo(player));
+            }else{
+                Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> dataLogin.setLimbo(new DataLimbo(player)));
+            }
         }
-        listPlayerLoginIn.remove(player.getUniqueId());
         dataLogin.setSession(null);// esto lo borra
 
         if (ServerMode.OFFLINE_MODE != Config.getServerMode() && LoginManager.getDataLogin(player).getRegister().getStateLogins().equals(StateLogins.PREMIUM)){
@@ -229,19 +225,18 @@ public final class LoginManager {
         return false;
     }
 
-    public static void checkJoin(@NotNull Player player){//TODO pasar esto al evento de Login
+    public static boolean isLimboMode(@NotNull Player player){
+        return getDataLogin(player).isLimboMode();
+    }
+
+    public static void onEntryServer(@NotNull Player player){//TODO pasar esto al evento de Login
         DataLogin dataLogin = getDataLogin(player);
         if (dataLogin != null) {
-            dataLogin.setLimbo(new DataLimbo(player));
             DataRegister dataRegister = dataLogin.getRegister();
             if (dataRegister != null) {
                 if (Config.getServerMode().equals(ServerMode.OFFLINE_MODE) || dataRegister.getStateLogins() == StateLogins.CRACKED){
                     if (dataRegister.getPasswordShaded() != null) {//tiene contraseña o no
-                        if (checkLoginIn(player, false)) {//si tiene una session valida o no
-                            dataLogin.setLimbo(null);//
-                        }else {
-                            player.getInventory().clear();
-                            player.teleport(new Location(player.getWorld(),0,100,0));
+                        if (!checkLoginIn(player, false)) {//si tiene una session valida o no
                             startMessage(player, "Para Loguear utiliza el siguiente comando:\n <|/login <Contraseña>|>");
                             startTimeOut(player, "Tardaste mucho en iniciar sesión");
                         }
@@ -269,13 +264,9 @@ public final class LoginManager {
         DataSession dataSession = new DataSession(player, StateLogins.CRACKED);
         dataSession.setEndTimeLogin(System.currentTimeMillis() + Config.getExpirationSession());
         dataLogin.setSession(dataSession);
-        player.getInventory().setContents(dataLogin.getLimbo().getItems());
-        player.teleport(dataLogin.getLimbo().getLocation());
-        if (player.isOp()) {
-            player.setGameMode(dataLogin.getLimbo().getGameMode());
-        } else {
-            player.setGameMode(GameMode.SURVIVAL);
-        }
+        dataLogin.getLimbo().restorePlayer(player);
+        dataLogin.setLimbo(null);
+        player.updateCommands();
         return dataLogin;
     }
 

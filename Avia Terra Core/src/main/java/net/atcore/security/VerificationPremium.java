@@ -78,7 +78,7 @@ public class VerificationPremium {
                                 DataSession session = new DataSession(player, StateLogins.PREMIUM, player.getAddress().getAddress());
                                 session.setEndTimeLogin(System.currentTimeMillis() + Config.getExpirationSession());
                                 dataLogin.setSession(session);
-                                LoginManager.getListPlayerLoginIn().add(GlobalUtils.getUUIDByName(userName));
+                                //LoginManager.checkLoginIn(player, false);//esto para que siga el protocolo
                             }else{
                                 GlobalUtils.kickPlayer(player, "Se detecto una discrepancia. Reinicie su cliente");
                                 sendMessageConsole("la ip que se envío el paquete no es la misma que se envío al primer paquete por el jugador <|"

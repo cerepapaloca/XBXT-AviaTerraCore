@@ -22,6 +22,7 @@ import net.atcore.security.VerificationPremium;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerToggleFlightEvent;
 
 import javax.crypto.*;
 import java.lang.reflect.Method;
@@ -99,7 +100,6 @@ public class SimulateOnlineMode {
         packetEncryption.getByteArrays().write(1, token);
 
         packetEncryption.getBooleans().write(0, true);
-
         ProtocolLibrary.getProtocolManager().sendServerPacket(sender, packetEncryption);
     }
 

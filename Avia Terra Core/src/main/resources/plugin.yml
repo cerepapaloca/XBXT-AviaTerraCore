@@ -8,12 +8,20 @@ authors: [Ceres, Vitah, EvaProject]
 description: Sera las bases del servidor
 
 commands:
+  tell:
+    aliases:
+      - msg
+      - w
+      - r
   prueba:
-    aliases: test
+    aliases:
+      - test
   aviaterra:
-    aliases: at
+    aliases:
+      - at
   aviaterrapruebas:
-    aliases: atp
+    aliases:
+      - atp
   freeze:
   ban:
   unban:
@@ -28,11 +36,6 @@ commands:
   weapon:
   seeinventory:
   link:
-  tell:
-    aliases:
-      - msg
-      - w
-      - r
 permissions:
   aviaterracore.commnad.*:
     description: Todos los permisos del comandos de AviaTerraCore

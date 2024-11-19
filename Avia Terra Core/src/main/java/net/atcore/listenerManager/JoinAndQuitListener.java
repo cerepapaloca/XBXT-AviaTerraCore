@@ -6,7 +6,6 @@ import net.atcore.data.DataBaseRegister;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
-import net.atcore.moderation.Ban.CheckBan;
 import net.atcore.moderation.Ban.ContextBan;
 import net.atcore.security.AntiTwoPlayer;
 import net.atcore.security.Login.DataLimbo;
@@ -23,8 +22,6 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import javax.mail.Message;
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -37,17 +34,13 @@ public class JoinAndQuitListener implements Listener {
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
-        if (!getListPlayerLoginIn().contains(player.getUniqueId())) {//esto debería ir en LoginManager pero bueno
+        if (LoginManager.isLimboMode(player)) {//Esto es para que los jugadores no logueados
             DataLogin login = LoginManager.getDataLogin(player);
             if (login == null)return;
             DataLimbo limbo = login.getLimbo();
-            if (limbo == null)return;
-
-            player.getInventory().setContents(limbo.getItems());
-            player.teleport(limbo.getLocation());
-            player.setGameMode(limbo.getGameMode());
+            limbo.restorePlayer(player);//hace que el servidor guarde los datos del jugador como si tuviera logueado
+            login.setLimbo(null);
         }
-
         if (LoginManager.getDataLogin(player) != null) {//si le llega a borrar el registro
             if (LoginManager.getDataLogin(player.getUniqueId()).getRegister().isTemporary()){
                 AviaTerraCore.getInstance().enqueueTaskAsynchronously(() ->
@@ -58,24 +51,24 @@ public class JoinAndQuitListener implements Listener {
         List<UUID> UUIDPlayers = List.copyOf(AviaTerraPlayer.getPlayer(player).getManipulatorInventoryPlayer());
         UUIDPlayers.forEach(UUID -> Objects.requireNonNull(Bukkit.getPlayer(UUID)).closeInventory());
         event.setQuitMessage(ChatColor.translateAlternateColorCodes('&',
-                "&8[&4-&8] " + COLOR_ESPECIAL + event.getPlayer().getDisplayName() + COLOR_INFO + " se a ido."));
+                "&8[&4-&8] " + COLOR_ESPECIAL + event.getPlayer().getName() + COLOR_INFO + " se a ido."));
         MessagesManager.sendMessageConsole(String.format("El jugador <|%s|> se a desconecto", event.getPlayer().getName()), TypeMessages.INFO, CategoryMessages.LOGIN);
     }
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
-        Player player = event.getPlayer();
-        checkJoin(player);
+        onEntryServer(event.getPlayer());
         event.setJoinMessage(ChatColor.translateAlternateColorCodes('&',
-                "&8[&a+&8] " + COLOR_ESPECIAL + event.getPlayer().getDisplayName() + COLOR_INFO + " se a unido."));
+                "&8[&a+&8] " + COLOR_ESPECIAL + event.getPlayer().getName() + COLOR_INFO + " se a unido."));
         MessagesManager.addProprieties(String.format("El jugador <|%s|> se a unido", event.getPlayer().getName()), TypeMessages.INFO, true, false);
     }
 
     @EventHandler
     public void onLogin(PlayerLoginEvent event) {
-        AviaTerraPlayer.addPlayer(event.getPlayer());
-        ServiceSection.getSimulateOnlineMode().applySkin(event.getPlayer());
-        ContextBan.GLOBAL.onContext(event.getPlayer(), event);
+        Player player = event.getPlayer();
+        AviaTerraPlayer.addPlayer(player);
+        ServiceSection.getSimulateOnlineMode().applySkin(player);
+        ContextBan.GLOBAL.onContext(player, event);
     }
 
     @EventHandler

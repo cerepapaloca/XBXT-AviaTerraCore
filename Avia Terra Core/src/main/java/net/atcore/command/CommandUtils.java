@@ -212,12 +212,13 @@ public final class CommandUtils {
         }
         boolean b = arg.startsWith("!");
         List<String> namesList = new ArrayList<>();
-        Bukkit.getOnlinePlayers().forEach(player -> namesList.add(player.getName()));
         if (arg.isEmpty()){
             namesList.add("*");
             namesList.add("!");
+            Bukkit.getOnlinePlayers().forEach(player -> namesList.add(player.getName()));
             return namesList;
         }
+        Bukkit.getOnlinePlayers().forEach(player -> namesList.add(player.getName()));
         String argNormalize = arg.endsWith(",") ? "" : Arrays.stream(arg.split(",")).toList().getLast().toLowerCase().replace("!", "");
         List<String> finalNamesList = namesList.stream()
                 .filter(name -> name.toLowerCase().contains(argNormalize))
@@ -255,22 +256,15 @@ public final class CommandUtils {
         //String permissionBase = AviaTerraCore.getInstance().getName().toLowerCase() + ".command." + command.toLowerCase();
         //if (player.hasPermission(permissionBase)) return true;
         //permission = permission.replace(permissionBase, "");
+        if (permission.equals("!*"))return false;
         if (LoginManager.checkLoginIn(player, true)) {
+            if (player.isOp()) return true;
             if (permission.contains("!")) permission = "!" + permission.replace("!", "");
             if (permission.equals("*") || permission.equals("**")) {
                 return true;
             }else {
                 if (player.hasPermission("aviaterracore.command.*")){
                     return true;
-                }
-                if (permission.startsWith("!")){
-                    if (permission.substring(1).equalsIgnoreCase("op")){
-                        return !player.isOp();
-                    }
-                }else {
-                    if (permission.equalsIgnoreCase("op")){
-                        return player.isOp();
-                    }
                 }
             }
             boolean b = false;
@@ -283,12 +277,7 @@ public final class CommandUtils {
             }
             return b;
         }else {
-            if (permission.equals("**")){
-                return true;
-            }else {
-
-                return false;
-            }
+            return permission.equals("**");
         }
     }
 }
