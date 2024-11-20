@@ -1,7 +1,6 @@
 package net.atcore.messages;
 
 import net.atcore.AviaTerraCore;
-import net.atcore.exception.DiscordChannelNotFound;
 import net.atcore.utils.GlobalUtils;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.md_5.bungee.api.ChatColor;
@@ -170,7 +169,7 @@ public final class MessagesManager {
             if (channel !=  null) {
                 channel.sendMessage(finalMessage.replace("<|", "**").replace("|>", "**").replace("|!>", "")).queue();
             } else {
-                throw new DiscordChannelNotFound("No se encontró canal de discord para los registro " + type.name());
+                throw new IllegalArgumentException("No se encontró canal de discord para los registro " + type.name());
             }
         });
     }

@@ -1,7 +1,8 @@
 package net.atcore.inventory.inventors;
 
 import net.atcore.AviaTerraCore;
-import net.atcore.AviaTerraPlayer;
+import net.atcore.aviaterraplayer.AviaTerraPlayer;
+import net.atcore.aviaterraplayer.ModerationPlayer;
 import net.atcore.inventory.BaseInventory;
 import net.atcore.inventory.InventorySection;
 import net.atcore.inventory.InventoryUtils;
@@ -27,18 +28,19 @@ public class ManipulatorInventory extends BaseInventory {
 
     @Override
     public Inventory createInventory(AviaTerraPlayer player) {
-        if (!tasks.containsKey(player.getManipulatedInventoryPlayer())) {
-            UUID uuid = player.getManipulatedInventoryPlayer();
+        ModerationPlayer moderationPlayer = player.getModerationPlayer();
+        if (!tasks.containsKey(moderationPlayer.getManipulatedInventoryPlayer())) {
+            UUID uuid = moderationPlayer.getManipulatedInventoryPlayer();
             BukkitTask task = new BukkitRunnable() {
                 private int previousHash = getInventoryHash(player); // Obtener el estado inicial del inventario
                 @Override
                 public void run() {
-                    if (player.getPlayer().isOnline() && player.getManipulatedInventoryPlayer() != null && Bukkit.getPlayer(uuid) != null) {
+                    if (player.getPlayer().isOnline() && moderationPlayer.getManipulatedInventoryPlayer() != null && Bukkit.getPlayer(uuid) != null) {
                         int currentHash = getInventoryHash(player);
                         if (currentHash != previousHash) {
                             previousHash = currentHash;
                             if (InventorySection.MANIPULATOR.getBaseInventory() instanceof ManipulatorInventory manipulatorInventory) {
-                                manipulatorInventory.updateInventory(GlobalUtils.getPlayer(player.getManipulatedInventoryPlayer()));
+                                manipulatorInventory.updateInventory(GlobalUtils.getPlayer(moderationPlayer.getManipulatedInventoryPlayer()));
                             }
                         }
                     } else {
@@ -47,14 +49,15 @@ public class ManipulatorInventory extends BaseInventory {
                     }
                 }
             }.runTaskTimer(AviaTerraCore.getInstance(), 0, 1);
-            tasks.put(player.getManipulatedInventoryPlayer(), task);
+            tasks.put(moderationPlayer.getManipulatedInventoryPlayer(), task);
         }
 
-        return updateInventory(GlobalUtils.getPlayer(player.getManipulatedInventoryPlayer()));
+        return updateInventory(GlobalUtils.getPlayer(moderationPlayer.getManipulatedInventoryPlayer()));
     }
 
     private int getInventoryHash(AviaTerraPlayer player) {
-        Inventory inventory = GlobalUtils.getPlayer(player.getManipulatedInventoryPlayer()).getInventory();
+        ModerationPlayer moderationPlayer = player.getModerationPlayer();
+        Inventory inventory = GlobalUtils.getPlayer(moderationPlayer.getManipulatedInventoryPlayer()).getInventory();
         int hash = 7;//se inicia por 7 por qué es un número primo facilitando una mayor aleatoriedad
 
         for (ItemStack item : inventory.getContents()) {

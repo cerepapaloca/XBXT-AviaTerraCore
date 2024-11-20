@@ -1,6 +1,6 @@
 package net.atcore.Test;
 
-import net.atcore.AviaTerraPlayer;
+import net.atcore.aviaterraplayer.AviaTerraPlayer;
 import net.atcore.messages.TypeMessages;
 import org.jetbrains.annotations.TestOnly;
 

@@ -30,16 +30,14 @@ public class DataRegister {
     private final StateLogins stateLogins;
     private UUID uuidPremium;
     private UUID uuidCracked;
-    private InetAddress ip;
     private String passwordShaded;
+    private boolean isTemporary;
+    private long lastLoginDate;
+    private long registerDate;
+    private InetAddress lastAddress;
+    private InetAddress registerAddress;
     @Nullable
     private String gmail;
     @Nullable
     private String discord;
-
-    private boolean isTemporary;
-    private long lastLoginDate;
-    private long registerDate;
-    private InetAddress addressRegister;
-
 }

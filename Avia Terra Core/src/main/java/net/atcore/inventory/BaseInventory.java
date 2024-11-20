@@ -2,7 +2,7 @@ package net.atcore.inventory;
 
 import lombok.Getter;
 import lombok.Setter;
-import net.atcore.AviaTerraPlayer;
+import net.atcore.aviaterraplayer.AviaTerraPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.Nullable;

@@ -21,6 +21,7 @@ public class DataLimbo {
         player.setOp(false);
         player.setGameMode(GameMode.SPECTATOR);
         player.setLevel(0);
+        player.setAllowFlight(true);
     }
 
     private final GameMode gameMode;
@@ -34,5 +35,6 @@ public class DataLimbo {
         player.setOp(op);
         player.teleport(location);
         player.getInventory().setContents(items);
+        if (gameMode == GameMode.SURVIVAL) player.setAllowFlight(false);
     }
 }

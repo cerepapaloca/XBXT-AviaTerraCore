@@ -3,7 +3,6 @@ package net.atcore.security.Login;
 import lombok.Getter;
 import lombok.experimental.UtilityClass;
 import net.atcore.AviaTerraCore;
-import net.atcore.exception.ConnedDataBaseMainThread;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import net.atcore.utils.GlobalUtils;
@@ -28,7 +27,7 @@ public class TwoFactorAuth {
 
     public void sendVerificationEmail(String recipientEmail, CodeAuth code, FormatMessage formatMessage) {
         if (Bukkit.isPrimaryThread()){
-            throw new ConnedDataBaseMainThread("No usar el hilo principal para el envió de emails");
+            throw new IllegalThreadStateException("No usar el hilo principal para el envió de emails");
         }
         Properties properties = new Properties();
         properties.put("mail.smtp.auth", "true");
@@ -62,7 +61,7 @@ public class TwoFactorAuth {
 
     public static void sendVerificationDiscord(String id, Player player, FormatMessage formatMessage) {
         if (Bukkit.isPrimaryThread()){
-            throw new ConnedDataBaseMainThread("No usar el hilo principal para el envió de mensajes de discord");
+            throw new IllegalThreadStateException("No usar el hilo principal para el envió de mensajes de discord");
         }
         User user = AviaTerraCore.BOT_DISCORD.retrieveUserById(id).complete();
         user.openPrivateChannel()

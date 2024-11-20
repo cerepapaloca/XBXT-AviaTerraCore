@@ -1,7 +1,7 @@
 package net.atcore.listenerManager;
 
 import net.atcore.AviaTerraCore;
-import net.atcore.AviaTerraPlayer;
+import net.atcore.aviaterraplayer.AviaTerraPlayer;
 import net.atcore.data.DataBaseRegister;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.MessagesManager;
@@ -49,7 +49,7 @@ public class JoinAndQuitListener implements Listener {
             }
         }
 
-        List<UUID> UUIDPlayers = List.copyOf(AviaTerraPlayer.getPlayer(player).getManipulatorInventoryPlayer());
+        List<UUID> UUIDPlayers = List.copyOf(AviaTerraPlayer.getPlayer(player).getModerationPlayer().getManipulatorInventoryPlayer());
         UUIDPlayers.forEach(UUID -> Objects.requireNonNull(Bukkit.getPlayer(UUID)).closeInventory());
         event.setQuitMessage(ChatColor.translateAlternateColorCodes('&',
                 "&8[&4-&8] " + COLOR_ESPECIAL + event.getPlayer().getName() + COLOR_INFO + " se a ido."));

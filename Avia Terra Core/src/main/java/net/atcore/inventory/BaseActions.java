@@ -2,7 +2,7 @@ package net.atcore.inventory;
 
 import lombok.Getter;
 import lombok.Setter;
-import net.atcore.AviaTerraPlayer;
+import net.atcore.aviaterraplayer.AviaTerraPlayer;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
@@ -18,7 +18,5 @@ public abstract class BaseActions {
     public abstract void closeInventory(AviaTerraPlayer player);
 
     public abstract void dragInventory(InventoryDragEvent event, AviaTerraPlayer player);
-
-    public abstract void pickupInventory(EntityPickupItemEvent event, AviaTerraPlayer player);
 
 }

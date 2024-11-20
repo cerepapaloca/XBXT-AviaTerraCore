@@ -7,9 +7,10 @@ import net.atcore.messages.TypeMessages;
 import net.atcore.moderation.Ban.ContextBan;
 import net.atcore.moderation.Ban.DataBan;
 import net.atcore.moderation.Ban.SearchBanBy;
+import net.atcore.security.Login.DataLogin;
+import net.atcore.security.Login.LoginManager;
 import net.atcore.utils.GlobalConstantes;
 import net.atcore.utils.GlobalUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -103,13 +104,27 @@ public class DataBaseBan extends DataBaseMySql {
 
 
 
-    private static void addListDataBan(String name, @Nullable String uuids, @Nullable String ip, String reason, long dateUnban, long dateBan, String context, String author) throws UnknownHostException {
+    private static void addListDataBan(String name,
+                                       @Nullable String uuids,
+                                       @Nullable String stringIp,
+                                       String reason,
+                                       long dateUnban,
+                                       long dateBan,
+                                       String context,
+                                       String author) throws UnknownHostException {
         UUID uuid = null;
         if (uuids != null){
             uuid = UUID.fromString(uuids);
         }
         InetAddress ipAddress = null;
-        if (ip != null) ipAddress = InetAddress.getByName(ip.split("/")[0]);
+        if (stringIp != null) {
+            ipAddress = InetAddress.getByName(stringIp.split("/")[0]);
+        }else {
+            DataLogin dataLogin = LoginManager.getDataLogin(name);
+            if (dataLogin != null) {
+                ipAddress = dataLogin.getRegister().getLastAddress();
+            }
+        }
         DataBan dataBan = new DataBan(name, uuid, ipAddress, reason, dateUnban, dateBan, ContextBan.valueOf(context), author);
 
         HashMap<ContextBan, DataBan> listUUID = listDataBanByNAME.getOrDefault(name,  new HashMap<>());//busca si hay una lista de DataBan si no hay crea una
@@ -173,7 +188,7 @@ public class DataBaseBan extends DataBaseMySql {
              PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, dataBan.getName());
             statement.setString(2, dataBan.getUuid() != null ? dataBan.getUuid().toString() : null);
-            statement.setString(3, dataBan.getAddress() != null ? dataBan.getAddress().toString().split("/")[0] : null);
+            statement.setString(3, dataBan.getAddress() != null ? dataBan.getAddress().getHostAddress().split("/")[0] : null);
             statement.setString(4, dataBan.getReason());
             statement.setLong(5, dataBan.getUnbanDate());
             statement.setLong(6, dataBan.getBanDate());

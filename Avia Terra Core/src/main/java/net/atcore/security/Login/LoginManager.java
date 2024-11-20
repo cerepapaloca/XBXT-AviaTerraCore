@@ -83,7 +83,7 @@ public final class LoginManager {
             if (profile.isPresent()){
                 Profile profileObj = profile.get();
                 dataRegister = new DataRegister(profileObj.getName(), GlobalUtils.getUUIDByName(name), profileObj.getId(), StateLogins.PREMIUM, false);
-                dataRegister.setIp(ip);
+                dataRegister.setLastAddress(ip);
                 //se guarda el registro en la base de datos
                 Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(), () ->
                         DataBaseRegister.addRegister(dataRegister.getUsername(),
@@ -95,7 +95,7 @@ public final class LoginManager {
 
             }else {//es temporal el registro por qué no ha puesto la contraseña
                 dataRegister = new DataRegister(name, GlobalUtils.getUUIDByName(name), StateLogins.CRACKED, true);
-                dataRegister.setIp(ip);
+                dataRegister.setLastAddress(ip);
                 //se guarda el registro en la base de datos
                 Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(), () ->
                         DataBaseRegister.addRegister(dataRegister.getUsername(),
@@ -143,7 +143,7 @@ public final class LoginManager {
         getDataLogin(name).getRegister().setPasswordShaded(s);
         DataRegister data = getDataLogin(name).getRegister();
         data.setTemporary(false);
-        data.setIp(inetAddress);
+        data.setLastAddress(inetAddress);
         data.setLastLoginDate(System.currentTimeMillis());
         Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(), () -> {
             updateLoginDate(name, System.currentTimeMillis());
@@ -157,7 +157,7 @@ public final class LoginManager {
             updateAddress(name, inetAddress.getHostAddress().replace("/",""));
         });
         DataRegister dataRegister = getDataLogin(name).getRegister();
-        dataRegister.setIp(inetAddress);
+        dataRegister.setLastAddress(inetAddress);
         dataRegister.setLastLoginDate(System.currentTimeMillis());
     }
 

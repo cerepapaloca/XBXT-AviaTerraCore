@@ -2,7 +2,7 @@ package net.atcore.armament;
 
 import lombok.Getter;
 import lombok.Setter;
-import net.atcore.AviaTerraPlayer;
+import net.atcore.aviaterraplayer.AviaTerraPlayer;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import net.atcore.utils.GlobalUtils;
@@ -30,9 +30,9 @@ public abstract class BaseWeaponUltraKill extends BaseWeapon {
     @Override
     public void shoot(Player player) {
         AviaTerraPlayer atp = AviaTerraPlayer.getPlayer(player);
-        double ammoPlayer = atp.getAmmo();
+        double ammoPlayer = atp.getWeaponPlayer().getAmmo();
         if (cost < ammoPlayer){
-            atp.setAmmo(ammoPlayer - cost);
+            atp.getWeaponPlayer().setAmmo(ammoPlayer - cost);
             DataShoot dataShoot = executeShoot(player, ammo, null);
             onShoot(dataShoot);
             ammo.onShoot(dataShoot);

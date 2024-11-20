@@ -62,12 +62,19 @@ public class PlayerListener implements Listener {
     public void onExecuteCommand(PlayerCommandPreprocessEvent event) {
         String command = event.getMessage().split(" ")[0].substring(1).toLowerCase();
         Player player = event.getPlayer();
-        if (COMMANDS_PRE_LOGIN.contains(command)) {
-            MessagesManager.sendMessageConsole(String.format("<|%s|> ejecuto -> %s", player.getName(), "&9*Comando De Login*"), TypeMessages.INFO, CategoryMessages.COMMANDS, true);
-        }else {
-            MessagesManager.sendMessageConsole(String.format("<|%s|> ejecuto -> %s", player.getName(), "&9" + event.getMessage()), TypeMessages.INFO, CategoryMessages.COMMANDS, true);
+        String s = "";
+        TypeMessages type = TypeMessages.INFO;
+        boolean isCancelled = CommandManager.checkCommand(command, player, false, true);
+        if (isCancelled){
+            s = " &c(Cancelado)";
+            type = TypeMessages.WARNING;
         }
-        event.setCancelled(CommandManager.checkCommand(command, player, false, true));
+        if (COMMANDS_PRE_LOGIN.contains(command)) {
+            MessagesManager.sendMessageConsole(String.format("<|%s|> ejecutó -> %s", player.getName(), "&6*Comando De Login*" + s), type, CategoryMessages.COMMANDS, true);
+        }else {
+            MessagesManager.sendMessageConsole(String.format("<|%s|> ejecutó -> %s", player.getName(), "&6" + event.getMessage() + s), type, CategoryMessages.COMMANDS, true);
+        }
+        event.setCancelled(isCancelled);
     }
 
     @EventHandler

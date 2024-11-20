@@ -48,9 +48,4 @@ public class InventoryListener implements Listener {
     public void onInventoryDrag(@NotNull InventoryDragEvent event) {
         event.setCancelled(ActionsInventoryManager.dragEvent(event));
     }
-
-    @EventHandler
-    public void onPickupItem(@NotNull EntityPickupItemEvent event) {
-        event.setCancelled(ActionsInventoryManager.pickupItem(event));
-    }
 }

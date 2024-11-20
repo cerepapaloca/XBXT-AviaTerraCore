@@ -116,7 +116,11 @@ public class CheckBanCommand extends BaseTabCommand {
                 return CommandUtils.listTab(args[1], new String[]{"?","!"});
             }
             case 3 -> {
-                return CommandUtils.listTab(args[2], CommandUtils.enumsToStrings(ContextBan.values()));
+                if (args[2].equals("!")){
+                    return CommandUtils.listTab(args[2], CommandUtils.enumsToStrings(ContextBan.values()));
+                }else {
+                    return List.of("");
+                }
             }
         }
         return List.of("");

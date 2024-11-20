@@ -1,6 +1,6 @@
 package net.atcore.inventory;
 
-import net.atcore.AviaTerraPlayer;
+import net.atcore.aviaterraplayer.AviaTerraPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -33,16 +33,5 @@ public class ActionsInventoryManager {
         InventorySection section = atp.getInventorySection();
         section.getBaseActions().dragInventory(event, atp);
         return section.isProtectedInventory();
-    }
-
-    public static boolean pickupItem(EntityPickupItemEvent event){
-        if (event.getEntity() instanceof Player player){
-            AviaTerraPlayer atp = AviaTerraPlayer.getPlayer(player);
-            if (atp.getInventorySection() == null) return false;
-            InventorySection section = atp.getInventorySection();
-            section.getBaseActions().pickupInventory(event, atp);
-            return section.isProtectedInventory();
-        }
-        return false;
     }
 }

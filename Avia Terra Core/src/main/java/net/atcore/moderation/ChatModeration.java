@@ -1,8 +1,9 @@
 package net.atcore.moderation;
 
 import net.atcore.AviaTerraCore;
-import net.atcore.AviaTerraPlayer;
+import net.atcore.aviaterraplayer.AviaTerraPlayer;
 import net.atcore.Config;
+import net.atcore.aviaterraplayer.ModerationPlayer;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.TypeMessages;
 import org.bukkit.Bukkit;
@@ -21,9 +22,10 @@ public class ChatModeration {
 
     public static boolean antiSpam(Player bukkitPlayer, String message) {
         AviaTerraPlayer aviaTerraPlayer = AviaTerraPlayer.getPlayer(bukkitPlayer);
-        float puntos = aviaTerraPlayer.getPointChat();
+        ModerationPlayer mp = aviaTerraPlayer.getModerationPlayer();
+        float puntos = mp.getPointChat();
         if (puntos < 0) {//si su puntos son negativos se lo hace saber
-            aviaTerraPlayer.setPointChat(puntos);
+            mp.setPointChat(puntos);
             sendMessageConsole( bukkitPlayer.getName() + " » &7" + message + "&c [ELIMINADO: Spam]", TypeMessages.INFO, CategoryMessages.MODERATION);
             float second = (puntos)/(20F * Config.getLevelModerationChat());//formula para calcular el tiempo que le fata para volver a escribir
             second *= 10F;
@@ -33,10 +35,10 @@ public class ChatModeration {
         }else {
             puntos = puntos - ((message.length()*3F) + 70F);//por cada letra más puntos le resta y por cada mensaje resta 15
             if (puntos < 0) {//si los puntos llega a estar en negativo lo multiplica por la cantidad de veces que fue penalizado en 2 minutos
-                aviaTerraPlayer.setSanctionsChat(aviaTerraPlayer.getSanctionsChat() + 1); //aumenta la penalización
-                puntos *= aviaTerraPlayer.getSanctionsChat();
+                mp.setSanctionsChat(mp.getSanctionsChat() + 1); //aumenta la penalización
+                puntos *= mp.getSanctionsChat();
             }
-            aviaTerraPlayer.setPointChat(puntos);
+            mp.setPointChat(puntos);
             return false;
         }
     }
@@ -46,9 +48,9 @@ public class ChatModeration {
             @Override
             public void run() {
                 Bukkit.getOnlinePlayers().forEach(player -> {
-                    AviaTerraPlayer aviaTerraPlayer = AviaTerraPlayer.getPlayer(player);
-                    float f = aviaTerraPlayer.getPointChat();
-                    aviaTerraPlayer.setPointChat(f > MAX_PUNTOS ? MAX_PUNTOS : f + Config.getLevelModerationChat());
+                    ModerationPlayer moderationPlayer = AviaTerraPlayer.getPlayer(player).getModerationPlayer();
+                    float f = moderationPlayer.getPointChat();
+                    moderationPlayer.setPointChat(f > MAX_PUNTOS ? MAX_PUNTOS : f + Config.getLevelModerationChat());
                 });
             }
         }.runTaskTimer(AviaTerraCore.getInstance(), 1, 1);//TODO optimiza esto por favor
@@ -57,9 +59,9 @@ public class ChatModeration {
             @Override
             public void run() {
                 Bukkit.getOnlinePlayers().forEach(player -> {
-                    AviaTerraPlayer aviaTerraPlayer = AviaTerraPlayer.getPlayer(player);
-                    int i = aviaTerraPlayer.getSanctionsChat();
-                    aviaTerraPlayer.setSanctionsChat(i > 1 ? i - 1 : 1);
+                    ModerationPlayer moderationPlayer = AviaTerraPlayer.getPlayer(player).getModerationPlayer();
+                    int i = moderationPlayer.getSanctionsChat();
+                    moderationPlayer.setSanctionsChat(i > 1 ? i - 1 : 1);
                 });
             }
         }.runTaskTimer(AviaTerraCore.getInstance(), 0, 20*60*2);

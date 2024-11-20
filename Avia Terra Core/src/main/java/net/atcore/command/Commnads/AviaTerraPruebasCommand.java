@@ -1,6 +1,6 @@
 package net.atcore.command.Commnads;
 
-import net.atcore.AviaTerraPlayer;
+import net.atcore.aviaterraplayer.AviaTerraPlayer;
 import net.atcore.Test.TypeTest;
 import net.atcore.command.BaseTabCommand;
 import net.atcore.command.CommandUtils;

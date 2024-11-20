@@ -23,13 +23,13 @@ public class DataBaseRegister extends DataBaseMySql {
     public void reloadDatabase() {
         String sql = "SELECT name, uuidPremium, uuidCracked, ipRegister, ipLogin, isPremium, password, lastLoginDate, registerDate, gmail, discord FROM register";
         HashMap<UUID, DataSession> sessions = new HashMap<>();
-        LoginManager.getDataLogin().forEach(dataLogin -> sessions.put(dataLogin.getRegister().getUuidCracked(),dataLogin.getSession()));//rescata las sesiones
-        LoginManager.clearDataLogin();//se limpia los datos
+
 
         try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(sql);
              ResultSet resultSet = statement.executeQuery()) {
-
+            LoginManager.getDataLogin().forEach(dataLogin -> sessions.put(dataLogin.getRegister().getUuidCracked(),dataLogin.getSession()));//rescata las sesiones
+            LoginManager.clearDataLogin();//se limpia los datos
             while (resultSet.next()) {
                 String name = resultSet.getString("name");
                 String uuidPremium = resultSet.getString("uuidPremium");
@@ -48,8 +48,8 @@ public class DataBaseRegister extends DataBaseMySql {
                 DataRegister dataRegister = new DataRegister(name, uuid,
                         uuidPremium != null ? UUID.fromString(uuidPremium) : null, isPremium == 1 ? StateLogins.PREMIUM : StateLogins.CRACKED,
                         false);
-                dataRegister.setAddressRegister(InetAddress.getByName(ipRegister));
-                dataRegister.setIp(InetAddress.getByName(ipLogin));
+                dataRegister.setRegisterAddress(InetAddress.getByName(ipRegister));
+                dataRegister.setLastAddress(InetAddress.getByName(ipLogin));
                 dataRegister.setPasswordShaded(password);
                 dataRegister.setLastLoginDate(lastLoginDate);
                 dataRegister.setRegisterDate(registerDate);

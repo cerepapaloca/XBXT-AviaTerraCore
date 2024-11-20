@@ -2,6 +2,8 @@ package net.atcore.moderation.Ban;
 
 import net.atcore.AviaTerraCore;
 import net.atcore.Config;
+import net.atcore.security.Login.DataLogin;
+import net.atcore.security.Login.LoginManager;
 import net.atcore.utils.GlobalConstantes;
 import net.atcore.data.DataBaseBan;
 import net.atcore.messages.CategoryMessages;
@@ -33,6 +35,11 @@ public class BanManager extends DataBaseBan {
 
     public void banPlayer(String name, UUID uuid, InetAddress ip, String reason, long time, ContextBan context, String nameAuthor) {
         long finalTime = time == GlobalConstantes.NUMERO_PERMA ? GlobalConstantes.NUMERO_PERMA : time == Long.MAX_VALUE ? Long.MAX_VALUE : time + System.currentTimeMillis();
+
+        DataLogin dataLogin = LoginManager.getDataLogin(name);
+        if (dataLogin != null) {
+            ip = dataLogin.getRegister().getLastAddress();
+        }
         DataBan dataBan = new DataBan(name, uuid, ip, reason, finalTime, System.currentTimeMillis(), context, nameAuthor);
         Player player = Bukkit.getPlayer(name);
         if (player != null) {
@@ -74,7 +81,9 @@ public class BanManager extends DataBaseBan {
 
         if (checkName || checkIp) {//comprueba que esté baneado por algúna de las dos razónes
 
-            /*if (dataBans == null) {//Esto es un "por si acaso"
+            if (dataBans.isEmpty()) {//En caso qué llega a estar en la lista de baneados, pero no tiene un ban vinculado
+                return IsBan.UNKNOWN;
+                /*No se usa por que se tiene que ejecutar en un hilo aparte
                 try {
                     if (checkName){//hace la búsqueda por ip o por UUID
                         dataBans = getDataBan(player, ip, SearchBanBy.NAME);
@@ -82,9 +91,10 @@ public class BanManager extends DataBaseBan {
                         dataBans = getDataBan(player, ip, SearchBanBy.IP);
                     }
                 } catch (SQLException e) {//por si explota
-                    sendMessageConsole(e.getMessage(),TypeMessages.ERROR);
+                    Bukkit.getLogger().severe(e.getMessage());
                 }
-            }*/
+                */
+            }
 
             if (context == null){//Otro "por si acaso"
                 context = ContextBan.GLOBAL;
@@ -96,8 +106,8 @@ public class BanManager extends DataBaseBan {
                     String time;
                     time = GlobalUtils.timeToString(unbanDate,1, true);
                     if (unbanDate == GlobalConstantes.NUMERO_PERMA || currentTime < unbanDate) {//para saber si él baneo ya expiro
-                        sendMessageConsole(player.getName() + " se \"echo\" por que estar baneado de: " + context.name() +
-                                ". Se detecto por Nombre: <|" + checkName + "|> por ip: <|" + checkIp + "|>. tiempo restante " +
+                        sendMessageConsole(player.getName() + " se \"echo\" por que estar baneado de: <|" + context.name() +
+                                "|>. Se detecto por Nombre: <|" + checkName + "|> por ip: <|" + checkIp + "|>. tiempo restante " +
                                 "<|" +  time + "|>", TypeMessages.INFO, CategoryMessages.BAN);
                         //ban.getContext().onBan(player, ban);
                         return IsBan.YES;

@@ -10,7 +10,6 @@ import java.sql.SQLException;
 
 import static net.atcore.messages.MessagesManager.sendMessageConsole;
 
-import net.atcore.exception.ConnedDataBaseMainThread;
 import net.atcore.messages.TypeMessages;
 
 public abstract class DataBaseMySql {
@@ -68,7 +67,7 @@ public abstract class DataBaseMySql {
 
     protected static Connection getConnection() throws SQLException {
         if (Bukkit.isPrimaryThread() && !AviaTerraCore.isStarting()){
-            throw new ConnedDataBaseMainThread("No usar el hilo principal para la base de datos");
+            throw new IllegalThreadStateException("No usar el hilo principal para la base de datos");
         }
         if (connection == null || connection.isClosed()) {
             if (!AviaTerraCore.isStarting()) sendMessageConsole("Conexión perdida Reconectando...", TypeMessages.WARNING);

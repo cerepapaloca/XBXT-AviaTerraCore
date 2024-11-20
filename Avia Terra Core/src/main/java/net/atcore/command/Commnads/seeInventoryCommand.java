@@ -1,6 +1,6 @@
 package net.atcore.command.Commnads;
 
-import net.atcore.AviaTerraPlayer;
+import net.atcore.aviaterraplayer.AviaTerraPlayer;
 import net.atcore.command.BaseCommand;
 import net.atcore.command.ModeAutoTab;
 import net.atcore.inventory.InventorySection;
@@ -28,14 +28,14 @@ public class seeInventoryCommand extends BaseCommand {
                 Player vitim = Bukkit.getPlayer(args[0]);
                 if (vitim != null) {
                     AviaTerraPlayer atp2 = AviaTerraPlayer.getPlayer(vitim);
-                    if (atp2.getManipulatedInventoryPlayer() == null){
+                    if (atp2.getModerationPlayer().getManipulatedInventoryPlayer() == null){
                         AviaTerraPlayer atp = AviaTerraPlayer.getPlayer(player);
-                        atp.setManipulatedInventoryPlayer(vitim.getUniqueId());
+                        atp.getModerationPlayer().setManipulatedInventoryPlayer(vitim.getUniqueId());
                         player.openInventory(InventorySection.MANIPULATOR.getBaseInventory().createInventory(atp));
                         atp.setInventorySection(InventorySection.MANIPULATOR);
 
                         atp2.setInventorySection(InventorySection.MANIPULATED);
-                        atp2.getManipulatorInventoryPlayer().add(player.getUniqueId());
+                        atp2.getModerationPlayer().getManipulatorInventoryPlayer().add(player.getUniqueId());
                     }else {
                         sendMessage(sender, "No puedes ver el inventarió de otro jugador que también este mirando un inventarió", TypeMessages.ERROR);
                     }

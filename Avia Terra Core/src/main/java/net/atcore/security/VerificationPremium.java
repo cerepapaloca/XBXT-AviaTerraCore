@@ -7,7 +7,6 @@ import com.google.common.hash.Hasher;
 import com.google.common.hash.Hashing;
 import net.atcore.AviaTerraCore;
 import net.atcore.Config;
-import net.atcore.exception.ExceptionPackageConnection;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.TypeMessages;
 import net.atcore.security.Login.DataLogin;
@@ -38,7 +37,7 @@ public class VerificationPremium {
         byte[] encryptedSharedSecret = packet.getByteArrays().read(0);
         byte[] encryptedToken = packet.getByteArrays().read(1);
 
-        if (player.getAddress() == null) throw new ExceptionPackageConnection("retorno nulo la conexión del paquete");
+        if (player.getAddress() == null) throw new IllegalThreadStateException("retorno nulo la conexión del paquete");
 
         ////* Aquí comienza la valides del usuario *////
         try {

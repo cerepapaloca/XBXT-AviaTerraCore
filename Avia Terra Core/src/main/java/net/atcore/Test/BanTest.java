@@ -1,7 +1,7 @@
 package net.atcore.Test;
 
 import net.atcore.AviaTerraCore;
-import net.atcore.AviaTerraPlayer;
+import net.atcore.aviaterraplayer.AviaTerraPlayer;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import net.atcore.moderation.Ban.ContextBan;

@@ -2,7 +2,7 @@ package net.atcore.inventory.Action;
 
 import lombok.Getter;
 import net.atcore.AviaTerraCore;
-import net.atcore.AviaTerraPlayer;
+import net.atcore.aviaterraplayer.AviaTerraPlayer;
 import net.atcore.inventory.BaseActions;
 import net.atcore.inventory.inventors.ManipulatorInventory;
 import net.atcore.utils.GlobalUtils;
@@ -29,11 +29,11 @@ public class ManipulatorAction extends BaseActions {
     @Override
     public void closeInventory(AviaTerraPlayer player) {
         player.setInventorySection(null);
-        Player victim = GlobalUtils.getPlayer(player.getManipulatedInventoryPlayer());
-        player.setManipulatedInventoryPlayer(null);
+        Player victim = GlobalUtils.getPlayer(player.getModerationPlayer().getManipulatedInventoryPlayer());
+        player.getModerationPlayer().setManipulatedInventoryPlayer(null);
         AviaTerraPlayer atp = AviaTerraPlayer.getPlayer(victim);
-        atp.getManipulatorInventoryPlayer().remove(player.getPlayer().getUniqueId());
-        if (atp.getManipulatorInventoryPlayer().isEmpty() || !atp.getPlayer().isOnline()){
+        atp.getModerationPlayer().getManipulatorInventoryPlayer().remove(player.getPlayer().getUniqueId());
+        if (atp.getModerationPlayer().getManipulatorInventoryPlayer().isEmpty() || !atp.getPlayer().isOnline()){
             atp.setInventorySection(null);
             ManipulatorInventory.inventories.remove(victim.getUniqueId());
         }
@@ -42,16 +42,10 @@ public class ManipulatorAction extends BaseActions {
     @Override
     public void dragInventory(InventoryDragEvent event, AviaTerraPlayer player) {
         sendInventoryToOtherPlayersAndUpdate(player);
-
-    }
-
-    @Override
-    public void pickupInventory(EntityPickupItemEvent event, AviaTerraPlayer player) {
-        sendInventoryToOtherPlayersAndUpdate(player);
     }
 
     private void sendInventoryToOtherPlayersAndUpdate(AviaTerraPlayer p) {
-        Player victim = GlobalUtils.getPlayer(p.getManipulatedInventoryPlayer());
+        Player victim = GlobalUtils.getPlayer(p.getModerationPlayer().getManipulatedInventoryPlayer());
         new BukkitRunnable() {
             final AviaTerraPlayer player = p;
             public void run() {
