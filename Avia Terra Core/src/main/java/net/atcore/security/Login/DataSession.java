@@ -29,5 +29,6 @@ public class DataSession {
     private StateLogins state;
     private InetAddress address;
     private final Player player;
+    private byte[] sharedSecret;
 
 }

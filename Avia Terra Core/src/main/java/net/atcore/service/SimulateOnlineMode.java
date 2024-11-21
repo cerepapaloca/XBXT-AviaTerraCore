@@ -135,8 +135,7 @@ public class SimulateOnlineMode {
      * Se encarga de que el servidor cambien de modo offline a modo online para algunos usuarios
      * este method lo encontré en por hay ósea no tengo ni idea como funciona solo que llama otro
      * method dentro del servidor por eso es mejor no tocar
-     * @param loginKey Este es secreto compartido entre servidor y el cliente se llama asi por solo lo
-     *                 sabe esos dos
+     * @param loginKey Este es secreto compartido entre servidor y el cliente
      * @param player El jugador que le va a afectar el modo online
      * @return da true cuando esta bien false si dio un error
      */

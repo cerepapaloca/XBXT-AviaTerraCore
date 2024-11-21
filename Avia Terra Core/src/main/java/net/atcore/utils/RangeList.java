@@ -35,7 +35,7 @@ public enum RangeList {
         this.displayName = displayName;
         this.icon = icon;
         this.staff = staff;
-        this.permission = "aviaterracore.range." + displayName.toLowerCase();
+        this.permission = "aviaterracore.group." + displayName.toLowerCase();
         Permission permission = new Permission(this.permission);
         getServer().getPluginManager().addPermission(permission);
     }

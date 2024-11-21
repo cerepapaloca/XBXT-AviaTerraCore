@@ -75,7 +75,8 @@ public class VerificationPremium {
                                 listUUIDPremium.put(userName, verification);
                                 DataLogin dataLogin = LoginManager.getDataLogin(userName);
                                 DataSession session = new DataSession(player, StateLogins.PREMIUM, player.getAddress().getAddress());
-                                session.setEndTimeLogin(System.currentTimeMillis() + Config.getExpirationSession());
+                                session.setSharedSecret(sharedSecret);
+                                session.setEndTimeLogin(-1);
                                 dataLogin.setSession(session);
                                 //LoginManager.checkLoginIn(player, false);//esto para que siga el protocolo
                             }else{

@@ -57,10 +57,13 @@ public class RegisterManager {
         for (String s : pluginCommand.getAliases()){
             CommandManager.COMMANDS_AVIA_TERRA.put(s.toLowerCase(), command.getPermissions());
         }
-        if (!command.getPermissions().equals("*")){
-            Permission permission = new Permission(AviaTerraCore.getInstance().getName().toLowerCase() + ".command." + command.getName());
-            getServer().getPluginManager().addPermission(permission);
+        if (!command.getPermissions().equals("*") && !command.getPermissions().equals("**") && !command.getPermissions().contains("!")){
+            pluginCommand.setPermission(AviaTerraCore.getInstance().getName().toLowerCase() + ".command." + command.getName());
+            //Permission permission = new Permission(AviaTerraCore.getInstance().getName().toLowerCase() + ".command." + command.getName());
+            //getServer().getPluginManager().addPermission(permission);
         }
+
+        pluginCommand.setDescription(command.getDescription());
         pluginCommand.setExecutor(CommandSection.getCommandHandler());
         pluginCommand.setTabCompleter(CommandSection.getCommandHandler());
     }

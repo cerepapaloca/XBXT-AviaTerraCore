@@ -102,7 +102,7 @@ public class AviaTerraCommand extends BaseTabCommand {
                     }else{
                         Config.setServerMode(mode);
                         sendMessage(sender,"El modo del servidor esta en " + Config.getServerMode().name().toLowerCase().replace("_"," "), TypeMessages.INFO);
-                        switch (Config.getServerMode()){
+                        /*switch (Config.getServerMode()){
                             case OFFLINE_MODE -> {
                                 for (Player player : Bukkit.getOnlinePlayers()){
                                     DataLogin login = LoginManager.getDataLogin(player);
@@ -124,7 +124,7 @@ public class AviaTerraCommand extends BaseTabCommand {
                                     }
                                 }
                             }
-                        }
+                        }*/
                     }
 
                 }else{

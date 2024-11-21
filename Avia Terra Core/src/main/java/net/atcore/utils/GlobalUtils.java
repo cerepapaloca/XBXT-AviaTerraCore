@@ -216,6 +216,14 @@ public final class GlobalUtils {
         world.dropItemNaturally(location, item);
     }
 
+    public void synchronizeKickPlayer(@NotNull Player player, @Nullable String reason){
+        if (Bukkit.isPrimaryThread()){
+            kickPlayer(player, reason);
+        }else {
+            Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> kickPlayer(player, reason));
+        }
+    }
+
     /**
      * Expulsa el jugador sin importar que esté en modo {@code Login} o en modo {@code Play}
      * y respetando el formato de razón del kick

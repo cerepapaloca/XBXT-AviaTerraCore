@@ -6,11 +6,9 @@ import com.github.games647.craftapi.resolver.RateLimitException;
 import net.atcore.AviaTerraCore;
 import net.atcore.Config;
 import net.atcore.data.DataBaseRegister;
-import net.atcore.messages.TypeMessages;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.checkerframework.dataflow.qual.Pure;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -167,7 +165,7 @@ public final class LoginManager {
 
     /**
      * Chequea si el jugador está logueado correctamente y lo cambia de modo de juego
-     * si está logueado correctamente.
+     * si está logueado correctamente. Esto puede correr afuera del hilo principal
      *
      * @param player     al jugador que se va chequear
      * @param ignoreTime sí se tiene en cuenta el tiempo de expiración
@@ -175,58 +173,66 @@ public final class LoginManager {
      */
 
     public static boolean checkLoginIn(@NotNull Player player, boolean ignoreTime, boolean limboMode){
+        if (player.getAddress() == null) return false; // Esto por qué el jugador no terminado de entrar al servidor
         DataLogin dataLogin = getDataLogin(player);
         if (dataLogin == null){
-            if (Bukkit.isPrimaryThread()){
-                GlobalUtils.kickPlayer(player, "Hubo un problema con tu registro, vuelve a registrarte");
-            }else{
-                Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () ->
-                        GlobalUtils.kickPlayer(player, "Hubo un problema con tu registro, vuelve a registrarte"));
-            }
+            GlobalUtils.synchronizeKickPlayer(player, "Hubo un problema con tu registro, vuelve a registrarte");
             return false;
         }
 
-        if (dataLogin.hasSession()){//mira si tiene una session
+        if (dataLogin.hasSession()) {//mira si tiene una session
             DataSession dataSession = dataLogin.getSession();
-            // revisa si tiene una contraseña la cuenta cracked o si es un usuario premium
-            if ((dataSession.getState() == StateLogins.CRACKED && dataLogin.getRegister().getPasswordShaded() != null) ||
-                    dataSession.getState() == StateLogins.PREMIUM){
-
-                // mira si la ip son iguales
-                if (player.getAddress() == null) return false;
-                if (GlobalUtils.equalIp(dataSession.getAddress(), player.getAddress().getAddress())){
-                    if (ignoreTime || dataLogin.getSession().getEndTimeLogin() > System.currentTimeMillis()){//expiro? o no se tiene en cuenta
-                        if (dataLogin.isLimboMode() && limboMode){
-                            dataLogin.getLimbo().restorePlayer(player);
-                            dataLogin.setLimbo(null);
+            //el no premium requiere si o si una contraseña
+            switch (dataSession.getState()) {
+                case CRACKED -> {
+                    if (dataLogin.getRegister().getPasswordShaded() != null) {
+                        if (Config.getServerMode().equals(ServerMode.ONLINE_MODE)){
+                            GlobalUtils.synchronizeKickPlayer(player, "El servidor esta online mode");
+                            dataLogin.setSession(null);
+                            return false;
                         }
-                        // en caso de que sea op no se le cambia el modo de juego y se hace en el hilo principal por si acaso
-                        /*if (!player.isOp()) {
-                            if (Bukkit.isPrimaryThread()){
-                                player.setGameMode(GameMode.SURVIVAL);
-                            }else{
-                                Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> player.setGameMode(GameMode.SURVIVAL));
+                        if (GlobalUtils.equalIp(dataSession.getAddress(), player.getAddress().getAddress())) {
+                            if (ignoreTime || dataLogin.getSession().getEndTimeLogin() > System.currentTimeMillis()) {//expiro? o no se tiene en cuenta
+                                if (dataLogin.isLimboMode() && limboMode && player.isOnline()) {
+                                    dataLogin.getLimbo().restorePlayer(player);
+                                    dataLogin.setLimbo(null);
+                                }
+                                return true;
                             }
-                        }*/
-                        return true;
+                        }
+                    }else {
+                        if (!isLimboMode(player) && limboMode && player.isOnline()) LimboManager.startSynchronizeLimboMode(player, ReasonLimbo.NO_REGISTER);
                     }
+                }
+                case PREMIUM -> {
+                    if (!Config.getServerMode().equals(ServerMode.OFFLINE_MODE) && dataLogin.getRegister().getUuidPremium() != null) {
+                        if (dataSession.getSharedSecret() == null){
+                            GlobalUtils.synchronizeKickPlayer(player, "Hubo problema con tu llave secreta vuelve a entrar al servidor. Si el problema persiste reinicie su launcher");
+                            dataLogin.setSession(null);
+                            return false;
+                        }else {
+                            return true;
+                        }
+                    }else {
+                        if (dataLogin.getRegister().getPasswordShaded() != null){
+                            GlobalUtils.synchronizeKickPlayer(player, "Vuelve a iniciar sesión pero con tu contraseña");
+                        }else {
+                            GlobalUtils.synchronizeKickPlayer(player, "Te tienes que registrar con una contraseña");
+                        }
+                        dataLogin.setSession(null);
+                        return false;
+                    }
+                }
+                case UNKNOWN -> {
+                    GlobalUtils.kickPlayer(player, "Vuelve a entrar, Hubo un problema con tu cuenta");
+                    return false;
                 }
             }
         }
         if (!isLimboMode(player) && limboMode && player.isOnline()){
-            // en caso que no sea valida
-            if (Bukkit.isPrimaryThread()){
-                dataLogin.setLimbo(new DataLimbo(player));
-            }else{
-                Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> dataLogin.setLimbo(new DataLimbo(player)));
-            }
+            LimboManager.startSynchronizeLimboMode(player, ReasonLimbo.NO_SESSION);
         }
-        dataLogin.setSession(null);// esto lo borra
-
-        if (ServerMode.OFFLINE_MODE != Config.getServerMode() && LoginManager.getDataLogin(player).getRegister().getStateLogins().equals(StateLogins.PREMIUM)){
-            GlobalUtils.kickPlayer(player, "Vuelve a entrar para obtener una sesión nueva");
-        }
-
+        dataLogin.setSession(null);
         return false;
     }
 
@@ -240,15 +246,7 @@ public final class LoginManager {
             DataRegister dataRegister = dataLogin.getRegister();
             if (dataRegister != null) {
                 if (Config.getServerMode().equals(ServerMode.OFFLINE_MODE) || dataRegister.getStateLogins() == StateLogins.CRACKED){
-                    if (dataRegister.getPasswordShaded() != null) {//tiene contraseña o no
-                        if (!checkLoginIn(player, false, true)) {//si tiene una session valida o no
-                            startMessage(player, "Para Loguear utiliza el siguiente comando:\n <|/login <Contraseña>|>");
-                            startTimeOut(player, "Tardaste mucho en iniciar sesión");
-                        }
-                    }else{
-                        startTimeOut(player, "Tardaste mucho en registrarte");
-                        startMessage(player, "Para registrarte utiliza el siguiente comando:\n <|/register <Contraseña> <Contraseña>|>.");
-                    }
+                    checkLoginIn(player, false, true);
                 }
             }else{
                 GlobalUtils.kickPlayer(player, "no estas registrado, vuelve a entrar al servidor");
@@ -256,12 +254,6 @@ public final class LoginManager {
         }else {
             GlobalUtils.kickPlayer(player, "no estas registrado, vuelve a entrar al servidor");
         }
-
-
-        /*if (LoginManager.getListSession().get(player.getName()).getUuidPremium() != null) {
-            player.sendTitle(ChatColor.translateAlternateColorCodes('&',COLOR_ESPECIAL + "Te haz logueado!"),
-                    ChatColor.translateAlternateColorCodes('&',COLOR_ESPECIAL + "&oCuenta premium"), 20, 20*3, 40);
-        }*/
     }
 
     public static DataLogin startPlaySessionCracked(@NotNull Player player){
@@ -275,30 +267,4 @@ public final class LoginManager {
         return dataLogin;
     }
 
-    public static void startTimeOut(Player player, String reason){
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                if (checkLoginIn(player)) return;
-                GlobalUtils.kickPlayer(player, reason);
-            }
-        }.runTaskLater(AviaTerraCore.getInstance(), 20*60);
-    }
-
-    public static void startMessage(Player player, String message){
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                if (!player.isOnline()){
-                    cancel();
-                    return;
-                }
-                if (checkLoginIn(player)){
-                    cancel();
-                }else{
-                    sendMessage(player, message, TypeMessages.INFO);
-                }
-            }
-        }.runTaskTimer(AviaTerraCore.getInstance(), 20*2, 20*2);
-    }
 }

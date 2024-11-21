@@ -261,14 +261,9 @@ public final class CommandUtils {
             if (permission.contains("!")) permission = "!" + permission.replace("!", "");
             if (permission.equals("*") || permission.equals("**")) {
                 return true;
-            }else {
-                if (player.hasPermission("aviaterracore.command.*")){
-                    return true;
-                }
             }
             boolean b = false;
             for (String s : permission.replace("!","").split(",")){
-
                 if (permission.startsWith("!")) {
                     b = b || !player.hasPermission(s);
                 } else {

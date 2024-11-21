@@ -1,13 +1,18 @@
 package net.atcore.security.Login;
 
 import lombok.Getter;
+import lombok.Setter;
+import net.atcore.messages.MessagesManager;
+import net.atcore.messages.TypeMessages;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitTask;
 
 @Getter
+@Setter
 public class DataLimbo {
 
     DataLimbo(Player player) {
@@ -29,6 +34,7 @@ public class DataLimbo {
     private final Location location;
     private final boolean op;
     private final int level;
+    private BukkitTask task;
 
     public void restorePlayer(Player player) {
         player.setGameMode(gameMode);

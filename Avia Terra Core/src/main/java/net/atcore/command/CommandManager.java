@@ -3,8 +3,10 @@ package net.atcore.command;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import net.atcore.security.Login.LoginManager;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import java.io.BufferedReader;
 import java.util.HashMap;
 
 import static net.atcore.messages.MessagesManager.sendMessage;
@@ -16,9 +18,9 @@ public class CommandManager {//nose si poner en esta clase aquí la verdad
 
     public static boolean checkCommand(String command, Player player, boolean isSilent, boolean b){
         if (COMMANDS.containsKey(command.toLowerCase())){
+
             String permission = COMMANDS.get(command.toLowerCase());
             if (permission == null){
-
                 return false;
             }else{
                 if (CommandUtils.hasPermission(permission, player, b)){

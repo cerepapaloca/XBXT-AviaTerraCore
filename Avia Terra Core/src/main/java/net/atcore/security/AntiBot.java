@@ -19,7 +19,7 @@ public class AntiBot {
     private static final int TOLERANCE = 50;
     private static final long laste = 3;
 
-    public static boolean checkBot(InetAddress ip, @NotNull String name){// hasta que Net no arregle lo de la ip no implementar el sistema para la ip
+    public static boolean checkBot(InetAddress ip, @NotNull String name){
         if (!Config.isAntiBot()) return false;
         if (lastName.equals(name)) return false;
         lastName = name;
