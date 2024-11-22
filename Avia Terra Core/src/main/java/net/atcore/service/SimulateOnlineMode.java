@@ -22,7 +22,6 @@ import net.atcore.security.VerificationPremium;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerToggleFlightEvent;
 
 import javax.crypto.*;
 import java.lang.reflect.Method;
@@ -76,17 +75,12 @@ public class SimulateOnlineMode {
             }
             switch (state){//revisa entre las sesiones o los registro del los jugadores
                 case PREMIUM -> startLoginPremium(name, uuid, player);
-                case CRACKED -> startLoginCracked(name, uuid);
                 case UNKNOWN -> GlobalUtils.kickPlayer(player, "Error de connexion vuele a intentar");
             }
             sendMessageConsole("Iniciando login: <|" + state.name().toLowerCase() + "|> para el jugador: <|" + name + "|>", TypeMessages.INFO, CategoryMessages.LOGIN);
             return state == StateLogins.PREMIUM; //se cancela por que asi el servidor no se da cuenta de que a recibido un paquete
         }
         return false;
-    }
-
-    private void startLoginCracked(String name, UUID uuid) {
-        //de pronto en el futuro lo usaré o no
     }
 
     private void startLoginPremium(String name, UUID uuid, Player sender) {

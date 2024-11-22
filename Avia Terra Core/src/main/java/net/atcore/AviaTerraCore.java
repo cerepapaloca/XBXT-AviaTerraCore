@@ -37,7 +37,6 @@ public final class AviaTerraCore extends JavaPlugin {
 
     @Getter
     private static AviaTerraCore instance;
-    private static HashMap<UUID, AviaTerraPlayer> players = new HashMap<>();
     public static final String TOKEN_BOT = "MTI5MTUzODM1MjY0NjEzMTc3NA.GDwtcq.azwlvX6fWKbusXk8sOyzRMK78Qe9CwbHy_pmWk";
     public static JDA BOT_DISCORD;
     @Getter private static LuckPerms LP;

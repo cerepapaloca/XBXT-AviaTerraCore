@@ -78,6 +78,7 @@ public class VerificationPremium {
                                 session.setSharedSecret(sharedSecret);
                                 session.setEndTimeLogin(-1);
                                 dataLogin.setSession(session);
+                                dataLogin.setLimbo(null);
                                 //LoginManager.checkLoginIn(player, false);//esto para que siga el protocolo
                             }else{
                                 GlobalUtils.kickPlayer(player, "Se detecto una discrepancia. Reinicie su cliente");

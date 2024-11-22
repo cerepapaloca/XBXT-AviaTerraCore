@@ -8,6 +8,7 @@ import net.atcore.Config;
 import net.atcore.data.DataBaseRegister;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.checkerframework.dataflow.qual.Pure;
 import org.jetbrains.annotations.NotNull;
@@ -22,7 +23,6 @@ import java.security.spec.InvalidKeySpecException;
 import java.util.*;
 
 import static net.atcore.data.DataBaseRegister.*;
-import static net.atcore.messages.MessagesManager.sendMessage;
 
 public final class LoginManager {
 
@@ -164,11 +164,12 @@ public final class LoginManager {
     }
 
     /**
-     * Chequea si el jugador está logueado correctamente y lo cambia de modo de juego
-     * si está logueado correctamente. Esto puede correr afuera del hilo principal
+     * Realiza todas comprobaciones de qué este logueado correctamente y tenga una sesión
+     * valída
      *
-     * @param player     al jugador que se va chequear
-     * @param ignoreTime sí se tiene en cuenta el tiempo de expiración
+     * @param player al jugador que se va chequear
+     * @param ignoreTime sí se tiene en cuenta el tiempo de expiración o se ignora
+     * @param limboMode El jugador puede llegar a entrar a modo limo si no está logueado
      * @return verdadero cuando esta logueado, falso cuando no lo está
      */
 
@@ -182,58 +183,64 @@ public final class LoginManager {
 
         if (dataLogin.hasSession()) {//mira si tiene una session
             DataSession dataSession = dataLogin.getSession();
-            //el no premium requiere si o si una contraseña
             switch (dataSession.getState()) {
                 case CRACKED -> {
-                    if (dataLogin.getRegister().getPasswordShaded() != null) {
-                        if (Config.getServerMode().equals(ServerMode.ONLINE_MODE)){
-                            GlobalUtils.synchronizeKickPlayer(player, "El servidor esta online mode");
-                            dataLogin.setSession(null);
-                            return false;
-                        }
-                        if (GlobalUtils.equalIp(dataSession.getAddress(), player.getAddress().getAddress())) {
-                            if (ignoreTime || dataLogin.getSession().getEndTimeLogin() > System.currentTimeMillis()) {//expiro? o no se tiene en cuenta
-                                if (dataLogin.isLimboMode() && limboMode && player.isOnline()) {
-                                    dataLogin.getLimbo().restorePlayer(player);
-                                    dataLogin.setLimbo(null);
+                    if (dataLogin.getRegister().getPasswordShaded() != null) {// tiene una contraseña la cuenta?
+                        if (!Config.getServerMode().equals(ServerMode.ONLINE_MODE)){// no puede ver cracked en modo online
+                            if (GlobalUtils.equalIp(dataSession.getAddress(), player.getAddress().getAddress())) {// las ips tiene que ser iguales
+                                if (ignoreTime || dataLogin.getSession().getEndTimeLogin() > System.currentTimeMillis()) {// expiro? o no se tiene en cuenta
+                                    if (dataLogin.isLimboMode() && limboMode && player.isOnline()) {
+                                        dataLogin.getLimbo().restorePlayer(player);
+                                        dataLogin.setLimbo(null);
+                                    }
+                                    return true;// sesión válida para los cracked
                                 }
-                                return true;
+                            }
+                            if (limboMode) LimboManager.startSynchronizeLimboMode(player, ReasonLimbo.NO_SESSION);
+                        }else {
+                            GlobalUtils.synchronizeKickPlayer(player, "El servidor esta online mode");
+                        }
+                    }else {
+                        if (limboMode) LimboManager.startSynchronizeLimboMode(player, ReasonLimbo.NO_REGISTER);
+                    }
+                    dataLogin.setSession(null);
+                    return false;
+                }
+                case PREMIUM -> {
+                    if (!Config.getServerMode().equals(ServerMode.OFFLINE_MODE)) {// no puede haber sesiónes premium si esta offline
+                        if (GlobalUtils.equalIp(dataSession.getAddress(), player.getAddress().getAddress())){// esto no tendría que dar falso
+                            if (dataSession.getSharedSecret() == null) {//no tiene el secreto compartido lo cual tiene que ser imposible
+                                GlobalUtils.synchronizeKickPlayer(player, "Hubo problema con tu llave secreta vuelve a entrar al servidor. Si el problema persiste reinicie su launcher");
+                                dataLogin.setSession(null);
+                            } else {
+                                return true;// sesión válida para los premium
                             }
                         }
                     }else {
-                        if (!isLimboMode(player) && limboMode && player.isOnline()) LimboManager.startSynchronizeLimboMode(player, ReasonLimbo.NO_REGISTER);
-                    }
-                }
-                case PREMIUM -> {
-                    if (!Config.getServerMode().equals(ServerMode.OFFLINE_MODE) && dataLogin.getRegister().getUuidPremium() != null) {
-                        if (dataSession.getSharedSecret() == null){
-                            GlobalUtils.synchronizeKickPlayer(player, "Hubo problema con tu llave secreta vuelve a entrar al servidor. Si el problema persiste reinicie su launcher");
-                            dataLogin.setSession(null);
-                            return false;
-                        }else {
-                            return true;
+                        if (limboMode){
+                            if (dataLogin.getRegister().getPasswordShaded() != null){// la cuenta premium tiene una contraseña?
+                                LimboManager.startSynchronizeLimboMode(player, ReasonLimbo.NO_SESSION);
+                            }else {
+                                LimboManager.startSynchronizeLimboMode(player, ReasonLimbo.NO_REGISTER);
+                            }
                         }
-                    }else {
-                        if (dataLogin.getRegister().getPasswordShaded() != null){
-                            GlobalUtils.synchronizeKickPlayer(player, "Vuelve a iniciar sesión pero con tu contraseña");
-                        }else {
-                            GlobalUtils.synchronizeKickPlayer(player, "Te tienes que registrar con una contraseña");
-                        }
-                        dataLogin.setSession(null);
-                        return false;
                     }
+                    dataLogin.setSession(null);
+                    return false;
                 }
-                case UNKNOWN -> {
+                default -> {
                     GlobalUtils.kickPlayer(player, "Vuelve a entrar, Hubo un problema con tu cuenta");
                     return false;
                 }
             }
+        }else {//esto solo sucedería para los no premium
+            if (dataLogin.getRegister().getPasswordShaded() != null){// la cuenta premium tiene una contraseña?
+                LimboManager.startSynchronizeLimboMode(player, ReasonLimbo.NO_SESSION);
+            }else {
+                LimboManager.startSynchronizeLimboMode(player, ReasonLimbo.NO_REGISTER);
+            }
+            return false;
         }
-        if (!isLimboMode(player) && limboMode && player.isOnline()){
-            LimboManager.startSynchronizeLimboMode(player, ReasonLimbo.NO_SESSION);
-        }
-        dataLogin.setSession(null);
-        return false;
     }
 
     public static boolean isLimboMode(@NotNull Player player){
@@ -264,6 +271,7 @@ public final class LoginManager {
         dataLogin.getLimbo().restorePlayer(player);
         dataLogin.setLimbo(null);
         player.updateCommands();
+        player.playSound(player, Sound.ENTITY_PLAYER_LEVELUP, 0.4f, 1);
         return dataLogin;
     }
 

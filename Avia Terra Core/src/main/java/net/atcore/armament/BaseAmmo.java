@@ -23,7 +23,7 @@ public abstract class BaseAmmo extends BaseArmament {
     }
 
     protected BaseAmmo(double damage, String displayName, Color color, boolean isTrace, float densityTrace, float penetration) {
-        super(displayName, new ItemStack(Material.SNOWBALL), "ammo");
+        super(displayName, new ItemStack(Material.END_ROD), "ammo");
         this.damage = damage;
         this.color = color;
         this.isTrace = isTrace;

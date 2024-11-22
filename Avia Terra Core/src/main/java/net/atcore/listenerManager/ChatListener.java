@@ -27,7 +27,7 @@ public class ChatListener implements Listener {
 
     private Player lastPlayerMention;
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGH)
     public void onChat(AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
         String message = event.getMessage();

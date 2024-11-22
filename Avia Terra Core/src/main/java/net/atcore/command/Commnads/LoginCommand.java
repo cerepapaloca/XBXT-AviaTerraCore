@@ -9,6 +9,7 @@ import net.atcore.moderation.Ban.ContextBan;
 import net.atcore.moderation.ModerationSection;
 import net.atcore.security.Login.*;
 import net.atcore.utils.GlobalUtils;
+import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -74,7 +75,7 @@ public class LoginCommand extends BaseCommand {
         LoginManager.updateLoginDataBase(player.getName(), Objects.requireNonNull(player.getAddress()).getAddress());
         player.updateCommands();
         MessagesManager.sendTitle(player,"Bienvenido de vuelta", "<|&o" + player.getDisplayName() + "|>", 20, 20*3, 40, TypeMessages.INFO);
-        sendMessage(player, "Has iniciado session exitosamente", TypeMessages.SUCCESS);
+        sendMessage(player, "Has iniciado sesión exitosamente", TypeMessages.SUCCESS);
     }
 
     private void fail(Player player) {
@@ -89,6 +90,7 @@ public class LoginCommand extends BaseCommand {
                 "Si no se acuerda de su contraseña y tiene un corro o un discord vinculado puede" +
                 "puede enviar un código de verificación usando <|/link <discord | gmail>|>");
     }
+
     public static boolean isUUID(String str) {
         try {
             UUID.fromString(str);

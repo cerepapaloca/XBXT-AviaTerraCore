@@ -6,6 +6,7 @@ import net.atcore.command.ModeAutoTab;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import net.atcore.security.Login.*;
+import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -36,7 +37,7 @@ public class RegisterCommand extends BaseCommand {
                             sendMessage(player, "la contraseña se guardo exitosamente y registraste exitosamente", TypeMessages.SUCCESS);
                             LoginManager.newRegisterCracked(player.getName(), player.getAddress().getAddress(),  args[0]);
                             MessagesManager.sendTitle(player, "Bienvenido A AviaTerra", "<|&0" + player.getDisplayName() + "|>", 20, 20*3, 40, TypeMessages.INFO);
-                            startPlaySessionCracked(player).getRegister().setTemporary(false);;
+                            startPlaySessionCracked(player).getRegister().setTemporary(false);
                             LoginManager.checkLoginIn(player);
                         }else{
                             sendMessage(player, "las contraseña no son iguales", TypeMessages.ERROR);

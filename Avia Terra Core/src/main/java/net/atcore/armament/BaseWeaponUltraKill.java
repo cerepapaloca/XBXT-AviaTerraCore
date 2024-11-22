@@ -37,7 +37,7 @@ public abstract class BaseWeaponUltraKill extends BaseWeapon {
             onShoot(dataShoot);
             ammo.onShoot(dataShoot);
             updateLore(player.getInventory().getItemInMainHand(), null);
-            player.getWorld().playSound(player.getLocation(), Sound.BLOCK_NETHERITE_BLOCK_HIT, SoundCategory.PLAYERS, 1, 1.3f);
+            player.getWorld().playSound(player.getLocation(), Sound.ENTITY_SNOW_GOLEM_SHOOT, SoundCategory.PLAYERS, 1.1f, 0.8f);
         }else{
             MessagesManager.sendMessage(player, "No tienes munición suficiente", TypeMessages.ERROR);
         }

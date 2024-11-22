@@ -16,11 +16,13 @@ public class LimboManager {
     public static final int LIMBO_TIME = 20*60;
 
     public void startSynchronizeLimboMode(Player player, ReasonLimbo reasonLimbo){
-        if (Bukkit.isPrimaryThread()){
-            LimboManager.createLimboMode(player, ReasonLimbo.NO_REGISTER);
-        }else{
-            Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () ->
-                    LimboManager.createLimboMode(player, ReasonLimbo.NO_REGISTER));
+        if (player.isOnline() && !LoginManager.isLimboMode(player)){
+            if (Bukkit.isPrimaryThread()){
+                LimboManager.createLimboMode(player, reasonLimbo);
+            }else{
+                Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () ->
+                        LimboManager.createLimboMode(player, reasonLimbo));
+            }
         }
     }
 
@@ -29,14 +31,14 @@ public class LimboManager {
         DataLimbo dataLimbo = new DataLimbo(player);
         dataLogin.setLimbo(dataLimbo);
         switch (reasonLimbo){
-            case NO_REGISTER -> {
+            case NO_SESSION -> {
                 MessagesManager.sendTitle(player,
                     "Utiliza Este Comando", "<|/login <Contraseña>|>", 30, LIMBO_TIME, 30, TypeMessages.INFO);
                 MessagesManager.sendMessage(player,
                         "Para Loguear utiliza el siguiente comando:\n <|/login <Contraseña>|>", TypeMessages.INFO);
                 startTimeOut(player, "Tardaste mucho en iniciar sesión", dataLimbo);
             }
-            case NO_SESSION -> {
+            case NO_REGISTER -> {
                 MessagesManager.sendTitle(player,
                     "Utiliza Este Comando", "<|/register <Contraseña> <Contraseña>|>", 30, LIMBO_TIME, 30, TypeMessages.INFO);
                 MessagesManager.sendMessage(player,

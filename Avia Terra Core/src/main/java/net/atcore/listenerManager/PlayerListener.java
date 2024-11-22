@@ -14,6 +14,8 @@ import net.atcore.utils.GlobalUtils;
 import net.atcore.utils.RangeList;
 import net.luckperms.api.node.types.InheritanceNode;
 import org.bukkit.*;
+import org.bukkit.advancement.Advancement;
+import org.bukkit.advancement.AdvancementDisplayType;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.PluginCommand;

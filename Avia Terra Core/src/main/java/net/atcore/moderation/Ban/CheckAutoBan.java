@@ -97,7 +97,6 @@ public class CheckAutoBan {
                     PersistentDataContainer dataContainer = item.getItemMeta().getPersistentDataContainer();
                     if (dataContainer.has(GlobalUtils.KEY_ANTI_DUPE, PersistentDataType.STRING)) {
                         String uniqueId = dataContainer.get(GlobalUtils.KEY_ANTI_DUPE, PersistentDataType.STRING);
-
                         itemCounts.put(uniqueId, itemCounts.getOrDefault(uniqueId, 0) + 1);
                     }
                 }
@@ -113,7 +112,6 @@ public class CheckAutoBan {
                 }
             }
         }.runTaskLater(AviaTerraCore.getInstance(), 1);
-
     }
 
     private static final Set<Material> ILEGAL_ITEMS = Set.of(BEDROCK, END_PORTAL_FRAME, COMMAND_BLOCK, BARRIER,

@@ -15,7 +15,7 @@ import net.atcore.messages.TypeMessages;
 public abstract class DataBaseMySql {
     private static Connection connection;
 
-    private static final String HOST = "147.185.221.20";
+    private static final String HOST = "localhost";// 147.185.221.20 localhost
     private static final String PORT = "2149";
     private static final String DATABASE = "AviaTerra";
     private static final String USER = "azurex";
@@ -52,15 +52,16 @@ public abstract class DataBaseMySql {
     }
 
     /**
-     * Crea una connexion con la base de datos si no está conectado y
-     * intentar usar este method en un hilo aparte del servidor porque lo
-     * puede bloquear el hilo principal de servidor un ejemplo de como
+     * Crea una connexion con la base de datos si no está conectado e
+     * intentar usar este method en un hilo aparte del servidor porque
+     * bloquea el hilo principal de servidor un ejemplo de como
      * pueden crear un hilo aparte
      * <blockquote><pre>
-     *     Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+     *     AviaTerraCore.getInstance().enqueueTaskAsynchronously(() -> {
      *          connection = getConnection()
      *     });
      * </pre></blockquote>
+     *
      * @return Te devuelve {@link #connection} que contiene todas las tablas
      * de la base de datos
      */

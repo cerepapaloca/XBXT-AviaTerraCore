@@ -56,7 +56,7 @@ public abstract class BaseWeaponTarkov extends BaseWeapon implements Compartment
                         updateLore(itemWeapon, null);
                         baseMagazine.onShoot(dataShoot);
                         ammon.onShoot(dataShoot);
-                        player.getWorld().playSound(player.getLocation(),Sound.BLOCK_NETHERITE_BLOCK_HIT, SoundCategory.PLAYERS, 1, 1.3f);
+                        player.getWorld().playSound(player.getLocation(), Sound.ENTITY_SNOW_GOLEM_SHOOT, SoundCategory.PLAYERS, 1.1f, 0.8f);
                     }
                 }else {
                     updateLore(itemWeapon, null);
@@ -146,7 +146,7 @@ public abstract class BaseWeaponTarkov extends BaseWeapon implements Compartment
             GlobalUtils.setPersistentDataItem(itemWeapon, "magazineNameInside", PersistentDataType.STRING, magazineNameExternal);
             updateLore(itemWeapon, hasCharger ? itemSwapMagazine : itemCharger);
             if (hasCharger){
-                GlobalUtils.addItemPlayer(itemSwapMagazine, player, false, true);
+                GlobalUtils.addItemPlayer(itemSwapMagazine, player, true, true);
             }
             player.getWorld().playSound(player.getLocation(), Sound.ITEM_ARMOR_EQUIP_IRON, SoundCategory.PLAYERS, 1, 1);
             break;
