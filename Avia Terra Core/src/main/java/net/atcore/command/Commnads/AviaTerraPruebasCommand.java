@@ -1,7 +1,7 @@
 package net.atcore.command.Commnads;
 
 import net.atcore.aviaterraplayer.AviaTerraPlayer;
-import net.atcore.Test.TypeTest;
+import net.atcore.test.TypeTest;
 import net.atcore.command.BaseTabCommand;
 import net.atcore.command.CommandUtils;
 import net.atcore.messages.MessagesManager;
@@ -32,7 +32,7 @@ public class AviaTerraPruebasCommand extends BaseTabCommand {
                     MessagesManager.sendMessage(player, "Esta prueba no existe", TypeMessages.ERROR);
                     return;
                 }
-                typeTest.getRunTest().runTest(atp);
+                typeTest.runtTest(atp);
             }else {
                 MessagesManager.sendMessage(player, this.getUsage(), TypeMessages.ERROR);
             }

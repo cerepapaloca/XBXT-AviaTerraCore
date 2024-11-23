@@ -209,6 +209,4 @@ public abstract class BaseMagazine extends BaseArmament implements Compartment {
         }
         return listAmmoToBaseAmmo(listAmmonFill);
     }
-
-    public abstract void onShoot(DataShoot dataShoot);
 }

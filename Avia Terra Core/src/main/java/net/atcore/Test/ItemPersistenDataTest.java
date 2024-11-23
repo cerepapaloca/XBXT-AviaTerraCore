@@ -1,4 +1,4 @@
-package net.atcore.Test;
+package net.atcore.test;
 
 import net.atcore.aviaterraplayer.AviaTerraPlayer;
 import net.atcore.messages.TypeMessages;
@@ -11,7 +11,7 @@ import org.bukkit.persistence.PersistentDataType;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ItemPersistenDataTest implements RunTest {
+public final class ItemPersistenDataTest implements RunTest {
 
     @Override
     public void runTest(AviaTerraPlayer player) {
@@ -52,6 +52,7 @@ public class ItemPersistenDataTest implements RunTest {
         return dataMap;
     }
 
+    @SuppressWarnings("deprecation")
     private Object getValue(PersistentDataContainer container, NamespacedKey key) {
         // Intenta obtener el valor para varios tipos de datos
         if (container.has(key, PersistentDataType.STRING)) {

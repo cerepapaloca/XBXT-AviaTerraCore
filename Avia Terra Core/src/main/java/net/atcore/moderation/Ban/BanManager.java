@@ -69,6 +69,7 @@ public class BanManager extends DataBaseBan {
         boolean checkIp = false;
         Collection<DataBan> dataBans = null;
 
+        // Se busca él databan del jugador
         if (listDataBanByNAME.containsKey(player.getName())) {
             dataBans = getDataBan(player.getName()).values();
             checkName = true;//Se Busca por su UUID de usuario, si está baneado
@@ -96,22 +97,21 @@ public class BanManager extends DataBaseBan {
                 */
             }
 
-            if (context == null){//Otro "por si acaso"
+            if (context == null){// Otro "por si acaso"
                 context = ContextBan.GLOBAL;
             }
-            for (DataBan ban : dataBans) {//mira cada DataBan del jugador para saber exactamente de que está baneado
-                if (ban.getContext().equals(context)) {//saber si el contexto del check le corresponde al baneo
+            for (DataBan ban : dataBans) {// mira cada DataBan del jugador para saber exactamente de que está baneado
+                if (ban.getContext().equals(context)) {// saber si el contexto del check le corresponde al baneo
                     long unbanDate = ban.getUnbanDate();
                     long currentTime = System.currentTimeMillis();
                     String time;
                     time = GlobalUtils.timeToString(unbanDate,1, true);
-                    if (unbanDate == GlobalConstantes.NUMERO_PERMA || currentTime < unbanDate) {//para saber si él baneo ya expiro
+                    if (unbanDate == GlobalConstantes.NUMERO_PERMA || currentTime < unbanDate) {// para saber si él baneó ya expiro o es permanente
                         sendMessageConsole(player.getName() + " se \"echo\" por que estar baneado de: <|" + context.name() +
                                 "|>. Se detecto por Nombre: <|" + checkName + "|> por ip: <|" + checkIp + "|>. tiempo restante " +
                                 "<|" +  time + "|>", TypeMessages.INFO, CategoryMessages.BAN);
-                        //ban.getContext().onBan(player, ban);
                         return IsBan.YES;
-                    } else {//eliminar él baneó cuando expiro y realiza en un hilo aparte para que no pete el servidor
+                    } else {// eliminar él baneó cuando expiro y realiza en un hilo aparte para que no pete el servidor
                         Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(), () -> ModerationSection.getBanManager().removeBanPlayer(player.getName(), ban.getContext(), "Servidor (Expiro)"));
                         return IsBan.NOT;
                     }

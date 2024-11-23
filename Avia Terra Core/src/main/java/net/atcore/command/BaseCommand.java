@@ -2,7 +2,6 @@ package net.atcore.command;
 
 import lombok.Getter;
 import net.atcore.AviaTerraCore;
-import net.atcore.Test.TypeTest;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

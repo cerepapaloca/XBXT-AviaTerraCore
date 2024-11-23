@@ -67,13 +67,15 @@ public class SimulateOnlineMode {
         }
 
         DataLogin dataLogin = LoginManager.getDataLogin(name);
+        // En caso que no tenga una sesión se le expiro se hace una nueva
         if ((dataLogin == null || dataLogin.getSession() == null) || dataLogin.getSession().getEndTimeLogin() < System.currentTimeMillis()) {
+            // Lo registra si no esta registrado
             StateLogins state = LoginManager.getStateAndRegister(player.getAddress().getAddress() ,name);
             switch (Config.getServerMode()){
                 case OFFLINE_MODE -> state = StateLogins.CRACKED;
                 case ONLINE_MODE -> state = StateLogins.PREMIUM;
             }
-            switch (state){//revisa entre las sesiones o los registro del los jugadores
+            switch (state){
                 case PREMIUM -> startLoginPremium(name, uuid, player);
                 case UNKNOWN -> GlobalUtils.kickPlayer(player, "Error de connexion vuele a intentar");
             }
@@ -94,6 +96,7 @@ public class SimulateOnlineMode {
         packetEncryption.getByteArrays().write(1, token);
 
         packetEncryption.getBooleans().write(0, true);
+        // se envía el paquete de inicio de cifrado esto es para que el cliente se prepara para comenzar el cifrado y seguir con el protocolo
         ProtocolLibrary.getProtocolManager().sendServerPacket(sender, packetEncryption);
     }
 
@@ -111,14 +114,13 @@ public class SimulateOnlineMode {
     /**
      * Esto envía un paquete falso al mismo servidor para que el servidor crea se está unido un
      * jugador por qué el paquete original fue cancelado al recibir el paquete {@code PacketType.Login.Client.START}
-     * y para que el servidor siga con el protocolo se envía de nuevo
+     * y para que el servidor siga con el protocolo
      */
 
     public static void FakeStartPacket(String username, UUID uuid, Player player) {
         PacketContainer startPacket = new PacketContainer(START);
         startPacket.getStrings().write(0, username);
         startPacket.getUUIDs().write(0, uuid);
-
         ProtocolLibrary.getProtocolManager().receiveClientPacket(player, startPacket, false);
     }
 
@@ -128,7 +130,7 @@ public class SimulateOnlineMode {
     /**
      * Se encarga de que el servidor cambien de modo offline a modo online para algunos usuarios
      * este method lo encontré en por hay ósea no tengo ni idea como funciona solo que llama otro
-     * method dentro del servidor por eso es mejor no tocar
+     * method dentro del servidor por eso es mejor no tocar. Ni sé de donde saco esto la verdad
      * @param loginKey Este es secreto compartido entre servidor y el cliente
      * @param player El jugador que le va a afectar el modo online
      * @return da true cuando esta bien false si dio un error

@@ -69,6 +69,4 @@ public abstract class BaseAmmo extends BaseArmament {
         itemMeta.setLore(GlobalUtils.StringToLoreString(MessagesManager.addProprieties(getProperties(), null, false, false), true));
         itemArmament.setItemMeta(itemMeta);
     }
-
-    public abstract void onShoot(DataShoot dataShoot);
 }

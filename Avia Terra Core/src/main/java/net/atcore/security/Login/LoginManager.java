@@ -82,7 +82,7 @@ public final class LoginManager {
                 Profile profileObj = profile.get();
                 dataRegister = new DataRegister(profileObj.getName(), GlobalUtils.getUUIDByName(name), profileObj.getId(), StateLogins.PREMIUM, false);
                 dataRegister.setLastAddress(ip);
-                //se guarda el registro en la base de datos
+                // Se guarda el registro en la base de datos
                 Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(), () ->
                         DataBaseRegister.addRegister(dataRegister.getUsername(),
                         profileObj.getId().toString(), GlobalUtils.getUUIDByName(name).toString(),
@@ -91,7 +91,7 @@ public final class LoginManager {
                         System.currentTimeMillis(), System.currentTimeMillis()
                 ));
 
-            }else {//es temporal el registro por qué no ha puesto la contraseña
+            }else {// Es temporal el registro por qué no ha puesto la contraseña
                 dataRegister = new DataRegister(name, GlobalUtils.getUUIDByName(name), StateLogins.CRACKED, true);
                 dataRegister.setLastAddress(ip);
                 //se guarda el registro en la base de datos
@@ -209,7 +209,7 @@ public final class LoginManager {
                 case PREMIUM -> {
                     if (!Config.getServerMode().equals(ServerMode.OFFLINE_MODE)) {// no puede haber sesiónes premium si esta offline
                         if (GlobalUtils.equalIp(dataSession.getAddress(), player.getAddress().getAddress())){// esto no tendría que dar falso
-                            if (dataSession.getSharedSecret() == null) {//no tiene el secreto compartido lo cual tiene que ser imposible
+                            if (dataSession.getSharedSecret() == null) {// no tiene el secreto compartido lo cual tiene que ser imposible.
                                 GlobalUtils.synchronizeKickPlayer(player, "Hubo problema con tu llave secreta vuelve a entrar al servidor. Si el problema persiste reinicie su launcher");
                                 dataLogin.setSession(null);
                             } else {

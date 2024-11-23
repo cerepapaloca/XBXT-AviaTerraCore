@@ -56,27 +56,28 @@ public class VerificationPremium {
                 String uuid = key.split("\\|")[2];
                 ////////////////////////////////////////
 
-                //se crea el serverID a partir de la llave secreta y la llave publica
+                // Se crea el serverID a partir de la llave secreta y la llave publicá
                 String serverId = generateServerId(ServiceSection.getEncrypt().getPublicKey(), sharedSecret);
                 MojangResolver resolver = AviaTerraCore.getResolver();
                 Optional<Verification> response;
-                //Activa el protocolo de encriptación de minecraft. Más información en https://wiki.vg/Protocol_Encryption
+                // Activa el protocolo de encriptación de minecraft. Más información en https://wiki.vg/Protocol_Encryption
                 if (SimulateOnlineMode.enableEncryption(new SecretKeySpec(sharedSecret, "AES"), player)){
-                    //se investiga en la base de datos en mojang para saber si esta logueado.
+                    // Se investiga en la base de datos en mojang para saber si está logueado.
                     response = resolver.hasJoined(name, serverId, player.getAddress().getAddress());
                     if (response.isPresent()){//Se mira la base de datos
                         Verification verification = response.get();
-                        if (checkNameAndUUID(verification, name, uuid)) {//mira si son iguales
-                            if (ip.equals(player.getAddress().getHostName())){//mira si la ip son las misma
-                                SimulateOnlineMode.FakeStartPacket(verification.getName(), verification.getId(), player);//se envía un paquete falso al servidor
-                                sendMessageConsole("Certificación del premíum valida del jugador <|" +           //para que siga con el protocolo
+                        if (checkNameAndUUID(verification, name, uuid)) {// Mira si son iguales las uuid premium
+                            if (ip.equals(player.getAddress().getAddress().getHostAddress())){// Mira si la ip son la misma ip
+                                // Se envía un paquete falso al servidor para que siga con el protocolo
+                                SimulateOnlineMode.FakeStartPacket(verification.getName(), verification.getId(), player);
+                                sendMessageConsole("Certificación del premíum valida del jugador <|" +
                                         name + "|>", TypeMessages.SUCCESS, CategoryMessages.LOGIN);
                                 String userName = verification.getName();
                                 listUUIDPremium.put(userName, verification);
                                 DataLogin dataLogin = LoginManager.getDataLogin(userName);
                                 DataSession session = new DataSession(player, StateLogins.PREMIUM, player.getAddress().getAddress());
                                 session.setSharedSecret(sharedSecret);
-                                session.setEndTimeLogin(-1);
+                                session.setEndTimeLogin(-1);// Por seguridad los jugadores premium no puede tener sesiones
                                 dataLogin.setSession(session);
                                 dataLogin.setLimbo(null);
                                 //LoginManager.checkLoginIn(player, false);//esto para que siga el protocolo

@@ -30,10 +30,10 @@ public final class CommandHandler implements TabExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {
-        for (BaseCommand command : commands) {
+        for (BaseCommand command : commands) {// Pasa por todas las clases para saber que comando es
             if (!(cmd.getName().equalsIgnoreCase(command.getName()))) continue;
             if (sender instanceof Player player) {
-               if (AntiExploit.checkOpAndCreative(player))return false;// mirar si el jugador tiene creativo o es OP)
+               if (AntiExploit.checkOpAndCreative(player))return false;// mirar si el jugador tiene creativo o es OP
             }
             try {
                 if (sender instanceof Player player) {

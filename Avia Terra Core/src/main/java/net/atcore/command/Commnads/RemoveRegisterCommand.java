@@ -8,8 +8,6 @@ import net.atcore.messages.TypeMessages;
 import net.atcore.security.Login.LoginManager;
 import org.bukkit.command.CommandSender;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 

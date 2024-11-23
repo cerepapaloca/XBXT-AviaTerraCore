@@ -4,7 +4,6 @@ import net.atcore.command.BaseTabCommand;
 import net.atcore.command.CommandUtils;
 import net.atcore.messages.TypeMessages;
 import net.atcore.moderation.Ban.ContextBan;
-import net.atcore.moderation.Ban.action.Global;
 import net.atcore.moderation.ModerationSection;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.command.CommandSender;

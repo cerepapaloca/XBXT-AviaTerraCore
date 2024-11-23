@@ -368,7 +368,7 @@ public final class GlobalUtils {
      * @param hueDelta se maneja -1 a 1
      * @param lightnessDelta se maneja -1 a 1
      * @param saturationDelta se maneja -1 a 1
-     * @return el hex con las modification
+     * @return el hex con las modificaciones
      */
 
     public static @NotNull String modifyColorHexWithHLS(@NotNull String hexColor, float hueDelta, float lightnessDelta, float saturationDelta) {

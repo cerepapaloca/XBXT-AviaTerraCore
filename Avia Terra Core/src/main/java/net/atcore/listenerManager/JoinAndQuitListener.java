@@ -42,10 +42,11 @@ public class JoinAndQuitListener implements Listener {
             login.setLimbo(null);
         }
 
-        if (LoginManager.getDataLogin(player) != null) {//si le llega a borrar el registro
+        if (LoginManager.getDataLogin(player) != null) {// si le llega a borrar el registro
+            // Borra a los jugadores no premium que no pudieron registrarse para evitar tener jugadores fantasmas
             if (LoginManager.getDataLogin(player.getUniqueId()).getRegister().isTemporary()){
                 AviaTerraCore.getInstance().enqueueTaskAsynchronously(() ->
-                        DataBaseRegister.removeRegister(player.getName(), "Servidor"));//borra a los jugadores no premium que no pudieron registrarse
+                        DataBaseRegister.removeRegister(player.getName(), "Servidor"));
             }
         }
 

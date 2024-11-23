@@ -1,4 +1,4 @@
-package net.atcore.Test;
+package net.atcore.test;
 
 import net.atcore.aviaterraplayer.AviaTerraPlayer;
 

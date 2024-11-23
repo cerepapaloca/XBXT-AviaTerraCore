@@ -2,8 +2,8 @@ package net.atcore.messages;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.jetbrains.annotations.Contract;
 
+@SuppressWarnings("LombokSetterMayBeUsed")
 @Getter
 public enum CategoryMessages {
     PRIVATE(null),

@@ -11,16 +11,20 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * En esta clase esta tod0 relacionado con los colores y envío de mensajes todos los mensajes tiene que pasar por quí
- * al igual que todos los colores. Es para modificar los calores
+ * al igual que todos los colores.
  */
 public final class MessagesManager {
 
+    @Deprecated
     public static final String COLOR_SUCCESS = "&2";
+    @Deprecated
     public static final String COLOR_INFO = "&3";
+    @Deprecated
     public static final String COLOR_ERROR = "&c";
 
     public static final String[] PREFIX_AND_SUFFIX_KICK = new String[]{"&c&m &r &c&m       &r  &4&lAviaKick&c  &m        &r &c&m \n\n&r", "\n\n&m &r &c&m                               &r &c&m "};
 
+    @Deprecated
     public static final String COLOR_ESPECIAL = "&b";
     public static final String LINK_DISCORD = "&a&nhttps://discord.gg/azurex";
 
@@ -141,7 +145,6 @@ public final class MessagesManager {
     }
 
     private static void sendMessageLogDiscord(TypeMessages type, CategoryMessages categoryMessages, String message) {
-        String channelId;
         Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(),() -> {
             String finalMessage;
             switch (type) {

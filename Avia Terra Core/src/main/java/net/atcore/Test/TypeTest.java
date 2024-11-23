@@ -1,6 +1,8 @@
-package net.atcore.Test;
+package net.atcore.test;
 
 import lombok.Getter;
+import net.atcore.aviaterraplayer.AviaTerraPlayer;
+import net.atcore.messages.TypeMessages;
 import org.jetbrains.annotations.TestOnly;
 
 @Getter
@@ -15,4 +17,9 @@ public enum TypeTest {
     }
 
     private final RunTest runTest;
+
+    public void runtTest(AviaTerraPlayer player) {
+        runTest.runTest(player);
+        player.sendMessage("Test terminado", TypeMessages.SUCCESS);
+    }
 }

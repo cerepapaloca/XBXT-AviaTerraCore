@@ -1,7 +1,6 @@
 package net.atcore.utils;
 
 import lombok.Getter;
-import net.atcore.AviaTerraCore;
 import org.bukkit.Color;
 import org.bukkit.permissions.Permission;
 

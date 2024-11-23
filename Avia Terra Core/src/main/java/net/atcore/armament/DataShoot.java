@@ -4,6 +4,11 @@ import lombok.*;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
+/**
+ * Son datos que obtiene al momento de realizar un disparo
+ * y se puede modificar y se dispara en {@link BaseArmament#onShoot(DataShoot) onShoot}
+ */
+
 @Getter
 @Setter
 @RequiredArgsConstructor

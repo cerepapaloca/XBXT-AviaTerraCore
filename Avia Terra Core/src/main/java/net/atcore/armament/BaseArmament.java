@@ -42,4 +42,14 @@ public abstract class BaseArmament {
     protected final ItemStack itemArmament;
 
     protected abstract void updateLore(ItemStack item,@Nullable ItemStack itemAuxiliar);
+
+    /**
+     * Es la abstracción principal del evento de disparo para que el
+     * armamento pueda hacer interacciones especiales al momento
+     * de hacer el disparo
+     *
+     * @param dataShoot da una instancia nueva de {@link DataShoot}
+     */
+
+    public abstract void onShoot(DataShoot dataShoot);
 }
