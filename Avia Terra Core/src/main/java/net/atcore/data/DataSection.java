@@ -3,7 +3,6 @@ package net.atcore.data;
 import lombok.Getter;
 import net.atcore.AviaTerraCore;
 import net.atcore.Section;
-import org.bukkit.Bukkit;
 
 import java.util.HashSet;
 
@@ -19,7 +18,7 @@ public class DataSection implements Section {
     public void enable() {
         register(mySQLConnection = new DataBaseBan());
         register(new DataBaseRegister());
-        register(new FilePermission());
+        register(new FileCommands());
         for (DataBaseMySql db : dataBases) db.createTable();
         for (FileYaml fileYaml : fileYaml) fileYaml.loadData();
     }

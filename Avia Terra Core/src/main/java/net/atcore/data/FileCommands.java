@@ -3,9 +3,9 @@ package net.atcore.data;
 import net.atcore.command.CommandManager;
 import org.bukkit.configuration.ConfigurationSection;
 
-public class FilePermission extends FileYaml {
+public class FileCommands extends FileYaml {
 
-    public FilePermission() {
+    public FileCommands() {
         super("comandos", null);
     }
 

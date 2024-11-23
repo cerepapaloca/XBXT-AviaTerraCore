@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.UUID;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.logging.LogRecord;
 
 import static net.atcore.messages.MessagesManager.COLOR_SUCCESS;
 import static net.atcore.messages.MessagesManager.sendMessageConsole;

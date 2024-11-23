@@ -142,15 +142,6 @@ public final class MessagesManager {
 
     private static void sendMessageLogDiscord(TypeMessages type, CategoryMessages categoryMessages, String message) {
         String channelId;
-        switch (categoryMessages) {
-            case BAN -> channelId = "1294324328401207389";
-            case MODERATION -> channelId = "1294324285602795550";
-            case LOGIN -> channelId = "1299444352409669746";
-            case COMMANDS -> channelId = "1308198706264277093";
-            default -> {
-                return;
-            }
-        }
         Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(),() -> {
             String finalMessage;
             switch (type) {
@@ -165,7 +156,7 @@ public final class MessagesManager {
             //no parece que tenga sentido, pero sí lo tiene, es por qué asi puede quitar los códigos de color del texto
             finalMessage = ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&', finalMessage));
             //obtén el canal por su ID
-            TextChannel channel = AviaTerraCore.BOT_DISCORD.getTextChannelById(channelId);
+            TextChannel channel = AviaTerraCore.BOT_DISCORD.getTextChannelById(categoryMessages.getIdChannel());
             if (channel !=  null) {
                 channel.sendMessage(finalMessage.replace("<|", "**").replace("|>", "**").replace("|!>", "")).queue();
             } else {
