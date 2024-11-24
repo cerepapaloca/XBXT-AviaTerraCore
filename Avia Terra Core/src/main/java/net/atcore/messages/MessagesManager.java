@@ -159,7 +159,7 @@ public final class MessagesManager {
             //no parece que tenga sentido, pero sí lo tiene, es por qué asi puede quitar los códigos de color del texto
             finalMessage = ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&', finalMessage));
             //obtén el canal por su ID
-            TextChannel channel = AviaTerraCore.BOT_DISCORD.getTextChannelById(categoryMessages.getIdChannel());
+            TextChannel channel = AviaTerraCore.jda.getTextChannelById(categoryMessages.getIdChannel());
             if (channel !=  null) {
                 channel.sendMessage(finalMessage.replace("<|", "**").replace("|>", "**").replace("|!>", "")).queue();
             } else {

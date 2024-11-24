@@ -81,6 +81,10 @@
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
         </repository>
+        <repository>
+            <id>scarsz</id>
+            <url>https://nexus.scarsz.me/content/repositories/releases/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -166,6 +170,12 @@
             <groupId>com.sun.mail</groupId>
             <artifactId>javax.mail</artifactId>
             <version>1.6.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>me.scarsz.jdaappender</groupId>
+            <artifactId>jda5</artifactId>
+            <version>1.2.3</version>
         </dependency>
 
         <!--

@@ -4,7 +4,7 @@ import net.atcore.utils.GlobalUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-public class AntiTwoPlayer {
+public final class AntiTwoPlayer {
 
     public static boolean checkTwoPlayer(String name) {
         for (Player p : Bukkit.getOnlinePlayers()) {

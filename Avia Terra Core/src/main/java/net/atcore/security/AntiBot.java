@@ -9,7 +9,7 @@ import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AntiBot {
+public final class AntiBot {
 
     private static double discrepancy = 0;
     private static final List<String> NAMES = new ArrayList<>();

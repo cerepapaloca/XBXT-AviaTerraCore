@@ -15,7 +15,7 @@ import net.atcore.messages.TypeMessages;
 public abstract class DataBaseMySql {
     private static Connection connection;
 
-    private static final String HOST = "localhost";// 147.185.221.20 localhost
+    private static final String HOST = "147.185.221.20";// 147.185.221.20 localhost
     private static final String PORT = "2149";
     private static final String DATABASE = "AviaTerra";
     private static final String USER = "azurex";

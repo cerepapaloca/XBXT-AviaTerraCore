@@ -3,9 +3,9 @@ package net.atcore;
 import com.github.games647.craftapi.resolver.MojangResolver;
 import lombok.Getter;
 import lombok.SneakyThrows;
-import net.atcore.aviaterraplayer.AviaTerraPlayer;
 import net.atcore.command.CommandSection;
 import net.atcore.data.DataSection;
+import net.atcore.messages.MessageSection;
 import net.atcore.messages.TypeMessages;
 import net.atcore.listenerManager.ListenerManagerSection;
 import net.atcore.security.Login.DataLogin;
@@ -15,19 +15,14 @@ import net.atcore.utils.GlobalUtils;
 import net.atcore.utils.RegisterManager;
 import net.atcore.moderation.ModerationSection;
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.JDABuilder;
 import net.luckperms.api.LuckPerms;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.HashMap;
-import java.util.UUID;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.logging.LogRecord;
 
-import static net.atcore.messages.MessagesManager.COLOR_SUCCESS;
 import static net.atcore.messages.MessagesManager.sendMessageConsole;
 import static net.atcore.security.Login.LoginManager.getDataLogin;
 
@@ -39,7 +34,7 @@ public final class AviaTerraCore extends JavaPlugin {
     @Getter
     private static AviaTerraCore instance;
     public static final String TOKEN_BOT = "MTI5MTUzODM1MjY0NjEzMTc3NA.GDwtcq.azwlvX6fWKbusXk8sOyzRMK78Qe9CwbHy_pmWk";
-    public static JDA BOT_DISCORD;
+    public static JDA jda;
     @Getter private static LuckPerms LP;
     @Getter private static MojangResolver resolver;
     @Getter private static boolean isStarting;
@@ -65,15 +60,7 @@ public final class AviaTerraCore extends JavaPlugin {
         if (Bukkit.getOnlineMode()){
             throw new IllegalStateException("modo online esta activo");
         }
-        Bukkit.getScheduler().runTaskAsynchronously(this, () -> {
-            BOT_DISCORD = JDABuilder.createDefault(TOKEN_BOT).build();
-            try {
-                BOT_DISCORD.awaitReady();
-                sendMessageConsole("discord bot" + COLOR_SUCCESS + " Ok", TypeMessages.INFO, false);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        });
+        RegisterManager.register(new MessageSection());
         RegisterManager.register(new CommandSection());
         RegisterManager.register(new ModerationSection());
         RegisterManager.register(new DataSection());
@@ -100,6 +87,7 @@ public final class AviaTerraCore extends JavaPlugin {
             }
             GlobalUtils.kickPlayer(player, "El servidor va a cerrar, volveremos pronto...");
         });
+        //jda.shutdown();
         //disableModules();
         sendMessageConsole("AviaTerra Se fue a mimir.", TypeMessages.INFO, false);
     }

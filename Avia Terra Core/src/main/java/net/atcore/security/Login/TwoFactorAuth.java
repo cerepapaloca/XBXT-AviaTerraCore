@@ -63,7 +63,7 @@ public class TwoFactorAuth {
         if (Bukkit.isPrimaryThread()){
             throw new IllegalThreadStateException("No usar el hilo principal para el envió de mensajes de discord");
         }
-        User user = AviaTerraCore.BOT_DISCORD.retrieveUserById(id).complete();
+        User user = AviaTerraCore.jda.retrieveUserById(id).complete();
         user.openPrivateChannel()
                 .flatMap(channel -> channel.sendMessage(String.format(formatMessage.discord,
                         player.getName(), TwoFactorAuth.getCodes().get(player.getUniqueId()).getCode())))
