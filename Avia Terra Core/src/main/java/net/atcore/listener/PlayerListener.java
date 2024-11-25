@@ -1,4 +1,4 @@
-package net.atcore.listenerManager;
+package net.atcore.listener;
 
 import net.atcore.AviaTerraCore;
 import net.atcore.Config;
@@ -14,13 +14,7 @@ import net.atcore.utils.GlobalUtils;
 import net.atcore.utils.RangeList;
 import net.luckperms.api.node.types.InheritanceNode;
 import org.bukkit.*;
-import org.bukkit.advancement.Advancement;
-import org.bukkit.advancement.AdvancementDisplayType;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandMap;
-import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -28,7 +22,6 @@ import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -76,9 +69,9 @@ public class PlayerListener implements Listener {
             type = TypeMessages.WARNING;
         }
         if (COMMANDS_PRE_LOGIN.contains(command)) {
-            MessagesManager.sendMessageConsole(String.format("<|%s|> ejecutó -> %s", player.getName(), "&6*Comando De Login*" + s), type, CategoryMessages.COMMANDS, true);
+            MessagesManager.sendMessageConsole(String.format("<|%s|> ejecutó -> %s", player.getName(), "&6*Comando De Login*" + s), type, CategoryMessages.COMMANDS, false);
         }else {
-            MessagesManager.sendMessageConsole(String.format("<|%s|> ejecutó -> %s", player.getName(), "&6" + event.getMessage() + s), type, CategoryMessages.COMMANDS, true);
+            MessagesManager.sendMessageConsole(String.format("<|%s|> ejecutó -> %s", player.getName(), "&6" + event.getMessage() + s), type, CategoryMessages.COMMANDS, false);
         }
         event.setCancelled(isCancelled);
     }

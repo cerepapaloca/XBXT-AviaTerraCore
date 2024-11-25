@@ -44,7 +44,7 @@ public final class CommandHandler implements TabExecutor {
                         if (LoginManager.checkLoginIn(player)){
                             sendMessage(sender, "No tienes Permisos", TypeMessages.ERROR);
                         }else {
-                            sendMessage(player,"Primero inicia sessión usando /login", TypeMessages.ERROR);
+                            sendMessage(player, "Primero inicia sessión usando /login", TypeMessages.ERROR);
                         }
                     }
                 }else {

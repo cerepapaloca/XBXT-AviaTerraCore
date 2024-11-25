@@ -10,6 +10,7 @@ import org.jetbrains.annotations.TestOnly;
 public enum TypeTest {
     BAN(new BanTest()),
     MESSAGE(new MessageTest()),
+    LOGIN_REMOVE(new LoginRemove()),
     PERSISTENT_DATA(new ItemPersistenDataTest());
 
     TypeTest(RunTest runTest) {

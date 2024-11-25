@@ -30,7 +30,7 @@ public class CommandManager {//nose si poner en esta clase aquí la verdad
                         if (LoginManager.checkLoginIn(player, true, b)){
                             sendMessage(player, "No tienes permisos para ejecutar ese comando", TypeMessages.ERROR);
                         }else {
-                            sendMessage(player,"Primero inicia sessión usando /login", TypeMessages.ERROR);
+                            sendMessage(player, "Primero inicia sessión usando /login", TypeMessages.ERROR);
                         }
                     }
                     return true;

@@ -1,4 +1,4 @@
-package net.atcore.listenerManager;
+package net.atcore.listener;
 
 import net.atcore.armament.*;
 import net.atcore.inventory.ActionsInventoryManager;
@@ -8,7 +8,6 @@ import net.atcore.security.AntiExploit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;

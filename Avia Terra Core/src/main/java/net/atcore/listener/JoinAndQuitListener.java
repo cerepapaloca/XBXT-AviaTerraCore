@@ -1,4 +1,4 @@
-package net.atcore.listenerManager;
+package net.atcore.listener;
 
 import net.atcore.AviaTerraCore;
 import net.atcore.aviaterraplayer.AviaTerraPlayer;

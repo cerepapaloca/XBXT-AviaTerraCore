@@ -7,7 +7,7 @@ import net.atcore.command.CommandSection;
 import net.atcore.data.DataSection;
 import net.atcore.messages.MessageSection;
 import net.atcore.messages.TypeMessages;
-import net.atcore.listenerManager.ListenerManagerSection;
+import net.atcore.listener.ListenerManagerSection;
 import net.atcore.security.Login.DataLogin;
 import net.atcore.security.Login.LoginManager;
 import net.atcore.service.ServiceSection;

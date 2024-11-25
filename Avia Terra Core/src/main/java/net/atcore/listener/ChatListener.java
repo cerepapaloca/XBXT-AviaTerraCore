@@ -1,4 +1,4 @@
-package net.atcore.listenerManager;
+package net.atcore.listener;
 
 import lombok.Getter;
 import lombok.Setter;
