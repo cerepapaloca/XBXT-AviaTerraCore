@@ -2,7 +2,7 @@ package net.atcore.listener;
 
 import net.atcore.AviaTerraCore;
 import net.atcore.aviaterraplayer.AviaTerraPlayer;
-import net.atcore.data.sql.DataBaseRegister;
+import net.atcore.data.DataBaseRegister;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;

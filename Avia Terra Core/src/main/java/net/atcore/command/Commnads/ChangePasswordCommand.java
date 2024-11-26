@@ -2,7 +2,7 @@ package net.atcore.command.Commnads;
 
 import net.atcore.AviaTerraCore;
 import net.atcore.command.BaseTabCommand;
-import net.atcore.data.sql.DataBaseRegister;
+import net.atcore.data.DataBaseRegister;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.TypeMessages;
 import net.atcore.security.Login.LoginManager;
