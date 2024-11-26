@@ -15,7 +15,8 @@ import java.io.*;
 public abstract class FileYaml {
 
     private final String fileName;
-    protected FileConfiguration fileConfiguration = null;
+    @Getter
+    protected FileConfiguration fileYaml = null;
     @Getter
     private File file = null;
     private final String folderName;
@@ -25,6 +26,15 @@ public abstract class FileYaml {
         this.folderName = folderName;
         copyDefaultConfig(); // Copiar archivo desde resources
         loadConfig(); // Cargar la configuración
+    }
+
+    public String getPath(){
+        if (folderName == null){
+            return fileName;
+        }else {
+            return folderName + File.separator + fileName;
+        }
+
     }
 
     private void copyDefaultConfig() {
@@ -65,16 +75,16 @@ public abstract class FileYaml {
     }
 
     private void loadConfig() {
-        fileConfiguration = YamlConfiguration.loadConfiguration(file);
+        fileYaml = YamlConfiguration.loadConfiguration(file);
     }
 
     public FileConfiguration getConfig() {
-        return fileConfiguration;
+        return fileYaml;
     }
 
     public void saveConfig() {
         try {
-            fileConfiguration.save(file);
+            fileYaml.save(file);
         } catch (IOException e) {
             throw new RuntimeException("No se pudo guardar el archivo de configuración " + fileName + ".yml", e);
         }
@@ -82,7 +92,7 @@ public abstract class FileYaml {
 
 
     public void reloadConfig() {
-        if (fileConfiguration == null) {
+        if (fileYaml == null) {
             if(folderName != null){
                 file = new File(AviaTerraCore.getInstance().getDataFolder()+File.separator + folderName, fileName);
             }else{
@@ -90,11 +100,11 @@ public abstract class FileYaml {
             }
 
         }
-        fileConfiguration = YamlConfiguration.loadConfiguration(file);
+        fileYaml = YamlConfiguration.loadConfiguration(file);
 
         if(file != null) {
             YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(file);
-            fileConfiguration.setDefaults(defConfig);
+            fileYaml.setDefaults(defConfig);
         }
         loadData();
         if (!AviaTerraCore.isStarting()) MessagesManager.sendMessageConsole(String.format("Archivo %s recargador exitosamente", file), TypeMessages.SUCCESS);

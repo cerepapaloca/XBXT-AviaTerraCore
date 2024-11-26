@@ -3,7 +3,6 @@ package net.atcore.messages;
 import me.scarsz.jdaappender.ChannelLoggingHandler;
 import me.scarsz.jdaappender.ExtensionBuilder;
 import net.atcore.AviaTerraCore;
-import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.requests.GatewayIntent;

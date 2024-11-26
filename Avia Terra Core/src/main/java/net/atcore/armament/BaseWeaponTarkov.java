@@ -76,29 +76,40 @@ public abstract class BaseWeaponTarkov extends BaseWeapon implements Compartment
         String magazineName = (String) GlobalUtils.getPersistenData(itemWeapon, "magazineNameInside", PersistentDataType.STRING);
         BaseMagazine charger = ArmamentUtils.getMagazine(magazineName);
         boolean b = false;//el jugador tiene un cargador con que cambiar o no
-        for (ItemStack itemCharger : player.getInventory().getStorageContents()){//Esto es un poco redundante
+        for (ItemStack itemCharger : player.getInventory().getStorageContents()){// Busca un cargador con balas
             if (itemCharger == null) continue;
             String ammo = (String) GlobalUtils.getPersistenData(itemCharger, "magazineAmmo", PersistentDataType.STRING);//se obtiene la munición del cargador
             if (ammo == null) continue;
             List<String> ammoCharger = ArmamentUtils.stringToList(ammo);
-            if (ammoCharger.isEmpty() || itemCharger.equals(itemWeapon))continue;//si el cargador está vacío busca otro cargador o el cargador es la propia arma
+            if (ammoCharger.isEmpty() || itemCharger.equals(itemWeapon))continue;// Si el cargador está vacío busca otro cargador o el cargador es la propia arma
             b = true;//sí hay un cargador
             break;
         }
 
-        if (charger != null){//el arma tiene un cargador?
-            if (b){//hay un cargador que se puede cambiar?
+        if (charger != null){// ¿Él arma tiene un cargador?
+            if (b){// ¿Hay un cargador que se puede cambiar?
                 if (inReload.containsKey(player.getUniqueId())) return;
-                BukkitTask bukkitTask = new BukkitRunnable() {
-                    @Override//no se si es buena idea ese @Override
+                BukkitTask bukkitTask = new BukkitRunnable() {// Comienza el delay de la recarga
                     public void run() {
                         if (player.isOnline() && itemWeapon.getItemMeta() != null) onReload(itemWeapon, player);
                         inReload.remove(player.getUniqueId());
                     }
                 }.runTaskLater(AviaTerraCore.getInstance(), charger.getReloadTime());
+                new BukkitRunnable() {// Esto es para asegurar que el jugador tiene el amra en la mano
+                    public void run() {
+                        ItemStack itemWeapon = player.getInventory().getItemInMainHand();
+                        if (itemWeapon.getItemMeta() == null){
+                            String name = (String) GlobalUtils.getPersistenData(itemArmament, "weaponName", PersistentDataType.STRING);
+                            if (name == null) {
+                                bukkitTask.cancel();
+                                MessagesManager.sendTitle(player,"", "Recarga Cancelada", 10, charger.getReloadTime(),10, TypeMessages.ERROR);
+                            }
+                        }
+                    }
+                }.runTaskTimer(AviaTerraCore.getInstance(), 0, 1);
                 MessagesManager.sendTitle(player,"", "Recargado...", 10, charger.getReloadTime(),10, TypeMessages.INFO);
                 player.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, charger.getReloadTime(), 2, true, false, false));
-                inReload.put(player.getUniqueId(), bukkitTask);
+                inReload.put(player.getUniqueId(), bukkitTask);// Por si se guarda el delay por si se tiene que cancelar
             }else {
                 MessagesManager.sendTitle(player, "", "No tienes cargadores con munición", 0,20,60, TypeMessages.ERROR);
             }

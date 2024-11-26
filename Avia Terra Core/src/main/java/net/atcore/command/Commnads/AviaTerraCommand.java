@@ -12,9 +12,7 @@ import net.atcore.Section;
 import net.atcore.security.Login.*;
 import net.atcore.utils.GlobalUtils;
 import net.atcore.utils.RegisterManager;
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import java.util.*;
 
@@ -36,8 +34,7 @@ public class AviaTerraCommand extends BaseTabCommand {
                 if (args.length >= 2) {
                     switch (args[1].toLowerCase().replace("_","")) {
                         case "yaml" -> AviaTerraCore.getInstance().enqueueTaskAsynchronously(() -> {
-
-                            for (FileYaml filePermission : DataSection.getFileYaml()) filePermission.reloadConfig();
+                            for (FileYaml filePermission : DataSection.getFileYaml()) filePermission.loadData();
                             sendMessage(sender, "Archivos yaml recargado exitosamente", TypeMessages.SUCCESS);
                         });
                         case "sql" -> AviaTerraCore.getInstance().enqueueTaskAsynchronously(() -> {
@@ -102,29 +99,6 @@ public class AviaTerraCommand extends BaseTabCommand {
                     }else{
                         Config.setServerMode(mode);
                         sendMessage(sender,"El modo del servidor esta en " + Config.getServerMode().name().toLowerCase().replace("_"," "), TypeMessages.INFO);
-                        /*switch (Config.getServerMode()){
-                            case OFFLINE_MODE -> {
-                                for (Player player : Bukkit.getOnlinePlayers()){
-                                    DataLogin login = LoginManager.getDataLogin(player);
-                                    if (!login.hasSession()) {
-                                        GlobalUtils.kickPlayer(player, "Se tiene que registrar/iniciar sesión con la contraseña code: 1");
-                                        return;
-                                    }
-                                    if (login.getSession().getState().equals(StateLogins.PREMIUM)){
-                                        login.setSession(null);
-                                        GlobalUtils.kickPlayer(player, "Se tiene que registrar/iniciar sesión con la contraseña code: 2");
-                                    }
-                                }
-                            }
-                            case ONLINE_MODE -> {
-                                for (Player player : Bukkit.getOnlinePlayers()){
-                                    if (!LoginManager.getDataLogin(player).hasSession()) continue;
-                                    if (LoginManager.getDataLogin(player).getSession().getState().equals(StateLogins.CRACKED)){
-                                        GlobalUtils.kickPlayer(player, "El servidor entro en Online Mode");
-                                    }
-                                }
-                            }
-                        }*/
                     }
 
                 }else{

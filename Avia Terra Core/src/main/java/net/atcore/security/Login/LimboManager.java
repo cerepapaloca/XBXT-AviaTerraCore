@@ -6,6 +6,7 @@ import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
@@ -28,7 +29,17 @@ public class LimboManager {
 
     public void createLimboMode(Player player, ReasonLimbo reasonLimbo){
         DataLogin dataLogin = LoginManager.getDataLogin(player);
-        DataLimbo dataLimbo = new DataLimbo(player);
+        DataLimbo dataLimbo = new DataLimbo(player.getGameMode(),
+                player.getInventory().getContents(),
+                player.getLocation(),
+                player.isOp(),
+                player.getLevel());
+        player.getInventory().clear();
+        player.teleport(player.getWorld().getSpawnLocation());
+        player.setOp(false);
+        player.setGameMode(GameMode.SPECTATOR);
+        player.setLevel(0);
+        player.setAllowFlight(true);
         dataLogin.setLimbo(dataLimbo);
         switch (reasonLimbo){
             case NO_SESSION -> {

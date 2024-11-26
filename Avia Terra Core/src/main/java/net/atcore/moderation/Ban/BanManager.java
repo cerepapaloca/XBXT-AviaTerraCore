@@ -5,7 +5,7 @@ import net.atcore.Config;
 import net.atcore.security.Login.DataLogin;
 import net.atcore.security.Login.LoginManager;
 import net.atcore.utils.GlobalConstantes;
-import net.atcore.data.DataBaseBan;
+import net.atcore.data.sql.DataBaseBan;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.TypeMessages;
 import net.atcore.moderation.ModerationSection;

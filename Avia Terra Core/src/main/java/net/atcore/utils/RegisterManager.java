@@ -8,11 +8,8 @@ import net.atcore.data.DataSection;
 import net.atcore.data.FileYaml;
 import net.atcore.messages.TypeMessages;
 import net.atcore.Section;
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandException;
 import org.bukkit.command.PluginCommand;
-import org.bukkit.permissions.Permission;
-import org.bukkit.plugin.PluginManager;
 import org.jetbrains.annotations.NotNull;
 
 import org.bukkit.event.Listener;
@@ -72,8 +69,8 @@ public class RegisterManager {
         DataSection.getDataBases().add(database);
     }
 
-    public static void register(@NotNull FileYaml database) {
-        DataSection.getFileYaml().add(database);
+    public static void register(@NotNull FileYaml yaml) {
+        DataSection.getFileYaml().add(yaml);
     }
 
 }

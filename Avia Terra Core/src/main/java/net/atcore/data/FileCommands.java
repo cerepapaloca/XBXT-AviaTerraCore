@@ -11,11 +11,11 @@ public class FileCommands extends FileYaml {
 
     @Override
     public void loadData() {
-        ConfigurationSection section = fileConfiguration.getConfigurationSection("comandos");
+        ConfigurationSection section = fileYaml.getConfigurationSection("comandos");
         if (section != null) {
             CommandManager.COMMANDS.clear();
             section.getKeys(false).forEach(key -> {
-                CommandManager.COMMANDS.put(key, fileConfiguration.getString("comandos." + key));
+                CommandManager.COMMANDS.put(key, fileYaml.getString("comandos." + key));
             });
             CommandManager.COMMANDS.putAll(CommandManager.COMMANDS_AVIA_TERRA);
         }

@@ -12,10 +12,10 @@ public class FileConfig extends FileYaml {
     @Override
     public void loadData() {
         for (CategoryMessages messages : CategoryMessages.values()) {
-            String message = fileConfiguration.getString("canales-de-discord." + messages.name().toLowerCase());
+            String message = fileYaml.getString("canales-de-discord." + messages.name().toLowerCase());
             messages.setIdChannel(message);
         }
-        ConsoleDiscord.consoleId = fileConfiguration.getString("canales-de-discord.console");
+        ConsoleDiscord.consoleId = fileYaml.getString("canales-de-discord.console");
     }
 
     @Override

@@ -135,36 +135,4 @@ public final class AviaTerraCore extends JavaPlugin {
             Thread.currentThread().interrupt(); // Si es interrumpido, detenemos el hilo
         }
     }
-
-
-    //no borrar
-    /*
-    private void enableModules() {
-        Reflections reflections = new Reflections("net");
-        Set<Class<? extends Module>> annotatedClasses = reflections.getSubTypesOf(Module.class);
-
-        for (Class<? extends Module> clazz : annotatedClasses) {
-            try {
-                Module module = clazz.getDeclaredConstructor().newInstance();
-                module.enable();
-            } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
-    //no borrar
-    private void disableModules() {
-        Reflections reflections = new Reflections("net");
-        Set<Class<? extends Module>> annotatedClasses = reflections.getSubTypesOf(Module.class);
-
-        for (Class<? extends Module> clazz : annotatedClasses) {
-            try {
-                Module module = clazz.getDeclaredConstructor().newInstance();
-                module.disable();
-            } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
-    */
 }
