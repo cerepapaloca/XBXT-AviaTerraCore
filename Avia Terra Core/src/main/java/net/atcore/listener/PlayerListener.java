@@ -11,7 +11,7 @@ import net.atcore.moderation.Freeze;
 import net.atcore.security.Login.LoginManager;
 import net.atcore.utils.GlobalConstantes;
 import net.atcore.utils.GlobalUtils;
-import net.atcore.utils.RangeList;
+import net.atcore.utils.RangeType;
 import net.luckperms.api.node.types.InheritanceNode;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
@@ -71,7 +71,7 @@ public class PlayerListener implements Listener {
         if (COMMANDS_PRE_LOGIN.contains(command)) {
             MessagesManager.sendMessageConsole(String.format("<|%s|> ejecutó -> %s", player.getName(), "&6*Comando De Login*" + s), type, CategoryMessages.COMMANDS, false);
         }else {
-            MessagesManager.sendMessageConsole(String.format("<|%s|> ejecutó -> %s", player.getName(), "&6" + event.getMessage() + s), type, CategoryMessages.COMMANDS, false);
+            MessagesManager.sendMessageConsole(String.format("<|%s|> ejecutó -> %s", player.getName(), "&6`" + event.getMessage() + "`" + s), type, CategoryMessages.COMMANDS, false);
         }
         event.setCancelled(isCancelled);
     }
@@ -114,19 +114,19 @@ public class PlayerListener implements Listener {
             }
             player.getInventory().getItemInMainHand().setAmount(0);
             if (time != null && time != GlobalConstantes.NUMERO_PERMA){
-                AviaTerraCore.getLP().getUserManager().modifyUser(player.getUniqueId(),
+                AviaTerraCore.getLp().getUserManager().modifyUser(player.getUniqueId(),
                         user -> user.data().add(InheritanceNode.builder(range).expiry(time, TimeUnit.MILLISECONDS).build()));
             }else {
-                AviaTerraCore.getLP().getUserManager().modifyUser(player.getUniqueId(),
+                AviaTerraCore.getLp().getUserManager().modifyUser(player.getUniqueId(),
                         user -> user.data().remove(InheritanceNode.builder(range).build()));
             }
             item.setType(Material.AIR);
             player.playSound(player, Sound.ENTITY_PLAYER_LEVELUP, 0.8F, 1);
-            RangeList rangeList = RangeList.valueOf(range.toUpperCase());
+            RangeType rangeType = RangeType.valueOf(range.toUpperCase());
             MessagesManager.sendTitle(player,"Nuevo Rango", GlobalUtils.applyGradient(
-                    "<" + GlobalUtils.modifyColorHexWithHLS(GlobalUtils.colorToStringHex(rangeList.getColor()), 0f, 0.3f, -0.1f) + ">" +
-                            rangeList.getDisplayName() +
-                            "<" + GlobalUtils.modifyColorHexWithHLS(GlobalUtils.colorToStringHex(rangeList.getColor()), 0, -0.2f, 0.1f) + ">",
+                    "<" + GlobalUtils.modifyColorHexWithHLS(GlobalUtils.colorToStringHex(rangeType.getColor()), 0f, 0.3f, -0.1f) + ">" +
+                            rangeType.getDisplayName() +
+                            "<" + GlobalUtils.modifyColorHexWithHLS(GlobalUtils.colorToStringHex(rangeType.getColor()), 0, -0.2f, 0.1f) + ">",
                     'l'
             ), 20, 60, 40, TypeMessages.INFO);
 

@@ -5,9 +5,8 @@ import net.atcore.command.BaseTabCommand;
 import net.atcore.command.CommandUtils;
 import net.atcore.messages.TypeMessages;
 import net.atcore.utils.GlobalUtils;
-import net.atcore.utils.RangeList;
+import net.atcore.utils.RangeType;
 import net.luckperms.api.model.group.Group;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -28,7 +27,7 @@ public class AddRangeCommand extends BaseTabCommand {
                 "/addRange <Rango> <Tiempo> <Jugador>",
                 "das una tags donde se puede dar un rango durante un tiempo determinado"
         );
-    }//
+    }
 
     @Override
     public void execute(CommandSender sender, String[] args) {
@@ -36,7 +35,7 @@ public class AddRangeCommand extends BaseTabCommand {
             case 0 -> sendMessage(sender, this.getUsage(), TypeMessages.ERROR);
             case 1 -> sendMessage(sender, "Te falta especificar el tiempo de duración", TypeMessages.ERROR);
             default -> {
-                List<Group> groups = AviaTerraCore.getLP().getGroupManager().getLoadedGroups().stream().toList();
+                List<Group> groups = AviaTerraCore.getLp().getGroupManager().getLoadedGroups().stream().toList();
                 List<String> nameRage = new ArrayList<>();
                 for (Group group : groups) nameRage.add(group.getName());
 
@@ -48,7 +47,7 @@ public class AddRangeCommand extends BaseTabCommand {
                         sendMessage(sender, "formato de fecha incorrecto", TypeMessages.ERROR);
                         return;
                     }
-                    RangeList range = RangeList.valueOf(args[0].toUpperCase());
+                    RangeType range = RangeType.valueOf(args[0].toUpperCase());
                     ItemStack item = new ItemStack(Material.NAME_TAG);
                     GlobalUtils.setPersistentDataItem(item, "durationRange", PersistentDataType.LONG, time);
                     GlobalUtils.setPersistentDataItem(item, "rangeName", PersistentDataType.STRING, range.name());
@@ -85,7 +84,7 @@ public class AddRangeCommand extends BaseTabCommand {
     public List<String> onTab(CommandSender sender, String[] args) {
         switch (args.length){
             case 1 -> {
-                List<Group> range = AviaTerraCore.getLP().getGroupManager().getLoadedGroups().stream().toList();
+                List<Group> range = AviaTerraCore.getLp().getGroupManager().getLoadedGroups().stream().toList();
                 List<String> nameRage = new ArrayList<>();
                 for (Group group : range) nameRage.add(group.getName());
                 return CommandUtils.listTab(args[0], nameRage);

@@ -1,24 +1,26 @@
 package net.atcore.messages;
 
 import lombok.Getter;
-import lombok.Setter;
 
-@SuppressWarnings("LombokSetterMayBeUsed")
 @Getter
 public enum CategoryMessages {
-    PRIVATE(null),
-    COMMANDS("1308198706264277093"),
-    BAN("1294324328401207389"),
-    MODERATION("1294324285602795550"),
-    LOGIN("1299444352409669746"),
-    PVP(null);
+    PRIVATE,
+    COMMANDS,
+    BAN,
+    MODERATION,
+    LOGIN,
+    PVP;
 
-    CategoryMessages(String idChannel) {
-        this.idChannel = idChannel;
-    }
-
-    @SuppressWarnings("NonFinalFieldInEnum")
-    @Setter
     private String idChannel;
+
+    public void setIdChannel(String idChannel) {
+        if (idChannel == null){
+            this.idChannel = null;
+        }else if (idChannel.isBlank()){
+            this.idChannel = null;
+        }else {
+            this.idChannel = idChannel;
+        }
+    }
 
 }

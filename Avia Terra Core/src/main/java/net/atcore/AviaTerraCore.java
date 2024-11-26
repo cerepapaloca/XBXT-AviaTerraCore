@@ -15,6 +15,8 @@ import net.atcore.utils.GlobalUtils;
 import net.atcore.utils.RegisterManager;
 import net.atcore.moderation.ModerationSection;
 import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.luckperms.api.LuckPerms;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -35,7 +37,7 @@ public final class AviaTerraCore extends JavaPlugin {
     private static AviaTerraCore instance;
     public static final String TOKEN_BOT = "MTI5MTUzODM1MjY0NjEzMTc3NA.GDwtcq.azwlvX6fWKbusXk8sOyzRMK78Qe9CwbHy_pmWk";
     public static JDA jda;
-    @Getter private static LuckPerms LP;
+    @Getter private static LuckPerms lp;
     @Getter private static MojangResolver resolver;
     @Getter private static boolean isStarting;
 
@@ -55,15 +57,15 @@ public final class AviaTerraCore extends JavaPlugin {
         workerThread.start();
         RegisteredServiceProvider<LuckPerms> provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
         if (provider != null) {
-            LP = provider.getProvider();
+            lp = provider.getProvider();
         }
         if (Bukkit.getOnlineMode()){
             throw new IllegalStateException("modo online esta activo");
         }
+        RegisterManager.register(new DataSection());// Los Datos Primero
         RegisterManager.register(new MessageSection());
         RegisterManager.register(new CommandSection());
         RegisterManager.register(new ModerationSection());
-        RegisterManager.register(new DataSection());
         RegisterManager.register(new ListenerManagerSection());
         RegisterManager.register(new ServiceSection());
         //enableModules();

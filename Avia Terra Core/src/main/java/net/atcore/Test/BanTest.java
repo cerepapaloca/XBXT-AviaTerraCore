@@ -8,7 +8,6 @@ import net.atcore.moderation.Ban.ContextBan;
 import net.atcore.moderation.ModerationSection;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.TestOnly;
 
 import java.net.InetAddress;

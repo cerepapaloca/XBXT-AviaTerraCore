@@ -6,10 +6,13 @@ import net.atcore.messages.TypeMessages;
 import net.atcore.security.Login.LoginManager;
 import net.atcore.utils.GlobalConstantes;
 import net.atcore.utils.ModeTab;
+import net.atcore.utils.RangeType;
+import net.dv8tion.jda.api.entities.Member;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -241,11 +244,11 @@ public final class CommandUtils {
 
     /**
      * Comprueba que si el jugador tiene los permisos. Si el permiso tiene {@code *}
-     * todos los jugadores tienen permiso, si el permiso comienza con {@code !} el
-     * jugador no debe tener ese permiso. Se puede unir varios permisos con {@code ,}
-     * estó permisos extras hace de "o" es decir la condición será verdadera cuando
-     * cumpla uno de los permisos
-     * @param permission Los permisos suele ser así {@code aviaterra.command.prueba}
+     * todos los jugadores logueados tienen permiso pero si tiene {@code **} todos aunque
+     * no estén logueados, si el permiso comienza con {@code !} el jgador no debe tener
+     * ese permiso. Se puede unir varios permisos con {@code ,}estó permisos extras hace
+     * de "o" es decir la condición será verdadera cuando cumpla uno de los permisos
+     * @param permission Los permisos suele ser así {@code aviaterracore.command.prueba}
      * @param player el jugador que le va hace el check
      * @param limbo ¿Puede entrar en modo limbo?
      * @return verdadero sí tiene permiso
@@ -274,5 +277,24 @@ public final class CommandUtils {
         }else {
             return permission.equals("**");
         }
+    }
+
+    @Contract(pure = true)
+    public boolean hasPermission(@NotNull String permission, RangeType range){
+        if (permission.equals("!**"))return false;
+        if (range.isOp()) return true;
+        if (permission.contains("!")) permission = "!" + permission.replace("!", "");
+        if (permission.equals("*") || permission.equals("**")) {
+            return true;
+        }
+        boolean b = false;
+        for (String s : permission.replace("!","").split(",")){
+            if (permission.startsWith("!")) {
+                b = b || !range.getPermission().equals(s);
+            } else {
+                b = b || range.getPermission().equals(s);
+            }
+        }
+        return b;
     }
 }

@@ -28,7 +28,7 @@ public class Config {
      * que todos tenga que usar el /login para iniciar sesión
      */
 
-    @Getter @Setter private static ServerMode serverMode = ServerMode.OFFLINE_MODE;
+    @Getter @Setter private static ServerMode serverMode = ServerMode.ONLINE_MODE;
 
     /**
      * Si está habilitado al momento de revisar si un jugador

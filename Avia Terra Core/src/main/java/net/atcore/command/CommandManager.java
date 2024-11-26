@@ -1,13 +1,20 @@
 package net.atcore.command;
 
+import net.atcore.AviaTerraCore;
+import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import net.atcore.security.Login.LoginManager;
+import net.atcore.utils.RangeType;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.entities.Member;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import java.io.BufferedReader;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import static net.atcore.messages.MessagesManager.sendMessage;
 
@@ -47,6 +54,45 @@ public class CommandManager {//nose si poner en esta clase aquí la verdad
                 if (!isSilent)sendMessage(player,"Primero inicia sessión usando /login", TypeMessages.ERROR);
             }
             return true;
+        }
+    }
+
+    public static void processCommandFromDiscord(Message command, Member member){
+        boolean hasPermission = false;
+        List<RangeType> rolesHasMember = new ArrayList<>();
+        List<String> rolesId = new ArrayList<>();// Se crea las listas
+        for (Role rangeList : member.getRoles()) rolesId.add(rangeList.getId());// Crea añade las Ids de los roles
+        for (RangeType range : RangeType.values()) {
+            if (rolesId.contains(range.getRolId())) {// Mira si tiene ese rol
+                rolesHasMember.add(range);// Añade el rol que pertenece
+            }
+        }
+        if (rolesHasMember.isEmpty()){
+            command.reply("No tienes autorización para ejecutar comandos en la consola").queue();
+            return;
+        }
+        for (RangeType range : rolesHasMember) {
+            String commandRaw = command.getContentRaw().split(" ")[0].toLowerCase();
+            if (COMMANDS.containsKey(commandRaw)){
+                String permission = COMMANDS.get(commandRaw.toLowerCase());
+                hasPermission = hasPermission || CommandUtils.hasPermission(permission, range);
+            }else {
+                if (range.isOp()){
+                    hasPermission = true;
+                }else {
+                    command.reply("No tienes permisos para ejecutar ese comando en la consola").queue();
+                    return;
+                }
+            }
+        }
+        if (hasPermission){
+            Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> {
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command.getContentRaw());
+                MessagesManager.sendMessageConsole(String.format("<|%s|> ejecutó -> %s"
+                        , member.getUser().getGlobalName() + "(" + member.getId() + ")" ,"`&6/" + command.getContentRaw() + "`"), TypeMessages.INFO, CategoryMessages.COMMANDS, false);
+            });
+        }else {
+            command.reply("No tienes permisos para ejecutar ese comando en la consola").queue();
         }
     }
 }

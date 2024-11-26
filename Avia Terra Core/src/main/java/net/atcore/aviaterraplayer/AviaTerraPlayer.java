@@ -7,7 +7,7 @@ import net.atcore.inventory.InventorySection;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import net.atcore.utils.GlobalUtils;
-import net.atcore.utils.RangeList;
+import net.atcore.utils.RangeType;
 import net.luckperms.api.model.user.User;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Contract;
@@ -21,9 +21,9 @@ public class AviaTerraPlayer {
 
     public AviaTerraPlayer(Player player) {
         this.uuid = player.getUniqueId();
-        User user = AviaTerraCore.getLP().getUserManager().getUser(player.getUniqueId());
+        User user = AviaTerraCore.getLp().getUserManager().getUser(player.getUniqueId());
         assert user != null;
-        this.rangeList = RangeList.valueOf(user.getPrimaryGroup().toUpperCase());
+        this.rangeType = RangeType.valueOf(user.getPrimaryGroup().toUpperCase());
 
     }
 
@@ -34,7 +34,7 @@ public class AviaTerraPlayer {
     private final UUID uuid;
 
     private InventorySection inventorySection = null;
-    private RangeList rangeList;
+    private RangeType rangeType;
 
     public void sendMessage(String message, TypeMessages type) {
         MessagesManager.sendMessage(GlobalUtils.getPlayer(uuid), message, type);

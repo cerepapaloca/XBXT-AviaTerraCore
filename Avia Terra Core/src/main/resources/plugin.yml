@@ -36,6 +36,7 @@ commands:
   weapon:
   seeinventory:
   link:
+  info:
 permissions:
   aviaterracore.commnad.*:
     description: Todos los permisos del comandos de AviaTerraCore

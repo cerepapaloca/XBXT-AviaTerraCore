@@ -14,6 +14,7 @@ public class CommandSection implements Section {
     @Override
     public void enable() {
         commandHandler = new CommandHandler();
+        register(new InfoCommand());
         register(new FreezeCommand());
         register(new PruebaCommand());
         register(new AviaTerraCommand());

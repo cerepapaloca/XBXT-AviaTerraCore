@@ -141,6 +141,7 @@ public final class MessagesManager {
         }
         if (type == null) type = TypeMessages.NULL;
         String colorMain = type.getMainColor();
+        message = message.replace("`", "");
         return s + colorMain +  message.replace("<|", type.getSecondColor()).replace("|>", colorMain).replace("|!>", colorMain);
     }
 
@@ -159,11 +160,13 @@ public final class MessagesManager {
             //no parece que tenga sentido, pero sí lo tiene, es por qué asi puede quitar los códigos de color del texto
             finalMessage = ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&', finalMessage));
             //obtén el canal por su ID
-            TextChannel channel = AviaTerraCore.jda.getTextChannelById(categoryMessages.getIdChannel());
+            String chanelId = categoryMessages.getIdChannel();
+            if (chanelId == null)return;
+            TextChannel channel = AviaTerraCore.jda.getTextChannelById(chanelId);
             if (channel !=  null) {
                 channel.sendMessage(finalMessage.replace("<|", "**").replace("|>", "**").replace("|!>", "")).queue();
             } else {
-                throw new IllegalArgumentException("No se encontró canal de discord para los registro " + type.name());
+                throw new IllegalArgumentException("No se encontró canal de discord para los registro " + categoryMessages.name());
             }
         });
     }

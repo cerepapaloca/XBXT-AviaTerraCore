@@ -16,16 +16,17 @@ public class DataSection implements Section {
 
     @Override
     public void enable() {
-        register(mySQLConnection = new DataBaseBan());
-        register(new DataBaseRegister());
+        //register(mySQLConnection = new DataBaseBan());
+        //register(new DataBaseRegister());
         register(new FileCommands());
+        register(new FileConfig());
         for (DataBaseMySql db : dataBases) db.createTable();
         for (FileYaml fileYaml : fileYaml) fileYaml.loadData();
     }
 
     @Override
     public void disable() {
-        DataSection.getMySQLConnection().close();
+        //DataSection.getMySQLConnection().close();
         DataBaseBan.listDataBanByNAME.clear();
         DataBaseBan.listDataBanByIP.clear();
     }

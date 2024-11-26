@@ -23,7 +23,6 @@ public class FileCommands extends FileYaml {
 
     @Override
     public void saveData() {
-        //fileConfiguration.set("premisos", CommandManager.COMMANDS);
-        //saveConfig();
+
     }
 }
