@@ -12,6 +12,7 @@ import java.io.IOException;
 
 import java.io.*;
 
+@SuppressWarnings("ResultOfMethodCallIgnored")
 public abstract class FileYaml {
 
     private final String fileName;

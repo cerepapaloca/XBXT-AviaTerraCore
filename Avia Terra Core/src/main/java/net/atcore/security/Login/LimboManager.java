@@ -2,6 +2,9 @@ package net.atcore.security.Login;
 
 import lombok.experimental.UtilityClass;
 import net.atcore.AviaTerraCore;
+import net.atcore.data.DataSection;
+import net.atcore.data.FileYaml;
+import net.atcore.data.FilesYams;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import net.atcore.utils.GlobalUtils;
@@ -29,18 +32,27 @@ public class LimboManager {
 
     public void createLimboMode(Player player, ReasonLimbo reasonLimbo){
         DataLogin dataLogin = LoginManager.getDataLogin(player);
-        DataLimbo dataLimbo = new DataLimbo(player.getGameMode(),
-                player.getInventory().getContents(),
-                player.getLocation(),
-                player.isOp(),
-                player.getLevel());
+        FileYaml file = DataSection.getFliesCacheLimbo().getConfigFile(player.getUniqueId().toString(), false);
+        DataLimbo dataLimbo;
+        if (file == null){
+            dataLimbo = new DataLimbo(player.getGameMode(),
+                    player.getInventory().getContents(),
+                    player.getLocation(),
+                    player.isOp(),
+                    player.getLevel());
+            dataLogin.setLimbo(dataLimbo);
+        }else {
+            file.loadData();
+            dataLimbo = dataLogin.getLimbo();
+        }
+        DataSection.getFliesCacheLimbo().registerConfigFile(player.getUniqueId().toString());
         player.getInventory().clear();
         player.teleport(player.getWorld().getSpawnLocation());
         player.setOp(false);
         player.setGameMode(GameMode.SPECTATOR);
         player.setLevel(0);
         player.setAllowFlight(true);
-        dataLogin.setLimbo(dataLimbo);
+
         switch (reasonLimbo){
             case NO_SESSION -> {
                 MessagesManager.sendTitle(player,

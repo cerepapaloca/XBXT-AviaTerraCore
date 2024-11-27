@@ -13,6 +13,7 @@ public class DataSection implements Section {
     @Getter private final static HashSet<DataBaseMySql> dataBases = new HashSet<>();
     @Getter private final static HashSet<FileYaml> fileYaml = new HashSet<>();
     @Getter private static DataBaseMySql mySQLConnection;
+    @Getter private static FliesCacheLimbo fliesCacheLimbo;
 
     @Override
     public void enable() {
@@ -20,6 +21,7 @@ public class DataSection implements Section {
         //register(new DataBaseRegister());
         register(new FileCommands());
         register(new FileConfig());
+        fliesCacheLimbo = new FliesCacheLimbo();
         for (DataBaseMySql db : dataBases) db.createTable();
         for (FileYaml fileYaml : fileYaml) fileYaml.loadData();
     }

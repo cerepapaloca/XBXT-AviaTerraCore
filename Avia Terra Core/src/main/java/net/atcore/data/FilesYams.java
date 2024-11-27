@@ -63,13 +63,18 @@ public abstract class FilesYams {
         }
     }
 
-    public FileYaml getConfigFile(String pathName) {
+    public FileYaml getConfigFile(String pathName, boolean createNew) {
         for (FileYaml configFile : configFiles) {
             if (configFile.getPath().equals(pathName)) {
                 return configFile;
             }
         }
-        return registerConfigFile(pathName);
+        if (createNew){
+            return registerConfigFile(pathName);
+        }else {
+            return null;
+        }
+
     }
 
     public FileYaml registerConfigFile(String pathName) {
@@ -83,7 +88,4 @@ public abstract class FilesYams {
             throw new RuntimeException("Error al crear instancia de " + fileclass.getName(), e);
         }
     }
-
-    public abstract void loadData(String s);
-    public abstract void saveData(String s);
 }
