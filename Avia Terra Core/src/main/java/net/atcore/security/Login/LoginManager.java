@@ -5,7 +5,7 @@ import com.github.games647.craftapi.resolver.MojangResolver;
 import com.github.games647.craftapi.resolver.RateLimitException;
 import net.atcore.AviaTerraCore;
 import net.atcore.Config;
-import net.atcore.data.DataBaseRegister;
+import net.atcore.data.sql.DataBaseRegister;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
@@ -22,7 +22,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.*;
 
-import static net.atcore.data.DataBaseRegister.*;
+import static net.atcore.data.sql.DataBaseRegister.*;
 
 public final class LoginManager {
 

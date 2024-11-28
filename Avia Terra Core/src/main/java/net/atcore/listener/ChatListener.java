@@ -3,7 +3,7 @@ package net.atcore.listener;
 import lombok.Getter;
 import lombok.Setter;
 import net.atcore.messages.TypeMessages;
-import net.atcore.moderation.Ban.ContextBan;
+import net.atcore.moderation.ban.ContextBan;
 import net.atcore.moderation.ChatModeration;
 import net.atcore.security.Login.LoginManager;
 import net.luckperms.api.LuckPerms;
@@ -20,7 +20,7 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import java.net.SocketException;
 
 import static net.atcore.messages.MessagesManager.*;
-import static net.atcore.moderation.Ban.CheckAutoBan.checkAutoBanChat;
+import static net.atcore.moderation.ban.CheckAutoBan.checkAutoBanChat;
 @Setter
 @Getter
 public class ChatListener implements Listener {

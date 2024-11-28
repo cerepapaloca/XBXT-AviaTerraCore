@@ -8,12 +8,14 @@ import net.atcore.data.DataSection;
 import net.atcore.data.FileYaml;
 import net.atcore.messages.TypeMessages;
 import net.atcore.Section;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandException;
 import org.bukkit.command.PluginCommand;
 import org.jetbrains.annotations.NotNull;
 
 import org.bukkit.event.Listener;
 
+import java.io.BufferedReader;
 import java.util.HashSet;
 
 import static net.atcore.messages.MessagesManager.*;
@@ -54,13 +56,13 @@ public class RegisterManager {
         for (String s : pluginCommand.getAliases()){
             CommandManager.COMMANDS_AVIA_TERRA.put(s.toLowerCase(), command.getPermissions());
         }
-        if (!command.getPermissions().equals("*") && !command.getPermissions().equals("**") && !command.getPermissions().contains("!")){
+        if (!command.getPermissions().equals("*") && !command.getPermissions().equals("**")) {
             pluginCommand.setPermission(AviaTerraCore.getInstance().getName().toLowerCase() + ".command." + command.getName());
             //Permission permission = new Permission(AviaTerraCore.getInstance().getName().toLowerCase() + ".command." + command.getName());
             //getServer().getPluginManager().addPermission(permission);
         }
-
         pluginCommand.setDescription(command.getDescription());
+        pluginCommand.setUsage(command.getUsage());
         pluginCommand.setExecutor(CommandSection.getCommandHandler());
         pluginCommand.setTabCompleter(CommandSection.getCommandHandler());
     }

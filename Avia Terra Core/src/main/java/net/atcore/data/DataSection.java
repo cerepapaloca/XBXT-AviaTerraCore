@@ -3,6 +3,10 @@ package net.atcore.data;
 import lombok.Getter;
 import net.atcore.AviaTerraCore;
 import net.atcore.Section;
+import net.atcore.data.sql.DataBaseBan;
+import net.atcore.data.yml.FileCommands;
+import net.atcore.data.yml.FileConfig;
+import net.atcore.data.yml.FliesCacheLimbo;
 
 import java.util.HashSet;
 
@@ -37,7 +41,7 @@ public class DataSection implements Section {
     public void reloadConfig() {
         AviaTerraCore.getInstance().enqueueTaskAsynchronously(() -> {
             for (DataBaseMySql dataBaseMySql : dataBases) dataBaseMySql.reloadDatabase();
-            for (FileYaml filePermission : fileYaml) filePermission.reloadConfig();
+            for (FileYaml file : fileYaml) file.reloadConfig(ActionInReloadYaml.LOAD);
         });
     }
 

@@ -1,8 +1,8 @@
 package net.atcore.moderation;
 
 import lombok.Getter;
-import net.atcore.moderation.Ban.CheckAutoBan;
-import net.atcore.moderation.Ban.BanManager;
+import net.atcore.moderation.ban.CheckAutoBan;
+import net.atcore.moderation.ban.BanManager;
 import net.atcore.Section;
 
 public class ModerationSection implements Section {

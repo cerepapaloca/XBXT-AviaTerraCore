@@ -7,7 +7,6 @@ import net.atcore.security.Login.LoginManager;
 import net.atcore.utils.GlobalConstantes;
 import net.atcore.utils.ModeTab;
 import net.atcore.utils.RangeType;
-import net.dv8tion.jda.api.entities.Member;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -176,7 +175,7 @@ public final class CommandUtils {
         };
     }
 
-    public void excuteForPlayer(@Nullable CommandSender sender, String arg, boolean safeMode, Consumer<TemporalPlayerData> action){
+    public void executeForPlayer(@Nullable CommandSender sender, String arg, boolean safeMode, Consumer<TemporalPlayerData> action){
         if (arg.charAt(0) == '*'){
             Bukkit.getOnlinePlayers().forEach(player ->  action.accept(new TemporalPlayerData(player.getName(), player)));
             return;

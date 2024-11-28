@@ -2,10 +2,10 @@ package net.atcore.data;
 
 import lombok.Getter;
 import net.atcore.AviaTerraCore;
+import org.bukkit.Bukkit;
 
 import java.io.File;
 import java.util.HashSet;
-import java.util.function.Supplier;
 
 public abstract class FilesYams {
 
@@ -74,15 +74,33 @@ public abstract class FilesYams {
         }else {
             return null;
         }
+    }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    public void deleteConfigFile(String nameFile) {
+        nameFile = nameFile + ".yml";
+        for (FileYaml configFile : configFiles) {
+            if (folderName != null){
+                nameFile = folderName + File.separator + nameFile;
+            }
+            if (configFile.getPath().equals(nameFile)) {
+                configFiles.remove(configFile);
+                configFile.getFile().delete();
+                return;
+            }
+        }
     }
 
     public FileYaml registerConfigFile(String pathName) {
+        return registerConfigFile(pathName, ActionInReloadYaml.NOTHING);
+    }
+
+    public FileYaml registerConfigFile(String fileName , ActionInReloadYaml action) {
         try {
             FileYaml config = fileclass.getConstructor(String.class, String.class)
-                    .newInstance(pathName, folderName);
-            config.reloadConfig();
+                    .newInstance(fileName, folderName);
             configFiles.add(config);
+            config.reloadConfig(action);
             return config;
         } catch (Exception e) {
             throw new RuntimeException("Error al crear instancia de " + fileclass.getName(), e);

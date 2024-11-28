@@ -2,11 +2,11 @@ package net.atcore.listener;
 
 import net.atcore.AviaTerraCore;
 import net.atcore.aviaterraplayer.AviaTerraPlayer;
-import net.atcore.data.DataBaseRegister;
+import net.atcore.data.sql.DataBaseRegister;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
-import net.atcore.moderation.Ban.ContextBan;
+import net.atcore.moderation.ban.ContextBan;
 import net.atcore.security.AntiTwoPlayer;
 import net.atcore.security.Login.DataLimbo;
 import net.atcore.security.Login.DataLogin;

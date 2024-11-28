@@ -15,18 +15,26 @@ import java.io.*;
 @SuppressWarnings("ResultOfMethodCallIgnored")
 public abstract class FileYaml {
 
-    private final String fileName;
+    protected final String fileName;
     @Getter
     protected FileConfiguration fileYaml = null;
     @Getter
     private File file = null;
     private final String folderName;
 
-    public FileYaml(String fileName, String folderName) {
-        this.fileName = fileName;
+    public FileYaml(String fileName, String folderName, boolean copy) {
+        if (fileName.endsWith(".yml")) {
+            this.fileName = fileName;
+        }else {
+            this.fileName = fileName + ".yml";
+        }
         this.folderName = folderName;
-        copyDefaultConfig(); // Copiar archivo desde resources
-        loadConfig(); // Cargar la configuración
+        if (copy) {
+            copyDefaultConfig();// Copiar archivo desde resources
+            loadConfig(); // Carga los datos en memoria
+            loadData(); // Aplica los datos
+        }
+
     }
 
     public String getPath(){
@@ -53,14 +61,14 @@ public abstract class FileYaml {
             }
         }
 
-        file = new File(targetFolder, fileName + ".yml");
+        file = new File(targetFolder, fileName);
 
         if (!file.exists()) {
-            try (InputStream inputStream = AviaTerraCore.getInstance().getResource(fileName + ".yml");
+            try (InputStream inputStream = AviaTerraCore.getInstance().getResource(fileName);
                  OutputStream outputStream = new FileOutputStream(file)) {
 
                 if (inputStream == null) {
-                    throw new FileNotFoundException("El archivo " + fileName + ".yml no se encontró en resources.");
+                    throw new FileNotFoundException("El archivo " + fileName + " no se encontró en resources.");
                 }
 
                 byte[] buffer = new byte[1024];
@@ -70,7 +78,7 @@ public abstract class FileYaml {
                 }
 
             } catch (IOException e) {
-                throw new RuntimeException("No se pudo copiar el archivo de configuración " + fileName + ".yml", e);
+                throw new RuntimeException("No se pudo copiar el archivo de configuración " + fileName, e);
             }
         }
     }
@@ -87,29 +95,39 @@ public abstract class FileYaml {
         try {
             fileYaml.save(file);
         } catch (IOException e) {
-            throw new RuntimeException("No se pudo guardar el archivo de configuración " + fileName + ".yml", e);
+            throw new RuntimeException("No se pudo guardar el archivo de configuración " + fileName, e);
         }
     }
 
 
-    public void reloadConfig() {
+    public void reloadConfig(ActionInReloadYaml action) {
+
         if (fileYaml == null) {
             if(folderName != null){
-                file = new File(AviaTerraCore.getInstance().getDataFolder()+File.separator + folderName, fileName);
+                file = new File(AviaTerraCore.getInstance().getDataFolder() + File.separator + folderName, fileName);
             }else{
                 file = new File(AviaTerraCore.getInstance().getDataFolder(), fileName);
             }
-
         }
-        fileYaml = YamlConfiguration.loadConfiguration(file);
 
-        if(file != null) {
+        fileYaml = YamlConfiguration.loadConfiguration(file);
+        /*if(file != null || fileYaml != null) {
             YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(file);
             fileYaml.setDefaults(defConfig);
+        }*/
+        if(!file.exists()){
+            try{
+                file.createNewFile();
+            }catch(IOException e){
+                throw new RuntimeException(e);
+            }
         }
-        loadData();
-        if (!AviaTerraCore.isStarting()) MessagesManager.sendMessageConsole(String.format("Archivo %s recargador exitosamente", file), TypeMessages.SUCCESS);
+        switch (action){
+            case LOAD -> loadData();
+            case SAVE -> saveData();
+        }
 
+        if (!AviaTerraCore.isStarting()) MessagesManager.sendMessageConsole(String.format("Archivo %s recargador exitosamente", file), TypeMessages.SUCCESS);
     }
 
     public abstract void loadData();

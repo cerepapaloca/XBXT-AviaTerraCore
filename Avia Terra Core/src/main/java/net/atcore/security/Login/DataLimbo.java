@@ -3,6 +3,7 @@ package net.atcore.security.Login;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import net.atcore.data.DataSection;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import org.bukkit.Bukkit;
@@ -29,6 +30,8 @@ public class DataLimbo {
         player.setOp(op);
         player.teleport(location);
         player.getInventory().setContents(items);
+        player.saveData();// Se guarda los datos del usuario en el servidor por si el servidor peta
         if (gameMode == GameMode.SURVIVAL) player.setAllowFlight(false);
+        DataSection.getFliesCacheLimbo().deleteConfigFile(player.getUniqueId().toString());// Borra la caché del jugador por qué ya no hace falta
     }
 }

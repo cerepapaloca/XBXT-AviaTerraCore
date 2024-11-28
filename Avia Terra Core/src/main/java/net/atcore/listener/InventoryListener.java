@@ -2,7 +2,7 @@ package net.atcore.listener;
 
 import net.atcore.armament.*;
 import net.atcore.inventory.ActionsInventoryManager;
-import net.atcore.moderation.Ban.CheckAutoBan;
+import net.atcore.moderation.ban.CheckAutoBan;
 import net.atcore.moderation.Freeze;
 import net.atcore.security.AntiExploit;
 import org.bukkit.entity.Player;

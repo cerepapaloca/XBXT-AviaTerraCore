@@ -1,7 +1,7 @@
 package net.atcore.command;
 
 import lombok.Getter;
-import net.atcore.command.Commnads.*;
+import net.atcore.command.commnads.*;
 import net.atcore.Section;
 
 import static net.atcore.utils.RegisterManager.register;
