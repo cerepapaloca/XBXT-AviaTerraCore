@@ -27,7 +27,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-import static net.atcore.messages.MessagesManager.*;
 import static net.atcore.security.Login.LoginManager.*;
 
 public class JoinAndQuitListener implements Listener {
@@ -53,7 +52,7 @@ public class JoinAndQuitListener implements Listener {
         List<UUID> UUIDPlayers = List.copyOf(AviaTerraPlayer.getPlayer(player).getModerationPlayer().getManipulatorInventoryPlayer());
         UUIDPlayers.forEach(UUID -> Objects.requireNonNull(Bukkit.getPlayer(UUID)).closeInventory());
         event.setQuitMessage(ChatColor.translateAlternateColorCodes('&',
-                "&8[&4-&8] " + COLOR_ESPECIAL + event.getPlayer().getName() + COLOR_INFO + " se a ido."));
+                "&8[&4-&8] " + TypeMessages.INFO.getSecondColor() + event.getPlayer().getName() + TypeMessages.INFO.getMainColor() + " se a ido."));
         MessagesManager.sendMessageConsole(String.format("El jugador <|%s|> se a desconecto", event.getPlayer().getName()), TypeMessages.INFO, CategoryMessages.LOGIN);
     }
 
@@ -61,7 +60,7 @@ public class JoinAndQuitListener implements Listener {
     public void onJoin(PlayerJoinEvent event) {
         onEnteringServer(event.getPlayer());
         event.setJoinMessage(ChatColor.translateAlternateColorCodes('&',
-                "&8[&a+&8] " + COLOR_ESPECIAL + event.getPlayer().getName() + COLOR_INFO + " se a unido."));
+                "&8[&a+&8] " + TypeMessages.INFO.getSecondColor() + event.getPlayer().getName() + TypeMessages.INFO.getMainColor() + " se a unido."));
         MessagesManager.addProprieties(String.format("El jugador <|%s|> se a unido", event.getPlayer().getName()), TypeMessages.INFO, true, false);
     }
 
@@ -75,6 +74,6 @@ public class JoinAndQuitListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOW)
     public void onPreLogin(AsyncPlayerPreLoginEvent event) {
-        if (AntiTwoPlayer.checkTwoPlayer(event.getName())) return;
+        AntiTwoPlayer.checkTwoPlayer(event.getName());
     }
 }

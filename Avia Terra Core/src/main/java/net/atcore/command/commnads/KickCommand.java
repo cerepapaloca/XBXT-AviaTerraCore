@@ -30,9 +30,7 @@ public class KickCommand extends BaseTabCommand {
                 }
 
                 String finalReason = reason;//esto porque no puede se una variable reasignada
-                CommandUtils.executeForPlayer(sender, args[0], true, dataTemporalPlayer -> {
-                    GlobalUtils.kickPlayer(dataTemporalPlayer.player(), finalReason);
-                });
+                CommandUtils.executeForPlayer(sender, args[0], true, dataTemporalPlayer -> GlobalUtils.kickPlayer(dataTemporalPlayer.player(), finalReason));
             }
         }
     }

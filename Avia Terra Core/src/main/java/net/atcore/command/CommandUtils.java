@@ -19,8 +19,6 @@ import java.util.*;
 import java.util.function.Consumer;
 
 import static java.util.stream.Collectors.toList;
-import static net.atcore.messages.MessagesManager.COLOR_ERROR;
-import static net.atcore.messages.MessagesManager.sendMessage;
 
 @UtilityClass
 public final class CommandUtils {
@@ -79,7 +77,7 @@ public final class CommandUtils {
                 list.addAll(listOthers);
                 return list;
             }else{
-                return List.of(ChatColor.translateAlternateColorCodes('&', COLOR_ERROR + "Error. no tiene s, m, h, d. al final del argumento"));
+                return List.of(ChatColor.translateAlternateColorCodes('&', "&cError. no tiene s, m, h, d. al final del argumento"));
             }
         }else {
             listOthers.add("##x");

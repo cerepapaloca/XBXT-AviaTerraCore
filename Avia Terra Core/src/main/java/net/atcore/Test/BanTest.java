@@ -4,7 +4,7 @@ import net.atcore.AviaTerraCore;
 import net.atcore.aviaterraplayer.AviaTerraPlayer;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
-import net.atcore.moderation.Ban.ContextBan;
+import net.atcore.moderation.ban.ContextBan;
 import net.atcore.moderation.ModerationSection;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.Bukkit;

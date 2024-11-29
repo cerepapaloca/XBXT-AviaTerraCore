@@ -74,7 +74,7 @@ public class DataBaseBan extends DataBaseMySql {
             try (ResultSet resultSet = dbMetaData.getTables(null, null, "bans", null)) {
                 if (resultSet.next()){
                     reloadDatabase();
-                    sendMessageConsole("DataBase Bans " + MessagesManager.COLOR_SUCCESS + "Ok", TypeMessages.INFO, false);
+                    sendMessageConsole("DataBase Bans " + TypeMessages.SUCCESS.getMainColor() + "Ok", TypeMessages.INFO, false);
                     return;
                 }
             }
@@ -97,7 +97,7 @@ public class DataBaseBan extends DataBaseMySql {
              Statement statement = connection.createStatement()) {
             statement.executeUpdate(createTableSQL);
             statement.executeUpdate(addUniqueKeySQL);
-            sendMessageConsole("DataBase Bans " + MessagesManager.COLOR_SUCCESS + "Creada", TypeMessages.INFO, false);
+            sendMessageConsole("DataBase Bans " + TypeMessages.SUCCESS.getMainColor() + "Creada", TypeMessages.INFO, false);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

@@ -50,11 +50,7 @@ public class InfoCommand extends BaseCommand {
     }
 
     private String applySpace(String s){
-        StringBuilder space = new StringBuilder();
-        for (int i = 0; i < SPACE - s.length(); i++) {
-            space.append(" ");
-        }
-        return  s + space;
+        return  s + " ".repeat(Math.max(0, SPACE - s.length()));
     }
 
     private String locationToString(Location loc){
