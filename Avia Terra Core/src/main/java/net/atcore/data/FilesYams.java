@@ -65,7 +65,7 @@ public abstract class FilesYams {
 
     public FileYaml getConfigFile(String pathName, boolean createNew) {
         for (FileYaml configFile : configFiles) {
-            if (configFile.getPath().equals(pathName + ".yml")) {
+            if (configFile.fileName.equals(pathName + ".yml")) {
                 return configFile;
             }
         }

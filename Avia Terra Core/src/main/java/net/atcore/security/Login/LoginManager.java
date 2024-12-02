@@ -160,7 +160,7 @@ public final class LoginManager {
      * @param player El usuario que iniciar sessión
      */
 
-    public DataLogin startPlaySessionCracked(@NotNull Player player){
+    public static DataLogin startPlaySessionCracked(@NotNull Player player){
         DataLogin dataLogin = getDataLogin(player);
         DataSession dataSession = new DataSession(player, StateLogins.CRACKED);
         dataSession.setEndTimeLogin(System.currentTimeMillis() + Config.getExpirationSession());

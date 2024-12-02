@@ -45,7 +45,7 @@ public class RegisterManager {
         }
     }
 
-    public void register(@NotNull BaseCommand command) {
+    public static void register(@NotNull BaseCommand command) {
         CommandSection.getCommandHandler().getCommands().add(command);
         PluginCommand pluginCommand = AviaTerraCore.getInstance().getCommand(command.getName());
         if (pluginCommand == null) {

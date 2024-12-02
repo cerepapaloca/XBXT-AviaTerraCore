@@ -18,7 +18,7 @@ public class FileCacheLimbo extends FileYaml {
 
     @Override
     public void loadData() {
-        DataLogin dataLogin = LoginManager.getDataLogin(UUID.fromString(fileYaml.getName().replace(".yml", "")));
+        DataLogin dataLogin = LoginManager.getDataLogin(UUID.fromString(fileName.replace(".yml", "")));
         List<?> rawList = fileYaml.getList("inventory", null);
         ItemStack[] inventory;
         if (rawList != null) {

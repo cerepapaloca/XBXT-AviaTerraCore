@@ -26,7 +26,6 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import static net.atcore.messages.MessagesManager.sendMessageConsole;
-import static net.atcore.security.Login.LoginManager.getDataLogin;
 
 public final class AviaTerraCore extends JavaPlugin {
 
@@ -47,7 +46,6 @@ public final class AviaTerraCore extends JavaPlugin {
         resolver = new MojangResolver();
     }
 
-    @SneakyThrows
     @Override
     public void onEnable() {
         long timeCurrent = System.currentTimeMillis();

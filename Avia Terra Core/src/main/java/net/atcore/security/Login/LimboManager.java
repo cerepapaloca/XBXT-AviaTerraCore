@@ -45,7 +45,6 @@ public class LimboManager {
             // Se guarda los datos cuando sé crear el limboData esto es solo por si hubo problema grave con el servidor
             AviaTerraCore.getInstance().enqueueTaskAsynchronously(() -> DataSection.getFliesCacheLimbo().registerConfigFile(uuidString, ActionInReloadYaml.SAVE));
         }else {
-            Bukkit.getLogger().severe("B");// TODO borrar esto cuando termine con las pruebas
             // Carga los datos del usuario
             file.loadData();
             dataLimbo = dataLogin.getLimbo();

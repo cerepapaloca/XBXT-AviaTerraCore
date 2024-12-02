@@ -4,6 +4,7 @@ import lombok.Getter;
 import net.atcore.AviaTerraCore;
 import net.atcore.Section;
 import net.atcore.data.sql.DataBaseBan;
+import net.atcore.data.sql.DataBaseRegister;
 import net.atcore.data.yml.FileCommands;
 import net.atcore.data.yml.FileConfig;
 import net.atcore.data.yml.FliesCacheLimbo;
@@ -21,11 +22,12 @@ public class DataSection implements Section {
 
     @Override
     public void enable() {
-        //register(mySQLConnection = new DataBaseBan());
-        //register(new DataBaseRegister());
+        register(mySQLConnection = new DataBaseBan());
+        register(new DataBaseRegister());
         register(new FileCommands());
         register(new FileConfig());
         fliesCacheLimbo = new FliesCacheLimbo();
+        fliesCacheLimbo.reloadConfigs();
         for (DataBaseMySql db : dataBases) db.createTable();
         for (FileYaml fileYaml : fileYaml) fileYaml.loadData();
     }
