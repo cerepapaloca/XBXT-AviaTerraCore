@@ -9,7 +9,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.atcore.AviaTerraCore;
-import net.atcore.service.ServiceSection;
+import net.atcore.security.SecuritySection;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 
@@ -46,7 +46,7 @@ public class PacketListener {
             @Override
             public void onPacketReceiving(PacketEvent event) {
                 event.setCancelled(true);//se cancela por qué si no el servidor le tira error al cliente por enviar un paquete que no debería
-                ServiceSection.getSimulateOnlineMode().startEncryption(event.getPlayer(), event.getPacket());
+                SecuritySection.getSimulateOnlineMode().startEncryption(event.getPlayer(), event.getPacket());
             }
         });
 
@@ -57,7 +57,7 @@ public class PacketListener {
         ){
             @Override
             public void onPacketReceiving(PacketEvent event) {
-                event.setCancelled(ServiceSection.getSimulateOnlineMode().preStartLogin(event.getPlayer(), event.getPacket()));
+                event.setCancelled(SecuritySection.getSimulateOnlineMode().preStartLogin(event.getPlayer(), event.getPacket()));
             }
         });
 

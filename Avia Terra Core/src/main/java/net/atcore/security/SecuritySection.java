@@ -1,9 +1,10 @@
-package net.atcore.service;
+package net.atcore.security;
 
 import lombok.Getter;
 import net.atcore.Section;
+import net.atcore.security.Login.SimulateOnlineMode;
 
-public class ServiceSection implements Section {
+public class SecuritySection implements Section {
 
     @Getter
     private static Encrypt encrypt;
@@ -28,6 +29,6 @@ public class ServiceSection implements Section {
 
     @Override
     public String getName() {
-        return "Servicios";
+        return "Seguridad";
     }
 }

@@ -7,6 +7,7 @@ import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import net.atcore.command.CommandManager;
+import net.atcore.misc.LimitWorld;
 import net.atcore.moderation.Freeze;
 import net.atcore.security.Login.LoginManager;
 import net.atcore.utils.GlobalConstantes;
@@ -32,11 +33,13 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onMove(PlayerMoveEvent event) {
-        if (LoginManager.isLimboMode(event.getPlayer())) {
+        Player player = event.getPlayer();
+        if (LoginManager.isLimboMode(player)) {
             event.setCancelled(true);
             return;
         }
-        event.setCancelled(Freeze.isFreeze(event.getPlayer()));
+        LimitWorld.checkLimit(player);
+        event.setCancelled(Freeze.isFreeze(player));
     }
 
     @EventHandler

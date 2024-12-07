@@ -6,15 +6,13 @@ import com.github.games647.craftapi.resolver.MojangResolver;
 import com.google.common.hash.Hasher;
 import com.google.common.hash.Hashing;
 import net.atcore.AviaTerraCore;
-import net.atcore.Config;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.TypeMessages;
 import net.atcore.security.Login.DataLogin;
 import net.atcore.security.Login.DataSession;
 import net.atcore.security.Login.LoginManager;
 import net.atcore.security.Login.StateLogins;
-import net.atcore.service.ServiceSection;
-import net.atcore.service.SimulateOnlineMode;
+import net.atcore.security.Login.SimulateOnlineMode;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -28,8 +26,8 @@ import java.util.Objects;
 import java.util.Optional;
 
 import static net.atcore.messages.MessagesManager.sendMessageConsole;
-import static net.atcore.service.SimulateOnlineMode.listUUIDPremium;
-import static net.atcore.service.SimulateOnlineMode.verifyTokens;
+import static net.atcore.security.Login.SimulateOnlineMode.listUUIDPremium;
+import static net.atcore.security.Login.SimulateOnlineMode.verifyTokens;
 
 public class VerificationPremium {
 
@@ -42,8 +40,8 @@ public class VerificationPremium {
         ////* Aquí comienza la valides del usuario *////
         try {
             // Descifrar usando la clave privada del servidor
-            byte[] sharedSecret = ServiceSection.getEncrypt().decryptData(encryptedSharedSecret);
-            byte[] token =  ServiceSection.getEncrypt().decryptData(encryptedToken);
+            byte[] sharedSecret = SecuritySection.getEncrypt().decryptData(encryptedSharedSecret);
+            byte[] token =  SecuritySection.getEncrypt().decryptData(encryptedToken);
 
             // verificar el token sean iguales
             if (verifyTokens.containsKey(Arrays.toString(token))) {
@@ -57,7 +55,7 @@ public class VerificationPremium {
                 ////////////////////////////////////////
 
                 // Se crea el serverID a partir de la llave secreta y la llave publicá
-                String serverId = generateServerId(ServiceSection.getEncrypt().getPublicKey(), sharedSecret);
+                String serverId = generateServerId(SecuritySection.getEncrypt().getPublicKey(), sharedSecret);
                 MojangResolver resolver = AviaTerraCore.getResolver();
                 Optional<Verification> response;
                 // Activa el protocolo de encriptación de minecraft. Más información en https://wiki.vg/Protocol_Encryption

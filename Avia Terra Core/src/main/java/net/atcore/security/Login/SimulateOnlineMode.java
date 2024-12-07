@@ -1,4 +1,4 @@
-package net.atcore.service;
+package net.atcore.security.Login;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
@@ -17,8 +17,8 @@ import net.atcore.Config;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.TypeMessages;
 import net.atcore.security.AntiBot;
-import net.atcore.security.Login.*;
 import net.atcore.security.VerificationPremium;
+import net.atcore.security.SecuritySection;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -92,7 +92,7 @@ public class SimulateOnlineMode {
 
         verifyTokens.put(Arrays.toString(token), name + "|" + Objects.requireNonNull(sender.getAddress()).getHostName() + "|" + uuid);
 
-        packetEncryption.getByteArrays().write(0, ServiceSection.getEncrypt().getPublicKey().getEncoded());
+        packetEncryption.getByteArrays().write(0, SecuritySection.getEncrypt().getPublicKey().getEncoded());
         packetEncryption.getByteArrays().write(1, token);
 
         packetEncryption.getBooleans().write(0, true);

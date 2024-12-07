@@ -11,7 +11,7 @@ import net.atcore.security.AntiTwoPlayer;
 import net.atcore.security.Login.DataLimbo;
 import net.atcore.security.Login.DataLogin;
 import net.atcore.security.Login.LoginManager;
-import net.atcore.service.ServiceSection;
+import net.atcore.security.SecuritySection;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -68,7 +68,7 @@ public class JoinAndQuitListener implements Listener {
     public void onLogin(PlayerLoginEvent event) {
         Player player = event.getPlayer();
         AviaTerraPlayer.addPlayer(player);
-        ServiceSection.getSimulateOnlineMode().applySkin(player);
+        SecuritySection.getSimulateOnlineMode().applySkin(player);
         ContextBan.GLOBAL.onContext(player, event);
     }
 

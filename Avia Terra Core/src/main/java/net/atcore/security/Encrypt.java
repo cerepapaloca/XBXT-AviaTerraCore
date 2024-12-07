@@ -1,4 +1,4 @@
-package net.atcore.service;
+package net.atcore.security;
 
 import lombok.Getter;
 

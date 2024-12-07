@@ -2,7 +2,6 @@ package net.atcore;
 
 import com.github.games647.craftapi.resolver.MojangResolver;
 import lombok.Getter;
-import lombok.SneakyThrows;
 import net.atcore.command.CommandSection;
 import net.atcore.data.DataSection;
 import net.atcore.messages.MessageSection;
@@ -10,7 +9,7 @@ import net.atcore.messages.TypeMessages;
 import net.atcore.listener.ListenerManagerSection;
 import net.atcore.security.Login.DataLogin;
 import net.atcore.security.Login.LoginManager;
-import net.atcore.service.ServiceSection;
+import net.atcore.security.SecuritySection;
 import net.atcore.utils.GlobalUtils;
 import net.atcore.utils.RegisterManager;
 import net.atcore.moderation.ModerationSection;
@@ -63,7 +62,7 @@ public final class AviaTerraCore extends JavaPlugin {
         RegisterManager.register(new CommandSection());
         RegisterManager.register(new ModerationSection());
         RegisterManager.register(new ListenerManagerSection());
-        RegisterManager.register(new ServiceSection());
+        RegisterManager.register(new SecuritySection());
         //enableModules();
         isStarting = false;
         messageOn(timeCurrent);
