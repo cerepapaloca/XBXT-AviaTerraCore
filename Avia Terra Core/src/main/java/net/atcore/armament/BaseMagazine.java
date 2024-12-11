@@ -33,7 +33,7 @@ public abstract class BaseMagazine extends BaseArmament implements Compartment {
         this.reloadTime = reloadTime;
         List<String> listAmmoName = new ArrayList<>();
         for (BaseAmmo ammo : listAmmoFill(defaultCaliber)) listAmmoName.add(ammo.getName());
-        GlobalUtils.setPersistentDataItem(itemArmament, "magazineAmmo", PersistentDataType.STRING, ArmamentUtils.listToString(listAmmoName));
+        GlobalUtils.setPersistentData(itemArmament, "magazineAmmo", PersistentDataType.STRING, ArmamentUtils.listToString(listAmmoName));
         getProperties(itemArmament, true);
     }
 
@@ -151,7 +151,7 @@ public abstract class BaseMagazine extends BaseArmament implements Compartment {
                 List<String> ammoList = ArmamentUtils.stringToList(ammoNameList);
                 ammoList.add(baseAmmo.getName());
                 ItemAmmo.setAmount(ItemAmmo.getAmount() - 1);
-                GlobalUtils.setPersistentDataItem(ItemCharger, "magazineAmmo", PersistentDataType.STRING, ArmamentUtils.listToString(ammoList));
+                GlobalUtils.setPersistentData(ItemCharger, "magazineAmmo", PersistentDataType.STRING, ArmamentUtils.listToString(ammoList));
                 getProperties(ItemCharger, true);
                 return;
             }
@@ -176,7 +176,7 @@ public abstract class BaseMagazine extends BaseArmament implements Compartment {
                 String ammonName = (String) GlobalUtils.getPersistenData(ItemCharger, "magazineName", PersistentDataType.STRING);
                 if (ammonName != null) {
                     String stringAmmo = (String) GlobalUtils.getPersistenData(ItemCharger, "magazineAmmo", PersistentDataType.STRING);
-                    GlobalUtils.setPersistentDataItem(ItemCharger, "magazineAmmo", PersistentDataType.STRING, "");
+                    GlobalUtils.setPersistentData(ItemCharger, "magazineAmmo", PersistentDataType.STRING, "");
                     if (stringAmmo == null)return false;
                     for (String name : ArmamentUtils.stringToList(stringAmmo)){
                         BaseAmmo baseAmmo = ArmamentUtils.getAmmo(name);

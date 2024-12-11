@@ -30,7 +30,7 @@ public class AviaTerraPlayer {
     private final static HashMap<UUID, AviaTerraPlayer> AVIA_TERRA_PLAYERS = new HashMap<>();
 
     private final ModerationPlayer moderationPlayer = new ModerationPlayer(this);
-    private final WeaponPlayer weaponPlayer = new WeaponPlayer(this);
+    private final ArmamentPlayer armamentPlayer = new ArmamentPlayer(this);
     private final UUID uuid;
 
     private InventorySection inventorySection = null;

@@ -29,7 +29,7 @@ public abstract class BaseWeaponTarkov extends BaseWeapon implements Compartment
     protected BaseWeaponTarkov(List<ListMagazine> listMagazines, int maxDistance, String displayName, double precision) {
         super(new ItemStack(Material.IRON_HORSE_ARMOR), maxDistance, displayName, precision);
         this.MAGAZINE_LIST = listMagazines;
-        GlobalUtils.setPersistentDataItem(itemArmament, "magazineNameInside", PersistentDataType.STRING, "null");
+        GlobalUtils.setPersistentData(itemArmament, "magazineNameInside", PersistentDataType.STRING, "null");
         updateLore(null, null);
     }
 
@@ -52,7 +52,7 @@ public abstract class BaseWeaponTarkov extends BaseWeapon implements Compartment
                         DataShoot dataShoot = executeShoot(player, ammon, baseMagazine);
                         if (dataShoot.isCancelled()) return;
                         listAmmo.removeFirst();//se elimina la bala del cargador
-                        GlobalUtils.setPersistentDataItem(itemWeapon, "magazineAmmo", PersistentDataType.STRING, ArmamentUtils.listToString(listAmmo));//guarda la munición actual
+                        GlobalUtils.setPersistentData(itemWeapon, "magazineAmmo", PersistentDataType.STRING, ArmamentUtils.listToString(listAmmo));//guarda la munición actual
                         updateLore(itemWeapon, null);
                         baseMagazine.onShoot(dataShoot);
                         ammon.onShoot(dataShoot);
@@ -152,9 +152,9 @@ public abstract class BaseWeaponTarkov extends BaseWeapon implements Compartment
             if (ammoMagazine.isEmpty())continue;//si el cargador está vacío busca otro cargador
             itemCharger.setAmount(0);//lo que hace es desperecer del mundo
             ItemStack itemSwapMagazine = new ItemStack(baseMagazine.getItemArmament());
-            GlobalUtils.setPersistentDataItem(itemSwapMagazine, "magazineAmmo", PersistentDataType.STRING, ArmamentUtils.listToString(ammoWeapon));
-            GlobalUtils.setPersistentDataItem(itemWeapon, "magazineAmmo", PersistentDataType.STRING, ArmamentUtils.listToString(ammoMagazine));
-            GlobalUtils.setPersistentDataItem(itemWeapon, "magazineNameInside", PersistentDataType.STRING, magazineNameExternal);
+            GlobalUtils.setPersistentData(itemSwapMagazine, "magazineAmmo", PersistentDataType.STRING, ArmamentUtils.listToString(ammoWeapon));
+            GlobalUtils.setPersistentData(itemWeapon, "magazineAmmo", PersistentDataType.STRING, ArmamentUtils.listToString(ammoMagazine));
+            GlobalUtils.setPersistentData(itemWeapon, "magazineNameInside", PersistentDataType.STRING, magazineNameExternal);
             updateLore(itemWeapon, hasCharger ? itemSwapMagazine : itemCharger);
             if (hasCharger){
                 GlobalUtils.addItemPlayer(itemSwapMagazine, player, true, true);
@@ -225,9 +225,9 @@ public abstract class BaseWeaponTarkov extends BaseWeapon implements Compartment
                     if (charger != null) {
                         ItemStack itemCharger = new ItemStack(charger.getItemArmament());
                         String stringAmmo = (String) GlobalUtils.getPersistenData(itemWeapon, "magazineAmmo", PersistentDataType.STRING);
-                        GlobalUtils.setPersistentDataItem(itemWeapon, "magazineNameInside", PersistentDataType.STRING, "null");
-                        GlobalUtils.setPersistentDataItem(itemWeapon, "magazineAmmo", PersistentDataType.STRING, "");
-                        GlobalUtils.setPersistentDataItem(itemCharger, "magazineAmmo", PersistentDataType.STRING, stringAmmo);
+                        GlobalUtils.setPersistentData(itemWeapon, "magazineNameInside", PersistentDataType.STRING, "null");
+                        GlobalUtils.setPersistentData(itemWeapon, "magazineAmmo", PersistentDataType.STRING, "");
+                        GlobalUtils.setPersistentData(itemCharger, "magazineAmmo", PersistentDataType.STRING, stringAmmo);
                         GlobalUtils.addProtectionAntiDupe(itemCharger);
                         updateLore(itemWeapon, itemCharger);
                         player.setItemOnCursor(itemCharger);

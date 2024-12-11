@@ -177,7 +177,7 @@ public final class GlobalUtils {
      */
 
     @SuppressWarnings("rawtypes")
-    public void setPersistentDataItem(@NotNull ItemStack itemStack, String nameKey, PersistentDataType type, Object data){
+    public void setPersistentData(@NotNull ItemStack itemStack, String nameKey, PersistentDataType type, Object data){
         ItemMeta meta = itemStack.getItemMeta();
         if (meta == null) return;
         NamespacedKey key = new NamespacedKey(AviaTerraCore.getInstance(), nameKey);

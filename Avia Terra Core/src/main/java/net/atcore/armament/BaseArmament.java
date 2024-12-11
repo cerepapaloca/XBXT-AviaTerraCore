@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 import net.atcore.AviaTerraCore;
 import net.atcore.utils.GlobalUtils;
-import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -32,7 +31,7 @@ public abstract class BaseArmament {
         new BukkitRunnable(){
             @Override
             public void run() {
-                GlobalUtils.setPersistentDataItem(itemArmament,armament + "Name", PersistentDataType.STRING, name);
+                GlobalUtils.setPersistentData(itemArmament,armament + "Name", PersistentDataType.STRING, name);
             }
         }.runTaskLater(AviaTerraCore.getInstance(), 1);
     }

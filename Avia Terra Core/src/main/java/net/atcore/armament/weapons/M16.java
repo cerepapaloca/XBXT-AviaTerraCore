@@ -9,7 +9,7 @@ public class M16 extends BaseWeaponUltraKill {
         super("M16",
                 60,
                 10,
-                10,
+                30, 10,
                 ListAmmo.MM45_OTAN_VERDE
         );
     }
