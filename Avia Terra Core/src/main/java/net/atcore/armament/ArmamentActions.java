@@ -1,6 +1,7 @@
 package net.atcore.armament;
 
 import lombok.experimental.UtilityClass;
+import net.atcore.AviaTerraCore;
 import net.atcore.aviaterraplayer.AviaTerraPlayer;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
@@ -43,7 +44,8 @@ public class ArmamentActions {
             compartment.reload(player);
             return true;
         }else {
-            return false;
+            AviaTerraPlayer aviaPlayer = AviaTerraPlayer.getPlayer(player);
+            return aviaPlayer.getArmamentPlayer().reload(player);
         }
     }
 

@@ -88,10 +88,10 @@ public abstract class BaseMagazine extends BaseArmament implements Compartment {
     private static HashMap<UUID, BukkitTask> reloadTask = new HashMap<>();
 
     @Override
-    public void reload(Player player){
+    public boolean reload(Player player){
         ItemStack charger = player.getInventory().getItemInMainHand();
-        if (charger.getItemMeta() == null) return;
-        if (reloadTask.containsKey(player.getUniqueId())) return;
+        if (charger.getItemMeta() == null) return false;
+        if (reloadTask.containsKey(player.getUniqueId())) return false;
         boolean b = false;
         for (ItemStack item : player.getInventory().getContents()) {//busca si tienes al menos una bala en el inventario
             if (item == null) continue;
@@ -129,9 +129,11 @@ public abstract class BaseMagazine extends BaseArmament implements Compartment {
             MessagesManager.sendTitle(player,"", "Recargando...", 0, 0,30, TypeMessages.INFO);
             player.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, Integer.MAX_VALUE, 3, true, false, false));
             reloadTask.put(player.getUniqueId(), task);
+            return true;
         }else {
             MessagesManager.sendTitle(player,"", "No tiene balas en el inventario", 0, 0,30, TypeMessages.ERROR);
         }
+        return false;
     }
 
     private void onReload(@NotNull Player player){

@@ -70,9 +70,9 @@ public abstract class BaseWeaponTarkov extends BaseWeapon implements Compartment
 
 
     @Override
-    public void reload(Player player) {
+    public boolean reload(Player player) {
         ItemStack itemWeapon = player.getInventory().getItemInMainHand();
-        if (itemWeapon.getItemMeta() == null) return;//por si acasó
+        if (itemWeapon.getItemMeta() == null) return false;//por si acasó
         String magazineName = (String) GlobalUtils.getPersistenData(itemWeapon, "magazineNameInside", PersistentDataType.STRING);
         BaseMagazine charger = ArmamentUtils.getMagazine(magazineName);
         boolean b = false;//el jugador tiene un cargador con que cambiar o no
@@ -88,7 +88,7 @@ public abstract class BaseWeaponTarkov extends BaseWeapon implements Compartment
 
         if (charger != null){// ¿Él arma tiene un cargador?
             if (b){// ¿Hay un cargador que se puede cambiar?
-                if (inReload.containsKey(player.getUniqueId())) return;
+                if (inReload.containsKey(player.getUniqueId())) return false;
                 BukkitTask bukkitTask = new BukkitRunnable() {// Comienza el delay de la recarga
                     public void run() {
                         if (player.isOnline() && itemWeapon.getItemMeta() != null) onReload(itemWeapon, player);
@@ -110,6 +110,7 @@ public abstract class BaseWeaponTarkov extends BaseWeapon implements Compartment
                 MessagesManager.sendTitle(player,"", "Recargado...", 10, charger.getReloadTime(),10, TypeMessages.INFO);
                 player.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, charger.getReloadTime(), 2, true, false, false));
                 inReload.put(player.getUniqueId(), bukkitTask);// Por si se guarda el delay por si se tiene que cancelar
+                return true;
             }else {
                 MessagesManager.sendTitle(player, "", "No tienes cargadores con munición", 0,20,60, TypeMessages.ERROR);
             }
@@ -117,10 +118,12 @@ public abstract class BaseWeaponTarkov extends BaseWeapon implements Compartment
             if (b){//hay un cargador que se puede cambiar?
                 onReload(itemWeapon, player);
                 MessagesManager.sendTitle(player,"", "Recargado", 0, 0,30, TypeMessages.SUCCESS);
+                return true;
             }else {
                 MessagesManager.sendTitle(player, "", "No tienes cargadores con munición", 0,20,60, TypeMessages.ERROR);
             }
         }
+        return false;
     }
 
     private void onReload(ItemStack itemWeapon ,Player player) {

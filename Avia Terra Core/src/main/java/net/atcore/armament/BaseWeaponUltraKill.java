@@ -14,6 +14,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -38,11 +39,13 @@ public abstract class BaseWeaponUltraKill extends BaseWeapon {
 
     @Override
     public void shoot(Player player) {
-        DataShoot dataShoot = executeShoot(player, ammo, null);
-        Integer amountAmmo = (Integer) GlobalUtils.getPersistenData(itemArmament,"AmountAmmo", PersistentDataType.INTEGER);
-        if (amountAmmo != null && amountAmmo > 0){
+        ItemStack item = player.getInventory().getItemInMainHand();
+        if (item.getItemMeta() == null)return;
+        Integer amountAmmo = (Integer) GlobalUtils.getPersistenData(item,"AmountAmmo", PersistentDataType.INTEGER);
+        if (amountAmmo != null){
+            DataShoot dataShoot = executeShoot(player, ammo, null);
             amountAmmo--;
-            GlobalUtils.setPersistentData(itemArmament, "AmountAmmo", PersistentDataType.INTEGER, amountAmmo);
+            GlobalUtils.setPersistentData(item, "AmountAmmo", PersistentDataType.INTEGER, amountAmmo);
             ArmamentPlayer armamentPlayer = AviaTerraPlayer.getPlayer(player).getArmamentPlayer();
             if (armamentPlayer.getBossBar() == null){
                 armamentPlayer.createBossBar();
@@ -51,7 +54,7 @@ public abstract class BaseWeaponUltraKill extends BaseWeapon {
             TabPlayer tabPlayer = TabAPI.getInstance().getPlayer(player.getUniqueId());
             if (tabPlayer != null){
                 bossBar.setTitle(ChatColor.translateAlternateColorCodes('&', "&3&lCantidad De Munición: &6&l" + amountAmmo));
-                bossBar.setProgress((float) ((amountAmmo / maxAmmo)*100));
+                bossBar.setProgress((((float) amountAmmo / (float) maxAmmo)*100));
                 TabAPI.getInstance().getBossBarManager().sendBossBarTemporarily(tabPlayer, bossBar.getName(), 3);
             }
             onShoot(dataShoot);
