@@ -40,7 +40,7 @@ public abstract class BaseArmament {
     protected String name;//esta variable es un final
     protected final ItemStack itemArmament;
 
-    protected abstract void updateLore(ItemStack item,@Nullable ItemStack itemAuxiliar);
+    protected abstract void updateLore(ItemStack item, @Nullable ItemStack itemAuxiliar);
 
     /**
      * Es la abstracción principal del evento de disparo para que el

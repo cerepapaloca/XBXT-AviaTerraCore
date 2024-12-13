@@ -74,11 +74,13 @@ public abstract class BaseWeaponUltraKill extends BaseWeapon {
                 Daño: <|%s|>
                 Coste: <|%s|>
                 Presión: <|%s|>
+                Munición: <|%s|>
                 Rango máximo: <|%sm|>
                 """,
                 this.ammo.getDamage(),
                 delay,
                 (100 - precision) + "%",
+                GlobalUtils.getPersistenData(itemStack,"AmountAmmo", PersistentDataType.INTEGER),
                 maxDistance
         ), null, false, false), true));
         itemStack.setItemMeta(meta);

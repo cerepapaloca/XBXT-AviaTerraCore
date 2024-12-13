@@ -162,7 +162,7 @@ public final class GlobalUtils {
     public void addProtectionAntiDupe(@NotNull ItemStack item){
         ItemMeta meta = item.getItemMeta();
         if (meta == null) return;
-        meta.getPersistentDataContainer().set(KEY_ANTI_DUPE, PersistentDataType.STRING, UUID.randomUUID().toString());
+        meta.getPersistentDataContainer().set(KEY_ANTI_DUPE, PersistentDataType.STRING, "?");
         item.setItemMeta(meta);
         item.setAmount(1);//se pone uno por qué si el jugador lo divide va a ser baneado accidentalmente
     }

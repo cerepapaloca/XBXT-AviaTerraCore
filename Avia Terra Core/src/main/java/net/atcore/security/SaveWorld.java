@@ -64,11 +64,7 @@ public class SaveWorld {
     private static void deleteDirectory(File dir) {
         if (dir.isDirectory()) {
             File[] files = dir.listFiles();
-            if (files != null) {
-                for (File file : files) {
-                    deleteDirectory(file);
-                }
-            }
+            if (files != null) for (File file : files) deleteDirectory(file);
         }
         dir.delete();
     }

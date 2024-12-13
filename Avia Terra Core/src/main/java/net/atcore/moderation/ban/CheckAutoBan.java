@@ -11,6 +11,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -89,15 +90,21 @@ public class CheckAutoBan {
         new BukkitRunnable(){
             public void run() {
                 Map<String, Integer> itemCounts = new HashMap<>();
-
                 for (ItemStack item : inventory) {
                     if (item == null) continue;
                     if (item.getItemMeta() == null) continue;
-
                     PersistentDataContainer dataContainer = item.getItemMeta().getPersistentDataContainer();
                     if (dataContainer.has(GlobalUtils.KEY_ANTI_DUPE, PersistentDataType.STRING)) {
                         String uniqueId = dataContainer.get(GlobalUtils.KEY_ANTI_DUPE, PersistentDataType.STRING);
-                        itemCounts.put(uniqueId, itemCounts.getOrDefault(uniqueId, 0) + 1);
+                        if (uniqueId != null){
+                            if (uniqueId.equals("?")) {
+                                ItemMeta meta = item.getItemMeta();
+                                meta.getPersistentDataContainer().set(GlobalUtils.KEY_ANTI_DUPE, PersistentDataType.STRING, UUID.randomUUID().toString());
+                                item.setItemMeta(meta);
+                            }else{
+                                itemCounts.put(uniqueId, itemCounts.getOrDefault(uniqueId, 0) + 1);
+                            }
+                        }
                     }
                 }
 

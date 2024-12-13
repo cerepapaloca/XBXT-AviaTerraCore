@@ -30,39 +30,12 @@ public class ArmamentPlayer extends AbstractAviaTerraPlayer implements Compartme
 
     ArmamentPlayer(AviaTerraPlayer player) {
         super(player);
-        /*new BukkitRunnable() {
-            boolean b = false;
-            public void run() {
-                Player bukkitPlayer = Bukkit.getPlayer(player.getUuid());
-                if (bukkitPlayer == null) return;
-                TabPlayer tabPlayer = TabAPI.getInstance().getPlayer(bukkitPlayer.getUniqueId());
-
-                if (bossBar == null){
-                    createBossBar();
-                }
-                if (tabPlayer != null) {
-                    if (MAX_AMMO < ammo) {
-                        if (b) return;
-                        b = true;
-                        bossBar.setTitle(ChatColor.translateAlternateColorCodes('&', "&3&lCantidad De Munición: &6&l" + MAX_AMMO + "%"));
-                        bossBar.setProgress((float) ((ammo / MAX_AMMO)*100));
-                        TabAPI.getInstance().getBossBarManager().sendBossBarTemporarily(tabPlayer, bossBar.getName(), 3);
-                    }else{
-                        b = false;
-                        bossBar.setProgress((float) ((ammo / MAX_AMMO)*100));
-                        bossBar.setTitle(ChatColor.translateAlternateColorCodes('&', "&3&lCantidad De Munición: &6&l" + ammo + "%"));
-                        ammo += 2;
-                        TabAPI.getInstance().getBossBarManager().sendBossBarTemporarily(tabPlayer, bossBar.getName(), 4000);
-                    }
-                }
-            }
-        }.runTaskTimer(AviaTerraCore.getInstance(), 5, 5);*/
     }
 
     @Override
     public boolean reload(Player player){
         BaseWeapon baseWeapon = ArmamentUtils.getWeapon(aviaTerraPlayer.getPlayer());
-
+        Bukkit.getLogger().warning(baseWeapon.getName());
         if (baseWeapon instanceof BaseWeaponUltraKill weapon){
             new BukkitRunnable() {
                 public void run() {
@@ -98,8 +71,9 @@ public class ArmamentPlayer extends AbstractAviaTerraPlayer implements Compartme
                 }
             }.runTaskTimer(AviaTerraCore.getInstance(), 1L, weapon.getDelay());
             return true;
+        }else {
+            return false;
         }
-        return false;
     }
 
     @Override

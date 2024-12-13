@@ -100,9 +100,12 @@ public class ArmamentUtils {
      */
 
     public BaseWeapon getWeapon(@NotNull ItemStack item) {
+        Bukkit.getLogger().warning("A");
         if (item.getItemMeta() == null) return null;
+        Bukkit.getLogger().warning("B");
         String weaponName = (String) GlobalUtils.getPersistenData(item, "weaponName", PersistentDataType.STRING);
         if (weaponName == null) return null;
+        Bukkit.getLogger().warning("C");
         return getWeapon(weaponName);
     }
 
