@@ -43,27 +43,28 @@ public abstract class BaseWeaponUltraKill extends BaseWeapon {
         if (item.getItemMeta() == null)return;
         Integer amountAmmo = (Integer) GlobalUtils.getPersistenData(item,"AmountAmmo", PersistentDataType.INTEGER);
         if (amountAmmo != null){
-            DataShoot dataShoot = executeShoot(player, ammo, null);
-            amountAmmo--;
-            GlobalUtils.setPersistentData(item, "AmountAmmo", PersistentDataType.INTEGER, amountAmmo);
-            ArmamentPlayer armamentPlayer = AviaTerraPlayer.getPlayer(player).getArmamentPlayer();
-            if (armamentPlayer.getBossBar() == null){
-                armamentPlayer.createBossBar();
+            if (amountAmmo > 0) {
+                DataShoot dataShoot = executeShoot(player, ammo, null);
+                amountAmmo--;
+                GlobalUtils.setPersistentData(item, "AmountAmmo", PersistentDataType.INTEGER, amountAmmo);
+                ArmamentPlayer armamentPlayer = AviaTerraPlayer.getPlayer(player).getArmamentPlayer();
+                if (armamentPlayer.getBossBar() == null){
+                    armamentPlayer.createBossBar();
+                }
+                BossBar bossBar = armamentPlayer.getBossBar();
+                TabPlayer tabPlayer = TabAPI.getInstance().getPlayer(player.getUniqueId());
+                if (tabPlayer != null){
+                    bossBar.setTitle(ChatColor.translateAlternateColorCodes('&', "&3&lCantidad De Munición: &6&l" + amountAmmo));
+                    bossBar.setProgress((((float) amountAmmo / (float) maxAmmo)*100));
+                    TabAPI.getInstance().getBossBarManager().sendBossBarTemporarily(tabPlayer, bossBar.getName(), 3);
+                }
+                onShoot(dataShoot);
+                ammo.onShoot(dataShoot);
+                updateLore(player.getInventory().getItemInMainHand(), null);
+                player.getWorld().playSound(player.getLocation(), Sound.ENTITY_SNOW_GOLEM_SHOOT, SoundCategory.PLAYERS, 1.1f, 0.8f);
             }
-            BossBar bossBar = armamentPlayer.getBossBar();
-            TabPlayer tabPlayer = TabAPI.getInstance().getPlayer(player.getUniqueId());
-            if (tabPlayer != null){
-                bossBar.setTitle(ChatColor.translateAlternateColorCodes('&', "&3&lCantidad De Munición: &6&l" + amountAmmo));
-                bossBar.setProgress((((float) amountAmmo / (float) maxAmmo)*100));
-                TabAPI.getInstance().getBossBarManager().sendBossBarTemporarily(tabPlayer, bossBar.getName(), 3);
-            }
-            onShoot(dataShoot);
-            ammo.onShoot(dataShoot);
-            updateLore(player.getInventory().getItemInMainHand(), null);
-            player.getWorld().playSound(player.getLocation(), Sound.ENTITY_SNOW_GOLEM_SHOOT, SoundCategory.PLAYERS, 1.1f, 0.8f);
-        }else {
-            MessagesManager.sendTitle(player, "", TypeMessages.ERROR.getMainColor() + "Sin munición", 0, 10, 30, TypeMessages.ERROR);
         }
+        MessagesManager.sendTitle(player, "", TypeMessages.ERROR.getMainColor() + "Sin munición", 0, 10, 30, TypeMessages.ERROR);
     }
 
     @Override

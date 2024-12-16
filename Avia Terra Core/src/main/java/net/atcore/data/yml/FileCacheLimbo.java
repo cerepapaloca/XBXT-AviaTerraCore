@@ -5,6 +5,7 @@ import net.atcore.security.Login.DataLimbo;
 import net.atcore.security.Login.DataLogin;
 import net.atcore.security.Login.LoginManager;
 import org.bukkit.*;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
@@ -69,6 +70,15 @@ public class FileCacheLimbo extends FileYaml {
         fileYaml.set("level-xp", dataLimbo.getLevel());
         fileYaml.set("op", dataLimbo.isOp());
         fileYaml.set("inventory", dataLimbo.getItems());
+        fileYaml.set("is-restored", false);
         saveConfig();
+    }
+
+    public boolean isRestored() {
+        return fileYaml.getBoolean("is-restored");
+    }
+
+    public void setRestored(boolean isRestored) {
+        fileYaml.set("is-restored", isRestored);
     }
 }

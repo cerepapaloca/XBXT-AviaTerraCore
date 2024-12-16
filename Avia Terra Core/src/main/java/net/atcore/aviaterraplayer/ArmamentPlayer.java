@@ -17,6 +17,8 @@ import net.atcore.messages.TypeMessages;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
@@ -58,10 +60,12 @@ public class ArmamentPlayer extends AbstractAviaTerraPlayer implements Compartme
                                         TabAPI.getInstance().getBossBarManager().sendBossBarTemporarily(tabPlayer, bossBar.getName(), weapon.getDelay()*20 + 20);
                                         return;
                                     }else {
+                                        player.getWorld().playSound(player.getLocation(), Sound.ITEM_ARMOR_EQUIP_IRON, SoundCategory.PLAYERS, 1, 1);
                                         bossBar.setTitle(ChatColor.translateAlternateColorCodes('&', "&3&lCantidad De Munición: &6&l" + weapon.getMaxAmmo()));
                                         bossBar.setProgress((((float) amountAmmo / (float) weapon.getMaxAmmo())*100));
                                         TabAPI.getInstance().getBossBarManager().sendBossBarTemporarily(tabPlayer, bossBar.getName(), 10);
                                     }
+                                    weapon.updateLore(itemArmament, null);
                                 }
                             }
                         }

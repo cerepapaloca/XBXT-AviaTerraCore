@@ -5,6 +5,7 @@ import net.atcore.AviaTerraCore;
 import net.atcore.data.ActionInReloadYaml;
 import net.atcore.data.DataSection;
 import net.atcore.data.FileYaml;
+import net.atcore.data.yml.FileCacheLimbo;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import net.atcore.utils.GlobalUtils;
@@ -13,6 +14,7 @@ import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
+import org.jetbrains.annotations.NotNull;
 
 @UtilityClass
 public class LimboManager {
@@ -36,19 +38,22 @@ public class LimboManager {
         FileYaml file = DataSection.getFliesCacheLimbo().getConfigFile(uuidString, false);
         DataLimbo dataLimbo;
         if (file == null){// Si tiene un archivo eso quiere decir que no pudo aplicar las propiedades al usuario
-            dataLimbo = new DataLimbo(player.getGameMode(),// TODO aplicar un sistema para evitar problemas donde el yml no se llegue a borrar
-                    player.getInventory().getContents(),
-                    player.getLocation(),
-                    player.isOp(),
-                    player.getLevel());
-            dataLogin.setLimbo(dataLimbo);
-            // Se guarda los datos cuando sé crear el limboData esto es solo por si hubo problema grave con el servidor
-            AviaTerraCore.getInstance().enqueueTaskAsynchronously(() -> DataSection.getFliesCacheLimbo().registerConfigFile(uuidString, ActionInReloadYaml.SAVE));
+            dataLimbo = newDataLimbo(player, dataLogin, uuidString);
         }else {
-            // Carga los datos del usuario
-            file.loadData();
-            dataLimbo = dataLogin.getLimbo();
+            if (file instanceof FileCacheLimbo cacheLimbo){
+                if (cacheLimbo.isRestored()){
+                    dataLimbo = newDataLimbo(player, dataLogin, uuidString);
+                }else {
+                    // Carga los datos del usuario
+                    file.loadData();
+                    dataLimbo = dataLogin.getLimbo();
+                }
+            }else {
+                dataLimbo = newDataLimbo(player, dataLogin, uuidString);
+            }
         }
+
+
         player.getInventory().clear();
         player.teleport(player.getWorld().getSpawnLocation());
         player.setOp(false);
@@ -72,6 +77,23 @@ public class LimboManager {
                 startTimeOut(player, "Tardaste mucho en registrarte", dataLimbo);
             }
         }
+    }
+
+    private static @NotNull DataLimbo newDataLimbo(Player player, DataLogin dataLogin, String uuidString) {
+        DataLimbo dataLimbo;
+        dataLimbo = new DataLimbo(player.getGameMode(),
+                player.getInventory().getContents(),
+                player.getLocation(),
+                player.isOp(),
+                player.getLevel());
+        dataLogin.setLimbo(dataLimbo);
+        // Se guarda los datos cuando sé crea el limboData esto es solo por si hubo problema grave con el servidor
+        AviaTerraCore.getInstance().enqueueTaskAsynchronously(() -> {
+            //DataSection.getFliesCacheLimbo().deleteConfigFile(player.getUniqueId().toString());
+            DataSection.getFliesCacheLimbo().registerConfigFile(uuidString, ActionInReloadYaml.SAVE);
+        });
+
+        return dataLimbo;
     }
 
     public static void startTimeOut(Player player, String reason, DataLimbo dataLimbo){

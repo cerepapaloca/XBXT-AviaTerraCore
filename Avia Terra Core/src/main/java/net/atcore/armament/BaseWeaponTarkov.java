@@ -139,25 +139,34 @@ public abstract class BaseWeaponTarkov extends BaseWeapon implements Compartment
         for (ItemStack itemCharger : player.getInventory().getStorageContents()) {
             //realiza todas las comprobaciones
             if (itemCharger == null) continue;
+
             String magazineNameExternal = (String) GlobalUtils.getPersistenData(itemCharger, "magazineName", PersistentDataType.STRING);
-            String magazineNameInside = (String) GlobalUtils.getPersistenData(itemWeapon, "magazineNameInside", PersistentDataType.STRING);
             if (magazineNameExternal == null) continue;
+
+            String magazineNameInside = (String) GlobalUtils.getPersistenData(itemWeapon, "magazineNameInside", PersistentDataType.STRING);
             if (magazineNameInside == null) continue;
+
             if (!isCompatible(magazineNameExternal))continue;//es un cargador compatible?
             boolean hasCharger = !magazineNameInside.equals("null");//tiene un cargador el arma
+
             BaseMagazine baseMagazineExternal = ArmamentUtils.getMagazine(magazineNameExternal);
             if (baseMagazineExternal == null) continue;
+
             BaseMagazine baseMagazine = ArmamentUtils.getMagazine(hasCharger ? magazineNameInside : magazineNameExternal);
             if (baseMagazine == null) throw new IllegalArgumentException("baseCharger dio nulo cuando debe ser imposible");//creo que nunca va a suceder o eso creo
             String ammo = (String) GlobalUtils.getPersistenData(itemCharger, "magazineAmmo", PersistentDataType.STRING);//se obtiene la munición del cargador
             if (ammo == null) continue;
+
             List<String> ammoMagazine = ArmamentUtils.stringToList(ammo);
             if (ammoMagazine.isEmpty())continue;//si el cargador está vacío busca otro cargador
+
             itemCharger.setAmount(0);//lo que hace es desperecer del mundo
             ItemStack itemSwapMagazine = new ItemStack(baseMagazine.getItemArmament());
+
             GlobalUtils.setPersistentData(itemSwapMagazine, "magazineAmmo", PersistentDataType.STRING, ArmamentUtils.listToString(ammoWeapon));
             GlobalUtils.setPersistentData(itemWeapon, "magazineAmmo", PersistentDataType.STRING, ArmamentUtils.listToString(ammoMagazine));
             GlobalUtils.setPersistentData(itemWeapon, "magazineNameInside", PersistentDataType.STRING, magazineNameExternal);
+
             updateLore(itemWeapon, hasCharger ? itemSwapMagazine : itemCharger);
             if (hasCharger){
                 GlobalUtils.addItemPlayer(itemSwapMagazine, player, true, true);

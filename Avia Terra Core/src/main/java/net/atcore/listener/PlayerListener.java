@@ -22,6 +22,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +33,7 @@ import static net.atcore.armament.BaseWeaponTarkov.checkReload;
 public class PlayerListener implements Listener {
 
     @EventHandler
-    public void onMove(PlayerMoveEvent event) {
+    public void onMove(@NotNull PlayerMoveEvent event) {
         Player player = event.getPlayer();
         if (LoginManager.isLimboMode(player)) {
             event.setCancelled(true);
@@ -43,7 +44,7 @@ public class PlayerListener implements Listener {
     }
 
     @EventHandler
-    public void onInteract(PlayerInteractEvent event) {
+    public void onInteract(@NotNull PlayerInteractEvent event) {
         Player player = event.getPlayer();
         if (LoginManager.isLimboMode(event.getPlayer())) {
             event.setCancelled(true);
@@ -61,7 +62,7 @@ public class PlayerListener implements Listener {
     private final List<String> COMMANDS_PRE_LOGIN = List.of("login", "register", "log", "reg");
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onExecuteCommand(PlayerCommandPreprocessEvent event) {
+    public void onExecuteCommand(@NotNull PlayerCommandPreprocessEvent event) {
         String command = event.getMessage().split(" ")[0].substring(1).toLowerCase();
         Player player = event.getPlayer();
         String s = "";
@@ -80,7 +81,7 @@ public class PlayerListener implements Listener {
     }
 
     @EventHandler
-    public void onCommand(PlayerCommandSendEvent event) {
+    public void onCommand(@NotNull PlayerCommandSendEvent event) {
         List<String> commands = new ArrayList<>(event.getCommands());
         event.getCommands().clear();
         for (String command : commands){
@@ -91,18 +92,18 @@ public class PlayerListener implements Listener {
     }
 
     @EventHandler
-    public void onSwap(PlayerSwapHandItemsEvent event) {
+    public void onSwap(@NotNull PlayerSwapHandItemsEvent event) {
         Player player = event.getPlayer();
         event.setCancelled(ArmamentActions.reloadAction(player, event.getOffHandItem()));
     }
 
     @EventHandler
-    public void onDrop(PlayerDropItemEvent event) {
+    public void onDrop(@NotNull PlayerDropItemEvent event) {
         Player player = event.getPlayer();
         event.setCancelled(checkReload(player));
     }
 
-    public void addRange(Player player){
+    public void addRange(@NotNull Player player){
         ItemStack item = player.getInventory().getItemInMainHand();
         if (item.getType().equals(Material.NAME_TAG)){
             String range = (String) GlobalUtils.getPersistenData(item, "rangeName", PersistentDataType.STRING);

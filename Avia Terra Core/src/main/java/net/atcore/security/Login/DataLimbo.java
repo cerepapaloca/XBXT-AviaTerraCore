@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import net.atcore.data.DataSection;
+import net.atcore.data.FileYaml;
+import net.atcore.data.yml.FileCacheLimbo;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import org.bukkit.Bukkit;
@@ -32,6 +34,12 @@ public class DataLimbo {
         player.getInventory().setContents(items);
         player.saveData();// Se guarda los datos del usuario en el servidor por si el servidor peta
         if (gameMode == GameMode.SURVIVAL) player.setAllowFlight(false);
-        DataSection.getFliesCacheLimbo().deleteConfigFile(player.getUniqueId().toString());// Borra la caché del jugador por qué ya no hace falta
+        FileYaml file = DataSection.getFliesCacheLimbo().getConfigFile(player.getUniqueId().toString(), false);
+        if (file != null) {
+            if (file instanceof FileCacheLimbo cacheLimbo) {
+                cacheLimbo.setRestored(true);
+            }
+        }
+        //DataSection.getFliesCacheLimbo().deleteConfigFile(player.getUniqueId().toString());// Borra la caché del jugador por qué ya no hace falta
     }
 }
