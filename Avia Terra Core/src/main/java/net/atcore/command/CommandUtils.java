@@ -6,11 +6,12 @@ import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import net.atcore.security.Login.LoginManager;
 import net.atcore.utils.GlobalConstantes;
+import net.atcore.utils.GlobalUtils;
 import net.atcore.utils.ModeTab;
 import net.atcore.utils.RangeType;
-import net.luckperms.api.LuckPerms;
 import net.luckperms.api.model.group.Group;
 import net.luckperms.api.model.user.User;
+import net.luckperms.api.node.Node;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -22,7 +23,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.function.Consumer;
 
-import static java.util.stream.Collectors.mapping;
 import static java.util.stream.Collectors.toList;
 
 @UtilityClass
@@ -181,22 +181,30 @@ public final class CommandUtils {
     public void executeForPlayer(@Nullable CommandSender sender, String arg, boolean safeMode, Consumer<TemporalPlayerData> action){
         if (arg.startsWith("*")){
             Bukkit.getOnlinePlayers().forEach(player ->  action.accept(new TemporalPlayerData(player.getName(), player)));
+            return;
         }
         if (arg.startsWith("#") || arg.startsWith("!#")){
             Set<User> users = AviaTerraCore.getLp().getUserManager().getLoadedUsers();
+            List<String> groups = new ArrayList<>(Arrays.stream(arg.replace("!", "").replace("#", "")
+                    .split(",")).toList());
+            Set<UUID> uuids = new HashSet<>();
+            if (arg.startsWith("!")) { // Si está en opuesto Añade todos los jugadores a la lista
+                for (Player player : Bukkit.getOnlinePlayers()) uuids.add(player.getUniqueId());
+            }
             users.forEach(user -> {
-                if (arg.startsWith("!")){
-                    if (!user.getPrimaryGroup().equals(arg.substring(2))){
-                        Player player = Bukkit.getPlayer(user.getUniqueId());
-                        if (player != null) action.accept(new TemporalPlayerData(player.getName(), player));
-                    }
-                }else {
-                    if (user.getPrimaryGroup().equals(arg.substring(1))){
-                        Player player = Bukkit.getPlayer(user.getUniqueId());
-                        if (player != null) action.accept(new TemporalPlayerData(player.getName(), player));
+                for (String group : groups) {
+                    if (arg.startsWith("!")){ // Aquí se va borrando a los jugadores que pertenece a los grupos
+                        if (user.getPrimaryGroup().equals(group)) uuids.remove(user.getUniqueId());
+                    }else { // TODO falta hacer test mas completo de esto
+                        if (user.getPrimaryGroup().equals(group)) uuids.add(user.getUniqueId());
                     }
                 }
             });
+            for (UUID uuid : uuids){
+                Player player = Bukkit.getPlayer(uuid);
+                if (player != null) action.accept(new TemporalPlayerData(player.getName(), player));
+            }
+
             return;
         }
         List<String> names = new ArrayList<>(Arrays.stream(arg.replace("!", "").split(",")).toList());
@@ -229,19 +237,31 @@ public final class CommandUtils {
         if (arg.startsWith("*")){
             return List.of("*");
         }
-        if (arg.startsWith("#") || arg.startsWith("!#")){
-            List<String> names = new ArrayList<>();
+        if (arg.startsWith("#") || arg.startsWith("!#")){ // En caso de que inicie con los grupos
+            List<String> nameGroup = new ArrayList<>();
             Set<Group> groups = AviaTerraCore.getLp().getGroupManager().getLoadedGroups();
-            groups.forEach(group -> {
+            groups.forEach(group -> { // agrega la lista de los nombres de los grupos
                 if (arg.startsWith("!")){
-                    names.add("!#" + group.getName());
+                    nameGroup.add("!#" + group.getName());
                 }else {
-                    names.add("#" + group.getName());
+                    nameGroup.add("#" + group.getName());
                 }
             });
-            return names.stream()
-                    .filter(name -> name.toLowerCase().contains(arg.toLowerCase()))
-                    .toList();
+            String argNormalize = arg.endsWith(",") ? "" : Arrays.stream(arg.split(",")).toList().getLast().toLowerCase()
+                    .replace("!", "").replace("#", "");
+            List<String> finalNamesList = new ArrayList<>(nameGroup.stream()
+                    .filter(name -> name.toLowerCase().contains(argNormalize.toLowerCase())).toList());
+            if (arg.endsWith(",")){
+                groups.forEach(group -> finalNamesList.add(arg + group.getName()));
+                return finalNamesList;
+            }
+            if (finalNamesList.isEmpty() || finalNamesList.getFirst().equals(arg)){
+                return List.of(arg + ",");
+            }
+            if (arg.contains(",")){
+                finalNamesList.replaceAll(s -> arg.substring(0, arg.lastIndexOf(",")) + "," + s.replace("#", "").replace("!", ""));
+            }
+            return finalNamesList;
         }
         boolean b = arg.startsWith("!");
         List<String> namesList = new ArrayList<>();

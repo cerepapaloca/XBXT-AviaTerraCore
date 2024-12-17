@@ -34,13 +34,16 @@ public class ArmamentPlayer extends AbstractAviaTerraPlayer implements Compartme
         super(player);
     }
 
+    @Getter
+    private boolean isReloading = false;
+
     @Override
     public boolean reload(Player player){
         BaseWeapon baseWeapon = ArmamentUtils.getWeapon(aviaTerraPlayer.getPlayer());
-        Bukkit.getLogger().warning(baseWeapon.getName());
         if (baseWeapon instanceof BaseWeaponUltraKill weapon){
             new BukkitRunnable() {
                 public void run() {
+                    isReloading = true;
                     ItemStack itemArmament = aviaTerraPlayer.getPlayer().getInventory().getItemInMainHand();
                     if (player.isOnline()){
                         if (itemArmament.getItemMeta() != null){
@@ -72,6 +75,12 @@ public class ArmamentPlayer extends AbstractAviaTerraPlayer implements Compartme
                     }
                     if (player.isOnline()) player.removePotionEffect(PotionEffectType.SLOWNESS);
                     cancel();
+                }
+
+                @Override
+                public void cancel(){
+                    Bukkit.getScheduler().cancelTask(getTaskId());
+                    isReloading = false;
                 }
             }.runTaskTimer(AviaTerraCore.getInstance(), 1L, weapon.getDelay());
             return true;

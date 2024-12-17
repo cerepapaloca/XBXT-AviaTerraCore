@@ -80,5 +80,6 @@ public class FileCacheLimbo extends FileYaml {
 
     public void setRestored(boolean isRestored) {
         fileYaml.set("is-restored", isRestored);
+        saveConfig();
     }
 }

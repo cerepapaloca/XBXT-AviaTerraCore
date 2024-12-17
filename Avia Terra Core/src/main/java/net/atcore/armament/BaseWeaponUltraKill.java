@@ -41,6 +41,11 @@ public abstract class BaseWeaponUltraKill extends BaseWeapon {
     public void shoot(Player player) {
         ItemStack item = player.getInventory().getItemInMainHand();
         if (item.getItemMeta() == null)return;
+        AviaTerraPlayer aviaPlayer = AviaTerraPlayer.getPlayer(player);
+        if (aviaPlayer.getArmamentPlayer().isReloading()){
+            MessagesManager.sendTitle(player, "", TypeMessages.ERROR.getMainColor() + "Estas Recargando", 0, 10, 30, TypeMessages.ERROR);
+            return;
+        }
         Integer amountAmmo = (Integer) GlobalUtils.getPersistenData(item,"AmountAmmo", PersistentDataType.INTEGER);
         if (amountAmmo != null){
             if (amountAmmo > 0) {
@@ -62,6 +67,7 @@ public abstract class BaseWeaponUltraKill extends BaseWeapon {
                 ammo.onShoot(dataShoot);
                 updateLore(player.getInventory().getItemInMainHand(), null);
                 player.getWorld().playSound(player.getLocation(), Sound.ENTITY_SNOW_GOLEM_SHOOT, SoundCategory.PLAYERS, 1.1f, 0.8f);
+                return;
             }
         }
         MessagesManager.sendTitle(player, "", TypeMessages.ERROR.getMainColor() + "Sin munición", 0, 10, 30, TypeMessages.ERROR);
