@@ -14,8 +14,4 @@ public class M16 extends BaseWeaponUltraKill {
         );
     }
 
-    @Override
-    public void onShoot(DataShoot dataShoot) {
-
-    }
 }

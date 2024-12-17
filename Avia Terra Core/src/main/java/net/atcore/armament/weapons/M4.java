@@ -17,14 +17,4 @@ public class M4 extends BaseWeaponTarkov {
                 1
         );
     }
-
-    @Override
-    public void onShoot(DataShoot dataShoot) {
-
-    }
-
-    @Override
-    public void onReloading(Player player) {
-
-    }
 }

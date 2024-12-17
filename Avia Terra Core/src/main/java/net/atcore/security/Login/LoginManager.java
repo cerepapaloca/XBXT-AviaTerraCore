@@ -1,11 +1,13 @@
 package net.atcore.security.Login;
 
+import com.comphenix.protocol.ProtocolLibrary;
 import com.github.games647.craftapi.model.Profile;
 import com.github.games647.craftapi.resolver.MojangResolver;
 import com.github.games647.craftapi.resolver.RateLimitException;
 import lombok.experimental.UtilityClass;
 import net.atcore.AviaTerraCore;
 import net.atcore.Config;
+import net.atcore.data.DataSection;
 import net.atcore.data.sql.DataBaseRegister;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.Bukkit;
@@ -182,21 +184,28 @@ public final class LoginManager {
 
     public void newRegisterCracked(@NotNull String name, @NotNull InetAddress inetAddress , @NotNull String password){
         String s = hashPassword(name ,password);
-        getDataLogin(name).getRegister().setPasswordShaded(s);
-        DataRegister data = getDataLogin(name).getRegister();
-        data.setTemporary(false);
-        data.setLastAddress(inetAddress);
-        data.setLastLoginDate(System.currentTimeMillis());
         AviaTerraCore.getInstance().enqueueTaskAsynchronously(() -> {
-            updateLoginDate(name, System.currentTimeMillis());
-            updatePassword(name, s);
+            if (updatePassword(name, s)){
+                getDataLogin(name).getRegister().setPasswordShaded(s);
+                DataRegister data = getDataLogin(name).getRegister();
+                data.setTemporary(false);
+            }else {
+                Player player = Bukkit.getPlayer(name);
+                if (player == null) return;
+                GlobalUtils.synchronizeKickPlayer(player, "Hubo un error al guardar tu contraseña");
+            }
         });
+        updateLoginDataBase(name, inetAddress);
     }
 
     public void updateLoginDataBase(String name, InetAddress inetAddress){
-        Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(), () -> {
-            updateLoginDate(name, System.currentTimeMillis());
-            updateAddress(name, inetAddress.getHostAddress().replace("/",""));
+        AviaTerraCore.getInstance().enqueueTaskAsynchronously(() -> {
+            boolean b = updateAddress(name, inetAddress.getHostAddress().replace("/","")) && updateLoginDate(name, System.currentTimeMillis());
+            if (!b) { // En caso de un error hace un kick al jugador para que vuelva a entrar
+                Player player = Bukkit.getPlayer(name);
+                if (player == null) return;
+                GlobalUtils.synchronizeKickPlayer(player, "Hubo un error al guardar tus datos, por favor vuelve a entrar");
+            }
         });
         DataRegister dataRegister = getDataLogin(name).getRegister();
         dataRegister.setLastAddress(inetAddress);
@@ -225,7 +234,7 @@ public final class LoginManager {
             return false;
         }
 
-        if (dataLogin.hasSession()) {//mira si tiene una session
+        if (dataLogin.hasSession()) {// Mira si tiene una session
             DataSession dataSession = dataLogin.getSession();
             switch (dataSession.getState()) {
                 case CRACKED -> {
@@ -277,8 +286,8 @@ public final class LoginManager {
                     return false;
                 }
             }
-        }else {//esto solo sucedería para los no premium
-            if (dataLogin.getRegister().getPasswordShaded() != null){// la cuenta premium tiene una contraseña?
+        }else {// Esto solo sucedería para los no premium
+            if (dataLogin.getRegister().getPasswordShaded() != null){// La cuenta premium tiene una contraseña?
                 LimboManager.startSynchronizeLimboMode(player, ReasonLimbo.NO_SESSION);
             }else {
                 LimboManager.startSynchronizeLimboMode(player, ReasonLimbo.NO_REGISTER);

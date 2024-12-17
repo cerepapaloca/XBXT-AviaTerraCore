@@ -16,9 +16,4 @@ public class MM45_OTAN_VERDE extends BaseAmmo {
                 2
         );
     }
-
-    @Override
-    public void onShoot(DataShoot dataShoot) {
-
-    }
 }

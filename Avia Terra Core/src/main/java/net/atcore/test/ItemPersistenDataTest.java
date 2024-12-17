@@ -7,10 +7,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataHolder;
 import org.bukkit.persistence.PersistentDataType;
+import org.jetbrains.annotations.TestOnly;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@TestOnly
 public final class ItemPersistenDataTest implements RunTest {
 
     @Override

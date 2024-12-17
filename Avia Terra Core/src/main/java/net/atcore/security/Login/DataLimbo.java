@@ -13,6 +13,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -31,7 +33,7 @@ public class DataLimbo {
     public void restorePlayer(Player player) {
         player.setGameMode(gameMode);
         player.setOp(op);
-        player.teleport(location);
+        player.teleport(location, PlayerTeleportEvent.TeleportCause.PLUGIN);
         player.getInventory().setContents(items);
         player.saveData();// Se guarda los datos del usuario en el servidor por si el servidor peta
         if (gameMode == GameMode.SURVIVAL) player.setAllowFlight(false);

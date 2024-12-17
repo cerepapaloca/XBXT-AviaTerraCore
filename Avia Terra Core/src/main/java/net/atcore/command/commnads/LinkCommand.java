@@ -50,9 +50,14 @@ public class LinkCommand extends BaseTabCommand {
                             }else if (args[1].charAt(8) == '-'){
                                 if (TwoFactorAuth.checkCode(player, args[1])){
                                     AviaTerraCore.getInstance().enqueueTaskAsynchronously(() -> {
-                                        DataBaseRegister.updateGmail(player.getName(), TwoFactorAuth.getCodes().get(uuid).getMedia());
+                                        if (DataBaseRegister.updateGmail(player.getName(), TwoFactorAuth.getCodes().get(uuid).getMedia())){
+                                            DataLogin login = LoginManager.getDataLogin(player);
+                                            login.getRegister().setGmail(TwoFactorAuth.getCodes().get(uuid).getMedia());
+                                            sendMessage(player, "Autenticación completa", TypeMessages.SUCCESS);
+                                        }else {
+                                            sendMessage(player, "Hubo un error con la autenticación, vuelve a intentar", TypeMessages.ERROR);
+                                        }
                                         TwoFactorAuth.getCodes().remove(uuid);
-                                        sendMessage(player, "Autenticación completa", TypeMessages.SUCCESS);
                                     });
                                 }
                             }else {
@@ -89,9 +94,15 @@ public class LinkCommand extends BaseTabCommand {
                             }else if (args[1].charAt(8) == '-') {
                                 if (TwoFactorAuth.checkCode(player, args[1])){
                                     AviaTerraCore.getInstance().enqueueTaskAsynchronously(() -> {
-                                        DataBaseRegister.updateDiscord(player.getName(), TwoFactorAuth.getCodes().get(uuid).getMedia());
+                                        if (DataBaseRegister.updateDiscord(player.getName(), TwoFactorAuth.getCodes().get(uuid).getMedia())){
+                                            DataLogin login = LoginManager.getDataLogin(player);
+                                            login.getRegister().setDiscord(TwoFactorAuth.getCodes().get(uuid).getMedia());
+                                            sendMessage(player, "Autenticación completa", TypeMessages.SUCCESS);
+                                        }else {
+                                            sendMessage(player, "Hubo un error con la autenticación, vuelve a intentar", TypeMessages.ERROR);
+                                        }
                                         TwoFactorAuth.getCodes().remove(uuid);
-                                        sendMessage(player, "Autenticación completa", TypeMessages.SUCCESS);
+
                                     });
                                 }
                             }else {
@@ -128,18 +139,23 @@ public class LinkCommand extends BaseTabCommand {
             case 2 -> {
                 switch (args[0].toLowerCase()){
                     case "discord" -> {
-                        if (args[1].length() > 9 && Character.isDigit(args[1].charAt(9))) {
-                            return List.of("##################");
-                        }else if (args[1].contains("-")){
-                            return List.of("xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx");
+                        if (args[1].length() > 9){
+                            if (args[1].charAt(8) == '-'){
+                                return List.of("xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx");
+                            }else {
+                                return List.of("##################");
+                            }
                         }
+
                         return List.of("##################", "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx");
                     }
                     case "gmail" -> {
-                        if (args[1].contains("@")){
-                            return List.of("TuCorreo@gmail.com");
-                        }else if (args[1].contains("-")){
-                            return List.of("xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx");
+                        if (args[1].length() > 9){
+                            if (args[1].charAt(8) == '-'){
+                                return List.of("xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx");
+                            }else {
+                                return List.of("TuCorreo@gmail.com");
+                            }
                         }
                         return List.of("TuCorreo@gmail.com", "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx");
                     }

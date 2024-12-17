@@ -33,25 +33,15 @@ public class ChangePasswordCommand extends BaseTabCommand {
                 String password = LoginManager.hashPassword(player.getName(), args[1]);
                 if (isUUID(args[0])){
                     if (TwoFactorAuth.checkCode(player, args[0])){
-                        LoginManager.getDataLogin(player).getRegister().setPasswordShaded(password);
-                        AviaTerraCore.getInstance().enqueueTaskAsynchronously(() ->
-                                DataBaseRegister.updatePassword(player.getName(), password));
-                        sendMessage(sender, "La contraseña se cambio correctamente", TypeMessages.SUCCESS);
-                        sendMessageConsole("el jugador <|" + player.getName() + "|> se cambio la contraseña con su <|código|>", TypeMessages.INFO, CategoryMessages.LOGIN);
-                        TwoFactorAuth.getCodes().remove(player.getUniqueId());
+                        onChange(player, password, "código");
                     }
                 }else {
                     if (LoginManager.isEqualPassword(player.getName(), args[0])){
-                        LoginManager.getDataLogin(player).getRegister().setPasswordShaded(password);
-                        sendMessage(sender, "La contraseña se cambio correctamente", TypeMessages.SUCCESS);
-                        sendMessageConsole("el jugador <|" + player.getName() + "|> se cambio la contraseña con su <|contraseña|>", TypeMessages.INFO, CategoryMessages.LOGIN);
-                        TwoFactorAuth.getCodes().remove(player.getUniqueId());
+                        onChange(player, password, "contraseña");
                     }else{
                         sendMessage(sender, "Contraseña incorrecta. Si no se acuerda de su contraseña y tiene un corro o un discord vinculado puede" +
                                 "puede enviar un código de verificación usando <|/link <discord | gmail>|>", TypeMessages.ERROR);
                     }
-                    AviaTerraCore.getInstance().enqueueTaskAsynchronously(() ->
-                            DataBaseRegister.updatePassword(player.getName(), password));
                 }
             }else{
                 sendMessage(sender, "solo para jugadores", TypeMessages.ERROR);
@@ -59,6 +49,20 @@ public class ChangePasswordCommand extends BaseTabCommand {
         }else{
             sendMessage(sender, this.getUsage(), TypeMessages.ERROR);
         }
+    }
+
+    private static void onChange(Player player, String password, String reason) {
+        LoginManager.getDataLogin(player).getRegister().setPasswordShaded(password);
+        AviaTerraCore.getInstance().enqueueTaskAsynchronously(() -> {
+            if (DataBaseRegister.updatePassword(player.getName(), password)){
+                sendMessage(player, "La contraseña se cambio correctamente", TypeMessages.SUCCESS);
+            }else {
+                sendMessage(player, "Hubo un error al cambiar la contraseña", TypeMessages.ERROR);
+            }
+        });
+
+        sendMessageConsole( String.format("el jugador <|%s|> se cambio la contraseña con su <|%s|>", player.getName(), reason), TypeMessages.INFO, CategoryMessages.LOGIN);
+        TwoFactorAuth.getCodes().remove(player.getUniqueId());
     }
 
     public static boolean isUUID(String str) {

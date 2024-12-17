@@ -94,4 +94,9 @@ public abstract class BaseWeapon extends BaseArmament implements ShootWeapon{
 
     @Override
     public abstract void shoot(Player player);
+
+    @Override
+    public void onShoot(DataShoot dataShoot){
+
+    }
 }

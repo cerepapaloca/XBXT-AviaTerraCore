@@ -15,9 +15,4 @@ public class MMxx_Prueba extends BaseAmmo {
                 10
         );
     }
-
-    @Override
-    public void onShoot(DataShoot dataShoot) {
-
-    }
 }

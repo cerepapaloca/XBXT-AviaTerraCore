@@ -15,7 +15,7 @@ public enum FormatMessage {
             ||```
             /link discord %2$s
             ```||
-            *si no tenias que recibir este mensaje por favor a caso omiso y bórrelo"""
+            *si no tenias que recibir este mensaje por favor a caso omiso y bórrelo*"""
             ),
     GENERIC("""
             <div style="background-color:#2f3136;border-radius:5px;color:#ffffff;font-family:Arial, sans-serif;max-width:500px;padding:20px;">

@@ -16,9 +16,4 @@ public class MM45_OTAN extends BaseAmmo {
                 10
         );
     }
-
-    @Override
-    public void onShoot(DataShoot dataShoot) {
-
-    }
 }

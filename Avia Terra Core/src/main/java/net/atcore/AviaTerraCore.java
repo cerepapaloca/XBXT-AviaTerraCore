@@ -49,6 +49,7 @@ public final class AviaTerraCore extends JavaPlugin {
         sendMessageConsole("AviaTerra Iniciando...", TypeMessages.INFO, false);
         isStarting = true;
         workerThread = new Thread(this::processQueue);
+        workerThread.setName("AviaTerra WorkerThread");
         workerThread.start();
         RegisteredServiceProvider<LuckPerms> provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
         if (provider != null) {

@@ -127,7 +127,6 @@ public abstract class BaseWeaponTarkov extends BaseWeapon implements Compartment
     }
 
     private void onReload(ItemStack itemWeapon ,Player player) {
-        onReloading(player);
         String ammoInside = (String) GlobalUtils.getPersistenData(itemWeapon, "magazineAmmo", PersistentDataType.STRING);
         List<String> ammoWeapon;
         if (ammoInside != null) {
@@ -256,7 +255,4 @@ public abstract class BaseWeaponTarkov extends BaseWeapon implements Compartment
         if (charger == null) return false;
         return MAGAZINE_LIST.contains(ListMagazine.valueOf(charger.getName()));
     }
-
-    public abstract void onReloading(Player player);
-
 }

@@ -89,7 +89,7 @@ public class DataBaseRegister extends DataBaseMySql {
             try (ResultSet resultSet = dbMetaData.getTables(null, null, "register", null)) {
                 if (resultSet.next()){
                     reloadDatabase();
-                    sendMessageConsole("DataBase Registro " + MessagesManager.COLOR_SUCCESS + "Ok", TypeMessages.INFO, false);
+                    sendMessageConsole("DataBase Registro " + TypeMessages.SUCCESS.getMainColor() + "Ok", TypeMessages.INFO, false);
                     return;
                 }
             }
@@ -115,7 +115,7 @@ public class DataBaseRegister extends DataBaseMySql {
              Statement statement = connection.createStatement()) {
             statement.executeUpdate(createTableSQL);
             reloadDatabase();
-            sendMessageConsole("DataBase Registro " + MessagesManager.COLOR_SUCCESS + "Creada", TypeMessages.INFO, false);
+            sendMessageConsole("DataBase Registro " + TypeMessages.SUCCESS.getMainColor()  + "Creada", TypeMessages.INFO, false);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -151,7 +151,7 @@ public class DataBaseRegister extends DataBaseMySql {
         }
     }
 
-    public static void updateLoginDate(String name ,long time){
+    public static boolean updateLoginDate(String name ,long time){
         String sql = "UPDATE register SET lastLoginDate = ? WHERE name = ?";
 
         try (PreparedStatement stmt = getConnection().prepareStatement(sql)) {
@@ -160,13 +160,15 @@ public class DataBaseRegister extends DataBaseMySql {
 
             stmt.executeUpdate();
             sendMessageConsole("Se actualizó la <|fecha del ultimo login|> del jugador <|" + name + "|> exitosamente", TypeMessages.SUCCESS, CategoryMessages.LOGIN);
+            return true;
         } catch (SQLException e) {
             sendMessageConsole("No se pudo actualizar la <|fecha del ultimo login|> del jugador <|" + name+ "|>", TypeMessages.ERROR, CategoryMessages.LOGIN);
-            Bukkit.getLogger().warning(e.getMessage());
+            AviaTerraCore.getInstance().getLogger().warning(e.getMessage());
+            return false;
         }
     }
 
-    public static void updateGmail(String name ,String gmail){
+    public static boolean updateGmail(String name ,String gmail){
         String sql = "UPDATE register SET gmail = ? WHERE name = ?";
 
         try (PreparedStatement stmt = getConnection().prepareStatement(sql)) {
@@ -175,13 +177,15 @@ public class DataBaseRegister extends DataBaseMySql {
 
             stmt.executeUpdate();
             sendMessageConsole("Se actualizó el <|gmail|> del jugador <|" + name + "|> exitosamente", TypeMessages.SUCCESS, CategoryMessages.LOGIN);
+            return true;
         } catch (SQLException e) {
             sendMessageConsole("No se pudo actualizar <|gmail|> del jugador <|" + name+ "|>", TypeMessages.ERROR, CategoryMessages.LOGIN);
-            Bukkit.getLogger().warning(e.getMessage());
+            AviaTerraCore.getInstance().getLogger().warning(e.getMessage());
+            return false;
         }
     }
 
-    public static void updateDiscord(String name ,String discord){
+    public static boolean updateDiscord(String name ,String discord){
         String sql = "UPDATE register SET discord = ? WHERE name = ?";
 
         try (PreparedStatement stmt = getConnection().prepareStatement(sql)) {
@@ -190,13 +194,15 @@ public class DataBaseRegister extends DataBaseMySql {
 
             stmt.executeUpdate();
             sendMessageConsole("Se actualizó el <|discord|> del jugador <|" + name + "|> exitosamente", TypeMessages.SUCCESS, CategoryMessages.LOGIN);
+            return true;
         } catch (SQLException e) {
             sendMessageConsole("No se pudo actualizar <|discord|> del jugador <|" + name+ "|>", TypeMessages.ERROR, CategoryMessages.LOGIN);
-            Bukkit.getLogger().warning(e.getMessage());
+            AviaTerraCore.getInstance().getLogger().warning(e.getMessage());
+            return false;
         }
     }
 
-    public static void updatePassword(String name, String password){
+    public static boolean updatePassword(String name, String password){
         String sql = "UPDATE register SET password = ? WHERE name = ?";
 
         try (PreparedStatement stmt = getConnection().prepareStatement(sql)) {
@@ -205,13 +211,15 @@ public class DataBaseRegister extends DataBaseMySql {
 
             stmt.executeUpdate();
             sendMessageConsole("Se actualizó la <|contraseña|> del jugador <|" + name + "|> exitosamente", TypeMessages.SUCCESS, CategoryMessages.LOGIN);
+            return true;
         } catch (SQLException e) {
             sendMessageConsole("No se pudo actualizar la <|contraseña|> del jugador <|" + name + "|>", TypeMessages.ERROR, CategoryMessages.LOGIN);
-            Bukkit.getLogger().warning(e.getMessage());
+            AviaTerraCore.getInstance().getLogger().warning(e.getMessage());
+            return false;
         }
     }
 
-    public static void updateAddress(String name, String ip){
+    public static boolean updateAddress(String name, String ip){
         String sql = "UPDATE register SET ipLogin = ? WHERE name = ?";
 
         try (PreparedStatement stmt = getConnection().prepareStatement(sql)) {
@@ -220,22 +228,33 @@ public class DataBaseRegister extends DataBaseMySql {
 
             stmt.executeUpdate();
             sendMessageConsole("Se actualizó la <|ip|> del jugador <|" + name + "|> exitosamente", TypeMessages.SUCCESS, CategoryMessages.LOGIN);
+            return true;
         } catch (SQLException e) {
             sendMessageConsole("No se pudo actualizar la <|ip|> del jugador <|" + name + "|>", TypeMessages.ERROR, CategoryMessages.LOGIN);
-            Bukkit.getLogger().warning(e.getMessage());
+            AviaTerraCore.getInstance().getLogger().warning(e.getMessage());
+            return false;
         }
     }
 
-    public static void removeRegister(String name, String author){
+    /**
+     * Borra el registro en la base de datos sql
+     * @param name Nombre del usuario que quieres borrar
+     * @param author Nombre del autor que borro el registro de la base de datos
+     * @return true si salió bien de lo contrario false
+     */
+
+    public static boolean removeRegister(String name, String author){
         String sql = "DELETE FROM register WHERE name = ?";
         try (PreparedStatement stmt = getConnection().prepareStatement(sql)){
             stmt.setString(1, name);
 
             stmt.executeUpdate();
             sendMessageConsole("Se borro el <|registro|> del jugador <|" + name + "|> por <|" + author + "|>", TypeMessages.SUCCESS, CategoryMessages.LOGIN);
+            return true;
         }catch(SQLException e){
             sendMessageConsole("Hubo un error al borrar el <|registro|> del jugador <|" + name + "|> por <|" + author + "|>", TypeMessages.ERROR, CategoryMessages.LOGIN);
-            Bukkit.getLogger().warning(e.getMessage());
+            AviaTerraCore.getInstance().getLogger().warning(e.getMessage());
+            return false;
         }
     }
 }

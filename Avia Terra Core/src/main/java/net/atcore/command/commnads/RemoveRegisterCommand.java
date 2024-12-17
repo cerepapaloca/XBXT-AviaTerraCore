@@ -29,10 +29,13 @@ public class RemoveRegisterCommand extends BaseTabCommand {
         if (args.length == 1) {
             CommandUtils.executeForPlayer(sender, args[0], false, dataTemporalPlayer ->
                     AviaTerraCore.getInstance().enqueueTaskAsynchronously(() -> {
-                        DataBaseRegister.removeRegister(dataTemporalPlayer.name(), sender.getName());
+                        if (DataBaseRegister.removeRegister(dataTemporalPlayer.name(), sender.getName())){
+                            sendMessage(sender, String.format("Se borro el registro al jugador <|%s|>", dataTemporalPlayer.name()), TypeMessages.SUCCESS);
+                        }else {
+                            sendMessage(sender, String.format("Hubo un error al borrar al jugador <|%s|>, vuelva a intentarlo", dataTemporalPlayer.name()), TypeMessages.ERROR);
+                        }
                         LoginManager.removeDataLogin(dataTemporalPlayer.name());
                     }));
-            sendMessage(sender, "va ser borrado el registro del jugador revisa los logs", TypeMessages.INFO);
         }else{
             sendMessage(sender, this.getUsage(), TypeMessages.ERROR);
         }

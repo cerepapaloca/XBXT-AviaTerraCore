@@ -14,8 +14,4 @@ public class M4Family extends BaseMagazine {
         );
     }
 
-    @Override
-    public void onShoot(DataShoot dataShoot) {
-
-    }
 }
