@@ -11,6 +11,7 @@ import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.Member;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.slf4j.event.Level;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -72,7 +73,7 @@ public class CommandManager {//nose si poner en esta clase aquí la verdad
             return;
         }
         for (RangeType range : rolesHasMember) {
-            String commandRaw = command.getContentRaw().split(" ")[0].toLowerCase();
+            String commandRaw = command.getContentRaw().substring(1).split(" ")[0].toLowerCase();
             if (COMMANDS.containsKey(commandRaw)){
                 String permission = COMMANDS.get(commandRaw.toLowerCase());
                 hasPermission = hasPermission || CommandUtils.hasPermission(permission, range);
@@ -87,9 +88,9 @@ public class CommandManager {//nose si poner en esta clase aquí la verdad
         }
         if (hasPermission){
             Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> {
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command.getContentRaw());
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command.getContentRaw().substring(1));
                 MessagesManager.sendMessageConsole(String.format("<|%s|> ejecutó -> %s"
-                        , member.getUser().getGlobalName() + "(" + member.getId() + ")" ,"`&6/" + command.getContentRaw() + "`"), TypeMessages.INFO, CategoryMessages.COMMANDS, false);
+                        , member.getUser().getGlobalName() + "(" + member.getId() + ")" ,"`&6" + command.getContentRaw() + "`"), TypeMessages.INFO, CategoryMessages.COMMANDS, false);
             });
         }else {
             command.reply("No tienes permisos para ejecutar ese comando en la consola").queue();

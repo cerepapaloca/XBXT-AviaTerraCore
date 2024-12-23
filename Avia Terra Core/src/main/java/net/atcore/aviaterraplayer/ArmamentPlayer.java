@@ -1,5 +1,6 @@
 package net.atcore.aviaterraplayer;
 
+import com.comphenix.protocol.scheduler.Task;
 import lombok.Getter;
 import lombok.Setter;
 import me.neznamy.tab.api.TabAPI;
@@ -25,6 +26,8 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
+import org.jetbrains.annotations.Nullable;
 
 @Getter
 @Setter
@@ -34,8 +37,9 @@ public class ArmamentPlayer extends AbstractAviaTerraPlayer implements Compartme
         super(player);
     }
 
-    @Getter
     private boolean isReloading = false;
+    @Nullable
+    private BukkitTask shootTask;
 
     @Override
     public boolean reload(Player player){

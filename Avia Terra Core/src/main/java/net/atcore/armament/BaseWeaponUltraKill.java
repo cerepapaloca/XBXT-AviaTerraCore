@@ -14,7 +14,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -24,8 +23,8 @@ import org.bukkit.persistence.PersistentDataType;
 @Setter
 public abstract class BaseWeaponUltraKill extends BaseWeapon {
 
-    public BaseWeaponUltraKill(String displayName, int maxDistance, int delay, int maxAmmo, double precision, ListAmmo ammo) {
-        super(new ItemStack(Material.GOLDEN_HORSE_ARMOR), maxDistance, displayName, precision);
+    public BaseWeaponUltraKill(String displayName, int maxDistance, int delay, int maxAmmo, double precision, ListAmmo ammo, WeaponMode mode, int cadence) {
+        super(new ItemStack(Material.GOLDEN_HORSE_ARMOR), maxDistance, displayName, precision, mode, cadence);
         this.delay = delay;
         this.ammo = ammo.getAmmo();
         this.maxAmmo = maxAmmo;
@@ -49,7 +48,7 @@ public abstract class BaseWeaponUltraKill extends BaseWeapon {
         Integer amountAmmo = (Integer) GlobalUtils.getPersistenData(item,"AmountAmmo", PersistentDataType.INTEGER);
         if (amountAmmo != null){
             if (amountAmmo > 0) {
-                DataShoot dataShoot = executeShoot(player, ammo, null);
+                processShoot(player, ammo, null);
                 amountAmmo--;
                 GlobalUtils.setPersistentData(item, "AmountAmmo", PersistentDataType.INTEGER, amountAmmo);
                 ArmamentPlayer armamentPlayer = AviaTerraPlayer.getPlayer(player).getArmamentPlayer();
@@ -63,8 +62,6 @@ public abstract class BaseWeaponUltraKill extends BaseWeapon {
                     bossBar.setProgress((((float) amountAmmo / (float) maxAmmo)*100));
                     TabAPI.getInstance().getBossBarManager().sendBossBarTemporarily(tabPlayer, bossBar.getName(), 3);
                 }
-                onShoot(dataShoot);
-                ammo.onShoot(dataShoot);
                 updateLore(player.getInventory().getItemInMainHand(), null);
                 player.getWorld().playSound(player.getLocation(), Sound.ENTITY_SNOW_GOLEM_SHOOT, SoundCategory.PLAYERS, 1.1f, 0.8f);
                 return;
@@ -79,13 +76,11 @@ public abstract class BaseWeaponUltraKill extends BaseWeapon {
         assert meta != null;
         meta.setLore(GlobalUtils.StringToLoreString(MessagesManager.addProprieties(String.format("""
                 Daño: <|%s|>
-                Coste: <|%s|>
                 Presión: <|%s|>
                 Munición: <|%s|>
                 Rango máximo: <|%sm|>
                 """,
                 this.ammo.getDamage(),
-                delay,
                 (100 - precision) + "%",
                 GlobalUtils.getPersistenData(itemStack,"AmountAmmo", PersistentDataType.INTEGER),
                 maxDistance

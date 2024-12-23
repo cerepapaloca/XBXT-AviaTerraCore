@@ -2,30 +2,67 @@ package net.atcore.armament;
 
 import lombok.Getter;
 import lombok.Setter;
+import net.atcore.AviaTerraCore;
+import net.atcore.aviaterraplayer.ArmamentPlayer;
+import net.atcore.aviaterraplayer.AviaTerraPlayer;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.BlockIterator;
 import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
+import org.jetbrains.annotations.Nullable;
 
 @Getter
 @Setter
 public abstract class BaseWeapon extends BaseArmament implements ShootWeapon{
-    public BaseWeapon(ItemStack item, int MaxDistance, String displayName, double precision) {
+    public BaseWeapon(ItemStack item, int MaxDistance, String displayName, double precision, WeaponMode mode, int coolDown) {
         super(displayName, item, "weapon");
         this.maxDistance = MaxDistance;
         this.precision = precision;
-
+        this.mode = mode;
+        this.coolDown = coolDown;
     }
 
     protected final int maxDistance;
     protected final double precision;
+    protected final WeaponMode mode;
+    protected final int coolDown;
+    private long lastShoot;
 
-    protected DataShoot executeShoot(Player player, BaseAmmo ammo, BaseMagazine charger) {
+    /**
+     * Realiza la cantidad de llamadas que tiene que hacer en caso
+     * de que sea un arma automática
+     */
+
+    private long test;
+
+    public void preProcessShoot(Player player){
+        ArmamentPlayer armamentPlayer = AviaTerraPlayer.getPlayer(player).getArmamentPlayer();
+        if (armamentPlayer.getShootTask() == null || armamentPlayer.getShootTask().isCancelled()){
+            BukkitTask task = new BukkitRunnable() {
+                private int i;
+                public void run() {
+                    if (i > (8/coolDown) +((coolDown%2) != 0 ? 1 : 0)) cancel();
+                    i++;
+                    shoot(player);
+                }
+            }.runTaskTimer(AviaTerraCore.getInstance(), 0, coolDown);
+            armamentPlayer.setShootTask(task);
+        }
+    }
+
+    /**
+     * Realiza el procedimiento de efectos del disparo como de daño
+     * a la entidad en caso de ser golpeado.
+     */
+
+    protected void processShoot(Player player, BaseAmmo ammo, @Nullable BaseMagazine charger) {
         Vector direction = player.getEyeLocation().getDirection();
         Location location = player.getEyeLocation();
         Vector directionRandom = direction.add(new Vector((Math.random() - 0.5)*precision*0.002, (Math.random() - 0.5)*precision*0.002, (Math.random() - 0.5)*precision*0.002));//añade la imprecision del arma
@@ -73,7 +110,9 @@ public abstract class BaseWeapon extends BaseArmament implements ShootWeapon{
         DataShoot dataShoot = new DataShoot(livingEntity, player, this, charger, ammo, distance);//se crea los datos del disparo
         dataShoot.setDamage(ammo.getDamage());
         onShoot(dataShoot);
-        if (dataShoot.isCancelled()) return dataShoot;
+        ammo.onShoot(dataShoot);
+        if (charger != null) charger.onShoot(dataShoot);
+        if (dataShoot.isCancelled()) return;
         if (f < ammo.getPenetration() && livingEntity != null) {
             livingEntity.damage(dataShoot.getDamage(), player);
             livingEntity.getWorld().playSound(livingEntity.getLocation(), Sound.ITEM_TRIDENT_HIT, SoundCategory.PLAYERS, 1 ,1);
@@ -88,8 +127,6 @@ public abstract class BaseWeapon extends BaseArmament implements ShootWeapon{
         }
         ArmamentUtils.drawParticleLine(player.getEyeLocation(),finalLocation,
                 ammo.getColor(), b, ammo.getDensityTrace());
-
-        return dataShoot;
     }
 
     @Override

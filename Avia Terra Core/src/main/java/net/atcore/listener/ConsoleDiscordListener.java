@@ -20,7 +20,8 @@ public class ConsoleDiscordListener extends ListenerAdapter {
         Message message = event.getMessage();
         String channel = event.getChannel().getId();
         if (channel.equals(ConsoleDiscord.consoleId)){
-            CommandManager.processCommandFromDiscord(message, member);
+            if (message.getContentRaw().startsWith("/")) CommandManager.processCommandFromDiscord(message, member);
+
         }
     }
 }

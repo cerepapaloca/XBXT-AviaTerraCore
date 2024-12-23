@@ -1,7 +1,6 @@
 package net.atcore.armament;
 
 import lombok.experimental.UtilityClass;
-import net.atcore.AviaTerraCore;
 import net.atcore.aviaterraplayer.AviaTerraPlayer;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
@@ -17,7 +16,7 @@ public class ArmamentActions {
         if (action.equals(Action.RIGHT_CLICK_AIR) ||action.equals(Action.RIGHT_CLICK_BLOCK)) {
             BaseWeapon weapon = ArmamentUtils.getWeapon(player);
             if (weapon == null) return false;
-            weapon.shoot(player);
+            weapon.preProcessShoot(player);
 
             return true;
         }else {

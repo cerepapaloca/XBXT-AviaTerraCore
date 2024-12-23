@@ -26,8 +26,8 @@ import java.util.*;
 @Setter
 public abstract class BaseWeaponTarkov extends BaseWeapon implements Compartment {
 
-    protected BaseWeaponTarkov(List<ListMagazine> listMagazines, int maxDistance, String displayName, double precision) {
-        super(new ItemStack(Material.IRON_HORSE_ARMOR), maxDistance, displayName, precision);
+    protected BaseWeaponTarkov(List<ListMagazine> listMagazines, int maxDistance, String displayName, double precision, WeaponMode mode, int cadence) {
+        super(new ItemStack(Material.IRON_HORSE_ARMOR), maxDistance, displayName, precision, mode, cadence);
         this.MAGAZINE_LIST = listMagazines;
         GlobalUtils.setPersistentData(itemArmament, "magazineNameInside", PersistentDataType.STRING, "null");
         updateLore(null, null);
@@ -49,13 +49,10 @@ public abstract class BaseWeaponTarkov extends BaseWeapon implements Compartment
                 if (!listAmmo.isEmpty()){//se vació el cargador
                     BaseAmmo ammon = ArmamentUtils.getAmmo(listAmmo.getFirst());
                     if (ammon != null) {
-                        DataShoot dataShoot = executeShoot(player, ammon, baseMagazine);
-                        if (dataShoot.isCancelled()) return;
+                        processShoot(player, ammon, baseMagazine);
                         listAmmo.removeFirst();//se elimina la bala del cargador
                         GlobalUtils.setPersistentData(itemWeapon, "magazineAmmo", PersistentDataType.STRING, ArmamentUtils.listToString(listAmmo));//guarda la munición actual
                         updateLore(itemWeapon, null);
-                        baseMagazine.onShoot(dataShoot);
-                        ammon.onShoot(dataShoot);
                         player.getWorld().playSound(player.getLocation(), Sound.ENTITY_SNOW_GOLEM_SHOOT, SoundCategory.PLAYERS, 1.1f, 0.8f);
                     }
                 }else {
