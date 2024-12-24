@@ -1,6 +1,7 @@
 package net.atcore.messages;
 
 import lombok.Getter;
+import org.bukkit.ChatColor;
 import org.jetbrains.annotations.Contract;
 
 @Getter
@@ -23,6 +24,11 @@ public enum TypeMessages {
     @Contract(pure = true)
     public String getMainColor() {
         return '&' + Character.toString(mainColor);
+    }
+
+    @Contract(pure = true)
+    public String getMainColorWithColorChart() {
+        return ChatColor.COLOR_CHAR + Character.toString(mainColor);
     }
 
     @Contract(pure = true)

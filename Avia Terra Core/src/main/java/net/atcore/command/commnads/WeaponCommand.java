@@ -17,7 +17,7 @@ public class WeaponCommand extends BaseTabCommand {
 
     public WeaponCommand() {
         super("weapon",
-                "/weapon <Jugador> <Tipo de armamento> <Nombre del armamento> <Cantidad>",
+                "/weapon <Jugador> <Tipo_de_armamento> <Nombre_del_armamento> <!Cantidad>",
                 "desbanea a al jugador que le caes bien"
         );
     }

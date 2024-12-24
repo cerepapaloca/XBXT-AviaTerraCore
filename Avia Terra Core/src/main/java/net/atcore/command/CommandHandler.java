@@ -5,13 +5,18 @@ import lombok.RequiredArgsConstructor;
 import net.atcore.messages.TypeMessages;
 import net.atcore.security.AntiExploit;
 import net.atcore.security.Login.LoginManager;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import javax.swing.*;
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 import static net.atcore.messages.MessagesManager.sendMessage;
 import static net.atcore.messages.MessagesManager.sendMessageConsole;
@@ -69,7 +74,27 @@ public final class CommandHandler implements TabExecutor {
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String alias, String[] args) {
         for (BaseCommand command : commands) {
             if (!(cmd.getName().equalsIgnoreCase(command.getName()))) continue;
-            if (command instanceof BaseTabCommand tabCommand)return tabCommand.onTab(sender, args);
+            if (command instanceof BaseTabCommand tabCommand){
+                List<String> list = tabCommand.onTab(sender, args);
+                List<String> argsUse = new ArrayList<>(Arrays.stream(command.getUsage().split(" ")).toList());
+                argsUse.removeFirst();
+                if (list == null)return null;
+                if (list.size() == 1) {
+                    if (list.getFirst().equalsIgnoreCase(args[args.length - 1])) {
+                        if (argsUse.size() >= args.length) {
+                            try {
+                                if (!argsUse.get(args.length).startsWith("<!")) {
+                                    return List.of(TypeMessages.ERROR.getMainColorWithColorChart() + "Te falta el argumento: " +
+                                            CommandUtils.useToUseDisplay(argsUse.get(args.length)));
+                                }
+                            }catch (Exception e) {
+                                return list;
+                            }
+                        }
+                    }
+                }
+                return list;
+            }
             switch (command.getModeAutoTab()){
                 case NONE -> {
                     return List.of();

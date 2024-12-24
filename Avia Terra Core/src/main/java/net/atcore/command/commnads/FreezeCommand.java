@@ -17,7 +17,7 @@ import static net.atcore.messages.MessagesManager.sendMessage;
 public class FreezeCommand extends BaseTabCommand {
     public FreezeCommand() {
         super("freeze",
-                "/freeze <player> <on | off>",
+                "/freeze <player> <on_|_off>",
                 "Este comando congelas a un jugador por actividad sospechosa"
         );
     }

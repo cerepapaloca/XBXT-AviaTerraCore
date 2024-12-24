@@ -4,6 +4,7 @@ import net.atcore.AviaTerraCore;
 import net.atcore.command.BaseCommand;
 import net.atcore.command.CommandManager;
 import net.atcore.command.CommandSection;
+import net.atcore.command.CommandUtils;
 import net.atcore.data.DataBaseMySql;
 import net.atcore.data.DataSection;
 import net.atcore.data.FileYaml;
@@ -61,7 +62,7 @@ public class RegisterManager {
             //getServer().getPluginManager().addPermission(permission);
         }
         pluginCommand.setDescription(command.getDescription());
-        pluginCommand.setUsage(command.getUsage());
+        pluginCommand.setUsage(CommandUtils.useToUseDisplay(command.getUsage()));
         pluginCommand.setExecutor(CommandSection.getCommandHandler());
         pluginCommand.setTabCompleter(CommandSection.getCommandHandler());
     }

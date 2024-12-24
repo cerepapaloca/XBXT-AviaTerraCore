@@ -207,28 +207,29 @@ public final class CommandUtils {
 
             return;
         }
-        List<String> names = new ArrayList<>(Arrays.stream(arg.replace("!", "").split(",")).toList());
+        Set<String> names = new HashSet<>(Arrays.stream(arg.replace("!", "").split(",")).toList());
         for (Player player :  Bukkit.getOnlinePlayers()) {
-            if (arg.charAt(0) == '!') {
-                if (!names.contains(player.getName())) {
+            if (arg.charAt(0) == '!') { // En caso de que este invertido la lista
+                if (!names.contains(player.getName())) { // No tiene que estar en la lista de jugadores
                     action.accept(new TemporalPlayerData(player.getName(), player));
-                }else {
+                }/*else {
                     names.remove(player.getName());
-                }
+                }*/
             } else {
                 if (names.contains(player.getName())) {
+                    // Se borra los nombres de los jugadores. En teoría si todos los jugadores de la lista están conectados debe estar vació al final del for
                     names.remove(player.getName());
                     action.accept(new TemporalPlayerData(player.getName(), player));
                 }
             }
         }
         if (sender == null) return;
-        if (names.isEmpty()) return;
+        if (names.isEmpty()) return; // Si no esta vaciá es por un jugador no se pudo borrar por que no esta conectado
         if (safeMode) {
-            MessagesManager.sendMessage(sender, String.format("El jugador/es <|%s|> no esta conectado o no existe", names), TypeMessages.WARNING);
+            if (arg.charAt(0) != '!') MessagesManager.sendMessage(sender, String.format("El jugador/es <|%s|> no esta conectado o no existe", names), TypeMessages.WARNING);
         }else {
-            for (String name : names){
-                action.accept(new TemporalPlayerData(name, null));//tiene que dar uno si no yo me dio nulo
+            for (String name : names){ // Si no esta en modo seguro crea un TemporalPlayerData con los nombres de los usuarios
+                action.accept(new TemporalPlayerData(name, null));
             }
         }
     }
@@ -265,7 +266,7 @@ public final class CommandUtils {
         }
         boolean b = arg.startsWith("!");
         List<String> namesList = new ArrayList<>();
-        if (arg.isEmpty()){
+        if (arg.isEmpty()){ // Aquí es donde se le agrega las posibles opciones al jugador
             namesList.add("*");
             namesList.add("!");
             namesList.add("#");
@@ -278,7 +279,9 @@ public final class CommandUtils {
                 .filter(name -> name.toLowerCase().contains(argNormalize))
                 .collect(toList());
         if (finalNamesList.isEmpty() || finalNamesList.getFirst().equals(argNormalize)) {
+            // Si el argumento termina en "," es por qué ya termino de escribir el nombre del usuario y está listo de escribir el siguiente
             if (arg.endsWith(",")){
+                // Se añade una lista de usuarios conservando el argumento al principio
                 namesList.replaceAll(s -> arg + "," + s);
                 return namesList;
             }else {
@@ -352,5 +355,12 @@ public final class CommandUtils {
             }
         }
         return b;
+    }
+
+    @Contract(pure = true)
+    public String useToUseDisplay(String use){
+        use = use.replace("<!", "<");
+        use = use.replace("_", " ");
+        return use;
     }
 }

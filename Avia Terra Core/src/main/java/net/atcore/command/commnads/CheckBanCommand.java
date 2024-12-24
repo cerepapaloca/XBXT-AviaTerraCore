@@ -21,7 +21,7 @@ public class CheckBanCommand extends BaseTabCommand {
 
     public CheckBanCommand() {
         super("checkban",
-                "/CheckBan <jugador> <! | ?> <Contexto>",
+                "/CheckBan <jugador> <!_|_?> <Contexto>",
                 "Compruebas que el jugador este baneado usando ? o !. con ? solo miras que contexto esta baneado y no requiere especificar " +
                         "el contexto mientras el ! se usa cuando quieres echar un jugador baneado de un contexto especificado (esto por si se llega a " +
                         "colar en un modo de juego o si hay bug)"
@@ -116,7 +116,7 @@ public class CheckBanCommand extends BaseTabCommand {
                 return CommandUtils.listTab(args[1], new String[]{"?","!"});
             }
             case 3 -> {
-                if (args[2].equals("!")){
+                if (args[1].equals("!")){
                     return CommandUtils.listTab(args[2], CommandUtils.enumsToStrings(ContextBan.values()));
                 }else {
                     return List.of("");

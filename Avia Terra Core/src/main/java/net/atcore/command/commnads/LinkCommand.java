@@ -17,7 +17,7 @@ import static net.atcore.messages.MessagesManager.sendMessage;
 public class LinkCommand extends BaseTabCommand {
     public LinkCommand() {
         super("link",
-                "/link <gmail | discord> <Cuenta>",
+                "/link <gmail_|_discord> <Cuenta>",
                 "**",
                 "Vinculas una cuenta para que mayor seguridad en el servidor"
         );
