@@ -5,7 +5,7 @@ import net.atcore.AviaTerraCore;
 import net.atcore.data.ActionInReloadYaml;
 import net.atcore.data.DataSection;
 import net.atcore.data.FileYaml;
-import net.atcore.data.yml.FileCacheLimbo;
+import net.atcore.data.yml.CacheLimboFile;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
@@ -41,7 +41,7 @@ public class LimboManager {
         if (file == null){// Si tiene un archivo eso quiere decir que no pudo aplicar las propiedades al usuario
             dataLimbo = newDataLimbo(player, dataLogin, uuidString);
         }else {
-            if (file instanceof FileCacheLimbo cacheLimbo){
+            if (file instanceof CacheLimboFile cacheLimbo){
                 if (cacheLimbo.isRestored()){
                     dataLimbo = newDataLimbo(player, dataLogin, uuidString);
                 }else {

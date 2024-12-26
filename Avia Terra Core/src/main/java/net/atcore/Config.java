@@ -62,7 +62,7 @@ public class Config {
      * chat
      */
 
-    @Getter @Setter private static float levelModerationChat = 1000;
+    @Getter @Setter private static double levelModerationChat = 1000;
 
     @Getter @Setter private static boolean antiBot = false;
 

@@ -21,7 +21,7 @@ public class RemoveRegisterCommand extends BaseTabCommand {
     public RemoveRegisterCommand() {
         super("removeRegister",
                 "/removeRegister <Jugador>",
-                "le borras el registro al jugador"
+                "Le borras el registro al jugador, util para jugadores temporales"
         );
     }
 

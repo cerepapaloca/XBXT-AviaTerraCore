@@ -69,7 +69,7 @@ public class VerificationPremium {
                             if (ip.equals(player.getAddress().getAddress().getHostAddress())){// Mira si la ip son la misma ip
                                 // Se envía un paquete falso al servidor para que siga con el protocolo
                                 SimulateOnlineMode.FakeStartPacket(verification.getName(), verification.getId(), player);
-                                sendMessageConsole(String.format(Message.LOGIN_PREMIUM_VALIDATION_OK.getMessage()), TypeMessages.SUCCESS, CategoryMessages.LOGIN);
+                                sendMessageConsole(String.format(Message.LOGIN_PREMIUM_VALIDATION_OK.getMessage(), name), TypeMessages.SUCCESS, CategoryMessages.LOGIN);
                                 String userName = verification.getName();
                                 listUUIDPremium.put(userName, verification);
                                 DataLogin dataLogin = LoginManager.getDataLogin(userName);

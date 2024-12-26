@@ -5,20 +5,20 @@ import net.atcore.security.Login.DataLimbo;
 import net.atcore.security.Login.DataLogin;
 import net.atcore.security.Login.LoginManager;
 import org.bukkit.*;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-public class FileCacheLimbo extends FileYaml {
-    public FileCacheLimbo(String fileName, String folderName) {
+public class CacheLimboFile extends FileYaml {
+    public CacheLimboFile(String fileName, String folderName) {
         super(fileName, folderName, false);
     }
 
     @Override
     public void loadData() {
+        loadConfig();
         DataLogin dataLogin = LoginManager.getDataLogin(UUID.fromString(fileName.replace(".yml", "")));
         List<?> rawList = fileYaml.getList("inventory", null);
         ItemStack[] inventory;

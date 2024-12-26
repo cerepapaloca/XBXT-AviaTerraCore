@@ -83,6 +83,12 @@ public abstract class FileYaml {
         }
     }
 
+    /**
+     * Lee los datos del yml. Esto se debería poner al inicio
+     * del {@link #loadData()} para que pueda usar los datos
+     * actualizados del yml escrito en la memoria ROM
+     */
+
     protected void loadConfig() {
         fileYaml = YamlConfiguration.loadConfiguration(file);
     }
@@ -90,6 +96,12 @@ public abstract class FileYaml {
     public FileConfiguration getConfig() {
         return fileYaml;
     }
+
+    /**
+     * Escribe los datos del {@link #fileYaml} en la memoria ROM.
+     * Esto tiene que estar al final del {@link #saveData()} para
+     * que guarde los datos modificados
+     */
 
     public void saveConfig() {
         try {

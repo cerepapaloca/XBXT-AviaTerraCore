@@ -2,10 +2,9 @@ package net.atcore.data.yml;
 
 import net.atcore.data.FileYaml;
 import net.atcore.messages.Message;
-import org.bukkit.Bukkit;
 
-public class FileMessage extends FileYaml {
-    public FileMessage() {
+public class MessageFile extends FileYaml {
+    public MessageFile() {
         super("message", null, false);
     }
 

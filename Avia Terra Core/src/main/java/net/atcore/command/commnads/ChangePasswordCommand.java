@@ -24,7 +24,7 @@ public class ChangePasswordCommand extends BaseTabCommand {
         super("changePassword",
                 "/changePassword <Contraseña_|_Código> <Nueva_Contraseña>",
                 "*",
-                "cambias tu contras "
+                "cambias tu contraseña"
         );
     }
 

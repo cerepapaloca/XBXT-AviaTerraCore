@@ -5,9 +5,9 @@ import net.atcore.AviaTerraCore;
 import net.atcore.Section;
 import net.atcore.data.sql.DataBaseBan;
 import net.atcore.data.sql.DataBaseRegister;
-import net.atcore.data.yml.FileCommands;
-import net.atcore.data.yml.FileConfig;
-import net.atcore.data.yml.FileMessage;
+import net.atcore.data.yml.CommandsFile;
+import net.atcore.data.yml.ConfigFile;
+import net.atcore.data.yml.MessageFile;
 import net.atcore.data.yml.FliesCacheLimbo;
 
 import java.util.HashSet;
@@ -20,16 +20,19 @@ public class DataSection implements Section {
     @Getter private final static HashSet<FileYaml> fileYaml = new HashSet<>();
     @Getter private static DataBaseMySql mySQLConnection;
     @Getter private static FliesCacheLimbo fliesCacheLimbo;
+    @Getter private static ConfigFile configFile;
 
     @Override
     public void enable() {
         register(mySQLConnection = new DataBaseBan());
-        FileYaml fileMessage = new FileMessage();
+        MessageFile messageFile = new MessageFile();
+        ConfigFile configFile = new ConfigFile();
         register(new DataBaseRegister());
-        register(new FileCommands());
-        register(fileMessage);
-        register(new FileConfig());
-        fileMessage.reloadConfig(ActionInReloadYaml.LOAD);
+        register(new CommandsFile());
+        register(messageFile);
+        register(configFile);
+        DataSection.configFile = configFile;
+        messageFile.reloadConfig(ActionInReloadYaml.LOAD);
         fliesCacheLimbo = new FliesCacheLimbo();
         fliesCacheLimbo.reloadConfigs();
         for (DataBaseMySql db : dataBases) db.createTable();

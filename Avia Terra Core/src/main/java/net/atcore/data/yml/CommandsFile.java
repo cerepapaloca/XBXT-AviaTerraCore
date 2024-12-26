@@ -2,17 +2,17 @@ package net.atcore.data.yml;
 
 import net.atcore.command.CommandManager;
 import net.atcore.data.FileYaml;
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 
-public class FileCommands extends FileYaml {
+public class CommandsFile extends FileYaml {
 
-    public FileCommands() {
+    public CommandsFile() {
         super("comandos", null, true);
     }
 
     @Override
     public void loadData() {
+        loadConfig();
         ConfigurationSection section = fileYaml.getConfigurationSection("comandos");
         if (section != null) {
             CommandManager.COMMANDS.clear();

@@ -23,7 +23,7 @@ public class AviaTerraCommand extends BaseTabCommand {
     public AviaTerraCommand() {
         super("AviaTerra",
                 "/AviaTerra",
-                "Es un comando en cargador de todas la funciones de básicas del servidor para el staff"
+                "Se encarga de la configuración de algunos apartados del plugin"
         );
     }
 
@@ -66,7 +66,7 @@ public class AviaTerraCommand extends BaseTabCommand {
                 }else{
                     sendMessage(sender,"El anti Op esta <|" + CommandUtils.booleanToString(Config.isCheckAntiOp()) + "|>", TypeMessages.INFO);
                 }
-
+                DataSection.getConfigFile().saveData();
             }
             case "antiilegalitems" -> {
                 if (args.length >= 2) {
@@ -83,6 +83,7 @@ public class AviaTerraCommand extends BaseTabCommand {
                 }else{
                     sendMessage(sender,"el Anti Items Ilegales esta <|" + CommandUtils.booleanToString(Config.isCheckAntiIllegalItems()) + "|>", TypeMessages.INFO);
                 }
+                DataSection.getConfigFile().saveData();
             }
             case "servermode" -> {
                 if (args.length >= 2) {
@@ -104,6 +105,7 @@ public class AviaTerraCommand extends BaseTabCommand {
                 }else{
                     sendMessage(sender,"El modo mixto esta <|" + Config.getServerMode().name().toLowerCase() + "|>", TypeMessages.INFO);
                 }
+                DataSection.getConfigFile().saveData();
             }
             case "checkbanporip" -> {
                 if (args.length >= 2) {
@@ -121,10 +123,12 @@ public class AviaTerraCommand extends BaseTabCommand {
                 }else{
                     sendMessage(sender,"El check de baneo por ip esta <|" + CommandUtils.booleanToString(Config.isCheckBanByIp()) + "|>", TypeMessages.INFO);
                 }
+                DataSection.getConfigFile().saveData();
             }
             case "purgarangos" -> {
                 Config.setPurgeTagRange(System.currentTimeMillis());
                 sendMessage(sender,"Todas los tags de rango ya no son validas y comenzara su eliminación", TypeMessages.INFO);
+                DataSection.getConfigFile().saveData();
             }
             case "tiempodesesion" -> {
                 if (args.length >= 2) {
@@ -138,6 +142,7 @@ public class AviaTerraCommand extends BaseTabCommand {
                     sendMessage(sender,"el tiempo de expiración de expiration esta en <|" +
                             GlobalUtils.timeToString(Config.getExpirationSession(), 2) + "|>", TypeMessages.INFO);
                 }
+                DataSection.getConfigFile().saveData();
             }
             case "levelmoderationchat" -> {
                 if (args.length >= 2) {
@@ -148,8 +153,9 @@ public class AviaTerraCommand extends BaseTabCommand {
                         sendMessage(sender, "solo números con decimales", TypeMessages.ERROR);
                     }
                 }else{
-                    sendMessage(sender,"el nivel de moderación en el chat esta en <|" + Config.getLevelModerationChat() + "|>", TypeMessages.INFO);
+                    sendMessage(sender,"El nivel de moderación en el chat esta en <|" + Config.getLevelModerationChat() + "|>", TypeMessages.INFO);
                 }
+                DataSection.getConfigFile().saveData();
             }
 
             case "antibot" -> {
@@ -167,6 +173,7 @@ public class AviaTerraCommand extends BaseTabCommand {
                 }else{
                     sendMessage(sender,"El sistema antiBot esta <|" + CommandUtils.booleanToString(Config.isAntiBot()) + "|>", TypeMessages.INFO);
                 }
+                DataSection.getConfigFile().saveData();
             }
         }
     }

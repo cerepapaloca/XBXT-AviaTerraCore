@@ -23,14 +23,14 @@ public class ChatModeration {
     public static boolean antiSpam(Player bukkitPlayer, String message) {
         AviaTerraPlayer aviaTerraPlayer = AviaTerraPlayer.getPlayer(bukkitPlayer);
         ModerationPlayer mp = aviaTerraPlayer.getModerationPlayer();
-        float puntos = mp.getPointChat();
+        double puntos = mp.getPointChat();
         if (puntos < 0) {//si su puntos son negativos se lo hace saber
             mp.setPointChat(puntos);
             sendMessageConsole( bukkitPlayer.getName() + " » &7" + message + "&c [ELIMINADO: Spam]", TypeMessages.INFO, CategoryMessages.MODERATION);
-            float second = (puntos)/(20F * Config.getLevelModerationChat());//formula para calcular el tiempo que le fata para volver a escribir
-            second *= 10F;
-            int secondInt = Math.round(Math.abs(second));
-            sendMessage(bukkitPlayer, "mensaje eliminado por Spam espera <|" + secondInt * 0.1F + "|> segundos", TypeMessages.ERROR);
+            double second = (puntos)/(20 * Config.getLevelModerationChat());//formula para calcular el tiempo que le fata para volver a escribir
+            second *= 10;
+            long secondInt = Math.round(Math.abs(second));
+            sendMessage(bukkitPlayer, "mensaje eliminado por Spam espera <|" + secondInt * 0.1D + "|> segundos", TypeMessages.ERROR);
             return true;
         }else {
             puntos = puntos - ((message.length()*3F) + 70F);//por cada letra más puntos le resta y por cada mensaje resta 15
@@ -49,7 +49,7 @@ public class ChatModeration {
             public void run() {
                 Bukkit.getOnlinePlayers().forEach(player -> {
                     ModerationPlayer moderationPlayer = AviaTerraPlayer.getPlayer(player).getModerationPlayer();
-                    float f = moderationPlayer.getPointChat();
+                    double f = moderationPlayer.getPointChat();
                     moderationPlayer.setPointChat(f > MAX_PUNTOS ? MAX_PUNTOS : f + Config.getLevelModerationChat());
                 });
             }

@@ -17,7 +17,7 @@ public class TellCommand extends BaseTabCommand {
         super("tell",
                 "/tell <Jugador> <Mensaje>",
                 "*",
-                "desbanea a al jugador que le caes bien"
+                "Le envías un mensaje privado a un jugador o un grupo de estos"
         );
     }
 

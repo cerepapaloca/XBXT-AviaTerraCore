@@ -6,14 +6,10 @@ import lombok.Setter;
 import net.atcore.AviaTerraCore;
 import net.atcore.data.DataSection;
 import net.atcore.data.FileYaml;
-import net.atcore.data.yml.FileCacheLimbo;
-import net.atcore.messages.MessagesManager;
-import net.atcore.messages.TypeMessages;
-import org.bukkit.Bukkit;
+import net.atcore.data.yml.CacheLimboFile;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitTask;
@@ -41,7 +37,7 @@ public class DataLimbo {
 
         AviaTerraCore.getInstance().enqueueTaskAsynchronously(() -> {
             if (file != null) {
-                if (file instanceof FileCacheLimbo cacheLimbo) {
+                if (file instanceof CacheLimboFile cacheLimbo) {
                     cacheLimbo.setRestored(true);
                 }
             }

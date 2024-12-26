@@ -20,7 +20,7 @@ public class LinkCommand extends BaseTabCommand {
         super("link",
                 "/link <gmail_|_discord> <Cuenta>",
                 "**",
-                "Vinculas una cuenta para que mayor seguridad en el servidor"
+                "Vinculas una cuenta para que mayor seguridad en el servidor y tener la capacidad de iniciar session con la autenticación de 2 pasos"
         );
     }
 

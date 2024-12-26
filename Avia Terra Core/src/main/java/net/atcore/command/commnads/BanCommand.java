@@ -18,7 +18,7 @@ public class BanCommand extends BaseTabCommand {
     public BanCommand() {
         super("ban",
                 "/ban <jugador> <Contexto> <Tiempo> <Ranzón...",
-                "Baneas a los jugadores que te miran feo"
+                "Baneas a los jugador de un contexto por un tiempo determinado"
         );
     }
 

@@ -17,7 +17,7 @@ public class RemoveSessionCommand extends BaseCommand {
     public RemoveSessionCommand() {
         super("removeSession",
                 "/removeSession <Jugador>",
-                "le borras la sesión al jugador",
+                "Le borras la sesión al jugador",
                 ModeAutoTab.ADVANCED
         );
     }

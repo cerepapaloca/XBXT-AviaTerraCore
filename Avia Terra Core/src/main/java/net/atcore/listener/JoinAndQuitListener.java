@@ -52,13 +52,17 @@ public class JoinAndQuitListener implements Listener {
 
         List<UUID> UUIDPlayers = List.copyOf(AviaTerraPlayer.getPlayer(player).getModerationPlayer().getManipulatorInventoryPlayer());
         UUIDPlayers.forEach(UUID -> Objects.requireNonNull(Bukkit.getPlayer(UUID)).closeInventory());
-        event.setQuitMessage(MessagesManager.addProprieties(String.format(Message.EVENT_QUIT.getMessage(), event.getPlayer().getName()), TypeMessages.INFO, false, false));
+        event.setQuitMessage(ChatColor.translateAlternateColorCodes('&',MessagesManager.addProprieties(String.format(Message.EVENT_QUIT.getMessage(),
+                        event.getPlayer().getName()),
+                TypeMessages.INFO, false, false)));
     }
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onJoin(PlayerJoinEvent event) {
         onEnteringServer(event.getPlayer());
-        event.setJoinMessage(MessagesManager.addProprieties(String.format(Message.EVENT_JOIN.getMessage(), event.getPlayer().getName()), TypeMessages.INFO, false, false));
+        event.setJoinMessage(ChatColor.translateAlternateColorCodes('&',MessagesManager.addProprieties(String.format(Message.EVENT_JOIN.getMessage(),
+                        event.getPlayer().getName()),
+                TypeMessages.INFO, false, false)));
     }
 
     @EventHandler
