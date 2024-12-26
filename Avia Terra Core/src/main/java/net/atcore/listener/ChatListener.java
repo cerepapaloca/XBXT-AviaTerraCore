@@ -44,14 +44,7 @@ public class ChatListener implements Listener {
         User user = luckPerms.getUserManager().getUser(player.getUniqueId());
         if (user != null) {
             String prefix = user.getCachedData().getMetaData().getPrefix();
-
-            try {
-                checkAutoBanChat(player , event.getMessage());//se le va a banear?
-            } catch (SocketException e) {
-                sendMessageConsole(String.format(Message.BAN_CHAT_AUTO_ERROR.getMessage(), player.getName()), TypeMessages.ERROR);
-                throw new RuntimeException(e);
-            }
-
+            checkAutoBanChat(player , event.getMessage());//se le va a banear?
             if (ContextBan.CHAT.onContext(player, event)){//está baneado?
                 event.setCancelled(true);
                 return;

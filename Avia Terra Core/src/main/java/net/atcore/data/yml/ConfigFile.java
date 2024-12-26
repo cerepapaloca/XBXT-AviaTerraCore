@@ -30,6 +30,7 @@ public class ConfigFile extends FileYaml {
         Config.setCheckAntiIllegalItems(fileYaml.getBoolean("check-anti-illegal-items", Config.isCheckAntiIllegalItems()));
         Config.setCheckBanByIp(fileYaml.getBoolean("check-ban-by-ip", Config.isCheckBanByIp()));
         Config.setServerMode(ServerMode.valueOf(fileYaml.getString("server-mode", Config.getServerMode().name().toLowerCase()).toUpperCase()));
+        saveData(); // Se guarda por si hay una liena faltante en la configuración
     }
 
     @Override

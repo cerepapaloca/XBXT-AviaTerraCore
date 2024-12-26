@@ -3,6 +3,7 @@ package net.atcore.moderation.ban;
 import net.atcore.AviaTerraCore;
 import net.atcore.Config;
 import net.atcore.messages.CategoryMessages;
+import net.atcore.messages.Message;
 import net.atcore.messages.TypeMessages;
 import net.atcore.moderation.ModerationSection;
 import net.atcore.utils.GlobalUtils;
@@ -19,6 +20,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.net.SocketException;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 
 import static net.atcore.messages.MessagesManager.sendMessageConsole;
 import static org.bukkit.Material.*;
@@ -32,49 +34,56 @@ public class CheckAutoBan {
     private static String lastMessage = "";
     private static final ArrayList<Player> ChatBotTime = new ArrayList<>();
 
-    public static void checkAutoBanChat(Player player, String message) throws SocketException {
-        long currentTime = System.currentTimeMillis();
-        if (Objects.equals(lastMessage, message)){
-            ChatBotTime.add(player);
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(), () -> {
-                        if (ChatBotTime.size() > 1) {
-                            for (Player player : ChatBotTime) {
-                                assert player != null;
-                                ModerationSection.getBanManager().banPlayer(player, "Uso de bots (Baneo Automático)",1000 * 60 * 60 * 24 * 5L, ContextBan.CHAT, "Servidor");
+    public static void checkAutoBanChat(Player player, String message) {
+        try {
+            long currentTime = System.currentTimeMillis();
+            if (Objects.equals(lastMessage, message)){
+                ChatBotTime.add(player);
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(), () -> {
+                            if (ChatBotTime.size() > 1) {
+                                for (Player player : ChatBotTime) {
+                                    assert player != null;
+                                    ModerationSection.getBanManager().banPlayer(player, Message.BAN_AUTO_BAN_BOT.getMessage()
+                                            ,1000 * 60 * 60 * 24 * 5L, ContextBan.CHAT, Message.BAN_AUTHOR_AUTO_BAN.getMessage());
+                                }
+                                sendMessageConsole(Message.BAN_AUTO_BAN_BOT_LOG.getMessage(), TypeMessages.SUCCESS, CategoryMessages.BAN);
                             }
-                            sendMessageConsole("Purga terminada", TypeMessages.SUCCESS);
-                        }
-                        ChatBotTime.clear();
-                    });
-                }
-            }.runTaskLater(AviaTerraCore.getInstance(), 2);
-        }else {
-            lastMessage = message;
-        }
-
-        if (timePunishChat.containsKey(player.getUniqueId())) {
-            long lastTime = timePunishChat.get(player.getUniqueId());
-            long DifferenceOld = timeDifferenceOld.getOrDefault(player.getUniqueId(), -1000L);
-            long DifferenceNew = timeDifferenceNew.getOrDefault(player.getUniqueId(), 1000L);
-
-            if ((DifferenceOld - DifferenceNew) < 30 && (DifferenceOld - DifferenceNew) > -30) {
-                timeDifferenceCount.put(player.getUniqueId(), timeDifferenceCount.getOrDefault(player.getUniqueId(), 0) + 1);
-                sendMessageConsole("Este jugador usa AutoBotChat: <|(" + timeDifferenceCount.get(player.getUniqueId()) + "/10)|> " + "Tiene una precision de <|"
-                        + (DifferenceOld - DifferenceNew) + " ms|>", TypeMessages.WARNING, CategoryMessages.MODERATION);
-                if (timeDifferenceCount.get(player.getUniqueId()) >= 10){
-                    ModerationSection.getBanManager().banPlayer(player, "Por enviar mensajes automatizado en el chat (Baneo Automático)",1000 * 60 * 60 * 24 * 2L, ContextBan.CHAT, "Servidor");
-                    timeDifferenceCount.remove(player.getUniqueId());
-                    timeDifferenceOld.remove(player.getUniqueId());
-                    timeDifferenceNew.remove(player.getUniqueId());
-                }
+                            ChatBotTime.clear();
+                        });
+                    }
+                }.runTaskLater(AviaTerraCore.getInstance(), 2);
+            }else {
+                lastMessage = message;
             }
-            timeDifferenceNew.put(player.getUniqueId() ,currentTime - lastTime);
-            timeDifferenceOld.put(player.getUniqueId(), DifferenceNew);
+
+            if (timePunishChat.containsKey(player.getUniqueId())) {
+                long lastTime = timePunishChat.get(player.getUniqueId());
+                long DifferenceOld = timeDifferenceOld.getOrDefault(player.getUniqueId(), -1000L);
+                long DifferenceNew = timeDifferenceNew.getOrDefault(player.getUniqueId(), 1000L);
+
+                if ((DifferenceOld - DifferenceNew) < 30 && (DifferenceOld - DifferenceNew) > -30) {
+                    timeDifferenceCount.put(player.getUniqueId(), timeDifferenceCount.getOrDefault(player.getUniqueId(), 0) + 1);
+                    sendMessageConsole("Este jugador usa AutoBotChat: <|(" + timeDifferenceCount.get(player.getUniqueId()) + "/10)|> " + "Tiene una precision de <|"
+                            + (DifferenceOld - DifferenceNew) + " ms|>", TypeMessages.WARNING, CategoryMessages.MODERATION);
+                    if (timeDifferenceCount.get(player.getUniqueId()) >= 10){
+                        ModerationSection.getBanManager().banPlayer(player, Message.BAN_AUTO_BAN_SPAM.getMessage(), 1000 * 60 * 60 * 24 * 2L, ContextBan.CHAT,
+                                Message.BAN_AUTHOR_AUTO_BAN.getMessage());
+                        timeDifferenceCount.remove(player.getUniqueId());
+                        timeDifferenceOld.remove(player.getUniqueId());
+                        timeDifferenceNew.remove(player.getUniqueId());
+                    }
+                }
+                timeDifferenceNew.put(player.getUniqueId() ,currentTime - lastTime);
+                timeDifferenceOld.put(player.getUniqueId(), DifferenceNew);
+            }
+            timePunishChat.put(player.getUniqueId(), currentTime);
+        }catch (Exception e) {
+            sendMessageConsole(String.format(Message.BAN_ERROR.getMessage(), player.getName(), Message.BAN_AUTO_BAN_SPAM.getMessage()), TypeMessages.ERROR);
+            throw new RuntimeException(e);
         }
-        timePunishChat.put(player.getUniqueId(), currentTime);
     }
 
     public static void startTimeRemove() {
@@ -111,10 +120,15 @@ public class CheckAutoBan {
                 for (Map.Entry<String, Integer> entry : itemCounts.entrySet()) {
                     if (entry.getValue() > 1) {
                         inventory.clear();
-                        Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(), () ->
-                                ModerationSection.getBanManager().banPlayer(player, "Uso de Dupes (Baneo Automático)",
-                                        1000 * 60 * 60 * 24 * 5L, ContextBan.GLOBAL, "Servidor"));
-
+                        AviaTerraCore.getInstance().enqueueTaskAsynchronously( () -> {
+                            try {
+                                ModerationSection.getBanManager().banPlayer(player, Message.BAN_AUTO_BAN_DUPE.getMessage(),
+                                        1000 * 60 * 60 * 24 * 5L, ContextBan.GLOBAL, Message.BAN_AUTHOR_AUTO_BAN.getMessage());
+                            }catch (Exception e) {
+                                sendMessageConsole(String.format(Message.BAN_ERROR.getMessage(), player.getName(),  Message.BAN_AUTO_BAN_SPAM.getMessage()), TypeMessages.ERROR);
+                                throw new RuntimeException(e);
+                            }
+                        });
                     }
                 }
             }
@@ -137,7 +151,15 @@ public class CheckAutoBan {
             }
         }
         if (!b)return;
-        ModerationSection.getBanManager().banPlayer(player, "Obtención de items ilegal (Baneo Automático)",1000 * 60 * 60 * 24 * 10L, ContextBan.GLOBAL, "Servidor");
+        AviaTerraCore.getInstance().enqueueTaskAsynchronously( () -> {
+            try {
+                ModerationSection.getBanManager().banPlayer(player, Message.BAN_AUTO_BAN_ILEGAL_ITEMS.getMessage(),
+                        1000 * 60 * 60 * 24 * 10L, ContextBan.GLOBAL, Message.BAN_AUTHOR_AUTO_BAN.getMessage());
+            }catch (Exception e) {
+                sendMessageConsole(String.format(Message.BAN_ERROR.getMessage(), player.getName(),  Message.BAN_AUTO_BAN_SPAM.getMessage()), TypeMessages.ERROR);
+                throw new RuntimeException(e);
+            }
+        });
         player.getInventory().clear();
     }
 }

@@ -2,7 +2,7 @@ canales-de-discord:
   commands: '1308198706264277093'
   ban: '1294324328401207389'
   login: '1299444352409669746'
-  console: '1299444352409669746'
+  console: '1294324285602795550'
 anti-bot: false
 expiration-session: 1000
 level-moderation-chat: 1000.0
@@ -10,4 +10,4 @@ check-anti-op: false
 purge-tag-range: 0
 check-anti-illegal-items: false
 check-ban-by-ip: false
-server-mode: mix_mode
+server-mode: online_mode
