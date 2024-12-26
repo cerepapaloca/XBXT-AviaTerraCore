@@ -2,6 +2,7 @@ package net.atcore.listener;
 
 import lombok.Getter;
 import lombok.Setter;
+import net.atcore.messages.Message;
 import net.atcore.messages.TypeMessages;
 import net.atcore.moderation.ban.ContextBan;
 import net.atcore.moderation.ChatModeration;
@@ -34,7 +35,7 @@ public class ChatListener implements Listener {
 
 
         if (!LoginManager.checkLoginIn(player)) {
-            sendMessage(player, "Te tienes que loguear para escribir en el chat", TypeMessages.ERROR);
+            sendMessage(player, Message.LOGIN_LIMBO_CHAT_WRITE.getMessage(), TypeMessages.ERROR);
             event.setCancelled(true);
             return;
         }
@@ -47,7 +48,7 @@ public class ChatListener implements Listener {
             try {
                 checkAutoBanChat(player , event.getMessage());//se le va a banear?
             } catch (SocketException e) {
-                sendMessageConsole("Hubo un problema con las bases de datos al banear " + player.getName(), TypeMessages.ERROR);
+                sendMessageConsole(String.format(Message.BAN_CHAT_AUTO_ERROR.getMessage(), player.getName()), TypeMessages.ERROR);
                 throw new RuntimeException(e);
             }
 
@@ -60,7 +61,7 @@ public class ChatListener implements Listener {
                 return;//hay algo indecente?
             }
             event.setMessage(ChatColor.GRAY + message);
-            event.setFormat(prefix + " %1$s » %2$s");
+            event.setFormat(prefix + Message.EVENT_FORMAT_CHAT.getMessage());
 
             for (Player Player : Bukkit.getOnlinePlayers()) {//busca todos los jugadores
                 if (message.contains(Player.getName())){

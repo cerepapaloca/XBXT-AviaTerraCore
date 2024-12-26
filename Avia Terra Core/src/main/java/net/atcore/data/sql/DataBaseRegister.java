@@ -3,7 +3,7 @@ package net.atcore.data.sql;
 import net.atcore.AviaTerraCore;
 import net.atcore.data.DataBaseMySql;
 import net.atcore.messages.CategoryMessages;
-import net.atcore.messages.MessagesManager;
+import net.atcore.messages.Message;
 import net.atcore.messages.TypeMessages;
 import net.atcore.security.Login.*;
 import net.atcore.utils.GlobalUtils;
@@ -159,10 +159,10 @@ public class DataBaseRegister extends DataBaseMySql {
             stmt.setString(2, name);
 
             stmt.executeUpdate();
-            sendMessageConsole("Se actualizó la <|fecha del ultimo login|> del jugador <|" + name + "|> exitosamente", TypeMessages.SUCCESS, CategoryMessages.LOGIN);
+            sendMessageConsole(String.format(Message.DATA_REGISTER_DATE_OK.getMessage(), name), TypeMessages.SUCCESS, CategoryMessages.LOGIN);
             return true;
         } catch (SQLException e) {
-            sendMessageConsole("No se pudo actualizar la <|fecha del ultimo login|> del jugador <|" + name+ "|>", TypeMessages.ERROR, CategoryMessages.LOGIN);
+            sendMessageConsole(String.format(Message.DATA_REGISTER_DATE_FAILED.getMessage(), name), TypeMessages.ERROR, CategoryMessages.LOGIN);
             AviaTerraCore.getInstance().getLogger().warning(e.getMessage());
             return false;
         }
@@ -176,10 +176,10 @@ public class DataBaseRegister extends DataBaseMySql {
             stmt.setString(2, name);
 
             stmt.executeUpdate();
-            sendMessageConsole("Se actualizó el <|gmail|> del jugador <|" + name + "|> exitosamente", TypeMessages.SUCCESS, CategoryMessages.LOGIN);
+            sendMessageConsole(String.format(Message.DATA_REGISTER_GMAIL_OK.getMessage(), name), TypeMessages.SUCCESS, CategoryMessages.LOGIN);
             return true;
         } catch (SQLException e) {
-            sendMessageConsole("No se pudo actualizar <|gmail|> del jugador <|" + name+ "|>", TypeMessages.ERROR, CategoryMessages.LOGIN);
+            sendMessageConsole(String.format(Message.DATA_REGISTER_GMAIL_FAILED.getMessage(), name), TypeMessages.ERROR, CategoryMessages.LOGIN);
             AviaTerraCore.getInstance().getLogger().warning(e.getMessage());
             return false;
         }
@@ -193,10 +193,10 @@ public class DataBaseRegister extends DataBaseMySql {
             stmt.setString(2, name);
 
             stmt.executeUpdate();
-            sendMessageConsole("Se actualizó el <|discord|> del jugador <|" + name + "|> exitosamente", TypeMessages.SUCCESS, CategoryMessages.LOGIN);
+            sendMessageConsole(String.format(Message.DATA_REGISTER_DISCORD_OK.getMessage(), name), TypeMessages.SUCCESS, CategoryMessages.LOGIN);
             return true;
         } catch (SQLException e) {
-            sendMessageConsole("No se pudo actualizar <|discord|> del jugador <|" + name+ "|>", TypeMessages.ERROR, CategoryMessages.LOGIN);
+            sendMessageConsole(String.format(Message.DATA_REGISTER_DISCORD_FAILED.getMessage(), name), TypeMessages.ERROR, CategoryMessages.LOGIN);
             AviaTerraCore.getInstance().getLogger().warning(e.getMessage());
             return false;
         }
@@ -210,10 +210,10 @@ public class DataBaseRegister extends DataBaseMySql {
             stmt.setString(2, name);
 
             stmt.executeUpdate();
-            sendMessageConsole("Se actualizó la <|contraseña|> del jugador <|" + name + "|> exitosamente", TypeMessages.SUCCESS, CategoryMessages.LOGIN);
+            sendMessageConsole(String.format(Message.DATA_REGISTER_PASSWORD_OK.getMessage(), name), TypeMessages.SUCCESS, CategoryMessages.LOGIN);
             return true;
         } catch (SQLException e) {
-            sendMessageConsole("No se pudo actualizar la <|contraseña|> del jugador <|" + name + "|>", TypeMessages.ERROR, CategoryMessages.LOGIN);
+            sendMessageConsole(String.format(Message.DATA_REGISTER_PASSWORD_FAILED.getMessage(), name), TypeMessages.ERROR, CategoryMessages.LOGIN);
             AviaTerraCore.getInstance().getLogger().warning(e.getMessage());
             return false;
         }
@@ -227,10 +227,10 @@ public class DataBaseRegister extends DataBaseMySql {
             stmt.setString(2, name);
 
             stmt.executeUpdate();
-            sendMessageConsole("Se actualizó la <|ip|> del jugador <|" + name + "|> exitosamente", TypeMessages.SUCCESS, CategoryMessages.LOGIN);
+            sendMessageConsole(String.format(Message.DATA_REGISTER_ADDRESS_OK.getMessage(), name), TypeMessages.SUCCESS, CategoryMessages.LOGIN);
             return true;
         } catch (SQLException e) {
-            sendMessageConsole("No se pudo actualizar la <|ip|> del jugador <|" + name + "|>", TypeMessages.ERROR, CategoryMessages.LOGIN);
+            sendMessageConsole(String.format(Message.DATA_REGISTER_ADDRESS_FAILED.getMessage(), name), TypeMessages.ERROR, CategoryMessages.LOGIN);
             AviaTerraCore.getInstance().getLogger().warning(e.getMessage());
             return false;
         }
@@ -249,10 +249,10 @@ public class DataBaseRegister extends DataBaseMySql {
             stmt.setString(1, name);
 
             stmt.executeUpdate();
-            sendMessageConsole("Se borro el <|registro|> del jugador <|" + name + "|> por <|" + author + "|>", TypeMessages.SUCCESS, CategoryMessages.LOGIN);
+            sendMessageConsole(String.format(Message.DATA_REGISTER_REMOVE_OK.getMessage(), name, author), TypeMessages.SUCCESS, CategoryMessages.LOGIN);
             return true;
         }catch(SQLException e){
-            sendMessageConsole("Hubo un error al borrar el <|registro|> del jugador <|" + name + "|> por <|" + author + "|>", TypeMessages.ERROR, CategoryMessages.LOGIN);
+            sendMessageConsole(String.format(Message.DATA_REGISTER_REMOVE_FAILED.getMessage(), name, author), TypeMessages.ERROR, CategoryMessages.LOGIN);
             AviaTerraCore.getInstance().getLogger().warning(e.getMessage());
             return false;
         }

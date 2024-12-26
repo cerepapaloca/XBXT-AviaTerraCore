@@ -7,6 +7,7 @@ import net.atcore.data.sql.DataBaseBan;
 import net.atcore.data.sql.DataBaseRegister;
 import net.atcore.data.yml.FileCommands;
 import net.atcore.data.yml.FileConfig;
+import net.atcore.data.yml.FileMessage;
 import net.atcore.data.yml.FliesCacheLimbo;
 
 import java.util.HashSet;
@@ -23,9 +24,12 @@ public class DataSection implements Section {
     @Override
     public void enable() {
         register(mySQLConnection = new DataBaseBan());
+        FileYaml fileMessage = new FileMessage();
         register(new DataBaseRegister());
         register(new FileCommands());
+        register(fileMessage);
         register(new FileConfig());
+        fileMessage.reloadConfig(ActionInReloadYaml.LOAD);
         fliesCacheLimbo = new FliesCacheLimbo();
         fliesCacheLimbo.reloadConfigs();
         for (DataBaseMySql db : dataBases) db.createTable();

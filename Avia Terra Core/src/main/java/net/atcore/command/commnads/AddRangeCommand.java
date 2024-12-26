@@ -3,6 +3,7 @@ package net.atcore.command.commnads;
 import net.atcore.AviaTerraCore;
 import net.atcore.command.BaseTabCommand;
 import net.atcore.command.CommandUtils;
+import net.atcore.messages.Message;
 import net.atcore.messages.TypeMessages;
 import net.atcore.utils.GlobalUtils;
 import net.atcore.utils.RangeType;
@@ -33,7 +34,7 @@ public class AddRangeCommand extends BaseTabCommand {
     public void execute(CommandSender sender, String[] args) {
         switch (args.length){
             case 0 -> sendMessage(sender, this.getUsage(), TypeMessages.ERROR);
-            case 1 -> sendMessage(sender, "Te falta especificar el tiempo de duración", TypeMessages.ERROR);
+            case 1 -> sendMessage(sender, Message.COMMAND_ADD_RANGE_MISSING_ARGUMENT_TIME.getMessage(), TypeMessages.ERROR);
             default -> {
                 List<Group> groups = AviaTerraCore.getLp().getGroupManager().getLoadedGroups().stream().toList();
                 List<String> nameRage = new ArrayList<>();
@@ -44,7 +45,7 @@ public class AddRangeCommand extends BaseTabCommand {
                     try {
                         time = CommandUtils.StringToMilliseconds(args[1], true);
                     }catch (RuntimeException e){
-                        sendMessage(sender, "formato de fecha incorrecto", TypeMessages.ERROR);
+                        sendMessage(sender, Message.COMMAND_GENERIC_FORMAT_DATE_ERROR.getMessage(), TypeMessages.ERROR);
                         return;
                     }
                     RangeType range = RangeType.valueOf(args[0].toUpperCase());
@@ -57,7 +58,7 @@ public class AddRangeCommand extends BaseTabCommand {
                     //meta.setDisplayName(GlobalUtils.applyGradient("<#f0f0f0>asdas<#404040>"));
                     String displayName = GlobalUtils.applyGradient(
                                     "<" + GlobalUtils.modifyColorHexWithHLS(GlobalUtils.colorToStringHex(range.getColor()), 0f, 0.35f, -0.f) + ">" +
-                                             "Rango " + range.getDisplayName() + " por " + GlobalUtils.timeToString(time, 2) +
+                                            String.format(Message.COMMAND_ADD_RANGE_NAME.getMessage(), range.getDisplayName(), GlobalUtils.timeToString(time, 2) ) +
                                             "<" + GlobalUtils.modifyColorHexWithHLS(GlobalUtils.colorToStringHex(range.getColor()), 0f, -0.2f, 0.1f) + ">");
                     meta.setDisplayName(displayName);
                     item.setItemMeta(meta);
@@ -65,14 +66,14 @@ public class AddRangeCommand extends BaseTabCommand {
                         if (sender instanceof Player playerSender){
                             addItemPlayer(item, playerSender, false, true);
                         }else{
-                            sendMessage(sender, "no eres un jugador para recibir el rango", TypeMessages.ERROR);
+                            sendMessage(sender, Message.COMMAND_GENERIC_NO_PLAYER.getMessage(), TypeMessages.ERROR);
                         }
                     }else{
                         CommandUtils.executeForPlayer(sender, args[2], true, fakePlayer -> GlobalUtils.addItemPlayer(item, fakePlayer.player(), false, true));
-                        sendMessage(sender, "El item se le dio exitosamente", TypeMessages.SUCCESS);
+                        sendMessage(sender, Message.COMMAND_ADD_RANGE_SUCCESSFUL.getMessage(), TypeMessages.SUCCESS);
                     }
                 }else{
-                    sendMessage(sender, "El rango no existe", TypeMessages.ERROR);
+                    sendMessage(sender, Message.COMMAND_ADD_RANGE_MISSING_ARGUMENT_TIME.getMessage(), TypeMessages.ERROR);
                 }
             }
 

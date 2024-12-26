@@ -4,6 +4,7 @@ import net.atcore.aviaterraplayer.AviaTerraPlayer;
 import net.atcore.aviaterraplayer.ModerationPlayer;
 import net.atcore.command.BaseTabCommand;
 import net.atcore.command.CommandUtils;
+import net.atcore.messages.Message;
 import net.atcore.messages.TypeMessages;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -29,7 +30,7 @@ public class FreezeCommand extends BaseTabCommand {
             return;
         }
         if (args.length == 1) {
-            sendMessage(sender, "tienes que poner true o false", TypeMessages.ERROR);
+            sendMessage(sender, Message.COMMAND_FREEZE_MISSING_ARGS_LAST.getMessage(), TypeMessages.ERROR);
             return;
         }
         CommandUtils.executeForPlayer(sender, args[0], true, dataTemporalPlayer -> {
@@ -38,13 +39,13 @@ public class FreezeCommand extends BaseTabCommand {
             switch (args[1].toLowerCase()){
                 case "true" -> {
                     if (moderationPlayer.isFreeze()) {
-                        sendMessage(sender, "El jugador ya esta congelado", TypeMessages.ERROR);
+                        sendMessage(sender, Message.COMMAND_FREEZE_ALREADY_FREEZE.getMessage(), TypeMessages.ERROR);
                     }else {
                         moderationPlayer.setFreeze(true);
                         player.closeInventory();
                         player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, Integer.MAX_VALUE, 1));
-                        sendMessage(player, "Te an congelado, por favor habla con el staff", TypeMessages.INFO);
-                        sendMessage(sender, "El jugador ya fue congelado", TypeMessages.SUCCESS);
+                        sendMessage(player, Message.COMMAND_FREEZE_FREEZE_TARGET.getMessage(), TypeMessages.INFO);
+                        sendMessage(sender, Message.COMMAND_FREEZE_FREEZE_AUTHOR.getMessage(), TypeMessages.SUCCESS);
                     }
 
                 }
@@ -52,10 +53,10 @@ public class FreezeCommand extends BaseTabCommand {
                     if (moderationPlayer.isFreeze()) {
                         moderationPlayer.setFreeze(false);
                         player.removePotionEffect(PotionEffectType.BLINDNESS);
-                        sendMessage(sender, "El jugador ya fue descongelado", TypeMessages.SUCCESS);
-                        sendMessage(player, "Te descongelado", TypeMessages.INFO);
+                        sendMessage(sender, Message.COMMAND_FREEZE_UNFREEZE_AUTHOR.getMessage(), TypeMessages.SUCCESS);
+                        sendMessage(player, Message.COMMAND_FREEZE_UNFREEZE_TARGET.getMessage(), TypeMessages.INFO);
                     }else{
-                        sendMessage(sender, "Ese jugador no esta congelado", TypeMessages.ERROR);
+                        sendMessage(sender, Message.COMMAND_FREEZE_ALREADY_UNFREEZE.getMessage(), TypeMessages.ERROR);
                     }
                 }
             }

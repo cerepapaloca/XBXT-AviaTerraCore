@@ -4,6 +4,7 @@ import net.atcore.AviaTerraCore;
 import net.atcore.aviaterraplayer.AviaTerraPlayer;
 import net.atcore.data.sql.DataBaseRegister;
 import net.atcore.messages.CategoryMessages;
+import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import net.atcore.moderation.ban.ContextBan;
@@ -51,17 +52,13 @@ public class JoinAndQuitListener implements Listener {
 
         List<UUID> UUIDPlayers = List.copyOf(AviaTerraPlayer.getPlayer(player).getModerationPlayer().getManipulatorInventoryPlayer());
         UUIDPlayers.forEach(UUID -> Objects.requireNonNull(Bukkit.getPlayer(UUID)).closeInventory());
-        event.setQuitMessage(ChatColor.translateAlternateColorCodes('&',
-                "&8[&4-&8] " + TypeMessages.INFO.getSecondColor() + event.getPlayer().getName() + TypeMessages.INFO.getMainColor() + " se a ido."));
-        MessagesManager.sendMessageConsole(String.format("El jugador <|%s|> se a desconecto", event.getPlayer().getName()), TypeMessages.INFO, CategoryMessages.LOGIN);
+        event.setQuitMessage(MessagesManager.addProprieties(String.format(Message.EVENT_QUIT.getMessage(), event.getPlayer().getName()), TypeMessages.INFO, false, false));
     }
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onJoin(PlayerJoinEvent event) {
         onEnteringServer(event.getPlayer());
-        event.setJoinMessage(ChatColor.translateAlternateColorCodes('&',
-                "&8[&a+&8] " + TypeMessages.INFO.getSecondColor() + event.getPlayer().getName() + TypeMessages.INFO.getMainColor() + " se a unido."));
-        MessagesManager.addProprieties(String.format("El jugador <|%s|> se a unido", event.getPlayer().getName()), TypeMessages.INFO, true, false);
+        event.setJoinMessage(MessagesManager.addProprieties(String.format(Message.EVENT_JOIN.getMessage(), event.getPlayer().getName()), TypeMessages.INFO, false, false));
     }
 
     @EventHandler

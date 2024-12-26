@@ -83,7 +83,7 @@ public abstract class FileYaml {
         }
     }
 
-    private void loadConfig() {
+    protected void loadConfig() {
         fileYaml = YamlConfiguration.loadConfiguration(file);
     }
 

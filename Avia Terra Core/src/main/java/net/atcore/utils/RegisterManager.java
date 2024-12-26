@@ -8,6 +8,7 @@ import net.atcore.command.CommandUtils;
 import net.atcore.data.DataBaseMySql;
 import net.atcore.data.DataSection;
 import net.atcore.data.FileYaml;
+import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.TypeMessages;
 import net.atcore.Section;
 import org.bukkit.command.CommandException;
@@ -39,9 +40,9 @@ public class RegisterManager {
         try {
             section.enable();
             sections.add(section);
-            sendMessageConsole(section.getName() + TypeMessages.SUCCESS.getMainColor() + " Ok", TypeMessages.INFO, false);
+            sendMessageConsole(section.getName() + TypeMessages.SUCCESS.getMainColor() + " Ok", TypeMessages.INFO, CategoryMessages.PRIVATE, false);
         } catch (Exception e) {
-            sendMessageConsole("Error al cargar: " + section.getName() + ". Plugin deshabilitado", TypeMessages.ERROR);
+            sendMessageConsole("Error al cargar: " + section.getName() + ". Plugin deshabilitado", TypeMessages.ERROR, CategoryMessages.PRIVATE, false);
             throw new RuntimeException(e);
         }
     }

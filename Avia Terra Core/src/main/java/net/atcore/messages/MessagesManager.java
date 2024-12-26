@@ -78,8 +78,8 @@ public final class MessagesManager {
         if (categoryMessages != CategoryMessages.PRIVATE){
             sendMessageLogDiscord(type, categoryMessages, message);
         }
-        message = addProprieties(message, type, categoryMessages != CategoryMessages.PRIVATE, isPrefix);
-        player.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+        String s = addProprieties(message, type, categoryMessages != CategoryMessages.PRIVATE, isPrefix);
+        player.sendMessage(ChatColor.translateAlternateColorCodes('&', s));
     }
 
     ///////////////////////////
@@ -102,8 +102,8 @@ public final class MessagesManager {
             sendMessageLogDiscord(type, categoryMessages, message);
         }
 
-        message = addProprieties(message, type, categoryMessages != CategoryMessages.PRIVATE, isPrefix);
-        Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+        String s = addProprieties(message, type, categoryMessages != CategoryMessages.PRIVATE, isPrefix);
+        Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', s));
     }
 
     ///////////////////////////

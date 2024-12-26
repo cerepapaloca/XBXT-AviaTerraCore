@@ -1,14 +1,13 @@
 package net.atcore.security.Login;
 
-import com.comphenix.protocol.ProtocolLibrary;
 import com.github.games647.craftapi.model.Profile;
 import com.github.games647.craftapi.resolver.MojangResolver;
 import com.github.games647.craftapi.resolver.RateLimitException;
 import lombok.experimental.UtilityClass;
 import net.atcore.AviaTerraCore;
 import net.atcore.Config;
-import net.atcore.data.DataSection;
 import net.atcore.data.sql.DataBaseRegister;
+import net.atcore.messages.Message;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
@@ -192,7 +191,7 @@ public final class LoginManager {
             }else {
                 Player player = Bukkit.getPlayer(name);
                 if (player == null) return;
-                GlobalUtils.synchronizeKickPlayer(player, "Hubo un error al guardar tu contraseña");
+                GlobalUtils.synchronizeKickPlayer(player, Message.LOGIN_KICK_PASSWORD_ERROR.getMessage());
             }
         });
         updateLoginDataBase(name, inetAddress);
@@ -204,7 +203,7 @@ public final class LoginManager {
             if (!b) { // En caso de un error hace un kick al jugador para que vuelva a entrar
                 Player player = Bukkit.getPlayer(name);
                 if (player == null) return;
-                GlobalUtils.synchronizeKickPlayer(player, "Hubo un error al guardar tus datos, por favor vuelve a entrar");
+                GlobalUtils.synchronizeKickPlayer(player, Message.LOGIN_KICK_ADDRESS_ERROR.getMessage());
             }
         });
         DataRegister dataRegister = getDataLogin(name).getRegister();
@@ -230,7 +229,7 @@ public final class LoginManager {
         if (player.getAddress() == null) return false; // Esto por qué el jugador no terminado de entrar al servidor
         DataLogin dataLogin = getDataLogin(player);
         if (dataLogin == null){
-            GlobalUtils.synchronizeKickPlayer(player, "Hubo un problema con tu registro, vuelve a registrarte");
+            GlobalUtils.synchronizeKickPlayer(player, Message.LOGIN_KICK_REGISTER_ERROR.getMessage());
             return false;
         }
 
@@ -251,7 +250,7 @@ public final class LoginManager {
                             }
                             if (limboMode) LimboManager.startSynchronizeLimboMode(player, ReasonLimbo.NO_SESSION);
                         }else {
-                            GlobalUtils.synchronizeKickPlayer(player, "El servidor esta online mode");
+                            GlobalUtils.synchronizeKickPlayer(player, Message.LOGIN_KICK_ONLINE_MODE.getMessage());
                         }
                     }else {
                         if (limboMode) LimboManager.startSynchronizeLimboMode(player, ReasonLimbo.NO_REGISTER);
@@ -263,7 +262,7 @@ public final class LoginManager {
                     if (!Config.getServerMode().equals(ServerMode.OFFLINE_MODE)) {// no puede haber sesiónes premium si esta offline
                         if (GlobalUtils.equalIp(dataSession.getAddress(), player.getAddress().getAddress())){// esto no tendría que dar falso
                             if (dataSession.getSharedSecret() == null) {// no tiene el secreto compartido lo cual tiene que ser imposible.
-                                GlobalUtils.synchronizeKickPlayer(player, "Hubo problema con tu llave secreta vuelve a entrar al servidor. Si el problema persiste reinicie su launcher");
+                                GlobalUtils.synchronizeKickPlayer(player, Message.LOGIN_KICK_KEY_ERROR.getMessage());
                                 dataLogin.setSession(null);
                             } else {
                                 return true;// sesión válida para los premium
@@ -282,7 +281,7 @@ public final class LoginManager {
                     return false;
                 }
                 default -> {
-                    GlobalUtils.kickPlayer(player, "Vuelve a entrar, Hubo un problema con tu cuenta");
+                    GlobalUtils.kickPlayer(player, Message.LOGIN_KICK_UNKNOWN_STATE.getMessage());
                     return false;
                 }
             }
@@ -305,10 +304,10 @@ public final class LoginManager {
                     checkLoginIn(player, false, true);
                 }
             }else{
-                GlobalUtils.kickPlayer(player, "no estas registrado, vuelve a entrar al servidor");
+                GlobalUtils.kickPlayer(player, Message.LOGIN_KICK_NO_REGISTER.getMessage());
             }
         }else {
-            GlobalUtils.kickPlayer(player, "no estas registrado, vuelve a entrar al servidor");
+            GlobalUtils.kickPlayer(player, Message.LOGIN_KICK_NO_REGISTER.getMessage());
         }
     }
 }

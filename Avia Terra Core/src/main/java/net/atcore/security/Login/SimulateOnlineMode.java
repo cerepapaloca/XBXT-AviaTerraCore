@@ -15,6 +15,7 @@ import com.github.games647.craftapi.model.skin.Textures;
 import lombok.Getter;
 import net.atcore.Config;
 import net.atcore.messages.CategoryMessages;
+import net.atcore.messages.Message;
 import net.atcore.messages.TypeMessages;
 import net.atcore.security.AntiBot;
 import net.atcore.security.VerificationPremium;
@@ -46,7 +47,7 @@ public class SimulateOnlineMode {
     public void startEncryption(Player player, PacketContainer packet){
 
         if (player.getAddress() == null){
-            GlobalUtils.kickPlayer(player, "Error de connexion vuele a intentar");
+            GlobalUtils.kickPlayer(player, Message.LOGIN_KICK_GENERIC.getMessage());
             return;
         }
 
@@ -56,7 +57,7 @@ public class SimulateOnlineMode {
     public boolean preStartLogin(Player player, PacketContainer packet){
 
         if (player.getAddress() == null){
-            GlobalUtils.kickPlayer(player, "Error de connexion vuele a intentar");
+            GlobalUtils.kickPlayer(player, Message.LOGIN_KICK_GENERIC.getMessage());
             return false;
         }
 
@@ -77,9 +78,9 @@ public class SimulateOnlineMode {
             }
             switch (state){
                 case PREMIUM -> startLoginPremium(name, uuid, player);
-                case UNKNOWN -> GlobalUtils.kickPlayer(player, "Error de connexion vuele a intentar");
+                case UNKNOWN -> GlobalUtils.kickPlayer(player, Message.LOGIN_KICK_GENERIC.getMessage());
             }
-            sendMessageConsole("Iniciando login: <|" + state.name().toLowerCase() + "|> para el jugador: <|" + name + "|>", TypeMessages.INFO, CategoryMessages.LOGIN);
+            sendMessageConsole(String.format(Message.LOGIN_START_PROTOCOL_LOG.getMessage(), state.name().toLowerCase(), name), TypeMessages.INFO, CategoryMessages.LOGIN);
             return state == StateLogins.PREMIUM; //se cancela por que asi el servidor no se da cuenta de que a recibido un paquete
         }
         return false;

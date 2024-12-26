@@ -36,9 +36,9 @@ public class CommandManager {//nose si poner en esta clase aquí la verdad
                 }else{
                     if (!isSilent){
                         if (LoginManager.checkLoginIn(player, true, b)){
-                            sendMessage(player, "No tienes permisos para ejecutar ese comando", TypeMessages.ERROR);
+                            sendMessage(player, net.atcore.messages.Message.COMMAND_GENERIC_NO_PERMISSION.getMessage(), TypeMessages.ERROR);
                         }else {
-                            sendMessage(player, "Primero inicia sessión usando /login", TypeMessages.ERROR);
+                            sendMessage(player, net.atcore.messages.Message.COMMAND_GENERIC_NO_LOGIN.getMessage(), TypeMessages.ERROR);
                         }
                     }
                     return true;
@@ -49,10 +49,10 @@ public class CommandManager {//nose si poner en esta clase aquí la verdad
                 if (player.isOp()){
                     return false;
                 }else {
-                    if (!isSilent) MessagesManager.sendMessage(player, "No tienes autorización para ejecutar ese comando", TypeMessages.ERROR);
+                    if (!isSilent) MessagesManager.sendMessage(player, net.atcore.messages.Message.COMMAND_GENERIC_NO_PERMISSION.getMessage(), TypeMessages.ERROR);
                 }
             }else {
-                if (!isSilent)sendMessage(player,"Primero inicia sessión usando /login", TypeMessages.ERROR);
+                if (!isSilent)sendMessage(player,net.atcore.messages.Message.COMMAND_GENERIC_NO_LOGIN.getMessage(), TypeMessages.ERROR);
             }
             return true;
         }
@@ -69,7 +69,7 @@ public class CommandManager {//nose si poner en esta clase aquí la verdad
             }
         }
         if (rolesHasMember.isEmpty()){
-            command.reply("No tienes autorización para ejecutar comandos en la consola").queue();
+            command.reply(net.atcore.messages.Message.COMMAND_GENERIC_NO_PERMISSION_CONSOLE.getMessage()).queue();
             return;
         }
         for (RangeType range : rolesHasMember) {
@@ -81,7 +81,7 @@ public class CommandManager {//nose si poner en esta clase aquí la verdad
                 if (range.isOp()){
                     hasPermission = true;
                 }else {
-                    command.reply("No tienes permisos para ejecutar ese comando en la consola").queue();
+                    command.reply(net.atcore.messages.Message.COMMAND_GENERIC_NO_PERMISSION_CONSOLE.getMessage()).queue();
                     return;
                 }
             }
@@ -89,11 +89,11 @@ public class CommandManager {//nose si poner en esta clase aquí la verdad
         if (hasPermission){
             Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> {
                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command.getContentRaw().substring(1));
-                MessagesManager.sendMessageConsole(String.format("<|%s|> ejecutó -> %s"
+                MessagesManager.sendMessageConsole(String.format(net.atcore.messages.Message.COMMAND_GENERIC_RUN_LOG.getMessage()
                         , member.getUser().getGlobalName() + "(" + member.getId() + ")" ,"`&6" + command.getContentRaw() + "`"), TypeMessages.INFO, CategoryMessages.COMMANDS, false);
             });
         }else {
-            command.reply("No tienes permisos para ejecutar ese comando en la consola").queue();
+            command.reply(net.atcore.messages.Message.COMMAND_GENERIC_NO_PERMISSION_CONSOLE.getMessage()).queue();
         }
     }
 }

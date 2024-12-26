@@ -3,6 +3,7 @@ package net.atcore.data.sql;
 import net.atcore.AviaTerraCore;
 import net.atcore.data.DataBaseMySql;
 import net.atcore.messages.CategoryMessages;
+import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import net.atcore.moderation.ban.ContextBan;
@@ -203,9 +204,7 @@ public class DataBaseBan extends DataBaseMySql {
                 tiempoDeBaneo = GlobalUtils.timeToString(dataBan.getUnbanDate() - dataBan.getBanDate(), 2);
             }
             reloadDatabase();
-            sendMessageConsole("el jugador <|" + dataBan.getName() + "|> fue baneado de <|" + dataBan.getContext() + "|> durante <|" +
-                    tiempoDeBaneo + "|> por el jugador <|" + dataBan.getAuthor() +
-                    "|> y la razón es <|" + dataBan.getReason() + "|> ", TypeMessages.SUCCESS, CategoryMessages.BAN);
+            sendMessageConsole(String.format(Message.DATA_BAN_ADD_OK.getMessage(), dataBan.getName(), dataBan.getContext(), tiempoDeBaneo, dataBan.getAuthor(), dataBan.getReason()), TypeMessages.SUCCESS, CategoryMessages.BAN);
 
         } catch (SQLException e) {
             String tiempoDeBaneo;
@@ -214,9 +213,7 @@ public class DataBaseBan extends DataBaseMySql {
             }else {
                 tiempoDeBaneo = GlobalUtils.timeToString(dataBan.getUnbanDate() - dataBan.getBanDate(), 2);
             }
-            sendMessageConsole("Error al banear al jugador <|" + dataBan.getName() + "|>, razón de baneo: <|" + dataBan.getReason() + "|>, Contexto: <|"
-                            + dataBan.getContext().name() + "|> Autor: <|" + dataBan.getAuthor() + "|> Tiempo de baneo: <|" + tiempoDeBaneo + "|>"
-                    , TypeMessages.ERROR, CategoryMessages.BAN);
+            sendMessageConsole(String.format(Message.DATA_BAN_ADD_FAILED.getMessage(), dataBan.getName(), dataBan.getContext(), tiempoDeBaneo, dataBan.getAuthor(), dataBan.getReason()), TypeMessages.SUCCESS, CategoryMessages.BAN);
             throw new RuntimeException(e);
         }
     }
@@ -229,11 +226,9 @@ public class DataBaseBan extends DataBaseMySql {
             statement.setString(2, context.name());
             statement.executeUpdate();
             reloadDatabase();
-            sendMessageConsole("Se Desbano el jugador <|" + name + "|> en el contexto <|" + context.name() + "|> " +
-                    "por <|" + author + "|>", TypeMessages.SUCCESS, CategoryMessages.BAN);
+            sendMessageConsole(String.format(Message.DATA_BAN_REMOVE_OK.getMessage(), name, context.name(), author), TypeMessages.SUCCESS, CategoryMessages.BAN);
         } catch (SQLException e) {
-            sendMessageConsole("Error al desbanear al jugador <|" + name + "|> del contexto: <|" + context.name() + "|> por <|" + author
-                    , TypeMessages.ERROR, CategoryMessages.BAN);
+            sendMessageConsole(String.format(Message.DATA_BAN_REMOVE_FAILED.getMessage(), name, context.name(), author), TypeMessages.ERROR, CategoryMessages.BAN);
             throw new RuntimeException(e);
         }
     }

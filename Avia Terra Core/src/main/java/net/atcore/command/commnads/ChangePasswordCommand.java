@@ -4,6 +4,8 @@ import net.atcore.AviaTerraCore;
 import net.atcore.command.BaseTabCommand;
 import net.atcore.data.sql.DataBaseRegister;
 import net.atcore.messages.CategoryMessages;
+import net.atcore.messages.Message;
+import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import net.atcore.security.Login.LoginManager;
 import net.atcore.security.Login.TwoFactorAuth;
@@ -39,12 +41,11 @@ public class ChangePasswordCommand extends BaseTabCommand {
                     if (LoginManager.isEqualPassword(player.getName(), args[0])){
                         onChange(player, password, "contraseña");
                     }else{
-                        sendMessage(sender, "Contraseña incorrecta. Si no se acuerda de su contraseña y tiene un corro o un discord vinculado puede" +
-                                "puede enviar un código de verificación usando <|/link <discord | gmail>|>", TypeMessages.ERROR);
+                        sendMessage(sender, Message.COMMAND_CHANGE_PASSWORD_NOT_EQUAL_PASSWORD.getMessage(), TypeMessages.ERROR);
                     }
                 }
             }else{
-                sendMessage(sender, "solo para jugadores", TypeMessages.ERROR);
+                sendMessage(sender, Message.COMMAND_GENERIC_NO_PLAYER.getMessage(), TypeMessages.ERROR);
             }
         }else{
             sendMessage(sender, this.getUsage(), TypeMessages.ERROR);
@@ -55,13 +56,13 @@ public class ChangePasswordCommand extends BaseTabCommand {
         LoginManager.getDataLogin(player).getRegister().setPasswordShaded(password);
         AviaTerraCore.getInstance().enqueueTaskAsynchronously(() -> {
             if (DataBaseRegister.updatePassword(player.getName(), password)){
-                sendMessage(player, "La contraseña se cambio correctamente", TypeMessages.SUCCESS);
+                sendMessage(player, Message.COMMAND_CHANGE_PASSWORD_SUCCESSFUL.getMessage(), TypeMessages.SUCCESS);
             }else {
-                sendMessage(player, "Hubo un error al cambiar la contraseña", TypeMessages.ERROR);
+                sendMessage(player, Message.COMMAND_CHANGE_PASSWORD_ERROR.getMessage(), TypeMessages.ERROR);
             }
         });
 
-        sendMessageConsole( String.format("el jugador <|%s|> se cambio la contraseña con su <|%s|>", player.getName(), reason), TypeMessages.INFO, CategoryMessages.LOGIN);
+        sendMessageConsole( String.format(Message.COMMAND_CHANGE_PASSWORD_SUCCESSFUL_LOG.getMessage(), player.getName(), reason), TypeMessages.INFO, CategoryMessages.LOGIN);
         TwoFactorAuth.getCodes().remove(player.getUniqueId());
     }
 

@@ -6,6 +6,7 @@ import net.atcore.data.ActionInReloadYaml;
 import net.atcore.data.DataSection;
 import net.atcore.data.FileYaml;
 import net.atcore.data.yml.FileCacheLimbo;
+import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import net.atcore.utils.GlobalUtils;
@@ -63,18 +64,14 @@ public class LimboManager {
 
         switch (reasonLimbo){
             case NO_SESSION -> {
-                MessagesManager.sendTitle(player,
-                    "Utiliza Este Comando", "<|/login <Contraseña>|>", 30, LIMBO_TIME, 30, TypeMessages.INFO);
-                MessagesManager.sendMessage(player,
-                        "Para Loguear utiliza el siguiente comando:\n <|/login <Contraseña>|>", TypeMessages.INFO);
-                startTimeOut(player, "Tardaste mucho en iniciar sesión", dataLimbo);
+                MessagesManager.sendTitle(player, Message.LOGIN_LIMBO_INITIATED_BY_SESSION_TITLE.getMessage(), Message.LOGIN_LIMBO_INITIATED_BY_SESSION_SUBTITLE.getMessage(), 30, LIMBO_TIME, 30, TypeMessages.INFO);
+                MessagesManager.sendMessage(player, Message.LOGIN_LIMBO_INITIATED_BY_SESSION_CHAT.getMessage(), TypeMessages.INFO);
+                startTimeOut(player, Message.LOGIN_LIMBO_TIME_OUT_SESSION.getMessage(), dataLimbo);
             }
             case NO_REGISTER -> {
-                MessagesManager.sendTitle(player,
-                    "Utiliza Este Comando", "<|/register <Contraseña> <Contraseña>|>", 30, LIMBO_TIME, 30, TypeMessages.INFO);
-                MessagesManager.sendMessage(player,
-                        "Para registrarte utiliza el siguiente comando:\n <|/register <Contraseña> <Contraseña>|>.", TypeMessages.INFO);
-                startTimeOut(player, "Tardaste mucho en registrarte", dataLimbo);
+                MessagesManager.sendTitle(player, Message.LOGIN_LIMBO_INITIATED_BY_REGISTER_TITLE.getMessage(), Message.LOGIN_LIMBO_INITIATED_BY_REGISTER_SUBTITLE.getMessage(), 30, LIMBO_TIME, 30, TypeMessages.INFO);
+                MessagesManager.sendMessage(player, Message.LOGIN_LIMBO_INITIATED_BY_REGISTER_CHAT.getMessage(), TypeMessages.INFO);
+                startTimeOut(player, Message.LOGIN_LIMBO_TIME_OUT_REGISTER.getMessage(), dataLimbo);
             }
         }
     }

@@ -3,6 +3,7 @@ package net.atcore.command.commnads;
 import net.atcore.AviaTerraCore;
 import net.atcore.command.BaseTabCommand;
 import net.atcore.command.CommandUtils;
+import net.atcore.messages.Message;
 import net.atcore.messages.TypeMessages;
 import net.atcore.moderation.ban.ContextBan;
 import net.atcore.moderation.ModerationSection;
@@ -27,14 +28,14 @@ public class UnbanCommand extends BaseTabCommand {
         try {
             contextBan = ContextBan.valueOf(args[1].toUpperCase());
         }catch (Exception ignored) {
-            sendMessage(sender, "contexto no valido", TypeMessages.ERROR);
+            sendMessage(sender, Message.COMMAND_UNBAN_NOT_FOUND_CONTEXT.getMessage(), TypeMessages.ERROR);
             return;
         }
         //en un hilo aparte por qué explota el servidor
         CommandUtils.executeForPlayer(sender, args[0], false, dataTemporalPlayer ->
                 AviaTerraCore.getInstance().enqueueTaskAsynchronously(() ->
                         ModerationSection.getBanManager().removeBanPlayer(dataTemporalPlayer.name(), contextBan, sender.getName())));
-        sendMessage(sender, "El jugador va ser desbaneado mira la los logs para confirmar", TypeMessages.INFO);
+        sendMessage(sender, Message.COMMAND_UNBAN_SUCCESSFUL.getMessage(), TypeMessages.INFO);
     }
 
     @Override

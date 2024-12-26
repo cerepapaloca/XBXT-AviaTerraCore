@@ -2,6 +2,7 @@ package net.atcore.command;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import net.atcore.messages.Message;
 import net.atcore.messages.TypeMessages;
 import net.atcore.security.AntiExploit;
 import net.atcore.security.Login.LoginManager;
@@ -47,9 +48,9 @@ public final class CommandHandler implements TabExecutor {
                         return true;
                     }else{
                         if (LoginManager.checkLoginIn(player)){
-                            sendMessage(sender, "No tienes Permisos", TypeMessages.ERROR);
+                            sendMessage(sender, Message.COMMAND_GENERIC_NO_PERMISSION.getMessage(), TypeMessages.ERROR);
                         }else {
-                            sendMessage(player, "Primero inicia sessión usando /login", TypeMessages.ERROR);
+                            sendMessage(player, Message.COMMAND_GENERIC_NO_LOGIN.getMessage(), TypeMessages.ERROR);
                         }
                     }
                 }else {
@@ -57,7 +58,7 @@ public final class CommandHandler implements TabExecutor {
                     return true;
                 }
             }catch (Exception e) {
-                sendMessage(sender, "Ops!! Hubo un error al ejecutar el comando contacta con el desarrollador", TypeMessages.ERROR);
+                sendMessage(sender, Message.COMMAND_GENERIC_EXCEPTION_ERROR.getMessage(), TypeMessages.ERROR);
                 e.printStackTrace();
             }
             break;
@@ -84,8 +85,8 @@ public final class CommandHandler implements TabExecutor {
                         if (argsUse.size() >= args.length) {
                             try {
                                 if (!argsUse.get(args.length).startsWith("<!")) {
-                                    return List.of(TypeMessages.ERROR.getMainColorWithColorChart() + "Te falta el argumento: " +
-                                            CommandUtils.useToUseDisplay(argsUse.get(args.length)));
+                                    return List.of(TypeMessages.ERROR.getMainColorWithColorChart() + String.format(Message.COMMAND_GENERIC_ARGS_ERROR.getMessage(),
+                                            CommandUtils.useToUseDisplay(argsUse.get(args.length))));
                                 }
                             }catch (Exception e) {
                                 return list;

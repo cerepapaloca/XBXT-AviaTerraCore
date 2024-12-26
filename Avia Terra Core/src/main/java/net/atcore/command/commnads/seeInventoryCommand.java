@@ -4,6 +4,7 @@ import net.atcore.aviaterraplayer.AviaTerraPlayer;
 import net.atcore.command.BaseCommand;
 import net.atcore.command.ModeAutoTab;
 import net.atcore.inventory.InventorySection;
+import net.atcore.messages.Message;
 import net.atcore.messages.TypeMessages;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -37,16 +38,16 @@ public class seeInventoryCommand extends BaseCommand {
                         atp2.setInventorySection(InventorySection.MANIPULATED);
                         atp2.getModerationPlayer().getManipulatorInventoryPlayer().add(player.getUniqueId());
                     }else {
-                        sendMessage(sender, "No puedes ver el inventarió de otro jugador que también este mirando un inventarió", TypeMessages.ERROR);
+                        sendMessage(sender, Message.COMMAND_SEE_INVENTORY_ERROR.getMessage(), TypeMessages.ERROR);
                     }
                 }else{
-                    sendMessage(sender, "el jugador no existe o no esta conectado", TypeMessages.ERROR);
+                    sendMessage(sender, Message.COMMAND_GENERIC_PLAYER_NOT_FOUND.getMessage(), TypeMessages.ERROR);
                 }
             }else {
-                sendMessage(sender, "tiene que tener el nombre del jugador", TypeMessages.ERROR);
+                sendMessage(sender, Message.COMMAND_SEE_INVENTORY_MISSING_ARGS.getMessage(), TypeMessages.ERROR);
             }
         }else{
-            sendMessage(sender, "solo se puede ejecutar por jugador", TypeMessages.ERROR);
+            sendMessage(sender, Message.COMMAND_GENERIC_NO_PLAYER.getMessage(), TypeMessages.ERROR);
         }
     }
 }

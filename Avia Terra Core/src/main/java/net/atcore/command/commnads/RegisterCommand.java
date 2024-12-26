@@ -3,6 +3,7 @@ package net.atcore.command.commnads;
 import net.atcore.command.BaseCommand;
 import net.atcore.Config;
 import net.atcore.command.ModeAutoTab;
+import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import net.atcore.security.Login.*;
@@ -33,22 +34,24 @@ public class RegisterCommand extends BaseCommand {
                 if (dataLogin.getRegister().getStateLogins() == StateLogins.CRACKED || Config.getServerMode().equals(ServerMode.OFFLINE_MODE)){
                     if (args.length >= 2){
                         if (Objects.equals(args[0], args[1])){
-                            sendMessage(player, "la contraseña se guardo exitosamente y registraste exitosamente", TypeMessages.SUCCESS);
+                            sendMessage(player, Message.COMMAND_REGISTER_SUCCESSFUL_CHAT.getMessage(), TypeMessages.SUCCESS);
                             LoginManager.newRegisterCracked(player.getName(), player.getAddress().getAddress(),  args[0]);
-                            MessagesManager.sendTitle(player, "Bienvenido A AviaTerra", "<|&0" + player.getDisplayName() + "|>", 20, 20*3, 40, TypeMessages.INFO);
+                            MessagesManager.sendTitle(player, Message.COMMAND_REGISTER_SUCCESSFUL_TITLE.getMessage(),
+                                    String.format(Message.COMMAND_REGISTER_SUCCESSFUL_SUBTITLE.getMessage(), player.getDisplayName())
+                                    , 20, 20*3, 40, TypeMessages.INFO);
                             startPlaySessionCracked(player).getRegister().setTemporary(false);
                             LoginManager.checkLoginIn(player);
                         }else{
-                            sendMessage(player, "las contraseña no son iguales", TypeMessages.ERROR);
+                            sendMessage(player, Message.COMMAND_REGISTER_NO_EQUAL_PASSWORD.getMessage(), TypeMessages.ERROR);
                         }
                     }else{
-                        sendMessage(player, "tiene que escribir la contraseña de nuevo", TypeMessages.ERROR);
+                        sendMessage(player, Message.COMMAND_REGISTER_MISSING_ARGS_PASSWORD.getMessage(), TypeMessages.ERROR);
                     }
                 }else {
-                    sendMessage(player, "Los premium no se registran", TypeMessages.ERROR);
+                    sendMessage(player, Message.COMMAND_REGISTER_IS_PREMIUM.getMessage(), TypeMessages.ERROR);
                 }
             }else {
-                sendMessage(player, "Ya estas registrado", TypeMessages.ERROR);
+                sendMessage(player, Message.COMMAND_REGISTER_ALREADY.getMessage(), TypeMessages.ERROR);
             }
         }
     }

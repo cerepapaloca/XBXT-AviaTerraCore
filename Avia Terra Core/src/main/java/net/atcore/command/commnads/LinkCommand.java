@@ -4,6 +4,7 @@ import net.atcore.AviaTerraCore;
 import net.atcore.command.BaseTabCommand;
 import net.atcore.command.CommandUtils;
 import net.atcore.data.sql.DataBaseRegister;
+import net.atcore.messages.Message;
 import net.atcore.messages.TypeMessages;
 import net.atcore.security.Login.*;
 import org.bukkit.command.CommandSender;
@@ -29,7 +30,7 @@ public class LinkCommand extends BaseTabCommand {
             UUID uuid = player.getUniqueId();
             DataLogin dataLogin = LoginManager.getDataLogin(player);
             if (args.length == 0) {
-                sendMessage(sender, "Tiene que poner Gmail o discord", TypeMessages.ERROR);
+                sendMessage(sender, Message.COMMAND_LINK_MISSING_ARGS.getMessage(), TypeMessages.ERROR);
                 return;
             }
             switch (args[0].toLowerCase()) {
@@ -39,13 +40,13 @@ public class LinkCommand extends BaseTabCommand {
                             if (args[1].contains("@")){
                                 CodeAuth codeAuth = new CodeAuth(UUID.randomUUID(), System.currentTimeMillis()+(1000*60*2), uuid, args[1].toLowerCase());
                                 TwoFactorAuth.getCodes().put(uuid, codeAuth);
-                                sendMessage(sender, "Se envió un correo a " + args[1] + " con el código", TypeMessages.INFO);
+                                sendMessage(sender,String.format(Message.COMMAND_LINK_SEND_GMAIL_1.getMessage(), args[1]), TypeMessages.INFO);
                                 if (dataLogin.getRegister().getGmail() != null){
-                                    sendMessage(sender, "Ya Tiene un correo vinculado solo usar el comando para vincular un nuevo correo", TypeMessages.WARNING);
+                                    sendMessage(sender, Message.COMMAND_LINK_ALREADY_GMAIL.getMessage(), TypeMessages.WARNING);
                                 }
                                 AviaTerraCore.getInstance().enqueueTaskAsynchronously(() -> {
                                     TwoFactorAuth.sendVerificationEmail(args[1], codeAuth, FormatMessage.LINK);
-                                    sendMessage(sender, "Revisa su bandeja de recibidos, ya tuvo que haber llegado", TypeMessages.SUCCESS);
+                                    sendMessage(sender, Message.COMMAND_LINK_ARRIVED_GMAIL.getMessage(), TypeMessages.SUCCESS);
                                 });
                             }else if (args[1].charAt(8) == '-'){
                                 if (TwoFactorAuth.checkCode(player, args[1])){
@@ -53,30 +54,30 @@ public class LinkCommand extends BaseTabCommand {
                                         if (DataBaseRegister.updateGmail(player.getName(), TwoFactorAuth.getCodes().get(uuid).getMedia())){
                                             DataLogin login = LoginManager.getDataLogin(player);
                                             login.getRegister().setGmail(TwoFactorAuth.getCodes().get(uuid).getMedia());
-                                            sendMessage(player, "Autenticación completa", TypeMessages.SUCCESS);
+                                            sendMessage(player, Message.COMMAND_LINK_SUCCESSFUL.getMessage(), TypeMessages.SUCCESS);
                                         }else {
-                                            sendMessage(player, "Hubo un error con la autenticación, vuelve a intentar", TypeMessages.ERROR);
+                                            sendMessage(player, Message.COMMAND_LINK_ERROR.getMessage(), TypeMessages.ERROR);
                                         }
                                         TwoFactorAuth.getCodes().remove(uuid);
                                     });
                                 }
                             }else {
-                                sendMessage(sender, "Tiene poner tu gmail o el código de validación", TypeMessages.ERROR);
+                                sendMessage(sender, Message.COMMAND_LINK_MISSING_ARGS_GMAIL.getMessage(), TypeMessages.ERROR);
                             }
                         }else {
-                            sendMessage(sender, "Para vincular tu gmail tiene que estar logueado", TypeMessages.ERROR);
+                            sendMessage(sender, Message.COMMAND_LINK_GMAIL_NO_LOGIN.getMessage(), TypeMessages.ERROR);
                         }
                     }else {
                         if (dataLogin.getRegister().getGmail() != null){
                             CodeAuth codeAuth = new CodeAuth(UUID.randomUUID(), System.currentTimeMillis()+(1000*60*2), uuid, dataLogin.getRegister().getGmail());
                             TwoFactorAuth.getCodes().put(uuid, codeAuth);
-                            sendMessage(sender, "Se esta enviando un correo con el código", TypeMessages.INFO);
+                            sendMessage(sender, Message.COMMAND_LINK_SEND_GMAIL_2.getMessage(), TypeMessages.INFO);
                             AviaTerraCore.getInstance().enqueueTaskAsynchronously(() -> {
                                 TwoFactorAuth.sendVerificationEmail(dataLogin.getRegister().getGmail(), codeAuth, FormatMessage.GENERIC);
-                                sendMessage(sender, "Revisa su bandeja de recibidos, ya tuvo que haber llegado", TypeMessages.SUCCESS);
+                                sendMessage(sender, Message.COMMAND_LINK_ARRIVED_GMAIL.getMessage(), TypeMessages.SUCCESS);
                             });
                         }else {
-                            sendMessage(sender, "No tiene un Gmail vinculado", TypeMessages.ERROR);
+                            sendMessage(sender, Message.COMMAND_LINK_NOT_FOUND_GMAIL.getMessage(), TypeMessages.ERROR);
                         }
                     }
                 }
@@ -86,9 +87,9 @@ public class LinkCommand extends BaseTabCommand {
                             if (args[1].length() == 18){
                                 CodeAuth codeAuth = new CodeAuth(UUID.randomUUID(), System.currentTimeMillis()+(1000*60*2), uuid, args[1].toLowerCase());
                                 TwoFactorAuth.getCodes().put(uuid, codeAuth);
-                                sendMessage(sender, "Se esta enviando un mensaje directo con el código", TypeMessages.INFO);
+                                sendMessage(sender, Message.COMMAND_LINK_SEND_DISCORD_1.getMessage(), TypeMessages.INFO);
                                 if (dataLogin.getRegister().getGmail() != null){
-                                    sendMessage(sender, "Ya Tiene un discord vinculado solo usar el comando para vincular un nuevo discord", TypeMessages.WARNING);
+                                    sendMessage(sender, Message.COMMAND_LINK_ALREADY_DISCORD.getMessage(), TypeMessages.WARNING);
                                 }
                                 AviaTerraCore.getInstance().enqueueTaskAsynchronously(() -> TwoFactorAuth.sendVerificationDiscord(args[1], player, FormatMessage.LINK));
                             }else if (args[1].charAt(8) == '-') {
@@ -97,36 +98,36 @@ public class LinkCommand extends BaseTabCommand {
                                         if (DataBaseRegister.updateDiscord(player.getName(), TwoFactorAuth.getCodes().get(uuid).getMedia())){
                                             DataLogin login = LoginManager.getDataLogin(player);
                                             login.getRegister().setDiscord(TwoFactorAuth.getCodes().get(uuid).getMedia());
-                                            sendMessage(player, "Autenticación completa", TypeMessages.SUCCESS);
+                                            sendMessage(player, Message.COMMAND_LINK_SUCCESSFUL.getMessage(), TypeMessages.SUCCESS);
                                         }else {
-                                            sendMessage(player, "Hubo un error con la autenticación, vuelve a intentar", TypeMessages.ERROR);
+                                            sendMessage(player, Message.COMMAND_LINK_ERROR.getMessage(), TypeMessages.ERROR);
                                         }
                                         TwoFactorAuth.getCodes().remove(uuid);
 
                                     });
                                 }
                             }else {
-                                sendMessage(player, "Tiene poner tu id del Discord o el código de validación", TypeMessages.ERROR);
+                                sendMessage(player, Message.COMMAND_LINK_MISSING_ARGS_DISCORD.getMessage(), TypeMessages.ERROR);
                             }
                         }else {
-                            sendMessage(sender, "Para vincular tu Discord tiene que estar logueado", TypeMessages.ERROR);
+                            sendMessage(sender, Message.COMMAND_LINK_DISCORD_NO_LOGIN.getMessage(), TypeMessages.ERROR);
                         }
                     }else {
                         if (dataLogin.getRegister().getDiscord() != null){
                             CodeAuth codeAuth = new CodeAuth(UUID.randomUUID(), System.currentTimeMillis()+(1000*60*2), uuid, dataLogin.getRegister().getDiscord());
                             TwoFactorAuth.getCodes().put(uuid, codeAuth);
-                            sendMessage(sender, "Se esta enviando un mensaje directo con el código", TypeMessages.INFO);
+                            sendMessage(sender, Message.COMMAND_LINK_SEND_DISCORD_2.getMessage(), TypeMessages.INFO);
                             AviaTerraCore.getInstance().enqueueTaskAsynchronously(() ->
                                     TwoFactorAuth.sendVerificationDiscord(dataLogin.getRegister().getDiscord(), player, FormatMessage.GENERIC));
                         }else {
-                            sendMessage(sender, "no tiene un Discord vinculado", TypeMessages.ERROR);
+                            sendMessage(sender, Message.COMMAND_LINK_NOT_FOUNT_DISCORD.getParent(), TypeMessages.ERROR);
                         }
                     }
                 }
-                default -> sendMessage(sender, "tiene que poner discord o gmail", TypeMessages.ERROR);
+                default -> sendMessage(sender, Message.COMMAND_LINK_MISSING_ARGS.getMessage(), TypeMessages.ERROR);
             }
         }else {
-            sendMessage(sender, "Solo lo puede ejecutar jugadores", TypeMessages.ERROR);
+            sendMessage(sender, Message.COMMAND_GENERIC_NO_PLAYER.getParent(), TypeMessages.ERROR);
         }
     }
 

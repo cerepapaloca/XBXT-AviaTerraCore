@@ -7,6 +7,7 @@ import com.google.common.hash.Hasher;
 import com.google.common.hash.Hashing;
 import net.atcore.AviaTerraCore;
 import net.atcore.messages.CategoryMessages;
+import net.atcore.messages.Message;
 import net.atcore.messages.TypeMessages;
 import net.atcore.security.Login.DataLogin;
 import net.atcore.security.Login.DataSession;
@@ -68,8 +69,7 @@ public class VerificationPremium {
                             if (ip.equals(player.getAddress().getAddress().getHostAddress())){// Mira si la ip son la misma ip
                                 // Se envía un paquete falso al servidor para que siga con el protocolo
                                 SimulateOnlineMode.FakeStartPacket(verification.getName(), verification.getId(), player);
-                                sendMessageConsole("Certificación del premíum valida del jugador <|" +
-                                        name + "|>", TypeMessages.SUCCESS, CategoryMessages.LOGIN);
+                                sendMessageConsole(String.format(Message.LOGIN_PREMIUM_VALIDATION_OK.getMessage()), TypeMessages.SUCCESS, CategoryMessages.LOGIN);
                                 String userName = verification.getName();
                                 listUUIDPremium.put(userName, verification);
                                 DataLogin dataLogin = LoginManager.getDataLogin(userName);
@@ -80,31 +80,24 @@ public class VerificationPremium {
                                 dataLogin.setLimbo(null);
                                 //LoginManager.checkLoginIn(player, false);//esto para que siga el protocolo
                             }else{
-                                GlobalUtils.kickPlayer(player, "Se detecto una discrepancia. Reinicie su cliente");
-                                sendMessageConsole("la ip que se envío el paquete no es la misma que se envío al primer paquete por el jugador <|"
-                                        + name + "|> y la ip <|" + player.getAddress().getHostName() +
-                                        "|>. Discrepancia detectada", TypeMessages.WARNING, CategoryMessages.LOGIN);
+                                GlobalUtils.kickPlayer(player, Message.LOGIN_KICK_PREMIUM_VALIDATION.getMessage());
+                                sendMessageConsole(String.format(Message.LOGIN_PREMIUM_VALIDATION_FAILED_LOG_0.getMessage(), name, player.getAddress().getHostName()), TypeMessages.WARNING, CategoryMessages.LOGIN);
                             }
                         }else {
-                            GlobalUtils.kickPlayer(player, "Se detecto una discrepancia. Reinicie su cliente");
-                            sendMessageConsole("Los datos dados por mojang no concuerda con el jugador <|" + name + "|> " +
-                                    "y la ip <|" + player.getAddress().getHostName() + "|>. Discrepancia detectada", TypeMessages.WARNING, CategoryMessages.LOGIN);
+                            GlobalUtils.kickPlayer(player, Message.LOGIN_KICK_PREMIUM_VALIDATION.getMessage());
+                            sendMessageConsole(String.format(Message.LOGIN_PREMIUM_VALIDATION_FAILED_LOG_1.getMessage(), name, player.getAddress().getHostName()), TypeMessages.WARNING, CategoryMessages.LOGIN);
                         }
                     }else{
-                        GlobalUtils.kickPlayer(player, "Se detecto una discrepancia. Reinicie su cliente");
-                        sendMessageConsole("No se encontró registros en mojang del jugador <|" + name + "|> " +
-                                "y la ip <|" + player.getAddress().getHostName() + "|>. Discrepancia detectada", TypeMessages.WARNING, CategoryMessages.LOGIN);
+                        GlobalUtils.kickPlayer(player, Message.LOGIN_KICK_PREMIUM_VALIDATION.getMessage());
+                        sendMessageConsole(String.format(Message.LOGIN_PREMIUM_VALIDATION_FAILED_LOG_2.getMessage(), name, player.getAddress().getHostName()), TypeMessages.WARNING, CategoryMessages.LOGIN);
                     }
                 }else {
-                    GlobalUtils.kickPlayer(player, "hubo un error. Reinicie su cliente");
-                    sendMessageConsole("hubo un error al activar el protocolo de encriptación por el jugador <|"
-                            + name + "|> y la ip <|" + player.getAddress().getHostName() +
-                            "|>. Discrepancia detectada", TypeMessages.ERROR, CategoryMessages.LOGIN);
+                    GlobalUtils.kickPlayer(player, Message.LOGIN_KICK_PREMIUM_VALIDATION.getMessage());
+                    sendMessageConsole(String.format(Message.LOGIN_PREMIUM_VALIDATION_FAILED_LOG_3.getMessage(), name, player.getAddress().getHostName()), TypeMessages.WARNING, CategoryMessages.LOGIN);
                 }
             }else{
                 GlobalUtils.kickPlayer(player, "Se detecto una discrepancia. Reinicie su cliente");
-                sendMessageConsole("tokens no iguales del el jugador <|" + "Desconocido" + "|> " +
-                        "y la ip <|" + player.getAddress().getHostName() + "|>. Discrepancia detectada", TypeMessages.WARNING, CategoryMessages.LOGIN);
+                sendMessageConsole(String.format(Message.LOGIN_PREMIUM_VALIDATION_FAILED_LOG_3.getMessage(), player.getAddress().getHostName()), TypeMessages.WARNING, CategoryMessages.LOGIN);
             }
         } catch (Exception e) {
             throw new RuntimeException(e);

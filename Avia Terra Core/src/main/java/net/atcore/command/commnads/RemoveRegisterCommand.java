@@ -4,6 +4,7 @@ import net.atcore.AviaTerraCore;
 import net.atcore.command.BaseTabCommand;
 import net.atcore.command.CommandUtils;
 import net.atcore.data.sql.DataBaseRegister;
+import net.atcore.messages.Message;
 import net.atcore.messages.TypeMessages;
 import net.atcore.security.Login.LoginManager;
 import org.bukkit.command.CommandSender;
@@ -30,9 +31,9 @@ public class RemoveRegisterCommand extends BaseTabCommand {
             CommandUtils.executeForPlayer(sender, args[0], false, dataTemporalPlayer ->
                     AviaTerraCore.getInstance().enqueueTaskAsynchronously(() -> {
                         if (DataBaseRegister.removeRegister(dataTemporalPlayer.name(), sender.getName())){
-                            sendMessage(sender, String.format("Se borro el registro al jugador <|%s|>", dataTemporalPlayer.name()), TypeMessages.SUCCESS);
+                            sendMessage(sender, String.format(Message.COMMAND_REMOVE_REGISTER_SUCCESSFUL.getMessage(), dataTemporalPlayer.name()), TypeMessages.SUCCESS);
                         }else {
-                            sendMessage(sender, String.format("Hubo un error al borrar al jugador <|%s|>, vuelva a intentarlo", dataTemporalPlayer.name()), TypeMessages.ERROR);
+                            sendMessage(sender, String.format(Message.COMMAND_REMOVE_REGISTER_ERROR.getMessage(), dataTemporalPlayer.name()), TypeMessages.ERROR);
                         }
                         LoginManager.removeDataLogin(dataTemporalPlayer.name());
                     }));

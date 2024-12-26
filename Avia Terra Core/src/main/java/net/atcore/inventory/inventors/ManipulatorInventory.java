@@ -6,6 +6,7 @@ import net.atcore.aviaterraplayer.ModerationPlayer;
 import net.atcore.inventory.BaseInventory;
 import net.atcore.inventory.InventorySection;
 import net.atcore.inventory.InventoryUtils;
+import net.atcore.messages.Message;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -20,7 +21,7 @@ import java.util.*;
 public class ManipulatorInventory extends BaseInventory {
 
     public ManipulatorInventory() {
-        super(54,"Inventario de moderación");
+        super(54, Message.INVENTORY_MANIPULATOR_TITLE.getMessage());
     }
 
     public static final HashMap<UUID, Inventory> inventories = new HashMap<>();

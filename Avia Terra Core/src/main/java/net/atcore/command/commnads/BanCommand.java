@@ -2,6 +2,7 @@ package net.atcore.command.commnads;
 
 import net.atcore.command.BaseTabCommand;
 import net.atcore.command.CommandUtils;
+import net.atcore.messages.Message;
 import net.atcore.messages.TypeMessages;
 import net.atcore.moderation.ban.ContextBan;
 import net.atcore.moderation.ModerationSection;
@@ -25,21 +26,21 @@ public class BanCommand extends BaseTabCommand {
     public void execute(CommandSender sender, String[] args) {
         switch (args.length) {
             case 1 -> sendMessage(sender, this.getUsage(), TypeMessages.ERROR);
-            case 2 -> sendMessage(sender, "Tiene que por un tiempo de baneo", TypeMessages.ERROR);
-            case 3 -> sendMessage(sender, "Tienes dar una razón de baneo", TypeMessages.ERROR);
+            case 2 -> sendMessage(sender, Message.COMMAND_BAN_MISSING_ARGUMENT_TIME.getMessage(), TypeMessages.ERROR);
+            case 3 -> sendMessage(sender, Message.COMMAND_BAN_MISSING_ARGUMENT_REASON.getMessage(), TypeMessages.ERROR);
             default -> {
                 ContextBan contextBan;
                 try {
                     contextBan = ContextBan.valueOf(args[1].toUpperCase());
                 }catch (Exception ignored) {
-                    sendMessage(sender, "contexto no valido", TypeMessages.ERROR);
+                    sendMessage(sender, Message.COMMAND_BAN_NOT_FOUND_CONTEXT.getMessage(), TypeMessages.ERROR);
                     return;
                 }
                 long time;
                 try {
                     time = CommandUtils.StringToMilliseconds(args[2], true);
                 }catch (RuntimeException e){
-                    sendMessage(sender, "formato de fecha incorrecto", TypeMessages.ERROR);
+                    sendMessage(sender, Message.COMMAND_GENERIC_FORMAT_DATE_ERROR.getMessage(), TypeMessages.ERROR);
                     return;
                 }
 
@@ -56,11 +57,11 @@ public class BanCommand extends BaseTabCommand {
                             ModerationSection.getBanManager().banPlayer(player1.name(), GlobalUtils.getUUIDByName(player1.name()), null, finalReason, time, contextBan, sender.getName());
                         }
                     }catch (Exception ignored) {
-                        sendMessage(sender, "Hubo un problema con las base de datos vuelva a ejecutar el comando", TypeMessages.ERROR);
+                        sendMessage(sender, Message.COMMAND_BAN_DATA_BASE_ERROR.getMessage(), TypeMessages.ERROR);
                     }
                 });
 
-                sendMessage(sender, "El jugador sera baneado mira los logs para confirmar", TypeMessages.INFO);
+                sendMessage(sender, Message.COMMAND_BAN_SUCCESSFUL.getMessage(), TypeMessages.INFO);
             }
         }
     }

@@ -4,6 +4,7 @@ import com.github.games647.craftapi.resolver.MojangResolver;
 import lombok.Getter;
 import net.atcore.command.CommandSection;
 import net.atcore.data.DataSection;
+import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.MessageSection;
 import net.atcore.messages.TypeMessages;
 import net.atcore.listener.ListenerManagerSection;
@@ -46,7 +47,7 @@ public final class AviaTerraCore extends JavaPlugin {
     @Override
     public void onEnable() {
         long timeCurrent = System.currentTimeMillis();
-        sendMessageConsole("AviaTerra Iniciando...", TypeMessages.INFO, false);
+        sendMessageConsole("AviaTerra Iniciando...", TypeMessages.SUCCESS, CategoryMessages.PRIVATE, false);
         isStarting = true;
         workerThread = new Thread(this::processQueue);
         workerThread.setName("AviaTerra WorkerThread");
@@ -87,7 +88,7 @@ public final class AviaTerraCore extends JavaPlugin {
         });
         //jda.shutdown();
         //disableModules();
-        sendMessageConsole("AviaTerra Se fue a mimir.", TypeMessages.INFO, false);
+        sendMessageConsole("AviaTerra Se fue a mimir.", TypeMessages.SUCCESS, CategoryMessages.PRIVATE, false);
     }
 
     @Override
@@ -107,7 +108,7 @@ public final class AviaTerraCore extends JavaPlugin {
                 "  \\ \\  \\ \\  \\ \\    / /   \\ \\  \\ \\  \\ \\  \\           \\ \\  \\ \\ \\  \\_|\\ \\ \\  \\\\  \\\\ \\  \\\\  \\\\ \\  \\ \\  \\ \n" +
                 "   \\ \\__\\ \\__\\ \\__/ /     \\ \\__\\ \\__\\ \\__\\           \\ \\__\\ \\ \\_______\\ \\__\\\\ _\\\\ \\__\\\\ _\\\\ \\__\\ \\__\\\n" +
                 "    \\|__|\\|__|\\|__|/       \\|__|\\|__|\\|__|            \\|__|  \\|_______|\\|__|\\|__|\\|__|\\|__|\\|__|\\|__|\n",
-                TypeMessages.SUCCESS, false);
+                TypeMessages.SUCCESS, CategoryMessages.PRIVATE, false);
     }
 
     /**

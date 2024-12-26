@@ -2,6 +2,7 @@ package net.atcore.test;
 
 import net.atcore.aviaterraplayer.AviaTerraPlayer;
 import net.atcore.messages.CategoryMessages;
+import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import org.jetbrains.annotations.TestOnly;
@@ -13,7 +14,7 @@ public final class MessageTest implements RunTest {
     public void runTest(AviaTerraPlayer player) {
         for (TypeMessages type : TypeMessages.values()) {
             for (CategoryMessages category : CategoryMessages.values()) {
-                MessagesManager.sendMessage(player.getPlayer(), "Hola mundo!! esto es un <|Test|>", type, category);
+                MessagesManager.sendMessage(player.getPlayer(), Message.TEST_MESSAGE.getMessage(), type, category);
             }
         }
     }

@@ -3,6 +3,7 @@ package net.atcore.command.commnads;
 import net.atcore.AviaTerraCore;
 import net.atcore.command.BaseCommand;
 import net.atcore.command.ModeAutoTab;
+import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import net.atcore.moderation.ban.ContextBan;
@@ -41,7 +42,7 @@ public class LoginCommand extends BaseCommand {
                     if (isUUID(args[0])){
                         if (TwoFactorAuth.checkCode(player, args[0])) {
                             if (LoginManager.checkLoginIn(player)) {
-                                sendMessage(player, "Ya estas logueado", TypeMessages.ERROR);
+                                sendMessage(player, Message.COMMAND_LOGIN_ALREADY.getMessage(), TypeMessages.ERROR);
                                 return;
                             }
                             startPlay(player);
@@ -51,7 +52,7 @@ public class LoginCommand extends BaseCommand {
                     }else {
                         if (LoginManager.isEqualPassword(player.getName(), args[0])){
                             if (LoginManager.checkLoginIn(player)) {
-                                sendMessage(player, "Ya estas logueado", TypeMessages.ERROR);
+                                sendMessage(player, Message.COMMAND_LOGIN_ALREADY.getMessage(), TypeMessages.ERROR);
                                 return;
                             }
                             startPlay(player);
@@ -60,10 +61,10 @@ public class LoginCommand extends BaseCommand {
                         }
                     }
                 }else {
-                    sendMessage(player, "No estas registrado usa el /register", TypeMessages.ERROR);
+                    sendMessage(player, Message.COMMAND_LOGIN_NO_REGISTER.getMessage(), TypeMessages.ERROR);
                 }
             }else {
-                sendMessage(player, "Tienes que poner tu contraseña", TypeMessages.ERROR);
+                sendMessage(player, Message.COMMAND_LOGIN_MISSING_ARGS.getMessage(), TypeMessages.ERROR);
             }
         }
     }
@@ -73,21 +74,21 @@ public class LoginCommand extends BaseCommand {
         attempts.remove(player.getUniqueId());
         LoginManager.updateLoginDataBase(player.getName(), Objects.requireNonNull(player.getAddress()).getAddress());
         player.updateCommands();
-        MessagesManager.sendTitle(player,"Bienvenido de vuelta", "<|&o" + player.getDisplayName() + "|>", 20, 20*3, 40, TypeMessages.INFO);
-        sendMessage(player, "Has iniciado sesión exitosamente", TypeMessages.SUCCESS);
+        MessagesManager.sendTitle(player,Message.COMMAND_LOGIN_SUCCESSFUL_TITLE.getMessage(),
+                String.format(Message.COMMAND_LOGIN_SUCCESSFUL_SUBTITLE.getMessage(), player.getDisplayName()),
+                20, 20*3, 40, TypeMessages.INFO);
+        sendMessage(player, Message.COMMAND_LOGIN_SUCCESSFUL_CHAT.getMessage(), TypeMessages.SUCCESS);
     }
 
     private void fail(Player player) {
         int i = attempts.getOrDefault(player.getUniqueId(), 0);
         attempts.put(player.getUniqueId(), ++i);
         if (i >= 5) AviaTerraCore.getInstance().enqueueTaskAsynchronously(() -> ModerationSection.getBanManager().banPlayer(player,
-                "Por su seguridad esta cuenta esta suspendido temporalmente por mucho intentos fallidos",
+                Message.COMMAND_LOGIN_BANNED.getMessage(),
                 1000*60*5,
                 ContextBan.GLOBAL,
                 "Servidor"));
-        GlobalUtils.kickPlayer(player, "contraseña incorrecta o código incorrecto, vuele a intentarlo. " +
-                "Si no se acuerda de su contraseña y tiene un corro o un discord vinculado puede" +
-                "puede enviar un código de verificación usando <|/link <discord | gmail>|>");
+        GlobalUtils.kickPlayer(player, Message.COMMAND_LOGIN_NO_EQUAL_PASSWORD.getMessage());
     }
 
     public static boolean isUUID(String str) {
