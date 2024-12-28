@@ -12,6 +12,7 @@ import net.atcore.messages.TypeMessages;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -26,6 +27,7 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
+@SuppressWarnings("unused")
 @UtilityClass//Le añade static a todos los métodos y a las variables
 public final class GlobalUtils {
 
@@ -44,8 +46,10 @@ public final class GlobalUtils {
      * @param in el formato del texto que usa minecraft por ejemplo la {@code l} da negrilla o
      *           la {@code o} pone el texto en cursiva
      * @return te da el texto con los degradados y formato
+     * @deprecated Mejor usar {@link Gradient}
      */
 
+    @Deprecated
     @Contract(pure = true)
     public @NotNull String applyGradient(@NotNull String input, char in) {
         if (input.contains("</#"))input = input.replace("/","");
@@ -154,8 +158,13 @@ public final class GlobalUtils {
     }
 
     /**
-     * Añade una protección anti dupe básicamente se le asigna una uuid al item esto
-     * hace que el item no se pueda estakear y si lo se pone en 1
+     * Añade una protección anti dupe.
+     * <ul>
+     * Añade una persisten Data que contiene un {@code ?} indicando que el item está a la
+     * espera de la asignación de la UUID, hasta entonces el item se puede duplicar pero
+     * cuando {@link net.atcore.moderation.ban.CheckAutoBan#checkDupe(Player, Inventory) checkDupe()}
+     * lo llaman le asigna una UUID única para que este no se pueda duplicar
+     *
      * @param item el item que le quieres aplicar la protección
      */
 
@@ -164,19 +173,20 @@ public final class GlobalUtils {
         if (meta == null) return;
         meta.getPersistentDataContainer().set(KEY_ANTI_DUPE, PersistentDataType.STRING, "?");
         item.setItemMeta(meta);
-        item.setAmount(1);//se pone uno por qué si el jugador lo divide va a ser baneado accidentalmente
+        item.setAmount(1);// Se pone uno, por qué si el jugador lo divide va a ser baneado accidentalmente
     }
 
     /**
      * Añade variable a items, las variables que se manejan son de {@code PersistentDataType}
-     * Se tiene que usar en antes o después de asignar el item meta si no se guardara
+     * <ul>
+     * <Strong>Se tiene que usar en antes o después de asignar el item meta si no se sobreescribirá</Strong>
      * @param itemStack el item que quieres añadir
      * @param nameKey nombre de la variable
      * @param type el tipo de la variable
      * @param data la variable
      */
 
-    @SuppressWarnings("rawtypes")
+    @SuppressWarnings({"rawtypes", "unchecked"})
     public void setPersistentData(@NotNull ItemStack itemStack, String nameKey, PersistentDataType type, Object data){
         ItemMeta meta = itemStack.getItemMeta();
         if (meta == null) return;
@@ -186,7 +196,7 @@ public final class GlobalUtils {
     }
 
     @Contract(pure = true)
-    @SuppressWarnings("rawtypes")
+    @SuppressWarnings({"rawtypes", "unchecked"})
     public Object getPersistenData(@NotNull ItemStack item, String nameKey, PersistentDataType type){
         ItemMeta meta = item.getItemMeta();
         assert meta != null;
@@ -202,7 +212,6 @@ public final class GlobalUtils {
     public static void removePersistenData(@NotNull ItemStack item, String nameKey){
         ItemMeta meta = item.getItemMeta();
         assert meta != null;
-        PersistentDataContainer dataContainer = meta.getPersistentDataContainer();
         NamespacedKey key = new NamespacedKey(AviaTerraCore.getInstance(), nameKey);
         meta.getPersistentDataContainer().remove(key);
     }
@@ -265,16 +274,46 @@ public final class GlobalUtils {
     }
 
     /**
-     * De la variable {@code Color} de bukkit lo convierte en el
-     * clasico formato hex, así {@code #FFEEDD}
+     * De la variable {@link Color} de bukkit lo convierte en el
+     * clasico formato hex, así {@code #AABBCC}
      */
 
+    @SuppressWarnings("DuplicatedCode") // Es curioso que tenga que poner esto
     @Contract(pure = true)
-    public String colorToStringHex(Color color) {
-        String r = color.getRed() > 9 ?  Integer.toString(color.getRed(), 16) : "0" + Integer.toString(color.getRed(), 16);
-        String g = color.getGreen() > 9 ?  Integer.toString(color.getGreen(), 16) : "0" + Integer.toString(color.getGreen(), 16);
-        String B = color.getBlue() > 9 ?  Integer.toString(color.getBlue(), 16) : "0" + Integer.toString(color.getBlue(), 16);
+    public String BukkitColorToStringHex(Color color) {
+        String r = addZeros(Integer.toString(color.getRed(), 16));
+        String g = addZeros(Integer.toString(color.getGreen(), 16));
+        String B = addZeros(Integer.toString(color.getBlue(), 16));
         return "#" + r + g + B;
+    }
+
+    /**
+     * De la variable {@link java.awt.Color Color} de java lo convierte en el
+     * clasico formato hex, así {@code #AABBCC}
+     */
+
+    @SuppressWarnings("DuplicatedCode")
+    @Contract(pure = true)
+    public String javaColorToStringHex(java.awt.Color color) {
+        String r = addZeros(Integer.toString(color.getRed(), 16));
+        String g = addZeros(Integer.toString(color.getGreen(), 16));
+        String B = addZeros(Integer.toString(color.getBlue(), 16));
+        return "#" + r + g + B;
+    }
+
+    @Contract(pure = true)
+    private String addZeros(String s){
+        switch (s.length()){
+            case 0 -> {
+                return "00";
+            }
+            case 1 -> {
+                return "0" + s;
+            }
+            default -> {
+                return s;
+            }
+        }
     }
 
     public static @NotNull ArrayList<String> StringToLoreString(@NotNull String texto, boolean space) {
@@ -291,8 +330,7 @@ public final class GlobalUtils {
 
     /**
      * Crea un lore a partir de un texto sin salto de línea esto es por qué minecraft el lore se ase con un {@code ArrayList<String>}
-     * donde cada String es una liena es decir tiene dos String en la List solo se muestra dos líneas en el item para crear un cuerpo
-     * de un texto con el salto de liena cuando le corresponde se usa esto.
+     * donde cada String es una liena es decir si tiene dos String en una List solo se muestra dos líneas en el item.
      * @param texto el texto que se va a transformar
      * @param longitud cada cuantas letras tiene que hacer el salto de linéa. Si usa {@code \n} crear un salo de linéa
      *                 sin importar si á llegado a la cantidad de letras
@@ -333,7 +371,9 @@ public final class GlobalUtils {
 
     /**
      * Para buscar un jugador de manera segura sin que bukkit esté jodiendo con el {@code @Nullable}
-     * usar solo cuando el jugador no debería dar nulo. No usar para comando o parecidos
+     * usar solo cuando el jugador no debería dar nulo.
+     * <ul>
+     * <strong>No usar para comando o donde el nombre del jugador puede ser incorrecto</strong>
      * @param uuid la uuid del jugador
      * @return regresa el jugador con un 100% de probabilidades de que no sea nulo
      */
@@ -342,7 +382,7 @@ public final class GlobalUtils {
     public @NotNull Player getPlayer(UUID uuid){
         Player player = Bukkit.getPlayer(uuid);
         if (player != null) return player;
-        throw new IllegalArgumentException("Dio nulo cuando no debería  " + uuid);
+        throw new IllegalArgumentException("Un jugador dio nulo cuando no debería: " + uuid);
     }
 
     /**
@@ -352,7 +392,7 @@ public final class GlobalUtils {
     public @NotNull Player getPlayer(String name){
         Player player = Bukkit.getPlayer(name);
         if (player != null) return player;
-        throw new IllegalArgumentException("Dio nulo cuando no debería  " + name);
+        throw new IllegalArgumentException("Un jugador dio nulo cuando no debería: " + name);
     }
 
     public boolean equalIp(@Nullable InetAddress ipA, @Nullable InetAddress ipB){
@@ -361,17 +401,18 @@ public final class GlobalUtils {
     }
 
     /**
-     * Modifica los colores hex usando hls para que sea más fácil de modificar. Los
-     * parametros del hls son diferencia entre si es decir si no lo quieres modificar
+     * Modifica los colores hex usando HLS para que sea más fácil de modificar. Los
+     * parámetros del HLS son "diferencias" es decir si no lo quieres modificar
      * usa el 0
-     * @param hexColor El hex
+     * @param hexColor El HEX
      * @param hueDelta se maneja -1 a 1
      * @param lightnessDelta se maneja -1 a 1
      * @param saturationDelta se maneja -1 a 1
-     * @return el hex con las modificaciones
+     * @return El hex con las modificaciones
      */
 
-    public static @NotNull String modifyColorHexWithHLS(@NotNull String hexColor, float hueDelta, float lightnessDelta, float saturationDelta) {
+    @NotNull
+    public static String modifyColorHexWithHLS(@NotNull String hexColor, float hueDelta, float lightnessDelta, float saturationDelta) {
         if(hexColor.startsWith("#")){
             hexColor = hexColor.substring(1);
         }

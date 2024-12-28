@@ -23,7 +23,7 @@ import static net.atcore.messages.MessagesManager.*;
 import static org.bukkit.Bukkit.getServer;
 
 /**
- * Esta es una clase que se dedica a registrar e inicializar Los listener o comando u otras cosas
+ * Esta es una clase que se dedica a registrar e inicializar los listener o comando u otras cosas
  */
 @UtilityClass
 public class RegisterManager {

@@ -2,8 +2,6 @@ package net.atcore.armament;
 
 import lombok.Getter;
 import lombok.Setter;
-import net.atcore.AviaTerraCore;
-import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.MessagesManager;
 import net.atcore.utils.GlobalUtils;
 import net.md_5.bungee.api.ChatColor;
@@ -11,8 +9,6 @@ import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.scheduler.BukkitRunnable;
 
 @Getter
 @Setter
@@ -56,7 +52,7 @@ public abstract class BaseAmmo extends BaseArmament {
                                     Color: <|%s|>
                                     Densidad del trazo: <|%s|>
                                     """,
-                ChatColor.of(GlobalUtils.colorToStringHex(color)) + GlobalUtils.colorToStringHex(color),
+                ChatColor.of(GlobalUtils.BukkitColorToStringHex(color)) + GlobalUtils.BukkitColorToStringHex(color),
                 densityTrace
         ));
         return properties.toString();

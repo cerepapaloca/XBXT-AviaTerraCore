@@ -15,10 +15,14 @@ import org.jetbrains.annotations.Contract;
 import java.util.HashMap;
 import java.util.UUID;
 
+/**
+ * Se encarga de guardar variable y funciones donde implique a un jugador específico.
+ * Para más orden se usa {@link ArmamentPlayer} y {@link ModerationPlayer}
+ */
+
 @Getter
 @Setter
 public class AviaTerraPlayer {
-
     public AviaTerraPlayer(Player player) {
         this.uuid = player.getUniqueId();
         User user = AviaTerraCore.getLp().getUserManager().getUser(player.getUniqueId());

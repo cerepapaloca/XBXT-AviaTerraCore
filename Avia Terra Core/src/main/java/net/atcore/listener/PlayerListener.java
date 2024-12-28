@@ -128,9 +128,9 @@ public class PlayerListener implements Listener {
             player.playSound(player, Sound.ENTITY_PLAYER_LEVELUP, 0.8F, 1);
             RangeType rangeType = RangeType.valueOf(range.toUpperCase());
             MessagesManager.sendTitle(player,"Nuevo Rango", GlobalUtils.applyGradient(
-                    "<" + GlobalUtils.modifyColorHexWithHLS(GlobalUtils.colorToStringHex(rangeType.getColor()), 0f, 0.3f, -0.1f) + ">" +
+                    "<" + GlobalUtils.modifyColorHexWithHLS(GlobalUtils.BukkitColorToStringHex(rangeType.getColor()), 0f, 0.3f, -0.1f) + ">" +
                             rangeType.getDisplayName() +
-                            "<" + GlobalUtils.modifyColorHexWithHLS(GlobalUtils.colorToStringHex(rangeType.getColor()), 0, -0.2f, 0.1f) + ">",
+                            "<" + GlobalUtils.modifyColorHexWithHLS(GlobalUtils.BukkitColorToStringHex(rangeType.getColor()), 0, -0.2f, 0.1f) + ">",
                     'l'
             ), 20, 60, 40, TypeMessages.INFO);
 

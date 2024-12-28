@@ -6,12 +6,14 @@ import net.atcore.command.CommandSection;
 import net.atcore.data.DataSection;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.MessageSection;
+import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import net.atcore.listener.ListenerManagerSection;
 import net.atcore.security.Login.DataLogin;
 import net.atcore.security.Login.LoginManager;
 import net.atcore.security.SecuritySection;
 import net.atcore.utils.GlobalUtils;
+import net.atcore.utils.Gradient;
 import net.atcore.utils.RegisterManager;
 import net.atcore.moderation.ModerationSection;
 import net.dv8tion.jda.api.JDA;
@@ -20,6 +22,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.awt.*;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -50,7 +53,7 @@ public final class AviaTerraCore extends JavaPlugin {
         sendMessageConsole("AviaTerra Iniciando...", TypeMessages.SUCCESS, CategoryMessages.PRIVATE, false);
         isStarting = true;
         workerThread = new Thread(this::processQueue);
-        workerThread.setName("AviaTerra WorkerThread");
+        workerThread.setName("AviaTerraCore WorkerThread");
         workerThread.start();
         RegisteredServiceProvider<LuckPerms> provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
         if (provider != null) {
@@ -86,9 +89,8 @@ public final class AviaTerraCore extends JavaPlugin {
             }
             GlobalUtils.kickPlayer(player, "El servidor va a cerrar, volveremos pronto...");
         });
-        //jda.shutdown();
-        //disableModules();
-        sendMessageConsole("AviaTerra Se fue a mimir.", TypeMessages.SUCCESS, CategoryMessages.PRIVATE, false);
+        jda.shutdown();
+        sendMessageConsole("AviaTerra Apagada", TypeMessages.SUCCESS, CategoryMessages.PRIVATE, false);
     }
 
     @Override

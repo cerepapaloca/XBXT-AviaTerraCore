@@ -57,9 +57,9 @@ public class AddRangeCommand extends BaseTabCommand {
                     assert meta != null;
                     //meta.setDisplayName(GlobalUtils.applyGradient("<#f0f0f0>asdas<#404040>"));
                     String displayName = GlobalUtils.applyGradient(
-                                    "<" + GlobalUtils.modifyColorHexWithHLS(GlobalUtils.colorToStringHex(range.getColor()), 0f, 0.35f, -0.f) + ">" +
+                                    "<" + GlobalUtils.modifyColorHexWithHLS(GlobalUtils.BukkitColorToStringHex(range.getColor()), 0f, 0.35f, -0.f) + ">" +
                                             String.format(Message.COMMAND_ADD_RANGE_NAME.getMessage(), range.getDisplayName(), GlobalUtils.timeToString(time, 2) ) +
-                                            "<" + GlobalUtils.modifyColorHexWithHLS(GlobalUtils.colorToStringHex(range.getColor()), 0f, -0.2f, 0.1f) + ">");
+                                            "<" + GlobalUtils.modifyColorHexWithHLS(GlobalUtils.BukkitColorToStringHex(range.getColor()), 0f, -0.2f, 0.1f) + ">");
                     meta.setDisplayName(displayName);
                     item.setItemMeta(meta);
                     if(args.length == 2){

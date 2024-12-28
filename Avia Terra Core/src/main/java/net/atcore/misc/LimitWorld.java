@@ -18,6 +18,7 @@ public class LimitWorld {
     }
 
     private static void checkX(Player player, int limit) {
+        if (player.isOp()) return;
         boolean b;
         if (limit > 0){
             b = player.getLocation().getX() > limit;
@@ -37,6 +38,7 @@ public class LimitWorld {
     }
 
     private static void checkZ(Player player, int limit) {
+        if (player.isOp()) return;
         boolean b;
         if (limit > 0) {
             b = player.getLocation().getZ() > limit;

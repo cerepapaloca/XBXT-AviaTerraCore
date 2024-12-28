@@ -1,6 +1,5 @@
 package net.atcore.aviaterraplayer;
 
-import com.comphenix.protocol.scheduler.Task;
 import lombok.Getter;
 import lombok.Setter;
 import me.neznamy.tab.api.TabAPI;
@@ -13,8 +12,6 @@ import net.atcore.armament.ArmamentUtils;
 import net.atcore.armament.BaseWeapon;
 import net.atcore.armament.BaseWeaponUltraKill;
 import net.atcore.armament.Compartment;
-import net.atcore.messages.MessagesManager;
-import net.atcore.messages.TypeMessages;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
