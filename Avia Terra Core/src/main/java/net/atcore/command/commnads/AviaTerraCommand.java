@@ -39,14 +39,14 @@ public class AviaTerraCommand extends BaseTabCommand {
                         });
                         case "sql" -> AviaTerraCore.getInstance().enqueueTaskAsynchronously(() -> {
                             sendMessage(sender, "Comenzando con la recarga de las bases de datos...", TypeMessages.INFO);
-                            for (DataBaseMySql dataBaseMySql : DataSection.getDataBases()) dataBaseMySql.reloadDatabase();
+                            for (DataBaseMySql dataBaseMySql : DataSection.getDataBases()) dataBaseMySql.reload();
                             sendMessage(sender, "Base de datos sql recargado exitosamente", TypeMessages.SUCCESS);
                         });
                     }
 
                 }else{
                     for (Section section : RegisterManager.sections){
-                        section.reloadConfig();
+                        section.reload();
                     }
                 }
             }

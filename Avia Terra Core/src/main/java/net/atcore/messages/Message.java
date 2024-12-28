@@ -18,6 +18,7 @@ public enum Message {
     LOGIN_KICK_PASSWORD_ERROR("login", "Hubo un error al guardar tu contraseña, por favor vuelve a entrar"),
     LOGIN_KICK_ADDRESS_ERROR("login", "Hubo un error al guardar tus datos, por favor vuelve a entrar"),
     LOGIN_KICK_REGISTER_ERROR("login", "Hubo un problema con tu registro, vuelve a registrarte"),
+    LOGIN_KICK_SESSION_ERROR("login", "Hubo un problema con tu sesión, vuelve a sesión"),
     LOGIN_KICK_KEY_ERROR("login", "Hubo problema con tu llave secreta vuelve a entrar al servidor. Si el problema persiste reinicie su launcher"),
     LOGIN_KICK_ONLINE_MODE("login", "El servidor entro en modo online"),
     LOGIN_KICK_UNKNOWN_STATE("login", "Vuelve a entrar, Hubo un problema con tu cuenta"),
@@ -71,6 +72,7 @@ public enum Message {
     COMMAND_GENERIC_FORMAT_DATE_ERROR("command", "EL formato de fecha es incorrecto"),
     COMMAND_GENERIC_NO_PLAYER("command", "Este comando solo lo puede ejecutar un jugador"),
     COMMAND_GENERIC_PLAYER_NOT_FOUND("command", "El jugador no existe o esta desconectado"),
+    COMMAND_GENERIC_PLAYERS_NOT_FOUND("command", "El jugador/es <|%s|> no esta conectado o no existe"),
     COMMAND_ADD_RANGE_NOT_FOUND_RANGE("command.add-range", "El rango no existe"),
     COMMAND_ADD_RANGE_SUCCESSFUL("command.add-range", "El item se le dio exitosamente"),
     COMMAND_ADD_RANGE_NAME("command.add-range", "Rango %1$s por %2$s"),
@@ -139,7 +141,11 @@ public enum Message {
     COMMAND_SEE_INVENTORY_ERROR("command.see-inventory", "No puedes ver el inventarió de otro jugador que también este mirando un inventarió"),
     COMMAND_SEE_INVENTORY_MISSING_ARGS("command.see-inventory", "tiene que tener el nombre del jugador"),
     COMMAND_UNBAN_NOT_FOUND_CONTEXT("command.unban", "contexto no valido"),
-    COMMAND_UNBAN_SUCCESSFUL("command.unban", "El jugador va ser desbaneado mira la los logs para confirmar")
+    COMMAND_UNBAN_SUCCESSFUL("command.unban", "El jugador va ser desbaneado mira la los logs para confirmar"),
+    COMMAND_WEAPON_MISSING_ARGS_NAME("command.weapon", "Falta el nombre del armamento"),
+    COMMAND_WEAPON_MISSING_ARGS_TYPE("command.weapon", "El tipo de armamento no existe"),
+    COMMAND_WEAPON_SUCCESSFUL("command.weapon", "Se dio el armamento de manera exitosa"),
+    COMMAND_WEAPON_NOT_FOUND_TYPE("command.weapon", "El tipo de armamento no existe"),
     ;
     Message(String parent, String message) {
         this.parent = parent;

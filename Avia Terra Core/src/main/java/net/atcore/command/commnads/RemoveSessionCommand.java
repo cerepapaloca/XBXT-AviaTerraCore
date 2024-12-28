@@ -29,7 +29,7 @@ public class RemoveSessionCommand extends BaseCommand {
                 LoginManager.getDataLogin(dataTemporalPlayer.player()).setSession(null);
                 //GlobalUtils.kickPlayer(dataTemporalPlayer.player(), "Vuelve a iniciar sesión");
             });
-            sendMessage(sender, Message.COMMAND_REMOVE_SESSION_SUCCESSFUL.getMessage(), TypeMessages.SUCCESS);
+            sendMessage(sender, Message.COMMAND_REMOVE_SESSION_SUCCESSFUL, TypeMessages.SUCCESS);
         }else{
             sendMessage(sender, this.getUsage(), TypeMessages.ERROR);
         }

@@ -33,6 +33,10 @@ public final class MessagesManager {
     ///////////////////////////
     ///////////////////////////
 
+    public static void sendMessage(CommandSender sender, Message message,@Nullable TypeMessages type) {
+        sendMessage(sender, message.getMessage(), type, CategoryMessages.PRIVATE, true);
+    }
+
     public static void sendMessage(CommandSender sender, String message,@Nullable TypeMessages type) {
         sendMessage(sender, message, type, CategoryMessages.PRIVATE, true);
     }

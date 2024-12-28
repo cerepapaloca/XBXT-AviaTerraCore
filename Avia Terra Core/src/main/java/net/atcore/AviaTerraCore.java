@@ -13,7 +13,6 @@ import net.atcore.security.Login.DataLogin;
 import net.atcore.security.Login.LoginManager;
 import net.atcore.security.SecuritySection;
 import net.atcore.utils.GlobalUtils;
-import net.atcore.utils.Gradient;
 import net.atcore.utils.RegisterManager;
 import net.atcore.moderation.ModerationSection;
 import net.dv8tion.jda.api.JDA;
@@ -22,7 +21,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.awt.*;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -96,7 +94,7 @@ public final class AviaTerraCore extends JavaPlugin {
     @Override
     public void reloadConfig(){
         for (Section section : RegisterManager.sections){
-            section.reloadConfig();
+            section.reload();
         }
     }
 
@@ -120,7 +118,9 @@ public final class AviaTerraCore extends JavaPlugin {
      */
 
     public void enqueueTaskAsynchronously(Runnable task) {
-        taskQueue.offer(task);
+        if (!taskQueue.offer(task)){
+            MessagesManager.sendMessageConsole("Error al añadir una tarea la cola", TypeMessages.ERROR);
+        }
     }
 
     private void processQueue() {

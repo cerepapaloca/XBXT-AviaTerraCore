@@ -42,7 +42,7 @@ public class LoginCommand extends BaseCommand {
                     if (isUUID(args[0])){
                         if (TwoFactorAuth.checkCode(player, args[0])) {
                             if (LoginManager.checkLoginIn(player)) {
-                                sendMessage(player, Message.COMMAND_LOGIN_ALREADY.getMessage(), TypeMessages.ERROR);
+                                sendMessage(player, Message.COMMAND_LOGIN_ALREADY, TypeMessages.ERROR);
                                 return;
                             }
                             startPlay(player);
@@ -52,7 +52,7 @@ public class LoginCommand extends BaseCommand {
                     }else {
                         if (LoginManager.isEqualPassword(player.getName(), args[0])){
                             if (LoginManager.checkLoginIn(player)) {
-                                sendMessage(player, Message.COMMAND_LOGIN_ALREADY.getMessage(), TypeMessages.ERROR);
+                                sendMessage(player, Message.COMMAND_LOGIN_ALREADY, TypeMessages.ERROR);
                                 return;
                             }
                             startPlay(player);
@@ -61,10 +61,10 @@ public class LoginCommand extends BaseCommand {
                         }
                     }
                 }else {
-                    sendMessage(player, Message.COMMAND_LOGIN_NO_REGISTER.getMessage(), TypeMessages.ERROR);
+                    sendMessage(player, Message.COMMAND_LOGIN_NO_REGISTER, TypeMessages.ERROR);
                 }
             }else {
-                sendMessage(player, Message.COMMAND_LOGIN_MISSING_ARGS.getMessage(), TypeMessages.ERROR);
+                sendMessage(player, Message.COMMAND_LOGIN_MISSING_ARGS, TypeMessages.ERROR);
             }
         }
     }
@@ -77,7 +77,7 @@ public class LoginCommand extends BaseCommand {
         MessagesManager.sendTitle(player,Message.COMMAND_LOGIN_SUCCESSFUL_TITLE.getMessage(),
                 String.format(Message.COMMAND_LOGIN_SUCCESSFUL_SUBTITLE.getMessage(), player.getDisplayName()),
                 20, 20*3, 40, TypeMessages.INFO);
-        sendMessage(player, Message.COMMAND_LOGIN_SUCCESSFUL_CHAT.getMessage(), TypeMessages.SUCCESS);
+        sendMessage(player, Message.COMMAND_LOGIN_SUCCESSFUL_CHAT, TypeMessages.SUCCESS);
     }
 
     private void fail(Player player) {

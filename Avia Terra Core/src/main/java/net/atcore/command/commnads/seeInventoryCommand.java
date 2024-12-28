@@ -38,16 +38,16 @@ public class seeInventoryCommand extends BaseCommand {
                         atp2.setInventorySection(InventorySection.MANIPULATED);
                         atp2.getModerationPlayer().getManipulatorInventoryPlayer().add(player.getUniqueId());
                     }else {
-                        sendMessage(sender, Message.COMMAND_SEE_INVENTORY_ERROR.getMessage(), TypeMessages.ERROR);
+                        sendMessage(sender, Message.COMMAND_SEE_INVENTORY_ERROR, TypeMessages.ERROR);
                     }
                 }else{
-                    sendMessage(sender, Message.COMMAND_GENERIC_PLAYER_NOT_FOUND.getMessage(), TypeMessages.ERROR);
+                    sendMessage(sender, Message.COMMAND_GENERIC_PLAYER_NOT_FOUND, TypeMessages.ERROR);
                 }
             }else {
-                sendMessage(sender, Message.COMMAND_SEE_INVENTORY_MISSING_ARGS.getMessage(), TypeMessages.ERROR);
+                sendMessage(sender, Message.COMMAND_SEE_INVENTORY_MISSING_ARGS, TypeMessages.ERROR);
             }
         }else{
-            sendMessage(sender, Message.COMMAND_GENERIC_NO_PLAYER.getMessage(), TypeMessages.ERROR);
+            sendMessage(sender, Message.COMMAND_GENERIC_NO_PLAYER, TypeMessages.ERROR);
         }
     }
 }

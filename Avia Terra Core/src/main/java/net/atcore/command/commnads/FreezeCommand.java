@@ -30,7 +30,7 @@ public class FreezeCommand extends BaseTabCommand {
             return;
         }
         if (args.length == 1) {
-            sendMessage(sender, Message.COMMAND_FREEZE_MISSING_ARGS_LAST.getMessage(), TypeMessages.ERROR);
+            sendMessage(sender, Message.COMMAND_FREEZE_MISSING_ARGS_LAST, TypeMessages.ERROR);
             return;
         }
         CommandUtils.executeForPlayer(sender, args[0], true, dataTemporalPlayer -> {
@@ -39,13 +39,13 @@ public class FreezeCommand extends BaseTabCommand {
             switch (args[1].toLowerCase()){
                 case "true" -> {
                     if (moderationPlayer.isFreeze()) {
-                        sendMessage(sender, Message.COMMAND_FREEZE_ALREADY_FREEZE.getMessage(), TypeMessages.ERROR);
+                        sendMessage(sender, Message.COMMAND_FREEZE_ALREADY_FREEZE, TypeMessages.ERROR);
                     }else {
                         moderationPlayer.setFreeze(true);
                         player.closeInventory();
                         player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, Integer.MAX_VALUE, 1));
-                        sendMessage(player, Message.COMMAND_FREEZE_FREEZE_TARGET.getMessage(), TypeMessages.INFO);
-                        sendMessage(sender, Message.COMMAND_FREEZE_FREEZE_AUTHOR.getMessage(), TypeMessages.SUCCESS);
+                        sendMessage(player, Message.COMMAND_FREEZE_FREEZE_TARGET, TypeMessages.INFO);
+                        sendMessage(sender, Message.COMMAND_FREEZE_FREEZE_AUTHOR, TypeMessages.SUCCESS);
                     }
 
                 }
@@ -53,10 +53,10 @@ public class FreezeCommand extends BaseTabCommand {
                     if (moderationPlayer.isFreeze()) {
                         moderationPlayer.setFreeze(false);
                         player.removePotionEffect(PotionEffectType.BLINDNESS);
-                        sendMessage(sender, Message.COMMAND_FREEZE_UNFREEZE_AUTHOR.getMessage(), TypeMessages.SUCCESS);
-                        sendMessage(player, Message.COMMAND_FREEZE_UNFREEZE_TARGET.getMessage(), TypeMessages.INFO);
+                        sendMessage(sender, Message.COMMAND_FREEZE_UNFREEZE_AUTHOR, TypeMessages.SUCCESS);
+                        sendMessage(player, Message.COMMAND_FREEZE_UNFREEZE_TARGET, TypeMessages.INFO);
                     }else{
-                        sendMessage(sender, Message.COMMAND_FREEZE_ALREADY_UNFREEZE.getMessage(), TypeMessages.ERROR);
+                        sendMessage(sender, Message.COMMAND_FREEZE_ALREADY_UNFREEZE, TypeMessages.ERROR);
                     }
                 }
             }

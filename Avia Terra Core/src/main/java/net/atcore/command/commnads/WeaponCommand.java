@@ -3,6 +3,7 @@ package net.atcore.command.commnads;
 import net.atcore.armament.*;
 import net.atcore.command.BaseTabCommand;
 import net.atcore.command.CommandUtils;
+import net.atcore.messages.Message;
 import net.atcore.messages.TypeMessages;
 import net.atcore.utils.GlobalUtils;
 import net.atcore.utils.ModeTab;
@@ -26,13 +27,13 @@ public class WeaponCommand extends BaseTabCommand {
     public void execute(CommandSender sender, String[] args) {
         switch (args.length) {
             case 0, 1 -> sendMessage(sender, this.getUsage(), TypeMessages.ERROR);
-            case 2 -> sendMessage(sender, "Falta el nombre del armamento", TypeMessages.ERROR);
+            case 2 -> sendMessage(sender, Message.COMMAND_WEAPON_MISSING_ARGS_NAME, TypeMessages.ERROR);
             default -> {
                 TypeArmament typeArmament;
                 try {
                     typeArmament = TypeArmament.valueOf(args[1].toUpperCase());
                 }catch (Exception e) {
-                    sendMessage(sender, "El tipo de armamento no existe", TypeMessages.ERROR);
+                    sendMessage(sender, Message.COMMAND_WEAPON_MISSING_ARGS_TYPE, TypeMessages.ERROR);
                     return;
                 }
                 BaseArmament baseArmament;
@@ -54,9 +55,9 @@ public class WeaponCommand extends BaseTabCommand {
                                 GlobalUtils.addItemPlayer(baseArmament.getItemArmament(), dataTemporalPlayer.player(),
                                         true, typeArmament != TypeArmament.AMMO));
                     }
-                    sendMessage(sender, "Se dio el armamento de manera exitosa", TypeMessages.SUCCESS);
+                    sendMessage(sender, Message.COMMAND_WEAPON_SUCCESSFUL, TypeMessages.SUCCESS);
                 }else{
-                    sendMessage(sender, "El tipo de armamento no existe", TypeMessages.ERROR);
+                    sendMessage(sender, Message.COMMAND_WEAPON_NOT_FOUND_TYPE, TypeMessages.ERROR);
                 }
             }
         }

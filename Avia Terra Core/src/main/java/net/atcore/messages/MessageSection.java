@@ -17,7 +17,7 @@ public class MessageSection implements Section {
     }
 
     @Override
-    public void reloadConfig() {
+    public void reload() {
         ConsoleDiscord.handler.shutdown();
         ConsoleDiscord.startConsoleAndBot();
     }

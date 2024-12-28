@@ -41,11 +41,11 @@ public class ChangePasswordCommand extends BaseTabCommand {
                     if (LoginManager.isEqualPassword(player.getName(), args[0])){
                         onChange(player, password, "contraseña");
                     }else{
-                        sendMessage(sender, Message.COMMAND_CHANGE_PASSWORD_NOT_EQUAL_PASSWORD.getMessage(), TypeMessages.ERROR);
+                        sendMessage(sender, Message.COMMAND_CHANGE_PASSWORD_NOT_EQUAL_PASSWORD, TypeMessages.ERROR);
                     }
                 }
             }else{
-                sendMessage(sender, Message.COMMAND_GENERIC_NO_PLAYER.getMessage(), TypeMessages.ERROR);
+                sendMessage(sender, Message.COMMAND_GENERIC_NO_PLAYER, TypeMessages.ERROR);
             }
         }else{
             sendMessage(sender, this.getUsage(), TypeMessages.ERROR);
@@ -56,9 +56,9 @@ public class ChangePasswordCommand extends BaseTabCommand {
         LoginManager.getDataLogin(player).getRegister().setPasswordShaded(password);
         AviaTerraCore.getInstance().enqueueTaskAsynchronously(() -> {
             if (DataBaseRegister.updatePassword(player.getName(), password)){
-                sendMessage(player, Message.COMMAND_CHANGE_PASSWORD_SUCCESSFUL.getMessage(), TypeMessages.SUCCESS);
+                sendMessage(player, Message.COMMAND_CHANGE_PASSWORD_SUCCESSFUL, TypeMessages.SUCCESS);
             }else {
-                sendMessage(player, Message.COMMAND_CHANGE_PASSWORD_ERROR.getMessage(), TypeMessages.ERROR);
+                sendMessage(player, Message.COMMAND_CHANGE_PASSWORD_ERROR, TypeMessages.ERROR);
             }
         });
 

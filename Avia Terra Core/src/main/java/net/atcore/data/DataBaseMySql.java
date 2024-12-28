@@ -1,6 +1,7 @@
 package net.atcore.data;
 
 import net.atcore.AviaTerraCore;
+import net.atcore.Reloadable;
 import org.bukkit.Bukkit;
 
 import java.sql.Connection;
@@ -12,7 +13,7 @@ import static net.atcore.messages.MessagesManager.sendMessageConsole;
 
 import net.atcore.messages.TypeMessages;
 
-public abstract class DataBaseMySql {
+public abstract class DataBaseMySql implements Reloadable {
     private static Connection connection;
 
     private static final String HOST = "localhost";// 147.185.221.20 localhost
@@ -76,8 +77,6 @@ public abstract class DataBaseMySql {
         }
         return connection;
     }
-
-    public abstract void reloadDatabase();
 
     protected abstract void createTable();
 

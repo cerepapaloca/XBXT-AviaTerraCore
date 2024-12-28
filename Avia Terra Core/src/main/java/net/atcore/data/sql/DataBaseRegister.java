@@ -21,10 +21,9 @@ import static net.atcore.messages.MessagesManager.sendMessageConsole;
 
 public class DataBaseRegister extends DataBaseMySql {
     @Override
-    public void reloadDatabase() {
+    public void reload() {
         String sql = "SELECT name, uuidPremium, uuidCracked, ipRegister, ipLogin, isPremium, password, lastLoginDate, registerDate, gmail, discord FROM register";
         HashMap<UUID, DataSession> sessions = new HashMap<>();
-
 
         try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(sql);
@@ -58,18 +57,18 @@ public class DataBaseRegister extends DataBaseMySql {
                 dataRegister.setDiscord(discord);
 
                 DataLogin dataLogin = LoginManager.addDataLogin(name, dataRegister);
-                DataSession session = sessions.get(uuid);//Se obtiene las sesiones rescatas
+                DataSession session = sessions.get(uuid);// Se obtiene las sesiones para que no se tenga que loguear de nuevo
                 Player player = Bukkit.getPlayer(uuid);
 
                 if (session == null || player == null) continue;
 
-                //se modifica los datos de la session
+                // Se modifica los datos de la session
                 session.setAddress(InetAddress.getByName(ipLogin));
                 session.setStartTimeLogin(lastLoginDate);
-                dataLogin.setSession(session);//añade la sesión rescatada
+                dataLogin.setSession(session);// añade la sesión rescatada
 
-                if (!LoginManager.checkLoginIn(player)){//revisa si son validas las sesiones
-                    Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> GlobalUtils.kickPlayer(player, "Hay una discrepancia es tu session, vuelve a iniciar sessión"));
+                if (!LoginManager.checkLoginIn(player)){// Revisa si son validas las sesiones
+                    GlobalUtils.synchronizeKickPlayer(player, Message.LOGIN_KICK_SESSION_ERROR.getMessage());
                 }
             }
             sessions.clear();
@@ -88,7 +87,7 @@ public class DataBaseRegister extends DataBaseMySql {
             DatabaseMetaData dbMetaData = connection.getMetaData();
             try (ResultSet resultSet = dbMetaData.getTables(null, null, "register", null)) {
                 if (resultSet.next()){
-                    reloadDatabase();
+                    reload();
                     sendMessageConsole("DataBase Registro " + TypeMessages.SUCCESS.getMainColor() + "Ok", TypeMessages.INFO, false);
                     return;
                 }
@@ -114,7 +113,7 @@ public class DataBaseRegister extends DataBaseMySql {
         try (Connection connection = getConnection();
              Statement statement = connection.createStatement()) {
             statement.executeUpdate(createTableSQL);
-            reloadDatabase();
+            reload();
             sendMessageConsole("DataBase Registro " + TypeMessages.SUCCESS.getMainColor()  + "Creada", TypeMessages.INFO, false);
         } catch (SQLException e) {
             throw new RuntimeException(e);

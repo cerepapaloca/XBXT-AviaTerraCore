@@ -4,17 +4,13 @@ import net.atcore.AviaTerraCore;
 import net.atcore.data.DataBaseMySql;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.Message;
-import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import net.atcore.moderation.ban.ContextBan;
 import net.atcore.moderation.ban.DataBan;
-import net.atcore.moderation.ban.SearchBanBy;
 import net.atcore.security.Login.DataLogin;
 import net.atcore.security.Login.LoginManager;
 import net.atcore.utils.GlobalConstantes;
 import net.atcore.utils.GlobalUtils;
-import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.net.InetAddress;
@@ -39,7 +35,7 @@ public class DataBaseBan extends DataBaseMySql {
     }
 
     @Override
-    public void reloadDatabase() {
+    public void reload() {
         String sql = "SELECT uuid, name, ip, reason, unban_date, ban_date, context, author FROM bans";
         listDataBanByNAME.clear();
         listDataBanByIP.clear();
@@ -74,7 +70,7 @@ public class DataBaseBan extends DataBaseMySql {
             DatabaseMetaData dbMetaData = connection.getMetaData();
             try (ResultSet resultSet = dbMetaData.getTables(null, null, "bans", null)) {
                 if (resultSet.next()){
-                    reloadDatabase();
+                    reload();
                     sendMessageConsole("DataBase Bans " + TypeMessages.SUCCESS.getMainColor() + "Ok", TypeMessages.INFO, false);
                     return;
                 }
@@ -140,7 +136,7 @@ public class DataBaseBan extends DataBaseMySql {
         listDataBanByIP.put(ipAddress, listIP);
 
     }
-
+    /* No se esto se volver a usar en el futuro
     protected static @NotNull HashSet<DataBan> getDataBan(@NotNull Player player, InetAddress address, SearchBanBy searchBanBy) throws SQLException {
 
         PreparedStatement statement = null;
@@ -178,7 +174,7 @@ public class DataBaseBan extends DataBaseMySql {
         }
 
         return banList;
-    }
+    }*/
 
     public void addBanPlayer(DataBan dataBan) {
         String sql = "INSERT INTO bans (name, uuid, ip, reason, unban_date, ban_date, context, author) " +
@@ -203,7 +199,7 @@ public class DataBaseBan extends DataBaseMySql {
             }else {
                 tiempoDeBaneo = GlobalUtils.timeToString(dataBan.getUnbanDate() - dataBan.getBanDate(), 2);
             }
-            reloadDatabase();
+            reload();
             sendMessageConsole(String.format(Message.DATA_BAN_ADD_OK.getMessage(), dataBan.getName(), dataBan.getContext(), tiempoDeBaneo, dataBan.getAuthor(), dataBan.getReason()), TypeMessages.SUCCESS, CategoryMessages.BAN);
 
         } catch (SQLException e) {
@@ -225,7 +221,7 @@ public class DataBaseBan extends DataBaseMySql {
             statement.setString(1, name);
             statement.setString(2, context.name());
             statement.executeUpdate();
-            reloadDatabase();
+            reload();
             sendMessageConsole(String.format(Message.DATA_BAN_REMOVE_OK.getMessage(), name, context.name(), author), TypeMessages.SUCCESS, CategoryMessages.BAN);
         } catch (SQLException e) {
             sendMessageConsole(String.format(Message.DATA_BAN_REMOVE_FAILED.getMessage(), name, context.name(), author), TypeMessages.ERROR, CategoryMessages.BAN);

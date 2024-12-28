@@ -21,6 +21,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.beans.JavaBean;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -284,7 +285,7 @@ public final class GlobalUtils {
         String r = addZeros(Integer.toString(color.getRed(), 16));
         String g = addZeros(Integer.toString(color.getGreen(), 16));
         String B = addZeros(Integer.toString(color.getBlue(), 16));
-        return "#" + r + g + B;
+        return ("#" + r + g + B).toUpperCase();
     }
 
     /**
@@ -298,11 +299,21 @@ public final class GlobalUtils {
         String r = addZeros(Integer.toString(color.getRed(), 16));
         String g = addZeros(Integer.toString(color.getGreen(), 16));
         String B = addZeros(Integer.toString(color.getBlue(), 16));
-        return "#" + r + g + B;
+        return ("#" + r + g + B).toUpperCase();
     }
 
     @Contract(pure = true)
-    private String addZeros(String s){
+    public @NotNull Color colorToColor(java.awt.@NotNull Color color) {
+        return Color.fromRGB(color.getRed(), color.getGreen(), color.getBlue());
+    }
+
+    @Contract(pure = true, value = "_ -> new")
+    public @NotNull java.awt.Color colorToColor(@NotNull Color color) {
+        return new java.awt.Color(color.getRed(), color.getGreen(), color.getBlue());
+    }
+
+    @Contract(pure = true)
+    private @NotNull String addZeros(@NotNull String s){
         switch (s.length()){
             case 0 -> {
                 return "00";

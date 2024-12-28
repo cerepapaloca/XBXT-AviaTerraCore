@@ -2,6 +2,7 @@ package net.atcore.command;
 
 import lombok.experimental.UtilityClass;
 import net.atcore.AviaTerraCore;
+import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import net.atcore.security.Login.LoginManager;
@@ -178,7 +179,7 @@ public final class CommandUtils {
         };
     }
 
-    public void executeForPlayer(@Nullable CommandSender sender, String arg, boolean safeMode, Consumer<TemporalPlayerData> action){
+    public void executeForPlayer(@Nullable CommandSender sender, @NotNull String arg, boolean safeMode, Consumer<TemporalPlayerData> action){
         if (arg.startsWith("*")){
             Bukkit.getOnlinePlayers().forEach(player ->  action.accept(new TemporalPlayerData(player.getName(), player)));
             return;
@@ -226,7 +227,7 @@ public final class CommandUtils {
         if (sender == null) return;
         if (names.isEmpty()) return; // Si no esta vaciá es por un jugador no se pudo borrar por que no esta conectado
         if (safeMode) {
-            if (arg.charAt(0) != '!') MessagesManager.sendMessage(sender, String.format("El jugador/es <|%s|> no esta conectado o no existe", names), TypeMessages.WARNING);
+            if (arg.charAt(0) != '!') MessagesManager.sendMessage(sender, String.format(Message.COMMAND_GENERIC_PLAYERS_NOT_FOUND.getMessage(), names), TypeMessages.WARNING);
         }else {
             for (String name : names){ // Si no esta en modo seguro crea un TemporalPlayerData con los nombres de los usuarios
                 action.accept(new TemporalPlayerData(name, null));
@@ -303,7 +304,7 @@ public final class CommandUtils {
 
     /**
      * Comprueba que si el jugador tiene los permisos. Si el permiso tiene {@code *}
-     * todos los jugadores logueados tienen permiso pero si tiene {@code **} todos aunque
+     * todos los jugadores logueados tienen permiso, pero si tiene {@code **} todos aunque
      * no estén logueados, si el permiso comienza con {@code !} el jgador no debe tener
      * ese permiso. Se puede unir varios permisos con {@code ,}estó permisos extras hace
      * de "o" es decir la condición será verdadera cuando cumpla uno de los permisos

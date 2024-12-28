@@ -42,16 +42,16 @@ public class RegisterCommand extends BaseCommand {
                             startPlaySessionCracked(player).getRegister().setTemporary(false);
                             LoginManager.checkLoginIn(player);
                         }else{
-                            sendMessage(player, Message.COMMAND_REGISTER_NO_EQUAL_PASSWORD.getMessage(), TypeMessages.ERROR);
+                            sendMessage(player, Message.COMMAND_REGISTER_NO_EQUAL_PASSWORD, TypeMessages.ERROR);
                         }
                     }else{
-                        sendMessage(player, Message.COMMAND_REGISTER_MISSING_ARGS_PASSWORD.getMessage(), TypeMessages.ERROR);
+                        sendMessage(player, Message.COMMAND_REGISTER_MISSING_ARGS_PASSWORD, TypeMessages.ERROR);
                     }
                 }else {
-                    sendMessage(player, Message.COMMAND_REGISTER_IS_PREMIUM.getMessage(), TypeMessages.ERROR);
+                    sendMessage(player, Message.COMMAND_REGISTER_IS_PREMIUM, TypeMessages.ERROR);
                 }
             }else {
-                sendMessage(player, Message.COMMAND_REGISTER_ALREADY.getMessage(), TypeMessages.ERROR);
+                sendMessage(player, Message.COMMAND_REGISTER_ALREADY, TypeMessages.ERROR);
             }
         }
     }

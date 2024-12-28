@@ -39,7 +39,7 @@ public class ListenerManagerSection implements Section {
     }
 
     @Override
-    public void reloadConfig() {
+    public void reload() {
 
     }
 

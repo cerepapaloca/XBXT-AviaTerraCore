@@ -4,6 +4,7 @@ import lombok.Getter;
 import net.atcore.AviaTerraCore;
 
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
 
 public abstract class FilesYams {
@@ -39,7 +40,7 @@ public abstract class FilesYams {
                 folder.mkdirs();
             }
         } catch(SecurityException e) {
-            e.printStackTrace();
+            throw new SecurityException(e);
         }
     }
 
@@ -101,8 +102,8 @@ public abstract class FilesYams {
             configFiles.add(config);
             config.reloadConfig(action);
             return config;
-        } catch (Exception e) {
-            throw new RuntimeException("Error al crear instancia de " + fileclass.getName(), e);
+        } catch (InvocationTargetException | InstantiationException | IllegalAccessException | NoSuchMethodException e) {
+            throw new RuntimeException(e);
         }
     }
 }

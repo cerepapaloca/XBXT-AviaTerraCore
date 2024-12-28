@@ -41,7 +41,7 @@ public class CommandSection implements Section {
     }
 
     @Override
-    public void reloadConfig() {
+    public void reload() {
 
     }
 

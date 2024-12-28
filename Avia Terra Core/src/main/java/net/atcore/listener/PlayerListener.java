@@ -103,7 +103,7 @@ public class PlayerListener implements Listener {
         event.setCancelled(checkReload(player));
     }
 
-    public void addRange(@NotNull Player player){
+    private void addRange(@NotNull Player player){
         ItemStack item = player.getInventory().getItemInMainHand();
         if (item.getType().equals(Material.NAME_TAG)){
             String range = (String) GlobalUtils.getPersistenData(item, "rangeName", PersistentDataType.STRING);

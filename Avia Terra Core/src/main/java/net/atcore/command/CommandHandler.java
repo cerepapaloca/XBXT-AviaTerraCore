@@ -34,6 +34,7 @@ public final class CommandHandler implements TabExecutor {
      * @param args esto son los argumentos que tiene los comando
      */
 
+    @SuppressWarnings("CallToPrintStackTrace")
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {
         for (BaseCommand command : commands) {// Pasa por todas las clases para saber que comando es

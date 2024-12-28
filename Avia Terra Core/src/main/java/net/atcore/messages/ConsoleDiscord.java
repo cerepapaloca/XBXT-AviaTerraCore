@@ -22,7 +22,7 @@ public class ConsoleDiscord {
     public static ChannelLoggingHandler handler;
 
     public static void startConsoleAndBot(){
-        Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(), () -> {
+        AviaTerraCore.getInstance().enqueueTaskAsynchronously(() -> {
             jda = JDABuilder.createDefault(TOKEN_BOT).enableIntents(GatewayIntent.MESSAGE_CONTENT).build();
             try {
                 jda.awaitReady();
@@ -50,7 +50,7 @@ public class ConsoleDiscord {
                     );
 
                 }).attach().schedule();
-                sendMessageConsole("discord bot &2 Ok", TypeMessages.INFO, false);
+                sendMessageConsole("discord bot " + TypeMessages.SUCCESS.getMainColor() + "Ok", TypeMessages.INFO, false);
 
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);

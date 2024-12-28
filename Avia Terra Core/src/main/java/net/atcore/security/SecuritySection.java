@@ -23,7 +23,7 @@ public class SecuritySection implements Section {
     }
 
     @Override
-    public void reloadConfig() {
+    public void reload() {
 
     }
 

@@ -34,7 +34,7 @@ public class AddRangeCommand extends BaseTabCommand {
     public void execute(CommandSender sender, String[] args) {
         switch (args.length){
             case 0 -> sendMessage(sender, this.getUsage(), TypeMessages.ERROR);
-            case 1 -> sendMessage(sender, Message.COMMAND_ADD_RANGE_MISSING_ARGUMENT_TIME.getMessage(), TypeMessages.ERROR);
+            case 1 -> sendMessage(sender, Message.COMMAND_ADD_RANGE_MISSING_ARGUMENT_TIME, TypeMessages.ERROR);
             default -> {
                 List<Group> groups = AviaTerraCore.getLp().getGroupManager().getLoadedGroups().stream().toList();
                 List<String> nameRage = new ArrayList<>();
@@ -45,7 +45,7 @@ public class AddRangeCommand extends BaseTabCommand {
                     try {
                         time = CommandUtils.StringToMilliseconds(args[1], true);
                     }catch (RuntimeException e){
-                        sendMessage(sender, Message.COMMAND_GENERIC_FORMAT_DATE_ERROR.getMessage(), TypeMessages.ERROR);
+                        sendMessage(sender, Message.COMMAND_GENERIC_FORMAT_DATE_ERROR, TypeMessages.ERROR);
                         return;
                     }
                     RangeType range = RangeType.valueOf(args[0].toUpperCase());
@@ -66,14 +66,14 @@ public class AddRangeCommand extends BaseTabCommand {
                         if (sender instanceof Player playerSender){
                             addItemPlayer(item, playerSender, false, true);
                         }else{
-                            sendMessage(sender, Message.COMMAND_GENERIC_NO_PLAYER.getMessage(), TypeMessages.ERROR);
+                            sendMessage(sender, Message.COMMAND_GENERIC_NO_PLAYER, TypeMessages.ERROR);
                         }
                     }else{
                         CommandUtils.executeForPlayer(sender, args[2], true, fakePlayer -> GlobalUtils.addItemPlayer(item, fakePlayer.player(), false, true));
-                        sendMessage(sender, Message.COMMAND_ADD_RANGE_SUCCESSFUL.getMessage(), TypeMessages.SUCCESS);
+                        sendMessage(sender, Message.COMMAND_ADD_RANGE_SUCCESSFUL, TypeMessages.SUCCESS);
                     }
                 }else{
-                    sendMessage(sender, Message.COMMAND_ADD_RANGE_MISSING_ARGUMENT_TIME.getMessage(), TypeMessages.ERROR);
+                    sendMessage(sender, Message.COMMAND_ADD_RANGE_MISSING_ARGUMENT_TIME, TypeMessages.ERROR);
                 }
             }
 
