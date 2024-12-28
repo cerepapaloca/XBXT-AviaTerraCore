@@ -2,6 +2,7 @@ package net.atcore.data;
 
 import lombok.Getter;
 import net.atcore.AviaTerraCore;
+import net.atcore.data.yml.ActionInReloadYaml;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -10,25 +11,15 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import java.io.File;
 import java.io.IOException;
 
-import java.io.*;
-
+@Getter
 @SuppressWarnings("ResultOfMethodCallIgnored")
-public abstract class FileYaml {
+public abstract class FileYaml extends net.atcore.data.File {
 
-    protected final String fileName;
-    @Getter
+
     protected FileConfiguration fileYaml = null;
-    @Getter
-    private File file = null;
-    private final String folderName;
 
     public FileYaml(String fileName, String folderName, boolean copy) {
-        if (fileName.endsWith(".yml")) {
-            this.fileName = fileName;
-        }else {
-            this.fileName = fileName + ".yml";
-        }
-        this.folderName = folderName;
+        super(fileName, "yml", folderName);
         if (copy) {
             copyDefaultConfig();// Copiar archivo desde resources
             loadConfig(); // Carga los datos en memoria
@@ -44,43 +35,6 @@ public abstract class FileYaml {
             return folderName + File.separator + fileName;
         }
 
-    }
-
-    private void copyDefaultConfig() {
-        File dataFolder = AviaTerraCore.getInstance().getDataFolder();
-
-        if (!dataFolder.exists()) {
-            dataFolder.mkdirs();
-        }
-
-        File targetFolder = dataFolder;
-        if (folderName != null) {
-            targetFolder = new File(dataFolder, folderName);
-            if (!targetFolder.exists()) {
-                targetFolder.mkdirs();
-            }
-        }
-
-        file = new File(targetFolder, fileName);
-
-        if (!file.exists()) {
-            try (InputStream inputStream = AviaTerraCore.getInstance().getResource(fileName);
-                 OutputStream outputStream = new FileOutputStream(file)) {
-
-                if (inputStream == null) {
-                    throw new FileNotFoundException("El archivo " + fileName + " no se encontró en resources.");
-                }
-
-                byte[] buffer = new byte[1024];
-                int length;
-                while ((length = inputStream.read(buffer)) > 0) {
-                    outputStream.write(buffer, 0, length);
-                }
-
-            } catch (IOException e) {
-                throw new RuntimeException("No se pudo copiar el archivo de configuración " + fileName, e);
-            }
-        }
     }
 
     /**
@@ -111,15 +65,9 @@ public abstract class FileYaml {
         }
     }
 
-
     public void reloadConfig(ActionInReloadYaml action) {
-
         if (fileYaml == null) {
-            if(folderName != null){
-                file = new File(AviaTerraCore.getInstance().getDataFolder() + File.separator + folderName, fileName);
-            }else{
-                file = new File(AviaTerraCore.getInstance().getDataFolder(), fileName);
-            }
+            reloadFile();
         }
 
         fileYaml = YamlConfiguration.loadConfiguration(file);
@@ -138,11 +86,7 @@ public abstract class FileYaml {
             case LOAD -> loadData();
             case SAVE -> saveData();
         }
-
-        if (!AviaTerraCore.isStarting()) MessagesManager.sendMessageConsole(String.format("Archivo %s recargador exitosamente", file), TypeMessages.SUCCESS);
     }
-
-    public abstract void loadData();
 
     public abstract void saveData();
 }

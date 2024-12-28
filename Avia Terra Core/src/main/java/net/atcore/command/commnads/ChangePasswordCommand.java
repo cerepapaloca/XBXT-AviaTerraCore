@@ -63,7 +63,7 @@ public class ChangePasswordCommand extends BaseTabCommand {
         });
 
         sendMessageConsole( String.format(Message.COMMAND_CHANGE_PASSWORD_SUCCESSFUL_LOG.getMessage(), player.getName(), reason), TypeMessages.INFO, CategoryMessages.LOGIN);
-        TwoFactorAuth.getCodes().remove(player.getUniqueId());
+        TwoFactorAuth.CODES.remove(player.getUniqueId());
     }
 
     public static boolean isUUID(String str) {

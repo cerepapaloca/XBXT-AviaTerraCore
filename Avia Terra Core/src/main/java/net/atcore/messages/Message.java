@@ -33,6 +33,18 @@ public enum Message {
     LOGIN_LIMBO_TIME_OUT_SESSION("login", "Tardaste mucho en iniciar sesión"),
     LOGIN_LIMBO_TIME_OUT_REGISTER("login", "Tardaste mucho en registrarte"),
     LOGIN_LIMBO_CHAT_WRITE("login", "Te tienes que loguear para escribir en el chat"),
+    LOGIN_TWO_FACTOR_LINK_TITLE("login", "Tiene que ejecutar este comando para iniciar vincular su cuenta"),
+    LOGIN_TWO_FACTOR_LINK_SUBTITLE("login", "/link %s"),
+    LOGIN_TWO_FACTOR_CODE_TITLE("login", "Aquí esta tu código de un solo uso. Este código no se tiene que compartir y tiene una validez de 2 minutos"),
+    LOGIN_TWO_FACTOR_CODE_SUBTITLE("login", "%s"),
+    LOGIN_TWO_FACTOR_SUBJECT_GMAIL("login", "Código de verificación en dos pasos de AviaTerra"),
+    LOGIN_TWO_FACTOR_NO_FOUND_CODE("login", "no tienes un código usa el <|/link|> para tener uno"),
+    LOGIN_TWO_FACTOR_UUID_NO_EQUAL("login", "hubo una discrepancia vuelve a enviar un nuevo código"),
+    LOGIN_TWO_FACTOR_EXPIRE_CODE("login", "El código ya expiro"),
+    LOGIN_TWO_FACTOR_CODE_NO_EQUAL("login", "El código no son iguales"),
+    LOGIN_TWO_FACTOR_ARRIVED_MESSAGE_DISCORD("login", "Revise su discord ya tuvo que haber llegado el mensaje"),
+    LOGIN_TWO_FACTOR_SEND_CODE_GMAIL_LOG("login", "Se envió código de verificación a <|%1$s|> (%2$s)"),
+    LOGIN_TWO_FACTOR_SEND_CODE_DISCORD_LOG("login", "Se envió código de verificación a <|%1$s|> (%2$s)"),
     SECURITY_KICK_ANTI_TWO_PLAYER("security", "Hay un jugador con tu nombre"),
     SECURITY_REMOVE_OP("security", "El jugador <|%s|> tenia creativo o Op y fue eliminado"),
     SECURITY_REMOVE_TAG("security", "Tag Eliminada"),
@@ -106,7 +118,7 @@ public enum Message {
     COMMAND_LINK_SEND_DISCORD_1("command.link", "Se esta enviando un mensaje directo con el código"),
     COMMAND_LINK_ALREADY_GMAIL("command.link", "Ya tiene un correo vinculado solo usar el comando para vincular un nuevo correo"),
     COMMAND_LINK_ALREADY_DISCORD("command.link", "Ya tiene una cuenta de discord vinculado solo usar el comando para vincular un nueva cuenta de discord"),
-    COMMAND_LINK_ARRIVED_GMAIL("command.link", "Revisa su bandeja de recibidos, ya tuvo que haber llegado"),
+    COMMAND_LINK_ARRIVED_MESSAGE_GMAIL("command.link", "Revisa su bandeja de recibidos, ya tuvo que haber llegado"),
     COMMAND_LINK_SUCCESSFUL("command.link", "Autenticación completada"),
     COMMAND_LINK_ERROR("command.link", "Hubo un error con la autenticación, vuelve a intentar"),
     COMMAND_LINK_MISSING_ARGS_GMAIL("command.link", "Tiene poner tu gmail o el código de validación"),
@@ -117,7 +129,7 @@ public enum Message {
     COMMAND_LINK_DISCORD_NO_LOGIN("command.link", "Para vincular tu Discord tiene que estar logueado"),
     COMMAND_LINK_SEND_DISCORD_2("command.link","Se esta enviando un mensaje directo con el código"),
     COMMAND_LINK_NOT_FOUNT_DISCORD("command.link", "No tiene un Discord vinculado"),
-    COMMAND_LINK_MISSING_ARGS("command.link", "Tienes que poner discord o gmail"),
+    COMMAND_LINK_MISSING_ARGS("command.link", "Tienes que poner discord, gmail un condigo"),
     COMMAND_LOGIN_ALREADY("command.login", "Ya estas logueado"),
     COMMAND_LOGIN_NO_REGISTER("command.login", "No estas registrado usa el <|/register|>"),
     COMMAND_LOGIN_MISSING_ARGS("command.login", "Tienes que poner tu contraseña"),
@@ -157,4 +169,9 @@ public enum Message {
     @Setter
     private String message;
 
+
+    @Override
+    public String toString() {
+        return message;
+    }
 }

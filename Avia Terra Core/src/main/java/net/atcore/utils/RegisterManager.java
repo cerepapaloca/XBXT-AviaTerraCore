@@ -7,6 +7,7 @@ import net.atcore.command.CommandSection;
 import net.atcore.command.CommandUtils;
 import net.atcore.data.DataBaseMySql;
 import net.atcore.data.DataSection;
+import net.atcore.data.File;
 import net.atcore.data.FileYaml;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.TypeMessages;
@@ -69,11 +70,11 @@ public class RegisterManager {
     }
 
     public void register(@NotNull DataBaseMySql database) {
-        DataSection.getDataBases().add(database);
+        DataSection.DATA_BASE.add(database);
     }
 
-    public void register(@NotNull FileYaml yaml) {
-        DataSection.getFileYaml().add(yaml);
+    public void register(@NotNull File yaml) {
+        DataSection.FILES.add(yaml);
     }
 
 }

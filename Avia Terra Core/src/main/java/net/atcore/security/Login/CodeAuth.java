@@ -13,4 +13,5 @@ public class CodeAuth {
     private final long expires;
     private final UUID uuidPlayer;
     private final String media;
+    private final TwoFactorAuth.MediaAuth mediaAuth;
 }

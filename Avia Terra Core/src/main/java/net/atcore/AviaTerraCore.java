@@ -87,7 +87,7 @@ public final class AviaTerraCore extends JavaPlugin {
             }
             GlobalUtils.kickPlayer(player, "El servidor va a cerrar, volveremos pronto...");
         });
-        jda.shutdown();
+        //if (jda != null) jda.shutdown();
         sendMessageConsole("AviaTerra Apagada", TypeMessages.SUCCESS, CategoryMessages.PRIVATE, false);
     }
 

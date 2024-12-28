@@ -2,11 +2,13 @@ package net.atcore.data;
 
 import lombok.Getter;
 import net.atcore.AviaTerraCore;
+import net.atcore.data.yml.ActionInReloadYaml;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
 
+@SuppressWarnings("unused")
 public abstract class FilesYams {
 
     protected String folderName;
@@ -44,11 +46,11 @@ public abstract class FilesYams {
         }
     }
 
-//    public void saveConfigFiles() {
-//        for (FileYaml configFile : configFiles) {
-//            configFile.saveConfig();
-//        }
-//    }
+    public void saveConfigFiles() {
+        for (FileYaml configFile : configFiles) {
+            configFile.saveConfig();
+        }
+    }
 
     public void registerConfigFiles(){
         String path = AviaTerraCore.getInstance().getDataFolder() + File.separator + folderName;
@@ -95,7 +97,7 @@ public abstract class FilesYams {
         return registerConfigFile(pathName, ActionInReloadYaml.NOTHING);
     }
 
-    public FileYaml registerConfigFile(String fileName , ActionInReloadYaml action) {
+    public FileYaml registerConfigFile(String fileName, ActionInReloadYaml action) {
         try {
             FileYaml config = fileclass.getConstructor(String.class, String.class)
                     .newInstance(fileName, folderName);

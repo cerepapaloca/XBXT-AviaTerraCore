@@ -110,6 +110,10 @@ public final class MessagesManager {
         Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', s));
     }
 
+    public static void sendException(String message, Exception exception) {
+        AviaTerraCore.getInstance().getLogger().severe(String.format("%s [%s]: %s", message, exception.getClass().getSimpleName(), exception.getMessage()));
+    }
+
     ///////////////////////////
     ///////////////////////////
 

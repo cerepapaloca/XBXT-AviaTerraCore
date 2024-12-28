@@ -1,4 +1,4 @@
-package net.atcore.data;
+package net.atcore.data.yml;
 
 public enum ActionInReloadYaml {
     LOAD,

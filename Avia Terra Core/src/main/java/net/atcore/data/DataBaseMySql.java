@@ -31,7 +31,7 @@ public abstract class DataBaseMySql implements Reloadable {
         String url = "jdbc:mysql://" + HOST + ":" + PORT + "/" + DATABASE;
         try {
             connection = DriverManager.getConnection(url, USER, PASSWORD);
-            if (!AviaTerraCore.isStarting()) sendMessageConsole("Conexión a MySQL establecida", TypeMessages.SUCCESS);
+            if (!AviaTerraCore.isStarting()) sendMessageConsole("Conexión establecida a MySQL", TypeMessages.SUCCESS);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -72,7 +72,7 @@ public abstract class DataBaseMySql implements Reloadable {
             throw new IllegalThreadStateException("No usar el hilo principal para la base de datos");
         }
         if (connection == null || connection.isClosed()) {
-            if (!AviaTerraCore.isStarting()) sendMessageConsole("Conexión perdida Reconectando...", TypeMessages.WARNING);
+            //if (!AviaTerraCore.isStarting()) sendMessageConsole("Conexión perdida Reconectando...", TypeMessages.WARNING);
             connect();
         }
         return connection;

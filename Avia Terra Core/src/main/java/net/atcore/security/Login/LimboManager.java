@@ -2,7 +2,7 @@ package net.atcore.security.Login;
 
 import lombok.experimental.UtilityClass;
 import net.atcore.AviaTerraCore;
-import net.atcore.data.ActionInReloadYaml;
+import net.atcore.data.yml.ActionInReloadYaml;
 import net.atcore.data.DataSection;
 import net.atcore.data.FileYaml;
 import net.atcore.data.yml.CacheLimboFile;
