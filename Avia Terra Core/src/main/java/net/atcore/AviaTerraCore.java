@@ -2,6 +2,7 @@ package net.atcore;
 
 import com.github.games647.craftapi.resolver.MojangResolver;
 import lombok.Getter;
+import net.atcore.armament.ArmamentSection;
 import net.atcore.command.CommandSection;
 import net.atcore.data.DataSection;
 import net.atcore.messages.CategoryMessages;
@@ -20,6 +21,7 @@ import net.luckperms.api.LuckPerms;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.checkerframework.checker.units.qual.A;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -28,7 +30,7 @@ import static net.atcore.messages.MessagesManager.sendMessageConsole;
 
 public final class AviaTerraCore extends JavaPlugin {
 
-    private final BlockingQueue<Runnable> taskQueue = new LinkedBlockingQueue<>();
+    private static final BlockingQueue<Runnable> TASK_QUEUE = new LinkedBlockingQueue<>();
     private Thread workerThread;
 
     @Getter
@@ -66,6 +68,7 @@ public final class AviaTerraCore extends JavaPlugin {
         RegisterManager.register(new ModerationSection());
         RegisterManager.register(new ListenerManagerSection());
         RegisterManager.register(new SecuritySection());
+        RegisterManager.register(new ArmamentSection());
         //enableModules();
         isStarting = false;
         messageOn(timeCurrent);
@@ -112,13 +115,12 @@ public final class AviaTerraCore extends JavaPlugin {
     }
 
     /**
-     * Se tiene usar cuando se va a hacer algo relacionado con la base de datos
-     * esto para evitar problemás de ejecutar varias peticiones simultáneas
-     * a la base de datos
+     * Realiza tareas de manera asincrónica y lo añade a una cola
+     * para evitar problemas de sincronización
      */
 
     public void enqueueTaskAsynchronously(Runnable task) {
-        if (!taskQueue.offer(task)){
+        if (!TASK_QUEUE.offer(task)){
             MessagesManager.sendMessageConsole("Error al añadir una tarea la cola", TypeMessages.ERROR);
         }
     }
@@ -127,7 +129,7 @@ public final class AviaTerraCore extends JavaPlugin {
         try {
             while (!Thread.currentThread().isInterrupted()) {
                 // Toma una tarea de la cola y la ejecuta
-                Runnable task = taskQueue.take();
+                Runnable task = TASK_QUEUE.take();
                 task.run();
             }
         } catch (InterruptedException e) {

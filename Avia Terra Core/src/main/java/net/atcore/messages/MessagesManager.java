@@ -1,7 +1,7 @@
 package net.atcore.messages;
 
 import net.atcore.AviaTerraCore;
-import net.atcore.utils.GlobalUtils;
+import net.atcore.utils.Gradient;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
@@ -9,26 +9,21 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 
+import java.awt.*;
+
 /**
  * En esta clase esta tod0 relacionado con los colores y envío de mensajes todos los mensajes tiene que pasar por quí
  * al igual que todos los colores.
  */
 public final class MessagesManager {
-
     @Deprecated
-    public static final String COLOR_SUCCESS = "&2";
-    @Deprecated
-    public static final String COLOR_INFO = "&3";
-    @Deprecated
-    public static final String COLOR_ERROR = "&c";
-
     public static final String[] PREFIX_AND_SUFFIX_KICK = new String[]{"&c&m &r &c&m       &r  &4&lAviaKick&c  &m        &r &c&m \n\n&r", "\n\n&m &r &c&m                               &r &c&m "};
-
-    @Deprecated
-    public static final String COLOR_ESPECIAL = "&b";
     public static final String LINK_DISCORD = "&a&nhttps://discord.gg/azurex";
-
-    private static final String PREFIX = "&8[" + GlobalUtils.applyGradient("<#00CCCC>AviaTerra<#00FFFF>",'l') + "&8]&r " ;
+    //"&8[" + GlobalUtils.applyGradient("<#00CCCC>AviaTerra<#00FFFF>",'l') + "&8]&r " ;
+    private static final String PREFIX = new Gradient("AviaTerra")
+            .addGradient(new Color(0,200, 200), 1)
+            .addGradient(new Color(0, 255, 255), 1)
+            .getText();
 
     ///////////////////////////
     ///////////////////////////
@@ -111,7 +106,11 @@ public final class MessagesManager {
     }
 
     public static void sendException(String message, Exception exception) {
-        AviaTerraCore.getInstance().getLogger().severe(String.format("%s [%s]: %s", message, exception.getClass().getSimpleName(), exception.getMessage()));
+        StringBuilder builder = new StringBuilder();
+        for (StackTraceElement element : exception.getStackTrace()) {
+            builder.append(element.toString()).append("\n\t");
+        }
+        AviaTerraCore.getInstance().getLogger().severe(String.format("%s [%s=%s] \n\t%s", message, exception.getClass().getSimpleName(), exception.getMessage(), builder));
     }
 
     ///////////////////////////

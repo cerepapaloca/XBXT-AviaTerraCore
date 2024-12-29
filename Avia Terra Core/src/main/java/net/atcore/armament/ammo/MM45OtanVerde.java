@@ -1,13 +1,13 @@
 package net.atcore.armament.ammo;
 
 import net.atcore.armament.BaseAmmo;
-import net.atcore.armament.DataShoot;
-import net.atcore.armament.ListAmmo;
+import net.atcore.armament.Initializer;
 import org.bukkit.Color;
 
-public class MM45_OTAN_VERDE extends BaseAmmo {
+@Initializer
+public final class MM45OtanVerde extends BaseAmmo {
 
-    public MM45_OTAN_VERDE() {
+    public MM45OtanVerde() {
         super(5,
                 "trazado verde",
                 Color.fromRGB(20,180,20),

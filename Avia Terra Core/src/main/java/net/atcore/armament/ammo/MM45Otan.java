@@ -1,13 +1,13 @@
 package net.atcore.armament.ammo;
 
 import net.atcore.armament.BaseAmmo;
-import net.atcore.armament.DataShoot;
-import net.atcore.armament.ListAmmo;
+import net.atcore.armament.Initializer;
 import org.bukkit.Color;
 
-public class MM45_OTAN extends BaseAmmo {
+@Initializer
+public final class MM45Otan extends BaseAmmo {
 
-    public MM45_OTAN() {
+    public MM45Otan() {
         super(5,
                 "prueba",
                 Color.fromRGB(20,20,20),

@@ -14,9 +14,12 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 @UtilityClass
 public class ArmamentUtils {
+
+    public static final HashSet<BaseArmament> ARMAMENTS = new HashSet<>();
 
     public String listToString(List<String> list){
         return list.toString().replace(" ", "").replace("[", "").replace("]", "");
@@ -32,45 +35,17 @@ public class ArmamentUtils {
     }
 
     @Nullable
-    public Compartment getCompartment(ItemStack itemStack){
-        BaseWeapon s = getWeapon(itemStack);//es muy feo pero funciona
-        if (s != null){
-            if (s instanceof Compartment compartment){
-                return compartment;
-            }else{
-                return null;
+    public Compartment getCompartment(@NotNull ItemStack item){
+        for (BaseArmament armament : ARMAMENTS){
+            if (armament.getName().equals(GlobalUtils.getPersistenData(item, "magazineName", PersistentDataType.STRING)) ||
+            armament.getName().equals(GlobalUtils.getPersistenData(item, "weaponName", PersistentDataType.STRING))){
+                if (armament instanceof Compartment compartment){
+                    return compartment;
+                }
             }
-        }else {
-            return getMagazine(itemStack);
         }
+        return null;
     }
-
-    public BaseAmmo getAmmo(Player player){
-        return getAmmo((String) GlobalUtils.getPersistenData(player.getInventory().getItemInMainHand(), "ammoName", PersistentDataType.STRING));
-    }
-
-    @Nullable
-    public BaseAmmo getAmmo(@Nullable String s){
-        ListAmmo list;
-        if (s == null){
-            return null;
-        }
-        try{
-            list = ListAmmo.valueOf(s);
-        }catch (Exception e){
-            return null;
-        }
-        return list.getAmmo();
-    }
-
-    public BaseMagazine getMagazine(@NotNull Player player){
-        return getMagazine(player.getInventory().getItemInMainHand());
-    }
-
-    /**
-     * Obtienes la clase {@link BaseMagazine} si es un arma si no regresa
-     * nulo en caso de que no
-     */
 
     public BaseMagazine getMagazine(@NotNull ItemStack item) {
         if (item.getItemMeta() == null) return null;
@@ -79,26 +54,6 @@ public class ArmamentUtils {
         return getMagazine(chargeName);
     }
 
-    @Nullable
-    public BaseMagazine getMagazine(@Nullable String s){
-        ListMagazine list;
-        try{
-            list = ListMagazine.valueOf(s);
-        }catch (Exception e){
-            return null;
-        }
-        return list.getMagazine();
-    }
-
-    public BaseWeapon getWeapon(@NotNull Player player){
-        return getWeapon(player.getInventory().getItemInMainHand());
-    }
-
-    /**
-     * Obtienes la clase {@link BaseWeapon} si es un arma si no regresa
-     * nulo en caso de que no
-     */
-
     public BaseWeapon getWeapon(@NotNull ItemStack item) {
         if (item.getItemMeta() == null) return null;
         String weaponName = (String) GlobalUtils.getPersistenData(item, "weaponName", PersistentDataType.STRING);
@@ -106,17 +61,68 @@ public class ArmamentUtils {
         return getWeapon(weaponName);
     }
 
-    @Nullable
-    public BaseWeapon getWeapon(@Nullable String s) {
-        try {
-            return ListWeaponTarvok.valueOf(s).getWeapon();
-        } catch (Exception e) {
-            try {
-                return ListWeaponUltraKill.valueOf(s).getWeapon();
-            } catch (Exception i) {
-                return null;
+    public BaseAmmo getAmmo(Player player){
+        return getAmmo((String) GlobalUtils.getPersistenData(player.getInventory().getItemInMainHand(), "ammoName", PersistentDataType.STRING));
+    }
+
+    public @Nullable BaseAmmo getAmmo(Class<? extends BaseAmmo> clazz) {
+        for (BaseArmament armament : ARMAMENTS) {
+            if (armament instanceof BaseAmmo ammo) {
+                if (clazz.isAssignableFrom(ammo.getClass())) {
+                    return ammo;
+                }
             }
         }
+        return null;
+    }
+
+    public BaseMagazine getMagazine(@NotNull Player player){
+        return getMagazine(player.getInventory().getItemInMainHand());
+    }
+
+    public BaseWeapon getWeapon(@NotNull Player player){
+        return getWeapon(player.getInventory().getItemInMainHand());
+    }
+
+    /**
+     * Obtienes la clase {@link BaseMagazine} si es un arma si no regresa
+     * nulo en caso de que no
+     */
+
+    @Nullable
+    public BaseAmmo getAmmo(@Nullable String s){
+        for (BaseArmament armament : ARMAMENTS){
+            if (armament instanceof BaseAmmo ammo){
+                if (ammo.getClass().getName().equals(s)){
+                    return ammo;
+                }
+            }
+        }
+        return null;
+    }
+
+    @Nullable
+    public BaseMagazine getMagazine(@Nullable String s){
+        for (BaseArmament armament : ARMAMENTS){
+            if (armament instanceof BaseMagazine magazine){
+                if (magazine.getClass().getName().equals(s)){
+                    return magazine;
+                }
+            }
+        }
+        return null;
+    }
+
+
+    public @Nullable BaseWeapon getWeapon(@Nullable String s) {
+        for (BaseArmament armament : ARMAMENTS){
+            if (armament instanceof BaseWeapon weapon){
+                if (weapon.getClass().getName().equals(s)){
+                    return weapon;
+                }
+            }
+        }
+        return null;
     }
 
     public void drawParticleLine(@NotNull Location start, Location end, Color color, boolean impacted, double density) {

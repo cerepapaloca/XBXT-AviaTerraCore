@@ -6,7 +6,7 @@ import net.atcore.security.Login.TwoFactorAuth;
 public class Discord extends FileMarkdownDocumentation {
 
     public Discord() {
-        super("Discord");
+        super("discord");
     }
 
     @Override

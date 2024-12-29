@@ -26,14 +26,14 @@ import java.util.*;
 @Setter
 public abstract class BaseWeaponTarkov extends BaseWeapon implements Compartment {
 
-    protected BaseWeaponTarkov(List<ListMagazine> listMagazines, int maxDistance, String displayName, double precision, WeaponMode mode, int cadence) {
+    protected BaseWeaponTarkov(List<Class<? extends BaseMagazine>> listMagazines, int maxDistance, String displayName, double precision, WeaponMode mode, int cadence) {
         super(new ItemStack(Material.IRON_HORSE_ARMOR), maxDistance, displayName, precision, mode, cadence);
-        this.MAGAZINE_LIST = listMagazines;
+        this.magazineList = listMagazines;
         GlobalUtils.setPersistentData(itemArmament, "magazineNameInside", PersistentDataType.STRING, "null");
         updateLore(null, null);
     }
 
-    private final List<ListMagazine> MAGAZINE_LIST;
+    private final List<Class<? extends BaseMagazine>> magazineList;
     public static final HashMap<UUID, BukkitTask> inReload = new HashMap<>();
 
     @Override
@@ -86,22 +86,37 @@ public abstract class BaseWeaponTarkov extends BaseWeapon implements Compartment
         if (charger != null){// ¿Él arma tiene un cargador?
             if (b){// ¿Hay un cargador que se puede cambiar?
                 if (inReload.containsKey(player.getUniqueId())) return false;
+                UUID uuid = player.getUniqueId();
                 BukkitTask bukkitTask = new BukkitRunnable() {// Comienza el delay de la recarga
                     public void run() {
-                        if (player.isOnline() && itemWeapon.getItemMeta() != null) onReload(itemWeapon, player);
-                        inReload.remove(player.getUniqueId());
+                        Player player = Bukkit.getPlayer(uuid);
+                        inReload.remove(uuid);
+                        if (player == null) return;
+                        ItemStack item = player.getInventory().getItemInMainHand();
+                        if (item.getItemMeta() != null) onReload(item, player);
                     }
                 }.runTaskLater(AviaTerraCore.getInstance(), charger.getReloadTime());
                 new BukkitRunnable() {// Esto es para asegurar que el jugador tiene el amra en la mano
                     public void run() {
-                        ItemStack itemWeapon = player.getInventory().getItemInMainHand();
-                        if (itemWeapon.getItemMeta() == null){
-                            String name = (String) GlobalUtils.getPersistenData(itemArmament, "weaponName", PersistentDataType.STRING);
+                        Player player = Bukkit.getPlayer(uuid);
+                        if (player == null) return;
+                        ItemStack item = player.getInventory().getItemInMainHand();
+                        if (item.getItemMeta() != null){
+                            String name = (String) GlobalUtils.getPersistenData(item, "weaponName", PersistentDataType.STRING);
                             if (name == null) {
-                                bukkitTask.cancel();
-                                MessagesManager.sendTitle(player,"", "Recarga Cancelada", 10, charger.getReloadTime(),10, TypeMessages.ERROR);
+                                cancel();
+
                             }
+                        }else {
+                            cancel();
                         }
+                    }
+                    @Override
+                    public void cancel() {
+                        super.cancel();
+                        bukkitTask.cancel();
+                        MessagesManager.sendTitle(player,"", "Recarga Cancelada", 10, charger.getReloadTime(),10, TypeMessages.ERROR);
+                        inReload.remove(uuid);
                     }
                 }.runTaskTimer(AviaTerraCore.getInstance(), 0, 1);
                 MessagesManager.sendTitle(player,"", "Recargado...", 10, charger.getReloadTime(),10, TypeMessages.INFO);
@@ -167,6 +182,7 @@ public abstract class BaseWeaponTarkov extends BaseWeapon implements Compartment
             if (hasCharger){
                 GlobalUtils.addItemPlayer(itemSwapMagazine, player, true, true);
             }
+            MessagesManager.sendTitle(player,"", "Recargado", 0, 0,30, TypeMessages.SUCCESS);
             player.getWorld().playSound(player.getLocation(), Sound.ITEM_ARMOR_EQUIP_IRON, SoundCategory.PLAYERS, 1, 1);
             break;
         }
@@ -250,6 +266,6 @@ public abstract class BaseWeaponTarkov extends BaseWeapon implements Compartment
     private boolean isCompatible(String s){
         BaseMagazine charger = ArmamentUtils.getMagazine(s);
         if (charger == null) return false;
-        return MAGAZINE_LIST.contains(ListMagazine.valueOf(charger.getName()));
+        return magazineList.contains(charger.getClass());
     }
 }

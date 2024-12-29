@@ -6,10 +6,11 @@ import net.atcore.command.CommandUtils;
 import net.atcore.messages.Message;
 import net.atcore.messages.TypeMessages;
 import net.atcore.utils.GlobalUtils;
-import net.atcore.utils.ModeTab;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static net.atcore.messages.MessagesManager.sendMessage;
@@ -21,6 +22,22 @@ public class WeaponCommand extends BaseTabCommand {
                 "/weapon <Jugador> <Tipo_de_armamento> <Nombre_del_armamento> <!Cantidad>",
                 "desbanea a al jugador que le caes bien"
         );
+        if (ArmamentUtils.ARMAMENTS.isEmpty()) ArmamentSection.initialize();
+        for (BaseArmament armament : ArmamentUtils.ARMAMENTS){
+            if (armament instanceof BaseWeaponUltraKill){
+                WEAPONS_ULTRA_KILL_NAMES.add(armament.getName());
+            }
+            if (armament instanceof BaseWeaponTarkov){
+                WEAPONS_TARVOK_NAMES.add(armament.getName());
+            }
+            if (armament instanceof BaseMagazine){
+                MAGAZINES_NAMES.add(armament.getName());
+            }
+            if (armament instanceof BaseAmmo){
+                AMMO_NAMES.add(armament.getName());
+            }
+            Bukkit.getLogger().warning(armament.getName());
+        }
     }
 
     @Override
@@ -81,16 +98,16 @@ public class WeaponCommand extends BaseTabCommand {
                 }
                 switch (typeArmament) {
                     case WEAPON_TARKOV -> {
-                        return CommandUtils.listTab(args[2], CommandUtils.enumsToStrings(ListWeaponTarvok.values(), false), ModeTab.StartWith);
+                        return  CommandUtils.listTab(args[2], WEAPONS_TARVOK_NAMES);
                     }
                     case WEAPON_ULTRA_KILL -> {
-                        return CommandUtils.listTab(args[2] ,CommandUtils.enumsToStrings(ListWeaponUltraKill.values(), false), ModeTab.StartWith);
+                        return  CommandUtils.listTab(args[2], WEAPONS_ULTRA_KILL_NAMES);
                     }
                     case MAGAZINE -> {
-                        return CommandUtils.listTab(args[2] ,CommandUtils.enumsToStrings(ListMagazine.values(), false), ModeTab.StartWith);
+                        return  CommandUtils.listTab(args[2], MAGAZINES_NAMES);
                     }
                     case AMMO -> {
-                        return CommandUtils.listTab(args[2] ,CommandUtils.enumsToStrings(ListAmmo.values(), false), ModeTab.StartWith);
+                        return  CommandUtils.listTab(args[2], AMMO_NAMES);
                     }
                 }
             }
@@ -100,5 +117,10 @@ public class WeaponCommand extends BaseTabCommand {
         }
         return null;
     }
+
+    private static final List<String> WEAPONS_TARVOK_NAMES = new ArrayList<>();
+    private static final List<String> WEAPONS_ULTRA_KILL_NAMES = new ArrayList<>();
+    private static final List<String> MAGAZINES_NAMES = new ArrayList<>();
+    private static final List<String> AMMO_NAMES = new ArrayList<>();
 
 }

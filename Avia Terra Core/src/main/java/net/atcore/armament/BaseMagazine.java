@@ -24,11 +24,11 @@ import java.util.*;
 @Setter
 public abstract class BaseMagazine extends BaseArmament implements Compartment {
 
-    public BaseMagazine(List<ListAmmo> compatibleCaliber, List<ListAmmo> defaultCaliber, int ammoMax, String displayName, int reloadTime) {
+    public BaseMagazine(List<Class<? extends BaseAmmo>> compatibleCaliber, List<Class<? extends BaseAmmo>> defaultCaliber, int ammoMax, String displayName, int reloadTime) {
         super(displayName, new ItemStack(Material.SUGAR), "magazine");
         this.displayName = displayName;
         this.DefaultammonList = listAmmoFill(defaultCaliber);
-        this.compatibleAmmonList = listAmmoToBaseAmmo(compatibleCaliber);
+        this.compatibleAmmonList = listAmmoClassToListBaseAmmo(compatibleCaliber);
         this.ammoMax = ammoMax;
         this.reloadTime = reloadTime;
         List<String> listAmmoName = new ArrayList<>();
@@ -198,18 +198,18 @@ public abstract class BaseMagazine extends BaseArmament implements Compartment {
         getProperties(itemArmament, true);
     }
 
-    private List<BaseAmmo> listAmmoToBaseAmmo(List<ListAmmo> baseAmmoList){
+    private List<BaseAmmo> listAmmoClassToListBaseAmmo(List<Class<? extends BaseAmmo>> baseAmmoList){
         List<BaseAmmo> listAmmo = new ArrayList<>();
-        for (ListAmmo ammo : baseAmmoList) listAmmo.add(ammo.getAmmo());
+        for (Class<? extends BaseAmmo> ammo : baseAmmoList) listAmmo.add(ArmamentUtils.getAmmo(ammo));
         return listAmmo;
     }
     
-    private List<BaseAmmo> listAmmoFill(List<ListAmmo> ammoList){
-        List<ListAmmo> listAmmonFill = new ArrayList<>();
+    private List<BaseAmmo> listAmmoFill(List<Class<? extends BaseAmmo>> ammoList){
+        List<Class<? extends BaseAmmo>> listAmmonFill = new ArrayList<>();
         for (int i = 0; i < ammoMax; i++) {
             listAmmonFill.add(ammoList.get(i % ammoList.size()));
         }
-        return listAmmoToBaseAmmo(listAmmonFill);
+        return listAmmoClassToListBaseAmmo(listAmmonFill);
     }
 
     @Override

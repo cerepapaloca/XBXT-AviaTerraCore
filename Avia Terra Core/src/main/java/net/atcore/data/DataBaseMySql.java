@@ -2,6 +2,8 @@ package net.atcore.data;
 
 import net.atcore.AviaTerraCore;
 import net.atcore.Reloadable;
+import net.atcore.messages.Message;
+import net.atcore.messages.MessagesManager;
 import org.bukkit.Bukkit;
 
 import java.sql.Connection;
@@ -33,7 +35,7 @@ public abstract class DataBaseMySql implements Reloadable {
             connection = DriverManager.getConnection(url, USER, PASSWORD);
             if (!AviaTerraCore.isStarting()) sendMessageConsole("Conexión establecida a MySQL", TypeMessages.SUCCESS);
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            MessagesManager.sendException("Error al conectar con la base de datos", e);
         }
     }
 
@@ -48,7 +50,7 @@ public abstract class DataBaseMySql implements Reloadable {
                 connection.close();
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            MessagesManager.sendException("Error al cerrar la conexión de la base de datos", e);
         }
     }
 

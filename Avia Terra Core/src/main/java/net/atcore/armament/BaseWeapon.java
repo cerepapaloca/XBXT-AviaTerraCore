@@ -43,17 +43,22 @@ public abstract class BaseWeapon extends BaseArmament implements ShootWeapon{
     private long test;
 
     public void preProcessShoot(Player player){
-        ArmamentPlayer armamentPlayer = AviaTerraPlayer.getPlayer(player).getArmamentPlayer();
-        if (armamentPlayer.getShootTask() == null || armamentPlayer.getShootTask().isCancelled()){
-            BukkitTask task = new BukkitRunnable() {
-                private int i;
-                public void run() {
-                    if (i > (8/coolDown) +((coolDown%2) != 0 ? 1 : 0)) cancel();
-                    i++;
-                    shoot(player);
+        switch(mode){
+            case AUTOMATIC -> {
+                ArmamentPlayer armamentPlayer = AviaTerraPlayer.getPlayer(player).getArmamentPlayer();
+                if (armamentPlayer.getShootTask() == null || armamentPlayer.getShootTask().isCancelled()){
+                    BukkitTask task = new BukkitRunnable() {
+                        private int i;
+                        public void run() {
+                            if (i > (8/coolDown) +((coolDown%2) != 0 ? 1 : 0)) cancel();
+                            i++;
+                            shoot(player);
+                        }
+                    }.runTaskTimer(AviaTerraCore.getInstance(), 0, coolDown);
+                    armamentPlayer.setShootTask(task);
                 }
-            }.runTaskTimer(AviaTerraCore.getInstance(), 0, coolDown);
-            armamentPlayer.setShootTask(task);
+            }
+            case SEMI_AUTOMATIC -> shoot(player);
         }
     }
 

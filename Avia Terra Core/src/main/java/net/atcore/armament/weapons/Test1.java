@@ -6,18 +6,16 @@ import net.atcore.armament.WeaponMode;
 import net.atcore.armament.ammo.MM45Otan;
 
 @Initializer
-public final class M16 extends BaseWeaponUltraKill {
+public final class Test1 extends BaseWeaponUltraKill {
 
-    public M16() {
-        super("M16",
-                60,
-                2,
-                30,
+    public Test1() {
+        super("test 1",
+                50,
+                1,
+                120,
                 10,
                 MM45Otan.class,
-                WeaponMode.SEMI_AUTOMATIC,
-                6
-        );
+                WeaponMode.AUTOMATIC,
+                2);
     }
-
 }

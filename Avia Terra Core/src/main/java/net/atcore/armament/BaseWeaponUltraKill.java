@@ -23,10 +23,10 @@ import org.bukkit.persistence.PersistentDataType;
 @Setter
 public abstract class BaseWeaponUltraKill extends BaseWeapon {
 
-    public BaseWeaponUltraKill(String displayName, int maxDistance, int delay, int maxAmmo, double precision, ListAmmo ammo, WeaponMode mode, int cadence) {
+    public BaseWeaponUltraKill(String displayName, int maxDistance, int delay, int maxAmmo, double precision, Class<? extends BaseAmmo> ammo, WeaponMode mode, int cadence) {
         super(new ItemStack(Material.GOLDEN_HORSE_ARMOR), maxDistance, displayName, precision, mode, cadence);
         this.delay = delay;
-        this.ammo = ammo.getAmmo();
+        this.ammo = ArmamentUtils.getAmmo(ammo);
         this.maxAmmo = maxAmmo;
         GlobalUtils.setPersistentData(itemArmament, "AmountAmmo", PersistentDataType.INTEGER, 0);
         updateLore(getItemArmament(), null);

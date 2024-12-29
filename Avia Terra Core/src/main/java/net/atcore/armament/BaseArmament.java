@@ -19,6 +19,7 @@ public abstract class BaseArmament {
     public BaseArmament(String displayName, ItemStack item, String armament) {
         this.displayName = displayName;
         this.itemArmament = item;
+        this.name = this.getClass().getName();
         ItemMeta meta = itemArmament.getItemMeta();
         if (meta == null) return;
         meta.setDisplayName(GlobalUtils.applyGradient("<#BCBCBC>" + displayName + "<#777777>", 'l'));
@@ -37,7 +38,7 @@ public abstract class BaseArmament {
     }
 
     protected final String displayName;
-    protected String name;//esta variable es un final
+    protected final String name;
     protected final ItemStack itemArmament;
 
     protected abstract void updateLore(ItemStack item, @Nullable ItemStack itemAuxiliar);

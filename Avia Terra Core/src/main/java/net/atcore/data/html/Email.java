@@ -6,7 +6,7 @@ import net.atcore.security.Login.TwoFactorAuth;
 public class Email extends FileHTML {
 
     public Email() {
-        super("Email");
+        super("email");
     }
 
     @Override

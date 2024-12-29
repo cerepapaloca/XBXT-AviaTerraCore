@@ -37,8 +37,9 @@ public class ArmamentActions {
         return false;
     }
 
-    public boolean reloadAction(Player player, ItemStack offHandItem) {
-        Compartment compartment = ArmamentUtils.getCompartment(offHandItem);
+    public boolean reloadAction(Player player, ItemStack item) {
+        if (item.getItemMeta() == null) return false;
+        Compartment compartment = ArmamentUtils.getCompartment(item);
         if (compartment != null){
             compartment.reload(player);
             return true;
