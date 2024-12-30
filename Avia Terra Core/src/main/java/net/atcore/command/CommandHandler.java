@@ -7,20 +7,16 @@ import net.atcore.messages.TypeMessages;
 import net.atcore.security.AntiExploit;
 import net.atcore.security.Login.LoginManager;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import javax.swing.*;
-import java.awt.*;
 import java.util.*;
 import java.util.List;
 
-import static net.atcore.messages.MessagesManager.sendMessage;
-import static net.atcore.messages.MessagesManager.sendMessageConsole;
+import static net.atcore.messages.MessagesManager.*;
 
 @Getter
 @RequiredArgsConstructor //esta anotación crea un constructor con las variables que tenga el final
@@ -34,7 +30,6 @@ public final class CommandHandler implements TabExecutor {
      * @param args esto son los argumentos que tiene los comando
      */
 
-    @SuppressWarnings("CallToPrintStackTrace")
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {
         for (BaseCommand command : commands) {// Pasa por todas las clases para saber que comando es
@@ -60,11 +55,11 @@ public final class CommandHandler implements TabExecutor {
                 }
             }catch (Exception e) {
                 sendMessage(sender, Message.COMMAND_GENERIC_EXCEPTION_ERROR.getMessage(), TypeMessages.ERROR);
-                e.printStackTrace();
+                sendErrorException("Error al ejecutar el comando", e);
+                return false;
             }
-            break;
         }
-        return true;
+        return false;
     }
 
     /**
@@ -76,38 +71,34 @@ public final class CommandHandler implements TabExecutor {
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String alias, String[] args) {
         for (BaseCommand command : commands) {
             if (!(cmd.getName().equalsIgnoreCase(command.getName()))) continue;
+            List<String> list;
+
             if (command instanceof BaseTabCommand tabCommand){
-                List<String> list = tabCommand.onTab(sender, args);
-                List<String> argsUse = new ArrayList<>(Arrays.stream(command.getUsage().split(" ")).toList());
-                argsUse.removeFirst();
-                if (list == null)return null;
-                if (list.size() == 1) {
-                    if (list.getFirst().equalsIgnoreCase(args[args.length - 1])) {
-                        if (argsUse.size() >= args.length) {
-                            try {
-                                if (!argsUse.get(args.length).startsWith("<!")) {
-                                    return List.of(TypeMessages.ERROR.getMainColorWithColorChart() + String.format(Message.COMMAND_GENERIC_ARGS_ERROR.getMessage(),
-                                            CommandUtils.useToUseDisplay(argsUse.get(args.length))));
-                                }
-                            }catch (Exception e) {
-                                return list;
+                list = tabCommand.onTab(sender, args);
+            }else {
+                list = command.getUsage().onTab(args);
+            }
+
+            UseArgs argsUse = command.getUsage();
+            if (list == null)return null;
+
+            if (list.size() == 1) {
+                if (list.getFirst().equalsIgnoreCase(args[args.length - 1])) {
+                    if (argsUse.getLength() >= args.length) {
+                        try {
+                            if (command.getUsage().getArg(args.length).isRequired()) {
+                                return List.of(TypeMessages.ERROR.getMainColorWithColorChart() + String.format(
+                                        Message.COMMAND_GENERIC_ARGS_ERROR.getMessage(),
+                                        CommandUtils.useToUseDisplay(argsUse.getArgRaw(args.length))
+                                ));
                             }
+                        }catch (IndexOutOfBoundsException e) {
+                            return list;
                         }
                     }
                 }
-                return list;
             }
-            switch (command.getModeAutoTab()){
-                case NONE -> {
-                    return List.of();
-                }
-                case NORMAL -> {
-                    return null;
-                }
-                case ADVANCED -> {
-                    return CommandUtils.tabForPlayer(args[0]);
-                }
-            }
+            return list;
         }
         return null;
     }

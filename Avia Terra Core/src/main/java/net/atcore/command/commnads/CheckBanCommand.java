@@ -2,6 +2,7 @@ package net.atcore.command.commnads;
 
 import net.atcore.command.BaseTabCommand;
 import net.atcore.command.CommandUtils;
+import net.atcore.command.UseArgs;
 import net.atcore.messages.Message;
 import net.atcore.messages.TypeMessages;
 import net.atcore.moderation.ban.IsBan;
@@ -22,7 +23,7 @@ public class CheckBanCommand extends BaseTabCommand {
 
     public CheckBanCommand() {
         super("checkban",
-                "/CheckBan <jugador> <!_|_?> <Contexto>",
+                new UseArgs("checkBan").addArg("?","!").addArg("Contexto"),
                 "Compruebas que el jugador este baneado usando ? o !. con ? solo miras que contexto esta baneado y no requiere especificar " +
                         "el contexto mientras el ! se usa cuando quieres echar un jugador baneado de un contexto especificado (esto por si se llega a " +
                         "colar en un modo de juego o si hay bug)"

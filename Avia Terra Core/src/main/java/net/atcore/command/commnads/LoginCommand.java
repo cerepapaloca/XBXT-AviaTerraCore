@@ -2,7 +2,8 @@ package net.atcore.command.commnads;
 
 import net.atcore.AviaTerraCore;
 import net.atcore.command.BaseCommand;
-import net.atcore.command.ModeAutoTab;
+import net.atcore.command.ModeTabPlayers;
+import net.atcore.command.UseArgs;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
@@ -24,10 +25,10 @@ public class LoginCommand extends BaseCommand {
 
     public LoginCommand() {
         super("login",
-                "/login <contraseña>",
+                new UseArgs("/login")
+                        .addNote("contraseña"),
                 "**",
-                "Te logueas",
-                ModeAutoTab.NONE
+                "Te logueas"
         );
     }
 

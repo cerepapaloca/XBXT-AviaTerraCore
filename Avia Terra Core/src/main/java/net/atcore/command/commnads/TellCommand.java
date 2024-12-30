@@ -2,6 +2,8 @@ package net.atcore.command.commnads;
 
 import net.atcore.command.BaseTabCommand;
 import net.atcore.command.CommandUtils;
+import net.atcore.command.ModeTabPlayers;
+import net.atcore.command.UseArgs;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.TypeMessages;
 import org.bukkit.command.CommandSender;
@@ -15,7 +17,9 @@ public class TellCommand extends BaseTabCommand {
 
     public TellCommand() {
         super("tell",
-                "/tell <Jugador> <Mensaje>",
+                new UseArgs("tell")
+                        .addArgPlayer(ModeTabPlayers.ADVANCED)
+                        .addArg("Mensaje"),
                 "*",
                 "Le envías un mensaje privado a un jugador o un grupo de estos"
         );

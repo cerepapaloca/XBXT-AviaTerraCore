@@ -3,6 +3,8 @@ package net.atcore.command.commnads;
 import net.atcore.AviaTerraCore;
 import net.atcore.command.BaseTabCommand;
 import net.atcore.command.CommandUtils;
+import net.atcore.command.ModeTabPlayers;
+import net.atcore.command.UseArgs;
 import net.atcore.data.sql.DataBaseRegister;
 import net.atcore.messages.Message;
 import net.atcore.messages.TypeMessages;
@@ -20,7 +22,7 @@ public class RemoveRegisterCommand extends BaseTabCommand {
 
     public RemoveRegisterCommand() {
         super("removeRegister",
-                "/removeRegister <Jugador>",
+                new UseArgs("removeRegister").addArgPlayer(ModeTabPlayers.ADVANCED),
                 "Le borras el registro al jugador, util para jugadores temporales"
         );
     }
@@ -38,7 +40,7 @@ public class RemoveRegisterCommand extends BaseTabCommand {
                         LoginManager.removeDataLogin(dataTemporalPlayer.name());
                     }));
         }else{
-            sendMessage(sender, this.getUsage(), TypeMessages.ERROR);
+            sendMessage(sender, this.getUsage().toString(), TypeMessages.ERROR);
         }
     }
 

@@ -35,6 +35,7 @@ public abstract class BaseArmament {
                 GlobalUtils.setPersistentData(itemArmament,armament + "Name", PersistentDataType.STRING, name);
             }
         }.runTaskLater(AviaTerraCore.getInstance(), 1);
+        ArmamentUtils.ARMAMENTS.add(this);
     }
 
     protected final String displayName;

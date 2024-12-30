@@ -7,6 +7,7 @@ import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import com.google.common.base.Charsets;
 import lombok.experimental.UtilityClass;
 import net.atcore.AviaTerraCore;
+import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import net.md_5.bungee.api.ChatColor;
@@ -21,7 +22,6 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.beans.JavaBean;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -240,8 +240,8 @@ public final class GlobalUtils {
      */
 
     public void kickPlayer(@NotNull Player player,@Nullable String reason) {
-        reason = org.bukkit.ChatColor.translateAlternateColorCodes('&', MessagesManager.addProprieties(MessagesManager.PREFIX_AND_SUFFIX_KICK[0]
-                + "&4" + (reason == null ? "Has sido expulsado" : reason) + "&c" + MessagesManager.PREFIX_AND_SUFFIX_KICK[1], TypeMessages.KICK, false, false));
+        reason = org.bukkit.ChatColor.translateAlternateColorCodes('&', MessagesManager.addProprieties(Message.MISC_KICK_UPPER
+                + "&4" + (reason == null ? "Has sido expulsado" : reason) + "&c" + Message.MISC_KICK_LOWER, TypeMessages.KICK, false, false));
         if (Bukkit.isPrimaryThread()){
             kickFinal(player, reason);
         }else{

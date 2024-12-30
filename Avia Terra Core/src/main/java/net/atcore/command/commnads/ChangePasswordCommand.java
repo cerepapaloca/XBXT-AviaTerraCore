@@ -2,6 +2,7 @@ package net.atcore.command.commnads;
 
 import net.atcore.AviaTerraCore;
 import net.atcore.command.BaseTabCommand;
+import net.atcore.command.UseArgs;
 import net.atcore.data.sql.DataBaseRegister;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.Message;
@@ -22,7 +23,7 @@ public class ChangePasswordCommand extends BaseTabCommand {
 
     public ChangePasswordCommand(){
         super("changePassword",
-                "/changePassword <Contraseña_|_Código> <Nueva_Contraseña>",
+                new UseArgs("changePassword").addNote("Contraseña", "Código").addNote("Nueva Contraseña"),
                 "*",
                 "cambias tu contraseña"
         );
@@ -48,7 +49,7 @@ public class ChangePasswordCommand extends BaseTabCommand {
                 sendMessage(sender, Message.COMMAND_GENERIC_NO_PLAYER, TypeMessages.ERROR);
             }
         }else{
-            sendMessage(sender, this.getUsage(), TypeMessages.ERROR);
+            sendMessage(sender, this.getUsage().toString(), TypeMessages.ERROR);
         }
     }
 

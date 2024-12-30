@@ -158,6 +158,8 @@ public enum Message {
     COMMAND_WEAPON_MISSING_ARGS_TYPE("command.weapon", "El tipo de armamento no existe"),
     COMMAND_WEAPON_SUCCESSFUL("command.weapon", "Se dio el armamento de manera exitosa"),
     COMMAND_WEAPON_NOT_FOUND_TYPE("command.weapon", "El tipo de armamento no existe"),
+    MISC_KICK_UPPER("misc", "&c&m &r &c&m       &r  &4&lAviaKick&c  &m        &r &c&m \n\n&r"),
+    MISC_KICK_LOWER("misc", "\n\n&m &r &c&m                               &r &c&m ")
     ;
     Message(String parent, String message) {
         this.parent = parent;

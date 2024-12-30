@@ -20,21 +20,19 @@ public class DataSection implements Section {
 
     public final static HashSet<File> FILES = new HashSet<>();
     public final static HashSet<DataBaseMySql> DATA_BASE = new HashSet<>();
-    @Getter private static DataBaseMySql mySQLConnection;
     @Getter private static FliesCacheLimbo fliesCacheLimbo;
     @Getter private static ConfigFile configFile;
 
     @Override
     public void enable() {
-        register(mySQLConnection = new DataBaseBan());
+
         MessageFile messageFile = new MessageFile();
         ConfigFile configFile = new ConfigFile();
-        register(new DataBaseRegister());
-        register(new CommandsFile());
-        register(new Discord());
-        register(new Email());
-        register(messageFile);
-        register(configFile);
+        new DataBaseBan();
+        new DataBaseRegister();
+        new CommandsFile();
+        new Discord();
+        new Email();
         DataSection.configFile = configFile;
         messageFile.reloadConfig(ActionInReloadYaml.LOAD);
         fliesCacheLimbo = new FliesCacheLimbo();

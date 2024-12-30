@@ -30,6 +30,7 @@ public abstract class File {
         }else {
             this.fileName = fileName + this.fileExtension;
         }
+        DataSection.FILES.add(this);
     }
 
     @Override
@@ -67,7 +68,7 @@ public abstract class File {
                     }
                 }
             } catch (IOException e) {
-                MessagesManager.sendException("No se pudo copiar de resources el archivo " + fileName, e);
+                MessagesManager.sendErrorException("No se pudo copiar de resources el archivo " + fileName, e);
             }
         }
     }
@@ -77,7 +78,7 @@ public abstract class File {
         try {
             return Files.asCharSource(file, StandardCharsets.UTF_8).read();
         } catch (IOException e) {
-            MessagesManager.sendException("Error al copiar o leer el archivo", e);
+            MessagesManager.sendErrorException("Error al copiar o leer el archivo", e);
             return "";
         }
     }

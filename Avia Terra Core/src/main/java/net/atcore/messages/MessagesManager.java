@@ -12,18 +12,17 @@ import org.jetbrains.annotations.Nullable;
 import java.awt.*;
 
 /**
- * En esta clase esta tod0 relacionado con los colores y envío de mensajes todos los mensajes tiene que pasar por quí
+ * En esta clase esta tod0 relacionado con los colores y el envío de mensajes. Todos los mensajes tienen que pasar por quí
  * al igual que todos los colores.
  */
 public final class MessagesManager {
-    @Deprecated
-    public static final String[] PREFIX_AND_SUFFIX_KICK = new String[]{"&c&m &r &c&m       &r  &4&lAviaKick&c  &m        &r &c&m \n\n&r", "\n\n&m &r &c&m                               &r &c&m "};
+
     public static final String LINK_DISCORD = "&a&nhttps://discord.gg/azurex";
     //"&8[" + GlobalUtils.applyGradient("<#00CCCC>AviaTerra<#00FFFF>",'l') + "&8]&r " ;
-    private static final String PREFIX = new Gradient("AviaTerra")
+    private static final String PREFIX = "&8[" + new Gradient("AviaTerra")
             .addGradient(new Color(0,200, 200), 1)
             .addGradient(new Color(0, 255, 255), 1)
-            .getText();
+            .getText() + "&8] ";
 
     ///////////////////////////
     ///////////////////////////
@@ -105,12 +104,20 @@ public final class MessagesManager {
         Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', s));
     }
 
-    public static void sendException(String message, Exception exception) {
+    public static void sendErrorException(String message, Exception exception) {
+        AviaTerraCore.getInstance().getLogger().severe(setFormatException(message, exception));
+    }
+
+    public static void sendWaringException(String message, Exception exception) {
+        AviaTerraCore.getInstance().getLogger().warning(setFormatException(message, exception));
+    }
+
+    private static String setFormatException(String message, Exception exception) {
         StringBuilder builder = new StringBuilder();
         for (StackTraceElement element : exception.getStackTrace()) {
             builder.append(element.toString()).append("\n\t");
         }
-        AviaTerraCore.getInstance().getLogger().severe(String.format("%s [%s=%s] \n\t%s", message, exception.getClass().getSimpleName(), exception.getMessage(), builder));
+        return String.format("%s [%s=%s] \n\t%s", message, exception.getClass().getSimpleName(), exception.getMessage(), builder);
     }
 
     ///////////////////////////

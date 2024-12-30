@@ -3,6 +3,7 @@ package net.atcore.command.commnads;
 import net.atcore.AviaTerraCore;
 import net.atcore.command.BaseTabCommand;
 import net.atcore.command.CommandUtils;
+import net.atcore.command.UseArgs;
 import net.atcore.data.sql.DataBaseRegister;
 import net.atcore.messages.Message;
 import net.atcore.messages.TypeMessages;
@@ -18,7 +19,9 @@ import static net.atcore.messages.MessagesManager.sendMessage;
 public class LinkCommand extends BaseTabCommand {
     public LinkCommand() {
         super("link",
-                "/link <gmail_|_discord> <Cuenta>",
+                new UseArgs("link")
+                        .addArg("gmail", "discord")
+                        .addNote("Cuenta"),
                 "**",
                 "Vinculas una cuenta para que mayor seguridad en el servidor y tener la capacidad de iniciar session con la autenticación de 2 pasos"
         );

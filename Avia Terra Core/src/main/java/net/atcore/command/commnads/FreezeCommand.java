@@ -4,6 +4,8 @@ import net.atcore.aviaterraplayer.AviaTerraPlayer;
 import net.atcore.aviaterraplayer.ModerationPlayer;
 import net.atcore.command.BaseTabCommand;
 import net.atcore.command.CommandUtils;
+import net.atcore.command.ModeTabPlayers;
+import net.atcore.command.UseArgs;
 import net.atcore.messages.Message;
 import net.atcore.messages.TypeMessages;
 import org.bukkit.command.CommandSender;
@@ -18,7 +20,9 @@ import static net.atcore.messages.MessagesManager.sendMessage;
 public class FreezeCommand extends BaseTabCommand {
     public FreezeCommand() {
         super("freeze",
-                "/freeze <player> <on_|_off>",
+                new UseArgs("freeze")
+                        .addArgPlayer(ModeTabPlayers.ADVANCED)
+                        .addArg("true", "false"),
                 "Este comando congelas a un jugador por actividad sospechosa"
         );
     }
@@ -26,7 +30,7 @@ public class FreezeCommand extends BaseTabCommand {
     @Override
     public void execute(CommandSender sender, String[] args) {
         if (args.length == 0) {
-            sendMessage(sender, this.getUsage(), TypeMessages.ERROR);
+            sendMessage(sender, this.getUsage().toString(), TypeMessages.ERROR);
             return;
         }
         if (args.length == 1) {

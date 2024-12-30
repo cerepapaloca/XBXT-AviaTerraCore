@@ -1,6 +1,7 @@
 package net.atcore.command.commnads;
 
 import net.atcore.aviaterraplayer.AviaTerraPlayer;
+import net.atcore.command.UseArgs;
 import net.atcore.test.TypeTest;
 import net.atcore.command.BaseTabCommand;
 import net.atcore.command.CommandUtils;
@@ -15,7 +16,7 @@ public class AviaTerraPruebasCommand extends BaseTabCommand {
 
     public AviaTerraPruebasCommand() {
         super("AviaTerraPruebas",
-                "/AviaTerraPruebas <Pruebas>",
+                new UseArgs("AviaTerraPruebas").addArg("Pruebas"),
                 "Commando para realizar pruebas del plugin"
         );
     }
@@ -34,7 +35,7 @@ public class AviaTerraPruebasCommand extends BaseTabCommand {
                 }
                 typeTest.runtTest(atp);
             }else {
-                MessagesManager.sendMessage(player, this.getUsage(), TypeMessages.ERROR);
+                MessagesManager.sendMessage(player, this.getUsage().toString(), TypeMessages.ERROR);
             }
         }
     }

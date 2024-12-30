@@ -2,7 +2,8 @@ package net.atcore.command.commnads;
 
 import net.atcore.AviaTerraCore;
 import net.atcore.command.BaseCommand;
-import net.atcore.command.ModeAutoTab;
+import net.atcore.command.ModeTabPlayers;
+import net.atcore.command.UseArgs;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.TypeMessages;
 import net.luckperms.api.model.user.User;
@@ -17,9 +18,8 @@ public class InfoCommand extends BaseCommand {
 
     public InfoCommand() {
         super("info",
-                "/info <jugador>",
-                "Te logueas",
-                ModeAutoTab.NORMAL
+                new UseArgs("/info"),
+                "Te logueas"
         );
     }
 

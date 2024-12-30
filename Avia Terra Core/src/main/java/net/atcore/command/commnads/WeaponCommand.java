@@ -3,6 +3,8 @@ package net.atcore.command.commnads;
 import net.atcore.armament.*;
 import net.atcore.command.BaseTabCommand;
 import net.atcore.command.CommandUtils;
+import net.atcore.command.ModeTabPlayers;
+import net.atcore.command.UseArgs;
 import net.atcore.messages.Message;
 import net.atcore.messages.TypeMessages;
 import net.atcore.utils.GlobalUtils;
@@ -19,7 +21,12 @@ public class WeaponCommand extends BaseTabCommand {
 
     public WeaponCommand() {
         super("weapon",
-                "/weapon <Jugador> <Tipo_de_armamento> <Nombre_del_armamento> <!Cantidad>",
+                new UseArgs("weapon")
+                        .addArgPlayer(ModeTabPlayers.ADVANCED)
+                        .addArg("Tipo De Armamento")
+                        .addArg("Nombre Del Armamento")
+                        .addArgOptional()
+                        .addArg("Cantidad"),
                 "desbanea a al jugador que le caes bien"
         );
         if (ArmamentUtils.ARMAMENTS.isEmpty()) ArmamentSection.initialize();
@@ -36,14 +43,13 @@ public class WeaponCommand extends BaseTabCommand {
             if (armament instanceof BaseAmmo){
                 AMMO_NAMES.add(armament.getName());
             }
-            Bukkit.getLogger().warning(armament.getName());
         }
     }
 
     @Override
     public void execute(CommandSender sender, String[] args) {
         switch (args.length) {
-            case 0, 1 -> sendMessage(sender, this.getUsage(), TypeMessages.ERROR);
+            case 0, 1 -> sendMessage(sender, this.getUsage().toString(), TypeMessages.ERROR);
             case 2 -> sendMessage(sender, Message.COMMAND_WEAPON_MISSING_ARGS_NAME, TypeMessages.ERROR);
             default -> {
                 TypeArmament typeArmament;

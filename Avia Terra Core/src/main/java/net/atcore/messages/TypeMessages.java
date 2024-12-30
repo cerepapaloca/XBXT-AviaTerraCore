@@ -21,6 +21,7 @@ public enum TypeMessages {
     private final char mainColor;
     private final String secondColor;
 
+    @Deprecated
     @Contract(pure = true)
     public String getMainColor() {
         return '&' + Character.toString(mainColor);

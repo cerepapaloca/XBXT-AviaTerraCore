@@ -1,20 +1,18 @@
 package net.atcore.command.commnads;
 
-import net.atcore.AviaTerraCore;
+import net.atcore.Config;
+import net.atcore.Section;
 import net.atcore.command.BaseTabCommand;
 import net.atcore.command.CommandUtils;
-import net.atcore.Config;
-import net.atcore.data.DataBaseMySql;
+import net.atcore.command.UseArgs;
 import net.atcore.data.DataSection;
-import net.atcore.data.File;
 import net.atcore.messages.TypeMessages;
-import net.atcore.Section;
-import net.atcore.security.Login.*;
+import net.atcore.security.Login.ServerMode;
 import net.atcore.utils.GlobalUtils;
 import net.atcore.utils.RegisterManager;
 import org.bukkit.command.CommandSender;
 
-import java.util.*;
+import java.util.List;
 
 import static net.atcore.messages.MessagesManager.sendMessage;
 
@@ -22,7 +20,7 @@ public class AviaTerraCommand extends BaseTabCommand {
 
     public AviaTerraCommand() {
         super("AviaTerra",
-                "/AviaTerra",
+                new UseArgs("aviaTerra"),
                 "Se encarga de la configuración de algunos apartados del plugin"
         );
     }

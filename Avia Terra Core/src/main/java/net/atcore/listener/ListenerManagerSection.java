@@ -9,6 +9,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import static net.atcore.AviaTerraCore.jda;
+import static net.atcore.utils.RegisterManager.*;
 
 public class ListenerManagerSection implements Section {
 
@@ -17,10 +18,12 @@ public class ListenerManagerSection implements Section {
 
     @Override
     public void enable() {
-        RegisterManager.register(chatListener = new ChatListener());
-        RegisterManager.register(new InventoryListener());
-        RegisterManager.register(new JoinAndQuitListener());
-        RegisterManager.register(new PlayerListener());
+        chatListener = new ChatListener();
+        register(chatListener,
+                new InventoryListener(),
+                new JoinAndQuitListener(),
+                new PlayerListener()
+        );
         new BukkitRunnable() {
             @Override
             public void run() {

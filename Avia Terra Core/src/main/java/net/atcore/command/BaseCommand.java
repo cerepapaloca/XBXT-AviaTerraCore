@@ -10,28 +10,26 @@ import org.jetbrains.annotations.Nullable;
 public abstract class BaseCommand {
 
     private final String name;
-    private final String usage;
     private final String permissions;
     private final String description;
-    private final ModeAutoTab modeAutoTab;
+    private final UseArgs usage;
 
     public BaseCommand(@NotNull String name,
-                       @NotNull  String usage,
-                       @Nullable String description,
-                       @NotNull ModeAutoTab modeAutoTab) {
-        this(name, usage, "", description, modeAutoTab);
+                       @NotNull UseArgs usage,
+                       @Nullable String description
+    ) {
+        this(name, usage, "", description);
     }
 
     public BaseCommand(@NotNull String name,
-                       @NotNull  String usage,
-                       @NotNull  String permissions,
-                       @Nullable String description,
-                       @NotNull ModeAutoTab modeAutoTab) {
+                       @NotNull UseArgs usage,
+                       @NotNull String permissions,
+                       @Nullable String description
+    ) {
         this.name = name;
         this.usage = usage;
         this.permissions = permissions.equals("*") || permissions.equals("**") ? permissions : AviaTerraCore.getInstance().getName().toLowerCase() + ".command." + name.toLowerCase() + "," + permissions;
         this.description = description == null || description.isEmpty() ? "&oSin Descripción" : description;
-        this.modeAutoTab = modeAutoTab;
     }
 
     public abstract void execute(CommandSender sender, String[] args) throws Exception;

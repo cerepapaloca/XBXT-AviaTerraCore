@@ -3,6 +3,8 @@ package net.atcore.command.commnads;
 import net.atcore.AviaTerraCore;
 import net.atcore.command.BaseTabCommand;
 import net.atcore.command.CommandUtils;
+import net.atcore.command.ModeTabPlayers;
+import net.atcore.command.UseArgs;
 import net.atcore.messages.Message;
 import net.atcore.messages.TypeMessages;
 import net.atcore.moderation.ban.ContextBan;
@@ -17,7 +19,9 @@ public class UnbanCommand extends BaseTabCommand {
 
     public UnbanCommand() {
         super("unban",
-                "/unban <Jugador> <Contexto>",
+                new UseArgs("unban")
+                        .addArgPlayer(ModeTabPlayers.ADVANCED)
+                        .addArg("Contexto"),
                 "desbanea a al jugador que le caes bien"
         );
     }

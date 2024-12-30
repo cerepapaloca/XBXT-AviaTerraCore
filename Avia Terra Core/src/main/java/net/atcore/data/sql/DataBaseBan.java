@@ -4,6 +4,7 @@ import net.atcore.AviaTerraCore;
 import net.atcore.data.DataBaseMySql;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.Message;
+import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import net.atcore.moderation.ban.ContextBan;
 import net.atcore.moderation.ban.DataBan;
@@ -58,7 +59,7 @@ public class DataBaseBan extends DataBaseMySql {
                 addListDataBan(name, uuids, ip, reason, dateUnban, dateBan, context, author);
             }
         } catch (SQLException | UnknownHostException e) {
-            throw new RuntimeException(e);
+            MessagesManager.sendErrorException("Error al recargar la base de datos", e);
         }
 
         if (!AviaTerraCore.isStarting()) sendMessageConsole("Baneos Recargado", TypeMessages.SUCCESS);
@@ -128,7 +129,6 @@ public class DataBaseBan extends DataBaseMySql {
         HashMap<ContextBan, DataBan> listUUID = listDataBanByNAME.getOrDefault(name,  new HashMap<>());//busca si hay una lista de DataBan si no hay crea una
         listUUID.put(ContextBan.valueOf(context), dataBan);//Añade el DataBan a la lista
         listDataBanByNAME.put(name, listUUID);//Añade la lista de DataBan Remplazando el dato
-
         if (ipAddress == null) return;
 
         HashMap<ContextBan, DataBan> listIP = listDataBanByIP.getOrDefault(ipAddress,  new HashMap<>());

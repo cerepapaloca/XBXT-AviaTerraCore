@@ -51,31 +51,7 @@ public abstract class BaseMagazine extends BaseArmament implements Compartment {
         List<BaseAmmo> AmmoBaseList = new ArrayList<>();
         if (stringAmmo != null) {
             for (String ammoName : ArmamentUtils.stringToList(stringAmmo)) AmmoBaseList.add(ArmamentUtils.getAmmo(ammoName));
-            int amountAmmo = AmmoBaseList.size();
-            String loreCargador = String.format("""
-                    %s
-                    CARGADOR
-                    Nombre <|%s|>
-                    Municion <|%s|>
-                    Munición maxima <|%s|>
-                    Velocidad de recarga <|%ss|>
-                    """,
-                    setLore ? "" : " \n",
-                    displayName,
-                    amountAmmo,
-                    ammoMax,
-                    (reloadTime/20)
-            );
-            StringBuilder loreAmmo = new StringBuilder();
-            if (!AmmoBaseList.isEmpty()) {
-                Set<BaseAmmo> uniqueAmmo = new HashSet<>(AmmoBaseList);
-                for(BaseAmmo ammo : uniqueAmmo){
-                    if (ammo == null) continue;
-                    loreAmmo.append(ammo.getProperties());
-                }
-            }
-
-            String finalLore = loreCargador + (amountAmmo > 0 ? loreAmmo.toString() : "");
+            String finalLore = getFinalLore(setLore, AmmoBaseList);
             if (setLore){
                 meta.setLore(GlobalUtils.StringToLoreString(MessagesManager.addProprieties(finalLore, null, false, false), true));
                 item.setItemMeta(meta);
@@ -83,6 +59,35 @@ public abstract class BaseMagazine extends BaseArmament implements Compartment {
             return finalLore;
         }
         return "?";
+    }
+
+    private @NotNull String getFinalLore(boolean setLore, List<BaseAmmo> AmmoBaseList) {
+        int amountAmmo = AmmoBaseList.size();
+        String loreCargador = String.format("""
+                %s
+                CARGADOR
+                Nombre <|%s|>
+                Municion <|%s|>
+                Munición maxima <|%s|>
+                Velocidad de recarga <|%ss|>
+                """,
+                setLore ? "" : " \n",
+                displayName,
+                amountAmmo,
+                ammoMax,
+                (reloadTime/20)
+        );
+        StringBuilder loreAmmo = new StringBuilder();
+        if (!AmmoBaseList.isEmpty()) {
+            Set<BaseAmmo> uniqueAmmo = new HashSet<>(AmmoBaseList);
+            for(BaseAmmo ammo : uniqueAmmo){
+                if (ammo == null) continue;
+                loreAmmo.append(ammo.getProperties());
+            }
+        }
+
+        String finalLore = loreCargador + (amountAmmo > 0 ? loreAmmo.toString() : "");
+        return finalLore;
     }
 
     private static HashMap<UUID, BukkitTask> reloadTask = new HashMap<>();
@@ -198,13 +203,13 @@ public abstract class BaseMagazine extends BaseArmament implements Compartment {
         getProperties(itemArmament, true);
     }
 
-    private List<BaseAmmo> listAmmoClassToListBaseAmmo(List<Class<? extends BaseAmmo>> baseAmmoList){
+    private @NotNull List<BaseAmmo> listAmmoClassToListBaseAmmo(@NotNull List<Class<? extends BaseAmmo>> baseAmmoList){
         List<BaseAmmo> listAmmo = new ArrayList<>();
         for (Class<? extends BaseAmmo> ammo : baseAmmoList) listAmmo.add(ArmamentUtils.getAmmo(ammo));
         return listAmmo;
     }
     
-    private List<BaseAmmo> listAmmoFill(List<Class<? extends BaseAmmo>> ammoList){
+    private @NotNull List<BaseAmmo> listAmmoFill(List<Class<? extends BaseAmmo>> ammoList){
         List<Class<? extends BaseAmmo>> listAmmonFill = new ArrayList<>();
         for (int i = 0; i < ammoMax; i++) {
             listAmmonFill.add(ammoList.get(i % ammoList.size()));

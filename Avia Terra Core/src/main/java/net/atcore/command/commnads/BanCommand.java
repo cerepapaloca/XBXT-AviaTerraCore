@@ -2,6 +2,8 @@ package net.atcore.command.commnads;
 
 import net.atcore.command.BaseTabCommand;
 import net.atcore.command.CommandUtils;
+import net.atcore.command.ModeTabPlayers;
+import net.atcore.command.UseArgs;
 import net.atcore.messages.Message;
 import net.atcore.messages.TypeMessages;
 import net.atcore.moderation.ban.ContextBan;
@@ -17,7 +19,7 @@ public class BanCommand extends BaseTabCommand {
 
     public BanCommand() {
         super("ban",
-                "/ban <jugador> <Contexto> <Tiempo> <Ranzón...",
+                new UseArgs("jugador").addArg("Contexto").addTime(true).addNote("Ranzón"),
                 "Baneas a los jugador de un contexto por un tiempo determinado"
         );
     }
@@ -25,7 +27,7 @@ public class BanCommand extends BaseTabCommand {
     @Override
     public void execute(CommandSender sender, String[] args) {
         switch (args.length) {
-            case 1 -> sendMessage(sender, this.getUsage(), TypeMessages.ERROR);
+            case 1 -> sendMessage(sender, this.getUsage().toString(), TypeMessages.ERROR);
             case 2 -> sendMessage(sender, Message.COMMAND_BAN_MISSING_ARGUMENT_TIME, TypeMessages.ERROR);
             case 3 -> sendMessage(sender, Message.COMMAND_BAN_MISSING_ARGUMENT_REASON, TypeMessages.ERROR);
             default -> {

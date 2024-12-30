@@ -14,25 +14,26 @@ public class CommandSection implements Section {
     @Override
     public void enable() {
         commandHandler = new CommandHandler();
-        register(new InfoCommand());
-        register(new FreezeCommand());
-        register(new PruebaCommand());
-        register(new AviaTerraCommand());
-        register(new UnbanCommand());
-        register(new BanCommand());
-        register(new CheckBanCommand());
-        register(new LoginCommand());
-        register(new RegisterCommand());
-        register(new AddRangeCommand());
-        register(new KickCommand());
-        register(new RemoveRegisterCommand());
-        register(new ChangePasswordCommand());
-        register(new RemoveSessionCommand());
-        register(new WeaponCommand());
-        register(new seeInventoryCommand());
-        register(new AviaTerraPruebasCommand());
-        register(new LinkCommand());
-        register(new TellCommand());
+        register(new InfoCommand(),
+                new FreezeCommand(),
+                new PruebaCommand(),
+                new AviaTerraCommand(),
+                new UnbanCommand(),
+                new BanCommand(),
+                new CheckBanCommand(),
+                new LoginCommand(),
+                new RegisterCommand(),
+                new AddRangeCommand(),
+                new KickCommand(),
+                new RemoveRegisterCommand(),
+                new ChangePasswordCommand(),
+                new RemoveSessionCommand(),
+                new WeaponCommand(),
+                new seeInventoryCommand(),
+                new AviaTerraPruebasCommand(),
+                new LinkCommand(),
+                new TellCommand()
+        );
     }
 
     @Override

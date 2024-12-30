@@ -5,7 +5,7 @@ package net.atcore.command;
  * manera pre terminada
  */
 
-public enum ModeAutoTab {
+public enum ModeTabPlayers {
     /**
      * No añade ningún argumento al TAB
      */
