@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ArtifactsWorkspaceSettings">
+    <artifacts-to-build>
+      <artifact name="AviaTerra:jar" />
+    </artifacts-to-build>
+  </component>
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="ea0f4ef9-10c7-4d19-b67e-e1a9046efa9d" name="Changes" comment="Mejoras a las armas y solución a unos bugs" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JUnit5 Test Class" />
+        <option value="Interface" />
+        <option value="Enum" />
+        <option value="Class" />
+        <option value="AnnotationType" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;cerepapaloca&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/cerepapaloca/Avia-Terra.git&quot;,
+    &quot;accountId&quot;: &quot;69f17d0a-1a07-47d3-a386-ff21ca0e5cb4&quot;
+  }
+}</component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="jar://$PROJECT_DIR$/../../../../Program Files/Java/jdk-21/lib/src.zip!/java.base/java/lang/String.java" root0="SKIP_INSPECTION" />
+    <setting file="jar://$PROJECT_DIR$/../../../../Program Files/Java/jdk-21/lib/src.zip!/java.base/java/lang/annotation/ElementType.java" root0="SKIP_INSPECTION" />
+    <setting file="jar://$MAVEN_REPOSITORY$/org/checkerframework/checker-qual/3.33.0/checker-qual-3.33.0-sources.jar!/org/checkerframework/checker/initialization/qual/NotOnlyInitialized.java" root0="SKIP_INSPECTION" />
+    <setting file="jar://$MAVEN_REPOSITORY$/org/spigotmc/spigot-api/1.21.1-R0.1-SNAPSHOT/spigot-api-1.21.1-R0.1-20241022.152140-54-sources.jar!/org/bukkit/entity/Player.java" root0="SKIP_INSPECTION" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 6
+}</component>
+  <component name="ProjectId" id="2pdLhDwNAQf46yBY49dXePQ6KMT" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary&quot;: &quot;JUnit5&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5&quot;: &quot;&quot;,
+    &quot;extract.method.default.visibility&quot;: &quot;private&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Cagut/IdeaProjects/Avia-Terra&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Artifacts&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15820312&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.29099306&quot;,
+    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;configurable.group.editor&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  },
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;mysql_aurora&quot;
+    ]
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CreateTestDialog.Recents.Supers">
+      <recent name="" />
+    </key>
+    <key name="CreateTestDialog.RecentsKey">
+      <recent name="net.atcore.messages" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="Avia-Terra" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="Avia-Terra" />
+      <option name="filePath" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-fdfe4dae3a2d-intellij.indexing.shared.core-IU-243.22562.218" />
+        <option value="bundled-js-predefined-d6986cc7102b-deb605915726-JavaScript-IU-243.22562.218" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="ea0f4ef9-10c7-4d19-b67e-e1a9046efa9d" name="Changes" comment="" />
+      <created>1733091123206</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1733091123206</updated>
+      <workItem from="1733091124263" duration="477000" />
+      <workItem from="1733091609866" duration="575000" />
+      <workItem from="1733092193339" duration="7174000" />
+      <workItem from="1733434562182" duration="2595000" />
+      <workItem from="1733517232339" duration="598000" />
+      <workItem from="1733594328450" duration="7967000" />
+      <workItem from="1733631414812" duration="270000" />
+      <workItem from="1733800208670" duration="1280000" />
+      <workItem from="1733863418931" duration="10446000" />
+      <workItem from="1734043270769" duration="4260000" />
+      <workItem from="1734130008635" duration="4248000" />
+      <workItem from="1734276026113" duration="47000" />
+      <workItem from="1734276943670" duration="7875000" />
+      <workItem from="1734304724745" duration="1476000" />
+      <workItem from="1734314990147" duration="789000" />
+      <workItem from="1734379312586" duration="9060000" />
+      <workItem from="1734459203608" duration="9245000" />
+      <workItem from="1734506071136" duration="1249000" />
+      <workItem from="1734658191600" duration="1979000" />
+      <workItem from="1734900932649" duration="7783000" />
+      <workItem from="1735005414855" duration="7000" />
+      <workItem from="1735006351523" duration="5488000" />
+      <workItem from="1735058422646" duration="7271000" />
+      <workItem from="1735147906309" duration="22491000" />
+      <workItem from="1735230618169" duration="4503000" />
+      <workItem from="1735238408149" duration="13383000" />
+      <workItem from="1735314041962" duration="2722000" />
+      <workItem from="1735323501174" duration="11819000" />
+      <workItem from="1735359211839" duration="4395000" />
+      <workItem from="1735403534925" duration="3756000" />
+      <workItem from="1735408434843" duration="17783000" />
+      <workItem from="1735430605878" duration="37000" />
+      <workItem from="1735431640905" duration="30000" />
+      <workItem from="1735437700240" duration="1333000" />
+      <workItem from="1735492055373" duration="15386000" />
+    </task>
+    <task id="LOCAL-00001" summary="cambios menores x2">
+      <option name="closed" value="true" />
+      <created>1733098284702</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1733098284702</updated>
+    </task>
+    <task id="LOCAL-00002" summary="descomprimir el assets.zip">
+      <option name="closed" value="true" />
+      <created>1733434620562</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1733434620562</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Se añadio el limite del mundo">
+      <option name="closed" value="true" />
+      <created>1733607388053</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1733607388053</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Cambios de cambios en la recarga de weaponUltraKill">
+      <option name="closed" value="true" />
+      <created>1733881293102</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1733881293103</updated>
+    </task>
+    <task id="LOCAL-00005" summary="mañana termino con lo de las armas de ultra kill">
+      <option name="closed" value="true" />
+      <created>1733885718903</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1733885718903</updated>
+    </task>
+    <task id="LOCAL-00006" summary="cambios al sistema antidupe">
+      <option name="closed" value="true" />
+      <created>1734134273589</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1734134273589</updated>
+    </task>
+    <task id="LOCAL-00007" summary="se añadio la posibilidad de añadir grupos a los comandos">
+      <option name="closed" value="true" />
+      <created>1734307250959</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1734307250959</updated>
+    </task>
+    <task id="LOCAL-00008" summary="mejoras a los comandos y algo pequeño a las armas">
+      <option name="closed" value="true" />
+      <created>1734398546714</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1734398546714</updated>
+    </task>
+    <task id="LOCAL-00009" summary="un poco de todo">
+      <option name="closed" value="true" />
+      <created>1734467146315</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1734467146315</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Se añadio un sistema de armas automaticas">
+      <option name="closed" value="true" />
+      <created>1734912052564</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1734912052564</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Mejor feedback al escribir los comandos">
+      <option name="closed" value="true" />
+      <created>1735058596958</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1735058596958</updated>
+    </task>
+    <task id="LOCAL-00012" summary="Ahora hay un message.yml">
+      <option name="closed" value="true" />
+      <created>1735232261053</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1735232261053</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Config.yml 2.0">
+      <option name="closed" value="true" />
+      <created>1735243468437</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1735243468437</updated>
+    </task>
+    <task id="LOCAL-00014" summary="corrigiendo algunos mensajes">
+      <option name="closed" value="true" />
+      <created>1735248300955</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1735248300955</updated>
+    </task>
+    <task id="LOCAL-00015" summary="se añadió el Gradient y mejoras a la documentación">
+      <option name="closed" value="true" />
+      <created>1735350858581</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1735350858581</updated>
+    </task>
+    <task id="LOCAL-00016" summary="cambios al MessagesManager.java y otros cambios menores">
+      <option name="closed" value="true" />
+      <created>1735407280666</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1735407280666</updated>
+    </task>
+    <task id="LOCAL-00017" summary="Se creó File.java para gestionar Email.html y Discord.md para que se pueda personalizar los mensajes">
+      <option name="closed" value="true" />
+      <created>1735427219238</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1735427219238</updated>
+    </task>
+    <task id="LOCAL-00018" summary="Mejoras a las armas y solución a unos bugs">
+      <option name="closed" value="true" />
+      <created>1735507245867</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1735507245867</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="cambios menores x2" />
+    <MESSAGE value="descomprimir el assets.zip" />
+    <MESSAGE value="Se añadio el limite del mundo" />
+    <MESSAGE value="Cambios de cambios en la recarga de weaponUltraKill" />
+    <MESSAGE value="mañana termino con lo de las armas de ultra kill" />
+    <MESSAGE value="cambios al sistema antidupe" />
+    <MESSAGE value="se añadio la posibilidad de añadir grupos a los comandos" />
+    <MESSAGE value="mejoras a los comandos y algo pequeño a las armas" />
+    <MESSAGE value="un poco de todo" />
+    <MESSAGE value="Se añadio un sistema de armas automaticas" />
+    <MESSAGE value="Mejor feedback al escribir los comandos" />
+    <MESSAGE value="Ahora hay un message.yml" />
+    <MESSAGE value="Config.yml 2.0" />
+    <MESSAGE value="corrigiendo algunos mensajes" />
+    <MESSAGE value="se añadió el Gradient y mejoras a la documentación" />
+    <MESSAGE value="cambios al MessagesManager.java y otros cambios menores" />
+    <MESSAGE value="Se creó File.java para gestionar Email.html y Discord.md para que se pueda personalizar los mensajes" />
+    <MESSAGE value="Mejoras a las armas y solución a unos bugs" />
+    <option name="LAST_COMMIT_MESSAGE" value="Mejoras a las armas y solución a unos bugs" />
+  </component>
+</project>
