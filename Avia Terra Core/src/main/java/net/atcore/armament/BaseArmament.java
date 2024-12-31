@@ -4,13 +4,17 @@ import lombok.Getter;
 import lombok.Setter;
 import net.atcore.AviaTerraCore;
 import net.atcore.utils.GlobalUtils;
+import net.atcore.utils.Gradient;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.checkerframework.checker.units.qual.C;
 import org.jetbrains.annotations.Nullable;
+
+import java.awt.*;
 
 @Getter
 @Setter
@@ -22,7 +26,10 @@ public abstract class BaseArmament {
         this.name = this.getClass().getName();
         ItemMeta meta = itemArmament.getItemMeta();
         if (meta == null) return;
-        meta.setDisplayName(GlobalUtils.applyGradient("<#BCBCBC>" + displayName + "<#777777>", 'l'));
+        Gradient gradient = new Gradient(displayName)
+                .addGradient(new Color(0xbc,0xbc,0xbc), 1)
+                .addGradient(new Color(0x77,0x77,0x77), 1);
+        meta.setDisplayName(gradient.toString());
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);//se oculta datos del item para que no se vea feo
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);

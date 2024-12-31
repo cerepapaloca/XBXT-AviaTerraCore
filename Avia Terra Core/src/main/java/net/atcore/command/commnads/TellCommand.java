@@ -3,9 +3,9 @@ package net.atcore.command.commnads;
 import net.atcore.command.BaseTabCommand;
 import net.atcore.command.CommandUtils;
 import net.atcore.command.ModeTabPlayers;
-import net.atcore.command.UseArgs;
+import net.atcore.command.ArgumentUse;
 import net.atcore.messages.CategoryMessages;
-import net.atcore.messages.TypeMessages;
+import net.atcore.messages.MessagesType;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -17,7 +17,7 @@ public class TellCommand extends BaseTabCommand {
 
     public TellCommand() {
         super("tell",
-                new UseArgs("tell")
+                new ArgumentUse("tell")
                         .addArgPlayer(ModeTabPlayers.ADVANCED)
                         .addArg("Mensaje"),
                 "*",
@@ -28,8 +28,8 @@ public class TellCommand extends BaseTabCommand {
     @Override
     public void execute(CommandSender sender, String[] args) {
         switch (args.length) {
-            case 0 -> sendMessage(sender, "Tienes que poner el nombre del jugador", TypeMessages.ERROR);
-            case 1 -> sendMessage(sender, "Te falta el mensaje", TypeMessages.ERROR);
+            case 0 -> sendMessage(sender, "Tienes que poner el nombre del jugador", MessagesType.ERROR);
+            case 1 -> sendMessage(sender, "Te falta el mensaje", MessagesType.ERROR);
             default -> {
                 String message = "";
                 for (int i = 1; i < args.length; i++){

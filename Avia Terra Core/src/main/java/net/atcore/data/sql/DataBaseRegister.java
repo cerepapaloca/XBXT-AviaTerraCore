@@ -4,7 +4,7 @@ import net.atcore.AviaTerraCore;
 import net.atcore.data.DataBaseMySql;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.Message;
-import net.atcore.messages.TypeMessages;
+import net.atcore.messages.MessagesType;
 import net.atcore.security.Login.*;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.Bukkit;
@@ -77,7 +77,7 @@ public class DataBaseRegister extends DataBaseMySql {
         }
         LoginManager.getDataLogin().forEach(login -> names.add(login.getRegister().getUsername()));
 
-        if (!AviaTerraCore.isStarting()) sendMessageConsole("Registros Recargado", TypeMessages.SUCCESS);
+        if (!AviaTerraCore.isStarting()) sendMessageConsole("Registros Recargado", MessagesType.SUCCESS);
     }
 
     @Override
@@ -88,7 +88,7 @@ public class DataBaseRegister extends DataBaseMySql {
             try (ResultSet resultSet = dbMetaData.getTables(null, null, "register", null)) {
                 if (resultSet.next()){
                     reload();
-                    sendMessageConsole("DataBase Registro " + TypeMessages.SUCCESS.getMainColor() + "Ok", TypeMessages.INFO, false);
+                    sendMessageConsole("DataBase Registro " + MessagesType.SUCCESS.getMainColor() + "Ok", MessagesType.INFO, false);
                     return;
                 }
             }
@@ -114,7 +114,7 @@ public class DataBaseRegister extends DataBaseMySql {
              Statement statement = connection.createStatement()) {
             statement.executeUpdate(createTableSQL);
             reload();
-            sendMessageConsole("DataBase Registro " + TypeMessages.SUCCESS.getMainColor()  + "Creada", TypeMessages.INFO, false);
+            sendMessageConsole("DataBase Registro " + MessagesType.SUCCESS.getMainColor()  + "Creada", MessagesType.INFO, false);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -158,10 +158,10 @@ public class DataBaseRegister extends DataBaseMySql {
             stmt.setString(2, name);
 
             stmt.executeUpdate();
-            sendMessageConsole(String.format(Message.DATA_REGISTER_DATE_OK.getMessage(), name), TypeMessages.SUCCESS, CategoryMessages.LOGIN);
+            sendMessageConsole(String.format(Message.DATA_REGISTER_DATE_OK.getMessage(), name), MessagesType.SUCCESS, CategoryMessages.LOGIN);
             return true;
         } catch (SQLException e) {
-            sendMessageConsole(String.format(Message.DATA_REGISTER_DATE_FAILED.getMessage(), name), TypeMessages.ERROR, CategoryMessages.LOGIN);
+            sendMessageConsole(String.format(Message.DATA_REGISTER_DATE_FAILED.getMessage(), name), MessagesType.ERROR, CategoryMessages.LOGIN);
             AviaTerraCore.getInstance().getLogger().warning(e.getMessage());
             return false;
         }
@@ -175,10 +175,10 @@ public class DataBaseRegister extends DataBaseMySql {
             stmt.setString(2, name);
 
             stmt.executeUpdate();
-            sendMessageConsole(String.format(Message.DATA_REGISTER_GMAIL_OK.getMessage(), name), TypeMessages.SUCCESS, CategoryMessages.LOGIN);
+            sendMessageConsole(String.format(Message.DATA_REGISTER_GMAIL_OK.getMessage(), name), MessagesType.SUCCESS, CategoryMessages.LOGIN);
             return true;
         } catch (SQLException e) {
-            sendMessageConsole(String.format(Message.DATA_REGISTER_GMAIL_FAILED.getMessage(), name), TypeMessages.ERROR, CategoryMessages.LOGIN);
+            sendMessageConsole(String.format(Message.DATA_REGISTER_GMAIL_FAILED.getMessage(), name), MessagesType.ERROR, CategoryMessages.LOGIN);
             AviaTerraCore.getInstance().getLogger().warning(e.getMessage());
             return false;
         }
@@ -192,10 +192,10 @@ public class DataBaseRegister extends DataBaseMySql {
             stmt.setString(2, name);
 
             stmt.executeUpdate();
-            sendMessageConsole(String.format(Message.DATA_REGISTER_DISCORD_OK.getMessage(), name), TypeMessages.SUCCESS, CategoryMessages.LOGIN);
+            sendMessageConsole(String.format(Message.DATA_REGISTER_DISCORD_OK.getMessage(), name), MessagesType.SUCCESS, CategoryMessages.LOGIN);
             return true;
         } catch (SQLException e) {
-            sendMessageConsole(String.format(Message.DATA_REGISTER_DISCORD_FAILED.getMessage(), name), TypeMessages.ERROR, CategoryMessages.LOGIN);
+            sendMessageConsole(String.format(Message.DATA_REGISTER_DISCORD_FAILED.getMessage(), name), MessagesType.ERROR, CategoryMessages.LOGIN);
             AviaTerraCore.getInstance().getLogger().warning(e.getMessage());
             return false;
         }
@@ -209,10 +209,10 @@ public class DataBaseRegister extends DataBaseMySql {
             stmt.setString(2, name);
 
             stmt.executeUpdate();
-            sendMessageConsole(String.format(Message.DATA_REGISTER_PASSWORD_OK.getMessage(), name), TypeMessages.SUCCESS, CategoryMessages.LOGIN);
+            sendMessageConsole(String.format(Message.DATA_REGISTER_PASSWORD_OK.getMessage(), name), MessagesType.SUCCESS, CategoryMessages.LOGIN);
             return true;
         } catch (SQLException e) {
-            sendMessageConsole(String.format(Message.DATA_REGISTER_PASSWORD_FAILED.getMessage(), name), TypeMessages.ERROR, CategoryMessages.LOGIN);
+            sendMessageConsole(String.format(Message.DATA_REGISTER_PASSWORD_FAILED.getMessage(), name), MessagesType.ERROR, CategoryMessages.LOGIN);
             AviaTerraCore.getInstance().getLogger().warning(e.getMessage());
             return false;
         }
@@ -226,10 +226,10 @@ public class DataBaseRegister extends DataBaseMySql {
             stmt.setString(2, name);
 
             stmt.executeUpdate();
-            sendMessageConsole(String.format(Message.DATA_REGISTER_ADDRESS_OK.getMessage(), name), TypeMessages.SUCCESS, CategoryMessages.LOGIN);
+            sendMessageConsole(String.format(Message.DATA_REGISTER_ADDRESS_OK.getMessage(), name), MessagesType.SUCCESS, CategoryMessages.LOGIN);
             return true;
         } catch (SQLException e) {
-            sendMessageConsole(String.format(Message.DATA_REGISTER_ADDRESS_FAILED.getMessage(), name), TypeMessages.ERROR, CategoryMessages.LOGIN);
+            sendMessageConsole(String.format(Message.DATA_REGISTER_ADDRESS_FAILED.getMessage(), name), MessagesType.ERROR, CategoryMessages.LOGIN);
             AviaTerraCore.getInstance().getLogger().warning(e.getMessage());
             return false;
         }
@@ -248,10 +248,10 @@ public class DataBaseRegister extends DataBaseMySql {
             stmt.setString(1, name);
 
             stmt.executeUpdate();
-            sendMessageConsole(String.format(Message.DATA_REGISTER_REMOVE_OK.getMessage(), name, author), TypeMessages.SUCCESS, CategoryMessages.LOGIN);
+            sendMessageConsole(String.format(Message.DATA_REGISTER_REMOVE_OK.getMessage(), name, author), MessagesType.SUCCESS, CategoryMessages.LOGIN);
             return true;
         }catch(SQLException e){
-            sendMessageConsole(String.format(Message.DATA_REGISTER_REMOVE_FAILED.getMessage(), name, author), TypeMessages.ERROR, CategoryMessages.LOGIN);
+            sendMessageConsole(String.format(Message.DATA_REGISTER_REMOVE_FAILED.getMessage(), name, author), MessagesType.ERROR, CategoryMessages.LOGIN);
             AviaTerraCore.getInstance().getLogger().warning(e.getMessage());
             return false;
         }

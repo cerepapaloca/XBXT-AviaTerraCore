@@ -4,7 +4,7 @@ import lombok.Setter;
 import lombok.experimental.UtilityClass;
 import net.atcore.AviaTerraCore;
 import net.atcore.messages.MessagesManager;
-import net.atcore.messages.TypeMessages;
+import net.atcore.messages.MessagesType;
 import net.atcore.utils.GlobalUtils;
 import net.dv8tion.jda.api.entities.User;
 import org.bukkit.Bukkit;
@@ -69,7 +69,7 @@ public class TwoFactorAuth {
                     "text/html; charset=utf-8");
 
             Transport.send(message);
-            MessagesManager.sendMessageConsole(String.format(LOGIN_TWO_FACTOR_SEND_CODE_DISCORD_LOG.getMessage(), recipientEmail, name), TypeMessages.INFO);
+            MessagesManager.sendMessageConsole(String.format(LOGIN_TWO_FACTOR_SEND_CODE_DISCORD_LOG.getMessage(), recipientEmail, name), MessagesType.INFO);
 
         } catch (MessagingException e) {
             throw new RuntimeException(e);
@@ -90,9 +90,9 @@ public class TwoFactorAuth {
                         String.format(format.getSubtitle().toString(), code.getCode().toString())
                        )
                 )
-        ).queue(success -> sendMessage(player, LOGIN_TWO_FACTOR_ARRIVED_MESSAGE_DISCORD, TypeMessages.SUCCESS));
+        ).queue(success -> sendMessage(player, LOGIN_TWO_FACTOR_ARRIVED_MESSAGE_DISCORD, MessagesType.SUCCESS));
 
-        MessagesManager.sendMessageConsole(String.format(LOGIN_TWO_FACTOR_SEND_CODE_GMAIL_LOG.getMessage(), player.getName(), id), TypeMessages.INFO);
+        MessagesManager.sendMessageConsole(String.format(LOGIN_TWO_FACTOR_SEND_CODE_GMAIL_LOG.getMessage(), player.getName(), id), MessagesType.INFO);
     }
 
     public boolean checkCode(Player player, String code) {
@@ -103,17 +103,17 @@ public class TwoFactorAuth {
                     if (code.equals(codeAuth.getCode().toString())) {
                         return true;
                     }else {
-                        sendMessage(player, LOGIN_TWO_FACTOR_CODE_NO_EQUAL, TypeMessages.ERROR);
+                        sendMessage(player, LOGIN_TWO_FACTOR_CODE_NO_EQUAL, MessagesType.ERROR);
                     }
                 }else {
-                    sendMessage(player, LOGIN_TWO_FACTOR_EXPIRE_CODE, TypeMessages.ERROR);
+                    sendMessage(player, LOGIN_TWO_FACTOR_EXPIRE_CODE, MessagesType.ERROR);
                     CODES.remove(player.getUniqueId());
                 }
             }else {
-                sendMessage(player, LOGIN_TWO_FACTOR_UUID_NO_EQUAL, TypeMessages.ERROR);
+                sendMessage(player, LOGIN_TWO_FACTOR_UUID_NO_EQUAL, MessagesType.ERROR);
             }
         }else {
-            sendMessage(player, LOGIN_TWO_FACTOR_NO_FOUND_CODE, TypeMessages.ERROR);
+            sendMessage(player, LOGIN_TWO_FACTOR_NO_FOUND_CODE, MessagesType.ERROR);
         }
         return false;
     }

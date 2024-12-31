@@ -2,12 +2,11 @@ package net.atcore.command.commnads;
 
 import net.atcore.AviaTerraCore;
 import net.atcore.command.BaseTabCommand;
-import net.atcore.command.UseArgs;
+import net.atcore.command.ArgumentUse;
 import net.atcore.data.sql.DataBaseRegister;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.Message;
-import net.atcore.messages.MessagesManager;
-import net.atcore.messages.TypeMessages;
+import net.atcore.messages.MessagesType;
 import net.atcore.security.Login.LoginManager;
 import net.atcore.security.Login.TwoFactorAuth;
 import org.bukkit.command.CommandSender;
@@ -23,7 +22,7 @@ public class ChangePasswordCommand extends BaseTabCommand {
 
     public ChangePasswordCommand(){
         super("changePassword",
-                new UseArgs("changePassword").addNote("Contraseña", "Código").addNote("Nueva Contraseña"),
+                new ArgumentUse("changePassword").addNote("Contraseña", "Código").addNote("Nueva Contraseña"),
                 "*",
                 "cambias tu contraseña"
         );
@@ -42,14 +41,14 @@ public class ChangePasswordCommand extends BaseTabCommand {
                     if (LoginManager.isEqualPassword(player.getName(), args[0])){
                         onChange(player, password, "contraseña");
                     }else{
-                        sendMessage(sender, Message.COMMAND_CHANGE_PASSWORD_NOT_EQUAL_PASSWORD, TypeMessages.ERROR);
+                        sendMessage(sender, Message.COMMAND_CHANGE_PASSWORD_NOT_EQUAL_PASSWORD, MessagesType.ERROR);
                     }
                 }
             }else{
-                sendMessage(sender, Message.COMMAND_GENERIC_NO_PLAYER, TypeMessages.ERROR);
+                sendMessage(sender, Message.COMMAND_GENERIC_NO_PLAYER, MessagesType.ERROR);
             }
         }else{
-            sendMessage(sender, this.getUsage().toString(), TypeMessages.ERROR);
+            sendMessage(sender, this.getUsage().toString(), MessagesType.ERROR);
         }
     }
 
@@ -57,13 +56,13 @@ public class ChangePasswordCommand extends BaseTabCommand {
         LoginManager.getDataLogin(player).getRegister().setPasswordShaded(password);
         AviaTerraCore.getInstance().enqueueTaskAsynchronously(() -> {
             if (DataBaseRegister.updatePassword(player.getName(), password)){
-                sendMessage(player, Message.COMMAND_CHANGE_PASSWORD_SUCCESSFUL, TypeMessages.SUCCESS);
+                sendMessage(player, Message.COMMAND_CHANGE_PASSWORD_SUCCESSFUL, MessagesType.SUCCESS);
             }else {
-                sendMessage(player, Message.COMMAND_CHANGE_PASSWORD_ERROR, TypeMessages.ERROR);
+                sendMessage(player, Message.COMMAND_CHANGE_PASSWORD_ERROR, MessagesType.ERROR);
             }
         });
 
-        sendMessageConsole( String.format(Message.COMMAND_CHANGE_PASSWORD_SUCCESSFUL_LOG.getMessage(), player.getName(), reason), TypeMessages.INFO, CategoryMessages.LOGIN);
+        sendMessageConsole( String.format(Message.COMMAND_CHANGE_PASSWORD_SUCCESSFUL_LOG.getMessage(), player.getName(), reason), MessagesType.INFO, CategoryMessages.LOGIN);
         TwoFactorAuth.CODES.remove(player.getUniqueId());
     }
 

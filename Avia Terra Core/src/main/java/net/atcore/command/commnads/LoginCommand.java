@@ -2,11 +2,10 @@ package net.atcore.command.commnads;
 
 import net.atcore.AviaTerraCore;
 import net.atcore.command.BaseCommand;
-import net.atcore.command.ModeTabPlayers;
-import net.atcore.command.UseArgs;
+import net.atcore.command.ArgumentUse;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
-import net.atcore.messages.TypeMessages;
+import net.atcore.messages.MessagesType;
 import net.atcore.moderation.ban.ContextBan;
 import net.atcore.moderation.ModerationSection;
 import net.atcore.security.Login.*;
@@ -25,7 +24,7 @@ public class LoginCommand extends BaseCommand {
 
     public LoginCommand() {
         super("login",
-                new UseArgs("/login")
+                new ArgumentUse("/login")
                         .addNote("contraseña"),
                 "**",
                 "Te logueas"
@@ -43,7 +42,7 @@ public class LoginCommand extends BaseCommand {
                     if (isUUID(args[0])){
                         if (TwoFactorAuth.checkCode(player, args[0])) {
                             if (LoginManager.checkLoginIn(player)) {
-                                sendMessage(player, Message.COMMAND_LOGIN_ALREADY, TypeMessages.ERROR);
+                                sendMessage(player, Message.COMMAND_LOGIN_ALREADY, MessagesType.ERROR);
                                 return;
                             }
                             startPlay(player);
@@ -53,7 +52,7 @@ public class LoginCommand extends BaseCommand {
                     }else {
                         if (LoginManager.isEqualPassword(player.getName(), args[0])){
                             if (LoginManager.checkLoginIn(player)) {
-                                sendMessage(player, Message.COMMAND_LOGIN_ALREADY, TypeMessages.ERROR);
+                                sendMessage(player, Message.COMMAND_LOGIN_ALREADY, MessagesType.ERROR);
                                 return;
                             }
                             startPlay(player);
@@ -62,10 +61,10 @@ public class LoginCommand extends BaseCommand {
                         }
                     }
                 }else {
-                    sendMessage(player, Message.COMMAND_LOGIN_NO_REGISTER, TypeMessages.ERROR);
+                    sendMessage(player, Message.COMMAND_LOGIN_NO_REGISTER, MessagesType.ERROR);
                 }
             }else {
-                sendMessage(player, Message.COMMAND_LOGIN_MISSING_ARGS, TypeMessages.ERROR);
+                sendMessage(player, Message.COMMAND_LOGIN_MISSING_ARGS, MessagesType.ERROR);
             }
         }
     }
@@ -77,8 +76,8 @@ public class LoginCommand extends BaseCommand {
         player.updateCommands();
         MessagesManager.sendTitle(player,Message.COMMAND_LOGIN_SUCCESSFUL_TITLE.getMessage(),
                 String.format(Message.COMMAND_LOGIN_SUCCESSFUL_SUBTITLE.getMessage(), player.getDisplayName()),
-                20, 20*3, 40, TypeMessages.INFO);
-        sendMessage(player, Message.COMMAND_LOGIN_SUCCESSFUL_CHAT, TypeMessages.SUCCESS);
+                20, 20*3, 40, MessagesType.INFO);
+        sendMessage(player, Message.COMMAND_LOGIN_SUCCESSFUL_CHAT, MessagesType.SUCCESS);
     }
 
     private void fail(Player player) {

@@ -8,7 +8,7 @@ import net.atcore.data.FileYaml;
 import net.atcore.data.yml.CacheLimboFile;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
-import net.atcore.messages.TypeMessages;
+import net.atcore.messages.MessagesType;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -64,13 +64,13 @@ public class LimboManager {
 
         switch (reasonLimbo){
             case NO_SESSION -> {
-                MessagesManager.sendTitle(player, Message.LOGIN_LIMBO_INITIATED_BY_SESSION_TITLE.getMessage(), Message.LOGIN_LIMBO_INITIATED_BY_SESSION_SUBTITLE.getMessage(), 30, LIMBO_TIME, 30, TypeMessages.INFO);
-                MessagesManager.sendMessage(player, Message.LOGIN_LIMBO_INITIATED_BY_SESSION_CHAT.getMessage(), TypeMessages.INFO);
+                MessagesManager.sendTitle(player, Message.LOGIN_LIMBO_INITIATED_BY_SESSION_TITLE.getMessage(), Message.LOGIN_LIMBO_INITIATED_BY_SESSION_SUBTITLE.getMessage(), 30, LIMBO_TIME, 30, MessagesType.INFO);
+                MessagesManager.sendMessage(player, Message.LOGIN_LIMBO_INITIATED_BY_SESSION_CHAT.getMessage(), MessagesType.INFO);
                 startTimeOut(player, Message.LOGIN_LIMBO_TIME_OUT_SESSION.getMessage(), dataLimbo);
             }
             case NO_REGISTER -> {
-                MessagesManager.sendTitle(player, Message.LOGIN_LIMBO_INITIATED_BY_REGISTER_TITLE.getMessage(), Message.LOGIN_LIMBO_INITIATED_BY_REGISTER_SUBTITLE.getMessage(), 30, LIMBO_TIME, 30, TypeMessages.INFO);
-                MessagesManager.sendMessage(player, Message.LOGIN_LIMBO_INITIATED_BY_REGISTER_CHAT.getMessage(), TypeMessages.INFO);
+                MessagesManager.sendTitle(player, Message.LOGIN_LIMBO_INITIATED_BY_REGISTER_TITLE.getMessage(), Message.LOGIN_LIMBO_INITIATED_BY_REGISTER_SUBTITLE.getMessage(), 30, LIMBO_TIME, 30, MessagesType.INFO);
+                MessagesManager.sendMessage(player, Message.LOGIN_LIMBO_INITIATED_BY_REGISTER_CHAT.getMessage(), MessagesType.INFO);
                 startTimeOut(player, Message.LOGIN_LIMBO_TIME_OUT_REGISTER.getMessage(), dataLimbo);
             }
         }

@@ -7,12 +7,12 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UseArgs {
+public class ArgumentUse {
 
     private final String command;
     private boolean isRequired = true;
 
-    public UseArgs(@NotNull String s) {
+    public ArgumentUse(@NotNull String s) {
         if (s.startsWith("/")){
             s = s.substring(1);
         }
@@ -46,24 +46,24 @@ public class UseArgs {
 
     private final List<Argument> args = new ArrayList<>();;
 
-    public UseArgs addArg(String... arg) {
+    public ArgumentUse addArg(String... arg) {
         args.add(new Argument(isRequired, arg));
         return this;
     }
 
-    public UseArgs addArgOptional() {
+    public ArgumentUse addArgOptional() {
         isRequired = false;
         return this;
     }
 
-    public UseArgs addNote(String... note) {
+    public ArgumentUse addNote(String... note) {
         Argument arg = new Argument(isRequired, note);
         arg.note = true;
         args.add(arg);
         return this;
     }
     
-    public UseArgs addTime(boolean isEspecial) {
+    public ArgumentUse addTime(boolean isEspecial) {
         Argument arg = new Argument(isRequired, new String[]{"Tiempo"});
         arg.useTime = true;
         arg.especialTime = isEspecial;
@@ -71,7 +71,7 @@ public class UseArgs {
         return this;
     }
     
-    public UseArgs addArgPlayer(ModeTabPlayers modePlayers) {
+    public ArgumentUse addArgPlayer(ModeTabPlayers modePlayers) {
         args.add(new Argument(modePlayers));
         return this;
     }

@@ -8,7 +8,7 @@ import net.atcore.data.DataSection;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.MessageSection;
 import net.atcore.messages.MessagesManager;
-import net.atcore.messages.TypeMessages;
+import net.atcore.messages.MessagesType;
 import net.atcore.listener.ListenerManagerSection;
 import net.atcore.security.Login.DataLogin;
 import net.atcore.security.Login.LoginManager;
@@ -21,12 +21,12 @@ import net.luckperms.api.LuckPerms;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.checkerframework.checker.units.qual.A;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import static net.atcore.messages.MessagesManager.sendMessageConsole;
+import static net.atcore.utils.RegisterManager.register;
 
 public final class AviaTerraCore extends JavaPlugin {
 
@@ -50,7 +50,7 @@ public final class AviaTerraCore extends JavaPlugin {
     @Override
     public void onEnable() {
         long timeCurrent = System.currentTimeMillis();
-        sendMessageConsole("AviaTerra Iniciando...", TypeMessages.SUCCESS, CategoryMessages.PRIVATE, false);
+        sendMessageConsole("AviaTerra Iniciando...", MessagesType.SUCCESS, CategoryMessages.PRIVATE, false);
         isStarting = true;
         workerThread = new Thread(this::processQueue);
         workerThread.setName("AviaTerraCore WorkerThread");
@@ -62,14 +62,14 @@ public final class AviaTerraCore extends JavaPlugin {
         if (Bukkit.getOnlineMode()){
             throw new IllegalStateException("modo online esta activo");
         }
-        RegisterManager.register(new DataSection());// Los Datos Primero
-        RegisterManager.register(new MessageSection());
-        RegisterManager.register(new CommandSection());
-        RegisterManager.register(new ModerationSection());
-        RegisterManager.register(new ListenerManagerSection());
-        RegisterManager.register(new SecuritySection());
-        RegisterManager.register(new ArmamentSection());
-        //enableModules();
+        register(new DataSection(),// Los Datos Primero
+                new MessageSection(),
+                new CommandSection(),
+                new ModerationSection(),
+                new ListenerManagerSection(),
+                new SecuritySection(),
+                new ArmamentSection()
+        );
         isStarting = false;
         messageOn(timeCurrent);
     }
@@ -91,7 +91,7 @@ public final class AviaTerraCore extends JavaPlugin {
             GlobalUtils.kickPlayer(player, "El servidor va a cerrar, volveremos pronto...");
         });
         //if (jda != null) jda.shutdown();
-        sendMessageConsole("AviaTerra Apagada", TypeMessages.SUCCESS, CategoryMessages.PRIVATE, false);
+        sendMessageConsole("AviaTerra Apagada", MessagesType.SUCCESS, CategoryMessages.PRIVATE, false);
     }
 
     @Override
@@ -111,7 +111,7 @@ public final class AviaTerraCore extends JavaPlugin {
                 "  \\ \\  \\ \\  \\ \\    / /   \\ \\  \\ \\  \\ \\  \\           \\ \\  \\ \\ \\  \\_|\\ \\ \\  \\\\  \\\\ \\  \\\\  \\\\ \\  \\ \\  \\ \n" +
                 "   \\ \\__\\ \\__\\ \\__/ /     \\ \\__\\ \\__\\ \\__\\           \\ \\__\\ \\ \\_______\\ \\__\\\\ _\\\\ \\__\\\\ _\\\\ \\__\\ \\__\\\n" +
                 "    \\|__|\\|__|\\|__|/       \\|__|\\|__|\\|__|            \\|__|  \\|_______|\\|__|\\|__|\\|__|\\|__|\\|__|\\|__|\n",
-                TypeMessages.SUCCESS, CategoryMessages.PRIVATE, false);
+                MessagesType.SUCCESS, CategoryMessages.PRIVATE, false);
     }
 
     /**
@@ -121,7 +121,7 @@ public final class AviaTerraCore extends JavaPlugin {
 
     public void enqueueTaskAsynchronously(Runnable task) {
         if (!TASK_QUEUE.offer(task)){
-            MessagesManager.sendMessageConsole("Error al añadir una tarea la cola", TypeMessages.ERROR);
+            MessagesManager.sendMessageConsole("Error al añadir una tarea la cola", MessagesType.ERROR);
         }
     }
 

@@ -3,10 +3,9 @@ package net.atcore.listener;
 import net.atcore.AviaTerraCore;
 import net.atcore.aviaterraplayer.AviaTerraPlayer;
 import net.atcore.data.sql.DataBaseRegister;
-import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
-import net.atcore.messages.TypeMessages;
+import net.atcore.messages.MessagesType;
 import net.atcore.moderation.ban.ContextBan;
 import net.atcore.security.AntiTwoPlayer;
 import net.atcore.security.Login.DataLimbo;
@@ -54,7 +53,7 @@ public class JoinAndQuitListener implements Listener {
         UUIDPlayers.forEach(UUID -> Objects.requireNonNull(Bukkit.getPlayer(UUID)).closeInventory());
         event.setQuitMessage(ChatColor.translateAlternateColorCodes('&',MessagesManager.addProprieties(String.format(Message.EVENT_QUIT.getMessage(),
                         event.getPlayer().getName()),
-                TypeMessages.INFO, false, false)));
+                MessagesType.INFO, false, false)));
     }
 
     @EventHandler(priority = EventPriority.HIGH)
@@ -62,7 +61,7 @@ public class JoinAndQuitListener implements Listener {
         onEnteringServer(event.getPlayer());
         event.setJoinMessage(ChatColor.translateAlternateColorCodes('&',MessagesManager.addProprieties(String.format(Message.EVENT_JOIN.getMessage(),
                         event.getPlayer().getName()),
-                TypeMessages.INFO, false, false)));
+                MessagesType.INFO, false, false)));
     }
 
     @EventHandler

@@ -4,9 +4,9 @@ import net.atcore.AviaTerraCore;
 import net.atcore.command.BaseTabCommand;
 import net.atcore.command.CommandUtils;
 import net.atcore.command.ModeTabPlayers;
-import net.atcore.command.UseArgs;
+import net.atcore.command.ArgumentUse;
 import net.atcore.messages.Message;
-import net.atcore.messages.TypeMessages;
+import net.atcore.messages.MessagesType;
 import net.atcore.utils.GlobalUtils;
 import net.atcore.utils.RangeType;
 import net.luckperms.api.model.group.Group;
@@ -27,7 +27,7 @@ public class AddRangeCommand extends BaseTabCommand {
 
     public AddRangeCommand() {
         super("addRange",
-                new UseArgs("addRange").addNote("Rango").addTime(true).addArgPlayer(ModeTabPlayers.ADVANCED),
+                new ArgumentUse("addRange").addNote("Rango").addTime(true).addArgPlayer(ModeTabPlayers.ADVANCED),
                 "das una tags donde se puede dar un rango durante un tiempo determinado"
         );
     }
@@ -35,8 +35,8 @@ public class AddRangeCommand extends BaseTabCommand {
     @Override
     public void execute(CommandSender sender, String[] args) {
         switch (args.length){
-            case 0 -> sendMessage(sender, this.getUsage().toString(), TypeMessages.ERROR);
-            case 1 -> sendMessage(sender, Message.COMMAND_ADD_RANGE_MISSING_ARGUMENT_TIME, TypeMessages.ERROR);
+            case 0 -> sendMessage(sender, this.getUsage().toString(), MessagesType.ERROR);
+            case 1 -> sendMessage(sender, Message.COMMAND_ADD_RANGE_MISSING_ARGUMENT_TIME, MessagesType.ERROR);
             default -> {
                 List<Group> groups = AviaTerraCore.getLp().getGroupManager().getLoadedGroups().stream().toList();
                 List<String> nameRage = new ArrayList<>();
@@ -47,7 +47,7 @@ public class AddRangeCommand extends BaseTabCommand {
                     try {
                         time = CommandUtils.StringToMilliseconds(args[1], true);
                     }catch (RuntimeException e){
-                        sendMessage(sender, Message.COMMAND_GENERIC_FORMAT_DATE_ERROR, TypeMessages.ERROR);
+                        sendMessage(sender, Message.COMMAND_GENERIC_FORMAT_DATE_ERROR, MessagesType.ERROR);
                         return;
                     }
                     RangeType range = RangeType.valueOf(args[0].toUpperCase());
@@ -68,14 +68,14 @@ public class AddRangeCommand extends BaseTabCommand {
                         if (sender instanceof Player playerSender){
                             addItemPlayer(item, playerSender, false, true);
                         }else{
-                            sendMessage(sender, Message.COMMAND_GENERIC_NO_PLAYER, TypeMessages.ERROR);
+                            sendMessage(sender, Message.COMMAND_GENERIC_NO_PLAYER, MessagesType.ERROR);
                         }
                     }else{
                         CommandUtils.executeForPlayer(sender, args[2], true, fakePlayer -> GlobalUtils.addItemPlayer(item, fakePlayer.player(), false, true));
-                        sendMessage(sender, Message.COMMAND_ADD_RANGE_SUCCESSFUL, TypeMessages.SUCCESS);
+                        sendMessage(sender, Message.COMMAND_ADD_RANGE_SUCCESSFUL, MessagesType.SUCCESS);
                     }
                 }else{
-                    sendMessage(sender, Message.COMMAND_ADD_RANGE_MISSING_ARGUMENT_TIME, TypeMessages.ERROR);
+                    sendMessage(sender, Message.COMMAND_ADD_RANGE_MISSING_ARGUMENT_TIME, MessagesType.ERROR);
                 }
             }
 

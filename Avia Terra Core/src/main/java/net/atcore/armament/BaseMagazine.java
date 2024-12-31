@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import net.atcore.AviaTerraCore;
 import net.atcore.messages.MessagesManager;
-import net.atcore.messages.TypeMessages;
+import net.atcore.messages.MessagesType;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
@@ -117,7 +117,7 @@ public abstract class BaseMagazine extends BaseArmament implements Compartment {
                             if (ArmamentUtils.stringToList(ammoNameList).size() < ammoMax) {
                                 onReload(player);
                             }else {
-                                MessagesManager.sendTitle(player,"", "Recargado Completada", 0, 0,30, TypeMessages.SUCCESS);
+                                MessagesManager.sendTitle(player,"", "Recargado Completada", 0, 0,30, MessagesType.SUCCESS);
                                 player.removePotionEffect(PotionEffectType.SLOWNESS);
                                 reloadTask.remove(player.getUniqueId());
                                 cancel();
@@ -131,12 +131,12 @@ public abstract class BaseMagazine extends BaseArmament implements Compartment {
                     cancel();
                 }
             }.runTaskTimer(AviaTerraCore.getInstance(), 3, 3);
-            MessagesManager.sendTitle(player,"", "Recargando...", 0, 0,30, TypeMessages.INFO);
+            MessagesManager.sendTitle(player,"", "Recargando...", 0, 0,30, MessagesType.INFO);
             player.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, Integer.MAX_VALUE, 3, true, false, false));
             reloadTask.put(player.getUniqueId(), task);
             return true;
         }else {
-            MessagesManager.sendTitle(player,"", "No tiene balas en el inventario", 0, 0,30, TypeMessages.ERROR);
+            MessagesManager.sendTitle(player,"", "No tiene balas en el inventario", 0, 0,30, MessagesType.ERROR);
         }
         return false;
     }

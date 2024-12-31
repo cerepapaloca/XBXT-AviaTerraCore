@@ -6,7 +6,6 @@ import net.atcore.AviaTerraCore;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.requests.GatewayIntent;
-import org.bukkit.Bukkit;
 
 import java.text.SimpleDateFormat;
 import java.util.TimeZone;
@@ -50,7 +49,7 @@ public class ConsoleDiscord {
                     );
 
                 }).attach().schedule();
-                sendMessageConsole("discord bot " + TypeMessages.SUCCESS.getMainColor() + "Ok", TypeMessages.INFO, false);
+                sendMessageConsole("discord bot " + MessagesType.SUCCESS.getMainColor() + "Ok", MessagesType.INFO, false);
 
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);

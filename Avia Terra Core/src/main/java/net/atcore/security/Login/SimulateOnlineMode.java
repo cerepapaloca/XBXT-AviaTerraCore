@@ -16,7 +16,7 @@ import lombok.Getter;
 import net.atcore.Config;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.Message;
-import net.atcore.messages.TypeMessages;
+import net.atcore.messages.MessagesType;
 import net.atcore.security.AntiBot;
 import net.atcore.security.VerificationPremium;
 import net.atcore.security.SecuritySection;
@@ -80,7 +80,7 @@ public class SimulateOnlineMode {
                 case PREMIUM -> startLoginPremium(name, uuid, player);
                 case UNKNOWN -> GlobalUtils.kickPlayer(player, Message.LOGIN_KICK_GENERIC.getMessage());
             }
-            sendMessageConsole(String.format(Message.LOGIN_START_PROTOCOL_LOG.getMessage(), state.name().toLowerCase(), name), TypeMessages.INFO, CategoryMessages.LOGIN);
+            sendMessageConsole(String.format(Message.LOGIN_START_PROTOCOL_LOG.getMessage(), state.name().toLowerCase(), name), MessagesType.INFO, CategoryMessages.LOGIN);
             return state == StateLogins.PREMIUM; //se cancela por que asi el servidor no se da cuenta de que a recibido un paquete
         }
         return false;
@@ -138,7 +138,7 @@ public class SimulateOnlineMode {
      */
 
     public static boolean enableEncryption(SecretKey loginKey, Player player) throws IllegalArgumentException {
-        sendMessageConsole("Se inicio cifrado", TypeMessages.INFO);
+        sendMessageConsole("Se inicio cifrado", MessagesType.INFO);
         // Initialize method reflections
         if (encryptKeyMethod == null || encryptMethod == null) {
             Class<?> networkManagerClass = MinecraftReflection.getNetworkManagerClass();

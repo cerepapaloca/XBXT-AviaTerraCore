@@ -9,7 +9,7 @@ import lombok.experimental.UtilityClass;
 import net.atcore.AviaTerraCore;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
-import net.atcore.messages.TypeMessages;
+import net.atcore.messages.MessagesType;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
@@ -241,7 +241,7 @@ public final class GlobalUtils {
 
     public void kickPlayer(@NotNull Player player,@Nullable String reason) {
         reason = org.bukkit.ChatColor.translateAlternateColorCodes('&', MessagesManager.addProprieties(Message.MISC_KICK_UPPER
-                + "&4" + (reason == null ? "Has sido expulsado" : reason) + "&c" + Message.MISC_KICK_LOWER, TypeMessages.KICK, false, false));
+                + "&4" + (reason == null ? "Has sido expulsado" : reason) + "&c" + Message.MISC_KICK_LOWER, MessagesType.KICK, false, false));
         if (Bukkit.isPrimaryThread()){
             kickFinal(player, reason);
         }else{

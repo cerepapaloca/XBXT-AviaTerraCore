@@ -2,11 +2,10 @@ package net.atcore.command.commnads;
 
 import net.atcore.command.BaseCommand;
 import net.atcore.Config;
-import net.atcore.command.ModeTabPlayers;
-import net.atcore.command.UseArgs;
+import net.atcore.command.ArgumentUse;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
-import net.atcore.messages.TypeMessages;
+import net.atcore.messages.MessagesType;
 import net.atcore.security.Login.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -20,7 +19,7 @@ public class RegisterCommand extends BaseCommand {
 
     public RegisterCommand() {
         super("register",
-                new UseArgs("/register").addNote("contraseña").addNote("contraseña"),//"/register <contraseña> <contraseña>"
+                new ArgumentUse("/register").addNote("contraseña").addNote("contraseña"),//"/register <contraseña> <contraseña>"
                 "**",
                 "Te registras"
         );
@@ -34,24 +33,24 @@ public class RegisterCommand extends BaseCommand {
                 if (dataLogin.getRegister().getStateLogins() == StateLogins.CRACKED || Config.getServerMode().equals(ServerMode.OFFLINE_MODE)){
                     if (args.length >= 2){
                         if (Objects.equals(args[0], args[1])){
-                            sendMessage(player, Message.COMMAND_REGISTER_SUCCESSFUL_CHAT.getMessage(), TypeMessages.SUCCESS);
+                            sendMessage(player, Message.COMMAND_REGISTER_SUCCESSFUL_CHAT.getMessage(), MessagesType.SUCCESS);
                             LoginManager.newRegisterCracked(player.getName(), player.getAddress().getAddress(),  args[0]);
                             MessagesManager.sendTitle(player, Message.COMMAND_REGISTER_SUCCESSFUL_TITLE.getMessage(),
                                     String.format(Message.COMMAND_REGISTER_SUCCESSFUL_SUBTITLE.getMessage(), player.getDisplayName())
-                                    , 20, 20*3, 40, TypeMessages.INFO);
+                                    , 20, 20*3, 40, MessagesType.INFO);
                             startPlaySessionCracked(player).getRegister().setTemporary(false);
                             LoginManager.checkLoginIn(player);
                         }else{
-                            sendMessage(player, Message.COMMAND_REGISTER_NO_EQUAL_PASSWORD, TypeMessages.ERROR);
+                            sendMessage(player, Message.COMMAND_REGISTER_NO_EQUAL_PASSWORD, MessagesType.ERROR);
                         }
                     }else{
-                        sendMessage(player, Message.COMMAND_REGISTER_MISSING_ARGS_PASSWORD, TypeMessages.ERROR);
+                        sendMessage(player, Message.COMMAND_REGISTER_MISSING_ARGS_PASSWORD, MessagesType.ERROR);
                     }
                 }else {
-                    sendMessage(player, Message.COMMAND_REGISTER_IS_PREMIUM, TypeMessages.ERROR);
+                    sendMessage(player, Message.COMMAND_REGISTER_IS_PREMIUM, MessagesType.ERROR);
                 }
             }else {
-                sendMessage(player, Message.COMMAND_REGISTER_ALREADY, TypeMessages.ERROR);
+                sendMessage(player, Message.COMMAND_REGISTER_ALREADY, MessagesType.ERROR);
             }
         }
     }

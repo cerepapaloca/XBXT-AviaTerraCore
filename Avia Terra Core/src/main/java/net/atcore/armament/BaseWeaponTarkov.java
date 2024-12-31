@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import net.atcore.AviaTerraCore;
 import net.atcore.messages.MessagesManager;
-import net.atcore.messages.TypeMessages;
+import net.atcore.messages.MessagesType;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
@@ -57,11 +57,11 @@ public abstract class BaseWeaponTarkov extends BaseWeapon implements Compartment
                     }
                 }else {
                     updateLore(itemWeapon, null);
-                    MessagesManager.sendTitle(player, "", ChatColor.RED + "sin munición", 0, 10, 30, TypeMessages.ERROR);
+                    MessagesManager.sendTitle(player, "", ChatColor.RED + "sin munición", 0, 10, 30, MessagesType.ERROR);
                 }
             }
         }else {
-            MessagesManager.sendTitle(player, "", ChatColor.RED + "sin cargador", 0, 10, 30, TypeMessages.ERROR);
+            MessagesManager.sendTitle(player, "", ChatColor.RED + "sin cargador", 0, 10, 30, MessagesType.ERROR);
         }
     }
 
@@ -115,24 +115,24 @@ public abstract class BaseWeaponTarkov extends BaseWeapon implements Compartment
                     public void cancel() {
                         super.cancel();
                         bukkitTask.cancel();
-                        MessagesManager.sendTitle(player,"", "Recarga Cancelada", 10, charger.getReloadTime(),10, TypeMessages.ERROR);
+                        MessagesManager.sendTitle(player,"", "Recarga Cancelada", 10, charger.getReloadTime(),10, MessagesType.ERROR);
                         inReload.remove(uuid);
                     }
                 }.runTaskTimer(AviaTerraCore.getInstance(), 0, 1);
-                MessagesManager.sendTitle(player,"", "Recargado...", 10, charger.getReloadTime(),10, TypeMessages.INFO);
+                MessagesManager.sendTitle(player,"", "Recargado...", 10, charger.getReloadTime(),10, MessagesType.INFO);
                 player.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, charger.getReloadTime(), 2, true, false, false));
                 inReload.put(player.getUniqueId(), bukkitTask);// Por si se guarda el delay por si se tiene que cancelar
                 return true;
             }else {
-                MessagesManager.sendTitle(player, "", "No tienes cargadores con munición", 0,20,60, TypeMessages.ERROR);
+                MessagesManager.sendTitle(player, "", "No tienes cargadores con munición", 0,20,60, MessagesType.ERROR);
             }
         }else {//en caso de que el arma no tiene cargador, cargaría de manera instantánea
             if (b){//hay un cargador que se puede cambiar?
                 onReload(itemWeapon, player);
-                MessagesManager.sendTitle(player,"", "Recargado", 0, 0,30, TypeMessages.SUCCESS);
+                MessagesManager.sendTitle(player,"", "Recargado", 0, 0,30, MessagesType.SUCCESS);
                 return true;
             }else {
-                MessagesManager.sendTitle(player, "", "No tienes cargadores con munición", 0,20,60, TypeMessages.ERROR);
+                MessagesManager.sendTitle(player, "", "No tienes cargadores con munición", 0,20,60, MessagesType.ERROR);
             }
         }
         return false;
@@ -182,7 +182,7 @@ public abstract class BaseWeaponTarkov extends BaseWeapon implements Compartment
             if (hasCharger){
                 GlobalUtils.addItemPlayer(itemSwapMagazine, player, true, true);
             }
-            MessagesManager.sendTitle(player,"", "Recargado", 0, 0,30, TypeMessages.SUCCESS);
+            MessagesManager.sendTitle(player,"", "Recargado", 0, 0,30, MessagesType.SUCCESS);
             player.getWorld().playSound(player.getLocation(), Sound.ITEM_ARMOR_EQUIP_IRON, SoundCategory.PLAYERS, 1, 1);
             break;
         }

@@ -4,11 +4,10 @@ import net.atcore.armament.*;
 import net.atcore.command.BaseTabCommand;
 import net.atcore.command.CommandUtils;
 import net.atcore.command.ModeTabPlayers;
-import net.atcore.command.UseArgs;
+import net.atcore.command.ArgumentUse;
 import net.atcore.messages.Message;
-import net.atcore.messages.TypeMessages;
+import net.atcore.messages.MessagesType;
 import net.atcore.utils.GlobalUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
@@ -21,7 +20,7 @@ public class WeaponCommand extends BaseTabCommand {
 
     public WeaponCommand() {
         super("weapon",
-                new UseArgs("weapon")
+                new ArgumentUse("weapon")
                         .addArgPlayer(ModeTabPlayers.ADVANCED)
                         .addArg("Tipo De Armamento")
                         .addArg("Nombre Del Armamento")
@@ -49,14 +48,14 @@ public class WeaponCommand extends BaseTabCommand {
     @Override
     public void execute(CommandSender sender, String[] args) {
         switch (args.length) {
-            case 0, 1 -> sendMessage(sender, this.getUsage().toString(), TypeMessages.ERROR);
-            case 2 -> sendMessage(sender, Message.COMMAND_WEAPON_MISSING_ARGS_NAME, TypeMessages.ERROR);
+            case 0, 1 -> sendMessage(sender, this.getUsage().toString(), MessagesType.ERROR);
+            case 2 -> sendMessage(sender, Message.COMMAND_WEAPON_MISSING_ARGS_NAME, MessagesType.ERROR);
             default -> {
                 TypeArmament typeArmament;
                 try {
                     typeArmament = TypeArmament.valueOf(args[1].toUpperCase());
                 }catch (Exception e) {
-                    sendMessage(sender, Message.COMMAND_WEAPON_MISSING_ARGS_TYPE, TypeMessages.ERROR);
+                    sendMessage(sender, Message.COMMAND_WEAPON_MISSING_ARGS_TYPE, MessagesType.ERROR);
                     return;
                 }
                 BaseArmament baseArmament;
@@ -78,9 +77,9 @@ public class WeaponCommand extends BaseTabCommand {
                                 GlobalUtils.addItemPlayer(baseArmament.getItemArmament(), dataTemporalPlayer.player(),
                                         true, typeArmament != TypeArmament.AMMO));
                     }
-                    sendMessage(sender, Message.COMMAND_WEAPON_SUCCESSFUL, TypeMessages.SUCCESS);
+                    sendMessage(sender, Message.COMMAND_WEAPON_SUCCESSFUL, MessagesType.SUCCESS);
                 }else{
-                    sendMessage(sender, Message.COMMAND_WEAPON_NOT_FOUND_TYPE, TypeMessages.ERROR);
+                    sendMessage(sender, Message.COMMAND_WEAPON_NOT_FOUND_TYPE, MessagesType.ERROR);
                 }
             }
         }

@@ -4,9 +4,9 @@ import net.atcore.Config;
 import net.atcore.Section;
 import net.atcore.command.BaseTabCommand;
 import net.atcore.command.CommandUtils;
-import net.atcore.command.UseArgs;
+import net.atcore.command.ArgumentUse;
 import net.atcore.data.DataSection;
-import net.atcore.messages.TypeMessages;
+import net.atcore.messages.MessagesType;
 import net.atcore.security.Login.ServerMode;
 import net.atcore.utils.GlobalUtils;
 import net.atcore.utils.RegisterManager;
@@ -20,7 +20,7 @@ public class AviaTerraCommand extends BaseTabCommand {
 
     public AviaTerraCommand() {
         super("AviaTerra",
-                new UseArgs("aviaTerra"),
+                new ArgumentUse("aviaTerra"),
                 "Se encarga de la configuración de algunos apartados del plugin"
         );
     }
@@ -37,17 +37,17 @@ public class AviaTerraCommand extends BaseTabCommand {
                 if (args.length >= 2) {
                     if (CommandUtils.isTrueOrFalse(args[1])){
                         Config.setCheckAntiOp(true);
-                        sendMessage(sender,"Anti Op <|Activado|>", TypeMessages.INFO);
+                        sendMessage(sender,"Anti Op <|Activado|>", MessagesType.INFO);
                     }else{
                         Config.setCheckAntiOp(false);
-                        sendMessage(sender,"Anti Op <|Desactivado|>", TypeMessages.INFO);
-                        sendMessage(sender,"****************************", TypeMessages.WARNING);
-                        sendMessage(sender,"DESACTIVAR SOLO PARA PRUEBAS", TypeMessages.WARNING);
-                        sendMessage(sender,"****************************", TypeMessages.WARNING);
+                        sendMessage(sender,"Anti Op <|Desactivado|>", MessagesType.INFO);
+                        sendMessage(sender,"****************************", MessagesType.WARNING);
+                        sendMessage(sender,"DESACTIVAR SOLO PARA PRUEBAS", MessagesType.WARNING);
+                        sendMessage(sender,"****************************", MessagesType.WARNING);
                     }
 
                 }else{
-                    sendMessage(sender,"El anti Op esta <|" + CommandUtils.booleanToString(Config.isCheckAntiOp()) + "|>", TypeMessages.INFO);
+                    sendMessage(sender,"El anti Op esta <|" + CommandUtils.booleanToString(Config.isCheckAntiOp()) + "|>", MessagesType.INFO);
                 }
                 DataSection.getConfigFile().saveData();
             }
@@ -55,16 +55,16 @@ public class AviaTerraCommand extends BaseTabCommand {
                 if (args.length >= 2) {
                     if (CommandUtils.isTrueOrFalse(args[1])){
                         Config.setCheckAntiIllegalItems(true);
-                        sendMessage(sender,"Anti Items Ilegales <|Activado|>", TypeMessages.INFO);
+                        sendMessage(sender,"Anti Items Ilegales <|Activado|>", MessagesType.INFO);
                     }else{
                         Config.setCheckAntiIllegalItems(false);
-                        sendMessage(sender,"Anti Items Ilegales <|Desactivado|>", TypeMessages.INFO);
-                        sendMessage(sender,"****************************", TypeMessages.WARNING);
-                        sendMessage(sender,"DESACTIVAR SOLO PARA PRUEBAS", TypeMessages.WARNING);
-                        sendMessage(sender,"****************************", TypeMessages.WARNING);
+                        sendMessage(sender,"Anti Items Ilegales <|Desactivado|>", MessagesType.INFO);
+                        sendMessage(sender,"****************************", MessagesType.WARNING);
+                        sendMessage(sender,"DESACTIVAR SOLO PARA PRUEBAS", MessagesType.WARNING);
+                        sendMessage(sender,"****************************", MessagesType.WARNING);
                     }
                 }else{
-                    sendMessage(sender,"el Anti Items Ilegales esta <|" + CommandUtils.booleanToString(Config.isCheckAntiIllegalItems()) + "|>", TypeMessages.INFO);
+                    sendMessage(sender,"el Anti Items Ilegales esta <|" + CommandUtils.booleanToString(Config.isCheckAntiIllegalItems()) + "|>", MessagesType.INFO);
                 }
                 DataSection.getConfigFile().saveData();
             }
@@ -74,19 +74,19 @@ public class AviaTerraCommand extends BaseTabCommand {
                     try {
                         mode = ServerMode.valueOf(args[1].toUpperCase());
                     }catch (Exception e){
-                        sendMessage(sender, "Modo no valido", TypeMessages.ERROR);
+                        sendMessage(sender, "Modo no valido", MessagesType.ERROR);
                         return;
                     }
                     if (CommandUtils.isTrueOrFalse(args[1])){
                         Config.setServerMode(mode);
-                        sendMessage(sender,"El modo del servidor esta en " + Config.getServerMode().name().toLowerCase().replace("_"," "), TypeMessages.INFO);
+                        sendMessage(sender,"El modo del servidor esta en " + Config.getServerMode().name().toLowerCase().replace("_"," "), MessagesType.INFO);
                     }else{
                         Config.setServerMode(mode);
-                        sendMessage(sender,"El modo del servidor esta en " + Config.getServerMode().name().toLowerCase().replace("_"," "), TypeMessages.INFO);
+                        sendMessage(sender,"El modo del servidor esta en " + Config.getServerMode().name().toLowerCase().replace("_"," "), MessagesType.INFO);
                     }
 
                 }else{
-                    sendMessage(sender,"El modo mixto esta <|" + Config.getServerMode().name().toLowerCase() + "|>", TypeMessages.INFO);
+                    sendMessage(sender,"El modo mixto esta <|" + Config.getServerMode().name().toLowerCase() + "|>", MessagesType.INFO);
                 }
                 DataSection.getConfigFile().saveData();
             }
@@ -94,36 +94,36 @@ public class AviaTerraCommand extends BaseTabCommand {
                 if (args.length >= 2) {
                     if (CommandUtils.isTrueOrFalse(args[1])){
                         Config.setCheckBanByIp(true);
-                        sendMessage(sender,"El check de baneo por ip <|Activado|>", TypeMessages.INFO);
+                        sendMessage(sender,"El check de baneo por ip <|Activado|>", MessagesType.INFO);
                     }else{
                         Config.setCheckBanByIp(false);
-                        sendMessage(sender,"El check de baneo por ip <|Desactivado|>", TypeMessages.INFO);
-                        sendMessage(sender,"********************************************************", TypeMessages.WARNING);
-                        sendMessage(sender,"SOLO PARA PRUEBAS O/Y PROBLEMAS CON LOS SERVIDOR DE AUTH", TypeMessages.WARNING);
-                        sendMessage(sender,"********************************************************", TypeMessages.WARNING);
+                        sendMessage(sender,"El check de baneo por ip <|Desactivado|>", MessagesType.INFO);
+                        sendMessage(sender,"********************************************************", MessagesType.WARNING);
+                        sendMessage(sender,"SOLO PARA PRUEBAS O/Y PROBLEMAS CON LOS SERVIDOR DE AUTH", MessagesType.WARNING);
+                        sendMessage(sender,"********************************************************", MessagesType.WARNING);
                     }
 
                 }else{
-                    sendMessage(sender,"El check de baneo por ip esta <|" + CommandUtils.booleanToString(Config.isCheckBanByIp()) + "|>", TypeMessages.INFO);
+                    sendMessage(sender,"El check de baneo por ip esta <|" + CommandUtils.booleanToString(Config.isCheckBanByIp()) + "|>", MessagesType.INFO);
                 }
                 DataSection.getConfigFile().saveData();
             }
             case "purgarangos" -> {
                 Config.setPurgeTagRange(System.currentTimeMillis());
-                sendMessage(sender,"Todas los tags de rango ya no son validas y comenzara su eliminación", TypeMessages.INFO);
+                sendMessage(sender,"Todas los tags de rango ya no son validas y comenzara su eliminación", MessagesType.INFO);
                 DataSection.getConfigFile().saveData();
             }
             case "tiempodesesion" -> {
                 if (args.length >= 2) {
                     try {
                         Config.setExpirationSession(CommandUtils.StringToMilliseconds(args[1], true));
-                        sendMessage(sender, "se cambio el la duración de la sesión", TypeMessages.SUCCESS);
+                        sendMessage(sender, "se cambio el la duración de la sesión", MessagesType.SUCCESS);
                     }catch (RuntimeException e){
-                        sendMessage(sender, "formato de fecha incorrecto", TypeMessages.ERROR);
+                        sendMessage(sender, "formato de fecha incorrecto", MessagesType.ERROR);
                     }
                 }else{
                     sendMessage(sender,"el tiempo de expiración de expiration esta en <|" +
-                            GlobalUtils.timeToString(Config.getExpirationSession(), 2) + "|>", TypeMessages.INFO);
+                            GlobalUtils.timeToString(Config.getExpirationSession(), 2) + "|>", MessagesType.INFO);
                 }
                 DataSection.getConfigFile().saveData();
             }
@@ -131,12 +131,12 @@ public class AviaTerraCommand extends BaseTabCommand {
                 if (args.length >= 2) {
                     try {
                         Config.setLevelModerationChat(Float.parseFloat(args[1]));
-                        sendMessage(sender, "se cambio el nivel de moderación", TypeMessages.SUCCESS);
+                        sendMessage(sender, "se cambio el nivel de moderación", MessagesType.SUCCESS);
                     }catch (RuntimeException e){
-                        sendMessage(sender, "solo números con decimales", TypeMessages.ERROR);
+                        sendMessage(sender, "solo números con decimales", MessagesType.ERROR);
                     }
                 }else{
-                    sendMessage(sender,"El nivel de moderación en el chat esta en <|" + Config.getLevelModerationChat() + "|>", TypeMessages.INFO);
+                    sendMessage(sender,"El nivel de moderación en el chat esta en <|" + Config.getLevelModerationChat() + "|>", MessagesType.INFO);
                 }
                 DataSection.getConfigFile().saveData();
             }
@@ -145,16 +145,16 @@ public class AviaTerraCommand extends BaseTabCommand {
                 if (args.length >= 2) {
                     if (CommandUtils.isTrueOrFalse(args[1])){
                         Config.setAntiBot(true);
-                        sendMessage(sender,"AntiBot <|Activado|>", TypeMessages.INFO);
+                        sendMessage(sender,"AntiBot <|Activado|>", MessagesType.INFO);
                     }else{
                         Config.setAntiBot(false);
-                        sendMessage(sender,"AntiBot <|Desactivado|>", TypeMessages.INFO);
-                        sendMessage(sender,"****************************", TypeMessages.WARNING);
-                        sendMessage(sender,"DESACTIVAR SOLO PARA PRUEBAS", TypeMessages.WARNING);
-                        sendMessage(sender,"****************************", TypeMessages.WARNING);
+                        sendMessage(sender,"AntiBot <|Desactivado|>", MessagesType.INFO);
+                        sendMessage(sender,"****************************", MessagesType.WARNING);
+                        sendMessage(sender,"DESACTIVAR SOLO PARA PRUEBAS", MessagesType.WARNING);
+                        sendMessage(sender,"****************************", MessagesType.WARNING);
                     }
                 }else{
-                    sendMessage(sender,"El sistema antiBot esta <|" + CommandUtils.booleanToString(Config.isAntiBot()) + "|>", TypeMessages.INFO);
+                    sendMessage(sender,"El sistema antiBot esta <|" + CommandUtils.booleanToString(Config.isAntiBot()) + "|>", MessagesType.INFO);
                 }
                 DataSection.getConfigFile().saveData();
             }

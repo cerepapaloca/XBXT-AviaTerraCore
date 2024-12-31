@@ -1,7 +1,7 @@
 package net.atcore.misc;
 
 import net.atcore.messages.MessagesManager;
-import net.atcore.messages.TypeMessages;
+import net.atcore.messages.MessagesType;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -70,7 +70,7 @@ public class LimitWorld {
     }
 
     private static void feedback(Player player) {
-        MessagesManager.sendTitle(player, "", "⚠ Fin Del Mundo ⚠", 0, 4, 30, TypeMessages.ERROR);
+        MessagesManager.sendTitle(player, "", "⚠ Fin Del Mundo ⚠", 0, 4, 30, MessagesType.ERROR);
         player.playSound(player, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.3F, 0.95F);
     }
 

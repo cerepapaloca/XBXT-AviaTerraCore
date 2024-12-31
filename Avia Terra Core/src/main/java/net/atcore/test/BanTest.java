@@ -4,7 +4,7 @@ import net.atcore.AviaTerraCore;
 import net.atcore.aviaterraplayer.AviaTerraPlayer;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
-import net.atcore.messages.TypeMessages;
+import net.atcore.messages.MessagesType;
 import net.atcore.moderation.ban.ContextBan;
 import net.atcore.moderation.ModerationSection;
 import net.atcore.utils.GlobalUtils;
@@ -42,7 +42,7 @@ public final class BanTest implements RunTest {
         Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> {
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "aviaterracore:ban jugadorA,JugadorB global 100d Es una prueba automatizada seras de desbaneado");
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "aviaterracore:unban jugadorA,JugadorB global");
-            MessagesManager.sendMessageConsole(Message.TEST_FINISHED.getMessage(), TypeMessages.SUCCESS);
+            MessagesManager.sendMessageConsole(Message.TEST_FINISHED.getMessage(), MessagesType.SUCCESS);
         });
     }
 }

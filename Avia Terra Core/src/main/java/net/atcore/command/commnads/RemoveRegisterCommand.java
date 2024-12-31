@@ -4,10 +4,10 @@ import net.atcore.AviaTerraCore;
 import net.atcore.command.BaseTabCommand;
 import net.atcore.command.CommandUtils;
 import net.atcore.command.ModeTabPlayers;
-import net.atcore.command.UseArgs;
+import net.atcore.command.ArgumentUse;
 import net.atcore.data.sql.DataBaseRegister;
 import net.atcore.messages.Message;
-import net.atcore.messages.TypeMessages;
+import net.atcore.messages.MessagesType;
 import net.atcore.security.Login.LoginManager;
 import org.bukkit.command.CommandSender;
 
@@ -22,7 +22,7 @@ public class RemoveRegisterCommand extends BaseTabCommand {
 
     public RemoveRegisterCommand() {
         super("removeRegister",
-                new UseArgs("removeRegister").addArgPlayer(ModeTabPlayers.ADVANCED),
+                new ArgumentUse("removeRegister").addArgPlayer(ModeTabPlayers.ADVANCED),
                 "Le borras el registro al jugador, util para jugadores temporales"
         );
     }
@@ -33,14 +33,14 @@ public class RemoveRegisterCommand extends BaseTabCommand {
             CommandUtils.executeForPlayer(sender, args[0], false, dataTemporalPlayer ->
                     AviaTerraCore.getInstance().enqueueTaskAsynchronously(() -> {
                         if (DataBaseRegister.removeRegister(dataTemporalPlayer.name(), sender.getName())){
-                            sendMessage(sender, String.format(Message.COMMAND_REMOVE_REGISTER_SUCCESSFUL.getMessage(), dataTemporalPlayer.name()), TypeMessages.SUCCESS);
+                            sendMessage(sender, String.format(Message.COMMAND_REMOVE_REGISTER_SUCCESSFUL.getMessage(), dataTemporalPlayer.name()), MessagesType.SUCCESS);
                         }else {
-                            sendMessage(sender, String.format(Message.COMMAND_REMOVE_REGISTER_ERROR.getMessage(), dataTemporalPlayer.name()), TypeMessages.ERROR);
+                            sendMessage(sender, String.format(Message.COMMAND_REMOVE_REGISTER_ERROR.getMessage(), dataTemporalPlayer.name()), MessagesType.ERROR);
                         }
                         LoginManager.removeDataLogin(dataTemporalPlayer.name());
                     }));
         }else{
-            sendMessage(sender, this.getUsage().toString(), TypeMessages.ERROR);
+            sendMessage(sender, this.getUsage().toString(), MessagesType.ERROR);
         }
     }
 

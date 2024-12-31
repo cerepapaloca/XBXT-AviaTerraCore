@@ -5,7 +5,7 @@ import net.atcore.aviaterraplayer.AviaTerraPlayer;
 import net.atcore.Config;
 import net.atcore.aviaterraplayer.ModerationPlayer;
 import net.atcore.messages.CategoryMessages;
-import net.atcore.messages.TypeMessages;
+import net.atcore.messages.MessagesType;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -26,11 +26,11 @@ public class ChatModeration {
         double puntos = mp.getPointChat();
         if (puntos < 0) {//si su puntos son negativos se lo hace saber
             mp.setPointChat(puntos);
-            sendMessageConsole( bukkitPlayer.getName() + " » &7" + message + "&c [ELIMINADO: Spam]", TypeMessages.INFO, CategoryMessages.MODERATION);
+            sendMessageConsole( bukkitPlayer.getName() + " » &7" + message + "&c [ELIMINADO: Spam]", MessagesType.INFO, CategoryMessages.MODERATION);
             double second = (puntos)/(20 * Config.getLevelModerationChat());//formula para calcular el tiempo que le fata para volver a escribir
             second *= 10;
             long secondInt = Math.round(Math.abs(second));
-            sendMessage(bukkitPlayer, "mensaje eliminado por Spam espera <|" + secondInt * 0.1D + "|> segundos", TypeMessages.ERROR);
+            sendMessage(bukkitPlayer, "mensaje eliminado por Spam espera <|" + secondInt * 0.1D + "|> segundos", MessagesType.ERROR);
             return true;
         }else {
             puntos = puntos - ((message.length()*3F) + 70F);//por cada letra más puntos le resta y por cada mensaje resta 15
@@ -80,8 +80,8 @@ public class ChatModeration {
                     message.contains(word.replace("n", "ñ")) ||
                     message.contains(word.replace("ñ", "n"))
             ){
-                sendMessageConsole( player.getName() + " » &7" + message + "&c [ELIMINADO: Malas Palabras]", TypeMessages.INFO, CategoryMessages.MODERATION);
-                sendMessage(player, "mensaje eliminado por qué contiene palabras inadecuadas", TypeMessages.ERROR);
+                sendMessageConsole( player.getName() + " » &7" + message + "&c [ELIMINADO: Malas Palabras]", MessagesType.INFO, CategoryMessages.MODERATION);
+                sendMessage(player, "mensaje eliminado por qué contiene palabras inadecuadas", MessagesType.ERROR);
                 return true;
             }
 

@@ -38,7 +38,8 @@ public class CommandSection implements Section {
 
     @Override
     public void disable() {
-
+        commandHandler.getCommands().clear();
+        commandHandler = null;
     }
 
     @Override

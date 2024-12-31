@@ -1,12 +1,12 @@
 package net.atcore.command.commnads;
 
 import net.atcore.aviaterraplayer.AviaTerraPlayer;
-import net.atcore.command.UseArgs;
+import net.atcore.command.ArgumentUse;
 import net.atcore.test.TypeTest;
 import net.atcore.command.BaseTabCommand;
 import net.atcore.command.CommandUtils;
 import net.atcore.messages.MessagesManager;
-import net.atcore.messages.TypeMessages;
+import net.atcore.messages.MessagesType;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -16,7 +16,7 @@ public class AviaTerraPruebasCommand extends BaseTabCommand {
 
     public AviaTerraPruebasCommand() {
         super("AviaTerraPruebas",
-                new UseArgs("AviaTerraPruebas").addArg("Pruebas"),
+                new ArgumentUse("AviaTerraPruebas").addArg("Pruebas"),
                 "Commando para realizar pruebas del plugin"
         );
     }
@@ -30,12 +30,12 @@ public class AviaTerraPruebasCommand extends BaseTabCommand {
                 try {
                     typeTest = TypeTest.valueOf(args[0].toUpperCase());
                 }catch (Exception e) {
-                    MessagesManager.sendMessage(player, "Esta prueba no existe", TypeMessages.ERROR);
+                    MessagesManager.sendMessage(player, "Esta prueba no existe", MessagesType.ERROR);
                     return;
                 }
                 typeTest.runtTest(atp);
             }else {
-                MessagesManager.sendMessage(player, this.getUsage().toString(), TypeMessages.ERROR);
+                MessagesManager.sendMessage(player, this.getUsage().toString(), MessagesType.ERROR);
             }
         }
     }

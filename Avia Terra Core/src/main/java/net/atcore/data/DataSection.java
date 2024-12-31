@@ -10,11 +10,9 @@ import net.atcore.data.sql.DataBaseRegister;
 import net.atcore.data.yml.*;
 import net.atcore.data.yml.ymls.FliesCacheLimbo;
 import net.atcore.messages.MessagesManager;
-import net.atcore.messages.TypeMessages;
+import net.atcore.messages.MessagesType;
 
 import java.util.HashSet;
-
-import static net.atcore.utils.RegisterManager.register;
 
 public class DataSection implements Section {
 
@@ -61,7 +59,7 @@ public class DataSection implements Section {
                     file.reloadFile();
                     file.loadData();
                 }
-                if (!AviaTerraCore.isStarting()) MessagesManager.sendMessageConsole(String.format("Archivo %s recargador exitosamente", file), TypeMessages.SUCCESS);
+                if (!AviaTerraCore.isStarting()) MessagesManager.sendMessageConsole(String.format("Archivo %s recargador exitosamente", file), MessagesType.SUCCESS);
             }
         });
     }

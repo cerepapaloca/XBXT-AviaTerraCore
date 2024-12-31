@@ -27,19 +27,19 @@ public final class MessagesManager {
     ///////////////////////////
     ///////////////////////////
 
-    public static void sendMessage(CommandSender sender, Message message,@Nullable TypeMessages type) {
+    public static void sendMessage(CommandSender sender, Message message,@Nullable MessagesType type) {
         sendMessage(sender, message.getMessage(), type, CategoryMessages.PRIVATE, true);
     }
 
-    public static void sendMessage(CommandSender sender, String message,@Nullable TypeMessages type) {
+    public static void sendMessage(CommandSender sender, String message,@Nullable MessagesType type) {
         sendMessage(sender, message, type, CategoryMessages.PRIVATE, true);
     }
 
-    public static void sendMessage(CommandSender sender, String message,@Nullable TypeMessages type , CategoryMessages categoryMessages) {
+    public static void sendMessage(CommandSender sender, String message, @Nullable MessagesType type , CategoryMessages categoryMessages) {
         sendMessage(sender, message, type, categoryMessages, true);
     }
 
-    public static void sendMessage(CommandSender sender, String message,@Nullable TypeMessages type,  CategoryMessages categoryMessages, boolean isPrefix) {
+    public static void sendMessage(CommandSender sender, String message, @Nullable MessagesType type, CategoryMessages categoryMessages, boolean isPrefix) {
         if (sender instanceof Player player) {
             sendMessage(player, message, type, categoryMessages, isPrefix);
         }else {
@@ -50,17 +50,25 @@ public final class MessagesManager {
     ///////////////////////////
     ///////////////////////////
 
-    public static void sendMessage(Player player, String message,@Nullable TypeMessages type) {
+    /**
+     * @see #sendMessage(Player, String, MessagesType, CategoryMessages, boolean) sendMessage()
+     */
+
+    public static void sendMessage(Player player, String message,@Nullable MessagesType type) {
         sendMessage(player, message, type,  CategoryMessages.PRIVATE,true);
     }
 
-    public static void sendMessage(Player player, String message,@Nullable TypeMessages type, CategoryMessages categoryMessages) {
+    /**
+     * @see #sendMessage(Player, String, MessagesType, CategoryMessages, boolean) sendMessage()
+     */
+
+    public static void sendMessage(Player player, String message, @Nullable MessagesType type, CategoryMessages categoryMessages) {
         sendMessage(player, message, type,  categoryMessages,true);
     }
 
     /**
      * Todos los mensajes del plugin tiene que pasar por este metodo o por el metodo
-     * {@link #sendMessageConsole(String, TypeMessages, CategoryMessages, boolean) sendMessageConsole}.
+     * {@link #sendMessageConsole(String, MessagesType, CategoryMessages, boolean) sendMessageConsole}.
      * Para que todos los mensajes tenga el mismo formato de color y diseño
      * @param player al jugador que le vas a enviar el mensaje
      * @param message el mensaje
@@ -72,7 +80,7 @@ public final class MessagesManager {
      * @see #addProprieties
      */
 
-    public static void sendMessage(Player player, String message, @Nullable TypeMessages type, CategoryMessages categoryMessages, boolean isPrefix) {
+    public static void sendMessage(Player player, String message, @Nullable MessagesType type, CategoryMessages categoryMessages, boolean isPrefix) {
         if (categoryMessages != CategoryMessages.PRIVATE){
             sendMessageLogDiscord(type, categoryMessages, message);
         }
@@ -83,19 +91,19 @@ public final class MessagesManager {
     ///////////////////////////
     ///////////////////////////
 
-    public static void sendMessageConsole(String message, TypeMessages type) {
+    public static void sendMessageConsole(String message, MessagesType type) {
         sendMessageConsole(message, type, CategoryMessages.PRIVATE);
     }
 
-    public static void sendMessageConsole(String message, TypeMessages type, boolean prefix) {
+    public static void sendMessageConsole(String message, MessagesType type, boolean prefix) {
         sendMessageConsole(message, type, CategoryMessages.PRIVATE, prefix);
     }
 
-    public static void sendMessageConsole(String message, @Nullable TypeMessages type,CategoryMessages categoryMessages) {
+    public static void sendMessageConsole(String message, @Nullable MessagesType type, CategoryMessages categoryMessages) {
         sendMessageConsole(message, type, categoryMessages,true);
     }
 
-    public static void sendMessageConsole(String message, @Nullable TypeMessages type, CategoryMessages categoryMessages, boolean isPrefix) {
+    public static void sendMessageConsole(String message, @Nullable MessagesType type, CategoryMessages categoryMessages, boolean isPrefix) {
         if (categoryMessages != CategoryMessages.PRIVATE){
             sendMessageLogDiscord(type, categoryMessages, message);
         }
@@ -103,6 +111,9 @@ public final class MessagesManager {
         String s = addProprieties(message, type, categoryMessages != CategoryMessages.PRIVATE, isPrefix);
         Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', s));
     }
+
+    ///////////////////////////
+    ///////////////////////////
 
     public static void sendErrorException(String message, Exception exception) {
         AviaTerraCore.getInstance().getLogger().severe(setFormatException(message, exception));
@@ -140,7 +151,7 @@ public final class MessagesManager {
      * @return regresa el
      */
 
-    public static String addProprieties(String message,@Nullable TypeMessages type, boolean isResister, boolean showPrefix) {
+    public static String addProprieties(String message, @Nullable MessagesType type, boolean isResister, boolean showPrefix) {
         if (isResister) {
             while (Character.isSpaceChar(message.charAt(message.length()-1))){
                 message = message.substring(0, message.length()-1);
@@ -153,13 +164,13 @@ public final class MessagesManager {
         }else {
             s = "";
         }
-        if (type == null) type = TypeMessages.NULL;
+        if (type == null) type = MessagesType.NULL;
         String colorMain = type.getMainColor();
         message = message.replace("`", "");
         return s + colorMain +  message.replace("<|", type.getSecondColor()).replace("|>", colorMain).replace("|!>", colorMain);
     }
 
-    private static void sendMessageLogDiscord(TypeMessages type, CategoryMessages categoryMessages, String message) {
+    private static void sendMessageLogDiscord(MessagesType type, CategoryMessages categoryMessages, String message) {
         Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(),() -> {
             String finalMessage;
             switch (type) {
@@ -186,10 +197,10 @@ public final class MessagesManager {
     }
 
     /**
-     * Le manda un título a jugador respetando el formato de {@link #addProprieties(String, TypeMessages, boolean, boolean) addProprieties}
+     * Le manda un título a jugador respetando el formato de {@link #addProprieties(String, MessagesType, boolean, boolean) addProprieties}
      */
 
-    public static void sendTitle(Player player, String title, String subtitle, int fadeIn, int stay, int fadeOut, TypeMessages type) {
+    public static void sendTitle(Player player, String title, String subtitle, int fadeIn, int stay, int fadeOut, MessagesType type) {
         player.sendTitle(ChatColor.translateAlternateColorCodes('&', addProprieties(title, type, false, false)),
                 ChatColor.translateAlternateColorCodes('&', addProprieties(subtitle, type, false, false)), fadeIn, stay, fadeOut);
     }

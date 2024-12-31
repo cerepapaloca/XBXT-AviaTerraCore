@@ -3,10 +3,9 @@ package net.atcore.command;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.atcore.messages.Message;
-import net.atcore.messages.TypeMessages;
+import net.atcore.messages.MessagesType;
 import net.atcore.security.AntiExploit;
 import net.atcore.security.Login.LoginManager;
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
@@ -44,9 +43,9 @@ public final class CommandHandler implements TabExecutor {
                         return true;
                     }else{
                         if (LoginManager.checkLoginIn(player)){
-                            sendMessage(sender, Message.COMMAND_GENERIC_NO_PERMISSION.getMessage(), TypeMessages.ERROR);
+                            sendMessage(sender, Message.COMMAND_GENERIC_NO_PERMISSION.getMessage(), MessagesType.ERROR);
                         }else {
-                            sendMessage(player, Message.COMMAND_GENERIC_NO_LOGIN.getMessage(), TypeMessages.ERROR);
+                            sendMessage(player, Message.COMMAND_GENERIC_NO_LOGIN.getMessage(), MessagesType.ERROR);
                         }
                     }
                 }else {
@@ -54,7 +53,7 @@ public final class CommandHandler implements TabExecutor {
                     return true;
                 }
             }catch (Exception e) {
-                sendMessage(sender, Message.COMMAND_GENERIC_EXCEPTION_ERROR.getMessage(), TypeMessages.ERROR);
+                sendMessage(sender, Message.COMMAND_GENERIC_EXCEPTION_ERROR.getMessage(), MessagesType.ERROR);
                 sendErrorException("Error al ejecutar el comando", e);
                 return false;
             }
@@ -79,7 +78,7 @@ public final class CommandHandler implements TabExecutor {
                 list = command.getUsage().onTab(args);
             }
 
-            UseArgs argsUse = command.getUsage();
+            ArgumentUse argsUse = command.getUsage();
             if (list == null)return null;
 
             if (list.size() == 1) {
@@ -87,7 +86,7 @@ public final class CommandHandler implements TabExecutor {
                     if (argsUse.getLength() >= args.length) {
                         try {
                             if (command.getUsage().getArg(args.length).isRequired()) {
-                                return List.of(TypeMessages.ERROR.getMainColorWithColorChart() + String.format(
+                                return List.of(MessagesType.ERROR.getMainColor() + String.format(
                                         Message.COMMAND_GENERIC_ARGS_ERROR.getMessage(),
                                         CommandUtils.useToUseDisplay(argsUse.getArgRaw(args.length))
                                 ));

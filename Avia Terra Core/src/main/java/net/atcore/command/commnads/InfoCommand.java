@@ -2,10 +2,9 @@ package net.atcore.command.commnads;
 
 import net.atcore.AviaTerraCore;
 import net.atcore.command.BaseCommand;
-import net.atcore.command.ModeTabPlayers;
-import net.atcore.command.UseArgs;
+import net.atcore.command.ArgumentUse;
 import net.atcore.messages.CategoryMessages;
-import net.atcore.messages.TypeMessages;
+import net.atcore.messages.MessagesType;
 import net.luckperms.api.model.user.User;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -18,7 +17,7 @@ public class InfoCommand extends BaseCommand {
 
     public InfoCommand() {
         super("info",
-                new UseArgs("/info"),
+                new ArgumentUse("/info"),
                 "Te logueas"
         );
     }
@@ -35,17 +34,17 @@ public class InfoCommand extends BaseCommand {
             groupName = "? (usuario)";
         }
         sendMessage(sender,"|" + applySpace("Nombres") + "|" + applySpace("Localización") + "|" + applySpace("Rango") + "|" + applySpace("UUID"),
-                TypeMessages.INFO, CategoryMessages.PRIVATE, false);
+                MessagesType.INFO, CategoryMessages.PRIVATE, false);
         for (Player p : Bukkit.getOnlinePlayers()) {
             sendMessage(sender,
                     "|" + applySpace(p.getName())
                             + "|" + applySpace(locationToString(p.getLocation()))
                             + "|" + applySpace(groupName)
                             + "|" + applySpace(p.getUniqueId().toString()),
-                    TypeMessages.INFO, CategoryMessages.PRIVATE, false);        }
-        sendMessage(sender," ", TypeMessages.INFO, CategoryMessages.PRIVATE, false);
-        sendMessage(sender,String.format("jugadores <|%s/%s|>", Bukkit.getOnlinePlayers().size(), Bukkit.getServer().getMaxPlayers()), TypeMessages.INFO, CategoryMessages.PRIVATE, false);
-        sendMessage(sender,String.format("TPS %s", Bukkit.getServer().getServerTickManager().getTickRate()), TypeMessages.INFO, CategoryMessages.PRIVATE, false);
+                    MessagesType.INFO, CategoryMessages.PRIVATE, false);        }
+        sendMessage(sender," ", MessagesType.INFO, CategoryMessages.PRIVATE, false);
+        sendMessage(sender,String.format("jugadores <|%s/%s|>", Bukkit.getOnlinePlayers().size(), Bukkit.getServer().getMaxPlayers()), MessagesType.INFO, CategoryMessages.PRIVATE, false);
+        sendMessage(sender,String.format("TPS %s", Bukkit.getServer().getServerTickManager().getTickRate()), MessagesType.INFO, CategoryMessages.PRIVATE, false);
 
     }
 

@@ -2,9 +2,9 @@ package net.atcore.command.commnads;
 
 import net.atcore.command.BaseTabCommand;
 import net.atcore.command.CommandUtils;
-import net.atcore.command.UseArgs;
+import net.atcore.command.ArgumentUse;
 import net.atcore.messages.Message;
-import net.atcore.messages.TypeMessages;
+import net.atcore.messages.MessagesType;
 import net.atcore.moderation.ban.IsBan;
 import net.atcore.moderation.ban.BanManager;
 import net.atcore.moderation.ban.ContextBan;
@@ -23,7 +23,7 @@ public class CheckBanCommand extends BaseTabCommand {
 
     public CheckBanCommand() {
         super("checkban",
-                new UseArgs("checkBan").addArg("?","!").addArg("Contexto"),
+                new ArgumentUse("checkBan").addArg("?","!").addArg("Contexto"),
                 "Compruebas que el jugador este baneado usando ? o !. con ? solo miras que contexto esta baneado y no requiere especificar " +
                         "el contexto mientras el ! se usa cuando quieres echar un jugador baneado de un contexto especificado (esto por si se llega a " +
                         "colar en un modo de juego o si hay bug)"
@@ -33,7 +33,7 @@ public class CheckBanCommand extends BaseTabCommand {
     @Override
     public void execute(CommandSender sender, String[] args) {
         if (args.length == 1) {
-            sendMessage(sender, Message.COMMAND_CHECK_BAN_MISSING_ARGUMENT_CONTEXT, TypeMessages.ERROR);
+            sendMessage(sender, Message.COMMAND_CHECK_BAN_MISSING_ARGUMENT_CONTEXT, MessagesType.ERROR);
             return;
         }
         if (args.length >= 2) {
@@ -48,7 +48,7 @@ public class CheckBanCommand extends BaseTabCommand {
 
             if (isChecking) {
                 if (BanManager.getDataBan(args[0]) == null) {
-                    sendMessage(sender, Message.COMMAND_CHECK_BAN_NOT_FOUND_BAN, TypeMessages.INFO);
+                    sendMessage(sender, Message.COMMAND_CHECK_BAN_NOT_FOUND_BAN, MessagesType.INFO);
                     return;
                 }
                 for (DataBan dataBan : BanManager.getDataBan(args[0]).values()) {
@@ -61,7 +61,7 @@ public class CheckBanCommand extends BaseTabCommand {
                     try {
                         contextBan = ContextBan.valueOf(args[2].toUpperCase());
                     }catch (Exception ignored) {
-                        sendMessage(sender, Message.COMMAND_CHECK_BAN_NOT_FOUND_CONTEXT, TypeMessages.ERROR);
+                        sendMessage(sender, Message.COMMAND_CHECK_BAN_NOT_FOUND_CONTEXT, MessagesType.ERROR);
                         return;
                     }
 
@@ -69,26 +69,26 @@ public class CheckBanCommand extends BaseTabCommand {
                     if (player != null) {
                         IsBan reason = BanManager.checkBan(player, contextBan);
                         switch (reason) {
-                            case NOT -> sendMessage(sender, Message.COMMAND_CHECK_BAN_NOT_FOUND_BAN_IN_CONTEXT, TypeMessages.SUCCESS);
+                            case NOT -> sendMessage(sender, Message.COMMAND_CHECK_BAN_NOT_FOUND_BAN_IN_CONTEXT, MessagesType.SUCCESS);
                             case NOT_THIS_CONTEXT -> {
-                                sendMessage(sender, Message.COMMAND_CHECK_BAN_FOUND_AND_KICK, TypeMessages.SUCCESS);
+                                sendMessage(sender, Message.COMMAND_CHECK_BAN_FOUND_AND_KICK, MessagesType.SUCCESS);
                                 if (BanManager.getDataBan(player.getName()) == null) {
-                                    sendMessage(sender, Message.COMMAND_CHECK_BAN_NOT_FOUND_BAN, TypeMessages.INFO);
+                                    sendMessage(sender, Message.COMMAND_CHECK_BAN_NOT_FOUND_BAN, MessagesType.INFO);
                                     return;
                                 }
                                 for (DataBan dataBan : BanManager.getDataBan(player.getName()).values()){
                                     sendDataBan(sender, dataBan);
                                 }
                             }
-                            case YES -> sendMessage(sender,  String.format(Message.COMMAND_CHECK_BAN_FOUND_AND_KICK.getMessage(), player.getName(), contextBan), TypeMessages.SUCCESS);
-                            case UNKNOWN -> sendMessage(sender,String.format(Message.COMMAND_CHECK_BAN_ERROR.getMessage(), player.getName()), TypeMessages.ERROR);
+                            case YES -> sendMessage(sender,  String.format(Message.COMMAND_CHECK_BAN_FOUND_AND_KICK.getMessage(), player.getName(), contextBan), MessagesType.SUCCESS);
+                            case UNKNOWN -> sendMessage(sender,String.format(Message.COMMAND_CHECK_BAN_ERROR.getMessage(), player.getName()), MessagesType.ERROR);
 
                         }
                     }else {
-                        sendMessage(sender, Message.COMMAND_GENERIC_PLAYER_NOT_FOUND, TypeMessages.ERROR);
+                        sendMessage(sender, Message.COMMAND_GENERIC_PLAYER_NOT_FOUND, MessagesType.ERROR);
                     }
                 }else {
-                    sendMessage(sender, Message.COMMAND_CHECK_BAN_MISSING_ARGUMENT_CONTEXT, TypeMessages.ERROR);
+                    sendMessage(sender, Message.COMMAND_CHECK_BAN_MISSING_ARGUMENT_CONTEXT, MessagesType.ERROR);
                 }
             }
         }
@@ -103,7 +103,7 @@ public class CheckBanCommand extends BaseTabCommand {
         }else {
             time = GlobalUtils.timeToString(dataBan.getUnbanDate(), 1, true);
         }
-        sendMessage(sender,String.format(Message.COMMAND_CHECK_BAN_FOUND.getMessage(), dataBan.getContext(), time, dataBan.getReason()), TypeMessages.INFO);
+        sendMessage(sender,String.format(Message.COMMAND_CHECK_BAN_FOUND.getMessage(), dataBan.getContext(), time, dataBan.getReason()), MessagesType.INFO);
     }
 
     @Override

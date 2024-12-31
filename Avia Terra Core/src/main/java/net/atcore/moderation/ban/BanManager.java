@@ -7,7 +7,7 @@ import net.atcore.security.Login.DataLogin;
 import net.atcore.security.Login.LoginManager;
 import net.atcore.utils.GlobalConstantes;
 import net.atcore.messages.CategoryMessages;
-import net.atcore.messages.TypeMessages;
+import net.atcore.messages.MessagesType;
 import net.atcore.moderation.ModerationSection;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.Bukkit;
@@ -109,7 +109,7 @@ public class BanManager extends DataBaseBan {
                     if (unbanDate == GlobalConstantes.NUMERO_PERMA || currentTime < unbanDate) {// para saber si él baneó ya expiro o es permanente
                         sendMessageConsole(player.getName() + " se \"echo\" por que estar baneado de: <|" + context.name() +
                                 "|>. Se detecto por Nombre: <|" + checkName + "|> por ip: <|" + checkIp + "|>. tiempo restante " +
-                                "<|" +  time + "|>", TypeMessages.INFO, CategoryMessages.BAN);
+                                "<|" +  time + "|>", MessagesType.INFO, CategoryMessages.BAN);
                         return IsBan.YES;
                     } else {// eliminar él baneó cuando expiro y realiza en un hilo aparte para que no pete el servidor
                         Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(), () -> ModerationSection.getBanManager().removeBanPlayer(player.getName(), ban.getContext(), "Servidor (Expiro)"));

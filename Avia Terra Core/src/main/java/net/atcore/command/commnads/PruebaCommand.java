@@ -1,10 +1,8 @@
 package net.atcore.command.commnads;
 
 import net.atcore.command.*;
-import net.atcore.messages.TypeMessages;
+import net.atcore.messages.MessagesType;
 import org.bukkit.command.CommandSender;
-
-import java.util.List;
 
 import static net.atcore.messages.MessagesManager.sendMessage;
 
@@ -12,7 +10,7 @@ public class PruebaCommand extends BaseCommand {
 
     public PruebaCommand() {
         super("prueba",
-                new UseArgs("prueba")
+                new ArgumentUse("prueba")
                         .addArg("Alfa", "Beta", "Gamma")
                         .addArgPlayer(ModeTabPlayers.ADVANCED)
                         .addNote("Note")
@@ -24,7 +22,7 @@ public class PruebaCommand extends BaseCommand {
 
     @Override
     public void execute(CommandSender sender, String[] args) {
-        sendMessage(sender, "Hola Mundo!", TypeMessages.SUCCESS);
+        sendMessage(sender, "Hola Mundo!", MessagesType.SUCCESS);
 
     }
 }

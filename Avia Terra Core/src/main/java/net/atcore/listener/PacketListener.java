@@ -9,8 +9,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.atcore.AviaTerraCore;
+import net.atcore.messages.MessagesType;
 import net.atcore.security.SecuritySection;
-import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 
 import java.util.UUID;
@@ -95,7 +95,7 @@ public class PacketListener {
                             JsonObject extraObject = extraArray.get(i).getAsJsonObject();
                             if (extraObject.has("text")) {
                                 String extraText = extraObject.get("text").getAsString();
-                                extraObject.addProperty("text", ChatColor.AQUA + extraText);
+                                extraObject.addProperty("text", MessagesType.INFO.getSecondColor() + extraText);
                             }
                         }
                     }
@@ -108,13 +108,6 @@ public class PacketListener {
                 }
             }
         });
-
-        /*ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(
-                AviaTerraCore.getInstance(),
-                PacketType.Play.Server.NAMED_ENTITY_SPAWN
-        ) {
-
-        });*/
 
         ///////////////////////////////////////////////////////////////////////////////
     }

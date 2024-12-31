@@ -8,7 +8,7 @@ import me.neznamy.tab.api.bossbar.BossBar;
 import net.atcore.aviaterraplayer.ArmamentPlayer;
 import net.atcore.aviaterraplayer.AviaTerraPlayer;
 import net.atcore.messages.MessagesManager;
-import net.atcore.messages.TypeMessages;
+import net.atcore.messages.MessagesType;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -42,7 +42,7 @@ public abstract class BaseWeaponUltraKill extends BaseWeapon {
         if (item.getItemMeta() == null)return;
         AviaTerraPlayer aviaPlayer = AviaTerraPlayer.getPlayer(player);
         if (aviaPlayer.getArmamentPlayer().isReloading()){
-            MessagesManager.sendTitle(player, "", TypeMessages.ERROR.getMainColor() + "Estas Recargando", 0, 10, 30, TypeMessages.ERROR);
+            MessagesManager.sendTitle(player, "", MessagesType.ERROR.getMainColor() + "Estas Recargando", 0, 10, 30, MessagesType.ERROR);
             return;
         }
         Integer amountAmmo = (Integer) GlobalUtils.getPersistenData(item,"AmountAmmo", PersistentDataType.INTEGER);
@@ -67,7 +67,7 @@ public abstract class BaseWeaponUltraKill extends BaseWeapon {
                 return;
             }
         }
-        MessagesManager.sendTitle(player, "", TypeMessages.ERROR.getMainColor() + "Sin munición", 0, 10, 30, TypeMessages.ERROR);
+        MessagesManager.sendTitle(player, "", MessagesType.ERROR.getMainColor() + "Sin munición", 0, 10, 30, MessagesType.ERROR);
     }
 
     @Override

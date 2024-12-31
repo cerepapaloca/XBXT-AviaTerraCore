@@ -3,7 +3,7 @@ package net.atcore.listener;
 import lombok.Getter;
 import lombok.Setter;
 import net.atcore.messages.Message;
-import net.atcore.messages.TypeMessages;
+import net.atcore.messages.MessagesType;
 import net.atcore.moderation.ban.ContextBan;
 import net.atcore.moderation.ChatModeration;
 import net.atcore.security.Login.LoginManager;
@@ -17,8 +17,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
-
-import java.net.SocketException;
 
 import static net.atcore.messages.MessagesManager.*;
 import static net.atcore.moderation.ban.CheckAutoBan.checkAutoBanChat;
@@ -35,7 +33,7 @@ public class ChatListener implements Listener {
 
 
         if (!LoginManager.checkLoginIn(player)) {
-            sendMessage(player, Message.LOGIN_LIMBO_CHAT_WRITE.getMessage(), TypeMessages.ERROR);
+            sendMessage(player, Message.LOGIN_LIMBO_CHAT_WRITE.getMessage(), MessagesType.ERROR);
             event.setCancelled(true);
             return;
         }

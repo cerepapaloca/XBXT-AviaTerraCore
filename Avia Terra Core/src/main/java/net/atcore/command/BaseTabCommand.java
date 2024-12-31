@@ -6,11 +6,11 @@ import java.util.List;
 
 public abstract class BaseTabCommand extends BaseCommand {
 
-    public BaseTabCommand(String name, UseArgs usage, String permission, String description) {
+    public BaseTabCommand(String name, ArgumentUse usage, String permission, String description) {
         super(name, usage, permission, description);
     }
 
-    public BaseTabCommand(String name, UseArgs usage, String description) {
+    public BaseTabCommand(String name, ArgumentUse usage, String description) {
         super(name, usage, description);
     }
 

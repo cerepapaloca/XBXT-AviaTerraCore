@@ -12,17 +12,17 @@ public abstract class BaseCommand {
     private final String name;
     private final String permissions;
     private final String description;
-    private final UseArgs usage;
+    private final ArgumentUse usage;
 
     public BaseCommand(@NotNull String name,
-                       @NotNull UseArgs usage,
+                       @NotNull ArgumentUse usage,
                        @Nullable String description
     ) {
         this(name, usage, "", description);
     }
 
     public BaseCommand(@NotNull String name,
-                       @NotNull UseArgs usage,
+                       @NotNull ArgumentUse usage,
                        @NotNull String permissions,
                        @Nullable String description
     ) {

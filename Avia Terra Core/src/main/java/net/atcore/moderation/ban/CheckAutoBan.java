@@ -4,7 +4,7 @@ import net.atcore.AviaTerraCore;
 import net.atcore.Config;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.Message;
-import net.atcore.messages.TypeMessages;
+import net.atcore.messages.MessagesType;
 import net.atcore.moderation.ModerationSection;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.Bukkit;
@@ -18,9 +18,7 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
-import java.net.SocketException;
 import java.util.*;
-import java.util.concurrent.ExecutionException;
 
 import static net.atcore.messages.MessagesManager.sendMessageConsole;
 import static org.bukkit.Material.*;
@@ -40,7 +38,6 @@ public class CheckAutoBan {
             if (Objects.equals(lastMessage, message)){
                 ChatBotTime.add(player);
                 new BukkitRunnable() {
-                    @Override
                     public void run() {
                         Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(), () -> {
                             if (ChatBotTime.size() > 1) {
@@ -49,7 +46,7 @@ public class CheckAutoBan {
                                     ModerationSection.getBanManager().banPlayer(player, Message.BAN_AUTO_BAN_BOT.getMessage()
                                             ,1000 * 60 * 60 * 24 * 5L, ContextBan.CHAT, Message.BAN_AUTHOR_AUTO_BAN.getMessage());
                                 }
-                                sendMessageConsole(Message.BAN_AUTO_BAN_BOT_LOG.getMessage(), TypeMessages.SUCCESS, CategoryMessages.BAN);
+                                sendMessageConsole(Message.BAN_AUTO_BAN_BOT_LOG.getMessage(), MessagesType.SUCCESS, CategoryMessages.BAN);
                             }
                             ChatBotTime.clear();
                         });
@@ -67,7 +64,7 @@ public class CheckAutoBan {
                 if ((DifferenceOld - DifferenceNew) < 30 && (DifferenceOld - DifferenceNew) > -30) {
                     timeDifferenceCount.put(player.getUniqueId(), timeDifferenceCount.getOrDefault(player.getUniqueId(), 0) + 1);
                     sendMessageConsole("Este jugador usa AutoBotChat: <|(" + timeDifferenceCount.get(player.getUniqueId()) + "/10)|> " + "Tiene una precision de <|"
-                            + (DifferenceOld - DifferenceNew) + " ms|>", TypeMessages.WARNING, CategoryMessages.MODERATION);
+                            + (DifferenceOld - DifferenceNew) + " ms|>", MessagesType.WARNING, CategoryMessages.MODERATION);
                     if (timeDifferenceCount.get(player.getUniqueId()) >= 10){
                         ModerationSection.getBanManager().banPlayer(player, Message.BAN_AUTO_BAN_SPAM.getMessage(), 1000 * 60 * 60 * 24 * 2L, ContextBan.CHAT,
                                 Message.BAN_AUTHOR_AUTO_BAN.getMessage());
@@ -81,14 +78,13 @@ public class CheckAutoBan {
             }
             timePunishChat.put(player.getUniqueId(), currentTime);
         }catch (Exception e) {
-            sendMessageConsole(String.format(Message.BAN_ERROR.getMessage(), player.getName(), Message.BAN_AUTO_BAN_SPAM.getMessage()), TypeMessages.ERROR);
+            sendMessageConsole(String.format(Message.BAN_ERROR.getMessage(), player.getName(), Message.BAN_AUTO_BAN_SPAM.getMessage()), MessagesType.ERROR);
             throw new RuntimeException(e);
         }
     }
 
     public static void startTimeRemove() {
         new BukkitRunnable() {
-            @Override
             public void run() {
                 timeDifferenceCount.replaceAll((uuid, count) -> count > 0 ? count - 1 : 0);
             }
@@ -125,7 +121,7 @@ public class CheckAutoBan {
                                 ModerationSection.getBanManager().banPlayer(player, Message.BAN_AUTO_BAN_DUPE.getMessage(),
                                         1000 * 60 * 60 * 24 * 5L, ContextBan.GLOBAL, Message.BAN_AUTHOR_AUTO_BAN.getMessage());
                             }catch (Exception e) {
-                                sendMessageConsole(String.format(Message.BAN_ERROR.getMessage(), player.getName(),  Message.BAN_AUTO_BAN_SPAM.getMessage()), TypeMessages.ERROR);
+                                sendMessageConsole(String.format(Message.BAN_ERROR.getMessage(), player.getName(),  Message.BAN_AUTO_BAN_SPAM.getMessage()), MessagesType.ERROR);
                                 throw new RuntimeException(e);
                             }
                         });
@@ -156,7 +152,7 @@ public class CheckAutoBan {
                 ModerationSection.getBanManager().banPlayer(player, Message.BAN_AUTO_BAN_ILEGAL_ITEMS.getMessage(),
                         1000 * 60 * 60 * 24 * 10L, ContextBan.GLOBAL, Message.BAN_AUTHOR_AUTO_BAN.getMessage());
             }catch (Exception e) {
-                sendMessageConsole(String.format(Message.BAN_ERROR.getMessage(), player.getName(),  Message.BAN_AUTO_BAN_SPAM.getMessage()), TypeMessages.ERROR);
+                sendMessageConsole(String.format(Message.BAN_ERROR.getMessage(), player.getName(),  Message.BAN_AUTO_BAN_SPAM.getMessage()), MessagesType.ERROR);
                 throw new RuntimeException(e);
             }
         });

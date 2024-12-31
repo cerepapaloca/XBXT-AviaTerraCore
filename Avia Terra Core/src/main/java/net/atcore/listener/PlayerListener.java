@@ -5,7 +5,7 @@ import net.atcore.Config;
 import net.atcore.armament.*;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.MessagesManager;
-import net.atcore.messages.TypeMessages;
+import net.atcore.messages.MessagesType;
 import net.atcore.command.CommandManager;
 import net.atcore.misc.LimitWorld;
 import net.atcore.moderation.Freeze;
@@ -66,11 +66,11 @@ public class PlayerListener implements Listener {
         String command = event.getMessage().split(" ")[0].substring(1).toLowerCase();
         Player player = event.getPlayer();
         String s = "";
-        TypeMessages type = TypeMessages.INFO;
+        MessagesType type = MessagesType.INFO;
         boolean isCancelled = CommandManager.checkCommand(command, player, false, true);
         if (isCancelled){
             s = " &c(Cancelado)";
-            type = TypeMessages.WARNING;
+            type = MessagesType.WARNING;
         }
         if (COMMANDS_PRE_LOGIN.contains(command)) {
             MessagesManager.sendMessageConsole(String.format("<|%s|> ejecutó -> %s", player.getName(), "&6*Comando De Login*" + s), type, CategoryMessages.COMMANDS, false);
@@ -132,7 +132,7 @@ public class PlayerListener implements Listener {
                             rangeType.getDisplayName() +
                             "<" + GlobalUtils.modifyColorHexWithHLS(GlobalUtils.BukkitColorToStringHex(rangeType.getColor()), 0, -0.2f, 0.1f) + ">",
                     'l'
-            ), 20, 60, 40, TypeMessages.INFO);
+            ), 20, 60, 40, MessagesType.INFO);
 
         }
     }

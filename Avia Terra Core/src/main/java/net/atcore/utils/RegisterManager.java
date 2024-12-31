@@ -1,29 +1,20 @@
 package net.atcore.utils;
 import lombok.experimental.UtilityClass;
 import net.atcore.AviaTerraCore;
-import net.atcore.armament.ArmamentUtils;
-import net.atcore.armament.BaseArmament;
 import net.atcore.command.BaseCommand;
 import net.atcore.command.CommandManager;
 import net.atcore.command.CommandSection;
 import net.atcore.command.CommandUtils;
-import net.atcore.data.DataBaseMySql;
-import net.atcore.data.DataSection;
-import net.atcore.data.File;
 import net.atcore.messages.CategoryMessages;
-import net.atcore.messages.TypeMessages;
+import net.atcore.messages.MessagesType;
 import net.atcore.Section;
 import org.bukkit.command.CommandException;
 import org.bukkit.command.PluginCommand;
-import org.checkerframework.checker.units.qual.A;
 import org.jetbrains.annotations.NotNull;
 
 import org.bukkit.event.Listener;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 
 import static net.atcore.messages.MessagesManager.*;
 import static org.bukkit.Bukkit.getServer;
@@ -42,14 +33,16 @@ public class RegisterManager {
         }
     }
 
-    public void register(@NotNull Section section) {
-        try {
-            section.enable();
-            sections.add(section);
-            sendMessageConsole(section.getName() + TypeMessages.SUCCESS.getMainColor() + " Ok", TypeMessages.INFO, CategoryMessages.PRIVATE, false);
-        } catch (Exception e) {
-            sendMessageConsole("Error al cargar: " + section.getName() + ". Plugin deshabilitado", TypeMessages.ERROR, CategoryMessages.PRIVATE, false);
-            throw new RuntimeException(e);
+    public void register(@NotNull Section... sections) {
+        for (Section section : sections) {
+            try {
+                section.enable();
+                RegisterManager.sections.add(section);
+                sendMessageConsole(section.getName() + MessagesType.SUCCESS.getMainColor() + " Ok", MessagesType.INFO, CategoryMessages.PRIVATE, false);
+            } catch (Exception e) {
+                sendMessageConsole("Error al cargar: " + section.getName() + ". Plugin deshabilitado", MessagesType.ERROR, CategoryMessages.PRIVATE, false);
+                throw new RuntimeException(e);
+            }
         }
     }
 

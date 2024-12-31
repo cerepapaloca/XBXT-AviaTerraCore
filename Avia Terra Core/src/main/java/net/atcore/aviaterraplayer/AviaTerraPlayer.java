@@ -5,7 +5,7 @@ import lombok.Setter;
 import net.atcore.AviaTerraCore;
 import net.atcore.inventory.InventorySection;
 import net.atcore.messages.MessagesManager;
-import net.atcore.messages.TypeMessages;
+import net.atcore.messages.MessagesType;
 import net.atcore.utils.GlobalUtils;
 import net.atcore.utils.RangeType;
 import net.luckperms.api.model.user.User;
@@ -40,7 +40,7 @@ public class AviaTerraPlayer {
     private InventorySection inventorySection = null;
     private RangeType rangeType;
 
-    public void sendMessage(String message, TypeMessages type) {
+    public void sendMessage(String message, MessagesType type) {
         MessagesManager.sendMessage(GlobalUtils.getPlayer(uuid), message, type);
     }
 
