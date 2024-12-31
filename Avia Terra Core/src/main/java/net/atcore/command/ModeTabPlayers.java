@@ -1,8 +1,7 @@
 package net.atcore.command;
 
 /**
- * Cambian él la manera como se va a comportar el TAB en de
- * manera pre terminada
+ * Mode como se muestra la lista de jugadores en el TAB
  */
 
 public enum ModeTabPlayers {
@@ -11,7 +10,7 @@ public enum ModeTabPlayers {
      */
     NONE,
     /**
-     * Solo añade la lista de jugadores conectados
+     * Solo añade la lista de jugadores conectados. Usando la lista que minecraft vanilla
      */
     NORMAL,
     /**

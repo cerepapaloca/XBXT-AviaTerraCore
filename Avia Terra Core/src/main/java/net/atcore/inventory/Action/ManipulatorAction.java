@@ -1,21 +1,21 @@
 package net.atcore.inventory.Action;
 
-import lombok.Getter;
-import net.atcore.AviaTerraCore;
-import net.atcore.aviaterraplayer.AviaTerraPlayer;
-import net.atcore.inventory.BaseActions;
-import net.atcore.inventory.inventors.ManipulatorInventory;
-import net.atcore.utils.GlobalUtils;
+import java.util.Arrays;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.Arrays;
+import lombok.Getter;
+import net.atcore.AviaTerraCore;
+import net.atcore.aviaterraplayer.AviaTerraPlayer;
+import net.atcore.inventory.BaseActions;
+import net.atcore.inventory.inventors.ManipulatorInventory;
+import net.atcore.utils.GlobalUtils;
 
 @Getter
 public class ManipulatorAction extends BaseActions {

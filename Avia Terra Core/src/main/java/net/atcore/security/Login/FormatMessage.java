@@ -3,7 +3,6 @@ package net.atcore.security.Login;
 import lombok.Getter;
 import net.atcore.messages.Message;
 
-import java.text.MessageFormat;
 @Getter
 public enum FormatMessage {
     LINK(Message.LOGIN_TWO_FACTOR_LINK_TITLE, Message.LOGIN_TWO_FACTOR_LINK_SUBTITLE),

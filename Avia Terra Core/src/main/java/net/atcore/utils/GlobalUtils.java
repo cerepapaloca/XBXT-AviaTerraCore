@@ -435,8 +435,8 @@ public final class GlobalUtils {
         float[] hls = rgbToHLS(r, g, b);
 
         hls[0] = (hls[0] + hueDelta) % 1.0f;
-        hls[1] = clamp(hls[1] + lightnessDelta, 0, 1);
-        hls[2] = clamp(hls[2] + saturationDelta, 0, 1);
+        hls[1] = clamp(hls[1] + lightnessDelta);
+        hls[2] = clamp(hls[2] + saturationDelta);
 
         int[] rgb = hlsToRGB(hls[0], hls[1], hls[2]);
 
@@ -502,8 +502,8 @@ public final class GlobalUtils {
         return p;
     }
 
-    private static float clamp(float value, float min, float max) {
-        return Math.max(min, Math.min(max, value));
+    private static float clamp(float value) {
+        return Math.max((float) 0, Math.min((float) 1, value));
     }
 
 }

@@ -1,13 +1,13 @@
 package net.atcore.inventory;
 
-import net.atcore.aviaterraplayer.AviaTerraPlayer;
+import java.util.HashMap;
+
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 
-import java.util.HashMap;
+import net.atcore.aviaterraplayer.AviaTerraPlayer;
 
 public class ActionsInventoryManager {
 

@@ -1,37 +1,44 @@
 package net.atcore.security.Login;
 
+import java.lang.reflect.Method;
+import java.net.InetAddress;
+import java.security.Key;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Objects;
+import java.util.UUID;
+
+import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
+
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+
 import com.comphenix.protocol.PacketType;
+import static com.comphenix.protocol.PacketType.Login.Client.START;
 import com.comphenix.protocol.ProtocolLibrary;
-import com.comphenix.protocol.events.*;
+import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.injector.netty.channel.NettyChannelInjector;
 import com.comphenix.protocol.injector.temporary.TemporaryPlayerFactory;
 import com.comphenix.protocol.reflect.FuzzyReflection;
 import com.comphenix.protocol.reflect.accessors.Accessors;
 import com.comphenix.protocol.reflect.accessors.FieldAccessor;
 import com.comphenix.protocol.utility.MinecraftReflection;
-import com.comphenix.protocol.wrappers.*;
+import com.comphenix.protocol.wrappers.WrappedGameProfile;
+import com.comphenix.protocol.wrappers.WrappedSignedProperty;
 import com.github.games647.craftapi.model.auth.Verification;
 import com.github.games647.craftapi.model.skin.Textures;
+
 import lombok.Getter;
 import net.atcore.Config;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.Message;
+import static net.atcore.messages.MessagesManager.sendMessageConsole;
 import net.atcore.messages.MessagesType;
 import net.atcore.security.AntiBot;
-import net.atcore.security.VerificationPremium;
 import net.atcore.security.SecuritySection;
+import net.atcore.security.VerificationPremium;
 import net.atcore.utils.GlobalUtils;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-
-import javax.crypto.*;
-import java.lang.reflect.Method;
-import java.net.InetAddress;
-import java.security.*;
-import java.util.*;
-
-import static com.comphenix.protocol.PacketType.Login.Client.START;
-import static net.atcore.messages.MessagesManager.sendMessageConsole;
 
 public class SimulateOnlineMode {
 

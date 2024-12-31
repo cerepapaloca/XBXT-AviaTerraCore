@@ -1,20 +1,19 @@
 package net.atcore.armament;
 
-import lombok.Getter;
-import lombok.Setter;
-import net.atcore.AviaTerraCore;
-import net.atcore.utils.GlobalUtils;
-import net.atcore.utils.Gradient;
-import org.bukkit.Bukkit;
+import java.awt.Color;
+
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.checkerframework.checker.units.qual.C;
 import org.jetbrains.annotations.Nullable;
 
-import java.awt.*;
+import lombok.Getter;
+import lombok.Setter;
+import net.atcore.AviaTerraCore;
+import net.atcore.utils.GlobalUtils;
+import net.atcore.utils.Gradient;
 
 @Getter
 @Setter

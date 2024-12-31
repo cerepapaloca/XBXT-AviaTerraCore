@@ -1,12 +1,14 @@
 package net.atcore.data;
 
-import lombok.Getter;
-import net.atcore.data.yml.ActionInReloadYaml;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
-
 import java.io.File;
 import java.io.IOException;
+
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.jetbrains.annotations.NotNull;
+
+import lombok.Getter;
+import net.atcore.data.yml.ActionInReloadYaml;
 
 @Getter
 @SuppressWarnings("ResultOfMethodCallIgnored")
@@ -62,7 +64,7 @@ public abstract class FileYaml extends net.atcore.data.File {
         }
     }
 
-    public void reloadConfig(ActionInReloadYaml action) {
+    public void reloadConfig(@NotNull ActionInReloadYaml action) {
         if (fileYaml == null) {
             reloadFile();
         }
@@ -82,6 +84,7 @@ public abstract class FileYaml extends net.atcore.data.File {
         switch (action){
             case LOAD -> loadData();
             case SAVE -> saveData();
+            case NOTHING -> {}
         }
     }
 

@@ -15,14 +15,14 @@ import org.bukkit.Sound;
 
 import java.util.UUID;
 
-public class PacketListener {
+public class PacketListenerManager {
 
-    public PacketListener(){
-        registerEvents();
+    public PacketListenerManager(){
+
     }
 
 
-    private void registerEvents(){
+    public static void registerEvents(){
         /*NO BORRAR POR SI ACASO
         ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(AviaTerraCore.getInstance(),PacketType.values()
         ){
@@ -69,7 +69,7 @@ public class PacketListener {
         ) {
             @Override
             public void onPacketSending(PacketEvent event) {
-                ChatListener chatListener = ListenerManagerSection.getChatListener();
+                ChatListener chatListener = ListenerSection.getChatListener();
                 if (chatListener.getLastPlayerMention() == null)return;
                 UUID playerUUID = chatListener.getLastPlayerMention().getUniqueId();
 

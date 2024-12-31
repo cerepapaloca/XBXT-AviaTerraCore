@@ -3,7 +3,6 @@ package net.atcore.inventory;
 import lombok.Getter;
 import lombok.Setter;
 import net.atcore.aviaterraplayer.AviaTerraPlayer;
-import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 

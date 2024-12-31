@@ -1,11 +1,28 @@
 package net.atcore.command;
 
-import lombok.Getter;
-
-import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
+
+import lombok.Getter;
+
+
+/**
+ * Creas el cómo tiene que usar el comando y Autogenera un TAB en caso la clase extienda de {@link BaseCommand} si extiende de
+ * {@link BaseTabCommand} se usara el {@link BaseTabCommand#onTab(CommandSender, String[]) onTab()} para crear el TAB
+ * <p>
+ * Un ejemplo de como crear los argumentos.
+ * <blockquote><pre>
+ *     new ArgumentUse("prueba")
+ *          .addArg("Alfa", "Beta", "Gamma")
+ *          .addArgPlayer(ModeTabPlayers.ADVANCED)
+ *          .addNote("Note")
+ *          .addTime(true),
+ * </pre></blockquote>
+ */
+
 
 public class ArgumentUse {
 
@@ -39,22 +56,44 @@ public class ArgumentUse {
 
         public Argument(@NotNull ModeTabPlayers modePlayers) {
             this.mode = modePlayers;
-            this.arg = new String[]{"jugador"};
+            if (modePlayers == ModeTabPlayers.ADVANCED) {
+                this.arg = new String[]{"jugador/es"};
+            } else {
+                this.arg = new String[]{"jugador"};
+            }
             this.required = true;
         }
     }
 
-    private final List<Argument> args = new ArrayList<>();;
+    private final List<Argument> args = new ArrayList<>();
+
+    /**
+     * Añades una lista de argumentos donde el jugador podrá autocompletar
+     * @param arg Argumento/s
+     */
 
     public ArgumentUse addArg(String... arg) {
         args.add(new Argument(isRequired, arg));
         return this;
     }
 
+    /**
+     * Hace que los argumentos que siguen después sean opcionales y no salte el error de
+     * sintaxis
+     * @return
+     */
+
     public ArgumentUse addArgOptional() {
         isRequired = false;
         return this;
     }
+
+    /**
+     * Añades una nota a los argumentos que tiene que escribir el jugador no podría autocompletar,
+     * solo está para indicar lo que tiene que escribir, pero sin decir exactamente lo hay que
+     * poner un ejemplo sería las contraseñas
+     * @param note La nota
+     */
 
     public ArgumentUse addNote(String... note) {
         Argument arg = new Argument(isRequired, note);
@@ -62,7 +101,13 @@ public class ArgumentUse {
         args.add(arg);
         return this;
     }
-    
+
+
+    /**
+     * Añades un argumento de tiempo usando {@link CommandUtils#listTabTime(String, boolean) listTabTime()}
+     * @param isEspecial ¿Se usará el numeró máximo y el permanente?
+     */
+
     public ArgumentUse addTime(boolean isEspecial) {
         Argument arg = new Argument(isRequired, new String[]{"Tiempo"});
         arg.useTime = true;
@@ -70,6 +115,14 @@ public class ArgumentUse {
         args.add(arg);
         return this;
     }
+
+    /**
+     * Añades una lista de jugadores usando {@link CommandUtils#tabForPlayer(String) tabForPlayer()} o
+     * el vanilla dependiendo el modo que use.
+     * <p>
+     * <strong>Importante: Usar {@link ModeTabPlayers#NONE NONE} crea una lista vacía</strong>
+     * @see ModeTabPlayers
+     */
     
     public ArgumentUse addArgPlayer(ModeTabPlayers modePlayers) {
         args.add(new Argument(modePlayers));
@@ -119,7 +172,7 @@ public class ArgumentUse {
             }
             switch (argument.mode){
                 case NONE -> {
-                    return CommandUtils.listTab(lastArgString, argument.arg);
+                    return List.of();
                 }
                 case NORMAL -> {
                     return null;

@@ -3,15 +3,12 @@ package net.atcore.listener;
 import lombok.Getter;
 import net.atcore.AviaTerraCore;
 import net.atcore.Section;
-import net.atcore.utils.RegisterManager;
-import net.dv8tion.jda.api.requests.GatewayIntent;
-import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import static net.atcore.AviaTerraCore.jda;
 import static net.atcore.utils.RegisterManager.*;
 
-public class ListenerManagerSection implements Section {
+public class ListenerSection implements Section {
 
     @Getter
     private static ChatListener chatListener;
@@ -33,7 +30,7 @@ public class ListenerManagerSection implements Section {
                 }
             }
         }.runTaskTimerAsynchronously(AviaTerraCore.getInstance(), 1 , 1);
-        new PacketListener();
+        PacketListenerManager.registerEvents();
     }
 
     @Override

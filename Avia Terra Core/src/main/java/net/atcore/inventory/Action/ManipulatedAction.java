@@ -1,10 +1,10 @@
 package net.atcore.inventory.Action;
 
-import net.atcore.aviaterraplayer.AviaTerraPlayer;
-import net.atcore.inventory.BaseActions;
-import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
+
+import net.atcore.aviaterraplayer.AviaTerraPlayer;
+import net.atcore.inventory.BaseActions;
 
 public class ManipulatedAction extends BaseActions {
 

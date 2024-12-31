@@ -9,7 +9,7 @@ import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.MessageSection;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.MessagesType;
-import net.atcore.listener.ListenerManagerSection;
+import net.atcore.listener.ListenerSection;
 import net.atcore.security.Login.DataLogin;
 import net.atcore.security.Login.LoginManager;
 import net.atcore.security.SecuritySection;
@@ -66,7 +66,7 @@ public final class AviaTerraCore extends JavaPlugin {
                 new MessageSection(),
                 new CommandSection(),
                 new ModerationSection(),
-                new ListenerManagerSection(),
+                new ListenerSection(),
                 new SecuritySection(),
                 new ArmamentSection()
         );
