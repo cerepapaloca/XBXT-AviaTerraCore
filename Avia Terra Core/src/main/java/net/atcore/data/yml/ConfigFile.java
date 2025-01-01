@@ -9,7 +9,7 @@ import net.atcore.security.Login.ServerMode;
 public class ConfigFile extends FileYaml {
 
     public ConfigFile() {
-        super("config", null, true);
+        super("config", null, true, true);
     }
 
     @Override

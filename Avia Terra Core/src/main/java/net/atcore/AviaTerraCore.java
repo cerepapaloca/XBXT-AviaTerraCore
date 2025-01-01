@@ -85,7 +85,6 @@ public final class AviaTerraCore extends JavaPlugin {
             if (dataLogin != null){
                 if (LoginManager.isLimboMode(player)) {
                     dataLogin.getLimbo().restorePlayer(player);
-                    dataLogin.setLimbo(null);
                 }
             }
             GlobalUtils.kickPlayer(player, "El servidor va a cerrar, volveremos pronto...");

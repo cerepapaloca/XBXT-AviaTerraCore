@@ -2,6 +2,7 @@ package net.atcore.security.Login;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.Bukkit;
 
 import java.util.UUID;
 
@@ -22,8 +23,8 @@ public class DataLogin {
     }
 
     final private DataRegister register;
-    private DataSession session;
-    private DataLimbo limbo;
+    private DataSession session = null;
+    private DataLimbo limbo = null;
 
     public boolean hasSession() {
         return session != null;

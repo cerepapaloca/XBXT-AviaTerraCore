@@ -30,6 +30,10 @@ public abstract class File {
         }else {
             this.fileName = fileName + this.fileExtension;
         }
+        addFile();
+    }
+
+    protected void addFile() {
         DataSection.FILES.add(this);
     }
 

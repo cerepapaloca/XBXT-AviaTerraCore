@@ -2,7 +2,6 @@ package net.atcore.data;
 
 import lombok.Getter;
 import net.atcore.AviaTerraCore;
-import net.atcore.data.yml.ActionInReloadYaml;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
@@ -93,16 +92,12 @@ public abstract class FilesYams {
         }
     }
 
-    public FileYaml registerConfigFile(String pathName) {
-        return registerConfigFile(pathName, ActionInReloadYaml.NOTHING);
-    }
-
-    public FileYaml registerConfigFile(String fileName, ActionInReloadYaml action) {
+    public FileYaml registerConfigFile(String fileName) {
         try {
             FileYaml config = fileclass.getConstructor(String.class, String.class)
                     .newInstance(fileName, folderName);
             configFiles.add(config);
-            config.reloadConfig(action);
+            config.reloadConfig();
             return config;
         } catch (InvocationTargetException | InstantiationException | IllegalAccessException | NoSuchMethodException e) {
             throw new RuntimeException(e);

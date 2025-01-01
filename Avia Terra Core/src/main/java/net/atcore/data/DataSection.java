@@ -11,6 +11,7 @@ import net.atcore.data.yml.*;
 import net.atcore.data.yml.ymls.FliesCacheLimbo;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.MessagesType;
+import org.bukkit.Bukkit;
 
 import java.util.HashSet;
 
@@ -32,7 +33,7 @@ public class DataSection implements Section {
         new Discord();
         new Email();
         DataSection.configFile = configFile;
-        messageFile.reloadConfig(ActionInReloadYaml.LOAD);
+        messageFile.reloadConfig();
         fliesCacheLimbo = new FliesCacheLimbo();
         fliesCacheLimbo.reloadConfigs();
         for (DataBaseMySql db : DATA_BASE) db.createTable();
@@ -54,7 +55,7 @@ public class DataSection implements Section {
             for (DataBaseMySql dataBaseMySql : DATA_BASE) dataBaseMySql.reload();
             for (File file : FILES) {
                 if (file instanceof FileYaml yaml) {
-                    yaml.reloadConfig(ActionInReloadYaml.LOAD);
+                    yaml.reloadConfig();
                 }else {
                     file.reloadFile();
                     file.loadData();

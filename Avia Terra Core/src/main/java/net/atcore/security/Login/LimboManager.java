@@ -27,8 +27,7 @@ public class LimboManager {
             if (Bukkit.isPrimaryThread()){
                 LimboManager.createLimboMode(player, reasonLimbo);
             }else{
-                Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () ->
-                        LimboManager.createLimboMode(player, reasonLimbo));
+                Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> LimboManager.createLimboMode(player, reasonLimbo));
             }
         }
     }
@@ -52,8 +51,7 @@ public class LimboManager {
             }else {
                 dataLimbo = newDataLimbo(player, dataLogin, uuidString);
             }
-        }
-
+        }//TODO: intentar ejecutar esto de manera asincrónica
 
         player.getInventory().clear();
         player.teleport(player.getWorld().getSpawnLocation());
@@ -87,7 +85,9 @@ public class LimboManager {
         // Se guarda los datos cuando sé crea el limboData esto es solo por si hubo problema grave con el servidor
         AviaTerraCore.getInstance().enqueueTaskAsynchronously(() -> {
             //DataSection.getFliesCacheLimbo().deleteConfigFile(player.getUniqueId().toString());
-            DataSection.getFliesCacheLimbo().registerConfigFile(uuidString, ActionInReloadYaml.SAVE);
+            CacheLimboFile limboFile = (CacheLimboFile) DataSection.getFliesCacheLimbo().registerConfigFile(uuidString);
+            limboFile.saveData();
+            limboFile.setRestored(false);
         });
 
         return dataLimbo;

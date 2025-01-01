@@ -38,7 +38,6 @@ public class JoinAndQuitListener implements Listener {
         if (LoginManager.isLimboMode(player)) {//Esto es para que los jugadores no logueados
             DataLimbo limbo = login.getLimbo();
             limbo.restorePlayer(player);//hace que el servidor guarde los datos del jugador como si tuviera logueado
-            login.setLimbo(null);
         }
 
         if (LoginManager.getDataLogin(player) != null) {// si le llega a borrar el registro

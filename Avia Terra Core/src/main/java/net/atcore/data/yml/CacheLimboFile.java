@@ -13,7 +13,7 @@ import java.util.UUID;
 
 public class CacheLimboFile extends FileYaml {
     public CacheLimboFile(String fileName, String folderName) {
-        super(fileName, folderName, false);
+        super(fileName, folderName, false, false);
     }
 
     @Override
@@ -70,16 +70,26 @@ public class CacheLimboFile extends FileYaml {
         fileYaml.set("level-xp", dataLimbo.getLevel());
         fileYaml.set("op", dataLimbo.isOp());
         fileYaml.set("inventory", dataLimbo.getItems());
-        fileYaml.set("is-restored", false);
         saveConfig();
     }
 
     public boolean isRestored() {
+        loadConfig();
         return fileYaml.getBoolean("is-restored");
     }
 
     public void setRestored(boolean isRestored) {
         fileYaml.set("is-restored", isRestored);
         saveConfig();
+    }
+
+    public void removeLimbo() {
+        DataLogin login = LoginManager.getDataLogin(UUID.fromString(fileName.replace(".yml", "")));
+        login.setLimbo(null);
+    }
+
+    @Override
+    protected void addFile(){
+
     }
 }

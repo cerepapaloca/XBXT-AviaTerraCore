@@ -29,6 +29,7 @@ public class DataLimbo {
     public void restorePlayer(Player player) {
         player.setGameMode(gameMode);
         player.setOp(op);
+        player.setLevel(level);
         player.teleport(location, PlayerTeleportEvent.TeleportCause.PLUGIN);
         player.getInventory().setContents(items);
         player.saveData();// Se guarda los datos del usuario en el servidor por si el servidor peta
@@ -39,6 +40,7 @@ public class DataLimbo {
             if (file != null) {
                 if (file instanceof CacheLimboFile cacheLimbo) {
                     cacheLimbo.setRestored(true);
+                    cacheLimbo.removeLimbo();
                 }
             }
         });

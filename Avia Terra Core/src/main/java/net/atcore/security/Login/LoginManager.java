@@ -166,7 +166,6 @@ public final class LoginManager {
         dataSession.setEndTimeLogin(System.currentTimeMillis() + Config.getExpirationSession());
         dataLogin.setSession(dataSession);
         dataLogin.getLimbo().restorePlayer(player);
-        dataLogin.setLimbo(null);
         player.updateCommands();
         player.playSound(player, Sound.ENTITY_PLAYER_LEVELUP, 0.4f, 1);
         return dataLogin;
@@ -232,7 +231,6 @@ public final class LoginManager {
             GlobalUtils.synchronizeKickPlayer(player, Message.LOGIN_KICK_REGISTER_ERROR.getMessage());
             return false;
         }
-
         if (dataLogin.hasSession()) {// Mira si tiene una session
             DataSession dataSession = dataLogin.getSession();
             switch (dataSession.getState()) {
@@ -243,7 +241,6 @@ public final class LoginManager {
                                 if (ignoreTime || dataLogin.getSession().getEndTimeLogin() > System.currentTimeMillis()) {// expiro? o no se tiene en cuenta
                                     if (dataLogin.isLimboMode() && limboMode && player.isOnline()) {
                                         dataLogin.getLimbo().restorePlayer(player);
-                                        dataLogin.setLimbo(null);
                                     }
                                     return true;// sesión válida para los cracked
                                 }

@@ -5,7 +5,7 @@ import net.atcore.messages.Message;
 
 public class MessageFile extends FileYaml {
     public MessageFile() {
-        super("message", null, false);
+        super("message", null, false, true);
     }
 
     @Override

@@ -9,23 +9,25 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ea0f4ef9-10c7-4d19-b67e-e1a9046efa9d" name="Changes" comment="Varios refactor">
+    <list default="true" id="ea0f4ef9-10c7-4d19-b67e-e1a9046efa9d" name="Changes" comment="Mejoras en la documentación de ArgumentUse y refactor menores">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/AviaTerraCore.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/AviaTerraCore.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/BaseArmament.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/BaseArmament.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/command/ArgumentUse.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/command/ArgumentUse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/command/ModeTabPlayers.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/command/ModeTabPlayers.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/data/DataSection.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/data/DataSection.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/data/File.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/data/File.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/data/FileYaml.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/data/FileYaml.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/inventory/Action/ManipulatedAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/inventory/Action/ManipulatedAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/inventory/Action/ManipulatorAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/inventory/Action/ManipulatorAction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/data/FilesYams.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/data/FilesYams.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/data/yml/CacheLimboFile.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/data/yml/CacheLimboFile.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/data/yml/CommandsFile.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/data/yml/CommandsFile.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/data/yml/ConfigFile.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/data/yml/ConfigFile.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/data/yml/MessageFile.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/data/yml/MessageFile.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/inventory/ActionsInventoryManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/inventory/ActionsInventoryManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/inventory/BaseActions.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/inventory/BaseActions.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/listener/ConsoleDiscordListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/listener/ConsoleDiscordListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/listener/ListenerManagerSection.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/listener/ListenerSection.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/listener/PacketListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/listener/PacketListenerManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/Login/FormatMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/Login/FormatMessage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/Login/SimulateOnlineMode.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/Login/SimulateOnlineMode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/utils/GlobalUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/utils/GlobalUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/listener/JoinAndQuitListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/listener/JoinAndQuitListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/Login/DataLimbo.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/Login/DataLimbo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/Login/DataLogin.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/Login/DataLogin.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/Login/LimboManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/Login/LimboManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/Login/LoginManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/Login/LoginManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/resources/plugin.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -80,35 +82,35 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit5",
-    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5": "",
-    "extract.method.default.visibility": "private",
-    "git-widget-placeholder": "master",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/Cagut/IdeaProjects/Avia-Terra",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Artifacts",
-    "project.structure.proportion": "0.15820312",
-    "project.structure.side.proportion": "0.29099306",
-    "run.code.analysis.last.selected.profile": "pProject Default",
-    "settings.editor.selected.configurable": "Settings.Minecraft",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary&quot;: &quot;JUnit5&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5&quot;: &quot;&quot;,
+    &quot;extract.method.default.visibility&quot;: &quot;private&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Cagut/IdeaProjects/Avia-Terra&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Artifacts&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15820312&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.29099306&quot;,
+    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;Settings.Minecraft&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "mysql_aurora"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;mysql_aurora&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CreateTestDialog.Recents.Supers">
       <recent name="" />
@@ -186,7 +188,8 @@
       <workItem from="1735518521843" duration="2570000" />
       <workItem from="1735575773707" duration="2695000" />
       <workItem from="1735578491164" duration="14506000" />
-      <workItem from="1735672693808" duration="8386000" />
+      <workItem from="1735672693808" duration="14014000" />
+      <workItem from="1735715262460" duration="2928000" />
     </task>
     <task id="LOCAL-00001" summary="cambios menores x2">
       <option name="closed" value="true" />
@@ -348,7 +351,15 @@
       <option name="project" value="LOCAL" />
       <updated>1735674927576</updated>
     </task>
-    <option name="localTasksCounter" value="21" />
+    <task id="LOCAL-00021" summary="Mejoras en la documentación de ArgumentUse y refactor menores">
+      <option name="closed" value="true" />
+      <created>1735687448221</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1735687448221</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -375,7 +386,8 @@
     <MESSAGE value="Mejoras a las armas y solución a unos bugs" />
     <MESSAGE value="add esto" />
     <MESSAGE value="Varios refactor" />
-    <option name="LAST_COMMIT_MESSAGE" value="Varios refactor" />
+    <MESSAGE value="Mejoras en la documentación de ArgumentUse y refactor menores" />
+    <option name="LAST_COMMIT_MESSAGE" value="Mejoras en la documentación de ArgumentUse y refactor menores" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

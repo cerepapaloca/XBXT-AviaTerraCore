@@ -3,12 +3,11 @@ package net.atcore.data;
 import java.io.File;
 import java.io.IOException;
 
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.jetbrains.annotations.NotNull;
 
 import lombok.Getter;
-import net.atcore.data.yml.ActionInReloadYaml;
 
 @Getter
 @SuppressWarnings("ResultOfMethodCallIgnored")
@@ -16,13 +15,15 @@ public abstract class FileYaml extends net.atcore.data.File {
 
 
     protected FileConfiguration fileYaml = null;
+    protected final boolean forceLoad;
 
-    public FileYaml(String fileName, String folderName, boolean copy) {
+    public FileYaml(String fileName, String folderName, boolean copy, boolean forceLoad) {
         super(fileName, "yml", folderName);
+        this.forceLoad = forceLoad;
         if (copy) {
             copyDefaultConfig();// Copiar archivo desde resources
             loadConfig(); // Carga los datos en memoria
-            loadData(); // Aplica los datos
+            loadData();
         }
 
     }
@@ -64,7 +65,11 @@ public abstract class FileYaml extends net.atcore.data.File {
         }
     }
 
-    public void reloadConfig(@NotNull ActionInReloadYaml action) {
+    public void reloadConfig() {
+        reloadConfig(forceLoad);
+    }
+
+    public void reloadConfig(boolean loadData) {
         if (fileYaml == null) {
             reloadFile();
         }
@@ -81,11 +86,13 @@ public abstract class FileYaml extends net.atcore.data.File {
                 throw new RuntimeException(e);
             }
         }
+        if (loadData) loadData();
+        /*
         switch (action){
-            case LOAD -> loadData();
+            case LOAD ->
             case SAVE -> saveData();
             case NOTHING -> {}
-        }
+        }*/
     }
 
     public abstract void saveData();

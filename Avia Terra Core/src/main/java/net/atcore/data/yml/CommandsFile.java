@@ -7,7 +7,7 @@ import org.bukkit.configuration.ConfigurationSection;
 public class CommandsFile extends FileYaml {
 
     public CommandsFile() {
-        super("comandos", null, true);
+        super("comandos", null, true, true);
     }
 
     @Override
