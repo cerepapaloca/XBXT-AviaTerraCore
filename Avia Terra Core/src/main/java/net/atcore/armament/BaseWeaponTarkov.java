@@ -26,19 +26,25 @@ import java.util.*;
 @Setter
 public abstract class BaseWeaponTarkov extends BaseWeapon implements Compartment {
 
-    protected BaseWeaponTarkov(List<Class<? extends BaseMagazine>> listMagazines, int maxDistance, String displayName, double precision, WeaponMode mode, int cadence) {
-        super(new ItemStack(Material.IRON_HORSE_ARMOR), maxDistance, displayName, precision, mode, cadence);
+    protected BaseWeaponTarkov(List<Class<? extends BaseMagazine>> listMagazines,
+                               int maxDistance,
+                               String displayName,
+                               double vague,
+                               WeaponMode mode,
+                               int cadence
+    ) {
+        super(new ItemStack(Material.IRON_HORSE_ARMOR), maxDistance, displayName, vague, mode, cadence);
         this.magazineList = listMagazines;
         GlobalUtils.setPersistentData(itemArmament, "magazineNameInside", PersistentDataType.STRING, "null");
         updateLore(null, null);
     }
 
     private final List<Class<? extends BaseMagazine>> magazineList;
-    public static final HashMap<UUID, BukkitTask> inReload = new HashMap<>();
+    public static final HashMap<UUID, BukkitTask> IN_RELOAD = new HashMap<>();
 
     @Override
-    public void shoot(Player player) {
-        if (inReload.containsKey(player.getUniqueId())) return;
+    public void processShoot(Player player) {
+        if (IN_RELOAD.containsKey(player.getUniqueId())) return;
         ItemStack itemWeapon = player.getInventory().getItemInMainHand();
         String magazineName = (String) GlobalUtils.getPersistenData(itemWeapon, "magazineNameInside", PersistentDataType.STRING);
         BaseMagazine baseMagazine = ArmamentUtils.getMagazine(magazineName);
@@ -49,7 +55,7 @@ public abstract class BaseWeaponTarkov extends BaseWeapon implements Compartment
                 if (!listAmmo.isEmpty()){//se vació el cargador
                     BaseAmmo ammon = ArmamentUtils.getAmmo(listAmmo.getFirst());
                     if (ammon != null) {
-                        processShoot(player, ammon, baseMagazine);
+                        processRayShoot(player, ammon, baseMagazine);
                         listAmmo.removeFirst();//se elimina la bala del cargador
                         GlobalUtils.setPersistentData(itemWeapon, "magazineAmmo", PersistentDataType.STRING, ArmamentUtils.listToString(listAmmo));//guarda la munición actual
                         updateLore(itemWeapon, null);
@@ -85,12 +91,12 @@ public abstract class BaseWeaponTarkov extends BaseWeapon implements Compartment
 
         if (charger != null){// ¿Él arma tiene un cargador?
             if (b){// ¿Hay un cargador que se puede cambiar?
-                if (inReload.containsKey(player.getUniqueId())) return false;
+                if (IN_RELOAD.containsKey(player.getUniqueId())) return false;
                 UUID uuid = player.getUniqueId();
                 BukkitTask bukkitTask = new BukkitRunnable() {// Comienza el delay de la recarga
                     public void run() {
                         Player player = Bukkit.getPlayer(uuid);
-                        inReload.remove(uuid);
+                        IN_RELOAD.remove(uuid);
                         if (player == null) return;
                         ItemStack item = player.getInventory().getItemInMainHand();
                         if (item.getItemMeta() != null) onReload(item, player);
@@ -116,12 +122,12 @@ public abstract class BaseWeaponTarkov extends BaseWeapon implements Compartment
                         super.cancel();
                         bukkitTask.cancel();
                         MessagesManager.sendTitle(player,"", "Recarga Cancelada", 10, charger.getReloadTime(),10, MessagesType.ERROR);
-                        inReload.remove(uuid);
+                        IN_RELOAD.remove(uuid);
                     }
                 }.runTaskTimer(AviaTerraCore.getInstance(), 0, 1);
                 MessagesManager.sendTitle(player,"", "Recargado...", 10, charger.getReloadTime(),10, MessagesType.INFO);
                 player.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, charger.getReloadTime(), 2, true, false, false));
-                inReload.put(player.getUniqueId(), bukkitTask);// Por si se guarda el delay por si se tiene que cancelar
+                IN_RELOAD.put(player.getUniqueId(), bukkitTask);// Por si se guarda el delay por si se tiene que cancelar
                 return true;
             }else {
                 MessagesManager.sendTitle(player, "", "No tienes cargadores con munición", 0,20,60, MessagesType.ERROR);
@@ -205,7 +211,7 @@ public abstract class BaseWeaponTarkov extends BaseWeapon implements Compartment
                 Presión: <|%s|>
                 """,
                 maxDistance,
-                (100 - precision) + "%"
+                (100 - vague) + "%"
         );
         if (charger != null){//en caso de que tenga un cargador
             if (charger.getItemMeta() != null) {
@@ -229,8 +235,8 @@ public abstract class BaseWeaponTarkov extends BaseWeapon implements Compartment
     }
 
     public static boolean checkReload(Player player){
-        if (BaseWeaponTarkov.inReload.containsKey(player.getUniqueId())){
-            BaseWeaponTarkov.inReload.remove(player.getUniqueId()).cancel();
+        if (BaseWeaponTarkov.IN_RELOAD.containsKey(player.getUniqueId())){
+            BaseWeaponTarkov.IN_RELOAD.remove(player.getUniqueId()).cancel();
             player.sendTitle("", ChatColor.RED + "Recarga Cancelada", 0, 20, 40);
             player.removePotionEffect(PotionEffectType.SLOWNESS);
             return true;

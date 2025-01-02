@@ -218,7 +218,7 @@ public abstract class BaseMagazine extends BaseArmament implements Compartment {
     }
 
     @Override
-    public void onShoot(DataShoot dataShoot){
+    public void onShoot(List<ShootData> shootData){
 
     }
 }

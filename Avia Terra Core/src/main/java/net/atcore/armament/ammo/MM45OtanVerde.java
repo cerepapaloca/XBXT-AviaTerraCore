@@ -13,7 +13,8 @@ public final class MM45OtanVerde extends BaseAmmo {
                 Color.fromRGB(20,180,20),
                 true,
                 1,
-                2
+                2,
+                1
         );
     }
 }

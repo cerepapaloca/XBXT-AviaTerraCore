@@ -75,6 +75,11 @@ public class Gradient {
         return ChatColor.translateAlternateColorCodes('&', gradientText.toString());
     }
 
+    @Override
+    public String toString() {
+        return getText();
+    }
+
     public String getRawText() {
         return text;
     }

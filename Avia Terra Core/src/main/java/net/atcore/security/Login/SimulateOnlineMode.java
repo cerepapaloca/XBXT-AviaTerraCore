@@ -43,9 +43,6 @@ import net.atcore.utils.GlobalUtils;
 
 public class SimulateOnlineMode {
 
-    private static Method encryptMethod;
-    private static Method encryptKeyMethod;
-
 
     @Getter
     private static final HashMap<String, InetAddress> IPS = new HashMap<>();
@@ -135,6 +132,8 @@ public class SimulateOnlineMode {
 
     private static final String ENCRYPTION_CLASS_NAME = "MinecraftEncryption";
     private static Method cipherMethod;
+    private static Method encryptMethod;
+    private static Method encryptKeyMethod;
 
     /**
      * Se encarga de que el servidor cambien de modo offline a modo online para algunos usuarios

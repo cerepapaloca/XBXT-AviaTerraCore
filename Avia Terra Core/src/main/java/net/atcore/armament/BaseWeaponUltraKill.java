@@ -10,10 +10,7 @@ import net.atcore.aviaterraplayer.AviaTerraPlayer;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.MessagesType;
 import net.atcore.utils.GlobalUtils;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.Sound;
-import org.bukkit.SoundCategory;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -23,9 +20,17 @@ import org.bukkit.persistence.PersistentDataType;
 @Setter
 public abstract class BaseWeaponUltraKill extends BaseWeapon {
 
-    public BaseWeaponUltraKill(String displayName, int maxDistance, int delay, int maxAmmo, double precision, Class<? extends BaseAmmo> ammo, WeaponMode mode, int cadence) {
-        super(new ItemStack(Material.GOLDEN_HORSE_ARMOR), maxDistance, displayName, precision, mode, cadence);
-        this.delay = delay;
+    public BaseWeaponUltraKill(String displayName,
+                               int maxDistance,
+                               int reloadDelay,
+                               int maxAmmo,
+                               double vague,
+                               Class<? extends BaseAmmo> ammo,
+                               WeaponMode mode,
+                               int cadence
+    ) {
+        super(new ItemStack(Material.GOLDEN_HORSE_ARMOR), maxDistance, displayName, vague, mode, cadence);
+        this.reloadDelay = reloadDelay;
         this.ammo = ArmamentUtils.getAmmo(ammo);
         this.maxAmmo = maxAmmo;
         GlobalUtils.setPersistentData(itemArmament, "AmountAmmo", PersistentDataType.INTEGER, 0);
@@ -33,11 +38,11 @@ public abstract class BaseWeaponUltraKill extends BaseWeapon {
     }
 
     private final BaseAmmo ammo;
-    private final int delay;
+    private final int reloadDelay;
     private final int maxAmmo;
 
     @Override
-    public void shoot(Player player) {
+    public void processShoot(Player player) {
         ItemStack item = player.getInventory().getItemInMainHand();
         if (item.getItemMeta() == null)return;
         AviaTerraPlayer aviaPlayer = AviaTerraPlayer.getPlayer(player);
@@ -48,7 +53,7 @@ public abstract class BaseWeaponUltraKill extends BaseWeapon {
         Integer amountAmmo = (Integer) GlobalUtils.getPersistenData(item,"AmountAmmo", PersistentDataType.INTEGER);
         if (amountAmmo != null){
             if (amountAmmo > 0) {
-                processShoot(player, ammo, null);
+                processRayShoot(player, ammo, null);
                 amountAmmo--;
                 GlobalUtils.setPersistentData(item, "AmountAmmo", PersistentDataType.INTEGER, amountAmmo);
                 ArmamentPlayer armamentPlayer = AviaTerraPlayer.getPlayer(player).getArmamentPlayer();
@@ -81,7 +86,7 @@ public abstract class BaseWeaponUltraKill extends BaseWeapon {
                 Rango máximo: <|%sm|>
                 """,
                 this.ammo.getDamage(),
-                (100 - precision) + "%",
+                (100 - vague) + "%",
                 GlobalUtils.getPersistenData(itemStack,"AmountAmmo", PersistentDataType.INTEGER),
                 maxDistance
         ), null, false, false), true));

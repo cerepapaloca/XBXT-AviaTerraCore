@@ -1,6 +1,7 @@
 package net.atcore.armament;
 
 import java.awt.Color;
+import java.util.List;
 
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -55,8 +56,8 @@ public abstract class BaseArmament {
      * armamento pueda hacer interacciones especiales al momento
      * de hacer el disparo
      *
-     * @param dataShoot da una instancia nueva de {@link DataShoot}
+     * @param shootData da una instancia nueva de {@link ShootData}
      */
 
-    public abstract void onShoot(DataShoot dataShoot);
+    public abstract void onShoot(List<ShootData> shootData);
 }

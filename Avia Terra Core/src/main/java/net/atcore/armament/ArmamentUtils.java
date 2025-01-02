@@ -125,7 +125,7 @@ public class ArmamentUtils {
         return null;
     }
 
-    public void drawParticleLine(@NotNull Location start, Location end, Color color, boolean impacted, double density) {
+    public void drawParticleLine(@NotNull Location start, Location end, Color color, double density) {
         World world = start.getWorld();
         if (world == null || !world.equals(end.getWorld())) {
             return;
@@ -145,7 +145,6 @@ public class ArmamentUtils {
                     //los ceros representa como de aleatorio aran spawn en el mundo en cada eje, primer numeró es la calidad de particular y el ultimo la velocidad
                     world.spawnParticle(Particle.DUST, point, 2, 0, 0, 0,0.3, dustOptions ,false);
                     if (d > distance){
-                        if (impacted)world.spawnParticle(Particle.CRIT, point, 4, 0.3, 0.3, 0.3, 0.2, null, true);
                         cancel();
                         break;
                     }

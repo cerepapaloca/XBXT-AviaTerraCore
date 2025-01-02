@@ -15,7 +15,7 @@ public final class M16 extends BaseWeaponUltraKill {
                 30,
                 10,
                 MM45Otan.class,
-                WeaponMode.SEMI_AUTOMATIC,
+                WeaponMode.SEMI,
                 6
         );
     }

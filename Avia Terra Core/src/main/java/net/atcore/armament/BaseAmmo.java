@@ -10,21 +10,42 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.List;
+
 @Getter
 @Setter
 public abstract class BaseAmmo extends BaseArmament {
 
-    protected BaseAmmo(double damage, String displayName, float penetration) {
-        this(damage, displayName, Color.fromRGB(80,80,80), false, 1F, penetration);
+    protected BaseAmmo(double damage,
+                       String displayName,
+                       float penetration,
+                       int projectiles
+    ) {
+        this(damage,
+                displayName,
+                Color.fromRGB(80,80,80),
+                false,
+                1F,
+                penetration,
+                projectiles
+        );
     }
 
-    protected BaseAmmo(double damage, String displayName, Color color, boolean isTrace, float densityTrace, float penetration) {
+    protected BaseAmmo(double damage,
+                       String displayName,
+                       Color color,
+                       boolean isTrace,
+                       float densityTrace,
+                       float penetration,
+                       int projectiles
+    ) {
         super(displayName, new ItemStack(Material.END_ROD), "ammo");
         this.damage = damage;
         this.color = color;
         this.isTrace = isTrace;
         this.densityTrace = densityTrace;
         this.penetration = penetration;
+        this.projectiles = projectiles;
         updateLore(itemArmament, null);
     }
 
@@ -33,6 +54,7 @@ public abstract class BaseAmmo extends BaseArmament {
     private final Color color;
     private final boolean isTrace;
     private final float densityTrace;
+    private final int projectiles;
 
     public String getProperties(){
         StringBuilder properties = new StringBuilder();
@@ -67,7 +89,7 @@ public abstract class BaseAmmo extends BaseArmament {
     }
 
     @Override
-    public void onShoot(DataShoot dataShoot){
+    public void onShoot(List<ShootData> shootData){
 
     }
 }

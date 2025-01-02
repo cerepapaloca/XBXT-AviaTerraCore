@@ -37,6 +37,7 @@ public class ArmamentPlayer extends AbstractAviaTerraPlayer implements Compartme
     private boolean isReloading = false;
     @Nullable
     private BukkitTask shootTask;
+    private long lastShoot = 0;
 
     @Override
     public boolean reload(Player player){
@@ -52,7 +53,7 @@ public class ArmamentPlayer extends AbstractAviaTerraPlayer implements Compartme
                             if (amountAmmo != null){
                                 TabPlayer tabPlayer = TabAPI.getInstance().getPlayer(aviaTerraPlayer.getUuid());
                                 if (tabPlayer != null){
-                                    player.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, weapon.getDelay() + 1, 2, true, false, false));
+                                    player.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, weapon.getReloadDelay() + 1, 2, true, false, false));
                                     if (bossBar == null){
                                         createBossBar();
                                     }
@@ -61,7 +62,7 @@ public class ArmamentPlayer extends AbstractAviaTerraPlayer implements Compartme
                                         GlobalUtils.setPersistentData(itemArmament, "AmountAmmo", PersistentDataType.INTEGER, amountAmmo);
                                         bossBar.setTitle(ChatColor.translateAlternateColorCodes('&', "&3&lCantidad De Munición: &6&l" + amountAmmo));
                                         bossBar.setProgress((((float) amountAmmo / (float) weapon.getMaxAmmo())*100));
-                                        TabAPI.getInstance().getBossBarManager().sendBossBarTemporarily(tabPlayer, bossBar.getName(), weapon.getDelay()*20 + 20);
+                                        TabAPI.getInstance().getBossBarManager().sendBossBarTemporarily(tabPlayer, bossBar.getName(), weapon.getReloadDelay()*20 + 20);
                                         return;
                                     }else {
                                         player.getWorld().playSound(player.getLocation(), Sound.ITEM_ARMOR_EQUIP_IRON, SoundCategory.PLAYERS, 1, 1);
@@ -83,7 +84,7 @@ public class ArmamentPlayer extends AbstractAviaTerraPlayer implements Compartme
                     Bukkit.getScheduler().cancelTask(getTaskId());
                     isReloading = false;
                 }
-            }.runTaskTimer(AviaTerraCore.getInstance(), 1L, weapon.getDelay());
+            }.runTaskTimer(AviaTerraCore.getInstance(), 1L, weapon.getReloadDelay());
             return true;
         }else {
             return false;

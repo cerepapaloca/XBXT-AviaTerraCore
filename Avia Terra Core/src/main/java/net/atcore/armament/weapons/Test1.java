@@ -9,13 +9,14 @@ import net.atcore.armament.ammo.MM45Otan;
 public final class Test1 extends BaseWeaponUltraKill {
 
     public Test1() {
-        super("test 1",
+        super("/est 1",
                 50,
                 1,
                 120,
-                10,
+                2,
                 MM45Otan.class,
                 WeaponMode.AUTOMATIC,
-                2);
+                2
+        );
     }
 }
