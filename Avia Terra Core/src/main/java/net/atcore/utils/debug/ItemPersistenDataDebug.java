@@ -1,4 +1,4 @@
-package net.atcore.test;
+package net.atcore.utils.debug;
 
 import net.atcore.aviaterraplayer.AviaTerraPlayer;
 import net.atcore.messages.MessagesType;
@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @TestOnly
-public final class ItemPersistenDataTest implements RunTest {
+public final class ItemPersistenDataDebug implements RunTest {
 
     @Override
     public void runTest(AviaTerraPlayer player) {

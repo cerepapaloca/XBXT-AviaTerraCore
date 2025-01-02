@@ -19,9 +19,9 @@ commands:
   aviaterra:
     aliases:
       - at
-  aviaterrapruebas:
+  aviaterradebug:
     aliases:
-      - atp
+      - atd
   freeze:
   ban:
   unban:

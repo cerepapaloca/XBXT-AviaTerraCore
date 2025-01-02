@@ -7,13 +7,13 @@ import net.atcore.security.Login.SimulateOnlineMode;
 public class SecuritySection implements Section {
 
     @Getter
-    private static Encrypt encrypt;
+    private static EncryptService encryptService;
     @Getter
     private static SimulateOnlineMode simulateOnlineMode;
 
     @Override
     public void enable() {
-        encrypt = new Encrypt();
+        encryptService = new EncryptService();
         simulateOnlineMode = new SimulateOnlineMode();
     }
 

@@ -1,4 +1,4 @@
-package net.atcore.test;
+package net.atcore.utils.debug;
 
 import net.atcore.AviaTerraCore;
 import net.atcore.aviaterraplayer.AviaTerraPlayer;
@@ -9,13 +9,12 @@ import net.atcore.moderation.ban.ContextBan;
 import net.atcore.moderation.ModerationSection;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.Bukkit;
-import org.jetbrains.annotations.TestOnly;
 
 import java.net.InetAddress;
 import java.util.Objects;
 
-@TestOnly
-public final class BanTest implements RunTest {
+
+public final class BanDebug implements RunTest {
 
     @Override
     public void runTest(AviaTerraPlayer player) {

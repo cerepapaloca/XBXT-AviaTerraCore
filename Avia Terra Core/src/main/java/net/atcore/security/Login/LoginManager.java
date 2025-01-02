@@ -8,6 +8,7 @@ import net.atcore.AviaTerraCore;
 import net.atcore.Config;
 import net.atcore.data.sql.DataBaseRegister;
 import net.atcore.messages.Message;
+import net.atcore.security.EncryptService;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
@@ -16,12 +17,8 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
 import java.io.IOException;
 import java.net.InetAddress;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
 import java.util.*;
 
 import static net.atcore.data.sql.DataBaseRegister.*;
@@ -40,11 +37,11 @@ public final class LoginManager {
         return listDataLogin.get(uuid);
     }
 
-    public DataLogin getDataLogin(Player player) {
+    public DataLogin getDataLogin(@NotNull Player player) {
         return listDataLogin.get(player.getUniqueId());
     }
 
-    public DataLogin addDataLogin(String name ,DataRegister dataRegister) {
+    public @NotNull DataLogin addDataLogin(String name , DataRegister dataRegister) {
         DataLogin dataLogin = new DataLogin(dataRegister);
         listDataLogin.put(GlobalUtils.getUUIDByName(name) ,dataLogin);
         return dataLogin;
@@ -58,7 +55,8 @@ public final class LoginManager {
         listDataLogin.remove(GlobalUtils.getUUIDByName(name));
     }
 
-    public HashSet<DataLogin> getDataLogin() {
+    @Contract(" -> new")
+    public @NotNull HashSet<DataLogin> getDataLogin() {
         return new HashSet<>(listDataLogin.values());
     }
 
@@ -125,32 +123,9 @@ public final class LoginManager {
         }
     }
 
-    private final int ITERATIONS = 65536; //número de iteraciones
-    private final int KEY_LENGTH = 256; //longitud del hash (bits)
-    private final String ALGORITHM = "PBKDF2WithHmacSHA256";
-
-    /**
-     * Crea un hash seguro combina el nombre de usuario y la contraseña en la misma contraseña
-     */
-
-    @NotNull
-    @Contract(pure = true)
-    public String hashPassword(String name, String password) {
-        String s = name + password;// combina el nombre de usuario y la contraseña
-        PBEKeySpec spec = new PBEKeySpec(s.toCharArray(), password.getBytes(), ITERATIONS, KEY_LENGTH);
-        byte[] hash;
-        try {
-            SecretKeyFactory skf = SecretKeyFactory.getInstance(ALGORITHM);
-            hash = skf.generateSecret(spec).getEncoded();
-        } catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        }
-        return Base64.getEncoder().encodeToString(hash);
-    }
-
     @Contract(pure = true)
     public boolean isEqualPassword(@NotNull String name, @NotNull String password)  {
-        return hashPassword(name, password).equals(getDataLogin(name).getRegister().getPasswordShaded());
+        return EncryptService.hashPassword(name, password).equals(getDataLogin(name).getRegister().getPasswordShaded());
     }
 
     /**
@@ -160,7 +135,7 @@ public final class LoginManager {
      * @param player El usuario que iniciar sessión
      */
 
-    public static DataLogin startPlaySessionCracked(@NotNull Player player){
+    public static @NotNull DataLogin startPlaySessionCracked(@NotNull Player player){
         DataLogin dataLogin = getDataLogin(player);
         DataSession dataSession = new DataSession(player, StateLogins.CRACKED);
         dataSession.setEndTimeLogin(System.currentTimeMillis() + Config.getExpirationSession());
@@ -181,7 +156,7 @@ public final class LoginManager {
      */
 
     public void newRegisterCracked(@NotNull String name, @NotNull InetAddress inetAddress , @NotNull String password){
-        String s = hashPassword(name ,password);
+        String s = EncryptService.hashPassword(name ,password);
         AviaTerraCore.getInstance().enqueueTaskAsynchronously(() -> {
             if (updatePassword(name, s)){
                 getDataLogin(name).getRegister().setPasswordShaded(s);
@@ -221,7 +196,7 @@ public final class LoginManager {
      * @param player al jugador que se va chequear
      * @param ignoreTime sí se tiene en cuenta el tiempo de expiración o se ignora
      * @param limboMode El jugador puede llegar a entrar a modo limo si no está logueado
-     * @return verdadero cuando esta logueado, falso cuando no lo está
+     * @return verdadero cuando está logueado, falso cuando no lo está
      */
 
     public boolean checkLoginIn(@NotNull Player player, boolean ignoreTime, boolean limboMode){
@@ -292,7 +267,7 @@ public final class LoginManager {
         }
     }
 
-    public void onEnteringServer(@NotNull Player player){//TODO pasar esto al evento de Login
+    public void onEnteringServer(@NotNull Player player){
         DataLogin dataLogin = getDataLogin(player);
         if (dataLogin != null) {
             DataRegister dataRegister = dataLogin.getRegister();

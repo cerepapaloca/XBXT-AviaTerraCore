@@ -1,4 +1,4 @@
-package net.atcore.test;
+package net.atcore.utils.debug;
 
 import net.atcore.aviaterraplayer.AviaTerraPlayer;
 import org.jetbrains.annotations.TestOnly;

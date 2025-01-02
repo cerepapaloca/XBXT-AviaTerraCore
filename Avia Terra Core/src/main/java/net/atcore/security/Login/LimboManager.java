@@ -2,7 +2,6 @@ package net.atcore.security.Login;
 
 import lombok.experimental.UtilityClass;
 import net.atcore.AviaTerraCore;
-import net.atcore.data.yml.ActionInReloadYaml;
 import net.atcore.data.DataSection;
 import net.atcore.data.FileYaml;
 import net.atcore.data.yml.CacheLimboFile;
@@ -22,14 +21,18 @@ public class LimboManager {
 
     public static final int LIMBO_TIME = 20*60;
 
-    public void startSynchronizeLimboMode(Player player, ReasonLimbo reasonLimbo){
-        if (player.isOnline() && !LoginManager.isLimboMode(player)){
+    public void startSynchronizeLimboMode(Player player, ReasonLimbo reasonLimbo) {
+        AviaTerraCore.getInstance().enqueueTaskAsynchronously(() -> {
+            if (player.isOnline() && !LoginManager.isLimboMode(player)){
+                LimboManager.createLimboMode(player, reasonLimbo);
+            /*
             if (Bukkit.isPrimaryThread()){
                 LimboManager.createLimboMode(player, reasonLimbo);
             }else{
                 Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> LimboManager.createLimboMode(player, reasonLimbo));
+            }*/
             }
-        }
+        });
     }
 
     public void createLimboMode(Player player, ReasonLimbo reasonLimbo){
@@ -51,30 +54,31 @@ public class LimboManager {
             }else {
                 dataLimbo = newDataLimbo(player, dataLogin, uuidString);
             }
-        }//TODO: intentar ejecutar esto de manera asincrónica
-
-        player.getInventory().clear();
-        player.teleport(player.getWorld().getSpawnLocation());
-        player.setOp(false);
-        player.setGameMode(GameMode.SPECTATOR);
-        player.setLevel(0);
-        player.setAllowFlight(true);
-
-        switch (reasonLimbo){
-            case NO_SESSION -> {
-                MessagesManager.sendTitle(player, Message.LOGIN_LIMBO_INITIATED_BY_SESSION_TITLE.getMessage(), Message.LOGIN_LIMBO_INITIATED_BY_SESSION_SUBTITLE.getMessage(), 30, LIMBO_TIME, 30, MessagesType.INFO);
-                MessagesManager.sendMessage(player, Message.LOGIN_LIMBO_INITIATED_BY_SESSION_CHAT.getMessage(), MessagesType.INFO);
-                startTimeOut(player, Message.LOGIN_LIMBO_TIME_OUT_SESSION.getMessage(), dataLimbo);
-            }
-            case NO_REGISTER -> {
-                MessagesManager.sendTitle(player, Message.LOGIN_LIMBO_INITIATED_BY_REGISTER_TITLE.getMessage(), Message.LOGIN_LIMBO_INITIATED_BY_REGISTER_SUBTITLE.getMessage(), 30, LIMBO_TIME, 30, MessagesType.INFO);
-                MessagesManager.sendMessage(player, Message.LOGIN_LIMBO_INITIATED_BY_REGISTER_CHAT.getMessage(), MessagesType.INFO);
-                startTimeOut(player, Message.LOGIN_LIMBO_TIME_OUT_REGISTER.getMessage(), dataLimbo);
-            }
         }
+
+        Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> {
+            player.getInventory().clear();
+            player.teleport(player.getWorld().getSpawnLocation());
+            player.setOp(false);
+            player.setGameMode(GameMode.SPECTATOR);
+            player.setLevel(0);
+            player.setAllowFlight(true);
+            switch (reasonLimbo){
+                case NO_SESSION -> {
+                    MessagesManager.sendTitle(player, Message.LOGIN_LIMBO_INITIATED_BY_SESSION_TITLE.getMessage(), Message.LOGIN_LIMBO_INITIATED_BY_SESSION_SUBTITLE.getMessage(), 30, LIMBO_TIME, 30, MessagesType.INFO);
+                    MessagesManager.sendMessage(player, Message.LOGIN_LIMBO_INITIATED_BY_SESSION_CHAT.getMessage(), MessagesType.INFO);
+                    startTimeOut(player, Message.LOGIN_LIMBO_TIME_OUT_SESSION.getMessage(), dataLimbo);
+                }
+                case NO_REGISTER -> {
+                    MessagesManager.sendTitle(player, Message.LOGIN_LIMBO_INITIATED_BY_REGISTER_TITLE.getMessage(), Message.LOGIN_LIMBO_INITIATED_BY_REGISTER_SUBTITLE.getMessage(), 30, LIMBO_TIME, 30, MessagesType.INFO);
+                    MessagesManager.sendMessage(player, Message.LOGIN_LIMBO_INITIATED_BY_REGISTER_CHAT.getMessage(), MessagesType.INFO);
+                    startTimeOut(player, Message.LOGIN_LIMBO_TIME_OUT_REGISTER.getMessage(), dataLimbo);
+                }
+            }
+        });
     }
 
-    private static @NotNull DataLimbo newDataLimbo(Player player, DataLogin dataLogin, String uuidString) {
+    private @NotNull DataLimbo newDataLimbo(Player player, DataLogin dataLogin, String uuidString) {
         DataLimbo dataLimbo;
         dataLimbo = new DataLimbo(player.getGameMode(),
                 player.getInventory().getContents(),
@@ -83,17 +87,14 @@ public class LimboManager {
                 player.getLevel());
         dataLogin.setLimbo(dataLimbo);
         // Se guarda los datos cuando sé crea el limboData esto es solo por si hubo problema grave con el servidor
-        AviaTerraCore.getInstance().enqueueTaskAsynchronously(() -> {
-            //DataSection.getFliesCacheLimbo().deleteConfigFile(player.getUniqueId().toString());
-            CacheLimboFile limboFile = (CacheLimboFile) DataSection.getFliesCacheLimbo().registerConfigFile(uuidString);
-            limboFile.saveData();
-            limboFile.setRestored(false);
-        });
+        CacheLimboFile limboFile = (CacheLimboFile) DataSection.getFliesCacheLimbo().registerConfigFile(uuidString);
+        limboFile.saveData();
+        limboFile.setRestored(false);
 
         return dataLimbo;
     }
 
-    public static void startTimeOut(Player player, String reason, DataLimbo dataLimbo){
+    private void startTimeOut(Player player, String reason, DataLimbo dataLimbo){
         BukkitTask task = new BukkitRunnable() {
             @Override
             public void run() {

@@ -2,7 +2,7 @@ package net.atcore.command.commnads;
 
 import net.atcore.aviaterraplayer.AviaTerraPlayer;
 import net.atcore.command.ArgumentUse;
-import net.atcore.test.TypeTest;
+import net.atcore.utils.debug.TypeTest;
 import net.atcore.command.BaseTabCommand;
 import net.atcore.command.CommandUtils;
 import net.atcore.messages.MessagesManager;
@@ -12,10 +12,10 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 
-public class AviaTerraPruebasCommand extends BaseTabCommand {
+public class AviaTerraDebugCommand extends BaseTabCommand {
 
-    public AviaTerraPruebasCommand() {
-        super("AviaTerraPruebas",
+    public AviaTerraDebugCommand() {
+        super("AviaTerraDebug",
                 new ArgumentUse("AviaTerraPruebas").addArg("Pruebas"),
                 "Commando para realizar pruebas del plugin"
         );

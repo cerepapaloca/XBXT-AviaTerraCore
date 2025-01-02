@@ -27,8 +27,8 @@ import java.util.Objects;
 import java.util.Optional;
 
 import static net.atcore.messages.MessagesManager.sendMessageConsole;
-import static net.atcore.security.Login.SimulateOnlineMode.listUUIDPremium;
-import static net.atcore.security.Login.SimulateOnlineMode.verifyTokens;
+import static net.atcore.security.Login.SimulateOnlineMode.LIST_UUID_PREMIUM;
+import static net.atcore.security.Login.SimulateOnlineMode.MAP_TOKENS;
 
 public class VerificationPremium {
 
@@ -41,22 +41,22 @@ public class VerificationPremium {
         ////* Aquí comienza la valides del usuario *////
         try {
             // Descifrar usando la clave privada del servidor
-            byte[] sharedSecret = SecuritySection.getEncrypt().decryptData(encryptedSharedSecret);
-            byte[] token =  SecuritySection.getEncrypt().decryptData(encryptedToken);
+            byte[] sharedSecret = SecuritySection.getEncryptService().decryptData(encryptedSharedSecret);
+            byte[] token =  SecuritySection.getEncryptService().decryptData(encryptedToken);
 
             // verificar el token sean iguales
-            if (verifyTokens.containsKey(Arrays.toString(token))) {
-                String key = verifyTokens.get(Arrays.toString(token));
-                verifyTokens.remove(Arrays.toString(token));
+            if (MAP_TOKENS.containsKey(Arrays.toString(token))) {
+                SimulateOnlineMode.BasicDataPlayer key = MAP_TOKENS.get(Arrays.toString(token));
+                MAP_TOKENS.remove(Arrays.toString(token));
 
                 //se obtiene los datos
-                String name = key.split("\\|")[0];
-                String ip = key.split("\\|")[1];
-                String uuid = key.split("\\|")[2];
+                String name = key.getName();
+                String ip = key.getIP().getHostAddress();
+                String uuid = key.getUuid().toString();
                 ////////////////////////////////////////
 
                 // Se crea el serverID a partir de la llave secreta y la llave publicá
-                String serverId = generateServerId(SecuritySection.getEncrypt().getPublicKey(), sharedSecret);
+                String serverId = generateServerId(SecuritySection.getEncryptService().getPublicKey(), sharedSecret);
                 MojangResolver resolver = AviaTerraCore.getResolver();
                 Optional<Verification> response;
                 // Activa el protocolo de encriptación de minecraft. Más información en https://wiki.vg/Protocol_Encryption
@@ -71,7 +71,7 @@ public class VerificationPremium {
                                 SimulateOnlineMode.FakeStartPacket(verification.getName(), verification.getId(), player);
                                 sendMessageConsole(String.format(Message.LOGIN_PREMIUM_VALIDATION_OK.getMessage(), name), MessagesType.SUCCESS, CategoryMessages.LOGIN);
                                 String userName = verification.getName();
-                                listUUIDPremium.put(userName, verification);
+                                LIST_UUID_PREMIUM.put(userName, verification);
                                 DataLogin dataLogin = LoginManager.getDataLogin(userName);
                                 DataSession session = new DataSession(player, StateLogins.PREMIUM, player.getAddress().getAddress());
                                 session.setSharedSecret(sharedSecret);

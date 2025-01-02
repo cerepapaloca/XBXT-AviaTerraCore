@@ -5,12 +5,12 @@ import java.net.InetAddress;
 import java.security.Key;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Objects;
 import java.util.UUID;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 
+import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -47,9 +47,9 @@ public class SimulateOnlineMode {
 
 
     @Getter
-    private static final HashMap<String, InetAddress> ips = new HashMap<>();
-    public static final HashMap<String, String> verifyTokens = new HashMap<>();
-    public static final HashMap<String, Verification> listUUIDPremium = new HashMap<>();
+    private static final HashMap<String, InetAddress> IPS = new HashMap<>();
+    public static final HashMap<String, BasicDataPlayer> MAP_TOKENS = new HashMap<>();
+    public static final HashMap<String, Verification> LIST_UUID_PREMIUM = new HashMap<>();
 
     public void startEncryption(Player player, PacketContainer packet){
 
@@ -98,9 +98,9 @@ public class SimulateOnlineMode {
         byte[] token = new byte[4];
         new java.security.SecureRandom().nextBytes(token);
 
-        verifyTokens.put(Arrays.toString(token), name + "|" + Objects.requireNonNull(sender.getAddress()).getHostName() + "|" + uuid);
+        MAP_TOKENS.put(Arrays.toString(token), new BasicDataPlayer(sender.getAddress().getAddress(), name, uuid));
 
-        packetEncryption.getByteArrays().write(0, SecuritySection.getEncrypt().getPublicKey().getEncoded());
+        packetEncryption.getByteArrays().write(0, SecuritySection.getEncryptService().getPublicKey().getEncoded());
         packetEncryption.getByteArrays().write(1, token);
 
         packetEncryption.getBooleans().write(0, true);
@@ -109,10 +109,10 @@ public class SimulateOnlineMode {
     }
 
     public void applySkin(Player player) {
-        if (listUUIDPremium.containsKey(player.getName())){
-            String skinData = listUUIDPremium.get(player.getName()).getProperties()[0].getValue();
-            String signature = listUUIDPremium.get(player.getName()).getProperties()[0].getSignature();
-            listUUIDPremium.remove(player.getName());
+        if (LIST_UUID_PREMIUM.containsKey(player.getName())){
+            String skinData = LIST_UUID_PREMIUM.get(player.getName()).getProperties()[0].getValue();
+            String signature = LIST_UUID_PREMIUM.get(player.getName()).getProperties()[0].getSignature();
+            LIST_UUID_PREMIUM.remove(player.getName());
             WrappedGameProfile gameProfile = WrappedGameProfile.fromPlayer(player);
             WrappedSignedProperty skin = WrappedSignedProperty.fromValues(Textures.KEY, skinData, signature);
             gameProfile.getProperties().put(Textures.KEY, skin);
@@ -194,5 +194,14 @@ public class SimulateOnlineMode {
                 NettyChannelInjector.class, "networkManager", Object.class
         );
         return accessor.get(injectorContainer);
+    }
+
+    @Getter
+    @RequiredArgsConstructor
+    public static class BasicDataPlayer {
+
+        private final InetAddress IP;
+        private final String name;
+        private final UUID uuid;
     }
 }

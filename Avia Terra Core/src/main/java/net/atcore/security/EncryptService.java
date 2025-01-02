@@ -1,19 +1,23 @@
 package net.atcore.security;
 
 import lombok.Getter;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 import javax.crypto.*;
-import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.PBEKeySpec;
 import java.security.*;
+import java.security.spec.InvalidKeySpecException;
+import java.util.Base64;
 
 @Getter
-public class Encrypt {
+public class EncryptService {
     private final PrivateKey privateKey;
     private final PublicKey publicKey;
     private final SecretKey secretKey;
     private final byte[] iv;
 
-    public Encrypt() {
+    public EncryptService() {
         try {
             KeyPairGenerator keyGenRSA = KeyPairGenerator.getInstance("RSA");
             keyGenRSA.initialize(2048); // Tamaño de clave recomendado
@@ -36,20 +40,6 @@ public class Encrypt {
         }
     }
 
-    public byte[] encrypt(byte[] plaintext) throws Exception {
-        Cipher cipher = Cipher.getInstance("AES/CFB8/PKCS5Padding");
-        IvParameterSpec ivParams = new IvParameterSpec(this.iv);
-        cipher.init(Cipher.ENCRYPT_MODE, secretKey, ivParams);
-        return cipher.doFinal(plaintext);
-    }
-
-    public byte[] decrypt(byte[] ciphertext) throws Exception {
-        Cipher cipher = Cipher.getInstance("AES/CFB8/PKCS5Padding");
-        IvParameterSpec ivParams = new IvParameterSpec(this.iv);
-        cipher.init(Cipher.DECRYPT_MODE, secretKey, ivParams);
-        return cipher.doFinal(ciphertext);
-    }
-
     public byte[] decryptData(byte[] data)
             throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
         Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
@@ -57,5 +47,26 @@ public class Encrypt {
         return cipher.doFinal(data);
     }
 
+    private static final int ITERATIONS = 65536; //número de iteraciones
+    private static final int KEY_LENGTH = 256; //longitud del hash (bits)
+    private static final String ALGORITHM = "PBKDF2WithHmacSHA256";
 
+    /**
+     * Crea un hash seguro combina el nombre de usuario y la contraseña en la misma contraseña
+     */
+
+    @NotNull
+    @Contract(pure = true)
+    public static String hashPassword(String name, String password) {
+        String s = name + password;// combina el nombre de usuario y la contraseña
+        PBEKeySpec spec = new PBEKeySpec(s.toCharArray(), password.getBytes(), ITERATIONS, KEY_LENGTH);
+        byte[] hash;
+        try {
+            SecretKeyFactory skf = SecretKeyFactory.getInstance(ALGORITHM);
+            hash = skf.generateSecret(spec).getEncoded();
+        } catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+        return Base64.getEncoder().encodeToString(hash);
+    }
 }

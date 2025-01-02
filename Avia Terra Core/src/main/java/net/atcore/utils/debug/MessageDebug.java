@@ -1,4 +1,4 @@
-package net.atcore.test;
+package net.atcore.utils.debug;
 
 import net.atcore.aviaterraplayer.AviaTerraPlayer;
 import net.atcore.messages.CategoryMessages;
@@ -8,7 +8,7 @@ import net.atcore.messages.MessagesType;
 import org.jetbrains.annotations.TestOnly;
 
 @TestOnly
-public final class MessageTest implements RunTest {
+public final class MessageDebug implements RunTest {
 
     @Override
     public void runTest(AviaTerraPlayer player) {

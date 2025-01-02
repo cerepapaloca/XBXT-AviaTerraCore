@@ -7,6 +7,7 @@ import net.atcore.data.sql.DataBaseRegister;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesType;
+import net.atcore.security.EncryptService;
 import net.atcore.security.Login.LoginManager;
 import net.atcore.security.Login.TwoFactorAuth;
 import org.bukkit.command.CommandSender;
@@ -32,7 +33,7 @@ public class ChangePasswordCommand extends BaseTabCommand {
     public void execute(CommandSender sender, String[] args) {
         if (args.length > 1) {
             if (sender instanceof Player player) {
-                String password = LoginManager.hashPassword(player.getName(), args[1]);
+                String password = EncryptService.hashPassword(player.getName(), args[1]);
                 if (isUUID(args[0])){
                     if (TwoFactorAuth.checkCode(player, args[0])){
                         onChange(player, password, "código");

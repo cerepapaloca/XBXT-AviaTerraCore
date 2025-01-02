@@ -1,4 +1,4 @@
-package net.atcore.test;
+package net.atcore.utils.debug;
 
 import lombok.Getter;
 import net.atcore.aviaterraplayer.AviaTerraPlayer;
@@ -8,10 +8,10 @@ import org.jetbrains.annotations.TestOnly;
 @Getter
 @TestOnly
 public enum TypeTest {
-    BAN(new BanTest()),
-    MESSAGE(new MessageTest()),
-    LOGIN_REMOVE(new LoginRemove()),
-    PERSISTENT_DATA(new ItemPersistenDataTest());
+    BAN(new BanDebug()),
+    MESSAGE(new MessageDebug()),
+    LOGIN_REMOVE(new LoginRemoveDebug()),
+    PERSISTENT_DATA(new ItemPersistenDataDebug());
 
     TypeTest(RunTest runTest) {
         this.runTest = runTest;
