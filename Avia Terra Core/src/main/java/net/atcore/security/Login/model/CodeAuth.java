@@ -1,7 +1,8 @@
-package net.atcore.security.Login;
+package net.atcore.security.Login.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import net.atcore.security.Login.TwoFactorAuth;
 
 import java.util.UUID;
 

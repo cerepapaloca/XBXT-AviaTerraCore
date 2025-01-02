@@ -9,6 +9,7 @@ import net.atcore.messages.MessagesType;
 import net.atcore.moderation.ban.ContextBan;
 import net.atcore.moderation.ModerationSection;
 import net.atcore.security.Login.*;
+import net.atcore.security.Login.model.LoginData;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -37,8 +38,8 @@ public class LoginCommand extends BaseCommand {
     public void execute(CommandSender sender, String[] args) {
         if (sender instanceof Player player) {
             if (args.length > 0) {
-                DataLogin dataLogin = LoginManager.getDataLogin(player);
-                if (dataLogin.getRegister().getPasswordShaded() != null) {
+                LoginData loginData = LoginManager.getDataLogin(player);
+                if (loginData.getRegister().getPasswordShaded() != null) {
                     if (isUUID(args[0])){
                         if (TwoFactorAuth.checkCode(player, args[0])) {
                             if (LoginManager.checkLoginIn(player)) {

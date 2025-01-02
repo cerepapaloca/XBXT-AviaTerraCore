@@ -11,6 +11,7 @@ import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 
 import lombok.RequiredArgsConstructor;
+import net.atcore.security.Login.model.LoginData;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -74,9 +75,9 @@ public class SimulateOnlineMode {
             return true;
         }
 
-        DataLogin dataLogin = LoginManager.getDataLogin(name);
+        LoginData loginData = LoginManager.getDataLogin(name);
         // En caso que no tenga una sesión se le expiro se hace una nueva
-        if ((dataLogin == null || dataLogin.getSession() == null) || dataLogin.getSession().getEndTimeLogin() < System.currentTimeMillis()) {
+        if ((loginData == null || loginData.getSession() == null) || loginData.getSession().getEndTimeLogin() < System.currentTimeMillis()) {
             // Lo registra si no esta registrado
             StateLogins state = LoginManager.getStateAndRegister(player.getAddress().getAddress() ,name);
             switch (Config.getServerMode()){

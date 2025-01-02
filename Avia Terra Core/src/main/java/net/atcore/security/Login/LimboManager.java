@@ -8,6 +8,8 @@ import net.atcore.data.yml.CacheLimboFile;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.MessagesType;
+import net.atcore.security.Login.model.LimboData;
+import net.atcore.security.Login.model.LoginData;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -36,23 +38,23 @@ public class LimboManager {
     }
 
     public void createLimboMode(Player player, ReasonLimbo reasonLimbo){
-        DataLogin dataLogin = LoginManager.getDataLogin(player);
+        LoginData loginData = LoginManager.getDataLogin(player);
         String uuidString = player.getUniqueId().toString();
         FileYaml file = DataSection.getFliesCacheLimbo().getConfigFile(uuidString, false);
-        DataLimbo dataLimbo;
+        LimboData limboData;
         if (file == null){// Si tiene un archivo eso quiere decir que no pudo aplicar las propiedades al usuario
-            dataLimbo = newDataLimbo(player, dataLogin, uuidString);
+            limboData = newLimboData(player, loginData, uuidString);
         }else {
             if (file instanceof CacheLimboFile cacheLimbo){
                 if (cacheLimbo.isRestored()){
-                    dataLimbo = newDataLimbo(player, dataLogin, uuidString);
+                    limboData = newLimboData(player, loginData, uuidString);
                 }else {
                     // Carga los datos del usuario
                     file.loadData();
-                    dataLimbo = dataLogin.getLimbo();
+                    limboData = loginData.getLimbo();
                 }
             }else {
-                dataLimbo = newDataLimbo(player, dataLogin, uuidString);
+                limboData = newLimboData(player, loginData, uuidString);
             }
         }
 
@@ -67,34 +69,34 @@ public class LimboManager {
                 case NO_SESSION -> {
                     MessagesManager.sendTitle(player, Message.LOGIN_LIMBO_INITIATED_BY_SESSION_TITLE.getMessage(), Message.LOGIN_LIMBO_INITIATED_BY_SESSION_SUBTITLE.getMessage(), 30, LIMBO_TIME, 30, MessagesType.INFO);
                     MessagesManager.sendMessage(player, Message.LOGIN_LIMBO_INITIATED_BY_SESSION_CHAT.getMessage(), MessagesType.INFO);
-                    startTimeOut(player, Message.LOGIN_LIMBO_TIME_OUT_SESSION.getMessage(), dataLimbo);
+                    startTimeOut(player, Message.LOGIN_LIMBO_TIME_OUT_SESSION.getMessage(), limboData);
                 }
                 case NO_REGISTER -> {
                     MessagesManager.sendTitle(player, Message.LOGIN_LIMBO_INITIATED_BY_REGISTER_TITLE.getMessage(), Message.LOGIN_LIMBO_INITIATED_BY_REGISTER_SUBTITLE.getMessage(), 30, LIMBO_TIME, 30, MessagesType.INFO);
                     MessagesManager.sendMessage(player, Message.LOGIN_LIMBO_INITIATED_BY_REGISTER_CHAT.getMessage(), MessagesType.INFO);
-                    startTimeOut(player, Message.LOGIN_LIMBO_TIME_OUT_REGISTER.getMessage(), dataLimbo);
+                    startTimeOut(player, Message.LOGIN_LIMBO_TIME_OUT_REGISTER.getMessage(), limboData);
                 }
             }
         });
     }
 
-    private @NotNull DataLimbo newDataLimbo(Player player, DataLogin dataLogin, String uuidString) {
-        DataLimbo dataLimbo;
-        dataLimbo = new DataLimbo(player.getGameMode(),
+    private @NotNull LimboData newLimboData(Player player, LoginData loginData, String uuidString) {
+        LimboData limboData;
+        limboData = new LimboData(player.getGameMode(),
                 player.getInventory().getContents(),
                 player.getLocation(),
                 player.isOp(),
                 player.getLevel());
-        dataLogin.setLimbo(dataLimbo);
+        loginData.setLimbo(limboData);
         // Se guarda los datos cuando sé crea el limboData esto es solo por si hubo problema grave con el servidor
         CacheLimboFile limboFile = (CacheLimboFile) DataSection.getFliesCacheLimbo().registerConfigFile(uuidString);
         limboFile.saveData();
         limboFile.setRestored(false);
 
-        return dataLimbo;
+        return limboData;
     }
 
-    private void startTimeOut(Player player, String reason, DataLimbo dataLimbo){
+    private void startTimeOut(Player player, String reason, LimboData limboData){
         BukkitTask task = new BukkitRunnable() {
             @Override
             public void run() {
@@ -102,6 +104,6 @@ public class LimboManager {
                 GlobalUtils.kickPlayer(player, reason);
             }
         }.runTaskLater(AviaTerraCore.getInstance(), LIMBO_TIME);
-        dataLimbo.setTask(task);
+        limboData.setTask(task);
     }
 }

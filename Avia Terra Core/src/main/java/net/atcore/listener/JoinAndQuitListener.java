@@ -8,8 +8,8 @@ import net.atcore.messages.MessagesManager;
 import net.atcore.messages.MessagesType;
 import net.atcore.moderation.ban.ContextBan;
 import net.atcore.security.AntiTwoPlayer;
-import net.atcore.security.Login.DataLimbo;
-import net.atcore.security.Login.DataLogin;
+import net.atcore.security.Login.model.LimboData;
+import net.atcore.security.Login.model.LoginData;
 import net.atcore.security.Login.LoginManager;
 import net.atcore.security.SecuritySection;
 import org.bukkit.Bukkit;
@@ -34,9 +34,9 @@ public class JoinAndQuitListener implements Listener {
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
-        DataLogin login = LoginManager.getDataLogin(player);
+        LoginData login = LoginManager.getDataLogin(player);
         if (LoginManager.isLimboMode(player)) {//Esto es para que los jugadores no logueados
-            DataLimbo limbo = login.getLimbo();
+            LimboData limbo = login.getLimbo();
             limbo.restorePlayer(player);//hace que el servidor guarde los datos del jugador como si tuviera logueado
         }
 

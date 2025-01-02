@@ -10,7 +10,7 @@ import net.atcore.messages.MessageSection;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.MessagesType;
 import net.atcore.listener.ListenerSection;
-import net.atcore.security.Login.DataLogin;
+import net.atcore.security.Login.model.LoginData;
 import net.atcore.security.Login.LoginManager;
 import net.atcore.security.SecuritySection;
 import net.atcore.utils.GlobalUtils;
@@ -81,10 +81,10 @@ public final class AviaTerraCore extends JavaPlugin {
         }
         workerThread.interrupt();
         Bukkit.getOnlinePlayers().forEach(player -> {
-            DataLogin dataLogin = LoginManager.getDataLogin(player);
-            if (dataLogin != null){
+            LoginData loginData = LoginManager.getDataLogin(player);
+            if (loginData != null){
                 if (LoginManager.isLimboMode(player)) {
-                    dataLogin.getLimbo().restorePlayer(player);
+                    loginData.getLimbo().restorePlayer(player);
                 }
             }
             GlobalUtils.kickPlayer(player, "El servidor va a cerrar, volveremos pronto...");

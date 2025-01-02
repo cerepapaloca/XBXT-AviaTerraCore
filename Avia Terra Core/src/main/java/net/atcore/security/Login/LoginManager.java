@@ -9,6 +9,9 @@ import net.atcore.Config;
 import net.atcore.data.sql.DataBaseRegister;
 import net.atcore.messages.Message;
 import net.atcore.security.EncryptService;
+import net.atcore.security.Login.model.LoginData;
+import net.atcore.security.Login.model.RegisterData;
+import net.atcore.security.Login.model.SessionData;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
@@ -26,25 +29,25 @@ import static net.atcore.data.sql.DataBaseRegister.*;
 @UtilityClass
 public final class LoginManager {
 
-    private final HashMap<UUID, DataLogin> listDataLogin = new HashMap<>();
+    private final HashMap<UUID, LoginData> listDataLogin = new HashMap<>();
 
     //la llave es el nombre de usuario
-    public DataLogin getDataLogin(String name) {
+    public LoginData getDataLogin(String name) {
         return listDataLogin.get(GlobalUtils.getUUIDByName(name));
     }
 
-    public DataLogin getDataLogin(UUID uuid) {
+    public LoginData getDataLogin(UUID uuid) {
         return listDataLogin.get(uuid);
     }
 
-    public DataLogin getDataLogin(@NotNull Player player) {
+    public LoginData getDataLogin(@NotNull Player player) {
         return listDataLogin.get(player.getUniqueId());
     }
 
-    public @NotNull DataLogin addDataLogin(String name , DataRegister dataRegister) {
-        DataLogin dataLogin = new DataLogin(dataRegister);
-        listDataLogin.put(GlobalUtils.getUUIDByName(name) ,dataLogin);
-        return dataLogin;
+    public @NotNull LoginData addDataLogin(String name , RegisterData registerData) {
+        LoginData loginData = new LoginData(registerData);
+        listDataLogin.put(GlobalUtils.getUUIDByName(name) , loginData);
+        return loginData;
     }
 
     public void clearDataLogin() {
@@ -56,7 +59,7 @@ public final class LoginManager {
     }
 
     @Contract(" -> new")
-    public @NotNull HashSet<DataLogin> getDataLogin() {
+    public @NotNull HashSet<LoginData> getDataLogin() {
         return new HashSet<>(listDataLogin.values());
     }
 
@@ -77,28 +80,28 @@ public final class LoginManager {
         if (getDataLogin(name) != null){//se pone nulo por qué es imposible no tener un registro sin tener un login data es decir si uno da nulo el otro también
             return getDataLogin(name).getRegister().getStateLogins();
         }else{//si no existe crea un registro
-            DataRegister dataRegister = startRegister(ip, name);
-            if (dataRegister != null){
-                addDataLogin(name, dataRegister);
-                return dataRegister.getStateLogins();
+            RegisterData registerData = startRegister(ip, name);
+            if (registerData != null){
+                addDataLogin(name, registerData);
+                return registerData.getStateLogins();
             }else {
                 return StateLogins.UNKNOWN;
             }
         }
     }
 
-    private @Nullable DataRegister startRegister(InetAddress ip, @NotNull String name){
+    private @Nullable RegisterData startRegister(InetAddress ip, @NotNull String name){
         try {
             MojangResolver resolver = AviaTerraCore.getResolver();
             Optional<Profile> profile = resolver.findProfile(name);
-            DataRegister dataRegister;
+            RegisterData registerData;
             if (profile.isPresent()){
                 Profile profileObj = profile.get();
-                dataRegister = new DataRegister(profileObj.getName(), GlobalUtils.getUUIDByName(name), profileObj.getId(), StateLogins.PREMIUM, false);
-                dataRegister.setLastAddress(ip);
+                registerData = new RegisterData(profileObj.getName(), GlobalUtils.getUUIDByName(name), profileObj.getId(), StateLogins.PREMIUM, false);
+                registerData.setLastAddress(ip);
                 // Se guarda el registro en la base de datos
                 Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(), () ->
-                        DataBaseRegister.addRegister(dataRegister.getUsername(),
+                        DataBaseRegister.addRegister(registerData.getUsername(),
                         profileObj.getId().toString(), GlobalUtils.getUUIDByName(name).toString(),
                         ip.getHostName(), ip.getHostName(),
                         true, null,
@@ -106,18 +109,18 @@ public final class LoginManager {
                 ));
 
             }else {// Es temporal el registro por qué no ha puesto la contraseña
-                dataRegister = new DataRegister(name, GlobalUtils.getUUIDByName(name), StateLogins.CRACKED, true);
-                dataRegister.setLastAddress(ip);
+                registerData = new RegisterData(name, GlobalUtils.getUUIDByName(name), StateLogins.CRACKED, true);
+                registerData.setLastAddress(ip);
                 //se guarda el registro en la base de datos
                 Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(), () ->
-                        DataBaseRegister.addRegister(dataRegister.getUsername(),
+                        DataBaseRegister.addRegister(registerData.getUsername(),
                         null, GlobalUtils.getUUIDByName(name).toString(),
                         ip.getHostName(), ip.getHostName(),
                         false, null,
                         System.currentTimeMillis(), System.currentTimeMillis()
                 ));
             }
-            return dataRegister;
+            return registerData;
         } catch (IOException | RateLimitException e) {
             return null;
         }
@@ -135,15 +138,15 @@ public final class LoginManager {
      * @param player El usuario que iniciar sessión
      */
 
-    public static @NotNull DataLogin startPlaySessionCracked(@NotNull Player player){
-        DataLogin dataLogin = getDataLogin(player);
-        DataSession dataSession = new DataSession(player, StateLogins.CRACKED);
-        dataSession.setEndTimeLogin(System.currentTimeMillis() + Config.getExpirationSession());
-        dataLogin.setSession(dataSession);
-        dataLogin.getLimbo().restorePlayer(player);
+    public static @NotNull LoginData startPlaySessionCracked(@NotNull Player player){
+        LoginData loginData = getDataLogin(player);
+        SessionData sessionData = new SessionData(player, StateLogins.CRACKED);
+        sessionData.setEndTimeLogin(System.currentTimeMillis() + Config.getExpirationSession());
+        loginData.setSession(sessionData);
+        loginData.getLimbo().restorePlayer(player);
         player.updateCommands();
         player.playSound(player, Sound.ENTITY_PLAYER_LEVELUP, 0.4f, 1);
-        return dataLogin;
+        return loginData;
     }
 
     /**
@@ -160,7 +163,7 @@ public final class LoginManager {
         AviaTerraCore.getInstance().enqueueTaskAsynchronously(() -> {
             if (updatePassword(name, s)){
                 getDataLogin(name).getRegister().setPasswordShaded(s);
-                DataRegister data = getDataLogin(name).getRegister();
+                RegisterData data = getDataLogin(name).getRegister();
                 data.setTemporary(false);
             }else {
                 Player player = Bukkit.getPlayer(name);
@@ -180,9 +183,9 @@ public final class LoginManager {
                 GlobalUtils.synchronizeKickPlayer(player, Message.LOGIN_KICK_ADDRESS_ERROR.getMessage());
             }
         });
-        DataRegister dataRegister = getDataLogin(name).getRegister();
-        dataRegister.setLastAddress(inetAddress);
-        dataRegister.setLastLoginDate(System.currentTimeMillis());
+        RegisterData registerData = getDataLogin(name).getRegister();
+        registerData.setLastAddress(inetAddress);
+        registerData.setLastLoginDate(System.currentTimeMillis());
     }
 
     public boolean checkLoginIn(@NotNull Player player){
@@ -201,21 +204,21 @@ public final class LoginManager {
 
     public boolean checkLoginIn(@NotNull Player player, boolean ignoreTime, boolean limboMode){
         if (player.getAddress() == null) return false; // Esto por qué el jugador no terminado de entrar al servidor
-        DataLogin dataLogin = getDataLogin(player);
-        if (dataLogin == null){
+        LoginData loginData = getDataLogin(player);
+        if (loginData == null){
             GlobalUtils.synchronizeKickPlayer(player, Message.LOGIN_KICK_REGISTER_ERROR.getMessage());
             return false;
         }
-        if (dataLogin.hasSession()) {// Mira si tiene una session
-            DataSession dataSession = dataLogin.getSession();
-            switch (dataSession.getState()) {
+        if (loginData.hasSession()) {// Mira si tiene una session
+            SessionData sessionData = loginData.getSession();
+            switch (sessionData.getState()) {
                 case CRACKED -> {
-                    if (dataLogin.getRegister().getPasswordShaded() != null) {// tiene una contraseña la cuenta?
+                    if (loginData.getRegister().getPasswordShaded() != null) {// tiene una contraseña la cuenta?
                         if (!Config.getServerMode().equals(ServerMode.ONLINE_MODE)){// no puede ver cracked en modo online
-                            if (GlobalUtils.equalIp(dataSession.getAddress(), player.getAddress().getAddress())) {// las ips tiene que ser iguales
-                                if (ignoreTime || dataLogin.getSession().getEndTimeLogin() > System.currentTimeMillis()) {// expiro? o no se tiene en cuenta
-                                    if (dataLogin.isLimboMode() && limboMode && player.isOnline()) {
-                                        dataLogin.getLimbo().restorePlayer(player);
+                            if (GlobalUtils.equalIp(sessionData.getAddress(), player.getAddress().getAddress())) {// las ips tiene que ser iguales
+                                if (ignoreTime || loginData.getSession().getEndTimeLogin() > System.currentTimeMillis()) {// expiro? o no se tiene en cuenta
+                                    if (loginData.isLimboMode() && limboMode && player.isOnline()) {
+                                        loginData.getLimbo().restorePlayer(player);
                                     }
                                     return true;// sesión válida para los cracked
                                 }
@@ -227,29 +230,29 @@ public final class LoginManager {
                     }else {
                         if (limboMode) LimboManager.startSynchronizeLimboMode(player, ReasonLimbo.NO_REGISTER);
                     }
-                    dataLogin.setSession(null);
+                    loginData.setSession(null);
                     return false;
                 }
                 case PREMIUM -> {
                     if (!Config.getServerMode().equals(ServerMode.OFFLINE_MODE)) {// no puede haber sesiónes premium si esta offline
-                        if (GlobalUtils.equalIp(dataSession.getAddress(), player.getAddress().getAddress())){// esto no tendría que dar falso
-                            if (dataSession.getSharedSecret() == null) {// no tiene el secreto compartido lo cual tiene que ser imposible.
+                        if (GlobalUtils.equalIp(sessionData.getAddress(), player.getAddress().getAddress())){// esto no tendría que dar falso
+                            if (sessionData.getSharedSecret() == null) {// no tiene el secreto compartido lo cual tiene que ser imposible.
                                 GlobalUtils.synchronizeKickPlayer(player, Message.LOGIN_KICK_KEY_ERROR.getMessage());
-                                dataLogin.setSession(null);
+                                loginData.setSession(null);
                             } else {
                                 return true;// sesión válida para los premium
                             }
                         }
                     }else {
                         if (limboMode){
-                            if (dataLogin.getRegister().getPasswordShaded() != null){// la cuenta premium tiene una contraseña?
+                            if (loginData.getRegister().getPasswordShaded() != null){// la cuenta premium tiene una contraseña?
                                 LimboManager.startSynchronizeLimboMode(player, ReasonLimbo.NO_SESSION);
                             }else {
                                 LimboManager.startSynchronizeLimboMode(player, ReasonLimbo.NO_REGISTER);
                             }
                         }
                     }
-                    dataLogin.setSession(null);
+                    loginData.setSession(null);
                     return false;
                 }
                 default -> {
@@ -258,7 +261,7 @@ public final class LoginManager {
                 }
             }
         }else {// Esto solo sucedería para los no premium
-            if (dataLogin.getRegister().getPasswordShaded() != null){// La cuenta premium tiene una contraseña?
+            if (loginData.getRegister().getPasswordShaded() != null){// La cuenta premium tiene una contraseña?
                 LimboManager.startSynchronizeLimboMode(player, ReasonLimbo.NO_SESSION);
             }else {
                 LimboManager.startSynchronizeLimboMode(player, ReasonLimbo.NO_REGISTER);
@@ -268,11 +271,11 @@ public final class LoginManager {
     }
 
     public void onEnteringServer(@NotNull Player player){
-        DataLogin dataLogin = getDataLogin(player);
-        if (dataLogin != null) {
-            DataRegister dataRegister = dataLogin.getRegister();
-            if (dataRegister != null) {
-                if (Config.getServerMode().equals(ServerMode.OFFLINE_MODE) || dataRegister.getStateLogins() == StateLogins.CRACKED){
+        LoginData loginData = getDataLogin(player);
+        if (loginData != null) {
+            RegisterData registerData = loginData.getRegister();
+            if (registerData != null) {
+                if (Config.getServerMode().equals(ServerMode.OFFLINE_MODE) || registerData.getStateLogins() == StateLogins.CRACKED){
                     checkLoginIn(player, false, true);
                 }
             }else{

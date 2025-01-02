@@ -22,7 +22,7 @@ public class ManipulatorAction extends BaseActions {
 
     @Override
     public boolean clickInventory(InventoryClickEvent event, AviaTerraPlayer player) {
-        sendInventoryToOtherPlayersAndUpdate(player);
+        updateInventoryVictim(player);
         return (event.getSlot() >= 36 && event.getSlot() <= 44) || event.getSlot() == 49 || event.getSlot() == 51 || event.getSlot() == 53;
     }
 
@@ -35,23 +35,28 @@ public class ManipulatorAction extends BaseActions {
         atp.getModerationPlayer().getManipulatorInventoryPlayer().remove(player.getPlayer().getUniqueId());
         if (atp.getModerationPlayer().getManipulatorInventoryPlayer().isEmpty() || !atp.getPlayer().isOnline()){
             atp.setInventorySection(null);
-            ManipulatorInventory.inventories.remove(victim.getUniqueId());
+            ManipulatorInventory.INVENTORIES.remove(victim.getUniqueId());
         }
     }
 
     @Override
     public void dragInventory(InventoryDragEvent event, AviaTerraPlayer player) {
-        sendInventoryToOtherPlayersAndUpdate(player);
+        updateInventoryVictim(player);
     }
 
-    private void sendInventoryToOtherPlayersAndUpdate(AviaTerraPlayer p) {
+    /**
+     * Cada vez que un manipulador realiza una interacción en el inventario se envía los items
+     * a la víctima
+     */
+
+    private void updateInventoryVictim(AviaTerraPlayer p) {
         Player victim = GlobalUtils.getPlayer(p.getModerationPlayer().getManipulatedInventoryPlayer());
         new BukkitRunnable() {
             final AviaTerraPlayer player = p;
             public void run() {
                 Inventory inv = Bukkit.createInventory(null, 54, "temporal");
                 for (int i = 0; i < 54; i++){
-                    ItemStack item = ManipulatorInventory.inventories.get(victim.getUniqueId()).getItem(i);
+                    ItemStack item = ManipulatorInventory.INVENTORIES.get(victim.getUniqueId()).getItem(i);
                     if (item != null) {
                         if (i >= 45 && i <= 48){
                             inv.setItem(i - 9, item);

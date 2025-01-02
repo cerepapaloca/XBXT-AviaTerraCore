@@ -1,5 +1,7 @@
-package net.atcore.security.Login;
+package net.atcore.security.Login.model;
 
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.events.PacketContainer;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -7,6 +9,7 @@ import net.atcore.AviaTerraCore;
 import net.atcore.data.DataSection;
 import net.atcore.data.FileYaml;
 import net.atcore.data.yml.CacheLimboFile;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -14,10 +17,12 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitTask;
 
+import java.util.HashSet;
+
 @Getter
 @Setter
 @RequiredArgsConstructor
-public class DataLimbo {
+public class LimboData {
 
     private final GameMode gameMode;
     private final ItemStack[] items;
@@ -25,6 +30,7 @@ public class DataLimbo {
     private final boolean op;
     private final int level;
     private BukkitTask task;
+    private HashSet<PacketContainer> packets;
 
     public void restorePlayer(Player player) {
         player.setGameMode(gameMode);
@@ -37,6 +43,12 @@ public class DataLimbo {
         FileYaml file = DataSection.getFliesCacheLimbo().getConfigFile(player.getUniqueId().toString(), false);
 
         AviaTerraCore.getInstance().enqueueTaskAsynchronously(() -> {
+            if (packets != null) {
+                Bukkit.getLogger().info("Restoring packets");
+                for (PacketContainer packet : packets.stream().toList()) {
+                    ProtocolLibrary.getProtocolManager().sendServerPacket(player, packet, true);
+                }
+            }
             if (file != null) {
                 if (file instanceof CacheLimboFile cacheLimbo) {
                     cacheLimbo.setRestored(true);
@@ -44,6 +56,5 @@ public class DataLimbo {
                 }
             }
         });
-        //DataSection.getFliesCacheLimbo().deleteConfigFile(player.getUniqueId().toString());// Borra la caché del jugador por qué ya no hace falta
     }
 }

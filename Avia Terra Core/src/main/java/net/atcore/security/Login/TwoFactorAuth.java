@@ -5,6 +5,7 @@ import lombok.experimental.UtilityClass;
 import net.atcore.AviaTerraCore;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.MessagesType;
+import net.atcore.security.Login.model.CodeAuth;
 import net.atcore.utils.GlobalUtils;
 import net.dv8tion.jda.api.entities.User;
 import org.bukkit.Bukkit;

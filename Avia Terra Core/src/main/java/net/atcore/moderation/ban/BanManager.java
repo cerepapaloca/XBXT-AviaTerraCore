@@ -3,7 +3,7 @@ package net.atcore.moderation.ban;
 import net.atcore.AviaTerraCore;
 import net.atcore.Config;
 import net.atcore.data.sql.DataBaseBan;
-import net.atcore.security.Login.DataLogin;
+import net.atcore.security.Login.model.LoginData;
 import net.atcore.security.Login.LoginManager;
 import net.atcore.utils.GlobalConstantes;
 import net.atcore.messages.CategoryMessages;
@@ -36,9 +36,9 @@ public class BanManager extends DataBaseBan {
     public void banPlayer(String name, UUID uuid, InetAddress ip, String reason, long time, ContextBan context, String nameAuthor) {
         long finalTime = time == GlobalConstantes.NUMERO_PERMA ? GlobalConstantes.NUMERO_PERMA : time == Long.MAX_VALUE ? Long.MAX_VALUE : time + System.currentTimeMillis();
 
-        DataLogin dataLogin = LoginManager.getDataLogin(name);
-        if (dataLogin != null) {
-            ip = dataLogin.getRegister().getLastAddress();
+        LoginData loginData = LoginManager.getDataLogin(name);
+        if (loginData != null) {
+            ip = loginData.getRegister().getLastAddress();
         }
         DataBan dataBan = new DataBan(name, uuid, ip, reason, finalTime, System.currentTimeMillis(), context, nameAuthor);
         Player player = Bukkit.getPlayer(name);

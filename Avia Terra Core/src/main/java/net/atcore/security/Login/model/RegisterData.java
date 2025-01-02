@@ -1,7 +1,8 @@
-package net.atcore.security.Login;
+package net.atcore.security.Login.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import net.atcore.security.Login.StateLogins;
 import org.jetbrains.annotations.Nullable;
 
 import java.net.InetAddress;
@@ -9,9 +10,9 @@ import java.util.UUID;
 
 @Getter
 @Setter
-public class DataRegister {
+public class RegisterData {
 
-    public DataRegister(String username, UUID uuidCracked, UUID uuidPremium , StateLogins state, boolean isTemporary) {
+    public RegisterData(String username, UUID uuidCracked, UUID uuidPremium , StateLogins state, boolean isTemporary) {
         this.username = username;
         this.uuidCracked = uuidCracked;
         this.stateLogins = state;
@@ -19,7 +20,7 @@ public class DataRegister {
         this.isTemporary = isTemporary;
     }
 
-    public DataRegister(String username, UUID uuidCracked, StateLogins state, boolean isTemporary) {
+    public RegisterData(String username, UUID uuidCracked, StateLogins state, boolean isTemporary) {
         this.username = username;
         this.uuidCracked = uuidCracked;
         this.stateLogins = state;

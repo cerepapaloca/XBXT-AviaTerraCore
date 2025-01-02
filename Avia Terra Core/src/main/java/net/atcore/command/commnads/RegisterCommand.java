@@ -7,6 +7,7 @@ import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.MessagesType;
 import net.atcore.security.Login.*;
+import net.atcore.security.Login.model.LoginData;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -28,9 +29,9 @@ public class RegisterCommand extends BaseCommand {
     @Override
     public void execute(CommandSender sender, String[] args) {
         if (sender instanceof Player player){
-            DataLogin dataLogin = LoginManager.getDataLogin(player);
-            if (dataLogin.getRegister().getPasswordShaded() == null){
-                if (dataLogin.getRegister().getStateLogins() == StateLogins.CRACKED || Config.getServerMode().equals(ServerMode.OFFLINE_MODE)){
+            LoginData loginData = LoginManager.getDataLogin(player);
+            if (loginData.getRegister().getPasswordShaded() == null){
+                if (loginData.getRegister().getStateLogins() == StateLogins.CRACKED || Config.getServerMode().equals(ServerMode.OFFLINE_MODE)){
                     if (args.length >= 2){
                         if (Objects.equals(args[0], args[1])){
                             sendMessage(player, Message.COMMAND_REGISTER_SUCCESSFUL_CHAT.getMessage(), MessagesType.SUCCESS);

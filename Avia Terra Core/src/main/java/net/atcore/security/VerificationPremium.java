@@ -9,8 +9,8 @@ import net.atcore.AviaTerraCore;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesType;
-import net.atcore.security.Login.DataLogin;
-import net.atcore.security.Login.DataSession;
+import net.atcore.security.Login.model.LoginData;
+import net.atcore.security.Login.model.SessionData;
 import net.atcore.security.Login.LoginManager;
 import net.atcore.security.Login.StateLogins;
 import net.atcore.security.Login.SimulateOnlineMode;
@@ -72,12 +72,12 @@ public class VerificationPremium {
                                 sendMessageConsole(String.format(Message.LOGIN_PREMIUM_VALIDATION_OK.getMessage(), name), MessagesType.SUCCESS, CategoryMessages.LOGIN);
                                 String userName = verification.getName();
                                 LIST_UUID_PREMIUM.put(userName, verification);
-                                DataLogin dataLogin = LoginManager.getDataLogin(userName);
-                                DataSession session = new DataSession(player, StateLogins.PREMIUM, player.getAddress().getAddress());
+                                LoginData loginData = LoginManager.getDataLogin(userName);
+                                SessionData session = new SessionData(player, StateLogins.PREMIUM, player.getAddress().getAddress());
                                 session.setSharedSecret(sharedSecret);
                                 session.setEndTimeLogin(-1);// Por seguridad los jugadores premium no puede tener sesiones
-                                dataLogin.setSession(session);
-                                dataLogin.setLimbo(null);
+                                loginData.setSession(session);
+                                loginData.setLimbo(null);
                                 //LoginManager.checkLoginIn(player, false);//esto para que siga el protocolo
                             }else{
                                 GlobalUtils.kickPlayer(player, Message.LOGIN_KICK_PREMIUM_VALIDATION.getMessage());

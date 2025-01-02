@@ -6,6 +6,9 @@ import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesType;
 import net.atcore.security.Login.*;
+import net.atcore.security.Login.model.LoginData;
+import net.atcore.security.Login.model.RegisterData;
+import net.atcore.security.Login.model.SessionData;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -23,7 +26,7 @@ public class DataBaseRegister extends DataBaseMySql {
     @Override
     public void reload() {
         String sql = "SELECT name, uuidPremium, uuidCracked, ipRegister, ipLogin, isPremium, password, lastLoginDate, registerDate, gmail, discord FROM register";
-        HashMap<UUID, DataSession> sessions = new HashMap<>();
+        HashMap<UUID, SessionData> sessions = new HashMap<>();
 
         try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(sql);
@@ -45,19 +48,19 @@ public class DataBaseRegister extends DataBaseMySql {
 
                 UUID uuid = UUID.fromString(uuidCracked);
 
-                DataRegister dataRegister = new DataRegister(name, uuid,
+                RegisterData registerData = new RegisterData(name, uuid,
                         uuidPremium != null ? UUID.fromString(uuidPremium) : null, isPremium == 1 ? StateLogins.PREMIUM : StateLogins.CRACKED,
                         false);
-                dataRegister.setRegisterAddress(InetAddress.getByName(ipRegister));
-                dataRegister.setLastAddress(InetAddress.getByName(ipLogin));
-                dataRegister.setPasswordShaded(password);
-                dataRegister.setLastLoginDate(lastLoginDate);
-                dataRegister.setRegisterDate(registerDate);
-                dataRegister.setGmail(gmail);
-                dataRegister.setDiscord(discord);
+                registerData.setRegisterAddress(InetAddress.getByName(ipRegister));
+                registerData.setLastAddress(InetAddress.getByName(ipLogin));
+                registerData.setPasswordShaded(password);
+                registerData.setLastLoginDate(lastLoginDate);
+                registerData.setRegisterDate(registerDate);
+                registerData.setGmail(gmail);
+                registerData.setDiscord(discord);
 
-                DataLogin dataLogin = LoginManager.addDataLogin(name, dataRegister);
-                DataSession session = sessions.get(uuid);// Se obtiene las sesiones para que no se tenga que loguear de nuevo
+                LoginData loginData = LoginManager.addDataLogin(name, registerData);
+                SessionData session = sessions.get(uuid);// Se obtiene las sesiones para que no se tenga que loguear de nuevo
                 Player player = Bukkit.getPlayer(uuid);
 
                 if (session == null || player == null) continue;
@@ -65,7 +68,7 @@ public class DataBaseRegister extends DataBaseMySql {
                 // Se modifica los datos de la session
                 session.setAddress(InetAddress.getByName(ipLogin));
                 session.setStartTimeLogin(lastLoginDate);
-                dataLogin.setSession(session);// añade la sesión rescatada
+                loginData.setSession(session);// añade la sesión rescatada
 
                 if (!LoginManager.checkLoginIn(player)){// Revisa si son validas las sesiones
                     GlobalUtils.synchronizeKickPlayer(player, Message.LOGIN_KICK_SESSION_ERROR.getMessage());

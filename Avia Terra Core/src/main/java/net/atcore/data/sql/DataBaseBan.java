@@ -8,7 +8,7 @@ import net.atcore.messages.MessagesManager;
 import net.atcore.messages.MessagesType;
 import net.atcore.moderation.ban.ContextBan;
 import net.atcore.moderation.ban.DataBan;
-import net.atcore.security.Login.DataLogin;
+import net.atcore.security.Login.model.LoginData;
 import net.atcore.security.Login.LoginManager;
 import net.atcore.utils.GlobalConstantes;
 import net.atcore.utils.GlobalUtils;
@@ -119,9 +119,9 @@ public class DataBaseBan extends DataBaseMySql {
         if (stringIp != null) {
             ipAddress = InetAddress.getByName(stringIp.split("/")[0]);
         }else {
-            DataLogin dataLogin = LoginManager.getDataLogin(name);
-            if (dataLogin != null) {
-                ipAddress = dataLogin.getRegister().getLastAddress();
+            LoginData loginData = LoginManager.getDataLogin(name);
+            if (loginData != null) {
+                ipAddress = loginData.getRegister().getLastAddress();
             }
         }
         DataBan dataBan = new DataBan(name, uuid, ipAddress, reason, dateUnban, dateBan, ContextBan.valueOf(context), author);

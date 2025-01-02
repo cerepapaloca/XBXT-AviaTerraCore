@@ -3,6 +3,7 @@ package net.atcore.listener;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.PacketAdapter;
+import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import com.google.gson.JsonArray;
@@ -10,9 +11,14 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.atcore.AviaTerraCore;
 import net.atcore.messages.MessagesType;
+import net.atcore.security.Login.model.LimboData;
+import net.atcore.security.Login.model.LoginData;
+import net.atcore.security.Login.LoginManager;
 import net.atcore.security.SecuritySection;
 import org.bukkit.Sound;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.UUID;
 
 public class PacketListenerManager {
@@ -21,6 +27,7 @@ public class PacketListenerManager {
 
     }
 
+    private final static HashMap<UUID, HashSet<PacketContainer>> PACKET_LISTENERS = new HashMap<>();
 
     public static void registerEvents(){
         /*NO BORRAR POR SI ACASO
@@ -29,12 +36,12 @@ public class PacketListenerManager {
             @Override
             public void onPacketReceiving(PacketEvent event) {
                 Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&6Cliente " + "Names " + event.getPacketType()));
-                Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&6datos " + event.getPacket().getModifier().getValues().toString()));
+                //Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&6datos " + event.getPacket().getModifier().getValues().toString()));
             }
             @Override
             public void onPacketSending(PacketEvent event) {
                 Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&bServer " + "Names " + event.getPacketType()));
-                Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&bdatos " + event.getPacket().getModifier().getValues().toString()));
+                //Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&bdatos " + event.getPacket().getModifier().getValues().toString()));
             }
         });*/
 
@@ -47,6 +54,36 @@ public class PacketListenerManager {
             public void onPacketReceiving(PacketEvent event) {
                 event.setCancelled(true);//se cancela por qué si no el servidor le tira error al cliente por enviar un paquete que no debería
                 SecuritySection.getSimulateOnlineMode().startEncryption(event.getPlayer(), event.getPacket());
+            }
+        });
+
+        ///////////////////////////////////////////////////////////////////////////////
+
+        ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(AviaTerraCore.getInstance(),
+                PacketType.Play.Server.MAP_CHUNK
+        ) {
+            @Override
+            public void onPacketSending(PacketEvent event) {
+                LoginData login = LoginManager.getDataLogin(event.getPlayer());
+                UUID uuid = event.getPlayer().getUniqueId();
+                if (login.hasSession()){
+                    PACKET_LISTENERS.remove(uuid);
+                    return;
+                }
+                if (!PACKET_LISTENERS.containsKey(uuid)) {
+                    PACKET_LISTENERS.put(uuid, new HashSet<>());
+                }
+                if (login.isLimboMode()){
+                    LimboData limbo = login.getLimbo();
+                    if (limbo.getPackets() == null){ // Pasa todos los paquetes guardados al limbo data
+                        limbo.setPackets(PACKET_LISTENERS.get(uuid));
+                    }
+                    limbo.getPackets().add(event.getPacket());
+                }else { // En caso de que no este en limbo mode lo va guardado
+                    PACKET_LISTENERS.get(uuid).add(event.getPacket());
+                }
+                event.setCancelled(true);
+
             }
         });
 

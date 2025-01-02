@@ -24,36 +24,36 @@ public class ManipulatorInventory extends BaseInventory {
         super(54, Message.INVENTORY_MANIPULATOR_TITLE.getMessage());
     }
 
-    public static final HashMap<UUID, Inventory> inventories = new HashMap<>();
-    public static final HashMap<UUID, BukkitTask> tasks = new HashMap<>();
+    public static final HashMap<UUID, Inventory> INVENTORIES = new HashMap<>();
+    public static final HashMap<UUID, BukkitTask> TASKS = new HashMap<>();
 
     @Override
     public Inventory createInventory(AviaTerraPlayer player) {
         ModerationPlayer moderationPlayer = player.getModerationPlayer();
-        if (!tasks.containsKey(moderationPlayer.getManipulatedInventoryPlayer())) {
+        if (!TASKS.containsKey(moderationPlayer.getManipulatedInventoryPlayer())) {
             UUID uuid = moderationPlayer.getManipulatedInventoryPlayer();
             BukkitTask task = new BukkitRunnable() {
                 private int previousHash = getInventoryHash(player); // Obtener el estado inicial del inventario
                 @Override
                 public void run() {
                     if (player.getPlayer().isOnline() && moderationPlayer.getManipulatedInventoryPlayer() != null && Bukkit.getPlayer(uuid) != null) {
-                        int currentHash = getInventoryHash(player);
-                        if (currentHash != previousHash) {
-                            previousHash = currentHash;
+                        int currentHash = getInventoryHash(player); // Se obtiene el hash para saber si su inventarió á cambiado
+                        if (currentHash != previousHash) { // Revisa si lo hash son diferente en caso de que si le envía él inventarió
+                            previousHash = currentHash; // Actualiza el Hash
                             if (InventorySection.MANIPULATOR.getBaseInventory() instanceof ManipulatorInventory manipulatorInventory) {
-                                manipulatorInventory.updateInventory(GlobalUtils.getPlayer(moderationPlayer.getManipulatedInventoryPlayer()));
+                                manipulatorInventory.updateInventoryManipulator(GlobalUtils.getPlayer(moderationPlayer.getManipulatedInventoryPlayer()));
                             }
                         }
                     } else {
-                        tasks.remove(uuid);
+                        TASKS.remove(uuid);
                         cancel();
                     }
                 }
-            }.runTaskTimer(AviaTerraCore.getInstance(), 0, 1);
-            tasks.put(moderationPlayer.getManipulatedInventoryPlayer(), task);
+            }.runTaskTimer(AviaTerraCore.getInstance(), 0, 1); // Cada Tick
+            TASKS.put(moderationPlayer.getManipulatedInventoryPlayer(), task);
         }
 
-        return updateInventory(GlobalUtils.getPlayer(moderationPlayer.getManipulatedInventoryPlayer()));
+        return updateInventoryManipulator(GlobalUtils.getPlayer(moderationPlayer.getManipulatedInventoryPlayer()));
     }
 
     private int getInventoryHash(AviaTerraPlayer player) {
@@ -68,11 +68,17 @@ public class ManipulatorInventory extends BaseInventory {
         return hash;
     }
 
-    public Inventory updateInventory(Player victim) {
-        Inventory inv = inventories.get(victim.getUniqueId());
+    /**
+     * Actualiza el inventario de los manipuladores cambiando de posición algunos items
+     * @param victim El jugador que se va leer el inventario
+     * @return El inventario modificado para los manipuladores
+     */
+
+    public Inventory updateInventoryManipulator(Player victim) {
+        Inventory inv = INVENTORIES.get(victim.getUniqueId());
         if (inv == null) {
             inv = createNewInventory(AviaTerraPlayer.getPlayer(victim));
-            inventories.put(victim.getUniqueId(), inv);
+            INVENTORIES.put(victim.getUniqueId(), inv);
         }
         inv.clear();
         inv.setItem(52, victim.getItemOnCursor());

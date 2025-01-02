@@ -36,7 +36,7 @@ public class seeInventoryCommand extends BaseCommand {
                         player.openInventory(InventorySection.MANIPULATOR.getBaseInventory().createInventory(atp));
                         atp.setInventorySection(InventorySection.MANIPULATOR);
 
-                        atp2.setInventorySection(InventorySection.MANIPULATED);
+                        //atp2.setInventorySection(InventorySection.MANIPULATED);
                         atp2.getModerationPlayer().getManipulatorInventoryPlayer().add(player.getUniqueId());
                     }else {
                         sendMessage(sender, Message.COMMAND_SEE_INVENTORY_ERROR, MessagesType.ERROR);

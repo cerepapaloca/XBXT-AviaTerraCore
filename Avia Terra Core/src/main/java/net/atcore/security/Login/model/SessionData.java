@@ -1,23 +1,24 @@
-package net.atcore.security.Login;
+package net.atcore.security.Login.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import net.atcore.security.Login.StateLogins;
 import org.bukkit.entity.Player;
 
 import java.net.InetAddress;
 
 @Getter
 @Setter
-public class DataSession {
+public class SessionData {
 
-    public DataSession(Player player, StateLogins state) {
+    public SessionData(Player player, StateLogins state) {
         this.player = player;
         this.address = player.getAddress().getAddress();
         this.setState(state);
         startTimeLogin = System.currentTimeMillis();
     }
 
-    public DataSession(Player player, StateLogins state, InetAddress address) {
+    public SessionData(Player player, StateLogins state, InetAddress address) {
         this.player = player;
         this.address = address;
         this.setState(state);

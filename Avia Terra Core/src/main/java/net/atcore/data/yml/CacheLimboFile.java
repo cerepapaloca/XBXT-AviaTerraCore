@@ -1,8 +1,8 @@
 package net.atcore.data.yml;
 
 import net.atcore.data.FileYaml;
-import net.atcore.security.Login.DataLimbo;
-import net.atcore.security.Login.DataLogin;
+import net.atcore.security.Login.model.LimboData;
+import net.atcore.security.Login.model.LoginData;
 import net.atcore.security.Login.LoginManager;
 import org.bukkit.*;
 import org.bukkit.inventory.ItemStack;
@@ -19,7 +19,7 @@ public class CacheLimboFile extends FileYaml {
     @Override
     public void loadData() {
         loadConfig();
-        DataLogin dataLogin = LoginManager.getDataLogin(UUID.fromString(fileName.replace(".yml", "")));
+        LoginData loginData = LoginManager.getDataLogin(UUID.fromString(fileName.replace(".yml", "")));
         List<?> rawList = fileYaml.getList("inventory", null);
         ItemStack[] inventory;
         if (rawList != null) {
@@ -44,32 +44,36 @@ public class CacheLimboFile extends FileYaml {
             location = new Location(world,
                     fileYaml.getDouble("location.x"),
                     fileYaml.getDouble("location.y"),
-                    fileYaml.getDouble("location.z")
+                    fileYaml.getDouble("location.z"),
+                    (float) fileYaml.getDouble("location.yaw"),
+                    (float) fileYaml.getDouble("location.pitch")
             );
         }
 
 
-        DataLimbo dataLimbo = new DataLimbo(
+        LimboData limboData = new LimboData(
                 GameMode.valueOf(fileYaml.getString("game-mode", "SURVIVAL").toUpperCase()),
                 inventory,
                 location,
                 fileYaml.getBoolean("op", false),
                 fileYaml.getInt("level-xp", 0)
         );
-        dataLogin.setLimbo(dataLimbo);
+        loginData.setLimbo(limboData);
     }
 
     @Override
     public void saveData() {
-        DataLimbo dataLimbo = LoginManager.getDataLogin(UUID.fromString(fileName.replace(".yml", ""))).getLimbo();
-        fileYaml.set("location.world", Objects.requireNonNull(dataLimbo.getLocation().getWorld()).getName());
-        fileYaml.set("location.x", dataLimbo.getLocation().getX());
-        fileYaml.set("location.y", dataLimbo.getLocation().getY());
-        fileYaml.set("location.z", dataLimbo.getLocation().getZ());
-        fileYaml.set("game-mode", dataLimbo.getGameMode().name());
-        fileYaml.set("level-xp", dataLimbo.getLevel());
-        fileYaml.set("op", dataLimbo.isOp());
-        fileYaml.set("inventory", dataLimbo.getItems());
+        LimboData limboData = LoginManager.getDataLogin(UUID.fromString(fileName.replace(".yml", ""))).getLimbo();
+        fileYaml.set("location.world", Objects.requireNonNull(limboData.getLocation().getWorld()).getName());
+        fileYaml.set("location.x", limboData.getLocation().getX());
+        fileYaml.set("location.y", limboData.getLocation().getY());
+        fileYaml.set("location.z", limboData.getLocation().getZ());
+        fileYaml.set("location.yaw", limboData.getLocation().getYaw());
+        fileYaml.set("location.pitch", limboData.getLocation().getPitch());
+        fileYaml.set("game-mode", limboData.getGameMode().name());
+        fileYaml.set("level-xp", limboData.getLevel());
+        fileYaml.set("op", limboData.isOp());
+        fileYaml.set("inventory", limboData.getItems());
         saveConfig();
     }
 
@@ -84,7 +88,7 @@ public class CacheLimboFile extends FileYaml {
     }
 
     public void removeLimbo() {
-        DataLogin login = LoginManager.getDataLogin(UUID.fromString(fileName.replace(".yml", "")));
+        LoginData login = LoginManager.getDataLogin(UUID.fromString(fileName.replace(".yml", "")));
         login.setLimbo(null);
     }
 
