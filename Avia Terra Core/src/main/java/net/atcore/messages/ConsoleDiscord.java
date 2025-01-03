@@ -44,7 +44,6 @@ public class ConsoleDiscord {
                             .text("[").timestamp(sdf).text("]")
                             .space()
                             .text("[").level().text("]").space()
-                            .text("[").logger().text("]").space()
                             .build()
                     );
 

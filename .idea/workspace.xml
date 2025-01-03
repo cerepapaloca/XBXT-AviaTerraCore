@@ -9,30 +9,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ea0f4ef9-10c7-4d19-b67e-e1a9046efa9d" name="Changes" comment="refactor y mejoras al mode limbo">
-      <change afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/ammo/Cartucho.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/weapons/Test2.java" afterDir="false" />
+    <list default="true" id="ea0f4ef9-10c7-4d19-b67e-e1a9046efa9d" name="Changes" comment="La Shotgun on Top!!">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/ArmamentSection.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/ArmamentSection.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/ArmamentUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/ArmamentUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/BaseAmmo.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/BaseAmmo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/BaseArmament.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/BaseArmament.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/BaseMagazine.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/BaseMagazine.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/BaseWeapon.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/BaseWeapon.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/BaseWeaponTarkov.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/BaseWeaponTarkov.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/BaseWeaponUltraKill.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/BaseWeaponUltraKill.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/DataShoot.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/ShootData.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/ShootWeapon.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/ShootWeapon.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/WeaponMode.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/WeaponMode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/ammo/MM45Otan.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/ammo/MM45Otan.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/ammo/MM45OtanVerde.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/ammo/MM45OtanVerde.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/ammo/MMxxPrueba.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/ammo/MMxxPrueba.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/weapons/M16.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/weapons/M16.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/weapons/Test1.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/weapons/Test1.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/aviaterraplayer/ArmamentPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/aviaterraplayer/ArmamentPlayer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/Login/SimulateOnlineMode.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/Login/SimulateOnlineMode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/utils/Gradient.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/utils/Gradient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/resources/plugin.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/command/commnads/PruebaCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/command/commnads/PruebaCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/messages/ConsoleDiscord.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/messages/ConsoleDiscord.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/messages/MessagesManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/messages/MessagesManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/VerificationPremium.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/VerificationPremium.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -201,7 +184,9 @@
       <workItem from="1735753997386" duration="6396000" />
       <workItem from="1735795302022" duration="202000" />
       <workItem from="1735795537913" duration="1382000" />
-      <workItem from="1735837820628" duration="17763000" />
+      <workItem from="1735837820628" duration="17941000" />
+      <workItem from="1735857260475" duration="172000" />
+      <workItem from="1735857438412" duration="19232000" />
     </task>
     <task id="LOCAL-00001" summary="cambios menores x2">
       <option name="closed" value="true" />
@@ -387,7 +372,15 @@
       <option name="project" value="LOCAL" />
       <updated>1735844349784</updated>
     </task>
-    <option name="localTasksCounter" value="24" />
+    <task id="LOCAL-00024" summary="La Shotgun on Top!!">
+      <option name="closed" value="true" />
+      <created>1735855743680</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1735855743680</updated>
+    </task>
+    <option name="localTasksCounter" value="25" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -417,7 +410,8 @@
     <MESSAGE value="Mejoras en la documentación de ArgumentUse y refactor menores" />
     <MESSAGE value="Se arregló un bug con el modo limbo" />
     <MESSAGE value="refactor y mejoras al mode limbo" />
-    <option name="LAST_COMMIT_MESSAGE" value="refactor y mejoras al mode limbo" />
+    <MESSAGE value="La Shotgun on Top!!" />
+    <option name="LAST_COMMIT_MESSAGE" value="La Shotgun on Top!!" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

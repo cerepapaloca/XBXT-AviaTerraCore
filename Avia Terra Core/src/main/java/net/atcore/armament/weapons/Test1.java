@@ -9,7 +9,7 @@ import net.atcore.armament.ammo.MM45Otan;
 public final class Test1 extends BaseWeaponUltraKill {
 
     public Test1() {
-        super("/est 1",
+        super("Test 1",
                 50,
                 1,
                 120,

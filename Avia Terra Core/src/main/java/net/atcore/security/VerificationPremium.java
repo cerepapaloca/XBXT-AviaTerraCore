@@ -96,7 +96,7 @@ public class VerificationPremium {
                     sendMessageConsole(String.format(Message.LOGIN_PREMIUM_VALIDATION_FAILED_LOG_3.getMessage(), name, player.getAddress().getHostName()), MessagesType.WARNING, CategoryMessages.LOGIN);
                 }
             }else{
-                GlobalUtils.kickPlayer(player, "Se detecto una discrepancia. Reinicie su cliente");
+                GlobalUtils.kickPlayer(player, Message.LOGIN_KICK_PREMIUM_VALIDATION.getMessage());
                 sendMessageConsole(String.format(Message.LOGIN_PREMIUM_VALIDATION_FAILED_LOG_3.getMessage(), player.getAddress().getHostName()), MessagesType.WARNING, CategoryMessages.LOGIN);
             }
         } catch (Exception e) {

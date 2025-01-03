@@ -1,9 +1,14 @@
 package net.atcore.command.commnads;
 
 import net.atcore.command.*;
+import net.atcore.messages.MessagesManager;
 import net.atcore.messages.MessagesType;
+import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 
+import static net.atcore.messages.MessagesManager.PREFIX;
 import static net.atcore.messages.MessagesManager.sendMessage;
 
 public class PruebaCommand extends BaseCommand {
@@ -23,6 +28,13 @@ public class PruebaCommand extends BaseCommand {
     @Override
     public void execute(CommandSender sender, String[] args) {
         sendMessage(sender, "Hola Mundo!", MessagesType.SUCCESS);
+        StringBuilder sb = new StringBuilder();
+        for (String arg : args) {
+            sb.append(arg).append(" ");
+        }
+        TextComponent text = MessagesManager.addTextComponent(sb.toString());
+        text.setColor(ChatColor.of("#11ff11"));
+        sender.spigot().sendMessage(MessagesManager.addTextComponent(PREFIX));
 
     }
 }
