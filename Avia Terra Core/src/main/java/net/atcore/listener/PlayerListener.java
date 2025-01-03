@@ -7,6 +7,7 @@ import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.MessagesType;
 import net.atcore.command.CommandManager;
+import net.atcore.misc.FrameDupe;
 import net.atcore.misc.LimitWorld;
 import net.atcore.moderation.Freeze;
 import net.atcore.security.Login.LoginManager;
@@ -19,6 +20,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
@@ -57,6 +59,11 @@ public class PlayerListener implements Listener {
         }
         event.setCancelled(ArmamentActions.shootAction(event.getAction(), player));
         addRange(player);
+    }
+
+    @EventHandler
+    public void onPlayerJoin(@NotNull EntityDamageByEntityEvent event) {
+        FrameDupe.dupeItem(event);
     }
 
     private final List<String> COMMANDS_PRE_LOGIN = List.of("login", "register", "log", "reg");

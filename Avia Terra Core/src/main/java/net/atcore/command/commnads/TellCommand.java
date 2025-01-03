@@ -1,25 +1,23 @@
 package net.atcore.command.commnads;
 
-import net.atcore.command.BaseTabCommand;
+import net.atcore.command.ArgumentUse;
+import net.atcore.command.BaseCommand;
 import net.atcore.command.CommandUtils;
 import net.atcore.command.ModeTabPlayers;
-import net.atcore.command.ArgumentUse;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.MessagesType;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.List;
-
 import static net.atcore.messages.MessagesManager.sendMessage;
 
-public class TellCommand extends BaseTabCommand {
+public class TellCommand extends BaseCommand {
 
     public TellCommand() {
         super("tell",
                 new ArgumentUse("tell")
                         .addArgPlayer(ModeTabPlayers.ADVANCED)
-                        .addArg("Mensaje"),
+                        .addNote("Mensaje..."),
                 "*",
                 "Le envías un mensaje privado a un jugador o un grupo de estos"
         );
@@ -41,21 +39,6 @@ public class TellCommand extends BaseTabCommand {
                     Player player = dataTemporalPlayer.player();
                     sendMessage(player,"&o" + sender.getName() + " -> " + finalMessage, null, CategoryMessages.PRIVATE, false);
                 });
-            }
-        }
-    }
-
-    @Override
-    public List<String> onTab(CommandSender sender, String[] args) {
-        switch (args.length){
-            case 1 -> {
-                return CommandUtils.tabForPlayer(args[0]);
-            }
-            case 2 -> {
-                return List.of("Mensaje...");
-            }
-            default -> {
-                return List.of("");
             }
         }
     }

@@ -93,6 +93,10 @@ public final class CommandUtils {
      * Variación de {@link #listTab(String, List, ModeTab)}
      */
 
+    /**
+     * Variación de {@link #listTab(String, List, ModeTab)}
+     */
+
     public @Nullable List<String> listTab(String arg, String[] args, ModeTab modeTab){
         return listTab(arg, Arrays.asList(args), modeTab);
     }
@@ -110,7 +114,7 @@ public final class CommandUtils {
      * elimina el parámetro {@code ModeTab} y pone como por defecto {@code ModeTab.StartWithIgnoreCase}
      */
 
-    public @Nullable List<String> listTab(String arg, String[] args){
+    public @Nullable List<String> listTab(String arg, String... args){
         return listTab(arg, Arrays.stream(args).toList(), ModeTab.StartWithIgnoreCase);
     }
 

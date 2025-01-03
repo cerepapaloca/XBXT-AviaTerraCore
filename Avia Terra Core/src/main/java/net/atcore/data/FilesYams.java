@@ -19,7 +19,6 @@ public abstract class FilesYams {
         this.folderName = folderName;
         this.configFiles = new HashSet<>();
         this.fileclass = fileclass;
-        configure();
     }
 
     public void configure() {

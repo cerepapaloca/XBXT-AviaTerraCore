@@ -9,8 +9,10 @@ import net.atcore.data.sql.DataBaseBan;
 import net.atcore.data.sql.DataBaseRegister;
 import net.atcore.data.yml.*;
 import net.atcore.data.yml.ymls.FliesCacheLimbo;
+import net.atcore.data.yml.ymls.PlayersData;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.MessagesType;
+import org.bukkit.Bukkit;
 
 import java.util.HashSet;
 
@@ -19,12 +21,14 @@ public class DataSection implements Section {
     public final static HashSet<File> FILES = new HashSet<>();
     public final static HashSet<DataBaseMySql> DATA_BASE = new HashSet<>();
     @Getter private static FliesCacheLimbo fliesCacheLimbo;
+    @Getter private static PlayersData playersData;
     @Getter private static ConfigFile configFile;
 
     @Override
     public void enable() {
 
         MessageFile messageFile = new MessageFile();
+        messageFile.reloadConfig();
         ConfigFile configFile = new ConfigFile();
         new DataBaseBan();
         new DataBaseRegister();
@@ -32,9 +36,9 @@ public class DataSection implements Section {
         new Discord();
         new Email();
         DataSection.configFile = configFile;
-        messageFile.reloadConfig();
+        playersData = new PlayersData();
         fliesCacheLimbo = new FliesCacheLimbo();
-        fliesCacheLimbo.reloadConfigs();
+        fliesCacheLimbo.configure();
         for (DataBaseMySql db : DATA_BASE) db.createTable();
         for (File fileYaml : FILES) fileYaml.loadData();
     }

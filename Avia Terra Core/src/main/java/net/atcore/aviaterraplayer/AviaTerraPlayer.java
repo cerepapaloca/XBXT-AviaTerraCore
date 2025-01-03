@@ -3,16 +3,22 @@ package net.atcore.aviaterraplayer;
 import lombok.Getter;
 import lombok.Setter;
 import net.atcore.AviaTerraCore;
+import net.atcore.command.commnads.TpaCommand;
+import net.atcore.data.DataSection;
+import net.atcore.data.yml.PlayerDataFile;
 import net.atcore.inventory.InventorySection;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.MessagesType;
 import net.atcore.utils.GlobalUtils;
 import net.atcore.utils.RangeType;
 import net.luckperms.api.model.user.User;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Contract;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -28,7 +34,10 @@ public class AviaTerraPlayer {
         User user = AviaTerraCore.getLp().getUserManager().getUser(player.getUniqueId());
         assert user != null;
         this.rangeType = RangeType.valueOf(user.getPrimaryGroup().toUpperCase());
-
+        AviaTerraCore.getInstance().enqueueTaskAsynchronously(() -> {
+            this.playerDataFile = (PlayerDataFile) DataSection.getPlayersData().getConfigFile(uuid.toString(), true);
+            playerDataFile.loadData();
+        });
     }
 
     private final static HashMap<UUID, AviaTerraPlayer> AVIA_TERRA_PLAYERS = new HashMap<>();
@@ -36,6 +45,9 @@ public class AviaTerraPlayer {
     private final ModerationPlayer moderationPlayer = new ModerationPlayer(this);
     private final ArmamentPlayer armamentPlayer = new ArmamentPlayer(this);
     private final UUID uuid;
+    private final List<TpaCommand.TpaRequest> ListTpa = new ArrayList<>();
+    private final HashMap<String, Location> homes = new HashMap<>();
+    private PlayerDataFile playerDataFile;
 
     private InventorySection inventorySection = null;
     private RangeType rangeType;

@@ -9,13 +9,24 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ea0f4ef9-10c7-4d19-b67e-e1a9046efa9d" name="Changes" comment="La Shotgun on Top!!">
+    <list default="true" id="ea0f4ef9-10c7-4d19-b67e-e1a9046efa9d" name="Changes" comment="TextComponent ON TOP!!!!!">
+      <change afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/command/commnads/HomeCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/command/commnads/TpaCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/data/yml/PlayerDataFile.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/data/yml/ymls/PlayersData.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/misc/FrameDupe.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/weapons/Test1.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/weapons/Test1.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/command/commnads/PruebaCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/command/commnads/PruebaCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/messages/ConsoleDiscord.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/messages/ConsoleDiscord.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/messages/MessagesManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/messages/MessagesManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/VerificationPremium.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/VerificationPremium.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/Config.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/Config.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/aviaterraplayer/AviaTerraPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/aviaterraplayer/AviaTerraPlayer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/command/CommandSection.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/command/CommandSection.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/command/CommandUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/command/CommandUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/command/commnads/TellCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/command/commnads/TellCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/data/DataSection.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/data/DataSection.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/data/FilesYams.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/data/FilesYams.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/data/yml/ConfigFile.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/data/yml/ConfigFile.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/listener/PlayerListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/listener/PlayerListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/messages/Message.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/messages/Message.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/resources/plugin.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -186,7 +197,8 @@
       <workItem from="1735795537913" duration="1382000" />
       <workItem from="1735837820628" duration="17941000" />
       <workItem from="1735857260475" duration="172000" />
-      <workItem from="1735857438412" duration="19232000" />
+      <workItem from="1735857438412" duration="19404000" />
+      <workItem from="1735918842128" duration="16291000" />
     </task>
     <task id="LOCAL-00001" summary="cambios menores x2">
       <option name="closed" value="true" />
@@ -380,7 +392,15 @@
       <option name="project" value="LOCAL" />
       <updated>1735855743680</updated>
     </task>
-    <option name="localTasksCounter" value="25" />
+    <task id="LOCAL-00025" summary="TextComponent ON TOP!!!!!">
+      <option name="closed" value="true" />
+      <created>1735876934354</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1735876934354</updated>
+    </task>
+    <option name="localTasksCounter" value="26" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -411,7 +431,8 @@
     <MESSAGE value="Se arregló un bug con el modo limbo" />
     <MESSAGE value="refactor y mejoras al mode limbo" />
     <MESSAGE value="La Shotgun on Top!!" />
-    <option name="LAST_COMMIT_MESSAGE" value="La Shotgun on Top!!" />
+    <MESSAGE value="TextComponent ON TOP!!!!!" />
+    <option name="LAST_COMMIT_MESSAGE" value="TextComponent ON TOP!!!!!" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

@@ -64,6 +64,8 @@ public class Config {
 
     @Getter @Setter private static double levelModerationChat = 1000;
 
+    @Getter @Setter private static double chaceDupeFrame = 0.5;
+
     @Getter @Setter private static boolean antiBot = false;
 
 }

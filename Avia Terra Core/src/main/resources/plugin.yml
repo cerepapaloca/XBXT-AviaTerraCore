@@ -37,6 +37,10 @@ commands:
   seeinventory:
   link:
   info:
+  tpa:
+  home:
+    aliases:
+      - h
 permissions:
   aviaterracore.commnad.*:
     description: Todos los permisos del comandos de AviaTerraCore
