@@ -62,7 +62,7 @@ public class Config {
      * chat
      */
 
-    @Getter @Setter private static double levelModerationChat = 1000;
+    @Getter @Setter private static double levelModerationChat = 0;
 
     @Getter @Setter private static double chaceDupeFrame = 0.5;
 

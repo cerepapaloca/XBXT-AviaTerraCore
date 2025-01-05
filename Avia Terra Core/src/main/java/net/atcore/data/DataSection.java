@@ -7,12 +7,12 @@ import net.atcore.data.html.Email;
 import net.atcore.data.md.Discord;
 import net.atcore.data.sql.DataBaseBan;
 import net.atcore.data.sql.DataBaseRegister;
+import net.atcore.data.txt.MOTDFile;
 import net.atcore.data.yml.*;
-import net.atcore.data.yml.ymls.FliesCacheLimbo;
+import net.atcore.data.yml.ymls.CacheLimboFlies;
 import net.atcore.data.yml.ymls.PlayersData;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.MessagesType;
-import org.bukkit.Bukkit;
 
 import java.util.HashSet;
 
@@ -20,9 +20,10 @@ public class DataSection implements Section {
 
     public final static HashSet<File> FILES = new HashSet<>();
     public final static HashSet<DataBaseMySql> DATA_BASE = new HashSet<>();
-    @Getter private static FliesCacheLimbo fliesCacheLimbo;
+    @Getter private static CacheLimboFlies cacheLimboFlies;
     @Getter private static PlayersData playersData;
     @Getter private static ConfigFile configFile;
+    @Getter private static CacheVoteFile cacheVoteFile;
 
     @Override
     public void enable() {
@@ -35,10 +36,12 @@ public class DataSection implements Section {
         new CommandsFile();
         new Discord();
         new Email();
+        new MOTDFile();
         DataSection.configFile = configFile;
         playersData = new PlayersData();
-        fliesCacheLimbo = new FliesCacheLimbo();
-        fliesCacheLimbo.configure();
+        cacheVoteFile = new CacheVoteFile();
+        cacheLimboFlies = new CacheLimboFlies();
+        cacheLimboFlies.configure();
         for (DataBaseMySql db : DATA_BASE) db.createTable();
         for (File fileYaml : FILES) fileYaml.loadData();
     }

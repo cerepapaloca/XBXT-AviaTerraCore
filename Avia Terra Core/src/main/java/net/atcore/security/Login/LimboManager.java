@@ -27,12 +27,6 @@ public class LimboManager {
         AviaTerraCore.getInstance().enqueueTaskAsynchronously(() -> {
             if (player.isOnline() && !LoginManager.isLimboMode(player)){
                 LimboManager.createLimboMode(player, reasonLimbo);
-            /*
-            if (Bukkit.isPrimaryThread()){
-                LimboManager.createLimboMode(player, reasonLimbo);
-            }else{
-                Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> LimboManager.createLimboMode(player, reasonLimbo));
-            }*/
             }
         });
     }
@@ -40,7 +34,7 @@ public class LimboManager {
     public void createLimboMode(Player player, ReasonLimbo reasonLimbo){
         LoginData loginData = LoginManager.getDataLogin(player);
         String uuidString = player.getUniqueId().toString();
-        FileYaml file = DataSection.getFliesCacheLimbo().getConfigFile(uuidString, false);
+        FileYaml file = DataSection.getCacheLimboFlies().getConfigFile(uuidString, false);
         LimboData limboData;
         if (file == null){// Si tiene un archivo eso quiere decir que no pudo aplicar las propiedades al usuario
             limboData = newLimboData(player, loginData, uuidString);
@@ -89,7 +83,7 @@ public class LimboManager {
                 player.getLevel());
         loginData.setLimbo(limboData);
         // Se guarda los datos cuando sé crea el limboData esto es solo por si hubo problema grave con el servidor
-        CacheLimboFile limboFile = (CacheLimboFile) DataSection.getFliesCacheLimbo().registerConfigFile(uuidString);
+        CacheLimboFile limboFile = (CacheLimboFile) DataSection.getCacheLimboFlies().registerConfigFile(uuidString);
         limboFile.saveData();
         limboFile.setRestored(false);
 

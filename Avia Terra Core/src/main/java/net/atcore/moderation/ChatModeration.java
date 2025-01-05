@@ -23,7 +23,8 @@ public class ChatModeration {
     public static boolean antiSpam(Player bukkitPlayer, String message) {
         AviaTerraPlayer aviaTerraPlayer = AviaTerraPlayer.getPlayer(bukkitPlayer);
         ModerationPlayer mp = aviaTerraPlayer.getModerationPlayer();
-        double puntos = mp.getPointChat();
+        double puntos = mp.getPointChat() + (double) ((System.currentTimeMillis() - mp.getLastChat())/1000L)*Config.getLevelModerationChat();
+        mp.setLastChat(System.currentTimeMillis());
         if (puntos < 0) {//si su puntos son negativos se lo hace saber
             mp.setPointChat(puntos);
             sendMessageConsole( bukkitPlayer.getName() + " » &7" + message + "&c [ELIMINADO: Spam]", MessagesType.INFO, CategoryMessages.MODERATION);
@@ -44,7 +45,7 @@ public class ChatModeration {
     }
 
     public static void tickEvent() {
-        new BukkitRunnable() {
+        /*new BukkitRunnable() {
             @Override
             public void run() {
                 Bukkit.getOnlinePlayers().forEach(player -> {
@@ -53,7 +54,7 @@ public class ChatModeration {
                     moderationPlayer.setPointChat(f > MAX_PUNTOS ? MAX_PUNTOS : f + Config.getLevelModerationChat());
                 });
             }
-        }.runTaskTimer(AviaTerraCore.getInstance(), 1, 1);//TODO optimiza esto por favor
+        }.runTaskTimer(AviaTerraCore.getInstance(), 1, 1);//TODO optimiza esto por favor*/
 
         new BukkitRunnable() {
             @Override

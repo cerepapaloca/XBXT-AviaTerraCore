@@ -19,7 +19,8 @@ public class ListenerSection implements Section {
         register(chatListener,
                 new InventoryListener(),
                 new JoinAndQuitListener(),
-                new PlayerListener()
+                new PlayerListener(),
+                new NuVotifierListener()
         );
         new BukkitRunnable() {
             @Override

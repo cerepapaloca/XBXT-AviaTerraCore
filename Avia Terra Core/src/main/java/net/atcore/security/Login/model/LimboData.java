@@ -40,11 +40,10 @@ public class LimboData {
         player.getInventory().setContents(items);
         player.saveData();// Se guarda los datos del usuario en el servidor por si el servidor peta
         if (gameMode == GameMode.SURVIVAL) player.setAllowFlight(false);
-        FileYaml file = DataSection.getFliesCacheLimbo().getConfigFile(player.getUniqueId().toString(), false);
+        FileYaml file = DataSection.getCacheLimboFlies().getConfigFile(player.getUniqueId().toString(), false);
 
         AviaTerraCore.getInstance().enqueueTaskAsynchronously(() -> {
             if (packets != null) {
-                Bukkit.getLogger().info("Restoring packets");
                 for (PacketContainer packet : packets.stream().toList()) {
                     ProtocolLibrary.getProtocolManager().sendServerPacket(player, packet, true);
                 }

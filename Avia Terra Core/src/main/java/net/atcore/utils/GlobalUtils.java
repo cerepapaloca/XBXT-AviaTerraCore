@@ -7,9 +7,13 @@ import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import com.google.common.base.Charsets;
 import lombok.experimental.UtilityClass;
 import net.atcore.AviaTerraCore;
+import net.atcore.data.DataSection;
+import net.atcore.listener.NuVotifierListener;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.MessagesType;
+import net.atcore.security.Login.LoginManager;
+import net.luckperms.api.node.types.InheritanceNode;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
@@ -506,4 +510,16 @@ public final class GlobalUtils {
         return Math.max((float) 0, Math.min((float) 1, value));
     }
 
+    public void addRangeVote(Player player){
+        if (LoginManager.checkLoginIn(player)){
+            if (NuVotifierListener.LIST_VOTE.contains(player.getName())){
+                AviaTerraCore.getLp().getUserManager().modifyUser(player.getUniqueId(), user ->
+                        user.data().remove(InheritanceNode.builder("vote").build()));
+                MessagesManager.sendTitle(player, "Nuevo Rango Adquirido", "Gracias por votar", 20, 40, 30, MessagesType.SUCCESS);
+                player.getWorld().playSound(player, Sound.ENTITY_PLAYER_LEVELUP, 1 ,1);
+                NuVotifierListener.LIST_VOTE.remove(player.getName());
+                DataSection.getCacheVoteFile().saveData();
+            }
+        }
+    }
 }

@@ -7,13 +7,17 @@ import net.atcore.command.commnads.TpaCommand;
 import net.atcore.data.DataSection;
 import net.atcore.data.yml.PlayerDataFile;
 import net.atcore.inventory.InventorySection;
+import net.atcore.listener.NuVotifierListener;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.MessagesType;
 import net.atcore.utils.GlobalUtils;
 import net.atcore.utils.RangeType;
 import net.luckperms.api.model.user.User;
+import net.luckperms.api.node.types.InheritanceNode;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.Contract;
 
 import java.util.ArrayList;
@@ -31,9 +35,6 @@ import java.util.UUID;
 public class AviaTerraPlayer {
     public AviaTerraPlayer(Player player) {
         this.uuid = player.getUniqueId();
-        User user = AviaTerraCore.getLp().getUserManager().getUser(player.getUniqueId());
-        assert user != null;
-        this.rangeType = RangeType.valueOf(user.getPrimaryGroup().toUpperCase());
         AviaTerraCore.getInstance().enqueueTaskAsynchronously(() -> {
             this.playerDataFile = (PlayerDataFile) DataSection.getPlayersData().getConfigFile(uuid.toString(), true);
             playerDataFile.loadData();
@@ -50,7 +51,6 @@ public class AviaTerraPlayer {
     private PlayerDataFile playerDataFile;
 
     private InventorySection inventorySection = null;
-    private RangeType rangeType;
 
     public void sendMessage(String message, MessagesType type) {
         MessagesManager.sendMessage(GlobalUtils.getPlayer(uuid), message, type);

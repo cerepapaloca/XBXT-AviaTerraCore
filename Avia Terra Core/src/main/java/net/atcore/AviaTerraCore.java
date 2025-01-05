@@ -14,6 +14,7 @@ import net.atcore.security.Login.model.LoginData;
 import net.atcore.security.Login.LoginManager;
 import net.atcore.security.SecuritySection;
 import net.atcore.utils.GlobalUtils;
+import net.atcore.utils.Gradient;
 import net.atcore.utils.RegisterManager;
 import net.atcore.moderation.ModerationSection;
 import net.dv8tion.jda.api.JDA;
@@ -21,7 +22,12 @@ import net.luckperms.api.LuckPerms;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -33,13 +39,14 @@ public final class AviaTerraCore extends JavaPlugin {
     private static final BlockingQueue<Runnable> TASK_QUEUE = new LinkedBlockingQueue<>();
     private Thread workerThread;
 
-    @Getter
-    private static AviaTerraCore instance;
     public static final String TOKEN_BOT = "MTI5MTUzODM1MjY0NjEzMTc3NA.GDwtcq.azwlvX6fWKbusXk8sOyzRMK78Qe9CwbHy_pmWk";
+    public static final List<String> LIST_MOTD = new ArrayList<>();
     public static JDA jda;
     @Getter private static LuckPerms lp;
     @Getter private static MojangResolver resolver;
     @Getter private static boolean isStarting;
+    @Getter private static AviaTerraCore instance;
+
 
     @Override
     public void onLoad(){
@@ -70,6 +77,7 @@ public final class AviaTerraCore extends JavaPlugin {
                 new SecuritySection(),
                 new ArmamentSection()
         );
+        startMOTD();
         isStarting = false;
         messageOn(timeCurrent);
     }
@@ -134,5 +142,27 @@ public final class AviaTerraCore extends JavaPlugin {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt(); // Si es interrumpido, detenemos el hilo
         }
+    }
+
+    private void startMOTD(){
+        Random random = new Random();
+        new BukkitRunnable() {
+            public void run() {
+                int randomInt = random.nextInt(LIST_MOTD.size());
+
+                Gradient xb = new Gradient("XB", 'l')
+                        .addGradient(new Color(75, 47, 222), 1);
+//                        .addGradient(new Color(152, 119, 201), 1);
+                Gradient xt = new Gradient("XT", 'l')
+                        .addGradient(new Color(255, 140, 0), 1);
+//                        .addGradient(new Color(255, 120, 0), 1);
+//                Gradient message = new Gradient(LIST_MOTD.get(randomInt))
+//                        .addGradient(new Color(255, 100, 0), 1)
+//                        .addGradient(new Color(255, 110, 10), 1);
+                getServer().setMotd(String.format("§6§l%s§r  §6%s \n§1%s", xb, LIST_MOTD.get(randomInt), xt));
+
+
+            }
+        }.runTaskTimer(this, 20L, 20L);
     }
 }

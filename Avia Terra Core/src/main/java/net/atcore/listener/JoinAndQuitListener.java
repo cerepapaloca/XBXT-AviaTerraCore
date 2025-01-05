@@ -12,6 +12,7 @@ import net.atcore.security.Login.model.LimboData;
 import net.atcore.security.Login.model.LoginData;
 import net.atcore.security.Login.LoginManager;
 import net.atcore.security.SecuritySection;
+import net.atcore.utils.GlobalUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -22,6 +23,7 @@ import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.List;
 import java.util.Objects;
@@ -57,10 +59,18 @@ public class JoinAndQuitListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onJoin(PlayerJoinEvent event) {
-        onEnteringServer(event.getPlayer());
+        Player player = event.getPlayer();
         event.setJoinMessage(ChatColor.translateAlternateColorCodes('&',MessagesManager.addProprieties(String.format(Message.EVENT_JOIN.getMessage(),
                         event.getPlayer().getName()),
                 MessagesType.INFO, false, false)));
+
+        onEnteringServer(player);
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                GlobalUtils.addRangeVote(player);
+            }
+        }.runTaskLater(AviaTerraCore.getInstance(), 20L*2);
     }
 
     @EventHandler

@@ -1,18 +1,15 @@
 package net.atcore.data;
 
-import java.io.File;
-import java.io.IOException;
-
-import org.bukkit.Bukkit;
+import lombok.Getter;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import lombok.Getter;
+import java.io.File;
+import java.io.IOException;
 
 @Getter
 @SuppressWarnings("ResultOfMethodCallIgnored")
 public abstract class FileYaml extends net.atcore.data.File {
-
 
     protected FileConfiguration fileYaml = null;
     protected final boolean forceLoad;
@@ -44,6 +41,7 @@ public abstract class FileYaml extends net.atcore.data.File {
      */
 
     protected void loadConfig() {
+        if (fileYaml == null) reloadFile();
         fileYaml = YamlConfiguration.loadConfiguration(file);
     }
 

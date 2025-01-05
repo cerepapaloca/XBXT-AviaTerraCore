@@ -16,6 +16,7 @@ import net.atcore.utils.GlobalUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -146,6 +147,11 @@ public final class LoginManager {
         loginData.getLimbo().restorePlayer(player);
         player.updateCommands();
         player.playSound(player, Sound.ENTITY_PLAYER_LEVELUP, 0.4f, 1);
+        new BukkitRunnable() {
+            public void run() {
+                GlobalUtils.addRangeVote(player);
+            }
+        }.runTaskLater(AviaTerraCore.getInstance(), 20*3);
         return loginData;
     }
 

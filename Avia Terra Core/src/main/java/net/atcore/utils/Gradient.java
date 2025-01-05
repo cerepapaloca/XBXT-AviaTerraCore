@@ -25,8 +25,11 @@ import java.util.List;
 @SuppressWarnings("unused")
 public class Gradient {
 
-    public Gradient(String text) {
+    private final char[] colors;
+
+    public Gradient(String text, char... colors) {
         this.text = text;
+        this.colors = colors;
     }
 
     private static class GradientSegment {
@@ -68,9 +71,11 @@ public class Gradient {
     public String getText(){
         int length = text.length();
         StringBuilder gradientText = new StringBuilder();
+        StringBuilder coloredText = new StringBuilder();
+        for (char c : colors) coloredText.append('&').append(c);
         for (int i = 0; i < length; i++) {
             float ratio = (float) i / (length - 1);
-            gradientText.append(ChatColor.of(GlobalUtils.javaColorToStringHex(getColor(ratio)))).append(text.charAt(i));
+            gradientText.append(ChatColor.of(GlobalUtils.javaColorToStringHex(getColor(ratio)))).append(coloredText).append(text.charAt(i));
         }
         return ChatColor.translateAlternateColorCodes('&', gradientText.toString());
     }

@@ -18,6 +18,7 @@ public class ModerationPlayer extends AbstractAviaTerraPlayer {
 
     private int sanctionsChat = 1;//por circunstancias matemáticas tiene que ser 1
     private double pointChat = ChatModeration.MAX_PUNTOS;
+    private long lastChat = System.currentTimeMillis();
     private boolean isFreeze = false;
     private List<UUID> manipulatorInventoryPlayer = new ArrayList<>();
     private UUID manipulatedInventoryPlayer = null;
