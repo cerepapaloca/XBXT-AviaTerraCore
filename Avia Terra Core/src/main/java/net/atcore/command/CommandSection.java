@@ -34,7 +34,8 @@ public class CommandSection implements Section {
                 new LinkCommand(),
                 new TellCommand(),
                 new HomeCommand(),
-                new TpaCommand()
+                new TpaCommand(),
+                new SayCommand()
         );
     }
 

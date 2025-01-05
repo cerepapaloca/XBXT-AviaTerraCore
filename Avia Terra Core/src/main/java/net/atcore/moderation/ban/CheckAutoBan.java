@@ -138,15 +138,14 @@ public class CheckAutoBan {
         if (!Config.isCheckAntiIllegalItems())return;
         if (player.isOp()) return;
 
-        boolean b = false;
         for (ItemStack item: inventory.getContents()){
             if (item == null) continue;
             if (ILEGAL_ITEMS.contains(item.getType())){
                 item.setType(Material.AIR);
-                b = true;
             }
-        }
+        }/*
         if (!b)return;
+
         AviaTerraCore.getInstance().enqueueTaskAsynchronously( () -> {
             try {
                 ModerationSection.getBanManager().banPlayer(player, Message.BAN_AUTO_BAN_ILEGAL_ITEMS.getMessage(),
@@ -156,6 +155,6 @@ public class CheckAutoBan {
                 throw new RuntimeException(e);
             }
         });
-        player.getInventory().clear();
+        player.getInventory().clear();*/
     }
 }

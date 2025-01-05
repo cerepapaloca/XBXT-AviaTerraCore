@@ -184,8 +184,7 @@ public final class MessagesManager {
                 .replace("|!>", colorMain)
                 .replace("`", "");
     }
-
-    /*Experimental*/
+    
     public static TextComponent addTextComponent(String s) {
         TextComponent finalText = new TextComponent();
         int end = 0;
@@ -237,10 +236,10 @@ public final class MessagesManager {
                 }
 
                 if (displayText == null) {
-                    throw new IllegalArgumentException("displayText is null");
+                    throw new IllegalArgumentException("displayText is null. Sintaxis errónea");
                 }
                 if (propertiesText == null) {
-                    throw new IllegalArgumentException("propertiesText is null");
+                    throw new IllegalArgumentException("propertiesText is null. Sintaxis errónea");
                 }
                 switch (sb.toString().replace(" ", "")) {
                     case "hover"-> {
@@ -251,14 +250,21 @@ public final class MessagesManager {
                         finalText.addExtra(textComponent);
                     }
                     case "click"->{
+//                        OPEN_URL,
+//                                OPEN_FILE,
+//                                RUN_COMMAND,
+//                                SUGGEST_COMMAND,
+//                                CHANGE_PAGE,
+//                                COPY_TO_CLIPBOARD;
                         String[] split = propertiesText.split(":");
+                        if (split.length == 1) throw new IllegalArgumentException("Sintaxis errónea tiene que agregar ':' después de la ación");
                         TextComponent tc = new TextComponent(displayText);
                         tc.setClickEvent(new ClickEvent(ClickEvent.Action.valueOf(split[0].replace(" ", "").toUpperCase()), split[1]));
                         textComponent.setColor(ChatColor.getByChar(chartColor));
                         textComponent.addExtra(tc);
                         finalText.addExtra(textComponent);
                     }
-                    default -> throw new IllegalArgumentException();
+                    default -> throw new IllegalArgumentException(String.format("Argumento invalido '%s'. Tiene que ser click o hover",sb));
                 }
             }
         }

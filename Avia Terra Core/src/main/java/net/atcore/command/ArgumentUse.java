@@ -3,6 +3,7 @@ package net.atcore.command;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.atcore.utils.GlobalUtils;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
@@ -28,6 +29,7 @@ public class ArgumentUse {
 
     private final String command;
     private boolean isRequired = true;
+    private boolean isFinal = false;
 
     public ArgumentUse(@NotNull String s) {
         if (s.startsWith("/")){
@@ -43,6 +45,7 @@ public class ArgumentUse {
         private boolean note = false;
         private boolean useTime = false;
         private boolean especialTime = false;
+        private boolean isFinal = false;
         @NotNull
         private final ModeTabPlayers mode;
         private final boolean required;
@@ -67,6 +70,14 @@ public class ArgumentUse {
 
     private final List<Argument> args = new ArrayList<>();
 
+    public ArgumentUse addFinalArg(@NotNull String s) {
+        Argument arg = new Argument(isRequired, new String[]{s});
+        arg.isFinal = true;
+        isFinal = true;
+        args.add(arg);
+        return this;
+    }
+
     /**
      * Añades una lista de argumentos donde el jugador podrá autocompletar
      * @param arg Argumento/s
@@ -74,6 +85,12 @@ public class ArgumentUse {
 
     public ArgumentUse addArg(String... arg) {
         args.add(new Argument(isRequired, arg));
+        return this;
+    }
+
+    @SuppressWarnings("rawtypes")
+    public ArgumentUse addArg(Enum[] arg) {
+        args.add(new Argument(isRequired, CommandUtils.enumsToStrings(arg, true)));
         return this;
     }
 
@@ -144,7 +161,12 @@ public class ArgumentUse {
                 sbArgs.append(" | ").append(s);
             }
         }
-        return "<" + sbArgs + ">";
+        if (arg.isFinal) {
+            return "<" + sbArgs + "...";
+        }else {
+            return "<" + sbArgs + ">";
+        }
+
     }
 
     @Override
@@ -159,11 +181,14 @@ public class ArgumentUse {
 
     public List<String> onTab(String[] args) {
         int length = args.length;
+        if (isFinal){
+            return List.of(this.args.getFirst().getArg());
+        }
         try{
             if (length > getLength()) return List.of();
             Argument argument = getArg(length - 1);
             String lastArgString = args[length - 1];
-            if (argument.note) {
+            if (argument.note || argument.isFinal) {
                 return List.of(argument.arg);
             }
             if (argument.useTime) {

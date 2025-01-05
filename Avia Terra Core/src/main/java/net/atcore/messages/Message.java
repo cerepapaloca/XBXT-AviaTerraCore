@@ -172,6 +172,8 @@ public enum Message {
     COMMAND_HOME_MAX_HOME("command.home", "Solo se permite máximo 5 homes"),
     COMMAND_HOME_CLOSE_SPAWN("command.home", "Esta muy cercar de spawn te falta %s metros para hacer <|{click(suggest_command:/home)/home}|>"),
     COMMAND_HOME_IS_NOT_ALPHABETICAL("command.home", "el nombre del home tiene que comenzar con una letra"),
+    COMMAND_SAY_MISSING_ARGS("command.say", "Te falta el mensaje y o tipo de mensaje"),
+    COMMAND_SAY_TYPE_MESSAGE_ERROR("command.say", "El tipo de mensaje no existe"),
     MISC_KICK_UPPER("misc", "&c&m &r &c&m       &r  &4&lAviaKick&c  &m        &r &c&m \n\n&r"),
     MISC_KICK_LOWER("misc", "\n\n&m &r &c&m                               &r &c&m ")
     ;
