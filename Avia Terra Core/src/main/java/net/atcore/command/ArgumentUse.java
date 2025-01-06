@@ -1,13 +1,13 @@
 package net.atcore.command;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.atcore.utils.GlobalUtils;
+import lombok.Getter;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
-import lombok.Getter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 
 /**
@@ -181,34 +181,36 @@ public class ArgumentUse {
 
     public List<String> onTab(String[] args) {
         int length = args.length;
-        if (isFinal){
-            return List.of(this.args.getFirst().getArg());
-        }
         try{
-            if (length > getLength()) return List.of();
-            Argument argument = getArg(length - 1);
-            String lastArgString = args[length - 1];
-            if (argument.note || argument.isFinal) {
-                return List.of(argument.arg);
-            }
-            if (argument.useTime) {
-                return CommandUtils.listTabTime(lastArgString, true);
-            }
-            switch (argument.mode){
-                case NONE -> {
+            if (length > getLength()){
+                if (this.args.getLast().isFinal){
+                    return List.of(this.args.getLast().getArg());
+                }else {
                     return List.of();
                 }
+            }
+            Argument argument = getArg(length - 1);
+            String lastArgString = args[length - 1];
+            switch (argument.mode){
                 case NORMAL -> {
                     return null;
                 }
                 case ADVANCED -> {
                     return CommandUtils.tabForPlayer(lastArgString);
                 }
+                default -> {
+                    if (argument.note) {
+                        return List.of(argument.arg);
+                    }
+                    if (argument.useTime) {
+                        return CommandUtils.listTabTime(lastArgString, true);
+                    }
+                    return List.of(argument.arg);
+                }
             }
         }catch (IndexOutOfBoundsException e){
             return List.of();
         }
-        return List.of();
     }
 
     public int getLength(){

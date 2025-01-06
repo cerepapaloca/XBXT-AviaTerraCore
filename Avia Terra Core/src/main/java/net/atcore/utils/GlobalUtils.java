@@ -32,6 +32,8 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
+import static net.md_5.bungee.api.ChatColor.ALL_CODES;
+
 @SuppressWarnings("unused")
 @UtilityClass//Le añade static a todos los métodos y a las variables
 public final class GlobalUtils {

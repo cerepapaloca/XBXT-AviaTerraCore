@@ -32,9 +32,6 @@ public class PruebaCommand extends BaseCommand {
         for (String arg : args) {
             sb.append(arg).append(" ");
         }
-        TextComponent text = MessagesManager.addTextComponent(sb.toString());
-        text.setColor(ChatColor.of("#11ff11"));
-        sender.spigot().sendMessage(MessagesManager.addTextComponent(PREFIX));
 
     }
 }

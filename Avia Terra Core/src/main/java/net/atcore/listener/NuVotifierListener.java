@@ -25,6 +25,5 @@ public class NuVotifierListener implements Listener {
         }else {
             DataSection.getCacheVoteFile().saveData();
         }
-
     }
 }

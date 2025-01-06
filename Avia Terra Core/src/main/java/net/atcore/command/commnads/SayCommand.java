@@ -43,9 +43,9 @@ public class SayCommand extends BaseCommand {
             for (Player p : Bukkit.getOnlinePlayers()) {
                 MessagesManager.sendMessage(p, message.toString(), type);
             }
-            CommandUtils.executeForPlayer(sender, args[0], true, dataTemporalPlayer -> {
-                MessagesManager.sendMessage(dataTemporalPlayer.player(), message.toString(), type);
-            });
+            CommandUtils.executeForPlayer(sender, args[0], true, dataTemporalPlayer ->
+                    MessagesManager.sendMessage(dataTemporalPlayer.player(), message.toString(), type));
+            MessagesManager.sendMessage(sender,  message.toString(), type);
         }
     }
 }

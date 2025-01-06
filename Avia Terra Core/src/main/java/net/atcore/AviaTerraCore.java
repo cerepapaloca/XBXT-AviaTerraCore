@@ -18,6 +18,9 @@ import net.atcore.utils.Gradient;
 import net.atcore.utils.RegisterManager;
 import net.atcore.moderation.ModerationSection;
 import net.dv8tion.jda.api.JDA;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.TextReplacementConfig;
 import net.luckperms.api.LuckPerms;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -159,9 +162,7 @@ public final class AviaTerraCore extends JavaPlugin {
 //                Gradient message = new Gradient(LIST_MOTD.get(randomInt))
 //                        .addGradient(new Color(255, 100, 0), 1)
 //                        .addGradient(new Color(255, 110, 10), 1);
-                getServer().setMotd(String.format("§6§l%s§r  §6%s \n§1%s", xb, LIST_MOTD.get(randomInt), xt));
-
-
+                Bukkit.motd(Component.text(String.format("§6§l%s§r  §6%s \n§1%s", xb, LIST_MOTD.get(randomInt), xt)));
             }
         }.runTaskTimer(this, 20L, 20L);
     }

@@ -3,6 +3,8 @@ package net.atcore.messages;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Random;
+
 @Getter
 public enum Message {
     TEST_FINISHED("test", "La prueba ha finalizado"),
@@ -179,17 +181,26 @@ public enum Message {
     ;
     Message(String parent, String message) {
         this.parent = parent;
-        this.message = message;
+        this.message = new String[]{message};
     }
 
     private final String parent;
     @SuppressWarnings("NonFinalFieldInEnum")
     @Setter
-    private String message;
+    private String[] message;
+
+    public String getMessage() {
+        if (message.length == 1) {
+            return message[0];
+        }else {
+            Random r = new Random();
+            return message[r.nextInt(message.length)];
+        }
+    }
 
 
     @Override
     public String toString() {
-        return message;
+        return getMessage();
     }
 }

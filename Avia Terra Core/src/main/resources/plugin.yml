@@ -6,7 +6,9 @@ depend: [ProtocolLib, TAB, LuckPerms]
 prefix: AviaTerraCore
 authors: [Ceres, Vitah, EvaProject]
 description: Las bases del servidor
+folia-supported: true
 
+# noinspection YAMLSchemaValidation
 commands:
   tell:
     aliases:

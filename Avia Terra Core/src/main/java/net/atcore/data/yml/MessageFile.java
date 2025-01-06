@@ -1,7 +1,12 @@
 package net.atcore.data.yml;
 
 import net.atcore.data.FileYaml;
+import net.atcore.listener.NuVotifierListener;
 import net.atcore.messages.Message;
+
+import java.lang.reflect.Array;
+import java.util.Arrays;
+import java.util.List;
 
 public class MessageFile extends FileYaml {
     public MessageFile() {
@@ -18,8 +23,11 @@ public class MessageFile extends FileYaml {
                     .replaceFirst("-", "");
             String finalPath = message.getParent() + "." + path;
             String s = fileYaml.getString(finalPath);
+            List<String> messages = fileYaml.getStringList(finalPath);
             if (s != null) {
-                message.setMessage(s);
+                message.setMessage(new String[]{s});
+            }else if (!messages.isEmpty()) {
+                message.setMessage(messages.toArray(new String[0]));
             }else {
                 fileYaml.set(finalPath, message.getMessage());
             }
