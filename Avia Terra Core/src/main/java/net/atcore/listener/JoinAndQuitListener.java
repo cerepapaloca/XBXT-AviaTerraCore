@@ -2,7 +2,9 @@ package net.atcore.listener;
 
 import net.atcore.AviaTerraCore;
 import net.atcore.aviaterraplayer.AviaTerraPlayer;
+import net.atcore.command.commnads.KickCommand;
 import net.atcore.data.sql.DataBaseRegister;
+import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.MessagesType;
@@ -15,6 +17,7 @@ import net.atcore.security.SecuritySection;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -56,7 +59,7 @@ public class JoinAndQuitListener implements Listener {
                 MessagesType.INFO, false, false)));
     }
 
-    @EventHandler(priority = EventPriority.HIGH)
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         event.joinMessage(GlobalUtils.ChatColorLegacyToComponent(MessagesManager.addProprieties(
@@ -81,6 +84,9 @@ public class JoinAndQuitListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOW)
     public void onPreLogin(AsyncPlayerPreLoginEvent event) {
-        AntiTwoPlayer.checkTwoPlayer(event.getName());
+        if (AntiTwoPlayer.checkTwoPlayer(event.getName())){
+            event.setLoginResult(AsyncPlayerPreLoginEvent.Result.KICK_OTHER);
+            event.kickMessage(MessagesManager.applyFinalProprieties(Message.SECURITY_KICK_ANTI_TWO_PLAYER.getMessage(), MessagesType.KICK, CategoryMessages.LOGIN, false));
+        }
     }
 }

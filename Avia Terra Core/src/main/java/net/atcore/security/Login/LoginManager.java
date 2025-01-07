@@ -142,7 +142,7 @@ public final class LoginManager {
     public static @NotNull LoginData startPlaySessionCracked(@NotNull Player player){
         LoginData loginData = getDataLogin(player);
         SessionData sessionData = new SessionData(player, StateLogins.CRACKED);
-        sessionData.setEndTimeLogin(System.currentTimeMillis() + Config.getExpirationSession());
+        sessionData.setEndTimeLogin(Config.getExpirationSession());
         loginData.setSession(sessionData);
         loginData.getLimbo().restorePlayer(player);
         player.updateCommands();
@@ -229,12 +229,12 @@ public final class LoginManager {
                                     return true;// sesión válida para los cracked
                                 }
                             }
-                            if (limboMode) LimboManager.startSynchronizeLimboMode(player, ReasonLimbo.NO_SESSION);
+                            if (limboMode) LimboManager.startAsynchronouslyLimboMode(player, ReasonLimbo.NO_SESSION);
                         }else {
                             GlobalUtils.synchronizeKickPlayer(player, Message.LOGIN_KICK_ONLINE_MODE.getMessage());
                         }
                     }else {
-                        if (limboMode) LimboManager.startSynchronizeLimboMode(player, ReasonLimbo.NO_REGISTER);
+                        if (limboMode) LimboManager.startAsynchronouslyLimboMode(player, ReasonLimbo.NO_REGISTER);
                     }
                     loginData.setSession(null);
                     return false;
@@ -252,9 +252,9 @@ public final class LoginManager {
                     }else {
                         if (limboMode){
                             if (loginData.getRegister().getPasswordShaded() != null){// la cuenta premium tiene una contraseña?
-                                LimboManager.startSynchronizeLimboMode(player, ReasonLimbo.NO_SESSION);
+                                LimboManager.startAsynchronouslyLimboMode(player, ReasonLimbo.NO_SESSION);
                             }else {
-                                LimboManager.startSynchronizeLimboMode(player, ReasonLimbo.NO_REGISTER);
+                                LimboManager.startAsynchronouslyLimboMode(player, ReasonLimbo.NO_REGISTER);
                             }
                         }
                     }
@@ -267,10 +267,10 @@ public final class LoginManager {
                 }
             }
         }else {// Esto solo sucedería para los no premium
-            if (loginData.getRegister().getPasswordShaded() != null){// La cuenta premium tiene una contraseña?
-                LimboManager.startSynchronizeLimboMode(player, ReasonLimbo.NO_SESSION);
+            if (loginData.getRegister().getPasswordShaded() != null){
+                LimboManager.startAsynchronouslyLimboMode(player, ReasonLimbo.NO_SESSION);
             }else {
-                LimboManager.startSynchronizeLimboMode(player, ReasonLimbo.NO_REGISTER);
+                LimboManager.startAsynchronouslyLimboMode(player, ReasonLimbo.NO_REGISTER);
             }
             return false;
         }

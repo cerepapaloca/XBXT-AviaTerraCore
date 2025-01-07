@@ -240,10 +240,10 @@ public final class MessagesManager {
                 }
 
                 if (displayText == null) {
-                    throw new IllegalArgumentException("displayText is null. Sintaxis errónea");
+                    throw new IllegalArgumentException("displayText is null. Sintaxis errónea: " + s);
                 }
                 if (propertiesText == null) {
-                    throw new IllegalArgumentException("propertiesText is null. Sintaxis errónea");
+                    throw new IllegalArgumentException("propertiesText is null. Sintaxis errónea: " + s);
                 }
                 Builder subTextBuilder = Component.text();
                 switch (sb.toString().replace(" ", "")) {
@@ -473,8 +473,8 @@ public final class MessagesManager {
         final Title.Times times = Title.Times.times(Duration.ofMillis(20L *fadeIn), Duration.ofMillis(20L *stay), Duration.ofMillis(20L *fadeOut));
         // Using the times object this title will use 500ms to fade in, stay on screen for 3000ms and then fade out for 1000ms
         final Title t = Title.title(
-                LegacyComponentSerializer.legacy('§').deserialize(addProprieties(title, type, false, false)),
-                LegacyComponentSerializer.legacy('§').deserialize(addProprieties(subtitle, type, false, false)),
+                GlobalUtils.ChatColorLegacyToComponent(addProprieties(title, type, false, false)),
+                GlobalUtils.ChatColorLegacyToComponent(addProprieties(subtitle, type, false, false)),
                 times
         );
 

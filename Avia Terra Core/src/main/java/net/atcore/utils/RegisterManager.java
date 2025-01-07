@@ -54,13 +54,11 @@ public class RegisterManager {
                 throw new CommandException(command.getName() + " El comando no existe. tiene que añadirlo en plugin.yml");
             }
             CommandManager.COMMANDS_AVIA_TERRA.put(command.getName().toLowerCase(), command.getPermissions());
-            for (String s : pluginCommand.getAliases()){
+            for (String s : pluginCommand.getAliases()) {
                 CommandManager.COMMANDS_AVIA_TERRA.put(s.toLowerCase(), command.getPermissions());
             }
             if (!command.getPermissions().equals("*") && !command.getPermissions().equals("**")) {
                 pluginCommand.setPermission(AviaTerraCore.getInstance().getName().toLowerCase() + ".command." + command.getName());
-                //Permission permission = new Permission(AviaTerraCore.getInstance().getName().toLowerCase() + ".command." + command.getName());
-                //getServer().getPluginManager().addPermission(permission);
             }
             pluginCommand.setDescription(command.getDescription());
             pluginCommand.setUsage(CommandUtils.useToUseDisplay(command.getUsage().toString()));
@@ -68,17 +66,4 @@ public class RegisterManager {
             pluginCommand.setTabCompleter(CommandSection.getCommandHandler());
         }
     }
-    /*
-    public void register(@NotNull DataBaseMySql... database) {
-        DataSection.DATA_BASE.addAll(Arrays.asList(database));
-    }
-
-    public void register(@NotNull File... yaml) {
-        DataSection.FILES.addAll(Arrays.asList(yaml));
-    }
-
-    /*public void register(@NotNull BaseArmament... armament) {
-        ArmamentUtils.ARMAMENTS.addAll(Arrays.asList(armament));
-    }*/
-
 }

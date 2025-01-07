@@ -15,6 +15,8 @@ import net.atcore.security.Login.model.LimboData;
 import net.atcore.security.Login.model.LoginData;
 import net.atcore.security.Login.LoginManager;
 import net.atcore.security.SecuritySection;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 
 import java.util.HashMap;
@@ -122,17 +124,20 @@ public class PacketListenerManager {
 
                     // de texto a json
                     JsonObject jsonObject = JsonParser.parseString(originalJsonMessage).getAsJsonObject();
-
                     //cambiar el color en la parte extra
                     if (jsonObject.has("extra")) {
                         JsonArray extraArray = jsonObject.getAsJsonArray("extra");
 
                         //puede venir varios
                         for (int i = 0; i < extraArray.size(); i++) {
-                            JsonObject extraObject = extraArray.get(i).getAsJsonObject();
-                            if (extraObject.has("text")) {
-                                String extraText = extraObject.get("text").getAsString();
-                                extraObject.addProperty("text", MessagesType.INFO.getSecondColor() + extraText);
+                            try {
+                                JsonObject extraObject = extraArray.get(i).getAsJsonObject();
+                                if (extraObject.has("text")) {
+                                    String extraText = extraObject.get("text").getAsString();
+                                    extraObject.addProperty("text", MessagesType.INFO.getSecondColor() + extraText);
+                                }
+                            }catch (Exception ignored){
+
                             }
                         }
                     }

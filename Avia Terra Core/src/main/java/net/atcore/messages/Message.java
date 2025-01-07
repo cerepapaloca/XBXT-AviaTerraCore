@@ -24,6 +24,7 @@ public enum Message {
     LOGIN_KICK_KEY_ERROR("login", "Hubo problema con tu llave secreta vuelve a entrar al servidor. Si el problema persiste reinicie su launcher"),
     LOGIN_KICK_ONLINE_MODE("login", "El servidor entro en modo online"),
     LOGIN_KICK_UNKNOWN_STATE("login", "Vuelve a entrar, Hubo un problema con tu cuenta"),
+    LOGIN_KICK_ENTRY_LIMBO_ERROR("login", "Error al entrar al modo limbo mode, Por favor vuelve a entrar"),
     LOGIN_KICK_NO_REGISTER("login", "No estas registrado, vuelve a entrar al servidor"),
     LOGIN_START_PROTOCOL_LOG("login", "Iniciando login: <|%1$s|> para el jugador: <|%2$s|>"),
     LOGIN_LIMBO_INITIATED_BY_SESSION_CHAT("login", "Para Loguear utiliza el siguiente comando:\n <|/login <Contraseña>|>"),

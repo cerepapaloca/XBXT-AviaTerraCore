@@ -20,6 +20,7 @@ public class PlayerDataFile extends FileYaml {
         loadConfig();
         AviaTerraPlayer atp = AviaTerraPlayer.getPlayer(UUID.fromString(fileName.replace(".yml", "")));
         ConfigurationSection cs = fileYaml.getConfigurationSection("homes");
+        atp.setNameColor(fileYaml.getString("display-name"));
         if (cs == null) return;
         atp.getHomes().clear();
         for (String key : cs.getKeys(false)) {
@@ -35,7 +36,6 @@ public class PlayerDataFile extends FileYaml {
             if (world == null) world = Bukkit.getWorlds().getFirst();
             atp.getHomes().put(key, new Location(world ,x, y, z, yaw, pitch));
         }
-        atp.setNameColor(fileYaml.getString("display-name"));
     }
 
     @Override

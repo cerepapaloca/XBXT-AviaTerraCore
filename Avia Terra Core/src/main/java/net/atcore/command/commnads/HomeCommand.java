@@ -68,7 +68,7 @@ public class HomeCommand extends BaseTabCommand {
                                 MessagesManager.sendMessage(sender, Message.COMMAND_HOME_CONTAINS_POINT, MessagesType.ERROR);
                                 return;
                             }
-                            if (Character.isAlphabetic(args[0].charAt(0))) {
+                            if (!Character.isAlphabetic(args[0].charAt(0))) {
                                 MessagesManager.sendMessage(sender, Message.COMMAND_HOME_IS_NOT_ALPHABETICAL, MessagesType.ERROR);
                                 return;
                             }

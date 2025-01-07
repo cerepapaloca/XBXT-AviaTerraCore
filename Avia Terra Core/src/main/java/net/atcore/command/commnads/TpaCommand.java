@@ -68,8 +68,8 @@ public class TpaCommand extends BaseTabCommand {
                         }
                         if (player != null) {
                             AviaTerraPlayer atp = AviaTerraPlayer.getPlayer(player);
-                            MessagesManager.sendMessage(sender, String.format(Message.COMMAND_TPA_SEND.getMessage(), p.displayName()), MessagesType.SUCCESS);
-                            atp.sendMessage(String.format(Message.COMMAND_TPA_RECEIVE.getMessage(), p.displayName()), MessagesType.INFO);
+                            MessagesManager.sendMessage(sender, String.format(Message.COMMAND_TPA_SEND.getMessage(), p.getName()), MessagesType.SUCCESS);
+                            atp.sendMessage(String.format(Message.COMMAND_TPA_RECEIVE.getMessage(), p.getName()), MessagesType.INFO);
                             atp.getListTpa().add(new TpaRequest(p.getUniqueId(), System.currentTimeMillis() + 1000*60*5));
                         }else {
                             MessagesManager.sendMessage(sender, Message.COMMAND_GENERIC_PLAYER_NOT_FOUND, MessagesType.ERROR);

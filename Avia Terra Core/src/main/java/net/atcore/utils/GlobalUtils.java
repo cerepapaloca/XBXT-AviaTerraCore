@@ -370,7 +370,7 @@ public final class GlobalUtils {
 
     public boolean equalIp(@Nullable InetAddress ipA, @Nullable InetAddress ipB){
         if (ipA == null || ipB == null) return false;
-        return Objects.equals(ipA.getHostAddress().split(":")[0], Objects.requireNonNull(ipB.getHostAddress().split(":")[0]));
+        return ipA.equals(ipB);
     }
 
     /**

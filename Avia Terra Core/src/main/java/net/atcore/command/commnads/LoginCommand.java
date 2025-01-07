@@ -39,24 +39,20 @@ public class LoginCommand extends BaseCommand {
         if (sender instanceof Player player) {
             if (args.length > 0) {
                 LoginData loginData = LoginManager.getDataLogin(player);
+                if (loginData.getRegister().getStateLogins() == StateLogins.PREMIUM){
+                    MessagesManager.sendMessage(player, Message.COMMAND_REGISTER_IS_PREMIUM, MessagesType.ERROR);
+                    return;
+                }
                 if (loginData.getRegister().getPasswordShaded() != null) {
                     if (isUUID(args[0])){
                         if (TwoFactorAuth.checkCode(player, args[0])) {
-                            if (LoginManager.checkLoginIn(player)) {
-                                sendMessage(player, Message.COMMAND_LOGIN_ALREADY, MessagesType.ERROR);
-                                return;
-                            }
-                            startPlay(player);
+                            preStartPlay(player, loginData);
                         }else {
                             fail(player);
                         }
                     }else {
                         if (LoginManager.isEqualPassword(player.getName(), args[0])){
-                            if (LoginManager.checkLoginIn(player)) {
-                                sendMessage(player, Message.COMMAND_LOGIN_ALREADY, MessagesType.ERROR);
-                                return;
-                            }
-                            startPlay(player);
+                            preStartPlay(player, loginData);
                         }else{
                             fail(player);
                         }
@@ -70,12 +66,29 @@ public class LoginCommand extends BaseCommand {
         }
     }
 
+    private void preStartPlay(Player player, LoginData loginData) {
+        if (LoginManager.checkLoginIn(player)){
+            sendMessage(player, Message.COMMAND_LOGIN_ALREADY, MessagesType.ERROR);
+            return;
+        }
+        try {
+            if (!loginData.isLimboMode()) {
+                throw new RuntimeException("El jugador no esta modo limbo");
+            }else {
+                startPlay(player);
+            }
+        }catch (Exception e) {
+            GlobalUtils.kickPlayer(player, Message.LOGIN_KICK_GENERIC.getMessage());
+            MessagesManager.sendWaringException("Error al iniciar el modo play", e);
+        }
+
+    }
+
     private void startPlay(Player player) {
         startPlaySessionCracked(player);
         attempts.remove(player.getUniqueId());
         LoginManager.updateLoginDataBase(player.getName(), Objects.requireNonNull(player.getAddress()).getAddress());
-        player.updateCommands();
-        MessagesManager.sendTitle(player,Message.COMMAND_LOGIN_SUCCESSFUL_TITLE.getMessage(),
+        MessagesManager.sendTitle(player, Message.COMMAND_LOGIN_SUCCESSFUL_TITLE.getMessage(),
                 String.format(Message.COMMAND_LOGIN_SUCCESSFUL_SUBTITLE.getMessage(), player.getDisplayName()),
                 20, 20*3, 40, MessagesType.INFO);
         sendMessage(player, Message.COMMAND_LOGIN_SUCCESSFUL_CHAT, MessagesType.SUCCESS);
@@ -88,7 +101,7 @@ public class LoginCommand extends BaseCommand {
                 Message.COMMAND_LOGIN_BANNED.getMessage(),
                 1000*60*5,
                 ContextBan.GLOBAL,
-                "Servidor"));
+                Message.BAN_AUTHOR_AUTO_BAN.getMessage()));
         GlobalUtils.kickPlayer(player, Message.COMMAND_LOGIN_NO_EQUAL_PASSWORD.getMessage());
     }
 

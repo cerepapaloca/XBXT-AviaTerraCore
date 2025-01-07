@@ -28,7 +28,6 @@ public class DataSection implements Section {
 
     @Override
     public void enable() {
-
         MessageFile messageFile = new MessageFile();
         messageFile.reloadConfig();
         ConfigFile configFile = new ConfigFile();

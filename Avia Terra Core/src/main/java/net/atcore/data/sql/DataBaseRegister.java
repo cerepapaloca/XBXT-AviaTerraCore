@@ -13,6 +13,7 @@ import net.atcore.utils.GlobalUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import javax.mail.Session;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.sql.*;
@@ -31,7 +32,7 @@ public class DataBaseRegister extends DataBaseMySql {
         try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(sql);
              ResultSet resultSet = statement.executeQuery()) {
-            LoginManager.getDataLogin().forEach(dataLogin -> sessions.put(dataLogin.getRegister().getUuidCracked(),dataLogin.getSession()));//rescata las sesiones
+            for (LoginData loginData : LoginManager.getDataLogin()) sessions.put(loginData.getRegister().getUuidCracked(), loginData.getSession());
             LoginManager.clearDataLogin();//se limpia los datos
             while (resultSet.next()) {
                 String name = resultSet.getString("name");
@@ -63,13 +64,14 @@ public class DataBaseRegister extends DataBaseMySql {
                 SessionData session = sessions.get(uuid);// Se obtiene las sesiones para que no se tenga que loguear de nuevo
                 Player player = Bukkit.getPlayer(uuid);
 
-                if (session == null || player == null) continue;
+                if (session == null || player == null) {
+                    continue; //TODO: A cristian el hace kick por algún motivo
+                }
 
                 // Se modifica los datos de la session
                 session.setAddress(InetAddress.getByName(ipLogin));
                 session.setStartTimeLogin(lastLoginDate);
                 loginData.setSession(session);// añade la sesión rescatada
-
                 if (!LoginManager.checkLoginIn(player)){// Revisa si son validas las sesiones
                     GlobalUtils.synchronizeKickPlayer(player, Message.LOGIN_KICK_SESSION_ERROR.getMessage());
                 }

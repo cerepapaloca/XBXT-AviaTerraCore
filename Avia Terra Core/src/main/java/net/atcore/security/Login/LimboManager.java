@@ -23,10 +23,15 @@ public class LimboManager {
 
     public static final int LIMBO_TIME = 20*60;
 
-    public void startSynchronizeLimboMode(Player player, ReasonLimbo reasonLimbo) {
+    public void startAsynchronouslyLimboMode(Player player, ReasonLimbo reasonLimbo) {
         AviaTerraCore.getInstance().enqueueTaskAsynchronously(() -> {
-            if (player.isOnline() && !LoginManager.isLimboMode(player)){
-                LimboManager.createLimboMode(player, reasonLimbo);
+            try {
+                if (player.isOnline() && !LoginManager.isLimboMode(player)){
+                    LimboManager.createLimboMode(player, reasonLimbo);
+                }
+            }catch (Exception e){
+                MessagesManager.sendWaringException("Error al pasar al limbo mode", e);
+                GlobalUtils.synchronizeKickPlayer(player, Message.LOGIN_KICK_ENTRY_LIMBO_ERROR.getMessage());
             }
         });
     }
@@ -37,18 +42,18 @@ public class LimboManager {
         FileYaml file = DataSection.getCacheLimboFlies().getConfigFile(uuidString, false);
         LimboData limboData;
         if (file == null){// Si tiene un archivo eso quiere decir que no pudo aplicar las propiedades al usuario
-            limboData = newLimboData(player, loginData, uuidString);
+            limboData = newLimboData(player, loginData);
         }else {
             if (file instanceof CacheLimboFile cacheLimbo){
                 if (cacheLimbo.isRestored()){
-                    limboData = newLimboData(player, loginData, uuidString);
+                    limboData = newLimboData(player, loginData);
                 }else {
                     // Carga los datos del usuario
                     file.loadData();
                     limboData = loginData.getLimbo();
                 }
             }else {
-                limboData = newLimboData(player, loginData, uuidString);
+                limboData = newLimboData(player, loginData);
             }
         }
 
@@ -74,7 +79,7 @@ public class LimboManager {
         });
     }
 
-    private @NotNull LimboData newLimboData(Player player, LoginData loginData, String uuidString) {
+    private @NotNull LimboData newLimboData(Player player, LoginData loginData) {
         LimboData limboData;
         limboData = new LimboData(player.getGameMode(),
                 player.getInventory().getContents(),
@@ -83,7 +88,7 @@ public class LimboManager {
                 player.getLevel());
         loginData.setLimbo(limboData);
         // Se guarda los datos cuando sé crea el limboData esto es solo por si hubo problema grave con el servidor
-        CacheLimboFile limboFile = (CacheLimboFile) DataSection.getCacheLimboFlies().registerConfigFile(uuidString);
+        CacheLimboFile limboFile = (CacheLimboFile) DataSection.getCacheLimboFlies().registerConfigFile(player.getUniqueId().toString());
         limboFile.saveData();
         limboFile.setRestored(false);
 

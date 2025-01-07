@@ -14,6 +14,7 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.jetbrains.annotations.Contract;
 
 import java.util.ArrayList;
@@ -78,6 +79,25 @@ public class AviaTerraPlayer {
 
     public void joinEvent(Player player) {
         AviaTerraCore.getInstance().enqueueTaskAsynchronously(() -> {
+            boolean b1 = true;
+            boolean b2 = true;
+            for (int i = 32; i > 4; i--) {
+                if (!b1 && !b2) return;
+                if (b1){
+                    if (player.hasPermission(AviaTerraCore.getInstance().getName().toLowerCase() + ".simulationdistance." + i)) {
+                        player.setSimulationDistance(i);
+                        b1 = false;
+                    }
+                }
+
+                if (b2){
+                    if (player.hasPermission(AviaTerraCore.getInstance().getName().toLowerCase() + ".viewdistance." + i)) {
+                        player.setViewDistance(i);
+                        b2 = false;
+                    }
+                }
+            }
+
             playerDataFile.loadData();
             Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> {
                 if (nameColor != null) player.displayName(GlobalUtils.ChatColorLegacyToComponent(nameColor));
