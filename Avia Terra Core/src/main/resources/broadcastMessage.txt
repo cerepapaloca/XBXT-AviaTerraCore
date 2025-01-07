@@ -1,0 +1,2 @@
+Buenos Dias tonoto
+Clic [{click(run_command:/kill)aqui}] para ser <|mejor|> persona

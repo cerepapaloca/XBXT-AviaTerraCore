@@ -113,7 +113,7 @@ public class AviaTerraCommand extends BaseTabCommand {
                 sendMessage(sender,"Todas los tags de rango ya no son validas y comenzara su eliminación", MessagesType.INFO);
                 DataSection.getConfigFile().saveData();
             }
-            case "tiempodesesion" -> {
+            case "tiempodesession" -> {
                 if (args.length >= 2) {
                     try {
                         Config.setExpirationSession(CommandUtils.StringToMilliseconds(args[1], true));
@@ -149,25 +149,35 @@ public class AviaTerraCommand extends BaseTabCommand {
                     }else{
                         Config.setAntiBot(false);
                         sendMessage(sender,"AntiBot <|Desactivado|>", MessagesType.INFO);
-                        sendMessage(sender,"****************************", MessagesType.WARNING);
-                        sendMessage(sender,"DESACTIVAR SOLO PARA PRUEBAS", MessagesType.WARNING);
-                        sendMessage(sender,"****************************", MessagesType.WARNING);
                     }
                 }else{
                     sendMessage(sender,"El sistema antiBot esta <|" + CommandUtils.booleanToString(Config.isAntiBot()) + "|>", MessagesType.INFO);
                 }
                 DataSection.getConfigFile().saveData();
             }
+            case "autoban" -> {
+                if (args.length >= 2) {
+                    if (CommandUtils.isTrueOrFalse(args[1])){
+                        Config.setAntiBot(true);
+                        sendMessage(sender,"autoBan <|Activado|>", MessagesType.INFO);
+                    }else{
+                        Config.setAntiBot(false);
+                        sendMessage(sender,"autoBan <|Desactivado|>", MessagesType.INFO);
+                    }
+                }else{
+                    sendMessage(sender,"El sistema autoBan esta <|" + CommandUtils.booleanToString(Config.isAntiBot()) + "|>", MessagesType.INFO);
+                }
+            }
         }
     }
 
     @Override
     public List<String> onTab(CommandSender sender, String[] args) {
-        String[] argsRoot = new String[]{"antiBot","reload", "antiOp", "antiIlegalItems", "serverMode", "checkBanPorIp", "purgaRangos","tiempoDeSesion", "levelModerationChat"};
+        String[] argsRoot = new String[]{"antiBot","reload", "antiOp", "antiIlegalItems", "serverMode", "checkBanPorIp", "purgaRangos","tiempoDeSession", "levelModerationChat", "autoBan"};
         if (args.length >= 2) {
             switch (args[0].toLowerCase().replace("_","")) {
-                case "antiop", "antiilegalitems", "checkbanporip", "antiBot" -> {
-                    return CommandUtils.listTab(args[1], new String[]{"true", "false"});
+                case "antiop", "antiilegalitems", "checkbanporip", "antiBot", "autban" -> {
+                    return CommandUtils.listTab(args[1], "true", "false");
                 }
                 case "servermode" -> {
                     return CommandUtils.listTab(args[1], CommandUtils.enumsToStrings(ServerMode.values()));

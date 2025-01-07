@@ -2,7 +2,6 @@ package net.atcore.inventory;
 
 import lombok.experimental.UtilityClass;
 import net.atcore.utils.GlobalUtils;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
@@ -29,8 +28,8 @@ public class InventoryUtils {
         ItemStack item = new ItemStack(material, amount);
         ItemMeta meta = item.getItemMeta();
         assert meta != null;
-        meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', name));
-        if (lore != null) meta.setLore(GlobalUtils.StringToLoreString(lore, true));
+        meta.displayName(GlobalUtils.ChatColorLegacyToComponent(name));
+        if (lore != null) meta.lore(GlobalUtils.stringToLoreComponent(lore, true));
         for (ItemFlag flag : ItemFlag.values()) {
             meta.addItemFlags(flag);
         }

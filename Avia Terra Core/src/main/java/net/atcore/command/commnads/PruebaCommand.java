@@ -28,10 +28,5 @@ public class PruebaCommand extends BaseCommand {
     @Override
     public void execute(CommandSender sender, String[] args) {
         sendMessage(sender, "Hola Mundo!", MessagesType.SUCCESS);
-        StringBuilder sb = new StringBuilder();
-        for (String arg : args) {
-            sb.append(arg).append(" ");
-        }
-
     }
 }

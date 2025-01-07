@@ -53,7 +53,7 @@ public abstract class BaseMagazine extends BaseArmament implements Compartment {
             for (String ammoName : ArmamentUtils.stringToList(stringAmmo)) AmmoBaseList.add(ArmamentUtils.getAmmo(ammoName));
             String finalLore = getFinalLore(setLore, AmmoBaseList);
             if (setLore){
-                meta.setLore(GlobalUtils.StringToLoreString(MessagesManager.addProprieties(finalLore, null, false, false), true));
+                meta.lore(GlobalUtils.stringToLoreComponent(finalLore, true));
                 item.setItemMeta(meta);
             }
             return finalLore;
@@ -86,8 +86,7 @@ public abstract class BaseMagazine extends BaseArmament implements Compartment {
             }
         }
 
-        String finalLore = loreCargador + (amountAmmo > 0 ? loreAmmo.toString() : "");
-        return finalLore;
+        return loreCargador + (amountAmmo > 0 ? loreAmmo.toString() : "");
     }
 
     private static HashMap<UUID, BukkitTask> reloadTask = new HashMap<>();
@@ -125,7 +124,7 @@ public abstract class BaseMagazine extends BaseArmament implements Compartment {
                             return;
                         }
                     }
-                    player.sendTitle("", ChatColor.RED + "Recargado Cancelada", 0, 0,30);
+                    MessagesManager.sendTitle(player,"", "Recargado Cancelada", 0, 0,30, MessagesType.ERROR);
                     player.removePotionEffect(PotionEffectType.SLOWNESS);
                     reloadTask.remove(player.getUniqueId());
                     cancel();
@@ -163,13 +162,13 @@ public abstract class BaseMagazine extends BaseArmament implements Compartment {
                 return;
             }
             reloadTask.get(player.getUniqueId()).cancel();
-            player.sendTitle("", ChatColor.GREEN + "Recargado Completada", 0, 0,30);
+            MessagesManager.sendTitle(player,"", "Recargado Completada", 0, 0,30, MessagesType.SUCCESS);
             player.removePotionEffect(PotionEffectType.SLOWNESS);
             reloadTask.remove(player.getUniqueId());
             player.getWorld().playSound(player.getLocation(), Sound.ITEM_ARMOR_EQUIP_IRON, SoundCategory.PLAYERS, 1, 1);
         }else{
             reloadTask.get(player.getUniqueId()).cancel();
-            player.sendTitle("", ChatColor.RED + "Recargado Cancelada", 0, 0,30);
+            MessagesManager.sendTitle(player,"", "Recargado Cancelada", 0, 0,30, MessagesType.SUCCESS);
             player.removePotionEffect(PotionEffectType.SLOWNESS);
             reloadTask.remove(player.getUniqueId());
         }

@@ -10,6 +10,8 @@ import net.atcore.inventory.InventorySection;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.MessagesType;
 import net.atcore.utils.GlobalUtils;
+import net.kyori.adventure.text.Component;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Contract;
@@ -31,7 +33,7 @@ public class AviaTerraPlayer {
         this.uuid = player.getUniqueId();
         AviaTerraCore.getInstance().enqueueTaskAsynchronously(() -> {
             this.playerDataFile = (PlayerDataFile) DataSection.getPlayersData().getConfigFile(uuid.toString(), true);
-            playerDataFile.loadData();
+            joinEvent(player);
         });
     }
 
@@ -42,6 +44,7 @@ public class AviaTerraPlayer {
     private final UUID uuid;
     private final List<TpaCommand.TpaRequest> ListTpa = new ArrayList<>();
     private final HashMap<String, Location> homes = new HashMap<>();
+    private String nameColor = null;
     private PlayerDataFile playerDataFile;
 
     private InventorySection inventorySection = null;
@@ -70,6 +73,16 @@ public class AviaTerraPlayer {
         if (!AVIA_TERRA_PLAYERS.containsKey(player.getUniqueId())){
             AVIA_TERRA_PLAYERS.put(player.getUniqueId(), new AviaTerraPlayer(player));
         }
+        AVIA_TERRA_PLAYERS.get(player.getUniqueId()).joinEvent(player);
+    }
+
+    public void joinEvent(Player player) {
+        AviaTerraCore.getInstance().enqueueTaskAsynchronously(() -> {
+            playerDataFile.loadData();
+            Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> {
+                if (nameColor != null) player.displayName(GlobalUtils.ChatColorLegacyToComponent(nameColor));
+            });
+        });
     }
 
 }

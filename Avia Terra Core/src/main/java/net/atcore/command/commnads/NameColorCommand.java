@@ -1,20 +1,19 @@
 package net.atcore.command.commnads;
 
+import net.atcore.aviaterraplayer.AviaTerraPlayer;
 import net.atcore.command.ArgumentUse;
 import net.atcore.command.BaseTabCommand;
-import net.atcore.command.CommandSection;
 import net.atcore.command.CommandUtils;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.MessagesType;
+import net.atcore.utils.GlobalUtils;
+import net.kyori.adventure.text.Component;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.stream.Collectors;
 
 public class NameColorCommand extends BaseTabCommand {
 
@@ -22,7 +21,8 @@ public class NameColorCommand extends BaseTabCommand {
     private final List<String> colorOptions;
     private final List<String> styleOptions;
 
-    NameColorCommand() {
+    public NameColorCommand() {
+        //noinspection deprecation
         super("nameColor",
                 new ArgumentUse("nameColor").addArg(ChatColor.values()),
                 "Puedes modificar el color de tu nombre"
@@ -47,6 +47,11 @@ public class NameColorCommand extends BaseTabCommand {
         if (!colorOptions.contains(colorName)) {
             MessagesManager.sendMessage(sender, "Estos colores no existe", MessagesType.ERROR);
             return;
+        }else if (colorName.equalsIgnoreCase("reset")){
+            AviaTerraPlayer atp = AviaTerraPlayer.getPlayer(player);
+            atp.setNameColor(player.getName());
+            atp.getPlayerDataFile().saveData();
+            player.displayName(Component.text(player.getName()));
         }
 
         String colorCode = getColorCode(colorName);
@@ -61,7 +66,11 @@ public class NameColorCommand extends BaseTabCommand {
 
         nameBuilder.append(player.getName());
         String displayNameString = nameBuilder.toString();
-        player.setDisplayName(displayNameString);
+        Component component = GlobalUtils.ChatColorLegacyToComponent(displayNameString);
+        AviaTerraPlayer atp = AviaTerraPlayer.getPlayer(player);
+        atp.setNameColor(displayNameString);
+        atp.getPlayerDataFile().saveData();
+        player.displayName(component);
     }
 
     @Override
@@ -75,11 +84,11 @@ public class NameColorCommand extends BaseTabCommand {
     }
 
     public List<String> getColorOptions() {
-        return List.of("black", "dark_blue", "dark_green", "dark_aqua", "dark_red", "dark_purple", "gold", "gray", "dark_gray", "blue", "green", "aqua", "red", "light_purple", "yellow", "white", "gradient_fire", "gradient_sky", "gradient_green", "gradient_pink", "gradient_silver", "gradient_red", "gradient_aqua", "gradient_retro");
+        return List.of("black", "dark_blue", "dark_green", "dark_aqua", "dark_red", "dark_purple", "gold", "gray", "dark_gray", "blue", "green", "aqua", "red", "light_purple", "yellow", "white", "gradient_fire", "gradient_sky", "gradient_green", "gradient_pink", "gradient_silver", "gradient_red", "gradient_aqua", "gradient_retro", "reset");
     }
 
     public List<String> getStyleOptions() {
-        return List.of("bold", "italic", "underline", "strikethrough");
+        return List.of("bold", "italic", "underline", "strikethrough", "reset");
     }
 
     private String getColorCode(String colorName) {
@@ -108,7 +117,7 @@ public class NameColorCommand extends BaseTabCommand {
             case "gradient_red" -> "<gradient:#BF0C1F:#DE4E4E>";
             case "gradient_aqua" -> "<gradient:#4FF3EA:#00828D>";
             case "gradient_retro" -> "<gradient:#F34F4F:#65008D>";
-            default -> "&f";
+            default -> "";
         };
     }
 

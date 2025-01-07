@@ -34,6 +34,7 @@ import java.util.Random;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import static net.atcore.messages.MessagesManager.addTextComponent;
 import static net.atcore.messages.MessagesManager.sendMessageConsole;
 import static net.atcore.utils.RegisterManager.register;
 
@@ -44,6 +45,7 @@ public final class AviaTerraCore extends JavaPlugin {
 
     public static final String TOKEN_BOT = "MTI5MTUzODM1MjY0NjEzMTc3NA.GDwtcq.azwlvX6fWKbusXk8sOyzRMK78Qe9CwbHy_pmWk";
     public static final List<String> LIST_MOTD = new ArrayList<>();
+    public static final List<String> LIST_BROADCAST = new ArrayList<>();
     public static JDA jda;
     @Getter private static LuckPerms lp;
     @Getter private static MojangResolver resolver;
@@ -81,6 +83,7 @@ public final class AviaTerraCore extends JavaPlugin {
                 new ArmamentSection()
         );
         startMOTD();
+        startBroadcast();
         isStarting = false;
         messageOn(timeCurrent);
     }
@@ -147,22 +150,24 @@ public final class AviaTerraCore extends JavaPlugin {
         }
     }
 
+    private void startBroadcast(){
+        Random random = new Random();
+        new BukkitRunnable() {
+            public void run() {
+                int randomInt = random.nextInt(LIST_BROADCAST.size());
+                Bukkit.broadcast(MessagesManager.applyFinalProprieties(LIST_BROADCAST.get(randomInt), MessagesType.INFO, CategoryMessages.PRIVATE, true));
+            }
+        }.runTaskTimer(this, 20*60*5L, 20*60*5L);
+    }
+
     private void startMOTD(){
         Random random = new Random();
         new BukkitRunnable() {
             public void run() {
                 int randomInt = random.nextInt(LIST_MOTD.size());
-
-                Gradient xb = new Gradient("XB", 'l')
-                        .addGradient(new Color(75, 47, 222), 1);
-//                        .addGradient(new Color(152, 119, 201), 1);
-                Gradient xt = new Gradient("XT", 'l')
-                        .addGradient(new Color(255, 140, 0), 1);
-//                        .addGradient(new Color(255, 120, 0), 1);
-//                Gradient message = new Gradient(LIST_MOTD.get(randomInt))
-//                        .addGradient(new Color(255, 100, 0), 1)
-//                        .addGradient(new Color(255, 110, 10), 1);
-                Bukkit.motd(Component.text(String.format("§6§l%s§r  §6%s \n§1%s", xb, LIST_MOTD.get(randomInt), xt)));
+                Gradient xb = new Gradient("XB", 'l').addGradient(new Color(75, 47, 222), 1);
+                Gradient xt = new Gradient("XT", 'l').addGradient(new Color(255, 140, 0), 1);
+                Bukkit.motd(addTextComponent(String.format("§6§l%s§r  §6%s \n§1%s", xb, LIST_MOTD.get(randomInt), xt)));
             }
         }.runTaskTimer(this, 20L, 20L);
     }

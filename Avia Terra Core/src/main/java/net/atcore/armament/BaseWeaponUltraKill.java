@@ -41,6 +41,7 @@ public abstract class BaseWeaponUltraKill extends BaseWeapon {
     private final int reloadDelay;
     private final int maxAmmo;
 
+    @SuppressWarnings("deprecation")
     @Override
     public void processShoot(Player player) {
         ItemStack item = player.getInventory().getItemInMainHand();
@@ -79,7 +80,7 @@ public abstract class BaseWeaponUltraKill extends BaseWeapon {
     public void updateLore(ItemStack itemStack, ItemStack itemAuxiliar){
         ItemMeta meta = itemStack.getItemMeta();
         assert meta != null;
-        meta.setLore(GlobalUtils.StringToLoreString(MessagesManager.addProprieties(String.format("""
+        meta.lore(GlobalUtils.stringToLoreComponent(String.format("""
                 Daño: <|%s|>
                 Presión: <|%s|>
                 Munición: <|%s|>
@@ -89,7 +90,7 @@ public abstract class BaseWeaponUltraKill extends BaseWeapon {
                 (100 - vague) + "%",
                 GlobalUtils.getPersistenData(itemStack,"AmountAmmo", PersistentDataType.INTEGER),
                 maxDistance
-        ), null, false, false), true));
+        ), true));
         itemStack.setItemMeta(meta);
     }
 }

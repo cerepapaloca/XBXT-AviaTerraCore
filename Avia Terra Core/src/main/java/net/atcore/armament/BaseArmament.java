@@ -1,8 +1,13 @@
 package net.atcore.armament;
 
-import java.awt.Color;
-import java.util.List;
-
+import lombok.Getter;
+import lombok.Setter;
+import net.atcore.AviaTerraCore;
+import net.atcore.messages.CategoryMessages;
+import net.atcore.messages.MessagesManager;
+import net.atcore.messages.MessagesType;
+import net.atcore.utils.GlobalUtils;
+import net.atcore.utils.Gradient;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -10,11 +15,8 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.Nullable;
 
-import lombok.Getter;
-import lombok.Setter;
-import net.atcore.AviaTerraCore;
-import net.atcore.utils.GlobalUtils;
-import net.atcore.utils.Gradient;
+import java.awt.*;
+import java.util.List;
 
 @Getter
 @Setter
@@ -29,7 +31,7 @@ public abstract class BaseArmament {
         Gradient gradient = new Gradient(displayName)
                 .addGradient(new Color(0xbc,0xbc,0xbc), 1)
                 .addGradient(new Color(0x77,0x77,0x77), 1);
-        meta.setDisplayName(gradient.toString());
+        meta.displayName(MessagesManager.applyFinalProprieties(gradient.toString(), MessagesType.ERROR, CategoryMessages.PRIVATE, false));
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);//se oculta datos del item para que no se vea feo
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);

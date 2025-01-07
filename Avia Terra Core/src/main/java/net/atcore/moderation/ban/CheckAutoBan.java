@@ -20,6 +20,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
+import static net.atcore.Config.*;
 import static net.atcore.messages.MessagesManager.sendMessageConsole;
 import static org.bukkit.Material.*;
 
@@ -33,6 +34,7 @@ public class CheckAutoBan {
     private static final ArrayList<Player> ChatBotTime = new ArrayList<>();
 
     public static void checkAutoBanChat(Player player, String message) {
+        if (!isAutoBan()) return;
         try {
             long currentTime = System.currentTimeMillis();
             if (Objects.equals(lastMessage, message)){
@@ -92,6 +94,7 @@ public class CheckAutoBan {
     }
 
     public static void checkDupe(@NotNull Player player, Inventory inventory) {
+        if (!isAutoBan()) return;
         new BukkitRunnable(){
             public void run() {
                 Map<String, Integer> itemCounts = new HashMap<>();
@@ -137,13 +140,15 @@ public class CheckAutoBan {
     public static void checkAntiIlegalItems(Player player ,Inventory inventory) {
         if (!Config.isCheckAntiIllegalItems())return;
         if (player.isOp()) return;
-
+        boolean b = false;
         for (ItemStack item: inventory.getContents()){
             if (item == null) continue;
             if (ILEGAL_ITEMS.contains(item.getType())){
-                item.setType(Material.AIR);
+                item.setAmount(0);
+                b = true;
             }
-        }/*
+        }
+        if (!isAutoBan()) return;
         if (!b)return;
 
         AviaTerraCore.getInstance().enqueueTaskAsynchronously( () -> {
@@ -155,6 +160,6 @@ public class CheckAutoBan {
                 throw new RuntimeException(e);
             }
         });
-        player.getInventory().clear();*/
+        player.getInventory().clear();
     }
 }

@@ -20,7 +20,8 @@ public class ListenerSection implements Section {
                 new InventoryListener(),
                 new JoinAndQuitListener(),
                 new PlayerListener(),
-                new NuVotifierListener()
+                new NuVotifierListener(),
+                new DeathListener()
         );
         new BukkitRunnable() {
             @Override

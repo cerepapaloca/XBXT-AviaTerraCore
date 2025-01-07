@@ -1,21 +1,43 @@
 package net.atcore.data.yml;
 
 import net.atcore.data.FileYaml;
-import net.atcore.listener.NuVotifierListener;
 import net.atcore.messages.Message;
+import org.bukkit.entity.EntityType;
 
-import java.lang.reflect.Array;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class MessageFile extends FileYaml {
     public MessageFile() {
         super("message", null, false, true);
     }
 
+    public static final HashMap<EntityType, List<String>> MESSAGES_ENTITY = new HashMap<>();
+
     @Override
     public void loadData() {
         loadConfig();
+        EnumSet<EntityType> allEntityTypes = EnumSet.allOf(EntityType.class);
+
+        // Filtrar las entidades hostiles
+        EnumSet<EntityType> hostileEntities = allEntityTypes.stream()
+                .filter(type -> type.getEntityClass() != null && (org.bukkit.entity.Monster.class.isAssignableFrom(type.getEntityClass()) ||
+                        org.bukkit.entity.Golem.class.isAssignableFrom(type.getEntityClass())))
+                .collect(Collectors.toCollection(() -> EnumSet.noneOf(EntityType.class)));
+        for (EntityType entityType : hostileEntities) {
+            String path = "death-cause.entity." + entityType.name().toLowerCase().replace("_", "-");
+            List<String> messages = fileYaml.getStringList(path);
+            String message = fileYaml.getString(path);
+            if (!messages.isEmpty()) {
+                MESSAGES_ENTITY.put(entityType, List.copyOf(messages));
+            }else if (message != null) {
+                MESSAGES_ENTITY.put(entityType, List.of(message));
+            }else {
+                fileYaml.set(path, Message.DEATH_CAUSE_ENTITY_ATTACK.getMessage());
+                MESSAGES_ENTITY.put(entityType, List.of(Message.DEATH_CAUSE_ENTITY_ATTACK.getMessage()));
+            }
+        }
+
         for (Message message : Message.values()) {
             String path = message.name().toLowerCase()
                     .replace("_", "-")

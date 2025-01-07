@@ -2,31 +2,38 @@ package net.atcore.messages;
 
 import lombok.extern.slf4j.Slf4j;
 import net.atcore.AviaTerraCore;
+import net.atcore.data.yml.MessageFile;
+import net.atcore.utils.GlobalUtils;
 import net.atcore.utils.Gradient;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.TextComponent.Builder;
 import net.kyori.adventure.text.TextReplacementConfig;
+import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.Style;
+import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.title.Title;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.xml.transform.sax.SAXResult;
 import java.awt.*;
 import java.time.Duration;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 import static net.kyori.adventure.text.event.ClickEvent.*;
 
@@ -318,7 +325,7 @@ public final class MessagesManager {
         }
     }
 
-    private static TextComponent applyFinalProprieties(String message, @Nullable MessagesType type, CategoryMessages categoryMessages, boolean isPrefix) {
+    public static TextComponent applyFinalProprieties(String message, @Nullable MessagesType type, CategoryMessages categoryMessages, boolean isPrefix) {
         if (categoryMessages != CategoryMessages.PRIVATE) {
             sendMessageLogDiscord(type, categoryMessages, message);
         }
@@ -327,7 +334,7 @@ public final class MessagesManager {
         return textComponent;
     }
 
-    public static String addEndColor(String text) {
+    private static String addEndColor(String text) {
         StringBuilder sb = new StringBuilder();
         List<String> colorHex = new ArrayList<>();
         for (int i = 0; text.length() > i; i++) {
@@ -473,5 +480,49 @@ public final class MessagesManager {
 
         // Send the title, you can also use Audience#clearTitle() to remove the title at any time
         player.showTitle(t);
+    }
+
+    public static Component deathMessage(Player victim, LivingEntity killer, ItemStack stack, EntityDamageEvent.DamageCause cause) {
+        Random r = new Random();
+        String message;
+        if (killer != null && !(killer instanceof Player)) {
+            message = MessageFile.MESSAGES_ENTITY.get(killer.getType()).get(r.nextInt(MessageFile.MESSAGES_ENTITY.get(killer.getType()).size()));
+        }else {
+            message = Message.valueOf("DEATH_CAUSE_" + cause.name()).toString();
+        }
+        Builder tc = Component.text();
+        Component component = tc.append(applyFinalProprieties(message, MessagesType.INFO, CategoryMessages.PRIVATE, true)).build();
+
+        Builder componentVictim = Component.text();
+        componentVictim.append(victim.displayName());
+        componentVictim.clickEvent(ClickEvent.clickEvent(Action.SUGGEST_COMMAND, "/w " + victim.getName()));
+        componentVictim.hoverEvent(HoverEvent.showEntity(victim.asHoverEvent().value()));
+        TextReplacementConfig.Builder config1 = TextReplacementConfig.builder().matchLiteral("%1$s").replacement(componentVictim);
+        component = component.replaceText(config1.build());
+        if (killer != null) {
+            Builder componentKiller = Component.text();
+            if (killer instanceof Player player) {
+                componentKiller.append(player.displayName());
+                componentKiller.clickEvent(ClickEvent.clickEvent(Action.SUGGEST_COMMAND, "/w " + player.getName()));
+            }else {
+                componentKiller.append(GlobalUtils.ChatColorLegacyToComponent(MessagesType.INFO.getSecondColor() + killer.getName() + MessagesType.INFO.getMainColor()));
+            }
+            componentKiller.hoverEvent(HoverEvent.showEntity(killer.asHoverEvent().value()));
+            TextReplacementConfig.Builder config2 = TextReplacementConfig.builder().matchLiteral("%2$s").replacement(componentKiller);
+            component = component.replaceText(config2.build());
+        }
+        Builder componentItem = Component.text();
+        if (stack != null) {
+            componentItem.append(stack.displayName());
+            componentItem.hoverEvent(HoverEvent.showItem(stack.asHoverEvent().value()));
+            TextReplacementConfig.Builder config3 = TextReplacementConfig.builder().matchLiteral("%3$s").replacement(componentItem);
+            component = component.replaceText(config3.build());
+        }else {
+            componentItem.content("Mano");
+            TextReplacementConfig.Builder config3 = TextReplacementConfig.builder().matchLiteral("%3$s").replacement(componentItem);
+            component = component.replaceText(config3.build());
+        }
+
+        return component;
     }
 }

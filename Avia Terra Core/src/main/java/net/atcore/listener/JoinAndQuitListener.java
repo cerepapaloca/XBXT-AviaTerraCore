@@ -14,7 +14,6 @@ import net.atcore.security.Login.LoginManager;
 import net.atcore.security.SecuritySection;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -52,18 +51,17 @@ public class JoinAndQuitListener implements Listener {
 
         List<UUID> UUIDPlayers = List.copyOf(AviaTerraPlayer.getPlayer(player).getModerationPlayer().getManipulatorInventoryPlayer());
         UUIDPlayers.forEach(UUID -> Objects.requireNonNull(Bukkit.getPlayer(UUID)).closeInventory());
-        event.setQuitMessage(ChatColor.translateAlternateColorCodes('&',MessagesManager.addProprieties(String.format(Message.EVENT_QUIT.getMessage(),
-                        event.getPlayer().getName()),
+        event.quitMessage(GlobalUtils.ChatColorLegacyToComponent(MessagesManager.addProprieties(
+                String.format(Message.EVENT_QUIT.getMessage(), event.getPlayer().getName()),
                 MessagesType.INFO, false, false)));
     }
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        event.setJoinMessage(ChatColor.translateAlternateColorCodes('&',MessagesManager.addProprieties(String.format(Message.EVENT_JOIN.getMessage(),
-                        event.getPlayer().getName()),
+        event.joinMessage(GlobalUtils.ChatColorLegacyToComponent(MessagesManager.addProprieties(
+                String.format(Message.EVENT_JOIN.getMessage(), event.getPlayer().getName()),
                 MessagesType.INFO, false, false)));
-
         onEnteringServer(player);
         new BukkitRunnable() {
             @Override

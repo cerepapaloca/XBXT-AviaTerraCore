@@ -26,6 +26,7 @@ public class ChatListener implements Listener {
 
     private Player lastPlayerMention;
 
+    @SuppressWarnings("deprecation")
     @EventHandler(priority = EventPriority.HIGH)
     public void onChat(AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
@@ -52,7 +53,7 @@ public class ChatListener implements Listener {
                 return;//hay algo indecente?
             }
             event.setMessage(ChatColor.GRAY + message);
-            event.setFormat(prefix + Message.EVENT_FORMAT_CHAT.getMessage());
+            event.setFormat(ChatColor.translateAlternateColorCodes('&',prefix +  Message.EVENT_FORMAT_CHAT.getMessage()));
 
             for (Player Player : Bukkit.getOnlinePlayers()) {//busca todos los jugadores
                 if (message.contains(Player.getName())){

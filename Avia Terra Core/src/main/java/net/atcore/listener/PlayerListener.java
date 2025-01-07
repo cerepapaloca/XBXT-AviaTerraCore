@@ -13,6 +13,7 @@ import net.atcore.moderation.Freeze;
 import net.atcore.security.Login.LoginManager;
 import net.atcore.utils.GlobalConstantes;
 import net.atcore.utils.GlobalUtils;
+import net.atcore.utils.Gradient;
 import net.atcore.utils.RangeType;
 import net.luckperms.api.node.types.InheritanceNode;
 import org.bukkit.*;
@@ -120,7 +121,7 @@ public class PlayerListener implements Listener {
             if (range == null)return;
 
             if (date < Config.getPurgeTagRange()){//mira está dentro de la purga
-                item.setType(Material.AIR);
+                item.setAmount(0);
                 return;
             }
             player.getInventory().getItemInMainHand().setAmount(0);
@@ -131,16 +132,13 @@ public class PlayerListener implements Listener {
                 AviaTerraCore.getLp().getUserManager().modifyUser(player.getUniqueId(),
                         user -> user.data().remove(InheritanceNode.builder(range).build()));
             }
-            item.setType(Material.AIR);
+            item.setAmount(0);
             player.playSound(player, Sound.ENTITY_PLAYER_LEVELUP, 0.8F, 1);
             RangeType rangeType = RangeType.valueOf(range.toUpperCase());
-            MessagesManager.sendTitle(player,"Nuevo Rango", GlobalUtils.applyGradient(
-                    "<" + GlobalUtils.modifyColorHexWithHLS(GlobalUtils.BukkitColorToStringHex(rangeType.getColor()), 0f, 0.3f, -0.1f) + ">" +
-                            rangeType.getDisplayName() +
-                            "<" + GlobalUtils.modifyColorHexWithHLS(GlobalUtils.BukkitColorToStringHex(rangeType.getColor()), 0, -0.2f, 0.1f) + ">",
-                    'l'
-            ), 20, 60, 40, MessagesType.INFO);
-
+            Gradient gradient = new Gradient(rangeType.getDisplayName());
+            gradient.addGradient(GlobalUtils.stringToJavaColor(GlobalUtils.modifyColorHexWithHLS(GlobalUtils.BukkitColorToStringHex(rangeType.getColor()), 0, 0.3f, -0.01f)), 1);
+            gradient.addGradient(GlobalUtils.stringToJavaColor(GlobalUtils.modifyColorHexWithHLS(GlobalUtils.BukkitColorToStringHex(rangeType.getColor()), 0, -0.1f, 0)), 1);
+            MessagesManager.sendTitle(player,"Nuevo Rango",gradient.toString(), 20, 60, 40, MessagesType.INFO);
         }
     }
 }

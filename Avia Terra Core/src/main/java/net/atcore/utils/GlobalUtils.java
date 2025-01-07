@@ -9,12 +9,14 @@ import lombok.experimental.UtilityClass;
 import net.atcore.AviaTerraCore;
 import net.atcore.data.DataSection;
 import net.atcore.listener.NuVotifierListener;
+import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.MessagesType;
 import net.atcore.security.Login.LoginManager;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.luckperms.api.node.types.InheritanceNode;
-import net.md_5.bungee.api.ChatColor;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -28,71 +30,16 @@ import org.jetbrains.annotations.Nullable;
 
 import java.net.InetAddress;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
-
-import static net.md_5.bungee.api.ChatColor.ALL_CODES;
 
 @SuppressWarnings("unused")
 @UtilityClass//Le añade static a todos los métodos y a las variables
 public final class GlobalUtils {
 
     public final NamespacedKey KEY_ANTI_DUPE = new NamespacedKey(AviaTerraCore.getInstance(), "uuid");
-
-    public @NotNull String applyGradient(String input){
-        return applyGradient(input , 'r');
-    }
-
-    /**
-     * Crea un gradiente de color en un texto. Para crear un
-     * degradado tienes que poner {@code <#FFEEDD>Text<#FFEEDD>} obviamente tiene
-     * que ser colores en Hex y si necesitas añadir varios degradados en un texto
-     * solo lo separas con {@code ::} un ejemplo {@code <#Hex>Text1<#Hex>::<#Hex>Text2<#Hex>}
-     * @param input El texto al que quieres darle el degradado
-     * @param in el formato del texto que usa minecraft por ejemplo la {@code l} da negrilla o
-     *           la {@code o} pone el texto en cursiva
-     * @return te da el texto con los degradados y formato
-     * @deprecated Mejor usar {@link Gradient}
-     */
-
-    @Deprecated
-    @Contract(pure = true)
-    public @NotNull String applyGradient(@NotNull String input, char in) {
-        if (input.contains("</#"))input = input.replace("/","");
-        input = input.replace("##","#");
-        StringBuilder gradientText = new StringBuilder();
-
-        for (String s : input.split("::")){
-            // Extraer colores de degradado y texto
-            String startTag = s.substring(s.indexOf("<#") + 2, s.indexOf(">")).replace("#", "");
-            String endTag = s.substring(s.lastIndexOf("<#") + 2, s.lastIndexOf(">")).replace("#", "");
-            String text = s.substring(s.indexOf(">") + 1, s.lastIndexOf("<"));
-
-            //convierte el String en números Int respetando la base hexadecimal
-            int startColor = Integer.parseInt(startTag, 16);
-            int endColor = Integer.parseInt(endTag, 16);
-
-            int length = text.length();
-
-            for (int i = 0; i < length; i++) {
-                //No Tengo ni idea de como funciona esto pero funciona
-                float ratio = (float) i / (length - 1);
-                int red = (int) ((1 - ratio) * ((startColor >> 16) & 0xFF) + ratio * ((endColor >> 16) & 0xFF));
-                int green = (int) ((1 - ratio) * ((startColor >> 8) & 0xFF) + ratio * ((endColor >> 8) & 0xFF));
-                int blue = (int) ((1 - ratio) * (startColor & 0xFF) + ratio * (endColor & 0xFF));
-                String hexColor = String.format("#%02x%02x%02x", red, green, blue);
-                if (in =='r'){
-                    gradientText.append(ChatColor.of(hexColor)).append(text.charAt(i));
-                }else{
-                    gradientText.append(ChatColor.of(hexColor)).append("&").append(in).append(text.charAt(i));
-                }
-
-                //ChatColor.of(hexColor);
-            }
-        }
-        return org.bukkit.ChatColor.translateAlternateColorCodes('&', gradientText.toString());
-    }
 
     /**
      * Lo mismo que {@link #timeToString(long, int, boolean)}
@@ -246,8 +193,8 @@ public final class GlobalUtils {
      */
 
     public void kickPlayer(@NotNull Player player,@Nullable String reason) {
-        reason = org.bukkit.ChatColor.translateAlternateColorCodes('&', MessagesManager.addProprieties(Message.MISC_KICK_UPPER
-                + "&4" + (reason == null ? "Has sido expulsado" : reason) + "&c" + Message.MISC_KICK_LOWER, MessagesType.KICK, false, false));
+        reason = MessagesManager.addProprieties(Message.MISC_KICK_UPPER
+                + "&4" + (reason == null ? "Has sido expulsado" : reason) + "&c" + Message.MISC_KICK_LOWER, MessagesType.KICK, false, false);
         if (Bukkit.isPrimaryThread()){
             kickFinal(player, reason);
         }else{
@@ -264,7 +211,7 @@ public final class GlobalUtils {
                 ProtocolLibrary.getProtocolManager().sendServerPacket(player, kickPack);
             }
         }finally {
-            player.kickPlayer(finalReason);
+            player.kick(GlobalUtils.ChatColorLegacyToComponent(finalReason));
         }
     }
 
@@ -318,6 +265,17 @@ public final class GlobalUtils {
         return new java.awt.Color(color.getRed(), color.getGreen(), color.getBlue());
     }
 
+    @Contract(pure = true, value = "_ -> new")
+    public @NotNull java.awt.Color stringToJavaColor(@NotNull String string) {
+        if (string.startsWith("#")){
+            int rgb = Integer.parseInt(string.substring(1), 16);
+            return new java.awt.Color(rgb);
+        }else {
+            throw new IllegalArgumentException("Invalid color string: " + string);
+        }
+
+    }
+
     @Contract(pure = true)
     private @NotNull String addZeros(@NotNull String s){
         switch (s.length()){
@@ -333,16 +291,16 @@ public final class GlobalUtils {
         }
     }
 
-    public static @NotNull ArrayList<String> StringToLoreString(@NotNull String texto, boolean space) {
-        return StringToLoreString(texto, 40, space, '7');
+    public static @NotNull List<Component> stringToLoreComponent(@NotNull String texto, boolean space) {
+        return stringToLoreComponent(texto, 40, space, '7');
     }
 
-    public static @NotNull ArrayList<String> StringToLoreString(@NotNull String texto, int longitud, boolean space) {
-        return StringToLoreString(texto, longitud, space, '7');
+    public static @NotNull List<Component> stringToLoreComponent(@NotNull String texto, int longitud, boolean space) {
+        return stringToLoreComponent(texto, longitud, space, '7');
     }
 
-    public static @NotNull ArrayList<String> StringToLoreString(@NotNull String texto, boolean space, char color) {
-        return StringToLoreString(texto, 40, space, color);
+    public static @NotNull List<Component> stringToLoreComponent(@NotNull String texto, boolean space, char color) {
+        return stringToLoreComponent(texto, 40, space, color);
     }
 
     /**
@@ -357,12 +315,11 @@ public final class GlobalUtils {
      */
 
     @Contract(pure = true)
-    public static @NotNull ArrayList<String> StringToLoreString(@NotNull String texto, int longitud, boolean space, char color) {
-        texto = ChatColor.translateAlternateColorCodes('&', texto);
-        ArrayList<String> lineas = new ArrayList<>();
-        if (space) lineas.add(" ");
+    public static @NotNull List<Component> stringToLoreComponent(@NotNull String texto, int longitud, boolean space, char color) {
+        ArrayList<Component> lineas = new ArrayList<>();
+        if (space) lineas.add(Component.text(" "));
 
-        String[] partes = texto.split("\n"); // Dividimos el texto en líneas si contiene \n
+        String[] partes = texto.split("\n");
 
         for (String parte : partes) {
             int inicio = 0;
@@ -377,12 +334,11 @@ public final class GlobalUtils {
                     }
                 }
 
-                lineas.add(ChatColor.translateAlternateColorCodes('&', "&" + color + parte.substring(inicio, fin).trim()));
+                lineas.add(MessagesManager.applyFinalProprieties(parte.substring(inicio, fin), MessagesType.NULL, CategoryMessages.PRIVATE, false));
                 inicio = fin + 1; // Salta el espacio
             }
         }
-
-        if (space && !lineas.isEmpty()) lineas.add(" ");
+        if (space) lineas.add(Component.text(" "));
         return lineas;
     }
 
@@ -523,5 +479,65 @@ public final class GlobalUtils {
                 DataSection.getCacheVoteFile().saveData();
             }
         }
+    }
+
+    /**
+     * Convierte los códigos de color antiguos en los nuevo sistema de MiniMessage
+     * ejemplo
+     * <blockquote><pre>
+     *     &lBuenos días&o gente.&r&6 Que buen dia
+     * </pre></blockquote>
+     * pasaría a esto
+     * <blockquote><pre>
+     *     <bold>Buenos días<italic> gente.<reset><gold> Que buen dia
+     * </pre></blockquote>
+     * @param input el texto a trasformar
+     * @return Texto trasformado
+     */
+
+    @NotNull
+    @Contract(pure = true)
+    public String convertToMiniMessageFormat(String input) {
+        input = input.replaceAll("&#([A-Fa-f0-9]{6})", "<#$1>");
+
+        input = input.replace("&l", "<bold>");
+        input = input.replace("&o", "<italic>");
+        input = input.replace("&n", "<underlined>");
+        input = input.replace("&m", "<strikethrough>");
+        input = input.replace("&k", "<obfuscated>");
+        input = input.replace("&r", "<reset>");
+        input = input.replace("&0", "<black>");
+        input = input.replace("&1", "<dark_blue>");
+        input = input.replace("&2", "<dark_green>");
+        input = input.replace("&3", "<dark_aqua>");
+        input = input.replace("&4", "<dark_red>");
+        input = input.replace("&5", "<dark_purple>");
+        input = input.replace("&6", "<gold>");
+        input = input.replace("&7", "<gray>");
+        input = input.replace("&8", "<dark_gray>");
+        input = input.replace("&9", "<blue>");
+        input = input.replace("&a", "<green>");
+        input = input.replace("&b", "<aqua>");
+        input = input.replace("&c", "<red>");
+        input = input.replace("&d", "<light_purple>");
+        input = input.replace("&e", "<yellow>");
+        input = input.replace("&f", "<white>");
+
+        return input;
+    }
+
+    /**
+     * Remplazo de {@link ChatColor#translateAlternateColorCodes(char, String) translateAlternateColorCodes()}. Conviérte
+     * los {@code §} a {@code &} y usa el sistema de miniMessage usando {@link #convertToMiniMessageFormat(String) esto}
+     * para la conversión y terminado en un Component
+     * @param input El texto crudo
+     * @return Los Component con los colores resueltos
+     */
+
+    @SuppressWarnings("deprecation")
+    @NotNull
+    @Contract(pure = true)
+    public Component ChatColorLegacyToComponent(String input) {
+        return MiniMessage.miniMessage().deserialize(GlobalUtils.convertToMiniMessageFormat(input.replace('§', '&')));
     }
 }

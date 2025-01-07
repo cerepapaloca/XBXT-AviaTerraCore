@@ -63,11 +63,11 @@ public abstract class BaseWeaponTarkov extends BaseWeapon implements Compartment
                     }
                 }else {
                     updateLore(itemWeapon, null);
-                    MessagesManager.sendTitle(player, "", ChatColor.RED + "sin munición", 0, 10, 30, MessagesType.ERROR);
+                    MessagesManager.sendTitle(player, "", "sin munición", 0, 10, 30, MessagesType.ERROR);
                 }
             }
         }else {
-            MessagesManager.sendTitle(player, "", ChatColor.RED + "sin cargador", 0, 10, 30, MessagesType.ERROR);
+            MessagesManager.sendTitle(player, "", "sin cargador", 0, 10, 30, MessagesType.ERROR);
         }
     }
 
@@ -230,14 +230,14 @@ public abstract class BaseWeaponTarkov extends BaseWeapon implements Compartment
             }
         }
 
-        itemMeta.setLore(GlobalUtils.StringToLoreString(MessagesManager.addProprieties(s, null, false, false), true));
+        itemMeta.lore(GlobalUtils.stringToLoreComponent(s, true));
         weapon.setItemMeta(itemMeta);
     }
 
     public static boolean checkReload(Player player){
         if (BaseWeaponTarkov.IN_RELOAD.containsKey(player.getUniqueId())){
             BaseWeaponTarkov.IN_RELOAD.remove(player.getUniqueId()).cancel();
-            player.sendTitle("", ChatColor.RED + "Recarga Cancelada", 0, 20, 40);
+            MessagesManager.sendTitle(player, "", "Recarga Cancelada", 0, 20, 40, MessagesType.ERROR);
             player.removePotionEffect(PotionEffectType.SLOWNESS);
             return true;
         }

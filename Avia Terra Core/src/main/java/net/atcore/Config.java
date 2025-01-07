@@ -68,4 +68,6 @@ public class Config {
 
     @Getter @Setter private static boolean antiBot = false;
 
+    @Getter @Setter private static boolean autoBan = false;
+
 }

@@ -7,9 +7,7 @@ import net.atcore.command.ModeTabPlayers;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.MessagesType;
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 public class SayCommand extends BaseCommand {
 
@@ -39,9 +37,6 @@ public class SayCommand extends BaseCommand {
             StringBuilder message = new StringBuilder();
             for (int i = 2; i < args.length; i++){
                 message.append(args[i]).append(" ");
-            }
-            for (Player p : Bukkit.getOnlinePlayers()) {
-                MessagesManager.sendMessage(p, message.toString(), type);
             }
             CommandUtils.executeForPlayer(sender, args[0], true, dataTemporalPlayer ->
                     MessagesManager.sendMessage(dataTemporalPlayer.player(), message.toString(), type));

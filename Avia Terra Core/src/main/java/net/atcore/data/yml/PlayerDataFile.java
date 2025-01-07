@@ -35,6 +35,7 @@ public class PlayerDataFile extends FileYaml {
             if (world == null) world = Bukkit.getWorlds().getFirst();
             atp.getHomes().put(key, new Location(world ,x, y, z, yaw, pitch));
         }
+        atp.setNameColor(fileYaml.getString("display-name"));
     }
 
     @Override
@@ -55,6 +56,7 @@ public class PlayerDataFile extends FileYaml {
             fileYaml.set("homes." + key + ".yaw",l.getYaw());
             fileYaml.set("homes." + key + ".pitch",l.getPitch());
         }
+        fileYaml.set("display-name", atp.getNameColor());
         saveConfig();
     }
 }

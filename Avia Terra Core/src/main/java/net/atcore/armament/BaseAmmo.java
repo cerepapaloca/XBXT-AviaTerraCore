@@ -2,7 +2,6 @@ package net.atcore.armament;
 
 import lombok.Getter;
 import lombok.Setter;
-import net.atcore.messages.MessagesManager;
 import net.atcore.utils.GlobalUtils;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Color;
@@ -56,6 +55,7 @@ public abstract class BaseAmmo extends BaseArmament {
     private final float densityTrace;
     private final int projectiles;
 
+    @SuppressWarnings("deprecation")
     public String getProperties(){
         StringBuilder properties = new StringBuilder();
         properties.append(String.format("""
@@ -84,7 +84,7 @@ public abstract class BaseAmmo extends BaseArmament {
     public void updateLore(ItemStack itemStack, ItemStack itemStack2) {
         ItemMeta itemMeta = itemStack.getItemMeta();
         assert itemMeta != null;
-        itemMeta.setLore(GlobalUtils.StringToLoreString(MessagesManager.addProprieties(getProperties(), null, false, false), true));
+        itemMeta.lore(GlobalUtils.stringToLoreComponent(getProperties(), true));
         itemArmament.setItemMeta(itemMeta);
     }
 

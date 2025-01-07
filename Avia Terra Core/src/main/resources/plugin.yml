@@ -41,6 +41,9 @@ commands:
   info:
   tpa:
   say:
+  namecolor:
+    aliases:
+      - nc
   home:
     aliases:
       - h

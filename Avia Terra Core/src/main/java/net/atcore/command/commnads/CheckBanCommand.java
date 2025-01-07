@@ -113,7 +113,7 @@ public class CheckBanCommand extends BaseTabCommand {
                 return null;
             }
             case 2 -> {
-                return CommandUtils.listTab(args[1], new String[]{"?","!"});
+                return CommandUtils.listTab(args[1], "?","!");
             }
             case 3 -> {
                 if (args[1].equals("!")){

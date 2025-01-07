@@ -7,6 +7,7 @@ import net.atcore.data.html.Email;
 import net.atcore.data.md.Discord;
 import net.atcore.data.sql.DataBaseBan;
 import net.atcore.data.sql.DataBaseRegister;
+import net.atcore.data.txt.BroadcastMessageFile;
 import net.atcore.data.txt.MOTDFile;
 import net.atcore.data.yml.*;
 import net.atcore.data.yml.ymls.CacheLimboFlies;
@@ -37,6 +38,7 @@ public class DataSection implements Section {
         new Discord();
         new Email();
         new MOTDFile();
+        new BroadcastMessageFile();
         DataSection.configFile = configFile;
         playersData = new PlayersData();
         cacheVoteFile = new CacheVoteFile();

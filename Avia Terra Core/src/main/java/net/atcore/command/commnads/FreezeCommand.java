@@ -70,7 +70,7 @@ public class FreezeCommand extends BaseTabCommand {
     @Override
     public List<String> onTab(CommandSender sender, String[] args) {
         if (args.length == 2) {
-            return CommandUtils.listTab(args[1], new String[]{"true", "false"});
+            return CommandUtils.listTab(args[1], "true", "false");
         }else if (args.length == 1) {
             return CommandUtils.tabForPlayer(args[0]);
         }

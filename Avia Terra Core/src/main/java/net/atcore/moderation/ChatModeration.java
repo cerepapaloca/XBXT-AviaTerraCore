@@ -23,15 +23,16 @@ public class ChatModeration {
     public static boolean antiSpam(Player bukkitPlayer, String message) {
         AviaTerraPlayer aviaTerraPlayer = AviaTerraPlayer.getPlayer(bukkitPlayer);
         ModerationPlayer mp = aviaTerraPlayer.getModerationPlayer();
-        double puntos = mp.getPointChat() + (double) ((System.currentTimeMillis() - mp.getLastChat())/1000L)*Config.getLevelModerationChat();
+        double puntos = Math.min(mp.getPointChat() + ((System.currentTimeMillis() - mp.getLastChat())/1000D)*Config.getLevelModerationChat(), MAX_PUNTOS);
+
         mp.setLastChat(System.currentTimeMillis());
         if (puntos < 0) {//si su puntos son negativos se lo hace saber
             mp.setPointChat(puntos);
-            sendMessageConsole( bukkitPlayer.getName() + " » &7" + message + "&c [ELIMINADO: Spam]", MessagesType.INFO, CategoryMessages.MODERATION);
-            double second = (puntos)/(20 * Config.getLevelModerationChat());//formula para calcular el tiempo que le fata para volver a escribir
-            second *= 10;
-            long secondInt = Math.round(Math.abs(second));
-            sendMessage(bukkitPlayer, "mensaje eliminado por Spam espera <|" + secondInt * 0.1D + "|> segundos", MessagesType.ERROR);
+            sendMessageConsole(bukkitPlayer.getName() + " » &7" + message + "&c [ELIMINADO: Spam]", MessagesType.INFO, CategoryMessages.MODERATION);
+            double second = (puntos)/(Config.getLevelModerationChat());//formula para calcular el tiempo que le fata para volver a escribir
+            Bukkit.getLogger().warning(puntos + " puntos " + second);
+            long secondLong = Math.round(Math.abs(second));
+            sendMessage(bukkitPlayer, "mensaje eliminado por Spam espera <|" + secondLong + "|> segundos", MessagesType.ERROR);
             return true;
         }else {
             puntos = puntos - ((message.length()*3F) + 70F);//por cada letra más puntos le resta y por cada mensaje resta 15

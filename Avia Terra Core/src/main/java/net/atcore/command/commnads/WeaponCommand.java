@@ -99,7 +99,7 @@ public class WeaponCommand extends BaseTabCommand {
                 try {
                     typeArmament = TypeArmament.valueOf(args[1].toUpperCase());
                 }catch (Exception e) {
-                    return List.of(ChatColor.RED + "En tipo de armamento no existe");
+                    return List.of( MessagesType.ERROR.getMainColor() + "En tipo de armamento no existe");
                 }
                 switch (typeArmament) {
                     case WEAPON_TARKOV -> {

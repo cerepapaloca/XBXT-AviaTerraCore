@@ -84,17 +84,6 @@ public class BanManager extends DataBaseBan {
 
             if (dataBans.isEmpty()) {//En caso qué llega a estar en la lista de baneados, pero no tiene un ban vinculado
                 return IsBan.UNKNOWN;
-                /*No se usa por que se tiene que ejecutar en un hilo aparte
-                try {
-                    if (checkName){//hace la búsqueda por ip o por UUID
-                        dataBans = getDataBan(player, ip, SearchBanBy.NAME);
-                    }else {
-                        dataBans = getDataBan(player, ip, SearchBanBy.IP);
-                    }
-                } catch (SQLException e) {//por si explota
-                    Bukkit.getLogger().severe(e.getMessage());
-                }
-                */
             }
 
             if (context == null){// Otro "por si acaso"

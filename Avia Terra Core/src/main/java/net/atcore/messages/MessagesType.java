@@ -4,6 +4,7 @@ import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.jetbrains.annotations.Contract;
 
+@SuppressWarnings("deprecation")
 @Getter
 public enum MessagesType {
     SUCCESS('2', "a"),

@@ -29,6 +29,7 @@ public class ConfigFile extends FileYaml {
         Config.setCheckBanByIp(fileYaml.getBoolean("check-ban-by-ip", Config.isCheckBanByIp()));
         Config.setServerMode(ServerMode.valueOf(fileYaml.getString("server-mode", Config.getServerMode().name().toLowerCase()).toUpperCase()));
         Config.setChaceDupeFrame(fileYaml.getDouble("chace-dupe-frame", Config.getChaceDupeFrame()));
+        Config.setAutoBan(fileYaml.getBoolean("auto-ban", Config.isAutoBan()));
         saveData(); // Se guarda por si hay una liena faltante en la configuración
     }
 
@@ -46,6 +47,7 @@ public class ConfigFile extends FileYaml {
         fileYaml.set("check-ban-by-ip", Config.isCheckBanByIp());
         fileYaml.set("server-mode", Config.getServerMode().name().toLowerCase());
         fileYaml.set("chace-dupe-frame", Config.getChaceDupeFrame());
+        fileYaml.set("auto-ban", Config.isAutoBan());
         saveConfig();
     }
 }

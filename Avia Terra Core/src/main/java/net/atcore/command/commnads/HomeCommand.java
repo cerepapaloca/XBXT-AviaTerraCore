@@ -32,7 +32,6 @@ public class HomeCommand extends BaseTabCommand {
     }
 
     private final Location spawnLocation = new Location(Bukkit.getWorlds().getFirst(), 0, 0, 0);
-    private final int distanceMinTp = 100;
 
     @Override
     public void execute(CommandSender sender, String[] args) throws Exception {
@@ -49,6 +48,7 @@ public class HomeCommand extends BaseTabCommand {
                         double distance = player.getLocation().distance(spawnLocation);
                         // Esto quiere decir si está en el nether
                         if (player.getWorld().isUltraWarm()) distance *= 8;
+                        int distanceMinTp = 100;
                         if (distance > distanceMinTp){
                             player.getWorld().playSound(player, Sound.ENTITY_PLAYER_TELEPORT, SoundCategory.PLAYERS, 1, 1);
                             player.teleport(loc, PlayerTeleportEvent.TeleportCause.COMMAND);

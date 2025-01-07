@@ -150,7 +150,7 @@ public class ArmamentUtils {
                     }
                 }
             }
-        }.runTaskTimer(AviaTerraCore.getInstance(), 1, 1);//TODO optimiza esto por favor. El problema es el envió del paquete
+        }.runTaskTimer(AviaTerraCore.getInstance(), 1, 1);
     }
 
     public Location getLookLocation(Vector direction, Location location, double maxDistance, double stepSize) {
