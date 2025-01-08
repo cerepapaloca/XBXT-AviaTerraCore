@@ -1,38 +1,22 @@
 package net.atcore.messages;
 
 import lombok.Getter;
-import org.bukkit.ChatColor;
-import org.jetbrains.annotations.Contract;
+import net.kyori.adventure.text.minimessage.tag.Tag;
 
-@SuppressWarnings("deprecation")
 @Getter
 public enum MessagesType {
-    SUCCESS('2', "a"),
-    INFO('3', "b"),
-    WARNING('e', "6"),
-    ERROR('c',"4"),
-    KICK('c',"4l"),
-    NULL('7',"8");
+    SUCCESS("<dark_green>", "<green>"),
+    INFO("<dark_aqua>", "<aqua>"),
+    WARNING("<yellow>", "<gold>"),
+    ERROR("<red>","<dark_red>"),
+    KICK("<red>","<dark_red><b>"),
+    NULL("<gray>","<dark_gray>"),;
 
-    MessagesType(char mainColor, String secondColor){
+    MessagesType(String mainColor, String secondTag) {
         this.mainColor = mainColor;
-        this.secondColor = secondColor;
+        this.secondColor = secondTag;
     }
 
-    private final char mainColor;
+    private final String mainColor;
     private final String secondColor;
-
-    @Contract(pure = true)
-    public String getMainColor() {
-        return ChatColor.COLOR_CHAR + Character.toString(mainColor);
-    }
-
-    @Contract(pure = true)
-    public String getSecondColor() {
-        StringBuilder s = new StringBuilder();
-        for (int i = 0; i < secondColor.length(); i++) {
-            s.append(ChatColor.COLOR_CHAR).append(secondColor.charAt(i));
-        }
-        return s.toString();
-    }
 }

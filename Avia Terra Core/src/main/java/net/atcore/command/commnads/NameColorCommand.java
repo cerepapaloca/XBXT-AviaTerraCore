@@ -66,7 +66,7 @@ public class NameColorCommand extends BaseTabCommand {
 
         nameBuilder.append(player.getName());
         String displayNameString = nameBuilder.toString();
-        Component component = GlobalUtils.ChatColorLegacyToComponent(displayNameString);
+        Component component = GlobalUtils.chatColorLegacyToComponent(displayNameString);
         AviaTerraPlayer atp = AviaTerraPlayer.getPlayer(player);
         atp.setNameColor(displayNameString);
         atp.getPlayerDataFile().saveData();

@@ -28,7 +28,7 @@ public class InventoryUtils {
         ItemStack item = new ItemStack(material, amount);
         ItemMeta meta = item.getItemMeta();
         assert meta != null;
-        meta.displayName(GlobalUtils.ChatColorLegacyToComponent(name));
+        meta.displayName(GlobalUtils.chatColorLegacyToComponent(name));
         if (lore != null) meta.lore(GlobalUtils.stringToLoreComponent(lore, true));
         for (ItemFlag flag : ItemFlag.values()) {
             meta.addItemFlags(flag);

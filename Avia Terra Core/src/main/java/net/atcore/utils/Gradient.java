@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-
+@Deprecated
 /**
  * Creas un degradado para el texto más complejo y com más colores.
  * <p>

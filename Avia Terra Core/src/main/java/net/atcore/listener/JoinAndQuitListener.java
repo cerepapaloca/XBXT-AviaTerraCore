@@ -2,7 +2,6 @@ package net.atcore.listener;
 
 import net.atcore.AviaTerraCore;
 import net.atcore.aviaterraplayer.AviaTerraPlayer;
-import net.atcore.command.commnads.KickCommand;
 import net.atcore.data.sql.DataBaseRegister;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.Message;
@@ -17,7 +16,6 @@ import net.atcore.security.SecuritySection;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -54,7 +52,7 @@ public class JoinAndQuitListener implements Listener {
 
         List<UUID> UUIDPlayers = List.copyOf(AviaTerraPlayer.getPlayer(player).getModerationPlayer().getManipulatorInventoryPlayer());
         UUIDPlayers.forEach(UUID -> Objects.requireNonNull(Bukkit.getPlayer(UUID)).closeInventory());
-        event.quitMessage(GlobalUtils.ChatColorLegacyToComponent(MessagesManager.addProprieties(
+        event.quitMessage(GlobalUtils.chatColorLegacyToComponent(MessagesManager.addProprieties(
                 String.format(Message.EVENT_QUIT.getMessage(), event.getPlayer().getName()),
                 MessagesType.INFO, false, false)));
     }
@@ -62,7 +60,7 @@ public class JoinAndQuitListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        event.joinMessage(GlobalUtils.ChatColorLegacyToComponent(MessagesManager.addProprieties(
+        event.joinMessage(GlobalUtils.chatColorLegacyToComponent(MessagesManager.addProprieties(
                 String.format(Message.EVENT_JOIN.getMessage(), event.getPlayer().getName()),
                 MessagesType.INFO, false, false)));
         onEnteringServer(player);

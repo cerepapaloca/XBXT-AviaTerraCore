@@ -3,34 +3,33 @@ package net.atcore.messages;
 import lombok.extern.slf4j.Slf4j;
 import net.atcore.AviaTerraCore;
 import net.atcore.data.yml.MessageFile;
+import net.atcore.security.Login.LoginManager;
 import net.atcore.utils.GlobalUtils;
-import net.atcore.utils.Gradient;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.TextComponent.Builder;
 import net.kyori.adventure.text.TextReplacementConfig;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.Style;
-import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.minimessage.Context;
+import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.tag.Tag;
+import net.kyori.adventure.text.minimessage.tag.resolver.ArgumentQueue;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.kyori.adventure.title.Title;
-import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.xml.transform.sax.SAXResult;
-import java.awt.*;
 import java.time.Duration;
 import java.util.*;
 import java.util.List;
@@ -46,27 +45,24 @@ public final class MessagesManager {
 
     public static final String LINK_DISCORD = "&a&nhttps://discord.gg/azurex";
     //"&8[" + GlobalUtils.applyGradient("<#00CCCC>AviaTerra<#00FFFF>",'l') + "&8]&r " ;
-    public static final String PREFIX = "&8[" + new Gradient("AviaTerra")
-            .addGradient(new Color(0, 200, 200), 1)
-            .addGradient(new Color(0, 255, 255), 1)
-            .getText() + "&8] ";
+    public static final String PREFIX = "<dark_gray>[<#4B2FDE>XT<#ff8C00>XB<dark_gray>] ";
 
     /// ////////////////////////
     /// ////////////////////////
 
-    public static void sendMessage(CommandSender sender, Message message, @Nullable MessagesType type) {
+    public static void sendMessage(CommandSender sender, Message message, @NotNull MessagesType type) {
         sendMessage(sender, message.getMessage(), type, CategoryMessages.PRIVATE, true);
     }
 
-    public static void sendMessage(CommandSender sender, String message, @Nullable MessagesType type) {
+    public static void sendMessage(CommandSender sender, String message, @NotNull MessagesType type) {
         sendMessage(sender, message, type, CategoryMessages.PRIVATE, true);
     }
 
-    public static void sendMessage(CommandSender sender, String message, @Nullable MessagesType type, CategoryMessages categoryMessages) {
+    public static void sendMessage(CommandSender sender, String message, @NotNull MessagesType type, CategoryMessages categoryMessages) {
         sendMessage(sender, message, type, categoryMessages, true);
     }
 
-    public static void sendMessage(CommandSender sender, String message, @Nullable MessagesType type, CategoryMessages categoryMessages, boolean isPrefix) {
+    public static void sendMessage(CommandSender sender, String message, @NotNull MessagesType type, CategoryMessages categoryMessages, boolean isPrefix) {
         if (sender instanceof Player player) {
             sendMessage(player, message, type, categoryMessages, isPrefix);
         } else {
@@ -81,7 +77,7 @@ public final class MessagesManager {
      * @see #sendMessage(Player, String, MessagesType, CategoryMessages, boolean) sendMessage()
      */
 
-    public static void sendMessage(Player player, String message, @Nullable MessagesType type) {
+    public static void sendMessage(Player player, String message, @NotNull MessagesType type) {
         sendMessage(player, message, type, CategoryMessages.PRIVATE, true);
     }
 
@@ -89,7 +85,7 @@ public final class MessagesManager {
      * @see #sendMessage(Player, String, MessagesType, CategoryMessages, boolean) sendMessage()
      */
 
-    public static void sendMessage(Player player, String message, @Nullable MessagesType type, CategoryMessages categoryMessages) {
+    public static void sendMessage(Player player, String message, @NotNull MessagesType type, CategoryMessages categoryMessages) {
         sendMessage(player, message, type, categoryMessages, true);
     }
 
@@ -108,7 +104,7 @@ public final class MessagesManager {
      * @see #addProprieties
      */
 
-    public static void sendMessage(Player player, String message, @Nullable MessagesType type, CategoryMessages categoryMessages, boolean isPrefix) {
+    public static void sendMessage(Player player, String message, @NotNull MessagesType type, CategoryMessages categoryMessages, boolean isPrefix) {
         player.sendMessage(applyFinalProprieties(message, type, categoryMessages, isPrefix));
     }
 
@@ -123,11 +119,11 @@ public final class MessagesManager {
         sendMessageConsole(message, type, CategoryMessages.PRIVATE, prefix);
     }
 
-    public static void sendMessageConsole(String message, @Nullable MessagesType type, CategoryMessages categoryMessages) {
+    public static void sendMessageConsole(String message, @NotNull MessagesType type, CategoryMessages categoryMessages) {
         sendMessageConsole(message, type, categoryMessages, true);
     }
 
-    public static void sendMessageConsole(String message, @Nullable MessagesType type, CategoryMessages categoryMessages, boolean isPrefix) {
+    public static void sendMessageConsole(String message, @NotNull MessagesType type, CategoryMessages categoryMessages, boolean isPrefix) {
         Bukkit.getConsoleSender().sendMessage(applyFinalProprieties(message, type, categoryMessages, isPrefix));
     }
 
@@ -176,7 +172,7 @@ public final class MessagesManager {
             while (Character.isSpaceChar(message.charAt(message.length() - 1))) {
                 message = message.substring(0, message.length() - 1);
             }
-            message = message + " &c[R]";
+            message = message + " <red>[R]";
         }
         String s;
         if (showPrefix) {
@@ -188,11 +184,12 @@ public final class MessagesManager {
         String colorMain = type.getMainColor();
         return s + colorMain + message
                 .replace("<|", type.getSecondColor())
-                .replace("|>", colorMain)
-                .replace("|!>", colorMain)
+                .replace("|>", "<reset>" + colorMain)
+                .replace("|!>","<reset>" + colorMain)
                 .replace("`", "");
     }
 
+    @Deprecated
     public static net.kyori.adventure.text.TextComponent addTextComponent(String s) {
         Builder textBuilder = Component.text();
         int end = 0;
@@ -325,38 +322,12 @@ public final class MessagesManager {
         }
     }
 
-    public static TextComponent applyFinalProprieties(String message, @Nullable MessagesType type, CategoryMessages categoryMessages, boolean isPrefix) {
+    public static Component applyFinalProprieties(String message, @NotNull MessagesType type, CategoryMessages categoryMessages, boolean isPrefix) {
         if (categoryMessages != CategoryMessages.PRIVATE) {
             sendMessageLogDiscord(type, categoryMessages, message);
         }
-        String s = addProprieties(message, type, categoryMessages != CategoryMessages.PRIVATE, isPrefix);
-        @SuppressWarnings("deprecation") var textComponent = addTextComponent(ChatColor.translateAlternateColorCodes('&', addEndColor(s)));
-        return textComponent;
-    }
-
-    private static String addEndColor(String text) {
-        StringBuilder sb = new StringBuilder();
-        List<String> colorHex = new ArrayList<>();
-        for (int i = 0; text.length() > i; i++) {
-            char c = text.charAt(i);
-            if ('&' == c || '§' == c) {
-                char h = text.charAt(i + 1);
-                if (h != 'x'){
-                    colorHex.add(String.valueOf(h));
-                }else {
-                    colorHex.add(text.substring(i+1, i+14));
-                }
-            }
-            if ('}' == c){
-                sb.append(c);
-                for (String s : colorHex) {
-                    sb.append("&").append(s);
-                }
-            }else {
-                sb.append(c);
-            }
-        }
-        return sb.toString();
+        String s = addProprieties(GlobalUtils.convertToMiniMessageFormat(message), type, categoryMessages != CategoryMessages.PRIVATE, isPrefix);
+        return AviaTerraCore.getMiniMessage().deserialize(s);
     }
 
     private static void addColor(Builder textComponent, List<Character> charsDisplay) {
@@ -365,55 +336,7 @@ public final class MessagesManager {
         String color = sb.toString();
         // Quien creó LegacyComponentSerializer le beso los pies
         textComponent.append(LegacyComponentSerializer.legacy('§').deserialize(color));
-        /*if (color.contains("§x")) {// TODO: Arreglar esto que no funciona cuando hay un degrado
-            String[] parts = color.split("§x");
-            for (String part : parts) {
-                if (part.isEmpty()) continue; // Ignorar partes vacías
-                if (!(part.length() > 12)) {
-                    textComponent.append(Component.text(part));
-                    continue;
-                }
-                String hexColor = part.substring(0, 12);
-                if (!(hexColor.replace("§", "").length() == 6)) {
-                    continue;
-                }
-                String text = part.substring(12);
-
-                // Crear un componente con el color y el texto correspondiente
-                Component component = Component.text(text);
-                textComponent.append(component.color(TextColor.color(Integer.parseInt(hexColor.replace("§", "").substring(1), 16))));
-            }
-        }else {
-            String[] split = color.split("§");
-            List<Component> components = new ArrayList<>();
-            for (String part : split) {
-                if (part.isEmpty()) continue;
-                Component c;
-                c = Component.text(part.substring(1));
-                if (components.isEmpty()) {
-                    components.add(c.style(getColorTextColor(List.of(part.charAt(0)))));
-                }else {
-                    components.add(c.style(joinStyle(getColorTextColor(List.of(part.charAt(0))), components.getLast().style())));
-                }
-
-            }
-            for (Component c : components) textComponent.append(c);
-        }*/
     }
-    /*
-    public static Style joinStyle(Style styleNew, Style styleOld) {
-        Style.Builder finalStyle = Style.style();
-        Map<TextDecoration, TextDecoration.State> td = styleNew.decorations();
-        if (styleNew.color() == null) {
-            finalStyle.color(styleOld.color());
-        }
-        for (TextDecoration key : td.keySet()) {
-            if (td.get(key) != TextDecoration.State.TRUE) {
-                finalStyle.decoration(key, styleOld.decorations().get(key));
-            }
-        }
-        return finalStyle.build();
-    }*/
 
     private static @Nullable String getProperties(@NotNull String sub) {
         int start = 0;// hola {test(dsad)dsadasda}
@@ -452,13 +375,15 @@ public final class MessagesManager {
                 }
             }
             //no parece que tenga sentido, pero sí lo tiene, es por qué asi puede quitar los códigos de color del texto
-            finalMessage = ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&', finalMessage));
+            Component component = MiniMessage.miniMessage().deserialize(finalMessage);
+            // Convertir Component a texto plano
+            String s = PlainTextComponentSerializer.plainText().serialize(component);
             //obtén el canal por su ID
             String chanelId = categoryMessages.getIdChannel();
             if (chanelId == null)return;
             TextChannel channel = AviaTerraCore.jda.getTextChannelById(chanelId);
             if (channel !=  null) {
-                channel.sendMessage(finalMessage.replace("<|", "**").replace("|>", "**").replace("|!>", "")).queue();
+                channel.sendMessage(s.replace("<|", "**").replace("|>", "**").replace("|!>", "")).queue();
             } else {
                 throw new IllegalArgumentException("No se encontró canal de discord para los registro " + categoryMessages.name());
             }
@@ -473,8 +398,8 @@ public final class MessagesManager {
         final Title.Times times = Title.Times.times(Duration.ofMillis(20L *fadeIn), Duration.ofMillis(20L *stay), Duration.ofMillis(20L *fadeOut));
         // Using the times object this title will use 500ms to fade in, stay on screen for 3000ms and then fade out for 1000ms
         final Title t = Title.title(
-                GlobalUtils.ChatColorLegacyToComponent(addProprieties(title, type, false, false)),
-                GlobalUtils.ChatColorLegacyToComponent(addProprieties(subtitle, type, false, false)),
+                MiniMessage.miniMessage().deserialize(addProprieties(title, type, false, false)),
+                MiniMessage.miniMessage().deserialize(addProprieties(subtitle, type, false, false)),
                 times
         );
 
@@ -505,7 +430,7 @@ public final class MessagesManager {
                 componentKiller.append(player.displayName());
                 componentKiller.clickEvent(ClickEvent.clickEvent(Action.SUGGEST_COMMAND, "/w " + player.getName()));
             }else {
-                componentKiller.append(GlobalUtils.ChatColorLegacyToComponent(MessagesType.INFO.getSecondColor() + killer.getName() + MessagesType.INFO.getMainColor()));
+                componentKiller.append(MiniMessage.miniMessage().deserialize(MessagesType.INFO.getSecondColor() + killer.getName() + MessagesType.INFO.getMainColor()));
             }
             componentKiller.hoverEvent(HoverEvent.showEntity(killer.asHoverEvent().value()));
             TextReplacementConfig.Builder config2 = TextReplacementConfig.builder().matchLiteral("%2$s").replacement(componentKiller);

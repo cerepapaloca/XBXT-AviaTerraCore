@@ -15,8 +15,6 @@ import net.atcore.security.Login.model.LimboData;
 import net.atcore.security.Login.model.LoginData;
 import net.atcore.security.Login.LoginManager;
 import net.atcore.security.SecuritySection;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 
 import java.util.HashMap;
@@ -109,11 +107,11 @@ public class PacketListenerManager {
             @Override
             public void onPacketSending(PacketEvent event) {
                 ChatListener chatListener = ListenerSection.getChatListener();
-                if (chatListener.getLastPlayerMention() == null)return;
+                if (chatListener.getLastPlayerMention() == null) return;
                 UUID playerUUID = chatListener.getLastPlayerMention().getUniqueId();
 
                 if (!playerUUID.equals(event.getPlayer().getUniqueId())) return;
-                event.getPlayer().playSound(event.getPlayer(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.7f,1);
+                event.getPlayer().playSound(event.getPlayer(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.7f, 1);
                 chatListener.setLastPlayerMention(null);
 
                 // Obtener el mensaje original en formato JSON
@@ -122,22 +120,22 @@ public class PacketListenerManager {
                 if (chatComponent != null) {
                     String originalJsonMessage = chatComponent.getJson();
 
-                    // de texto a json
+                    // Convertir el mensaje JSON en un objeto JsonObject
                     JsonObject jsonObject = JsonParser.parseString(originalJsonMessage).getAsJsonObject();
-                    //cambiar el color en la parte extra
+
+                    // Cambiar el color en la parte "extra"
                     if (jsonObject.has("extra")) {
                         JsonArray extraArray = jsonObject.getAsJsonArray("extra");
 
-                        //puede venir varios
+                        // Iterar a través de los elementos en "extra"
                         for (int i = 0; i < extraArray.size(); i++) {
                             try {
                                 JsonObject extraObject = extraArray.get(i).getAsJsonObject();
                                 if (extraObject.has("text")) {
-                                    String extraText = extraObject.get("text").getAsString();
-                                    extraObject.addProperty("text", MessagesType.INFO.getSecondColor() + extraText);
+                                    // Cambiar el color del texto
+                                    extraObject.addProperty("color", "gold");
                                 }
-                            }catch (Exception ignored){
-
+                            } catch (Exception ignored) {
                             }
                         }
                     }

@@ -33,8 +33,8 @@ public class MessageFile extends FileYaml {
             }else if (message != null) {
                 MESSAGES_ENTITY.put(entityType, List.of(message));
             }else {
-                fileYaml.set(path, Message.DEATH_CAUSE_ENTITY_ATTACK.getMessage());
-                MESSAGES_ENTITY.put(entityType, List.of(Message.DEATH_CAUSE_ENTITY_ATTACK.getMessage()));
+                fileYaml.set(path, "<|%2$s|> mató a <|%1$s|>");
+                MESSAGES_ENTITY.put(entityType, List.of("<|%2$s|> mató a <|%1$s|>"));
             }
         }
 

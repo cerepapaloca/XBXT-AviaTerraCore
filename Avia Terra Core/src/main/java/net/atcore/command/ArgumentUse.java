@@ -27,7 +27,6 @@ public class ArgumentUse {
 
     private final String command;
     private boolean isRequired = true;
-    private boolean isFinal = false;
 
     public ArgumentUse(@NotNull String s) {
         if (s.startsWith("/")){
@@ -71,7 +70,6 @@ public class ArgumentUse {
     public ArgumentUse addFinalArg(@NotNull String s) {
         Argument arg = new Argument(isRequired, new String[]{s});
         arg.isFinal = true;
-        isFinal = true;
         args.add(arg);
         return this;
     }

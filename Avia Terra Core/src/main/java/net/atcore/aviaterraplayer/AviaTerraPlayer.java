@@ -10,11 +10,9 @@ import net.atcore.inventory.InventorySection;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.MessagesType;
 import net.atcore.utils.GlobalUtils;
-import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.jetbrains.annotations.Contract;
 
 import java.util.ArrayList;
@@ -82,7 +80,7 @@ public class AviaTerraPlayer {
             boolean b1 = true;
             boolean b2 = true;
             for (int i = 32; i > 4; i--) {
-                if (!b1 && !b2) return;
+                if (!b1 && !b2) break;
                 if (b1){
                     if (player.hasPermission(AviaTerraCore.getInstance().getName().toLowerCase() + ".simulationdistance." + i)) {
                         player.setSimulationDistance(i);
@@ -100,7 +98,7 @@ public class AviaTerraPlayer {
 
             playerDataFile.loadData();
             Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> {
-                if (nameColor != null) player.displayName(GlobalUtils.ChatColorLegacyToComponent(nameColor));
+                if (nameColor != null) player.displayName(GlobalUtils.chatColorLegacyToComponent(nameColor));
             });
         });
     }

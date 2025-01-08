@@ -4,6 +4,7 @@ import net.atcore.AviaTerraCore;
 import net.atcore.Config;
 import net.atcore.armament.*;
 import net.atcore.messages.CategoryMessages;
+import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.MessagesType;
 import net.atcore.command.CommandManager;
@@ -77,13 +78,13 @@ public class PlayerListener implements Listener {
         MessagesType type = MessagesType.INFO;
         boolean isCancelled = CommandManager.checkCommand(command, player, false, true);
         if (isCancelled){
-            s = " &c(Cancelado)";
+            s = " <red>(Cancelado)";
             type = MessagesType.WARNING;
         }
         if (COMMANDS_PRE_LOGIN.contains(command)) {
-            MessagesManager.sendMessageConsole(String.format("<|%s|> ejecutó -> %s", player.getName(), "&6*Comando De Login*" + s), type, CategoryMessages.COMMANDS, false);
+            MessagesManager.sendMessageConsole(String.format(Message.COMMAND_GENERIC_RUN_LOG.getMessage(), player.getName(), "<gold>*Comando De Login*" + s), type, CategoryMessages.COMMANDS, false);
         }else {
-            MessagesManager.sendMessageConsole(String.format("<|%s|> ejecutó -> %s", player.getName(), "&6`" + event.getMessage() + "`" + s), type, CategoryMessages.COMMANDS, false);
+            MessagesManager.sendMessageConsole(String.format(Message.COMMAND_GENERIC_RUN_LOG.getMessage(), player.getName(), "<gold>`" + event.getMessage() + "`" + s), type, CategoryMessages.COMMANDS, false);
         }
         event.setCancelled(isCancelled);
     }
@@ -113,32 +114,36 @@ public class PlayerListener implements Listener {
 
     private void addRange(@NotNull Player player){
         ItemStack item = player.getInventory().getItemInMainHand();
-        if (item.getType().equals(Material.NAME_TAG)){
+        if (item.getType().equals(Material.NAME_TAG)) {
             String range = (String) GlobalUtils.getPersistenData(item, "rangeName", PersistentDataType.STRING);
             Long time = (Long) GlobalUtils.getPersistenData(item, "durationRange", PersistentDataType.LONG);
             Long date = (Long) GlobalUtils.getPersistenData(item, "dateCreationRange", PersistentDataType.LONG);
-            if (date == null)return;
-            if (range == null)return;
+            if (date == null) return;
+            if (range == null) return;
 
-            if (date < Config.getPurgeTagRange()){//mira está dentro de la purga
+            if (date < Config.getPurgeTagRange()) {//mira está dentro de la purga
                 item.setAmount(0);
                 return;
             }
             player.getInventory().getItemInMainHand().setAmount(0);
-            if (time != null && time != GlobalConstantes.NUMERO_PERMA){
+            if (time != null && time != GlobalConstantes.NUMERO_PERMA) {
                 AviaTerraCore.getLp().getUserManager().modifyUser(player.getUniqueId(),
                         user -> user.data().add(InheritanceNode.builder(range).expiry(time, TimeUnit.MILLISECONDS).build()));
-            }else {
+            } else {
                 AviaTerraCore.getLp().getUserManager().modifyUser(player.getUniqueId(),
                         user -> user.data().remove(InheritanceNode.builder(range).build()));
             }
             item.setAmount(0);
             player.playSound(player, Sound.ENTITY_PLAYER_LEVELUP, 0.8F, 1);
             RangeType rangeType = RangeType.valueOf(range.toUpperCase());
-            Gradient gradient = new Gradient(rangeType.getDisplayName());
-            gradient.addGradient(GlobalUtils.stringToJavaColor(GlobalUtils.modifyColorHexWithHLS(GlobalUtils.BukkitColorToStringHex(rangeType.getColor()), 0, 0.3f, -0.01f)), 1);
-            gradient.addGradient(GlobalUtils.stringToJavaColor(GlobalUtils.modifyColorHexWithHLS(GlobalUtils.BukkitColorToStringHex(rangeType.getColor()), 0, -0.1f, 0)), 1);
-            MessagesManager.sendTitle(player,"Nuevo Rango",gradient.toString(), 20, 60, 40, MessagesType.INFO);
+            String sb = "<gradient:" +
+                    GlobalUtils.modifyColorHexWithHLS(GlobalUtils.BukkitColorToStringHex(rangeType.getColor()), 0, 0.3f, -0.01f) +
+                    ":" +
+                    GlobalUtils.modifyColorHexWithHLS(GlobalUtils.BukkitColorToStringHex(rangeType.getColor()), 0, -0.1f, 0) +
+                    ">" +
+                    rangeType.getDisplayName() +
+                    "</gradient>";
+            MessagesManager.sendTitle(player,"Nuevo Rango", sb, 20, 60, 40, MessagesType.INFO);
         }
     }
 }

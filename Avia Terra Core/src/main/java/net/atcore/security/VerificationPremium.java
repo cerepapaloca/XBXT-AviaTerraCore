@@ -20,6 +20,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.crypto.spec.SecretKeySpec;
 import java.math.BigInteger;
+import java.net.InetAddress;
 import java.nio.charset.StandardCharsets;
 import java.security.PublicKey;
 import java.util.Arrays;
@@ -37,7 +38,7 @@ public class VerificationPremium {
         byte[] encryptedToken = packet.getByteArrays().read(1);
 
         if (player.getAddress() == null) throw new IllegalThreadStateException("retorno nulo la conexión del paquete");
-
+        InetAddress inetAddress = player.getAddress().getAddress();
         ////* Aquí comienza la valides del usuario *////
         try {
             // Descifrar usando la clave privada del servidor
@@ -60,44 +61,45 @@ public class VerificationPremium {
                 MojangResolver resolver = AviaTerraCore.getResolver();
                 Optional<Verification> response;
                 // Activa el protocolo de encriptación de minecraft. Más información en https://wiki.vg/Protocol_Encryption
-                if (SimulateOnlineMode.enableEncryption(new SecretKeySpec(sharedSecret, "AES"), player)){
+                if (SimulateOnlineMode.enableEncryption(new SecretKeySpec(sharedSecret, "AES"), player)) {
                     // Se investiga en la base de datos en mojang para saber si está logueado.
-                    response = resolver.hasJoined(name, serverId, player.getAddress().getAddress());
+                    response = resolver.hasJoined(name, serverId, inetAddress);
                     if (response.isPresent()){//Se mira la base de datos
                         Verification verification = response.get();
                         if (checkNameAndUUID(verification, name, uuid)) {// Mira si son iguales las uuid premium
-                            if (ip.equals(player.getAddress().getAddress().getHostAddress())){// Mira si la ip son la misma ip
+                            if (ip.equals(inetAddress.getHostAddress())){// Mira si la ip son la misma ip
                                 // Se envía un paquete falso al servidor para que siga con el protocolo
                                 SimulateOnlineMode.FakeStartPacket(verification.getName(), verification.getId(), player);
                                 sendMessageConsole(String.format(Message.LOGIN_PREMIUM_VALIDATION_OK.getMessage(), name), MessagesType.SUCCESS, CategoryMessages.LOGIN);
                                 String userName = verification.getName();
                                 LIST_UUID_PREMIUM.put(userName, verification);
                                 LoginData loginData = LoginManager.getDataLogin(userName);
-                                SessionData session = new SessionData(player, StateLogins.PREMIUM, player.getAddress().getAddress());
+                                SessionData session = new SessionData(player, StateLogins.PREMIUM, inetAddress);
                                 session.setSharedSecret(sharedSecret);
                                 session.setEndTimeLogin(-1);// Por seguridad los jugadores premium no puede tener sesiones
                                 loginData.setSession(session);
                                 loginData.setLimbo(null);
+                                LoginManager.updateLoginDataBase(name, inetAddress);
                                 //LoginManager.checkLoginIn(player, false);//esto para que siga el protocolo
                             }else{
                                 GlobalUtils.kickPlayer(player, Message.LOGIN_KICK_PREMIUM_VALIDATION.getMessage());
-                                sendMessageConsole(String.format(Message.LOGIN_PREMIUM_VALIDATION_FAILED_LOG_0.getMessage(), name, player.getAddress().getHostName()), MessagesType.WARNING, CategoryMessages.LOGIN);
+                                sendMessageConsole(String.format(Message.LOGIN_PREMIUM_VALIDATION_FAILED_LOG_0.getMessage(), name, inetAddress), MessagesType.WARNING, CategoryMessages.LOGIN);
                             }
                         }else {
                             GlobalUtils.kickPlayer(player, Message.LOGIN_KICK_PREMIUM_VALIDATION.getMessage());
-                            sendMessageConsole(String.format(Message.LOGIN_PREMIUM_VALIDATION_FAILED_LOG_1.getMessage(), name, player.getAddress().getHostName()), MessagesType.WARNING, CategoryMessages.LOGIN);
+                            sendMessageConsole(String.format(Message.LOGIN_PREMIUM_VALIDATION_FAILED_LOG_1.getMessage(), name, inetAddress), MessagesType.WARNING, CategoryMessages.LOGIN);
                         }
                     }else{
                         GlobalUtils.kickPlayer(player, Message.LOGIN_KICK_PREMIUM_VALIDATION.getMessage());
-                        sendMessageConsole(String.format(Message.LOGIN_PREMIUM_VALIDATION_FAILED_LOG_2.getMessage(), name, player.getAddress().getHostName()), MessagesType.WARNING, CategoryMessages.LOGIN);
+                        sendMessageConsole(String.format(Message.LOGIN_PREMIUM_VALIDATION_FAILED_LOG_2.getMessage(), name, inetAddress), MessagesType.WARNING, CategoryMessages.LOGIN);
                     }
                 }else {
                     GlobalUtils.kickPlayer(player, Message.LOGIN_KICK_PREMIUM_VALIDATION.getMessage());
-                    sendMessageConsole(String.format(Message.LOGIN_PREMIUM_VALIDATION_FAILED_LOG_3.getMessage(), name, player.getAddress().getHostName()), MessagesType.WARNING, CategoryMessages.LOGIN);
+                    sendMessageConsole(String.format(Message.LOGIN_PREMIUM_VALIDATION_FAILED_LOG_3.getMessage(), name, inetAddress), MessagesType.WARNING, CategoryMessages.LOGIN);
                 }
             }else{
                 GlobalUtils.kickPlayer(player, Message.LOGIN_KICK_PREMIUM_VALIDATION.getMessage());
-                sendMessageConsole(String.format(Message.LOGIN_PREMIUM_VALIDATION_FAILED_LOG_3.getMessage(), player.getAddress().getHostName()), MessagesType.WARNING, CategoryMessages.LOGIN);
+                sendMessageConsole(String.format(Message.LOGIN_PREMIUM_VALIDATION_FAILED_LOG_4.getMessage(), inetAddress.toString()), MessagesType.WARNING, CategoryMessages.LOGIN);
             }
         } catch (Exception e) {
             throw new RuntimeException(e);

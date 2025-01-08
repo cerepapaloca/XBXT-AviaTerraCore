@@ -104,7 +104,7 @@ public final class LoginManager {
                 Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(), () ->
                         DataBaseRegister.addRegister(registerData.getUsername(),
                         profileObj.getId().toString(), GlobalUtils.getUUIDByName(name).toString(),
-                        ip.getHostName(), ip.getHostName(),
+                        ip.getHostAddress(), ip.getHostAddress(),
                         true, null,
                         System.currentTimeMillis(), System.currentTimeMillis()
                 ));
@@ -116,7 +116,7 @@ public final class LoginManager {
                 Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(), () ->
                         DataBaseRegister.addRegister(registerData.getUsername(),
                         null, GlobalUtils.getUUIDByName(name).toString(),
-                        ip.getHostName(), ip.getHostName(),
+                        ip.getHostAddress(), ip.getHostAddress(),
                         false, null,
                         System.currentTimeMillis(), System.currentTimeMillis()
                 ));

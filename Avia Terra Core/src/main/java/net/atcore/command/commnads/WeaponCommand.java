@@ -8,7 +8,6 @@ import net.atcore.command.ArgumentUse;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesType;
 import net.atcore.utils.GlobalUtils;
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;

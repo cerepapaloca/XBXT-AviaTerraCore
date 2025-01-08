@@ -65,10 +65,11 @@ public class SimulateOnlineMode {
             GlobalUtils.kickPlayer(player, Message.LOGIN_KICK_GENERIC.getMessage());
             return false;
         }
+        InetAddress inetAddress = player.getAddress().getAddress();
 
         UUID uuid = packet.getUUIDs().read(0);
         String name = packet.getStrings().read(0);
-        if (AntiBot.checkBot(player.getAddress().getAddress(), name)){
+        if (AntiBot.checkBot(inetAddress, name)){
             return true;
         }
 
@@ -76,7 +77,7 @@ public class SimulateOnlineMode {
         // En caso que no tenga una sesión se le expiro se hace una nueva
         if ((loginData == null || loginData.getSession() == null) || loginData.getSession().getEndTimeLogin() < System.currentTimeMillis()) {
             // Lo registra si no esta registrado
-            StateLogins state = LoginManager.getStateAndRegister(player.getAddress().getAddress() ,name);
+            StateLogins state = LoginManager.getStateAndRegister(inetAddress ,name);
             switch (Config.getServerMode()){
                 case OFFLINE_MODE -> state = StateLogins.CRACKED;
                 case ONLINE_MODE -> state = StateLogins.PREMIUM;
@@ -85,7 +86,7 @@ public class SimulateOnlineMode {
                 case PREMIUM -> startLoginPremium(name, uuid, player);
                 case UNKNOWN -> GlobalUtils.kickPlayer(player, Message.LOGIN_KICK_GENERIC.getMessage());
             }
-            sendMessageConsole(String.format(Message.LOGIN_START_PROTOCOL_LOG.getMessage(), state.name().toLowerCase(), name), MessagesType.INFO, CategoryMessages.LOGIN);
+            sendMessageConsole(String.format(Message.LOGIN_START_PROTOCOL_LOG.getMessage(), state.name().toLowerCase(), name, inetAddress.getHostName(), inetAddress.getHostAddress()), MessagesType.INFO, CategoryMessages.LOGIN);
             return state == StateLogins.PREMIUM; //se cancela por que asi el servidor no se da cuenta de que a recibido un paquete
         }
         return false;

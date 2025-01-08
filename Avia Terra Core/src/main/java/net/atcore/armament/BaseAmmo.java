@@ -55,7 +55,6 @@ public abstract class BaseAmmo extends BaseArmament {
     private final float densityTrace;
     private final int projectiles;
 
-    @SuppressWarnings("deprecation")
     public String getProperties(){
         StringBuilder properties = new StringBuilder();
         properties.append(String.format("""
@@ -74,7 +73,7 @@ public abstract class BaseAmmo extends BaseArmament {
                                     Color: <|%s|>
                                     Densidad del trazo: <|%s|>
                                     """,
-                ChatColor.of(GlobalUtils.BukkitColorToStringHex(color)) + GlobalUtils.BukkitColorToStringHex(color),
+                "<" + GlobalUtils.BukkitColorToStringHex(color) + ">" + GlobalUtils.BukkitColorToStringHex(color),
                 densityTrace
         ));
         return properties.toString();

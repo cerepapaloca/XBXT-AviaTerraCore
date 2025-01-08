@@ -28,10 +28,7 @@ public abstract class BaseArmament {
         this.name = this.getClass().getName();
         ItemMeta meta = itemArmament.getItemMeta();
         if (meta == null) return;
-        Gradient gradient = new Gradient(displayName)
-                .addGradient(new Color(0xbc,0xbc,0xbc), 1)
-                .addGradient(new Color(0x77,0x77,0x77), 1);
-        meta.displayName(MessagesManager.applyFinalProprieties(gradient.toString(), MessagesType.ERROR, CategoryMessages.PRIVATE, false));
+        meta.displayName(MessagesManager.applyFinalProprieties(displayName, MessagesType.ERROR, CategoryMessages.PRIVATE, false));
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);//se oculta datos del item para que no se vea feo
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);

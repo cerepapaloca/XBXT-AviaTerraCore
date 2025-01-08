@@ -5,6 +5,7 @@ import net.atcore.command.BaseCommand;
 import net.atcore.command.CommandUtils;
 import net.atcore.command.ModeTabPlayers;
 import net.atcore.messages.CategoryMessages;
+import net.atcore.messages.Message;
 import net.atcore.messages.MessagesType;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -34,10 +35,10 @@ public class TellCommand extends BaseCommand {
                     message = message.concat(args[i] + " ");
                 }
                 String finalMessage = message;
-                sendMessage(sender, "&ole haz susurrado a " + args[0], null);
+                sendMessage(sender, String.format(Message.COMMAND_TELL_FEEDBACK.getMessage() ,args[0]), MessagesType.NULL);
                 CommandUtils.executeForPlayer(sender, args[0], true, dataTemporalPlayer -> {
                     Player player = dataTemporalPlayer.player();
-                    sendMessage(player,"&o" + sender.getName() + " -> " + finalMessage, null, CategoryMessages.PRIVATE, false);
+                    sendMessage(player,String.format(Message.COMMAND_TELL_FORMAT_MESSAGE.getMessage(), sender.getName(), finalMessage), MessagesType.NULL, CategoryMessages.PRIVATE, false);
                 });
             }
         }

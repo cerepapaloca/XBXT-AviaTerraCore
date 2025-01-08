@@ -86,7 +86,7 @@ public final class CommandHandler implements TabExecutor {
                     if (argsUse.getLength() >= args.length) {
                         try {
                             if (command.getUsage().getArg(args.length).isRequired()) {
-                                return List.of(MessagesType.ERROR.getMainColor() + String.format(
+                                return List.of("§c" + String.format(// La única vez que se tiene que usar '§'
                                         Message.COMMAND_GENERIC_ARGS_ERROR.getMessage(),
                                         CommandUtils.useToUseDisplay(argsUse.getArgRaw(args.length))
                                 ));

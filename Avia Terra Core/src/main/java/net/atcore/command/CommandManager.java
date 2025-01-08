@@ -91,7 +91,7 @@ public class CommandManager {//nose si poner en esta clase aquí la verdad
             Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> {
                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command.getContentRaw().substring(1));
                 MessagesManager.sendMessageConsole(String.format(net.atcore.messages.Message.COMMAND_GENERIC_RUN_LOG.getMessage()
-                        , member.getUser().getGlobalName() + "(" + member.getId() + ")" ,"`&6" + command.getContentRaw() + "`"), MessagesType.INFO, CategoryMessages.COMMANDS, false);
+                        , member.getUser().getGlobalName() + "(" + member.getId() + ")" ,"<gold>`" + command.getContentRaw() + "`"), MessagesType.INFO, CategoryMessages.COMMANDS, false);
             });
         }else {
             command.reply(net.atcore.messages.Message.COMMAND_GENERIC_NO_PERMISSION_CONSOLE.getMessage()).queue();

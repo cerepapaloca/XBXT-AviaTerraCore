@@ -30,8 +30,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.net.InetAddress;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -211,7 +211,7 @@ public final class GlobalUtils {
                 ProtocolLibrary.getProtocolManager().sendServerPacket(player, kickPack);
             }
         }finally {
-            player.kick(GlobalUtils.ChatColorLegacyToComponent(finalReason));
+            player.kick(GlobalUtils.chatColorLegacyToComponent(finalReason));
         }
     }
 
@@ -534,10 +534,9 @@ public final class GlobalUtils {
      * @return Los Component con los colores resueltos
      */
 
-    @SuppressWarnings("deprecation")
     @NotNull
     @Contract(pure = true)
-    public Component ChatColorLegacyToComponent(String input) {
+    public Component chatColorLegacyToComponent(String input) {
         return MiniMessage.miniMessage().deserialize(GlobalUtils.convertToMiniMessageFormat(input.replace('§', '&')));
     }
 }

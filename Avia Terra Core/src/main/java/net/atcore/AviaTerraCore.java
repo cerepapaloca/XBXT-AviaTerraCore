@@ -21,6 +21,7 @@ import net.dv8tion.jda.api.JDA;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.TextReplacementConfig;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.luckperms.api.LuckPerms;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -51,12 +52,14 @@ public final class AviaTerraCore extends JavaPlugin {
     @Getter private static MojangResolver resolver;
     @Getter private static boolean isStarting;
     @Getter private static AviaTerraCore instance;
+    @Getter private static MiniMessage miniMessage;
 
 
     @Override
     public void onLoad(){
         instance = this;
         resolver = new MojangResolver();
+        miniMessage = MiniMessage.miniMessage();
     }
 
     @Override
@@ -93,6 +96,8 @@ public final class AviaTerraCore extends JavaPlugin {
         for (Section section : RegisterManager.sections){
             section.disable();
         }
+        LIST_BROADCAST.clear();
+
         workerThread.interrupt();
         Bukkit.getOnlinePlayers().forEach(player -> {
             LoginData loginData = LoginManager.getDataLogin(player);
@@ -164,6 +169,7 @@ public final class AviaTerraCore extends JavaPlugin {
         Random random = new Random();
         new BukkitRunnable() {
             public void run() {
+                if (LIST_MOTD.isEmpty()) return;
                 int randomInt = random.nextInt(LIST_MOTD.size());
                 Gradient xb = new Gradient("XB", 'l').addGradient(new Color(75, 47, 222), 1);
                 Gradient xt = new Gradient("XT", 'l').addGradient(new Color(255, 140, 0), 1);

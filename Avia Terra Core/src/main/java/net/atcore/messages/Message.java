@@ -26,11 +26,11 @@ public enum Message {
     LOGIN_KICK_UNKNOWN_STATE("login", "Vuelve a entrar, Hubo un problema con tu cuenta"),
     LOGIN_KICK_ENTRY_LIMBO_ERROR("login", "Error al entrar al modo limbo mode, Por favor vuelve a entrar"),
     LOGIN_KICK_NO_REGISTER("login", "No estas registrado, vuelve a entrar al servidor"),
-    LOGIN_START_PROTOCOL_LOG("login", "Iniciando login: <|%1$s|> para el jugador: <|%2$s|>"),
-    LOGIN_LIMBO_INITIATED_BY_SESSION_CHAT("login", "Para Loguear utiliza el siguiente comando:\n <|/login <Contraseña>|>"),
+    LOGIN_START_PROTOCOL_LOG("login", "Iniciando login: <|%1$s|> para el jugador: <|%2$s|> Ip: <|%3$s|> (%4$s)"),
+    LOGIN_LIMBO_INITIATED_BY_SESSION_CHAT("login", "Para Loguear utiliza el siguiente comando:\n <|<click:suggest_command:/login>/login</click>|>"),
     LOGIN_LIMBO_INITIATED_BY_SESSION_TITLE("login", "Utiliza Este Comando"),
     LOGIN_LIMBO_INITIATED_BY_SESSION_SUBTITLE("login", "<|/login <Contraseña>|>"),
-    LOGIN_LIMBO_INITIATED_BY_REGISTER_CHAT("login", "Para registrarte utiliza el siguiente comando:\n <|/register <Contraseña> <Contraseña>|>."),
+    LOGIN_LIMBO_INITIATED_BY_REGISTER_CHAT("login", "Para registrarte utiliza el siguiente comando:\n <|<click:suggest_command:/register>/register</click>|>."),
     LOGIN_LIMBO_INITIATED_BY_REGISTER_TITLE("login", "Utiliza Este Comando"),
     LOGIN_LIMBO_INITIATED_BY_REGISTER_SUBTITLE("login", "<|/register <Contraseña> <Contraseña>|>"),
     LOGIN_LIMBO_TIME_OUT_SESSION("login", "Tardaste mucho en iniciar sesión"),
@@ -53,7 +53,7 @@ public enum Message {
     SECURITY_REMOVE_TAG("security", "Tag Eliminada"),
     EVENT_QUIT("event", "&8[&4-&8]|!> El jugador <|%s|> se a desconecto"),
     EVENT_JOIN("event", "&8[&a+&8]|!> El jugador <|%s|> se a unido"),
-    EVENT_FORMAT_CHAT("event", " %1$s&r » %2$s"),
+    EVENT_FORMAT_CHAT("event", " %1$s&r » %2$s"),// Dejar el &r
     BAN_ERROR("ban", "Hubo un problema con las bases de datos al banear <|%s|> por <|%s|>"),
     BAN_AUTO_BAN_BOT("ban", "Uso de bots (Baneo Automático)"),
     BAN_AUTO_BAN_BOT_LOG("ban", "Purga de bots terminada"),
@@ -81,7 +81,7 @@ public enum Message {
     COMMAND_GENERIC_NO_PERMISSION("command", "No tienes autorización para ejecutar ese comando"),
     COMMAND_GENERIC_NO_LOGIN("command", "Primero inicia sessión usando <|/login|>"),
     COMMAND_GENERIC_NO_PERMISSION_CONSOLE("command", "No tienes autorización para ejecutar comandos en la consola"),
-    COMMAND_GENERIC_RUN_LOG("command", "<|%s|> ejecutó -> %s"),
+    COMMAND_GENERIC_RUN_LOG("command", "<|%s|> -> %s"),
     COMMAND_GENERIC_EXCEPTION_ERROR("command", "Ops!! Hubo un error al ejecutar el comando contacta con el desarrollador"),
     COMMAND_GENERIC_ARGS_ERROR("command", "Te falta el argumento: %s"),
     COMMAND_GENERIC_FORMAT_DATE_ERROR("command", "EL formato de fecha es incorrecto"),
@@ -108,7 +108,7 @@ public enum Message {
     COMMAND_CHECK_BAN_NOT_FOUND_BAN_IN_CONTEXT("command.check-ban", "El jugador no esta banedo de ningún contexto"),
     COMMAND_CHECK_BAN_NOT_FOUND_BUT("command.check-ban", "El jugador esta baneado pero no del contexto seleccionado pero esta baneado de:"),
     COMMAND_CHECK_BAN_FOUND_AND_KICK("command.check-ban", "El jugador <|%1$s|> fue echado del contexto <|%2$s|>"),
-    COMMAND_CHECK_BAN_FOUND("command.check-ban", "&f-|!> Esta baneado de <|%1$s|>, expira en <|%2$s|> y la razón es <|%3$s|>"),
+    COMMAND_CHECK_BAN_FOUND("command.check-ban", "<white>-|!> Esta baneado de <|%1$s|>, expira en <|%2$s|> y la razón es <|%3$s|>"),
     COMMAND_CHECK_BAN_ERROR("command.check-ban", "Hubo un problema al encontrar la información del jugador <|%1$s|>"),
     COMMAND_FREEZE_MISSING_ARGS_LAST("command.freeze", "Tienes que poner true o false"),
     COMMAND_FREEZE_ALREADY_FREEZE("command.freeze", "El jugador ya fue congelado"),
@@ -164,19 +164,21 @@ public enum Message {
     COMMAND_TPA_SEND("command.tpa", "Solicitud enviada a %s"),
     COMMAND_TPA_WAS_DISCONNECTED("command.tpa", "El jugador que te invito se desconecto"),
     COMMAND_TPA_NO_FOUND("command.tpa", "No tienes solicitudes de tpa"),
-    COMMAND_TPA_RECEIVE("command.tpa", "Tienes una solicitud de %s Tpa, Click para &a{click(run_command:/tpa y)[Aceptar]} |!>o &4{click(run_command:/tpa y)[Denegar]}"),
+    COMMAND_TPA_RECEIVE("command.tpa", "Tienes una solicitud de %s Tpa, Click para <click:run_command:/tpa y><green>[Aceptar]</click> |!>o <click:run_command:/tpa n><green><red>[Denegar]</click> "),
     COMMAND_TPA_SELF("command.tpa", "No puedes enviar una solicitud a ti mismo"),
     COMMAND_TPA_EXPIRE("command.tpa","Ya expiro el la solicitud de tpa"),
     COMMAND_HOME_ADD_SUCCESSFUL("command.home", "El home fue creado"),
     COMMAND_HOME_REMOVE_SUCCESSFUL("command.home", "El home fue borrado"),
     COMMAND_HOME_NOT_FOUND_REMOVE("command.home", "El home no existe"),
-    COMMAND_HOME_NOT_FOUND("command.home", "El home no existe puedes crear uno usando <|{click(suggest_command:/home %1$s add)/home %1$s add}"),
+    COMMAND_HOME_NOT_FOUND("command.home", "El home no existe puedes crear uno usando <|<click:run_command:/home %1$s add>/home %1$s add</click>|>"),
     COMMAND_HOME_CONTAINS_POINT("command.home", "El home no puede tener puntos"),
     COMMAND_HOME_MAX_HOME("command.home", "Solo se permite máximo 5 homes"),
-    COMMAND_HOME_CLOSE_SPAWN("command.home", "Esta muy cercar de spawn te falta %s metros para hacer <|{click(suggest_command:/home)/home}|>"),
+    COMMAND_HOME_CLOSE_SPAWN("command.home", "Esta muy cercar de spawn te falta <|%s|> metros para hacer <|<click:run_command:/home>/home</click>|>"),
     COMMAND_HOME_IS_NOT_ALPHABETICAL("command.home", "el nombre del home tiene que comenzar con una letra"),
     COMMAND_SAY_MISSING_ARGS("command.say", "Te falta el mensaje y o tipo de mensaje"),
     COMMAND_SAY_TYPE_MESSAGE_ERROR("command.say", "El tipo de mensaje no existe"),
+    COMMAND_TELL_FEEDBACK("command.tell", "&ole haz susurrado a %s"),
+    COMMAND_TELL_FORMAT_MESSAGE("command.tell", "&o %s -> %s"),
     MISC_KICK_UPPER("misc", "&c&m &r &c&m       &r  &4&lAviaKick&c  &m        &r &c&m \n\n&r"),
     MISC_KICK_LOWER("misc", "\n\n&m &r &c&m                               &r &c&m "),
     DEATH_CAUSE_KILL("death-cause", "<|%1$s|> se murió por que si"),
@@ -232,7 +234,7 @@ public enum Message {
         }
     }
 
-
+    @Deprecated
     @Override
     public String toString() {
         return getMessage();
