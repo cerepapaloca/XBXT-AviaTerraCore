@@ -9,14 +9,21 @@ import net.atcore.AviaTerraCore;
 import net.atcore.data.DataSection;
 import net.atcore.data.FileYaml;
 import net.atcore.data.yml.CacheLimboFile;
+import net.atcore.messages.CategoryMessages;
+import net.atcore.messages.Message;
+import net.atcore.messages.MessagesManager;
+import net.atcore.messages.MessagesType;
+import org.bukkit.Effect;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.HashSet;
+import java.util.List;
 
 @Getter
 @Setter
@@ -28,6 +35,13 @@ public class LimboData {
     private final Location location;
     private final boolean op;
     private final int level;
+    private final double health;
+    private final int foodLevel;
+    private final float exhaustion;
+    private final float saturation;
+    private final int fireTicks;
+    private final List<PotionEffect> effects;
+
     private BukkitTask task;
     private HashSet<PacketContainer> packets;
 
@@ -37,6 +51,12 @@ public class LimboData {
         player.setLevel(level);
         player.teleport(location, PlayerTeleportEvent.TeleportCause.PLUGIN);
         player.getInventory().setContents(items);
+        player.setHealth(health);
+        player.setFoodLevel(foodLevel);
+        player.setExhaustion(exhaustion);
+        player.setSaturation(saturation);
+        player.addPotionEffects(effects);
+        player.setFireTicks(fireTicks);
         player.saveData();// Se guarda los datos del usuario en el servidor por si el servidor peta
         if (gameMode == GameMode.SURVIVAL) player.setAllowFlight(false);
         FileYaml file = DataSection.getCacheLimboFlies().getConfigFile(player.getUniqueId().toString(), false);
@@ -51,6 +71,7 @@ public class LimboData {
                 if (file instanceof CacheLimboFile cacheLimbo) {
                     cacheLimbo.setRestored(true);
                     cacheLimbo.removeLimbo();
+                    MessagesManager.sendMessageConsole(String.format(Message.LOGIN_LIMBO_EXIT.getMessage(), player.getName()), MessagesType.INFO, CategoryMessages.LOGIN);
                 }
             }
         });

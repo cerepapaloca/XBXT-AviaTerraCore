@@ -69,6 +69,8 @@ public class DataSection implements Section {
                 }
                 if (!AviaTerraCore.isStarting()) MessagesManager.sendMessageConsole(String.format("Archivo %s recargador exitosamente", file), MessagesType.SUCCESS);
             }
+            cacheLimboFlies.reloadConfigs();
+            MessagesManager.sendMessageConsole("La cache del limbo fue recarga exitosamente", MessagesType.SUCCESS);
         });
     }
 

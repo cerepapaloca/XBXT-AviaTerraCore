@@ -94,7 +94,6 @@ public class CheckAutoBan {
     }
 
     public static void checkDupe(@NotNull Player player, Inventory inventory) {
-        if (!isAutoBan()) return;
         new BukkitRunnable(){
             public void run() {
                 Map<String, Integer> itemCounts = new HashMap<>();
@@ -119,6 +118,7 @@ public class CheckAutoBan {
                 for (Map.Entry<String, Integer> entry : itemCounts.entrySet()) {
                     if (entry.getValue() > 1) {
                         inventory.clear();
+                        if (!isAutoBan()) return;
                         AviaTerraCore.getInstance().enqueueTaskAsynchronously( () -> {
                             try {
                                 ModerationSection.getBanManager().banPlayer(player, Message.BAN_AUTO_BAN_DUPE.getMessage(),

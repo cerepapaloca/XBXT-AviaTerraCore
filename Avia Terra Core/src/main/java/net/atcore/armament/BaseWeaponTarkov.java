@@ -3,9 +3,11 @@ package net.atcore.armament;
 import lombok.Getter;
 import lombok.Setter;
 import net.atcore.AviaTerraCore;
+import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.MessagesType;
 import net.atcore.utils.GlobalUtils;
+import net.kyori.adventure.text.Component;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -186,7 +188,7 @@ public abstract class BaseWeaponTarkov extends BaseWeapon implements Compartment
 
             updateLore(itemWeapon, hasCharger ? itemSwapMagazine : itemCharger);
             if (hasCharger){
-                GlobalUtils.addItemPlayer(itemSwapMagazine, player, true, true);
+                GlobalUtils.addItemPlayer(itemSwapMagazine, player, true, true, false);
             }
             MessagesManager.sendTitle(player,"", "Recargado", 0, 0,30, MessagesType.SUCCESS);
             player.getWorld().playSound(player.getLocation(), Sound.ITEM_ARMOR_EQUIP_IRON, SoundCategory.PLAYERS, 1, 1);
@@ -229,8 +231,9 @@ public abstract class BaseWeaponTarkov extends BaseWeapon implements Compartment
                         SIN CARGADOR""";
             }
         }
-
-        itemMeta.lore(GlobalUtils.stringToLoreComponent(s, true));
+        List<Component> lore = GlobalUtils.stringToLoreComponent(s, true);
+        lore.addAll(GlobalUtils.stringToLoreComponent(Message.MISC_WARING_ANTI_DUPE.getMessage(), false, MessagesType.WARNING.getMainColor()));
+        itemMeta.lore(lore);
         weapon.setItemMeta(itemMeta);
     }
 
@@ -258,7 +261,7 @@ public abstract class BaseWeaponTarkov extends BaseWeapon implements Compartment
                         GlobalUtils.setPersistentData(itemWeapon, "magazineNameInside", PersistentDataType.STRING, "null");
                         GlobalUtils.setPersistentData(itemWeapon, "magazineAmmo", PersistentDataType.STRING, "");
                         GlobalUtils.setPersistentData(itemCharger, "magazineAmmo", PersistentDataType.STRING, stringAmmo);
-                        GlobalUtils.addProtectionAntiDupe(itemCharger);
+                        GlobalUtils.addProtectionAntiDupe(itemCharger, false);
                         updateLore(itemWeapon, itemCharger);
                         player.setItemOnCursor(itemCharger);
                         return true;

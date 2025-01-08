@@ -136,14 +136,14 @@ public class PlayerListener implements Listener {
             item.setAmount(0);
             player.playSound(player, Sound.ENTITY_PLAYER_LEVELUP, 0.8F, 1);
             RangeType rangeType = RangeType.valueOf(range.toUpperCase());
-            String sb = "<gradient:" +
+            String s = "<gradient:" +
                     GlobalUtils.modifyColorHexWithHLS(GlobalUtils.BukkitColorToStringHex(rangeType.getColor()), 0, 0.3f, -0.01f) +
                     ":" +
                     GlobalUtils.modifyColorHexWithHLS(GlobalUtils.BukkitColorToStringHex(rangeType.getColor()), 0, -0.1f, 0) +
                     ">" +
                     rangeType.getDisplayName() +
                     "</gradient>";
-            MessagesManager.sendTitle(player,"Nuevo Rango", sb, 20, 60, 40, MessagesType.INFO);
+            MessagesManager.sendTitle(player,"Nuevo Rango", s, 20, 60, 40, MessagesType.INFO);
         }
     }
 }

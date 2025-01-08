@@ -74,7 +74,7 @@ public class WeaponCommand extends BaseTabCommand {
                     for (int i = 0; i < cantidad; i++) {
                         CommandUtils.executeForPlayer(sender, args[0], true, dataTemporalPlayer ->
                                 GlobalUtils.addItemPlayer(baseArmament.getItemArmament(), dataTemporalPlayer.player(),
-                                        true, typeArmament != TypeArmament.AMMO));
+                                        true, typeArmament != TypeArmament.AMMO, false));
                     }
                     sendMessage(sender, Message.COMMAND_WEAPON_SUCCESSFUL, MessagesType.SUCCESS);
                 }else{

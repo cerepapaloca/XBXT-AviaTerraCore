@@ -7,14 +7,18 @@ import me.neznamy.tab.api.TabPlayer;
 import me.neznamy.tab.api.bossbar.BossBar;
 import net.atcore.aviaterraplayer.ArmamentPlayer;
 import net.atcore.aviaterraplayer.AviaTerraPlayer;
+import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.MessagesType;
 import net.atcore.utils.GlobalUtils;
+import net.kyori.adventure.text.Component;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -79,8 +83,8 @@ public abstract class BaseWeaponUltraKill extends BaseWeapon {
     @Override
     public void updateLore(ItemStack itemStack, ItemStack itemAuxiliar){
         ItemMeta meta = itemStack.getItemMeta();
-        assert meta != null;
-        meta.lore(GlobalUtils.stringToLoreComponent(String.format("""
+        if (meta == null)return;
+        String s = String.format("""
                 Daño: <|%s|>
                 Presión: <|%s|>
                 Munición: <|%s|>
@@ -90,7 +94,10 @@ public abstract class BaseWeaponUltraKill extends BaseWeapon {
                 (100 - vague) + "%",
                 GlobalUtils.getPersistenData(itemStack,"AmountAmmo", PersistentDataType.INTEGER),
                 maxDistance
-        ), true));
+        );
+        List<Component> lore = GlobalUtils.stringToLoreComponent(s, true);
+        lore.addAll(GlobalUtils.stringToLoreComponent(Message.MISC_WARING_ANTI_DUPE.getMessage(), false, MessagesType.WARNING.getMainColor()));;
+        meta.lore(lore);
         itemStack.setItemMeta(meta);
     }
 }

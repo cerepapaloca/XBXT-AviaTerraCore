@@ -159,10 +159,10 @@ public class AviaTerraCommand extends BaseTabCommand {
             case "autoban" -> {
                 if (args.length >= 2) {
                     if (CommandUtils.isTrueOrFalse(args[1])){
-                        Config.setAntiBot(true);
+                        Config.setAutoBan(true);
                         sendMessage(sender,"autoBan <|Activado|>", MessagesType.INFO);
                     }else{
-                        Config.setAntiBot(false);
+                        Config.setAutoBan(false);
                         sendMessage(sender,"autoBan <|Desactivado|>", MessagesType.INFO);
                     }
                 }else{

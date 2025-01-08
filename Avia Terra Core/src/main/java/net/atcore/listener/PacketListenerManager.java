@@ -15,7 +15,9 @@ import net.atcore.security.Login.model.LimboData;
 import net.atcore.security.Login.model.LoginData;
 import net.atcore.security.Login.LoginManager;
 import net.atcore.security.SecuritySection;
+import org.bukkit.Bukkit;
 import org.bukkit.Sound;
+import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -119,7 +121,6 @@ public class PacketListenerManager {
 
                 if (chatComponent != null) {
                     String originalJsonMessage = chatComponent.getJson();
-
                     // Convertir el mensaje JSON en un objeto JsonObject
                     JsonObject jsonObject = JsonParser.parseString(originalJsonMessage).getAsJsonObject();
 
@@ -132,10 +133,13 @@ public class PacketListenerManager {
                             try {
                                 JsonObject extraObject = extraArray.get(i).getAsJsonObject();
                                 if (extraObject.has("text")) {
+                                    // Si el primer elemento tiene color eso quieres decir que se está tomando el nombre de usuario
+                                    if (extraObject.has("color") && i == 0) continue;
                                     // Cambiar el color del texto
                                     extraObject.addProperty("color", "gold");
                                 }
                             } catch (Exception ignored) {
+                                //throw new RuntimeException("Couldn't parse extra");
                             }
                         }
                     }

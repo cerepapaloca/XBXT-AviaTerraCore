@@ -23,6 +23,7 @@ import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.kyori.adventure.title.Title;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.AbstractVillager;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -398,8 +399,8 @@ public final class MessagesManager {
         final Title.Times times = Title.Times.times(Duration.ofMillis(20L *fadeIn), Duration.ofMillis(20L *stay), Duration.ofMillis(20L *fadeOut));
         // Using the times object this title will use 500ms to fade in, stay on screen for 3000ms and then fade out for 1000ms
         final Title t = Title.title(
-                MiniMessage.miniMessage().deserialize(addProprieties(title, type, false, false)),
-                MiniMessage.miniMessage().deserialize(addProprieties(subtitle, type, false, false)),
+                AviaTerraCore.getMiniMessage().deserialize(GlobalUtils.convertToMiniMessageFormat(addProprieties(title, type, false, false))),
+                AviaTerraCore.getMiniMessage().deserialize(GlobalUtils.convertToMiniMessageFormat(addProprieties(subtitle, type, false, false))),
                 times
         );
 

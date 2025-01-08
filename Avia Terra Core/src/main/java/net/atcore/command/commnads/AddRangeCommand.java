@@ -60,19 +60,23 @@ public class AddRangeCommand extends BaseTabCommand {
                     ItemMeta meta = item.getItemMeta();
                     assert meta != null;
                     //meta.setDisplayName(GlobalUtils.applyGradient("<#f0f0f0>asdas<#404040>"));
-                    Gradient gradient = new Gradient(String.format(Message.COMMAND_ADD_RANGE_NAME.getMessage(), range.getDisplayName(), GlobalUtils.timeToString(time, 2)));
-                    gradient.addGradient(GlobalUtils.stringToJavaColor(GlobalUtils.modifyColorHexWithHLS(GlobalUtils.BukkitColorToStringHex(range.getColor()), 0f, 0.35f, -0.f)), 1);
-                    gradient.addGradient(GlobalUtils.stringToJavaColor( GlobalUtils.modifyColorHexWithHLS(GlobalUtils.BukkitColorToStringHex(range.getColor()), 0f, 0.35f, -0f)), 1);
-                    meta.displayName(addTextComponent(gradient.toString()));
+                    String s = "<gradient:" +
+                            GlobalUtils.modifyColorHexWithHLS(GlobalUtils.BukkitColorToStringHex(range.getColor()), 0, 0.3f, -0.01f) +
+                            ":" +
+                            GlobalUtils.modifyColorHexWithHLS(GlobalUtils.BukkitColorToStringHex(range.getColor()), 0, -0.1f, 0) +
+                            ">" +
+                            range.getDisplayName() +
+                            "</gradient>";
+                    meta.displayName(AviaTerraCore.getMiniMessage().deserialize(s));
                     item.setItemMeta(meta);
                     if(args.length == 2){
                         if (sender instanceof Player playerSender){
-                            addItemPlayer(item, playerSender, false, true);
+                            addItemPlayer(item, playerSender, false, true, true);
                         }else{
                             sendMessage(sender, Message.COMMAND_GENERIC_NO_PLAYER, MessagesType.ERROR);
                         }
                     }else{
-                        CommandUtils.executeForPlayer(sender, args[2], true, fakePlayer -> GlobalUtils.addItemPlayer(item, fakePlayer.player(), false, true));
+                        CommandUtils.executeForPlayer(sender, args[2], true, fakePlayer -> GlobalUtils.addItemPlayer(item, fakePlayer.player(), false, true, true));
                         sendMessage(sender, Message.COMMAND_ADD_RANGE_SUCCESSFUL, MessagesType.SUCCESS);
                     }
                 }else{

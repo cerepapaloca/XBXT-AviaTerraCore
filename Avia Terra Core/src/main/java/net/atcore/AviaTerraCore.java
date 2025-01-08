@@ -159,6 +159,7 @@ public final class AviaTerraCore extends JavaPlugin {
         Random random = new Random();
         new BukkitRunnable() {
             public void run() {
+                if (LIST_BROADCAST.isEmpty()) return;
                 int randomInt = random.nextInt(LIST_BROADCAST.size());
                 Bukkit.broadcast(MessagesManager.applyFinalProprieties(LIST_BROADCAST.get(randomInt), MessagesType.INFO, CategoryMessages.PRIVATE, true));
             }
@@ -171,9 +172,7 @@ public final class AviaTerraCore extends JavaPlugin {
             public void run() {
                 if (LIST_MOTD.isEmpty()) return;
                 int randomInt = random.nextInt(LIST_MOTD.size());
-                Gradient xb = new Gradient("XB", 'l').addGradient(new Color(75, 47, 222), 1);
-                Gradient xt = new Gradient("XT", 'l').addGradient(new Color(255, 140, 0), 1);
-                Bukkit.motd(addTextComponent(String.format("§6§l%s§r  §6%s \n§1%s", xb, LIST_MOTD.get(randomInt), xt)));
+                Bukkit.motd(AviaTerraCore.getMiniMessage().deserialize(String.format("<#4B2FDE><bold>XB<reset>  <gold>%s \n<#FF8C00><bold>XT", LIST_MOTD.get(randomInt))));
             }
         }.runTaskTimer(this, 20L, 20L);
     }

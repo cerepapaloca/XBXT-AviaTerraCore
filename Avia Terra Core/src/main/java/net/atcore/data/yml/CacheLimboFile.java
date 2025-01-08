@@ -6,10 +6,9 @@ import net.atcore.security.Login.model.LoginData;
 import net.atcore.security.Login.LoginManager;
 import org.bukkit.*;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 public class CacheLimboFile extends FileYaml {
     public CacheLimboFile(String fileName, String folderName) {
@@ -50,15 +49,34 @@ public class CacheLimboFile extends FileYaml {
             );
         }
 
+        List<?> raw = fileYaml.getList("effects");
+        List<PotionEffect> effects = new ArrayList<>();
+        if (raw != null) {
+            for (Object obj : raw) {
+                if (obj != null) {
+                    if (obj instanceof PotionEffect effect) {
+                        effects.add(effect);
+                    }
+                }
+            }
+        }
 
         LimboData limboData = new LimboData(
                 GameMode.valueOf(fileYaml.getString("game-mode", "SURVIVAL").toUpperCase()),
                 inventory,
                 location,
                 fileYaml.getBoolean("op", false),
-                fileYaml.getInt("level-xp", 0)
+                fileYaml.getInt("level-xp", 0),
+                fileYaml.getDouble("heath"),
+                fileYaml.getInt("food-level"),
+                (float) fileYaml.getDouble("exhaustion"),
+                (float) fileYaml.getDouble("saturation"),
+                fileYaml.getInt("fire-tick"),
+                effects
+
         );
         loginData.setLimbo(limboData);
+        Bukkit.getLogger().warning("Loaded Limbo: " + limboData);
     }
 
     @Override
@@ -74,6 +92,11 @@ public class CacheLimboFile extends FileYaml {
         fileYaml.set("level-xp", limboData.getLevel());
         fileYaml.set("op", limboData.isOp());
         fileYaml.set("inventory", limboData.getItems());
+        fileYaml.set("effects", limboData.getEffects());
+        fileYaml.set("health", limboData.getHealth());
+        fileYaml.set("exhaustion", limboData.getExhaustion());
+        fileYaml.set("fire-tick", limboData.getFireTicks());
+        fileYaml.set("saturation", limboData.getSaturation());
         saveConfig();
     }
 

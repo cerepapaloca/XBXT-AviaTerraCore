@@ -3,9 +3,11 @@ package net.atcore.armament;
 import lombok.Getter;
 import lombok.Setter;
 import net.atcore.AviaTerraCore;
+import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.MessagesType;
 import net.atcore.utils.GlobalUtils;
+import net.kyori.adventure.text.Component;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -53,7 +55,10 @@ public abstract class BaseMagazine extends BaseArmament implements Compartment {
             for (String ammoName : ArmamentUtils.stringToList(stringAmmo)) AmmoBaseList.add(ArmamentUtils.getAmmo(ammoName));
             String finalLore = getFinalLore(setLore, AmmoBaseList);
             if (setLore){
-                meta.lore(GlobalUtils.stringToLoreComponent(finalLore, true));
+
+                List<Component> lore = GlobalUtils.stringToLoreComponent(finalLore, true);
+                lore.addAll(GlobalUtils.stringToLoreComponent(Message.MISC_WARING_ANTI_DUPE.getMessage(), false, MessagesType.WARNING.getMainColor()));
+                meta.lore(lore);
                 item.setItemMeta(meta);
             }
             return finalLore;
@@ -187,7 +192,7 @@ public abstract class BaseMagazine extends BaseArmament implements Compartment {
                     for (String name : ArmamentUtils.stringToList(stringAmmo)){
                         BaseAmmo baseAmmo = ArmamentUtils.getAmmo(name);
                         if (baseAmmo == null) continue;
-                        GlobalUtils.addItemPlayer(baseAmmo.getItemArmament(), player, true, false);
+                        GlobalUtils.addItemPlayer(baseAmmo.getItemArmament(), player, true, false, false);
                     }
                     baseMagazine.getProperties(ItemCharger, true);
                     return true;

@@ -30,7 +30,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.net.InetAddress;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -122,9 +121,23 @@ public final class GlobalUtils {
      * @param item el item que le quieres aplicar la protección
      */
 
-    public void addProtectionAntiDupe(@NotNull ItemStack item){
+    public void addProtectionAntiDupe(@NotNull ItemStack item, boolean warningMessage){
         ItemMeta meta = item.getItemMeta();
         if (meta == null) return;
+        List<Component> components = meta.lore();
+        List<Component> addLore;
+        if (warningMessage) {
+            addLore = GlobalUtils.stringToLoreComponent(Message.MISC_WARING_ANTI_DUPE.getMessage(), true, MessagesType.WARNING.getMainColor());
+        }else {
+            addLore = new ArrayList<>();
+        }
+        if (components == null){
+            meta.lore(addLore);
+        }else {
+            components.addAll(addLore);
+            meta.lore(components);
+        }
+
         meta.getPersistentDataContainer().set(KEY_ANTI_DUPE, PersistentDataType.STRING, "?");
         item.setItemMeta(meta);
         item.setAmount(1);// Se pone uno, por qué si el jugador lo divide va a ser baneado accidentalmente
@@ -170,9 +183,9 @@ public final class GlobalUtils {
         meta.getPersistentDataContainer().remove(key);
     }
 
-    public static void addItemPlayer(@NotNull ItemStack item, @NotNull Player player, boolean silent, boolean protection){
+    public static void addItemPlayer(@NotNull ItemStack item, @NotNull Player player, boolean silent, boolean protection, boolean warningMessage){
         if (!silent) player.playSound(player, Sound.ENTITY_ITEM_PICKUP, 1,1);
-        if (protection) GlobalUtils.addProtectionAntiDupe(item);
+        if (protection) GlobalUtils.addProtectionAntiDupe(item, warningMessage);
         if (player.getInventory().addItem(item).isEmpty()) return;
         Location location = player.getLocation();
         World world = player.getWorld();
@@ -292,30 +305,31 @@ public final class GlobalUtils {
     }
 
     public static @NotNull List<Component> stringToLoreComponent(@NotNull String texto, boolean space) {
-        return stringToLoreComponent(texto, 40, space, '7');
+        return stringToLoreComponent(texto, space, 40, "&7");
     }
 
-    public static @NotNull List<Component> stringToLoreComponent(@NotNull String texto, int longitud, boolean space) {
-        return stringToLoreComponent(texto, longitud, space, '7');
+    public static @NotNull List<Component> stringToLoreComponent(@NotNull String texto, boolean space, int longitud) {
+        return stringToLoreComponent(texto, space, longitud, "&7");
     }
 
-    public static @NotNull List<Component> stringToLoreComponent(@NotNull String texto, boolean space, char color) {
-        return stringToLoreComponent(texto, 40, space, color);
+    public static @NotNull List<Component> stringToLoreComponent(@NotNull String texto, boolean space, String color) {
+        return stringToLoreComponent(texto, space, 40, color);
     }
 
     /**
      * Crea un lore a partir de un texto sin salto de línea esto es por qué minecraft el lore se ase con un {@code ArrayList<String>}
      * donde cada String es una liena es decir si tiene dos String en una List solo se muestra dos líneas en el item.
-     * @param texto el texto que se va a transformar
+     *
+     * @param texto    el texto que se va a transformar
+     * @param space    si el lore tiene un espacio por arriba y por abajo es solo por qué el lore se ve mejor con el espacio
      * @param longitud cada cuantas letras tiene que hacer el salto de linéa. Si usa {@code \n} crear un salo de linéa
      *                 sin importar si á llegado a la cantidad de letras
-     * @param space si el lore tiene un espacio por arriba y por abajo es solo por qué el lore se ve mejor con el espacio
-     * @param color el color por defecto que va a tener el lore
+     * @param color    el Color usando MiniMessage
      * @return regresa una List conde cada elemento de la lista es un salto de liena del texto
      */
 
     @Contract(pure = true)
-    public static @NotNull List<Component> stringToLoreComponent(@NotNull String texto, int longitud, boolean space, char color) {
+    public static @NotNull List<Component> stringToLoreComponent(@NotNull String texto, boolean space, int longitud, String color) {
         ArrayList<Component> lineas = new ArrayList<>();
         if (space) lineas.add(Component.text(" "));
 
@@ -334,7 +348,7 @@ public final class GlobalUtils {
                     }
                 }
 
-                lineas.add(MessagesManager.applyFinalProprieties(parte.substring(inicio, fin), MessagesType.NULL, CategoryMessages.PRIVATE, false));
+                lineas.add(MessagesManager.applyFinalProprieties(GlobalUtils.convertToMiniMessageFormat(color) + parte.substring(inicio, fin), MessagesType.NULL, CategoryMessages.PRIVATE, false));
                 inicio = fin + 1; // Salta el espacio
             }
         }
@@ -498,6 +512,7 @@ public final class GlobalUtils {
     @NotNull
     @Contract(pure = true)
     public String convertToMiniMessageFormat(String input) {
+        input = input.replace('§', '&');
         input = input.replaceAll("&#([A-Fa-f0-9]{6})", "<#$1>");
 
         input = input.replace("&l", "<bold>");
@@ -534,6 +549,7 @@ public final class GlobalUtils {
      * @return Los Component con los colores resueltos
      */
 
+    @SuppressWarnings("deprecation")
     @NotNull
     @Contract(pure = true)
     public Component chatColorLegacyToComponent(String input) {
