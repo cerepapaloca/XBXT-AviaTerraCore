@@ -37,7 +37,7 @@ public class UnbanCommand extends BaseTabCommand {
         }
         //en un hilo aparte por qué explota el servidor
         CommandUtils.executeForPlayer(sender, args[0], false, dataTemporalPlayer ->
-                AviaTerraCore.getInstance().enqueueTaskAsynchronously(() ->
+                AviaTerraCore.enqueueTaskAsynchronously(() ->
                         ModerationSection.getBanManager().removeBanPlayer(dataTemporalPlayer.name(), contextBan, sender.getName())));
         sendMessage(sender, Message.COMMAND_UNBAN_SUCCESSFUL.getMessage(), MessagesType.INFO);
     }

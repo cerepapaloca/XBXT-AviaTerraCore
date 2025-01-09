@@ -3,6 +3,7 @@ package net.atcore.security.Login;
 import lombok.experimental.UtilityClass;
 import net.atcore.AviaTerraCore;
 import net.atcore.data.DataSection;
+import net.atcore.data.File;
 import net.atcore.data.FileYaml;
 import net.atcore.data.yml.CacheLimboFile;
 import net.atcore.messages.CategoryMessages;
@@ -18,6 +19,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.UUID;
 
 @UtilityClass
 public class LimboManager {
@@ -47,18 +50,18 @@ public class LimboManager {
         sendMessage(player, reasonLimbo, newLimboData(player, loginData));
         if (file != null) {// Si tiene un archivo eso quiere decir que no pudo aplicar las propiedades al usuario
             if (file instanceof CacheLimboFile cacheLimbo){
-                AviaTerraCore.getInstance().enqueueTaskAsynchronously(() -> {
+                AviaTerraCore.enqueueTaskAsynchronously(() -> {
                     if (!cacheLimbo.isRestored()){
-                        Bukkit.getLogger().warning("Limbo restored");
                         // Carga los datos del usuario
                         // Se realiza de manera asincrónica por qué no se requiere los datos del usuario para crear el LimboData
                         cacheLimbo.loadData();
                     }
+                    loginData.getLimbo().setFinishedProcessing(true);
                 });
 
             }
         }
-        AviaTerraCore.getInstance().enqueueTaskAsynchronously(() -> {
+        AviaTerraCore.enqueueTaskAsynchronously(() -> {
             CacheLimboFile limboFile = (CacheLimboFile) DataSection.getCacheLimboFlies().registerConfigFile(player.getUniqueId().toString());
             limboFile.saveData();
             limboFile.setRestored(false);

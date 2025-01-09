@@ -60,7 +60,7 @@ public class VerificationPremium {
                 String serverId = generateServerId(SecuritySection.getEncryptService().getPublicKey(), sharedSecret);
                 MojangResolver resolver = AviaTerraCore.getResolver();
                 Optional<Verification> response;
-                // Activa el protocolo de encriptación de minecraft. Más información en https://wiki.vg/Protocol_Encryption
+                // Activa el protocolo de encriptación de minecraft. Más información en https://minecraft.wiki/w/Minecraft_Wiki:Projects/wiki.vg_merge/Protocol_Encryption
                 if (SimulateOnlineMode.enableEncryption(new SecretKeySpec(sharedSecret, "AES"), player)) {
                     // Se investiga en la base de datos en mojang para saber si está logueado.
                     response = resolver.hasJoined(name, serverId, inetAddress);

@@ -8,7 +8,6 @@ import net.atcore.command.ArgumentUse;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesType;
 import net.atcore.utils.GlobalUtils;
-import net.atcore.utils.Gradient;
 import net.atcore.utils.RangeType;
 import net.luckperms.api.model.group.Group;
 import org.bukkit.Material;
@@ -21,7 +20,6 @@ import org.bukkit.persistence.PersistentDataType;
 import java.util.ArrayList;
 import java.util.List;
 
-import static net.atcore.messages.MessagesManager.addTextComponent;
 import static net.atcore.messages.MessagesManager.sendMessage;
 import static net.atcore.utils.GlobalUtils.addItemPlayer;
 

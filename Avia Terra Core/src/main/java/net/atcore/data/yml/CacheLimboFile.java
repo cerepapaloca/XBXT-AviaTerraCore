@@ -75,8 +75,8 @@ public class CacheLimboFile extends FileYaml {
                 effects
 
         );
+        limboData.setFinishedProcessing(true);
         loginData.setLimbo(limboData);
-        Bukkit.getLogger().warning("Loaded Limbo: " + limboData);
     }
 
     @Override

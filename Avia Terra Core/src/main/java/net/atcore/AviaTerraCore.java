@@ -13,14 +13,11 @@ import net.atcore.listener.ListenerSection;
 import net.atcore.security.Login.model.LoginData;
 import net.atcore.security.Login.LoginManager;
 import net.atcore.security.SecuritySection;
+import net.atcore.utils.AviaRunnable;
 import net.atcore.utils.GlobalUtils;
-import net.atcore.utils.Gradient;
 import net.atcore.utils.RegisterManager;
 import net.atcore.moderation.ModerationSection;
 import net.dv8tion.jda.api.JDA;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextComponent;
-import net.kyori.adventure.text.TextReplacementConfig;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.luckperms.api.LuckPerms;
 import org.bukkit.Bukkit;
@@ -28,20 +25,18 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import static net.atcore.messages.MessagesManager.addTextComponent;
 import static net.atcore.messages.MessagesManager.sendMessageConsole;
 import static net.atcore.utils.RegisterManager.register;
 
 public final class AviaTerraCore extends JavaPlugin {
 
-    private static final BlockingQueue<Runnable> TASK_QUEUE = new LinkedBlockingQueue<>();
+    private static final BlockingQueue<AviaRunnable> TASK_QUEUE = new LinkedBlockingQueue<>();
     private Thread workerThread;
 
     public static final String TOKEN_BOT = "MTI5MTUzODM1MjY0NjEzMTc3NA.GDwtcq.azwlvX6fWKbusXk8sOyzRMK78Qe9CwbHy_pmWk";
@@ -133,13 +128,30 @@ public final class AviaTerraCore extends JavaPlugin {
     }
 
     /**
-     * Realiza tareas de manera asincrónica y lo añade a una cola
-     * para evitar problemas de sincronización
+     * @see #enqueueTaskAsynchronously(boolean, Runnable)
+     * @param task La tarea que se va añadir
      */
 
-    public void enqueueTaskAsynchronously(Runnable task) {
-        if (!TASK_QUEUE.offer(task)){
+    public static void enqueueTaskAsynchronously(Runnable task) {
+        enqueueTaskAsynchronously(false, task);
+    }
+
+    /**
+     * Realiza tareas de manera asincrónica y lo añade a una cola para evitar problemas de sincronización y que se haga
+     * los proceso de manera consecutiva.
+     * <p>
+     * Si la tarea tarda mucho en realizarse mucho en realize (<100 ms) salta una excepción indicando el problema
+     * @param task El proceso que va a realizar
+     * @param isHeavyProcess indica si la tarea es pesada haciendo una omisión del waring que se
+     *                       produce cuando la tarea tarda en completable
+     */
+
+    public static void enqueueTaskAsynchronously(boolean isHeavyProcess, Runnable task) {
+        if (!TASK_QUEUE.offer(new AviaRunnable(task, isHeavyProcess))){
             MessagesManager.sendMessageConsole("Error al añadir una tarea la cola", MessagesType.ERROR);
+        }
+        if (TASK_QUEUE.size() > 6){
+            MessagesManager.sendMessageConsole(String.format("Hay <|%s|> tareas en cola, Hilo sobre cargador", TASK_QUEUE.size()), MessagesType.WARNING, CategoryMessages.SYSTEM, false);
         }
     }
 
@@ -147,8 +159,18 @@ public final class AviaTerraCore extends JavaPlugin {
         try {
             while (!Thread.currentThread().isInterrupted()) {
                 // Toma una tarea de la cola y la ejecuta
-                Runnable task = TASK_QUEUE.take();
+                AviaRunnable task = TASK_QUEUE.take();
+                long startTime = System. nanoTime();
                 task.run();
+                long elapsedNanos = System. nanoTime() - startTime;
+                // 100 ms
+                if (elapsedNanos > 1000000*100 && !isStarting){
+                    StringBuilder builder = new StringBuilder();
+                    for (StackTraceElement element : task.getStackTraceElements()) {
+                        builder.append(element.toString()).append("\n\t");
+                    }
+                    AviaTerraCore.getInstance().getLogger().warning(String.format("La tarea tardo %s Ms en procesarse", elapsedNanos*0.000001D) + "\n" + builder);
+                }
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt(); // Si es interrumpido, detenemos el hilo

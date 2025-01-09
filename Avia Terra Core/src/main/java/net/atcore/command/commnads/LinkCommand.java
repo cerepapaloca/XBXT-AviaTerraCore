@@ -57,7 +57,7 @@ public class LinkCommand extends BaseTabCommand {
                                 if (loginData.getRegister().getGmail() != null){
                                     sendMessage(sender, Message.COMMAND_LINK_ALREADY_GMAIL, MessagesType.WARNING);
                                 }
-                                AviaTerraCore.getInstance().enqueueTaskAsynchronously(() -> {
+                                AviaTerraCore.enqueueTaskAsynchronously(() -> {
                                     TwoFactorAuth.sendVerificationEmail(args[1], codeAuth, FormatMessage.LINK);
                                     sendMessage(sender, Message.COMMAND_LINK_ARRIVED_MESSAGE_GMAIL, MessagesType.SUCCESS);
                                 });
@@ -77,7 +77,7 @@ public class LinkCommand extends BaseTabCommand {
                             );
                             TwoFactorAuth.CODES.put(uuid, codeAuth);
                             sendMessage(sender, Message.COMMAND_LINK_SEND_GMAIL_2, MessagesType.INFO);
-                            AviaTerraCore.getInstance().enqueueTaskAsynchronously(() -> {
+                            AviaTerraCore.enqueueTaskAsynchronously(() -> {
                                 TwoFactorAuth.sendVerificationEmail(loginData.getRegister().getGmail(), codeAuth, FormatMessage.CODE);
                                 sendMessage(sender, Message.COMMAND_LINK_ARRIVED_MESSAGE_GMAIL, MessagesType.SUCCESS);
                             });

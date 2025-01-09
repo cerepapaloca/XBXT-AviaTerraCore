@@ -41,6 +41,7 @@ public class LimboData {
     private final float saturation;
     private final int fireTicks;
     private final List<PotionEffect> effects;
+    private boolean finishedProcessing = false;
 
     private BukkitTask task;
     private HashSet<PacketContainer> packets;

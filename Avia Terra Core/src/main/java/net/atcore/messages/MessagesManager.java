@@ -3,7 +3,6 @@ package net.atcore.messages;
 import lombok.extern.slf4j.Slf4j;
 import net.atcore.AviaTerraCore;
 import net.atcore.data.yml.MessageFile;
-import net.atcore.security.Login.LoginManager;
 import net.atcore.utils.GlobalUtils;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.kyori.adventure.text.Component;
@@ -11,19 +10,11 @@ import net.kyori.adventure.text.TextComponent.Builder;
 import net.kyori.adventure.text.TextReplacementConfig;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.Style;
-import net.kyori.adventure.text.format.TextDecoration;
-import net.kyori.adventure.text.minimessage.Context;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.kyori.adventure.text.minimessage.tag.Tag;
-import net.kyori.adventure.text.minimessage.tag.resolver.ArgumentQueue;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.kyori.adventure.title.Title;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.AbstractVillager;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -32,10 +23,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.time.Duration;
-import java.util.*;
-import java.util.List;
+import java.util.Random;
 
-import static net.kyori.adventure.text.event.ClickEvent.*;
+import static net.kyori.adventure.text.event.ClickEvent.Action;
 
 /**
  * En esta clase esta tod0 relacionado con los colores y el envío de mensajes. Todos los mensajes tienen que pasar por quí
@@ -189,89 +179,6 @@ public final class MessagesManager {
                 .replace("|!>","<reset>" + colorMain)
                 .replace("`", "");
     }
-
-    @Deprecated
-    public static net.kyori.adventure.text.TextComponent addTextComponent(String s) {
-        Builder textBuilder = Component.text();
-        int end = 0;
-        int start = 0;
-        List<Character> charsDisplay = new ArrayList<>();
-        boolean isEntrySyntax = false;
-        List<Character> chartColor = new ArrayList<>();
-        for (int i = 0; s.length() > i; i++) {
-            char c = s.charAt(i);
-            if ('{' == (c)) {
-                start = i;
-                isEntrySyntax = true;
-                addColor(textBuilder, charsDisplay);
-
-                charsDisplay.clear();
-            } else {
-                if (!isEntrySyntax) {
-                    charsDisplay.add(c);
-                }
-            }
-            if ('&' == c || '§' == c) {
-                chartColor.add(s.charAt(i + 1));
-            }
-            if ('}' == (c)) {
-                end = i;
-                isEntrySyntax = false;
-            }
-            if (start != 0 && end != 0) {
-                String sub = s.substring(start, end);
-                start = 0;
-                end = 0;
-                List<Character> chars = new ArrayList<>();
-                for (int j = 1; j < sub.length(); j++) {
-                    if (sub.charAt(j) != '(') {
-                        chars.add(sub.charAt(j));
-                    } else {
-                        break;
-                    }
-                }
-                String propertiesText = getProperties(sub);
-                String displayText = getDisplayText(sub);
-                StringBuilder sb = new StringBuilder();
-                for (char ch : chars) {
-                    sb.append(ch);
-                }
-
-                if (displayText == null) {
-                    throw new IllegalArgumentException("displayText is null. Sintaxis errónea: " + s);
-                }
-                if (propertiesText == null) {
-                    throw new IllegalArgumentException("propertiesText is null. Sintaxis errónea: " + s);
-                }
-                Builder subTextBuilder = Component.text();
-                switch (sb.toString().replace(" ", "")) {
-                    case "hover" -> {
-                        Builder tc = Component.text();
-                        tc.content(displayText);
-                        tc.style(getColorTextColor(chartColor));
-                        tc.hoverEvent(HoverEvent.showText(Component.text(displayText)));
-                        Bukkit.getLogger().warning(tc.build().toString());
-                        subTextBuilder.append(tc);
-                    }
-                    case "click" -> {
-                        String[] split = propertiesText.split(":");
-                        if (split.length == 1)
-                            throw new IllegalArgumentException("Sintaxis errónea tiene que agregar ':' después de la ación");
-                        Builder tc = Component.text();
-                        tc.content(displayText);
-                        tc.style(getColorTextColor(chartColor));
-                        tc.clickEvent(clickEvent(Action.valueOf(split[0].replace(" ", "").toUpperCase()), split[1]));
-                        subTextBuilder.append(tc);
-                    }
-                    default ->
-                            throw new IllegalArgumentException(String.format("Argumento invalido '%s'. Tiene que ser click o hover", sb));
-                }
-                textBuilder.append(subTextBuilder);
-            }
-        }
-        addColor(textBuilder, charsDisplay);
-        return textBuilder.build();
-    }
     //                        OPEN_URL,
 //                                OPEN_FILE,
 //                                RUN_COMMAND,
@@ -279,88 +186,12 @@ public final class MessagesManager {
 //                                CHANGE_PAGE,
 //                                COPY_TO_CLIPBOARD;
 
-    public static Style getColorTextColor(List<Character> chars) {
-        NamedTextColor color = null;
-        TextDecoration td = null;
-        for (char c : chars) {
-            switch (c) {
-                case '4' -> color = NamedTextColor.DARK_RED;
-                case 'c' -> color = NamedTextColor.RED;
-                case '6' -> color = NamedTextColor.GOLD;
-                case 'e' -> color = NamedTextColor.YELLOW;
-                case '2' -> color = NamedTextColor.DARK_GREEN;
-                case 'a' -> color = NamedTextColor.GREEN;
-                case 'b' -> color = NamedTextColor.AQUA;
-                case '3' -> color = NamedTextColor.DARK_AQUA;
-                case '1' -> color = NamedTextColor.DARK_BLUE;
-                case '9' -> color = NamedTextColor.BLUE;
-                case 'd' -> color = NamedTextColor.LIGHT_PURPLE;
-                case '5' -> color = NamedTextColor.DARK_PURPLE;
-                case 'f' -> color = NamedTextColor.WHITE;
-                case '7' -> color = NamedTextColor.GRAY;
-                case '8' -> color = NamedTextColor.DARK_GRAY;
-                case '0' -> color = NamedTextColor.BLACK;
-                case 'k' -> td = TextDecoration.OBFUSCATED;
-                case 'l' -> td = TextDecoration.BOLD;
-                case 'n' -> td = TextDecoration.UNDERLINED;
-                case 'o' -> td = TextDecoration.ITALIC;
-                case 'm' -> td = TextDecoration.STRIKETHROUGH;
-                case 'r' -> {
-                    Style.Builder s = Style.style();
-                    Map<TextDecoration, TextDecoration.State> decorationStateMap = Style.style(color).decorations();
-                    for (TextDecoration key : decorationStateMap.keySet()) {
-                        s.decoration(key, TextDecoration.State.FALSE);
-                    }
-                    s.color(null);
-                    return s.build();
-                }
-            }
-        }
-        if (td != null) {
-            return Style.style(color, td);
-        }else {
-            return Style.style(color);
-        }
-    }
-
     public static Component applyFinalProprieties(String message, @NotNull MessagesType type, CategoryMessages categoryMessages, boolean isPrefix) {
         if (categoryMessages != CategoryMessages.PRIVATE) {
             sendMessageLogDiscord(type, categoryMessages, message);
         }
         String s = addProprieties(GlobalUtils.convertToMiniMessageFormat(message), type, categoryMessages != CategoryMessages.PRIVATE, isPrefix);
         return AviaTerraCore.getMiniMessage().deserialize(s);
-    }
-
-    private static void addColor(Builder textComponent, List<Character> charsDisplay) {
-        StringBuilder sb = new StringBuilder();
-        for (Character ch : charsDisplay) sb.append(ch);
-        String color = sb.toString();
-        // Quien creó LegacyComponentSerializer le beso los pies
-        textComponent.append(LegacyComponentSerializer.legacy('§').deserialize(color));
-    }
-
-    private static @Nullable String getProperties(@NotNull String sub) {
-        int start = 0;// hola {test(dsad)dsadasda}
-        int end = 0;
-        for (int i = 0; i < sub.length(); i++) {
-            char c = sub.charAt(i);
-            if ('(' == (c)) start = i;
-            if (')' == (c)) end = i;
-            if (start != 0 && end != 0) {
-                return sub.substring(start + 1, end);
-            }
-        }
-        return null;
-    }
-
-    private static @Nullable String getDisplayText(String sub) {
-        for (int i = 0; i < sub.length(); i++) {
-            char c = sub.charAt(i);
-            if (')' == c) {
-                return sub.substring(i + 1);
-            }
-        }
-        return null;
     }
 
     private static void sendMessageLogDiscord(MessagesType type, CategoryMessages categoryMessages, String message) {
@@ -414,7 +245,7 @@ public final class MessagesManager {
         if (killer != null && !(killer instanceof Player)) {
             message = MessageFile.MESSAGES_ENTITY.get(killer.getType()).get(r.nextInt(MessageFile.MESSAGES_ENTITY.get(killer.getType()).size()));
         }else {
-            message = Message.valueOf("DEATH_CAUSE_" + cause.name()).toString();
+            message = Message.valueOf("DEATH_CAUSE_" + cause.name()).getMessage();
         }
         Builder tc = Component.text();
         Component component = tc.append(applyFinalProprieties(message, MessagesType.INFO, CategoryMessages.PRIVATE, true)).build();

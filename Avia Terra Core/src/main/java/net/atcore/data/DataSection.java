@@ -58,7 +58,7 @@ public class DataSection implements Section {
 
     @Override
     public void reload() {
-        AviaTerraCore.getInstance().enqueueTaskAsynchronously(() -> {
+        AviaTerraCore.enqueueTaskAsynchronously(true, () -> {
             for (DataBaseMySql dataBaseMySql : DATA_BASE) dataBaseMySql.reload();
             for (File file : FILES) {
                 if (file instanceof FileYaml yaml) {

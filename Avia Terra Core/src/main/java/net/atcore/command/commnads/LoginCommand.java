@@ -85,19 +85,21 @@ public class LoginCommand extends BaseCommand {
     }
 
     private void startPlay(Player player) {
-        startPlaySessionCracked(player);
-        attempts.remove(player.getUniqueId());
-        LoginManager.updateLoginDataBase(player.getName(), Objects.requireNonNull(player.getAddress()).getAddress());
-        MessagesManager.sendTitle(player, Message.COMMAND_LOGIN_SUCCESSFUL_TITLE.getMessage(),
-                String.format(Message.COMMAND_LOGIN_SUCCESSFUL_SUBTITLE.getMessage(), player.getDisplayName()),
-                20, 20*3, 40, MessagesType.INFO);
-        sendMessage(player, Message.COMMAND_LOGIN_SUCCESSFUL_CHAT, MessagesType.SUCCESS);
+        AviaTerraCore.enqueueTaskAsynchronously(() -> {
+            startPlaySessionCracked(player);
+            attempts.remove(player.getUniqueId());
+            LoginManager.updateLoginDataBase(player.getName(), Objects.requireNonNull(player.getAddress()).getAddress());
+            MessagesManager.sendTitle(player, Message.COMMAND_LOGIN_SUCCESSFUL_TITLE.getMessage(),
+                    String.format(Message.COMMAND_LOGIN_SUCCESSFUL_SUBTITLE.getMessage(), player.getDisplayName()),
+                    20, 20*3, 40, MessagesType.INFO);
+            sendMessage(player, Message.COMMAND_LOGIN_SUCCESSFUL_CHAT, MessagesType.SUCCESS);
+        });
     }
 
     private void fail(Player player) {
         int i = attempts.getOrDefault(player.getUniqueId(), 0);
         attempts.put(player.getUniqueId(), ++i);
-        if (i >= 5) AviaTerraCore.getInstance().enqueueTaskAsynchronously(() -> ModerationSection.getBanManager().banPlayer(player,
+        if (i >= 5) AviaTerraCore.enqueueTaskAsynchronously(() -> ModerationSection.getBanManager().banPlayer(player,
                 Message.COMMAND_LOGIN_BANNED.getMessage(),
                 1000*60*5,
                 ContextBan.GLOBAL,

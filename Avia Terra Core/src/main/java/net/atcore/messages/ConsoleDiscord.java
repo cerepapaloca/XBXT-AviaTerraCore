@@ -21,7 +21,7 @@ public class ConsoleDiscord {
     public static ChannelLoggingHandler handler;
 
     public static void startConsoleAndBot(){
-        AviaTerraCore.getInstance().enqueueTaskAsynchronously(() -> {
+        AviaTerraCore.enqueueTaskAsynchronously(true, () -> {
             jda = JDABuilder.createDefault(TOKEN_BOT).enableIntents(GatewayIntent.MESSAGE_CONTENT).build();
             try {
                 jda.awaitReady();

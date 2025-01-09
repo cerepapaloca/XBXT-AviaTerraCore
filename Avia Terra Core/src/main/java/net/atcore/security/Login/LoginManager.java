@@ -144,8 +144,10 @@ public final class LoginManager {
         SessionData sessionData = new SessionData(player, StateLogins.CRACKED);
         sessionData.setEndTimeLogin(Config.getExpirationSession());
         loginData.setSession(sessionData);
-        loginData.getLimbo().restorePlayer(player);
-        player.updateCommands();
+        Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> {
+            loginData.getLimbo().restorePlayer(player);
+            player.updateCommands();
+        });
         player.playSound(player, Sound.ENTITY_PLAYER_LEVELUP, 0.4f, 1);
         new BukkitRunnable() {
             public void run() {

@@ -14,7 +14,6 @@ import net.atcore.moderation.Freeze;
 import net.atcore.security.Login.LoginManager;
 import net.atcore.utils.GlobalConstantes;
 import net.atcore.utils.GlobalUtils;
-import net.atcore.utils.Gradient;
 import net.atcore.utils.RangeType;
 import net.luckperms.api.node.types.InheritanceNode;
 import org.bukkit.*;
