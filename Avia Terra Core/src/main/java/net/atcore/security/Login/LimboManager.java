@@ -50,12 +50,13 @@ public class LimboManager {
         if (file != null) {// Si tiene un archivo eso quiere decir que no pudo aplicar las propiedades al usuario
             if (file instanceof CacheLimboFile cacheLimbo){
                 AviaTerraCore.enqueueTaskAsynchronously(() -> {
-                    if (!cacheLimbo.isRestored()){
+                    if (!cacheLimbo.isRestored()) {
                         // Carga los datos del usuario
                         // Se realiza de manera asincrónica por qué no se requiere los datos del usuario para crear el LimboData
                         cacheLimbo.loadData();
+                        MessagesManager.sendMessageConsole(String.format("Se restauro el usuario usando el .yaml", player.getName()), MessagesType.INFO, CategoryMessages.LOGIN);
+
                     }
-                    loginData.getLimbo().setFinishedProcessing(true);
                 });
 
             }

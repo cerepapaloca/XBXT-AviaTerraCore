@@ -68,13 +68,16 @@ public class PacketListenerManager {
             public void onPacketSending(PacketEvent event) {
                 LoginData login = LoginManager.getDataLogin(event.getPlayer());
                 UUID uuid = event.getPlayer().getUniqueId();
+                if (!PACKET_LISTENERS.containsKey(uuid)) PACKET_LISTENERS.put(uuid, new HashSet<>());
+                if (login == null){
+                    PACKET_LISTENERS.get(uuid).add(event.getPacket());
+                    return;
+                }
                 if (login.hasSession()){
                     PACKET_LISTENERS.remove(uuid);
                     return;
                 }
-                if (!PACKET_LISTENERS.containsKey(uuid)) {
-                    PACKET_LISTENERS.put(uuid, new HashSet<>());
-                }
+
                 if (login.isLimboMode()){
                     LimboData limbo = login.getLimbo();
                     if (limbo.getPackets() == null){ // Pasa todos los paquetes guardados al limbo data

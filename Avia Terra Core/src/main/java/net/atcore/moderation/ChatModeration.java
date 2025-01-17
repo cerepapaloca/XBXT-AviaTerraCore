@@ -46,17 +46,6 @@ public class ChatModeration {
     }
 
     public static void tickEvent() {
-        /*new BukkitRunnable() {
-            @Override
-            public void run() {
-                Bukkit.getOnlinePlayers().forEach(player -> {
-                    ModerationPlayer moderationPlayer = AviaTerraPlayer.getPlayer(player).getModerationPlayer();
-                    double f = moderationPlayer.getPointChat();
-                    moderationPlayer.setPointChat(f > MAX_PUNTOS ? MAX_PUNTOS : f + Config.getLevelModerationChat());
-                });
-            }
-        }.runTaskTimer(AviaTerraCore.getInstance(), 1, 1);//TODO optimiza esto por favor*/
-
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -73,6 +62,7 @@ public class ChatModeration {
 
     public static boolean antiBanWord(Player player, String message){
         message = message.toLowerCase();
+        if (Config.getLevelModerationChat() == 0) return false;
         for (String word : badWords){
             if (message.contains(word) ||
                     message.contains(word.replace("i", "1")) ||

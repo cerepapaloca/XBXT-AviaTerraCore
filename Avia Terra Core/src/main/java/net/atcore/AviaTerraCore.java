@@ -187,7 +187,7 @@ public final class AviaTerraCore extends JavaPlugin {
                 int randomInt = random.nextInt(LIST_BROADCAST.size());
                 Bukkit.broadcast(MessagesManager.applyFinalProprieties(LIST_BROADCAST.get(randomInt), MessagesType.INFO, CategoryMessages.PRIVATE, true));
             }
-        }.runTaskTimer(this, 20*60*5L, 20*60*5L);
+        }.runTaskTimer(this, 20*60*15L, 20*60*15L);
     }
 
     private void startMOTD(){

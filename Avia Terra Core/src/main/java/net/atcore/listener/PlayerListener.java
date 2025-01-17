@@ -44,7 +44,7 @@ public class PlayerListener implements Listener {
             event.setCancelled(true);
             return;
         }
-        LimitWorld.checkLimit(player);
+        //LimitWorld.checkLimit(player);
         event.setCancelled(Freeze.isFreeze(player));
     }
 

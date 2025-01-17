@@ -75,7 +75,6 @@ public class CacheLimboFile extends FileYaml {
                 effects
 
         );
-        limboData.setFinishedProcessing(true);
         loginData.setLimbo(limboData);
     }
 

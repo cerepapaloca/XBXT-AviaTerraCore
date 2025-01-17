@@ -119,7 +119,7 @@ public class CheckAutoBan {
                     if (entry.getValue() > 1) {
                         inventory.clear();
                         if (!isAutoBan()) return;
-                        AviaTerraCore.getInstance().enqueueTaskAsynchronously( () -> {
+                        AviaTerraCore.enqueueTaskAsynchronously( () -> {
                             try {
                                 ModerationSection.getBanManager().banPlayer(player, Message.BAN_AUTO_BAN_DUPE.getMessage(),
                                         1000 * 60 * 60 * 24 * 5L, ContextBan.GLOBAL, Message.BAN_AUTHOR_AUTO_BAN.getMessage());
@@ -151,7 +151,7 @@ public class CheckAutoBan {
         if (!isAutoBan()) return;
         if (!b)return;
 
-        AviaTerraCore.getInstance().enqueueTaskAsynchronously( () -> {
+        AviaTerraCore.enqueueTaskAsynchronously( () -> {
             try {
                 ModerationSection.getBanManager().banPlayer(player, Message.BAN_AUTO_BAN_ILEGAL_ITEMS.getMessage(),
                         1000 * 60 * 60 * 24 * 10L, ContextBan.GLOBAL, Message.BAN_AUTHOR_AUTO_BAN.getMessage());

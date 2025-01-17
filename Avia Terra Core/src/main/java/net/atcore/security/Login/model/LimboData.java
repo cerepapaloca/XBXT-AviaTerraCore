@@ -43,7 +43,6 @@ public class LimboData {
     private final float saturation;
     private final int fireTicks;
     private final List<PotionEffect> effects;
-    private boolean finishedProcessing = false;
 
     private BukkitTask task;
     private HashSet<PacketContainer> packets;
@@ -65,7 +64,7 @@ public class LimboData {
         CacheLimboFile cacheLimbo = (CacheLimboFile) DataSection.getCacheLimboFlies().getConfigFile(GlobalUtils.getRealUUID(player).toString(), false);
         AviaTerraCore.enqueueTaskAsynchronously(() -> cacheLimbo.setRestored(true));
         cacheLimbo.removeLimbo();
-        if (packets != null) {
+        if (packets != null) {// TODO: Muy baja fiabilidad en bedrock
             for (PacketContainer packet : packets.stream().toList()) {
                 ProtocolLibrary.getProtocolManager().sendServerPacket(player, packet, true);
             }

@@ -488,7 +488,7 @@ public final class GlobalUtils {
         if (LoginManager.checkLoginIn(player)){
             if (NuVotifierListener.LIST_VOTE.contains(player.getName())){
                 AviaTerraCore.getLp().getUserManager().modifyUser(player.getUniqueId(), user ->
-                        user.data().remove(InheritanceNode.builder("vote").build()));
+                        user.data().add(InheritanceNode.builder("vote").build()));
                 MessagesManager.sendTitle(player, "Nuevo Rango Adquirido", "Gracias por votar", 20, 40, 30, MessagesType.SUCCESS);
                 player.getWorld().playSound(player, Sound.ENTITY_PLAYER_LEVELUP, 1 ,1);
                 NuVotifierListener.LIST_VOTE.remove(player.getName());
