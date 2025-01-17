@@ -26,8 +26,8 @@ public class CommandManager {//nose si poner en esta clase aquí la verdad
     public final HashMap<String, String> COMMANDS_AVIA_TERRA = new HashMap<>();
 
     public boolean checkCommand(String command, Player player, boolean isSilent, boolean b){
+        if (!command.startsWith("/")) command = "/" + command;
         if (COMMANDS.containsKey(command.toLowerCase())){
-
             String permission = COMMANDS.get(command.toLowerCase());
             if (permission == null){
                 return false;
@@ -60,6 +60,13 @@ public class CommandManager {//nose si poner en esta clase aquí la verdad
     }
 
     public void processCommandFromDiscord(Message command, Member member){
+
+        Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> {
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command.getContentRaw().substring(1));
+            MessagesManager.sendMessageConsole(String.format(net.atcore.messages.Message.COMMAND_GENERIC_RUN_LOG.getMessage()
+                    , member.getUser().getGlobalName() + "(" + member.getId() + ")" ,"<gold>`" + command.getContentRaw() + "`"), MessagesType.INFO, CategoryMessages.COMMANDS, false);
+        });
+        /*
         boolean hasPermission = false;
         List<RangeType> rolesHasMember = new ArrayList<>();
         List<String> rolesId = new ArrayList<>();// Se crea las listas
@@ -88,13 +95,10 @@ public class CommandManager {//nose si poner en esta clase aquí la verdad
             }
         }
         if (hasPermission){
-            Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> {
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command.getContentRaw().substring(1));
-                MessagesManager.sendMessageConsole(String.format(net.atcore.messages.Message.COMMAND_GENERIC_RUN_LOG.getMessage()
-                        , member.getUser().getGlobalName() + "(" + member.getId() + ")" ,"<gold>`" + command.getContentRaw() + "`"), MessagesType.INFO, CategoryMessages.COMMANDS, false);
-            });
+
         }else {
             command.reply(net.atcore.messages.Message.COMMAND_GENERIC_NO_PERMISSION_CONSOLE.getMessage()).queue();
         }
+        */
     }
 }

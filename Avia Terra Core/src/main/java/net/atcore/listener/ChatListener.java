@@ -39,26 +39,21 @@ public class ChatListener implements Listener {
             return;
         }
 
-        LuckPerms luckPerms = LuckPermsProvider.get();
-        User user = luckPerms.getUserManager().getUser(player.getUniqueId());
-        if (user != null) {
-            String prefix = user.getCachedData().getMetaData().getPrefix();
-            checkAutoBanChat(player , event.getMessage());//se le va a banear?
-            if (ContextBan.CHAT.onContext(player, event)){//está baneado?
-                event.setCancelled(true);
-                return;
-            }
-            if (ChatModeration.antiSpam(player, message) || ChatModeration.antiBanWord(player, message)){
-                event.setCancelled(true);
-                return;//hay algo indecente?
-            }
-            event.setMessage(ChatColor.GRAY + message);
-            event.setFormat(ChatColor.translateAlternateColorCodes('&',prefix +  Message.EVENT_FORMAT_CHAT.getMessage()));
+        checkAutoBanChat(player , event.getMessage());//se le va a banear?
+        if (ContextBan.CHAT.onContext(player, event) != null){//está baneado?
+            event.setCancelled(true);
+            return;
+        }
+        if (ChatModeration.antiSpam(player, message) || ChatModeration.antiBanWord(player, message)){
+            event.setCancelled(true);
+            return;//hay algo indecente?
+        }
+        event.setMessage(ChatColor.GRAY + message);
+        event.setFormat(ChatColor.translateAlternateColorCodes('&', Message.EVENT_FORMAT_CHAT.getMessage()));
 
-            for (Player Player : Bukkit.getOnlinePlayers()) {//busca todos los jugadores
-                if (message.contains(Player.getName())){
-                    lastPlayerMention = Player;
-                }
+        for (Player Player : Bukkit.getOnlinePlayers()) {//busca todos los jugadores
+            if (message.contains(Player.getName())){
+                lastPlayerMention = Player;
             }
         }
     }

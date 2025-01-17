@@ -320,6 +320,7 @@ public final class CommandUtils {
         //String permissionBase = AviaTerraCore.getInstance().getName().toLowerCase() + ".command." + command.toLowerCase();
         //if (player.hasPermission(permissionBase)) return true;
         //permission = permission.replace(permissionBase, "");
+
         if (permission.equals("!*"))return false;
         if (LoginManager.checkLoginIn(player, true, limbo)) {
             if (player.isOp()) return true;

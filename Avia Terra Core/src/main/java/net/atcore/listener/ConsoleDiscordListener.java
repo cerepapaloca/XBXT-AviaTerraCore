@@ -6,6 +6,7 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
 public class ConsoleDiscordListener extends ListenerAdapter {
@@ -20,7 +21,7 @@ public class ConsoleDiscordListener extends ListenerAdapter {
         Message message = event.getMessage();
         String channel = event.getChannel().getId();
         if (channel.equals(ConsoleDiscord.consoleId)){
-            if (message.getContentRaw().startsWith("/")) CommandManager.processCommandFromDiscord(message, member);
+            if (message.getContentRaw().startsWith("-")) CommandManager.processCommandFromDiscord(message, member);
         }
     }
 }

@@ -17,11 +17,11 @@ import net.atcore.messages.MessagesType;
 public abstract class DataBaseMySql implements Reloadable {
     private static Connection connection;
 
-    private static final String HOST = "localhost";// 147.185.221.20 localhost
-    private static final String PORT = "3306";// 2149
-    private static final String DATABASE = "AviaTerra";
-    private static final String USER = "root"; // azurex
-    private static final String PASSWORD = ""; // AdeptusAzurex1313#waos
+    private static final String HOST = "192.168.1.55";
+    private static final String PORT = "3306";
+    private static final String DATABASE = "xbxt";
+    private static final String USER = "xbxt-data-base";
+    private static final String PASSWORD = "AdeptusAzurex1313#waos";
 
     /**
      * No usar este method para tener la conexión con la base de datos
@@ -63,7 +63,7 @@ public abstract class DataBaseMySql implements Reloadable {
      * bloquea el hilo principal de servidor un ejemplo de como
      * pueden crear un hilo aparte
      * <blockquote><pre>
-     *     AviaTerraCore.getInstance().enqueueTaskAsynchronously(() -> {
+     *     AviaTerraCore.enqueueTaskAsynchronously(() -> {
      *          connection = getConnection()
      *     });
      * </pre></blockquote>

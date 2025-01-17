@@ -31,10 +31,10 @@ import static net.kyori.adventure.text.event.ClickEvent.Action;
  * En esta clase esta tod0 relacionado con los colores y el envío de mensajes. Todos los mensajes tienen que pasar por quí
  * al igual que todos los colores.
  */
-@Slf4j
+
 public final class MessagesManager {
 
-    public static final String LINK_DISCORD = "&a&nhttps://discord.gg/azurex";
+    public static final String LINK_DISCORD = "&a&n<click:open_url:https://discord.gg/7ubQQFVMWF>[Discord]</click>";
     //"&8[" + GlobalUtils.applyGradient("<#00CCCC>AviaTerra<#00FFFF>",'l') + "&8]&r " ;
     public static final String PREFIX = "<dark_gray>[<#4B2FDE>XT<#ff8C00>XB<dark_gray>] ";
 

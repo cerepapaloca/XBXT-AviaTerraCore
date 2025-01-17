@@ -51,7 +51,7 @@ public class LoginCommand extends BaseCommand {
                             fail(player);
                         }
                     }else {
-                        if (LoginManager.isEqualPassword(player.getName(), args[0])){
+                        if (LoginManager.isEqualPassword(player, args[0])){
                             preStartPlay(player, loginData);
                         }else{
                             fail(player);
@@ -71,6 +71,7 @@ public class LoginCommand extends BaseCommand {
             sendMessage(player, Message.COMMAND_LOGIN_ALREADY, MessagesType.ERROR);
             return;
         }
+        TwoFactorAuth.CODES.remove(player.getUniqueId());
         try {
             if (!loginData.isLimboMode()) {
                 throw new RuntimeException("El jugador no esta modo limbo");
@@ -88,7 +89,7 @@ public class LoginCommand extends BaseCommand {
         AviaTerraCore.enqueueTaskAsynchronously(() -> {
             startPlaySessionCracked(player);
             attempts.remove(player.getUniqueId());
-            LoginManager.updateLoginDataBase(player.getName(), Objects.requireNonNull(player.getAddress()).getAddress());
+            LoginManager.updateLoginDataBase(GlobalUtils.getRealName(player), Objects.requireNonNull(player.getAddress()).getAddress());
             MessagesManager.sendTitle(player, Message.COMMAND_LOGIN_SUCCESSFUL_TITLE.getMessage(),
                     String.format(Message.COMMAND_LOGIN_SUCCESSFUL_SUBTITLE.getMessage(), player.getDisplayName()),
                     20, 20*3, 40, MessagesType.INFO);

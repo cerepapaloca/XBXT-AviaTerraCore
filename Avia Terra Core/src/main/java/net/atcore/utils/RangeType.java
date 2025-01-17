@@ -10,8 +10,8 @@ import static org.bukkit.Bukkit.getServer;
 
 @Getter
 public enum RangeType {
-    SEPHIRAH(Color.fromRGB(0,0,0), "Sephirah", '\uDFEC', "", true),
-    DEVELOPER(Color.fromRGB(255,0,220), "Developer", '\uDFED', "", true),
+    SEPHIRAH(Color.fromRGB(0,0,0), "Sephirah", '\uDFEC', "1328194548156989460", true),
+    DEVELOPER(Color.fromRGB(255,0,220), "Developer", '\uDFED', "675857224223948801", true),
     SERAPHINE(Color.fromRGB(255,0,0), "Seraphine", '\uDFEE', "1299841338820268072", true),
     VIRTUE(Color.fromRGB(255,0,0), "Virtue", '\uDFEF', "", false),
     ARBITRO(Color.fromRGB(255,106,0), "Arbitro", '\uDFF1', "", false),

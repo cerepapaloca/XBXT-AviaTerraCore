@@ -3,7 +3,6 @@ package net.atcore.security.Login;
 import lombok.experimental.UtilityClass;
 import net.atcore.AviaTerraCore;
 import net.atcore.data.DataSection;
-import net.atcore.data.File;
 import net.atcore.data.FileYaml;
 import net.atcore.data.yml.CacheLimboFile;
 import net.atcore.messages.CategoryMessages;
@@ -18,9 +17,8 @@ import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
+import org.geysermc.floodgate.api.FloodgateApi;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.UUID;
 
 @UtilityClass
 public class LimboManager {
@@ -45,9 +43,10 @@ public class LimboManager {
     public void createLimboMode(Player player, ReasonLimbo reasonLimbo){
         MessagesManager.sendMessageConsole(String.format(Message.LOGIN_LIMBO_INITIATED_LOG.getMessage(), player.getName()), MessagesType.INFO, CategoryMessages.LOGIN);
         LoginData loginData = LoginManager.getDataLogin(player);
-        String uuidString = player.getUniqueId().toString();
+        String uuidString = GlobalUtils.getRealUUID(player).toString();
         FileYaml file = DataSection.getCacheLimboFlies().getConfigFile(uuidString, false);
-        sendMessage(player, reasonLimbo, newLimboData(player, loginData));
+        addLimboData(player, loginData);
+        sendMessage(player, reasonLimbo);
         if (file != null) {// Si tiene un archivo eso quiere decir que no pudo aplicar las propiedades al usuario
             if (file instanceof CacheLimboFile cacheLimbo){
                 AviaTerraCore.enqueueTaskAsynchronously(() -> {
@@ -62,10 +61,19 @@ public class LimboManager {
             }
         }
         AviaTerraCore.enqueueTaskAsynchronously(() -> {
-            CacheLimboFile limboFile = (CacheLimboFile) DataSection.getCacheLimboFlies().registerConfigFile(player.getUniqueId().toString());
+            CacheLimboFile limboFile = (CacheLimboFile) DataSection.getCacheLimboFlies()
+                    .registerConfigFile(GlobalUtils.getRealUUID(player).toString());
             limboFile.saveData();
             limboFile.setRestored(false);
         });
+        if (FloodgateApi.getInstance().isFloodgatePlayer(player.getUniqueId())) {
+            Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> clearPlayer(player));
+        }else {
+            clearPlayer(player);
+        }
+    }
+
+    private static void clearPlayer(Player player) {
         player.getInventory().clear();
         player.teleport(player.getWorld().getSpawnLocation());
         player.setOp(false);
@@ -80,24 +88,36 @@ public class LimboManager {
         player.clearActivePotionEffects();
     }
 
-    private void sendMessage(Player player, ReasonLimbo reasonLimbo, LimboData limboData) {
+    private void sendMessage(Player player, ReasonLimbo reasonLimbo) {
         switch (reasonLimbo){
             case NO_SESSION -> {
                 MessagesManager.sendTitle(player, Message.LOGIN_LIMBO_INITIATED_BY_SESSION_TITLE.getMessage(), Message.LOGIN_LIMBO_INITIATED_BY_SESSION_SUBTITLE.getMessage(), 30, LIMBO_TIME, 30, MessagesType.INFO);
                 MessagesManager.sendMessage(player, Message.LOGIN_LIMBO_INITIATED_BY_SESSION_CHAT.getMessage(), MessagesType.INFO);
-                startTimeOut(player, Message.LOGIN_LIMBO_TIME_OUT_SESSION.getMessage(), limboData);
+                startTimeOut(player, Message.LOGIN_LIMBO_TIME_OUT_SESSION.getMessage());
             }
             case NO_REGISTER -> {
                 MessagesManager.sendTitle(player, Message.LOGIN_LIMBO_INITIATED_BY_REGISTER_TITLE.getMessage(), Message.LOGIN_LIMBO_INITIATED_BY_REGISTER_SUBTITLE.getMessage(), 30, LIMBO_TIME, 30, MessagesType.INFO);
                 MessagesManager.sendMessage(player, Message.LOGIN_LIMBO_INITIATED_BY_REGISTER_CHAT.getMessage(), MessagesType.INFO);
-                startTimeOut(player, Message.LOGIN_LIMBO_TIME_OUT_REGISTER.getMessage(), limboData);
+                startTimeOut(player, Message.LOGIN_LIMBO_TIME_OUT_REGISTER.getMessage());
             }
         }
     }
 
-    private @NotNull LimboData newLimboData(Player player, LoginData loginData) {
+    private void addLimboData(Player player, LoginData loginData) {
         LimboData limboData;
-        limboData = new LimboData(player.getGameMode(),
+        limboData = newLimboData(player);
+        loginData.setLimbo(limboData);
+        if (FloodgateApi.getInstance().isFloodgatePlayer(player.getUniqueId())) {
+            Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> {
+                LimboData realLimboData = newLimboData(player);
+                loginData.setLimbo(realLimboData);
+            });
+        }
+        // Se guarda los datos cuando sé crea el limboData esto es solo por si hubo problema grave con el servidor
+    }
+
+    private static @NotNull LimboData newLimboData(Player player) {
+        return new LimboData(player.getGameMode(),
                 player.getInventory().getContents(),
                 player.getLocation(),
                 player.isOp(),
@@ -109,12 +129,9 @@ public class LimboManager {
                 player.getFireTicks(),
                 player.getActivePotionEffects().stream().toList()
         );
-        loginData.setLimbo(limboData);
-        // Se guarda los datos cuando sé crea el limboData esto es solo por si hubo problema grave con el servidor
-        return limboData;
     }
 
-    private void startTimeOut(Player player, String reason, LimboData limboData){
+    private void startTimeOut(Player player, String reason){
         BukkitTask task = new BukkitRunnable() {
             @Override
             public void run() {
@@ -122,6 +139,6 @@ public class LimboManager {
                 GlobalUtils.kickPlayer(player, reason);
             }
         }.runTaskLater(AviaTerraCore.getInstance(), LIMBO_TIME);
-        limboData.setTask(task);
+        LoginManager.getDataLogin(player).getLimbo().setTask(task);
     }
 }

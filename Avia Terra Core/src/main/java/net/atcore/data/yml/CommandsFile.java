@@ -2,6 +2,7 @@ package net.atcore.data.yml;
 
 import net.atcore.command.CommandManager;
 import net.atcore.data.FileYaml;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 
 public class CommandsFile extends FileYaml {
@@ -19,7 +20,6 @@ public class CommandsFile extends FileYaml {
             section.getKeys(false).forEach(key -> {
                 CommandManager.COMMANDS.put(key, fileYaml.getString("comandos." + key));
             });
-            CommandManager.COMMANDS.putAll(CommandManager.COMMANDS_AVIA_TERRA);
         }
     }
 

@@ -31,7 +31,7 @@ public class RemoveRegisterCommand extends BaseTabCommand {
     public void execute(CommandSender sender, String[] args) {
         if (args.length == 1) {
             CommandUtils.executeForPlayer(sender, args[0], false, dataTemporalPlayer ->
-                    AviaTerraCore.getInstance().enqueueTaskAsynchronously(() -> {
+                    AviaTerraCore.enqueueTaskAsynchronously(() -> {
                         if (DataBaseRegister.removeRegister(dataTemporalPlayer.name(), sender.getName())){
                             sendMessage(sender, String.format(Message.COMMAND_REMOVE_REGISTER_SUCCESSFUL.getMessage(), dataTemporalPlayer.name()), MessagesType.SUCCESS);
                         }else {

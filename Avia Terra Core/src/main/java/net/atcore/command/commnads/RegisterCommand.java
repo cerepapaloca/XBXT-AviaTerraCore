@@ -26,6 +26,8 @@ public class RegisterCommand extends BaseCommand {
         );
     }
 
+    private static final int LENGTH_MIN_PASSWORD = 4;
+
     @Override
     public void execute(CommandSender sender, String[] args) {
         if (sender instanceof Player player){
@@ -34,13 +36,21 @@ public class RegisterCommand extends BaseCommand {
                 if (loginData.getRegister().getStateLogins() == StateLogins.CRACKED || Config.getServerMode().equals(ServerMode.OFFLINE_MODE)){
                     if (args.length >= 2){
                         if (Objects.equals(args[0], args[1])){
-                            sendMessage(player, Message.COMMAND_REGISTER_SUCCESSFUL_CHAT.getMessage(), MessagesType.SUCCESS);
-                            LoginManager.newRegisterCracked(player.getName(), player.getAddress().getAddress(),  args[0]);
-                            MessagesManager.sendTitle(player, Message.COMMAND_REGISTER_SUCCESSFUL_TITLE.getMessage(),
-                                    String.format(Message.COMMAND_REGISTER_SUCCESSFUL_SUBTITLE.getMessage(), player.getDisplayName())
-                                    , 20, 20*3, 40, MessagesType.INFO);
-                            startPlaySessionCracked(player).getRegister().setTemporary(false);
-                            LoginManager.checkLoginIn(player);
+                            if (args[0].length() > LENGTH_MIN_PASSWORD){
+                                if (!args[0].equalsIgnoreCase(player.getName())){
+                                    sendMessage(player, Message.COMMAND_REGISTER_SUCCESSFUL_CHAT.getMessage(), MessagesType.SUCCESS);
+                                    LoginManager.newRegisterCracked(player,  args[0]);
+                                    MessagesManager.sendTitle(player, String.format( Message.COMMAND_REGISTER_SUCCESSFUL_TITLE.getMessage(), MessagesManager.PREFIX),
+                                            String.format(Message.COMMAND_REGISTER_SUCCESSFUL_SUBTITLE.getMessage(), player.getDisplayName())
+                                            , 20, 20*3, 40, MessagesType.INFO);
+                                    startPlaySessionCracked(player).getRegister().setTemporary(false);
+                                    LoginManager.checkLoginIn(player);
+                                }else {
+                                    sendMessage(player, Message.COMMAND_REGISTER_PASSWORD_EQUAL_NAME , MessagesType.ERROR);
+                                }
+                            }else {
+                                sendMessage(player, String.format(Message.COMMAND_REGISTER_PASSWORD_TOO_SHORT.getMessage(), LENGTH_MIN_PASSWORD), MessagesType.ERROR);
+                            }
                         }else{
                             sendMessage(player, Message.COMMAND_REGISTER_NO_EQUAL_PASSWORD, MessagesType.ERROR);
                         }

@@ -3,6 +3,7 @@ package net.atcore.listener;
 import lombok.Getter;
 import net.atcore.AviaTerraCore;
 import net.atcore.Section;
+import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import static net.atcore.AviaTerraCore.jda;
@@ -23,15 +24,6 @@ public class ListenerSection implements Section {
                 new NuVotifierListener(),
                 new DeathListener()
         );
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                if (jda != null) {
-                    jda.addEventListener(new ConsoleDiscordListener());
-                    cancel();
-                }
-            }
-        }.runTaskTimerAsynchronously(AviaTerraCore.getInstance(), 1 , 1);
         PacketListenerManager.registerEvents();
     }
 

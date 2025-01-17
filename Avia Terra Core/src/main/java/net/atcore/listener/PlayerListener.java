@@ -3,6 +3,7 @@ package net.atcore.listener;
 import net.atcore.AviaTerraCore;
 import net.atcore.Config;
 import net.atcore.armament.*;
+import net.atcore.command.commnads.CheckBanCommand;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
@@ -11,6 +12,7 @@ import net.atcore.command.CommandManager;
 import net.atcore.misc.FrameDupe;
 import net.atcore.misc.LimitWorld;
 import net.atcore.moderation.Freeze;
+import net.atcore.moderation.ban.ContextBan;
 import net.atcore.security.Login.LoginManager;
 import net.atcore.utils.GlobalConstantes;
 import net.atcore.utils.GlobalUtils;
@@ -75,6 +77,8 @@ public class PlayerListener implements Listener {
         Player player = event.getPlayer();
         String s = "";
         MessagesType type = MessagesType.INFO;
+        ContextBan.CHAT.onContext(player, event);
+        if (event.isCancelled()) return;
         boolean isCancelled = CommandManager.checkCommand(command, player, false, true);
         if (isCancelled){
             s = " <red>(Cancelado)";

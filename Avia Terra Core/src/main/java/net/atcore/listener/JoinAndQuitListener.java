@@ -7,7 +7,9 @@ import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.MessagesType;
+import net.atcore.moderation.ban.BanManager;
 import net.atcore.moderation.ban.ContextBan;
+import net.atcore.moderation.ban.DataBan;
 import net.atcore.security.AntiTwoPlayer;
 import net.atcore.security.Login.model.LimboData;
 import net.atcore.security.Login.model.LoginData;
@@ -45,8 +47,7 @@ public class JoinAndQuitListener implements Listener {
         if (LoginManager.getDataLogin(player) != null) {// si le llega a borrar el registro
             // Borra a los jugadores no premium que no pudieron registrarse para evitar tener jugadores fantasmas
             if (LoginManager.getDataLogin(player.getUniqueId()).getRegister().isTemporary()){
-                AviaTerraCore.getInstance().enqueueTaskAsynchronously(() ->
-                        DataBaseRegister.removeRegister(player.getName(), "Servidor"));
+                AviaTerraCore.enqueueTaskAsynchronously(() -> DataBaseRegister.removeRegister(player.getName(), "Servidor"));
             }
         }
 
@@ -77,7 +78,12 @@ public class JoinAndQuitListener implements Listener {
         Player player = event.getPlayer();
         AviaTerraPlayer.addPlayer(player);
         SecuritySection.getSimulateOnlineMode().applySkin(player);
-        ContextBan.GLOBAL.onContext(player, event);
+        DataBan ban = ContextBan.GLOBAL.onContext(player, event);
+        if (ban != null){
+            event.kickMessage(MessagesManager.applyFinalProprieties(GlobalUtils.kickPlayer(player, BanManager.formadMessageBan(ban)), MessagesType.KICK, CategoryMessages.PRIVATE, false));
+            event.setResult(PlayerLoginEvent.Result.KICK_BANNED);
+        }
+
     }
 
     @EventHandler(priority = EventPriority.LOW)

@@ -6,14 +6,15 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import net.atcore.AviaTerraCore;
+import net.atcore.aviaterraplayer.AviaTerraPlayer;
 import net.atcore.data.DataSection;
-import net.atcore.data.FileYaml;
 import net.atcore.data.yml.CacheLimboFile;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.MessagesType;
-import org.bukkit.Effect;
+import net.atcore.utils.GlobalUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -21,6 +22,7 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitTask;
+import org.geysermc.floodgate.api.FloodgateApi;
 
 import java.util.HashSet;
 import java.util.List;
@@ -60,21 +62,15 @@ public class LimboData {
         player.setFireTicks(fireTicks);
         player.saveData();// Se guarda los datos del usuario en el servidor por si el servidor peta
         if (gameMode == GameMode.SURVIVAL) player.setAllowFlight(false);
-        FileYaml file = DataSection.getCacheLimboFlies().getConfigFile(player.getUniqueId().toString(), false);
+        CacheLimboFile cacheLimbo = (CacheLimboFile) DataSection.getCacheLimboFlies().getConfigFile(GlobalUtils.getRealUUID(player).toString(), false);
+        AviaTerraCore.enqueueTaskAsynchronously(() -> cacheLimbo.setRestored(true));
+        cacheLimbo.removeLimbo();
+        if (packets != null) {
+            for (PacketContainer packet : packets.stream().toList()) {
+                ProtocolLibrary.getProtocolManager().sendServerPacket(player, packet, true);
+            }
+        }
+        MessagesManager.sendMessageConsole(String.format(Message.LOGIN_LIMBO_EXIT.getMessage(), player.getName()), MessagesType.INFO, CategoryMessages.LOGIN);
 
-        AviaTerraCore.getInstance().enqueueTaskAsynchronously(() -> {
-            if (packets != null) {
-                for (PacketContainer packet : packets.stream().toList()) {
-                    ProtocolLibrary.getProtocolManager().sendServerPacket(player, packet, true);
-                }
-            }
-            if (file != null) {
-                if (file instanceof CacheLimboFile cacheLimbo) {
-                    cacheLimbo.setRestored(true);
-                    cacheLimbo.removeLimbo();
-                    MessagesManager.sendMessageConsole(String.format(Message.LOGIN_LIMBO_EXIT.getMessage(), player.getName()), MessagesType.INFO, CategoryMessages.LOGIN);
-                }
-            }
-        });
     }
 }

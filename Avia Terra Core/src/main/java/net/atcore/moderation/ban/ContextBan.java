@@ -4,26 +4,44 @@ import net.atcore.messages.MessagesManager;
 import net.atcore.messages.MessagesType;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
+import org.eclipse.aether.internal.impl.collect.DefaultVersionFilterContext;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
+import java.util.Set;
 
 public enum ContextBan {
     CHAT() {
+
+        private static final Set<String> SET_COMMANDS_SOCIAL = Set.of("tell", "w", "whipper", "r");
         @Override
-        public boolean onContext(Player player, Event event) {
+        public DataBan onContext(Player player, Event event) {
             if (event instanceof AsyncPlayerChatEvent e) {
-                IsBan isBan = BanManager.checkBan(player, Objects.requireNonNull(player.getAddress()).getAddress(), ContextBan.CHAT);
-                if (isBan.equals(IsBan.YES)) {
-                    e.setCancelled(true);
-                    DataBan dataBan = BanManager.getDataBan(player.getName()).get(ContextBan.CHAT);
-                    MessagesManager.sendMessage(player, " \n" + BanManager.formadMessageBan(dataBan), MessagesType.KICK);
-                    return true;
+                return ban(player, e);
+            }
+            if (event instanceof PlayerCommandPreprocessEvent e) {
+                String command = e.getMessage().split(" ")[0].substring(1).toLowerCase();
+                if (SET_COMMANDS_SOCIAL.contains(command)) {
+                    return ban(player, e);
                 }
             }
-            return false;
+            return null;
+        }
+
+        private DataBan ban(Player player, Cancellable e) {
+            IsBan isBan = BanManager.checkBan(player, Objects.requireNonNull(player.getAddress()).getAddress(), ContextBan.CHAT);
+            if (isBan.equals(IsBan.YES)) {
+                e.setCancelled(true);
+                DataBan dataBan = BanManager.getDataBan(player.getName()).get(ContextBan.CHAT);
+                MessagesManager.sendMessage(player, " \n" + BanManager.formadMessageBan(dataBan), MessagesType.KICK);
+                return dataBan;
+            }
+            return null;
         }
 
         @Override
@@ -33,16 +51,16 @@ public enum ContextBan {
     },
     GLOBAL() {
         @Override
-        public boolean onContext(Player player, Event event) {
+        public DataBan onContext(Player player, Event event) {
             if (event instanceof PlayerLoginEvent e) {
                 IsBan isBan = BanManager.checkBan(player, e.getAddress(), ContextBan.GLOBAL);
                 if (isBan.equals(IsBan.YES)) {
                     DataBan dataBan = BanManager.getDataBan(player.getName()).get(ContextBan.GLOBAL);
                     GlobalUtils.kickPlayer(player, BanManager.formadMessageBan(dataBan));
-                    return true;
+                    return dataBan;
                 }
             }
-            return false;
+            return null;
         }
 
         @Override
@@ -51,7 +69,7 @@ public enum ContextBan {
         }
     };
 
-    public abstract boolean onContext(Player player, Event event);
+    public abstract @Nullable DataBan onContext(Player player, Event event);
 
     public abstract void onBan(Player player, DataBan dataBan);
 }

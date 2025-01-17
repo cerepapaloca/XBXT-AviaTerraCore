@@ -16,6 +16,7 @@ import net.atcore.messages.MessagesType;
 import net.atcore.security.Login.LoginManager;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.luckperms.api.node.types.InheritanceNode;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
@@ -24,6 +25,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.geysermc.floodgate.api.FloodgateApi;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -205,7 +207,7 @@ public final class GlobalUtils {
      * y respetando el formato de razón del kick
      */
 
-    public void kickPlayer(@NotNull Player player,@Nullable String reason) {
+    public String kickPlayer(@NotNull Player player,@Nullable String reason) {
         reason = MessagesManager.addProprieties(Message.MISC_KICK_UPPER
                 + "&4" + (reason == null ? "Has sido expulsado" : reason) + "&c" + Message.MISC_KICK_LOWER, MessagesType.KICK, false, false);
         if (Bukkit.isPrimaryThread()){
@@ -214,16 +216,16 @@ public final class GlobalUtils {
             @NotNull String finalReason = reason;
             Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> kickFinal(player, finalReason));
         }
+        return reason;
     }
 
     private static void kickFinal(@NotNull Player player, @NotNull String finalReason) {
-        try {
-            if (player.getName().startsWith("UNKNOWN[")){
-                PacketContainer kickPack = new PacketContainer(PacketType.Login.Server.DISCONNECT);
-                kickPack.getChatComponents().write(0, WrappedChatComponent.fromText(finalReason));
-                ProtocolLibrary.getProtocolManager().sendServerPacket(player, kickPack);
-            }
-        }finally {
+        if (player.getName().startsWith("UNKNOWN[")){
+            PacketContainer kickPack = new PacketContainer(PacketType.Login.Server.DISCONNECT);
+            String json = GsonComponentSerializer.gson().serialize(GlobalUtils.chatColorLegacyToComponent(finalReason));
+            kickPack.getChatComponents().write(0, WrappedChatComponent.fromJson(json));
+            ProtocolLibrary.getProtocolManager().sendServerPacket(player, kickPack);
+        }else {
             player.kick(GlobalUtils.chatColorLegacyToComponent(finalReason));
         }
     }
@@ -554,5 +556,20 @@ public final class GlobalUtils {
     @Contract(pure = true)
     public Component chatColorLegacyToComponent(String input) {
         return MiniMessage.miniMessage().deserialize(GlobalUtils.convertToMiniMessageFormat(input.replace('§', '&')));
+    }
+
+    @NotNull
+    @Contract(pure = true)
+    public String getRealName(Player player) {
+        if (FloodgateApi.getInstance().isFloodgatePlayer(player.getUniqueId())){
+            return FloodgateApi.getInstance().getPlayer(player.getUniqueId()).getUsername();
+        }else {
+            return player.getName();
+        }
+    }
+
+    @Contract(pure = true)
+    public UUID getRealUUID(Player player) {
+        return GlobalUtils.getUUIDByName(getRealName(player));
     }
 }

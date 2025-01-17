@@ -53,7 +53,7 @@ public class RegisterManager {
             if (pluginCommand == null) {
                 throw new CommandException(command.getName() + " El comando no existe. tiene que añadirlo en plugin.yml");
             }
-            CommandManager.COMMANDS_AVIA_TERRA.put(command.getName().toLowerCase(), command.getPermissions());
+            CommandManager.COMMANDS_AVIA_TERRA.put("/" + command.getName().toLowerCase(), command.getPermissions());
             for (String s : pluginCommand.getAliases()) {
                 CommandManager.COMMANDS_AVIA_TERRA.put(s.toLowerCase(), command.getPermissions());
             }

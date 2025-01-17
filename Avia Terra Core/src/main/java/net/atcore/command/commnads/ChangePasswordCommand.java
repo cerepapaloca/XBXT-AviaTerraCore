@@ -39,7 +39,7 @@ public class ChangePasswordCommand extends BaseTabCommand {
                         onChange(player, password, "código");
                     }
                 }else {
-                    if (LoginManager.isEqualPassword(player.getName(), args[0])){
+                    if (LoginManager.isEqualPassword(player, args[0])){
                         onChange(player, password, "contraseña");
                     }else{
                         sendMessage(sender, Message.COMMAND_CHANGE_PASSWORD_NOT_EQUAL_PASSWORD, MessagesType.ERROR);

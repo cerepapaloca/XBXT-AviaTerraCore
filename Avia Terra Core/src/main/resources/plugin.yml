@@ -41,6 +41,7 @@ commands:
   info:
   tpa:
   say:
+  forcelogin:
   namecolor:
     aliases:
       - nc

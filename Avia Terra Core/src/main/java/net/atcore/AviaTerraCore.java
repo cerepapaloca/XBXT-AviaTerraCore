@@ -3,6 +3,7 @@ package net.atcore;
 import com.github.games647.craftapi.resolver.MojangResolver;
 import lombok.Getter;
 import net.atcore.armament.ArmamentSection;
+import net.atcore.command.CommandManager;
 import net.atcore.command.CommandSection;
 import net.atcore.data.DataSection;
 import net.atcore.messages.CategoryMessages;
@@ -80,6 +81,7 @@ public final class AviaTerraCore extends JavaPlugin {
                 new SecuritySection(),
                 new ArmamentSection()
         );
+        CommandManager.COMMANDS.putAll(CommandManager.COMMANDS_AVIA_TERRA);
         startMOTD();
         startBroadcast();
         isStarting = false;
@@ -103,8 +105,9 @@ public final class AviaTerraCore extends JavaPlugin {
             }
             GlobalUtils.kickPlayer(player, "El servidor va a cerrar, volveremos pronto...");
         });
-        //if (jda != null) jda.shutdown();
-        sendMessageConsole("AviaTerra Apagada", MessagesType.SUCCESS, CategoryMessages.PRIVATE, false);
+        //if (jda != null) jda
+        TASK_QUEUE.clear();
+        sendMessageConsole("XB XT Apagada", MessagesType.SUCCESS, CategoryMessages.PRIVATE, false);
     }
 
     @Override
@@ -115,15 +118,16 @@ public final class AviaTerraCore extends JavaPlugin {
     }
 
     private void messageOn(long timeCurrent){
-        sendMessageConsole("AviaTerra Iniciado en <|" + (System.currentTimeMillis() - timeCurrent) + "ms" +
+        sendMessageConsole("XB XT Iniciado en <|" + (System.currentTimeMillis() - timeCurrent) + "ms" +
                 "\n" +
-                " ________  ___      ___ ___  ________          _________  _______   ________  ________  ________     \n" +
-                "|\\   __  \\|\\  \\    /  /|\\  \\|\\   __  \\        |\\___   ___\\\\  ___ \\ |\\   __  \\|\\   __  \\|\\   __  \\    \n" +
-                "\\ \\  \\|\\  \\ \\  \\  /  / | \\  \\ \\  \\|\\  \\       \\|___ \\  \\_\\ \\   __/|\\ \\  \\|\\  \\ \\  \\|\\  \\ \\  \\|\\  \\   \n" +
-                " \\ \\   __  \\ \\  \\/  / / \\ \\  \\ \\   __  \\           \\ \\  \\ \\ \\  \\_|/_\\ \\   _  _\\ \\   _  _\\ \\   __  \\  \n" +
-                "  \\ \\  \\ \\  \\ \\    / /   \\ \\  \\ \\  \\ \\  \\           \\ \\  \\ \\ \\  \\_|\\ \\ \\  \\\\  \\\\ \\  \\\\  \\\\ \\  \\ \\  \\ \n" +
-                "   \\ \\__\\ \\__\\ \\__/ /     \\ \\__\\ \\__\\ \\__\\           \\ \\__\\ \\ \\_______\\ \\__\\\\ _\\\\ \\__\\\\ _\\\\ \\__\\ \\__\\\n" +
-                "    \\|__|\\|__|\\|__|/       \\|__|\\|__|\\|__|            \\|__|  \\|_______|\\|__|\\|__|\\|__|\\|__|\\|__|\\|__|\n",
+                "<gradient:#571ecf:#3f39ea> ___    ___ ________     </gradient><gradient:#fb8015:#fbb71f> ___    ___ _________   </gradient>\n" +
+                "<gradient:#571ecf:#3f39ea>|\\  \\  /  /|\\   __  \\    </gradient><gradient:#fb8015:#fbb71f>|\\  \\  /  /|\\___   ___\\ </gradient>\n" +
+                "<gradient:#571ecf:#3f39ea>\\ \\  \\/  / | \\  \\|\\ /_   </gradient><gradient:#fb8015:#fbb71f>\\ \\  \\/  / ||___ \\  \\_| </gradient>\n" +
+                "<gradient:#571ecf:#3f39ea> \\ \\    / / \\ \\   __  \\  </gradient><gradient:#fb8015:#fbb71f> \\ \\    / /     \\ \\  \\  </gradient>\n" +
+                "<gradient:#571ecf:#3f39ea>  /     \\/   \\ \\  \\|\\  \\ </gradient><gradient:#fb8015:#fbb71f>  /     \\/       \\ \\  \\ </gradient>\n" +
+                "<gradient:#571ecf:#3f39ea> /  /\\   \\    \\ \\_______\\ </gradient><gradient:#fb8015:#fbb71f>/  /\\   \\        \\ \\__\\ </gradient>\n" +
+                "<gradient:#571ecf:#3f39ea>/__/ /\\ __\\    \\|_______|</gradient><gradient:#fb8015:#fbb71f>/__/ /\\ __\\        \\|__|</gradient>\n" +
+                "<gradient:#571ecf:#3f39ea>|__|/ \\|__|              </gradient><gradient:#fb8015:#fbb71f>|__|/ \\|__|             </gradient>",
                 MessagesType.SUCCESS, CategoryMessages.PRIVATE, false);
     }
 
@@ -140,7 +144,7 @@ public final class AviaTerraCore extends JavaPlugin {
      * Realiza tareas de manera asincrónica y lo añade a una cola para evitar problemas de sincronización y que se haga
      * los proceso de manera consecutiva.
      * <p>
-     * Si la tarea tarda mucho en realizarse mucho en realize (<100 ms) salta una excepción indicando el problema
+     * Si la tarea tarda mucho en realizarse mucho en realize (<1000 ms) salta una excepción indicando el problema
      * @param task El proceso que va a realizar
      * @param isHeavyProcess indica si la tarea es pesada haciendo una omisión del waring que se
      *                       produce cuando la tarea tarda en completable
@@ -163,12 +167,10 @@ public final class AviaTerraCore extends JavaPlugin {
                 long startTime = System. nanoTime();
                 task.run();
                 long elapsedNanos = System. nanoTime() - startTime;
-                // 100 ms
-                if (elapsedNanos > 1000000*100 && !isStarting){
+                // 1000 ms
+                if (elapsedNanos > 1000000*1000 && !task.isHeavyProcess()){
                     StringBuilder builder = new StringBuilder();
-                    for (StackTraceElement element : task.getStackTraceElements()) {
-                        builder.append(element.toString()).append("\n\t");
-                    }
+                    for (StackTraceElement element : task.getStackTraceElements()) builder.append(element.toString()).append("\n\t");
                     AviaTerraCore.getInstance().getLogger().warning(String.format("La tarea tardo %s Ms en procesarse", elapsedNanos*0.000001D) + "\n" + builder);
                 }
             }

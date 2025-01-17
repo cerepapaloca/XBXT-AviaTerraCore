@@ -30,7 +30,7 @@ import java.util.UUID;
 public class AviaTerraPlayer {
     public AviaTerraPlayer(Player player) {
         this.uuid = player.getUniqueId();
-        AviaTerraCore.getInstance().enqueueTaskAsynchronously(() -> {
+        AviaTerraCore.enqueueTaskAsynchronously(() -> {
             this.playerDataFile = (PlayerDataFile) DataSection.getPlayersData().getConfigFile(uuid.toString(), true);
             joinEvent(player);
         });
@@ -76,10 +76,17 @@ public class AviaTerraPlayer {
     }
 
     public void joinEvent(Player player) {
-        AviaTerraCore.getInstance().enqueueTaskAsynchronously(() -> {
+        updateChuck(player);
+        AviaTerraCore.enqueueTaskAsynchronously(() -> playerDataFile.loadData());
+    }
+
+    public void updateChuck(Player player) {
+        AviaTerraCore.enqueueTaskAsynchronously(() -> {
+            player.setSimulationDistance(6);
+            player.setSendViewDistance(6);
             boolean b1 = true;
             boolean b2 = true;
-            for (int i = 32; i > 4; i--) {
+            for (int i = 32; i > 6; i--) {
                 if (!b1 && !b2) break;
                 if (b1){
                     if (player.hasPermission(AviaTerraCore.getInstance().getName().toLowerCase() + ".simulationdistance." + i)) {
@@ -90,13 +97,11 @@ public class AviaTerraPlayer {
 
                 if (b2){
                     if (player.hasPermission(AviaTerraCore.getInstance().getName().toLowerCase() + ".viewdistance." + i)) {
-                        player.setViewDistance(i);
+                        player.setSendViewDistance(i);
                         b2 = false;
                     }
                 }
             }
-
-            playerDataFile.loadData();
             Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> {
                 if (nameColor != null) player.displayName(GlobalUtils.chatColorLegacyToComponent(nameColor));
             });

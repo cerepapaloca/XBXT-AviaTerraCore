@@ -36,7 +36,8 @@ public class CommandSection implements Section {
                 new HomeCommand(),
                 new TpaCommand(),
                 new SayCommand(),
-                new NameColorCommand()
+                new NameColorCommand(),
+                new ForceLoginCommand()
         );
     }
 

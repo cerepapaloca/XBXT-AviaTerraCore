@@ -8,6 +8,7 @@ import net.atcore.AviaTerraCore;
 import net.atcore.Config;
 import net.atcore.data.sql.DataBaseRegister;
 import net.atcore.messages.Message;
+import net.atcore.messages.MessagesManager;
 import net.atcore.security.EncryptService;
 import net.atcore.security.Login.model.LoginData;
 import net.atcore.security.Login.model.RegisterData;
@@ -17,6 +18,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.geysermc.floodgate.api.FloodgateApi;
+import org.geysermc.floodgate.api.player.FloodgatePlayer;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -38,11 +41,17 @@ public final class LoginManager {
     }
 
     public LoginData getDataLogin(UUID uuid) {
-        return listDataLogin.get(uuid);
+        if (FloodgateApi.getInstance().isFloodgatePlayer(uuid)){
+            FloodgatePlayer playerFP = FloodgateApi.getInstance().getPlayer(uuid);
+            return listDataLogin.get(GlobalUtils.getUUIDByName(playerFP.getUsername()));
+        }else {
+            return listDataLogin.get(uuid);
+        }
+
     }
 
     public LoginData getDataLogin(@NotNull Player player) {
-        return listDataLogin.get(player.getUniqueId());
+        return listDataLogin.get(GlobalUtils.getUUIDByName(GlobalUtils.getRealName(player)));
     }
 
     public @NotNull LoginData addDataLogin(String name , RegisterData registerData) {
@@ -56,6 +65,13 @@ public final class LoginManager {
     }
 
     public void removeDataLogin(String name) {
+        Player player = Bukkit.getPlayer(name);
+        if (player != null) {
+            if (FloodgateApi.getInstance().isFloodgatePlayer(player.getUniqueId())) {
+                FloodgatePlayer playerFP = FloodgateApi.getInstance().getPlayer(player.getUniqueId());
+                listDataLogin.remove(GlobalUtils.getUUIDByName(playerFP.getUsername()));
+            }
+        }
         listDataLogin.remove(GlobalUtils.getUUIDByName(name));
     }
 
@@ -65,7 +81,9 @@ public final class LoginManager {
     }
 
     public boolean isLimboMode(Player player) {
-        return getDataLogin(player).isLimboMode();
+        LoginData loginData = getDataLogin(player);
+        if (loginData == null) return false;
+        return loginData.isLimboMode();
     }
 
     /**
@@ -123,12 +141,14 @@ public final class LoginManager {
             }
             return registerData;
         } catch (IOException | RateLimitException e) {
+            MessagesManager.sendWaringException("Error al iniciar el registro del jugador", e);
             return null;
         }
     }
 
     @Contract(pure = true)
-    public boolean isEqualPassword(@NotNull String name, @NotNull String password)  {
+    public boolean isEqualPassword(@NotNull Player player, @NotNull String password)  {
+        String name = GlobalUtils.getRealName(player);
         return EncryptService.hashPassword(name, password).equals(getDataLogin(name).getRegister().getPasswordShaded());
     }
 
@@ -161,29 +181,26 @@ public final class LoginManager {
      * No crea un nuevo registro como tal solo añade la contraseña
      * a su registro asi completado el registro de los cracked
      *
-     * @param name Nombre del usuario
-     * @param inetAddress La ip con que va registrar
+     * @param player El usuario
      * @param password La contraseña sin cifrar
      */
 
-    public void newRegisterCracked(@NotNull String name, @NotNull InetAddress inetAddress , @NotNull String password){
+    public void newRegisterCracked(@NotNull Player player, @NotNull String password){
+        String name = GlobalUtils.getRealName(player);
         String s = EncryptService.hashPassword(name ,password);
-        AviaTerraCore.getInstance().enqueueTaskAsynchronously(() -> {
-            if (updatePassword(name, s)){
-                getDataLogin(name).getRegister().setPasswordShaded(s);
-                RegisterData data = getDataLogin(name).getRegister();
-                data.setTemporary(false);
-            }else {
-                Player player = Bukkit.getPlayer(name);
-                if (player == null) return;
+        RegisterData data = getDataLogin(name).getRegister();
+        data.setTemporary(false);
+        data.setPasswordShaded(s);
+        AviaTerraCore.enqueueTaskAsynchronously(() -> {
+            if (!updatePassword(name, s)){
                 GlobalUtils.synchronizeKickPlayer(player, Message.LOGIN_KICK_PASSWORD_ERROR.getMessage());
             }
         });
-        updateLoginDataBase(name, inetAddress);
+        updateLoginDataBase(name, player.getAddress().getAddress());
     }
 
     public void updateLoginDataBase(String name, InetAddress inetAddress){
-        AviaTerraCore.getInstance().enqueueTaskAsynchronously(() -> {
+        AviaTerraCore.enqueueTaskAsynchronously(() -> {
             boolean b = updateAddress(name, inetAddress.getHostAddress().replace("/","")) && updateLoginDate(name, System.currentTimeMillis());
             if (!b) { // En caso de un error hace un kick al jugador para que vuelva a entrar
                 Player player = Bukkit.getPlayer(name);
@@ -226,7 +243,7 @@ public final class LoginManager {
                             if (GlobalUtils.equalIp(sessionData.getAddress(), player.getAddress().getAddress())) {// las ips tiene que ser iguales
                                 if (ignoreTime || loginData.getSession().getEndTimeLogin() > System.currentTimeMillis()) {// expiro? o no se tiene en cuenta
                                     if (loginData.isLimboMode() && limboMode && player.isOnline()) {
-                                        loginData.getLimbo().restorePlayer(player);
+                                        Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> loginData.getLimbo().restorePlayer(player));
                                     }
                                     return true;// sesión válida para los cracked
                                 }

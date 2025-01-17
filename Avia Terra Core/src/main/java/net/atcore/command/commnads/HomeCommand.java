@@ -45,7 +45,9 @@ public class HomeCommand extends BaseTabCommand {
                 case 1 -> {
                     if (atp.getHomes().containsKey(args[0])) {
                         Location loc = atp.getHomes().get(args[0]);
-                        double distance = player.getLocation().distance(spawnLocation);
+                        Location l = spawnLocation.clone();
+                        l.setWorld(player.getWorld());
+                        double distance = player.getLocation().distance(l);
                         // Esto quiere decir si está en el nether
                         if (player.getWorld().isUltraWarm()) distance *= 8;
                         int distanceMinTp = 100;
@@ -63,7 +65,7 @@ public class HomeCommand extends BaseTabCommand {
                 case 2 -> {
                     FileYaml fileYaml = DataSection.getPlayersData().getConfigFile(atp.getUuid().toString(), true);
                     switch (args[1].toLowerCase()){
-                        case "add" -> AviaTerraCore.getInstance().enqueueTaskAsynchronously(() -> {
+                        case "add" -> AviaTerraCore.enqueueTaskAsynchronously(() -> {
                             if (args[0].contains(".")){
                                 MessagesManager.sendMessage(sender, Message.COMMAND_HOME_CONTAINS_POINT, MessagesType.ERROR);
                                 return;
@@ -80,7 +82,7 @@ public class HomeCommand extends BaseTabCommand {
                             fileYaml.saveData();
                             MessagesManager.sendMessage(sender, Message.COMMAND_HOME_ADD_SUCCESSFUL, MessagesType.SUCCESS);
                         });
-                        case "remove" -> AviaTerraCore.getInstance().enqueueTaskAsynchronously(() -> {
+                        case "remove" -> AviaTerraCore.enqueueTaskAsynchronously(() -> {
                             if (atp.getHomes().containsKey(args[0])) {
                                 atp.getHomes().remove(args[0]);
                                 fileYaml.saveData();
