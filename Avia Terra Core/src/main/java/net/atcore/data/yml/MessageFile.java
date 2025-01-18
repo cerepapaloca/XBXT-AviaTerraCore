@@ -22,8 +22,10 @@ public class MessageFile extends FileYaml {
         String tagLocale = fileName.replace(".yml", "");
         // Filtrar las entidades hostiles
         EnumSet<EntityType> hostileEntities = allEntityTypes.stream()
-                .filter(type -> type.getEntityClass() != null && (org.bukkit.entity.Monster.class.isAssignableFrom(type.getEntityClass()) ||
-                        org.bukkit.entity.Golem.class.isAssignableFrom(type.getEntityClass())))
+                .filter(type -> type.getEntityClass() != null && (
+                        org.bukkit.entity.Monster.class.isAssignableFrom(type.getEntityClass()) ||
+                        org.bukkit.entity.Golem.class.isAssignableFrom(type.getEntityClass())
+                ))
                 .collect(Collectors.toCollection(() -> EnumSet.noneOf(EntityType.class)));
         for (EntityType entityType : hostileEntities) {
             String path = "death-cause.entity." + entityType.name().toLowerCase().replace("_", "-");

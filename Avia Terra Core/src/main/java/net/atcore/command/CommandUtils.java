@@ -21,6 +21,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
@@ -191,14 +192,13 @@ public final class CommandUtils {
             List<String> groups = new ArrayList<>(Arrays.stream(arg.replace("!", "").replace("#", "")
                     .split(",")).toList());
             Set<UUID> uuids = new HashSet<>();
-            if (arg.startsWith("!")) { // Si está en opuesto Añade todos los jugadores a la lista
-                for (Player player : Bukkit.getOnlinePlayers()) uuids.add(player.getUniqueId());
-            }
+            // Si está en opuesto Añade todos los jugadores a la lista
+            if (arg.startsWith("!")) uuids.addAll(Bukkit.getOnlinePlayers().stream().map(Player::getUniqueId).collect(Collectors.toSet()));
             users.forEach(user -> {
                 for (String group : groups) {
                     if (arg.startsWith("!")){ // Aquí se va borrando a los jugadores que pertenece a los grupos
                         if (user.getPrimaryGroup().equals(group)) uuids.remove(user.getUniqueId());
-                    }else { // TODO falta hacer test mas completo de esto
+                    }else {
                         if (user.getPrimaryGroup().equals(group)) uuids.add(user.getUniqueId());
                     }
                 }
@@ -231,7 +231,7 @@ public final class CommandUtils {
         if (safeMode) {
             if (arg.charAt(0) != '!') MessagesManager.sendMessage(sender, String.format(Message.COMMAND_GENERIC_PLAYERS_NOT_FOUND.getMessage(sender), names), MessagesType.WARNING);
         }else {
-            for (String name : names){ // Si no esta en modo seguro crea un TemporalPlayerData con los nombres de los usuarios
+            for (String name : names){ // Si no esta en modo seguro crea un TemporalPlayerData con los nombres de los usuarios no conectados
                 action.accept(new TemporalPlayerData(name, null));
             }
         }

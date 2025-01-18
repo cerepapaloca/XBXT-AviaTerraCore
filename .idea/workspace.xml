@@ -9,15 +9,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ea0f4ef9-10c7-4d19-b67e-e1a9046efa9d" name="Changes" comment="Se añadió la posibilidad de añadir diferentes idiomas (Aún muy EXPERIMENTAL)">
-      <change afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/messages/LocaleAvailable.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/command/commnads/AviaTerraCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/command/commnads/AviaTerraCommand.java" afterDir="false" />
+    <list default="true" id="ea0f4ef9-10c7-4d19-b67e-e1a9046efa9d" name="Changes" comment="bug fix con los idiomas">
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/command/CommandUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/command/CommandUtils.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/data/yml/MessageFile.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/data/yml/MessageFile.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/data/yml/ymls/MessagesLocaleFile.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/data/yml/ymls/MessagesLocaleFile.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/messages/Message.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/messages/Message.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/listener/DeathListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/listener/DeathListener.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/messages/MessagesManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/messages/MessagesManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/utils/GlobalUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/utils/GlobalUtils.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -207,7 +203,7 @@
       <workItem from="1737129053371" duration="11770000" />
       <workItem from="1737171570277" duration="3278000" />
       <workItem from="1737180004223" duration="400000" />
-      <workItem from="1737222277023" duration="13677000" />
+      <workItem from="1737222277023" duration="17039000" />
     </task>
     <task id="LOCAL-00001" summary="cambios menores x2">
       <option name="closed" value="true" />
@@ -505,14 +501,21 @@
       <option name="project" value="LOCAL" />
       <updated>1737233343471</updated>
     </task>
-    <option name="localTasksCounter" value="38" />
+    <task id="LOCAL-00038" summary="bug fix con los idiomas">
+      <option name="closed" value="true" />
+      <created>1737236701389</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1737236701389</updated>
+    </task>
+    <option name="localTasksCounter" value="39" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Config.yml 2.0" />
     <MESSAGE value="corrigiendo algunos mensajes" />
     <MESSAGE value="se añadió el Gradient y mejoras a la documentación" />
     <MESSAGE value="cambios al MessagesManager.java y otros cambios menores" />
@@ -537,7 +540,8 @@
     <MESSAGE value="integración con bedrock y otras cosas más para el servidor" />
     <MESSAGE value="1.0" />
     <MESSAGE value="Se añadió la posibilidad de añadir diferentes idiomas (Aún muy EXPERIMENTAL)" />
-    <option name="LAST_COMMIT_MESSAGE" value="Se añadió la posibilidad de añadir diferentes idiomas (Aún muy EXPERIMENTAL)" />
+    <MESSAGE value="bug fix con los idiomas" />
+    <option name="LAST_COMMIT_MESSAGE" value="bug fix con los idiomas" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

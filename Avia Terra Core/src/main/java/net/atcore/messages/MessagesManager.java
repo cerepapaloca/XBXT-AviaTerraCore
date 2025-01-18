@@ -22,6 +22,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.time.Duration;
+import java.util.Objects;
 import java.util.Random;
 
 import static net.kyori.adventure.text.event.ClickEvent.Action;
@@ -244,7 +245,7 @@ public final class MessagesManager {
         player.showTitle(t);
     }
 
-    public static void deathMessage(Player victim, LivingEntity killer, ItemStack stack, EntityDamageEvent.DamageCause cause) {
+    public static void deathMessage(@NotNull Player victim, @Nullable LivingEntity killer, @Nullable ItemStack stack, @NotNull EntityDamageEvent.DamageCause cause) {
         Random r = new Random();
         for (Player p : Bukkit.getOnlinePlayers()) {
             String message;
@@ -268,7 +269,13 @@ public final class MessagesManager {
                     componentKiller.append(player.displayName());
                     componentKiller.clickEvent(ClickEvent.clickEvent(Action.SUGGEST_COMMAND, "/w " + player.getName()));
                 }else {
-                    componentKiller.append(MiniMessage.miniMessage().deserialize(MessagesType.INFO.getSecondColor() + killer.getName() + MessagesType.INFO.getMainColor()));
+                    Component customName = killer.customName();
+                    if (customName != null) {
+                        componentKiller.append(customName).append(AviaTerraCore.getMiniMessage().deserialize(" (" + killer.getName() + ")"));
+                    }else {
+                        componentKiller.append(AviaTerraCore.getMiniMessage().deserialize(killer.getName()));
+                    }
+
                 }
                 componentKiller.hoverEvent(HoverEvent.showEntity(killer.asHoverEvent().value()));
                 TextReplacementConfig.Builder config2 = TextReplacementConfig.builder().matchLiteral("%2$s").replacement(componentKiller);
