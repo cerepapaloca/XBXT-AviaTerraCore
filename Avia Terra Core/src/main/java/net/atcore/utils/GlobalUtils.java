@@ -208,8 +208,9 @@ public final class GlobalUtils {
      */
 
     public String kickPlayer(@NotNull Player player,@Nullable String reason) {
-        reason = MessagesManager.addProprieties(Message.MISC_KICK_UPPER
-                + "&4" + (reason == null ? "Has sido expulsado" : reason) + "&c" + Message.MISC_KICK_LOWER, MessagesType.KICK, false, false);
+        reason = MessagesManager.addProprieties(Message.MISC_KICK_UPPER.getMessageLocateDefault()
+                + "&4" + (reason == null ? "Has sido expulsado" : reason) + "&c" +
+                Message.MISC_KICK_LOWER.getMessageLocateDefault(), MessagesType.KICK, false, false);
         if (Bukkit.isPrimaryThread()){
             kickFinal(player, reason);
         }else{

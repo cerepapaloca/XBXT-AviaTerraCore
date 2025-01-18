@@ -5,7 +5,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Random;
 
 import static net.atcore.messages.MessagesManager.DEFAULT_LOCALE_PRIVATE;
@@ -232,19 +231,19 @@ public enum Message {
     }
 
     private final String parent;
-    @Getter private final HashMap<Locale, String[]> MapMessageLocale = new HashMap<>();
+    @Getter private final HashMap<LocaleAvailable, String[]> MapMessageLocale = new HashMap<>();
 
     public String getMessage(CommandSender sender) {
-        Locale locale;
+        LocaleAvailable locale;
         if (sender instanceof Player player) {
-            locale = player.locale();
+            locale = LocaleAvailable.getLocate(player.locale());
         }else {
             locale = DEFAULT_LOCALE_PRIVATE;
         }
         return getMessageLocate(locale);
     }
 
-    private String getMessageLocate(Locale locale) {
+    private String getMessageLocate(LocaleAvailable locale) {
         if (!MapMessageLocale.containsKey(locale)) locale = DEFAULT_LOCALE_USER;
         String[] strings = this.MapMessageLocale.get(locale);
         if (strings.length == 1) {
@@ -262,6 +261,4 @@ public enum Message {
     public String getMessageLocateDefault() {
         return getMessageLocate(DEFAULT_LOCALE_USER);
     }
-
-
 }

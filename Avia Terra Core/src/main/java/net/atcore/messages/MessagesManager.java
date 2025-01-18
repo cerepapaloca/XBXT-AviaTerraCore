@@ -22,9 +22,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.time.Duration;
-import java.util.Locale;
 import java.util.Random;
-import java.util.Set;
 
 import static net.kyori.adventure.text.event.ClickEvent.Action;
 
@@ -38,9 +36,8 @@ public final class MessagesManager {
     public static final String LINK_DISCORD = "&a&n<click:open_url:https://discord.gg/7ubQQFVMWF>[Discord]</click>";
     //"&8[" + GlobalUtils.applyGradient("<#00CCCC>AviaTerra<#00FFFF>",'l') + "&8]&r " ;
     public static final String PREFIX = "<dark_gray>[<#4B2FDE>XT<#ff8C00>XB<dark_gray>] ";
-    public static final Locale DEFAULT_LOCALE_USER = Locale.ENGLISH;
-    public static final Locale DEFAULT_LOCALE_PRIVATE = Locale.of("es");
-    public static final Set<Locale> LOCALES_AVAILABLE = Set.of(DEFAULT_LOCALE_USER, DEFAULT_LOCALE_PRIVATE);
+    public static final LocaleAvailable DEFAULT_LOCALE_USER = LocaleAvailable.EN;
+    public static final LocaleAvailable DEFAULT_LOCALE_PRIVATE = LocaleAvailable.ES;
 
     /// ////////////////////////
     /// ////////////////////////
@@ -103,8 +100,8 @@ public final class MessagesManager {
         player.sendMessage(applyFinalProprieties(message, type, categoryMessages, isPrefix));
     }
 
-    /// ////////////////////////
-    /// ////////////////////////
+    /////////////////////////////
+    ////////////////////////////
 
     public static void sendMessageConsole(Message message, MessagesType type) {
         sendMessageConsole(message.getMessageLocatePrivate(), type, CategoryMessages.PRIVATE);

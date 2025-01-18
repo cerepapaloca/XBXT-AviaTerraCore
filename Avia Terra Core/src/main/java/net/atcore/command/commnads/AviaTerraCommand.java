@@ -1,5 +1,6 @@
 package net.atcore.command.commnads;
 
+import net.atcore.AviaTerraCore;
 import net.atcore.Config;
 import net.atcore.Section;
 import net.atcore.command.BaseTabCommand;
@@ -32,7 +33,7 @@ public class AviaTerraCommand extends BaseTabCommand {
                 for (Section section : RegisterManager.sections){
                     section.reload();
                 }
-                sendMessage(sender,"Reload Terminado", MessagesType.SUCCESS);
+                AviaTerraCore.enqueueTaskAsynchronously(() -> sendMessage(sender,"Reload Terminado", MessagesType.SUCCESS));
             }
             case "antiop" -> {
                 if (args.length >= 2) {

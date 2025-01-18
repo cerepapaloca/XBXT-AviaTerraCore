@@ -1,6 +1,7 @@
 package net.atcore.data.yml;
 
 import net.atcore.data.FileYaml;
+import net.atcore.messages.LocaleAvailable;
 import net.atcore.messages.Message;
 import org.bukkit.entity.EntityType;
 
@@ -57,10 +58,11 @@ public class MessageFile extends FileYaml {
             String finalPath = message.getParent() + "." + path;
             String s = fileYaml.getString(finalPath);
             List<String> messages = fileYaml.getStringList(finalPath);
+            LocaleAvailable available = LocaleAvailable.valueOf(tagLocale.toUpperCase());
             if (s != null) {
-                message.getMapMessageLocale().put(Locale.of(tagLocale), new String[]{s});
+                message.getMapMessageLocale().put(available, new String[]{s});
             }else if (!messages.isEmpty()) {
-                message.getMapMessageLocale().put(Locale.of(tagLocale), messages.toArray(new String[0]));
+                message.getMapMessageLocale().put(available, messages.toArray(new String[0]));
             }else {
                 fileYaml.set(finalPath, message.getMessageLocatePrivate());
             }
