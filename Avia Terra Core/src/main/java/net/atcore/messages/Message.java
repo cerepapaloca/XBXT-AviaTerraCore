@@ -1,9 +1,15 @@
 package net.atcore.messages;
 
 import lombok.Getter;
-import lombok.Setter;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
+import java.util.HashMap;
+import java.util.Locale;
 import java.util.Random;
+
+import static net.atcore.messages.MessagesManager.DEFAULT_LOCALE_PRIVATE;
+import static net.atcore.messages.MessagesManager.DEFAULT_LOCALE_USER;
 
 @Getter
 public enum Message {
@@ -54,7 +60,7 @@ public enum Message {
     SECURITY_REMOVE_OP("security", "El jugador <|%s|> tenia creativo o Op y fue eliminado"),
     SECURITY_REMOVE_TAG("security", "Tag Eliminada"),
     EVENT_QUIT("event", "&8[&4-&8]|!> El jugador <|%s|> se a desconecto"),
-    EVENT_JOIN("event", "&8[&a+&8]|!> El jugador <|%s|> se a unido"),
+    EVENT_JOIN("event", "&8[&a+&8]|!> El jugador <click:suggest_command:/w %1$s><|%1$s|></click> se a unido"),
     EVENT_FORMAT_CHAT("event", " %1$s&r » %2$s"),// Dejar el &r
     BAN_ERROR("ban", "Hubo un problema con las bases de datos al banear <|%s|> por <|%s|>"),
     BAN_AUTO_BAN_BOT("ban", "Uso de bots (Baneo Automático)"),
@@ -106,7 +112,7 @@ public enum Message {
     COMMAND_CHANGE_PASSWORD_SUCCESSFUL_LOG("command.change-password", "El jugador <|%1$s|> se cambio la contraseña con su <|%2$s>"),
     COMMAND_CHECK_BAN_MISSING_ARGUMENT_CONTEXT("command.check-ban", "Falta el contexto"),
     COMMAND_CHECK_BAN_NOT_FOUND_BAN("command.check-ban", "No esta baneado"),
-    COMMAND_CHECK_BAN_NOT_FOUND_CONTEXT("command.ban", "El contexto no existe"),
+    COMMAND_CHECK_BAN_NOT_FOUND_CONTEXT("command.check-ban", "El contexto no existe"),
     COMMAND_CHECK_BAN_NOT_FOUND_BAN_IN_CONTEXT("command.check-ban", "El jugador no esta banedo de ningún contexto"),
     COMMAND_CHECK_BAN_NOT_FOUND_BUT("command.check-ban", "El jugador esta baneado pero no del contexto seleccionado pero esta baneado de:"),
     COMMAND_CHECK_BAN_FOUND_AND_KICK("command.check-ban", "El jugador <|%1$s|> fue echado del contexto <|%2$s|>"),
@@ -219,29 +225,43 @@ public enum Message {
     DEATH_CAUSE_DRYOUT("death-cause", "<|%1$s|> se ahogo en el aire"),
     DEATH_CAUSE_FREEZE("death-cause", "<|%1$s|> no soporto el team frio"),
     DEATH_CAUSE_SONIC_BOOM("death-cause", "<|%1$s|> lo mato el grito del warden");
-    ;
+
     Message(String parent, String message) {
         this.parent = parent;
-        this.message = new String[]{message};
+        this.MapMessageLocale.put(DEFAULT_LOCALE_PRIVATE, new String[]{message});
     }
 
     private final String parent;
-    @SuppressWarnings("NonFinalFieldInEnum")
-    @Setter
-    private String[] message;
+    @Getter private final HashMap<Locale, String[]> MapMessageLocale = new HashMap<>();
 
-    public String getMessage() {
-        if (message.length == 1) {
-            return message[0];
+    public String getMessage(CommandSender sender) {
+        Locale locale;
+        if (sender instanceof Player player) {
+            locale = player.locale();
+        }else {
+            locale = DEFAULT_LOCALE_PRIVATE;
+        }
+        return getMessageLocate(locale);
+    }
+
+    private String getMessageLocate(Locale locale) {
+        if (!MapMessageLocale.containsKey(locale)) locale = DEFAULT_LOCALE_USER;
+        String[] strings = this.MapMessageLocale.get(locale);
+        if (strings.length == 1) {
+            return strings[0];
         }else {
             Random r = new Random();
-            return message[r.nextInt(message.length)];
+            return strings[r.nextInt(strings.length)];
         }
     }
 
-    @Deprecated
-    @Override
-    public String toString() {
-        return getMessage();
+    public String getMessageLocatePrivate() {
+        return getMessageLocate(DEFAULT_LOCALE_PRIVATE);
     }
+
+    public String getMessageLocateDefault() {
+        return getMessageLocate(DEFAULT_LOCALE_USER);
+    }
+
+
 }

@@ -43,21 +43,6 @@ public abstract class DataBaseMySql implements Reloadable {
     }
 
     /**
-     * Para cerrar la connection, pero no es muy util porque la connexion
-     * se cierra automáticamente
-     */
-
-    protected void close() {
-        try {
-            if (connection != null && !connection.isClosed()) {
-                connection.close();
-            }
-        } catch (SQLException e) {
-            MessagesManager.sendErrorException("Error al cerrar la conexión de la base de datos", e);
-        }
-    }
-
-    /**
      * Crea una connexion con la base de datos si no está conectado e
      * intentar usar este method en un hilo aparte del servidor porque
      * bloquea el hilo principal de servidor un ejemplo de como

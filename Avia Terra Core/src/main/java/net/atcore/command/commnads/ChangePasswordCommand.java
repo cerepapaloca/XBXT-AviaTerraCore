@@ -63,7 +63,7 @@ public class ChangePasswordCommand extends BaseTabCommand {
             }
         });
 
-        sendMessageConsole( String.format(Message.COMMAND_CHANGE_PASSWORD_SUCCESSFUL_LOG.getMessage(), player.getName(), reason), MessagesType.INFO, CategoryMessages.LOGIN);
+        sendMessageConsole( String.format(Message.COMMAND_CHANGE_PASSWORD_SUCCESSFUL_LOG.getMessage(player), player.getName(), reason), MessagesType.INFO, CategoryMessages.LOGIN);
         TwoFactorAuth.CODES.remove(player.getUniqueId());
     }
 

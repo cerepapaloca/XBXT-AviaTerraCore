@@ -63,7 +63,7 @@ public class HomeCommand extends BaseTabCommand {
                     }
                 }
                 case 2 -> {
-                    FileYaml fileYaml = DataSection.getPlayersData().getConfigFile(atp.getUuid().toString(), true);
+                    FileYaml fileYaml = DataSection.getPlayersDataFiles().getConfigFile(atp.getUuid().toString(), true);
                     switch (args[1].toLowerCase()){
                         case "add" -> AviaTerraCore.enqueueTaskAsynchronously(() -> {
                             if (args[0].contains(".")){

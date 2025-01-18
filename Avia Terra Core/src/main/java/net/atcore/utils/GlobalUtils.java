@@ -129,7 +129,7 @@ public final class GlobalUtils {
         List<Component> components = meta.lore();
         List<Component> addLore;
         if (warningMessage) {
-            addLore = GlobalUtils.stringToLoreComponent(Message.MISC_WARING_ANTI_DUPE.getMessage(), true, MessagesType.WARNING.getMainColor());
+            addLore = GlobalUtils.stringToLoreComponent(Message.MISC_WARING_ANTI_DUPE.getMessageLocatePrivate(), true, MessagesType.WARNING.getMainColor());
         }else {
             addLore = new ArrayList<>();
         }

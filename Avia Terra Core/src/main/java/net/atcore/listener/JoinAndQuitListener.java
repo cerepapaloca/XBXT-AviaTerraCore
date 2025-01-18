@@ -54,7 +54,7 @@ public class JoinAndQuitListener implements Listener {
         List<UUID> UUIDPlayers = List.copyOf(AviaTerraPlayer.getPlayer(player).getModerationPlayer().getManipulatorInventoryPlayer());
         UUIDPlayers.forEach(UUID -> Objects.requireNonNull(Bukkit.getPlayer(UUID)).closeInventory());
         event.quitMessage(GlobalUtils.chatColorLegacyToComponent(MessagesManager.addProprieties(
-                String.format(Message.EVENT_QUIT.getMessage(), event.getPlayer().getName()),
+                String.format(Message.EVENT_QUIT.getMessage(player), event.getPlayer().getName()),
                 MessagesType.INFO, false, false)));
     }
 
@@ -62,7 +62,7 @@ public class JoinAndQuitListener implements Listener {
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         event.joinMessage(GlobalUtils.chatColorLegacyToComponent(MessagesManager.addProprieties(
-                String.format(Message.EVENT_JOIN.getMessage(), event.getPlayer().getName()),
+                String.format(Message.EVENT_JOIN.getMessage(player), event.getPlayer().getName()),
                 MessagesType.INFO, false, false)));
         onEnteringServer(player);
         new BukkitRunnable() {
@@ -90,7 +90,7 @@ public class JoinAndQuitListener implements Listener {
     public void onPreLogin(AsyncPlayerPreLoginEvent event) {
         if (AntiTwoPlayer.checkTwoPlayer(event.getName())){
             event.setLoginResult(AsyncPlayerPreLoginEvent.Result.KICK_OTHER);
-            event.kickMessage(MessagesManager.applyFinalProprieties(Message.SECURITY_KICK_ANTI_TWO_PLAYER.getMessage(), MessagesType.KICK, CategoryMessages.LOGIN, false));
+            event.kickMessage(MessagesManager.applyFinalProprieties(Message.SECURITY_KICK_ANTI_TWO_PLAYER.getMessageLocateDefault(), MessagesType.KICK, CategoryMessages.LOGIN, false));
         }
     }
 }

@@ -52,7 +52,7 @@ public class SimulateOnlineMode {
     public void startEncryption(Player player, PacketContainer packet){
 
         if (player.getAddress() == null){
-            GlobalUtils.kickPlayer(player, Message.LOGIN_KICK_GENERIC.getMessage());
+            GlobalUtils.kickPlayer(player, Message.LOGIN_KICK_GENERIC.getMessage(player));
             return;
         }
 
@@ -62,7 +62,7 @@ public class SimulateOnlineMode {
     public boolean preStartLogin(Player player, PacketContainer packet){
 
         if (player.getAddress() == null){
-            GlobalUtils.kickPlayer(player, Message.LOGIN_KICK_GENERIC.getMessage());
+            GlobalUtils.kickPlayer(player, Message.LOGIN_KICK_GENERIC.getMessage(player));
             return false;
         }
         InetAddress inetAddress = player.getAddress().getAddress();
@@ -84,9 +84,9 @@ public class SimulateOnlineMode {
             }
             switch (state){
                 case PREMIUM -> startLoginPremium(name, uuid, player);
-                case UNKNOWN -> GlobalUtils.kickPlayer(player, Message.LOGIN_KICK_GENERIC.getMessage());
+                case UNKNOWN -> GlobalUtils.kickPlayer(player, Message.LOGIN_KICK_GENERIC.getMessage(player));
             }
-            sendMessageConsole(String.format(Message.LOGIN_START_PROTOCOL_LOG.getMessage(), state.name().toLowerCase(), name, inetAddress.getHostName(), inetAddress.getHostAddress()), MessagesType.INFO, CategoryMessages.LOGIN);
+            sendMessageConsole(String.format(Message.LOGIN_START_PROTOCOL_LOG.getMessageLocatePrivate(), state.name().toLowerCase(), name, inetAddress.getHostName(), inetAddress.getHostAddress()), MessagesType.INFO, CategoryMessages.LOGIN);
             return state == StateLogins.PREMIUM; //se cancela por que asi el servidor no se da cuenta de que a recibido un paquete
         }
         return false;

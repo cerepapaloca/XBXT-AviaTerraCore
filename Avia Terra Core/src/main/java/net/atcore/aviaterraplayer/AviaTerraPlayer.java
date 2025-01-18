@@ -7,6 +7,7 @@ import net.atcore.command.commnads.TpaCommand;
 import net.atcore.data.DataSection;
 import net.atcore.data.yml.PlayerDataFile;
 import net.atcore.inventory.InventorySection;
+import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.MessagesType;
 import net.atcore.utils.GlobalUtils;
@@ -31,7 +32,7 @@ public class AviaTerraPlayer {
     public AviaTerraPlayer(Player player) {
         this.uuid = player.getUniqueId();
         AviaTerraCore.enqueueTaskAsynchronously(() -> {
-            this.playerDataFile = (PlayerDataFile) DataSection.getPlayersData().getConfigFile(uuid.toString(), true);
+            this.playerDataFile = (PlayerDataFile) DataSection.getPlayersDataFiles().getConfigFile(uuid.toString(), true);
             joinEvent(player);
         });
     }
@@ -52,6 +53,9 @@ public class AviaTerraPlayer {
         MessagesManager.sendMessage(GlobalUtils.getPlayer(uuid), message, type);
     }
 
+    public void sendMessage(Message message, MessagesType type) {
+        MessagesManager.sendMessage(GlobalUtils.getPlayer(uuid), message, type);
+    }
 
     @Contract(pure = true)
     public static AviaTerraPlayer getPlayer(UUID uuid){

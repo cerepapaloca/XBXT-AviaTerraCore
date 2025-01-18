@@ -1,6 +1,5 @@
 package net.atcore.messages;
 
-import lombok.extern.slf4j.Slf4j;
 import net.atcore.AviaTerraCore;
 import net.atcore.data.yml.MessageFile;
 import net.atcore.utils.GlobalUtils;
@@ -23,7 +22,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.time.Duration;
+import java.util.Locale;
 import java.util.Random;
+import java.util.Set;
 
 import static net.kyori.adventure.text.event.ClickEvent.Action;
 
@@ -37,12 +38,15 @@ public final class MessagesManager {
     public static final String LINK_DISCORD = "&a&n<click:open_url:https://discord.gg/7ubQQFVMWF>[Discord]</click>";
     //"&8[" + GlobalUtils.applyGradient("<#00CCCC>AviaTerra<#00FFFF>",'l') + "&8]&r " ;
     public static final String PREFIX = "<dark_gray>[<#4B2FDE>XT<#ff8C00>XB<dark_gray>] ";
+    public static final Locale DEFAULT_LOCALE_USER = Locale.ENGLISH;
+    public static final Locale DEFAULT_LOCALE_PRIVATE = Locale.of("es");
+    public static final Set<Locale> LOCALES_AVAILABLE = Set.of(DEFAULT_LOCALE_USER, DEFAULT_LOCALE_PRIVATE);
 
     /// ////////////////////////
     /// ////////////////////////
 
     public static void sendMessage(CommandSender sender, Message message, @NotNull MessagesType type) {
-        sendMessage(sender, message.getMessage(), type, CategoryMessages.PRIVATE, true);
+        sendMessage(sender, message.getMessage(sender), type, CategoryMessages.PRIVATE, true);
     }
 
     public static void sendMessage(CommandSender sender, String message, @NotNull MessagesType type) {
@@ -101,6 +105,10 @@ public final class MessagesManager {
 
     /// ////////////////////////
     /// ////////////////////////
+
+    public static void sendMessageConsole(Message message, MessagesType type) {
+        sendMessageConsole(message.getMessageLocatePrivate(), type, CategoryMessages.PRIVATE);
+    }
 
     public static void sendMessageConsole(String message, MessagesType type) {
         sendMessageConsole(message, type, CategoryMessages.PRIVATE);
@@ -239,47 +247,48 @@ public final class MessagesManager {
         player.showTitle(t);
     }
 
-    public static Component deathMessage(Player victim, LivingEntity killer, ItemStack stack, EntityDamageEvent.DamageCause cause) {
+    public static void deathMessage(Player victim, LivingEntity killer, ItemStack stack, EntityDamageEvent.DamageCause cause) {
         Random r = new Random();
-        String message;
-        if (killer != null && !(killer instanceof Player)) {
-            message = MessageFile.MESSAGES_ENTITY.get(killer.getType()).get(r.nextInt(MessageFile.MESSAGES_ENTITY.get(killer.getType()).size()));
-        }else {
-            message = Message.valueOf("DEATH_CAUSE_" + cause.name()).getMessage();
-        }
-        Builder tc = Component.text();
-        Component component = tc.append(applyFinalProprieties(message, MessagesType.INFO, CategoryMessages.PRIVATE, true)).build();
-
-        Builder componentVictim = Component.text();
-        componentVictim.append(victim.displayName());
-        componentVictim.clickEvent(ClickEvent.clickEvent(Action.SUGGEST_COMMAND, "/w " + victim.getName()));
-        componentVictim.hoverEvent(HoverEvent.showEntity(victim.asHoverEvent().value()));
-        TextReplacementConfig.Builder config1 = TextReplacementConfig.builder().matchLiteral("%1$s").replacement(componentVictim);
-        component = component.replaceText(config1.build());
-        if (killer != null) {
-            Builder componentKiller = Component.text();
-            if (killer instanceof Player player) {
-                componentKiller.append(player.displayName());
-                componentKiller.clickEvent(ClickEvent.clickEvent(Action.SUGGEST_COMMAND, "/w " + player.getName()));
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            String message;
+            if (killer != null && !(killer instanceof Player)) {
+                message = MessageFile.MESSAGES_ENTITY.get(killer.getType()).get(r.nextInt(MessageFile.MESSAGES_ENTITY.get(killer.getType()).size()));
             }else {
-                componentKiller.append(MiniMessage.miniMessage().deserialize(MessagesType.INFO.getSecondColor() + killer.getName() + MessagesType.INFO.getMainColor()));
+                message = Message.valueOf("DEATH_CAUSE_" + cause.name()).getMessage(p);
             }
-            componentKiller.hoverEvent(HoverEvent.showEntity(killer.asHoverEvent().value()));
-            TextReplacementConfig.Builder config2 = TextReplacementConfig.builder().matchLiteral("%2$s").replacement(componentKiller);
-            component = component.replaceText(config2.build());
-        }
-        Builder componentItem = Component.text();
-        if (stack != null) {
-            componentItem.append(stack.displayName());
-            componentItem.hoverEvent(HoverEvent.showItem(stack.asHoverEvent().value()));
-            TextReplacementConfig.Builder config3 = TextReplacementConfig.builder().matchLiteral("%3$s").replacement(componentItem);
-            component = component.replaceText(config3.build());
-        }else {
-            componentItem.content("Mano");
-            TextReplacementConfig.Builder config3 = TextReplacementConfig.builder().matchLiteral("%3$s").replacement(componentItem);
-            component = component.replaceText(config3.build());
-        }
+            Builder tc = Component.text();
+            Component component = tc.append(applyFinalProprieties(message, MessagesType.INFO, CategoryMessages.PRIVATE, true)).build();
 
-        return component;
+            Builder componentVictim = Component.text();
+            componentVictim.append(victim.displayName());
+            componentVictim.clickEvent(ClickEvent.clickEvent(Action.SUGGEST_COMMAND, "/w " + victim.getName()));
+            componentVictim.hoverEvent(HoverEvent.showEntity(victim.asHoverEvent().value()));
+            TextReplacementConfig.Builder config1 = TextReplacementConfig.builder().matchLiteral("%1$s").replacement(componentVictim);
+            component = component.replaceText(config1.build());
+            if (killer != null) {
+                Builder componentKiller = Component.text();
+                if (killer instanceof Player player) {
+                    componentKiller.append(player.displayName());
+                    componentKiller.clickEvent(ClickEvent.clickEvent(Action.SUGGEST_COMMAND, "/w " + player.getName()));
+                }else {
+                    componentKiller.append(MiniMessage.miniMessage().deserialize(MessagesType.INFO.getSecondColor() + killer.getName() + MessagesType.INFO.getMainColor()));
+                }
+                componentKiller.hoverEvent(HoverEvent.showEntity(killer.asHoverEvent().value()));
+                TextReplacementConfig.Builder config2 = TextReplacementConfig.builder().matchLiteral("%2$s").replacement(componentKiller);
+                component = component.replaceText(config2.build());
+            }
+            Builder componentItem = Component.text();
+            if (stack != null) {
+                componentItem.append(stack.displayName());
+                componentItem.hoverEvent(HoverEvent.showItem(stack.asHoverEvent().value()));
+                TextReplacementConfig.Builder config3 = TextReplacementConfig.builder().matchLiteral("%3$s").replacement(componentItem);
+                component = component.replaceText(config3.build());
+            }else {
+                componentItem.content("Mano");
+                TextReplacementConfig.Builder config3 = TextReplacementConfig.builder().matchLiteral("%3$s").replacement(componentItem);
+                component = component.replaceText(config3.build());
+            }
+            p.sendMessage(component);
+        }
     }
 }

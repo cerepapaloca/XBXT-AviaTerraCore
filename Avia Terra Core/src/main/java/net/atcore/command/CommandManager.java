@@ -6,16 +6,12 @@ import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.MessagesType;
 import net.atcore.security.Login.LoginManager;
-import net.atcore.utils.RangeType;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.Member;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import static net.atcore.messages.MessagesManager.sendMessage;
 
@@ -37,9 +33,9 @@ public class CommandManager {//nose si poner en esta clase aquí la verdad
                 }else{
                     if (!isSilent){
                         if (LoginManager.checkLoginIn(player, true, b)){
-                            sendMessage(player, net.atcore.messages.Message.COMMAND_GENERIC_NO_PERMISSION.getMessage(), MessagesType.ERROR);
+                            sendMessage(player, net.atcore.messages.Message.COMMAND_GENERIC_NO_PERMISSION, MessagesType.ERROR);
                         }else {
-                            sendMessage(player, net.atcore.messages.Message.COMMAND_GENERIC_NO_LOGIN.getMessage(), MessagesType.ERROR);
+                            sendMessage(player, net.atcore.messages.Message.COMMAND_GENERIC_NO_LOGIN, MessagesType.ERROR);
                         }
                     }
                     return true;
@@ -50,10 +46,10 @@ public class CommandManager {//nose si poner en esta clase aquí la verdad
                 if (player.isOp()){
                     return false;
                 }else {
-                    if (!isSilent) MessagesManager.sendMessage(player, net.atcore.messages.Message.COMMAND_GENERIC_NO_PERMISSION.getMessage(), MessagesType.ERROR);
+                    if (!isSilent) MessagesManager.sendMessage(player, net.atcore.messages.Message.COMMAND_GENERIC_NO_PERMISSION, MessagesType.ERROR);
                 }
             }else {
-                if (!isSilent)sendMessage(player,net.atcore.messages.Message.COMMAND_GENERIC_NO_LOGIN.getMessage(), MessagesType.ERROR);
+                if (!isSilent)sendMessage(player, net.atcore.messages.Message.COMMAND_GENERIC_NO_LOGIN, MessagesType.ERROR);
             }
             return true;
         }
@@ -63,7 +59,7 @@ public class CommandManager {//nose si poner en esta clase aquí la verdad
 
         Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> {
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command.getContentRaw().substring(1));
-            MessagesManager.sendMessageConsole(String.format(net.atcore.messages.Message.COMMAND_GENERIC_RUN_LOG.getMessage()
+            MessagesManager.sendMessageConsole(String.format(net.atcore.messages.Message.COMMAND_GENERIC_RUN_LOG.getMessageLocatePrivate()
                     , member.getUser().getGlobalName() + "(" + member.getId() + ")" ,"<gold>`" + command.getContentRaw() + "`"), MessagesType.INFO, CategoryMessages.COMMANDS, false);
         });
         /*

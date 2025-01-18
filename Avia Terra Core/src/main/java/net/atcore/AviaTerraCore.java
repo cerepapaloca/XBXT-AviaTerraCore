@@ -73,8 +73,9 @@ public final class AviaTerraCore extends JavaPlugin {
         if (Bukkit.getOnlineMode()){
             throw new IllegalStateException("modo online esta activo");
         }
-        register(new DataSection(),// Los Datos Primero
+        register(
                 new MessageSection(),
+                new DataSection(),// Los Datos Primero
                 new CommandSection(),
                 new ModerationSection(),
                 new ListenerSection(),

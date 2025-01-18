@@ -11,7 +11,8 @@ import net.atcore.data.txt.BroadcastMessageFile;
 import net.atcore.data.txt.MOTDFile;
 import net.atcore.data.yml.*;
 import net.atcore.data.yml.ymls.CacheLimboFlies;
-import net.atcore.data.yml.ymls.PlayersData;
+import net.atcore.data.yml.ymls.MessagesLocaleFile;
+import net.atcore.data.yml.ymls.PlayersDataFiles;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.MessagesType;
 
@@ -22,14 +23,12 @@ public class DataSection implements Section {
     public final static HashSet<File> FILES = new HashSet<>();
     public final static HashSet<DataBaseMySql> DATA_BASE = new HashSet<>();
     @Getter private static CacheLimboFlies cacheLimboFlies;
-    @Getter private static PlayersData playersData;
+    @Getter private static PlayersDataFiles playersDataFiles;
     @Getter private static ConfigFile configFile;
     @Getter private static CacheVoteFile cacheVoteFile;
 
     @Override
     public void enable() {
-        MessageFile messageFile = new MessageFile();
-        messageFile.reloadConfig();
         ConfigFile configFile = new ConfigFile();
         new DataBaseBan();
         new DataBaseRegister();
@@ -38,11 +37,11 @@ public class DataSection implements Section {
         new Email();
         new MOTDFile();
         new BroadcastMessageFile();
+        new MessagesLocaleFile();
         DataSection.configFile = configFile;
-        playersData = new PlayersData();
+        playersDataFiles = new PlayersDataFiles();
         cacheVoteFile = new CacheVoteFile();
         cacheLimboFlies = new CacheLimboFlies();
-        cacheLimboFlies.configure();
         for (DataBaseMySql db : DATA_BASE) db.createTable();
         for (File fileYaml : FILES) fileYaml.loadData();
     }

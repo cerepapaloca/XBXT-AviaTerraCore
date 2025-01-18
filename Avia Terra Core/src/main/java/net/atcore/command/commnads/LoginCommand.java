@@ -79,7 +79,7 @@ public class LoginCommand extends BaseCommand {
                 startPlay(player);
             }
         }catch (Exception e) {
-            GlobalUtils.kickPlayer(player, Message.LOGIN_KICK_GENERIC.getMessage());
+            GlobalUtils.kickPlayer(player, Message.LOGIN_KICK_GENERIC.getMessage(player));
             MessagesManager.sendWaringException("Error al iniciar el modo play", e);
         }
 
@@ -90,8 +90,8 @@ public class LoginCommand extends BaseCommand {
             startPlaySessionCracked(player);
             attempts.remove(player.getUniqueId());
             LoginManager.updateLoginDataBase(GlobalUtils.getRealName(player), Objects.requireNonNull(player.getAddress()).getAddress());
-            MessagesManager.sendTitle(player, Message.COMMAND_LOGIN_SUCCESSFUL_TITLE.getMessage(),
-                    String.format(Message.COMMAND_LOGIN_SUCCESSFUL_SUBTITLE.getMessage(), player.getDisplayName()),
+            MessagesManager.sendTitle(player, Message.COMMAND_LOGIN_SUCCESSFUL_TITLE.getMessage(player),
+                    String.format(Message.COMMAND_LOGIN_SUCCESSFUL_SUBTITLE.getMessage(player), player.getDisplayName()),
                     20, 20*3, 40, MessagesType.INFO);
             sendMessage(player, Message.COMMAND_LOGIN_SUCCESSFUL_CHAT, MessagesType.SUCCESS);
         });
@@ -101,11 +101,11 @@ public class LoginCommand extends BaseCommand {
         int i = attempts.getOrDefault(player.getUniqueId(), 0);
         attempts.put(player.getUniqueId(), ++i);
         if (i >= 5) AviaTerraCore.enqueueTaskAsynchronously(() -> ModerationSection.getBanManager().banPlayer(player,
-                Message.COMMAND_LOGIN_BANNED.getMessage(),
+                Message.COMMAND_LOGIN_BANNED.getMessage(player),
                 1000*60*5,
                 ContextBan.GLOBAL,
-                Message.BAN_AUTHOR_AUTO_BAN.getMessage()));
-        GlobalUtils.kickPlayer(player, Message.COMMAND_LOGIN_NO_EQUAL_PASSWORD.getMessage());
+                Message.BAN_AUTHOR_AUTO_BAN.getMessage(player)));
+        GlobalUtils.kickPlayer(player, Message.COMMAND_LOGIN_NO_EQUAL_PASSWORD.getMessage(player));
     }
 
     public static boolean isUUID(String str) {

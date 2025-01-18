@@ -14,7 +14,7 @@ public final class MessageDebug implements RunTest {
     public void runTest(AviaTerraPlayer player) {
         for (MessagesType type : MessagesType.values()) {
             for (CategoryMessages category : CategoryMessages.values()) {
-                MessagesManager.sendMessage(player.getPlayer(), Message.TEST_MESSAGE.getMessage(), type, category);
+                MessagesManager.sendMessage(player.getPlayer(), Message.TEST_MESSAGE.getMessage(player.getPlayer()), type, category);
             }
         }
     }

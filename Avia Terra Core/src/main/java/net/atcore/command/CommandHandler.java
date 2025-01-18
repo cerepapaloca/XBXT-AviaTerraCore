@@ -43,9 +43,9 @@ public final class CommandHandler implements TabExecutor {
                         return true;
                     }else{
                         if (LoginManager.checkLoginIn(player)){
-                            sendMessage(sender, Message.COMMAND_GENERIC_NO_PERMISSION.getMessage(), MessagesType.ERROR);
+                            sendMessage(sender, Message.COMMAND_GENERIC_NO_PERMISSION, MessagesType.ERROR);
                         }else {
-                            sendMessage(player, Message.COMMAND_GENERIC_NO_LOGIN.getMessage(), MessagesType.ERROR);
+                            sendMessage(player, Message.COMMAND_GENERIC_NO_LOGIN, MessagesType.ERROR);
                         }
                     }
                 }else {
@@ -53,7 +53,7 @@ public final class CommandHandler implements TabExecutor {
                     return true;
                 }
             }catch (Exception e) {
-                sendMessage(sender, Message.COMMAND_GENERIC_EXCEPTION_ERROR.getMessage(), MessagesType.ERROR);
+                sendMessage(sender, Message.COMMAND_GENERIC_EXCEPTION_ERROR, MessagesType.ERROR);
                 sendErrorException("Error al ejecutar el comando", e);
                 return false;
             }
@@ -87,7 +87,7 @@ public final class CommandHandler implements TabExecutor {
                         try {
                             if (command.getUsage().getArg(args.length).isRequired()) {
                                 return List.of("§c" + String.format(// La única vez que se tiene que usar '§'
-                                        Message.COMMAND_GENERIC_ARGS_ERROR.getMessage(),
+                                        Message.COMMAND_GENERIC_ARGS_ERROR.getMessage(sender),
                                         CommandUtils.useToUseDisplay(argsUse.getArgRaw(args.length))
                                 ));
                             }

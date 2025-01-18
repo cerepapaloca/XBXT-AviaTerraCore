@@ -37,7 +37,7 @@ public class LinkCommand extends BaseTabCommand {
             UUID uuid = player.getUniqueId();
             LoginData loginData = LoginManager.getDataLogin(player);
             if (args.length == 0) {
-                sendMessage(sender, Message.COMMAND_LINK_MISSING_ARGS.getMessage(), MessagesType.ERROR);
+                sendMessage(sender, Message.COMMAND_LINK_MISSING_ARGS.getMessage(player), MessagesType.ERROR);
                 return;
             }
             switch (args[0].toLowerCase()) {
@@ -53,7 +53,7 @@ public class LinkCommand extends BaseTabCommand {
                                 );
                                 TwoFactorAuth.CODES.put(uuid, codeAuth);
 
-                                sendMessage(sender,String.format(Message.COMMAND_LINK_SEND_GMAIL_1.getMessage(), args[1]), MessagesType.INFO);
+                                sendMessage(sender,String.format(Message.COMMAND_LINK_SEND_GMAIL_1.getMessage(player), args[1]), MessagesType.INFO);
                                 if (loginData.getRegister().getGmail() != null){
                                     sendMessage(sender, Message.COMMAND_LINK_ALREADY_GMAIL, MessagesType.WARNING);
                                 }

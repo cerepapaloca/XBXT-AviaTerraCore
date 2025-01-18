@@ -21,7 +21,7 @@ import java.util.*;
 public class ManipulatorInventory extends BaseInventory {
 
     public ManipulatorInventory() {
-        super(54, Message.INVENTORY_MANIPULATOR_TITLE.getMessage());
+        super(54, Message.INVENTORY_MANIPULATOR_TITLE);
     }
 
     public static final HashMap<UUID, Inventory> INVENTORIES = new HashMap<>();

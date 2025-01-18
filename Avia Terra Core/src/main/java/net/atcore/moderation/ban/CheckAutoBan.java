@@ -45,10 +45,10 @@ public class CheckAutoBan {
                             if (ChatBotTime.size() > 1) {
                                 for (Player player : ChatBotTime) {
                                     assert player != null;
-                                    ModerationSection.getBanManager().banPlayer(player, Message.BAN_AUTO_BAN_BOT.getMessage()
-                                            ,1000 * 60 * 60 * 24 * 5L, ContextBan.CHAT, Message.BAN_AUTHOR_AUTO_BAN.getMessage());
+                                    ModerationSection.getBanManager().banPlayer(player, Message.BAN_AUTO_BAN_BOT.getMessage(player)
+                                            ,1000 * 60 * 60 * 24 * 5L, ContextBan.CHAT, Message.BAN_AUTHOR_AUTO_BAN.getMessage(player));
                                 }
-                                sendMessageConsole(Message.BAN_AUTO_BAN_BOT_LOG.getMessage(), MessagesType.SUCCESS, CategoryMessages.BAN);
+                                sendMessageConsole(Message.BAN_AUTO_BAN_BOT_LOG.getMessage(player), MessagesType.SUCCESS, CategoryMessages.BAN);
                             }
                             ChatBotTime.clear();
                         });
@@ -68,8 +68,8 @@ public class CheckAutoBan {
                     sendMessageConsole("Este jugador usa AutoBotChat: <|(" + timeDifferenceCount.get(player.getUniqueId()) + "/10)|> " + "Tiene una precision de <|"
                             + (DifferenceOld - DifferenceNew) + " ms|>", MessagesType.WARNING, CategoryMessages.MODERATION);
                     if (timeDifferenceCount.get(player.getUniqueId()) >= 10){
-                        ModerationSection.getBanManager().banPlayer(player, Message.BAN_AUTO_BAN_SPAM.getMessage(), 1000 * 60 * 60 * 24 * 2L, ContextBan.CHAT,
-                                Message.BAN_AUTHOR_AUTO_BAN.getMessage());
+                        ModerationSection.getBanManager().banPlayer(player, Message.BAN_AUTO_BAN_SPAM.getMessage(player), 1000 * 60 * 60 * 24 * 2L, ContextBan.CHAT,
+                                Message.BAN_AUTHOR_AUTO_BAN.getMessage(player));
                         timeDifferenceCount.remove(player.getUniqueId());
                         timeDifferenceOld.remove(player.getUniqueId());
                         timeDifferenceNew.remove(player.getUniqueId());
@@ -80,7 +80,7 @@ public class CheckAutoBan {
             }
             timePunishChat.put(player.getUniqueId(), currentTime);
         }catch (Exception e) {
-            sendMessageConsole(String.format(Message.BAN_ERROR.getMessage(), player.getName(), Message.BAN_AUTO_BAN_SPAM.getMessage()), MessagesType.ERROR);
+            sendMessageConsole(String.format(Message.BAN_ERROR.getMessage(player), player.getName(), Message.BAN_AUTO_BAN_SPAM.getMessage(player)), MessagesType.ERROR);
             throw new RuntimeException(e);
         }
     }
@@ -121,10 +121,10 @@ public class CheckAutoBan {
                         if (!isAutoBan()) return;
                         AviaTerraCore.enqueueTaskAsynchronously( () -> {
                             try {
-                                ModerationSection.getBanManager().banPlayer(player, Message.BAN_AUTO_BAN_DUPE.getMessage(),
-                                        1000 * 60 * 60 * 24 * 5L, ContextBan.GLOBAL, Message.BAN_AUTHOR_AUTO_BAN.getMessage());
+                                ModerationSection.getBanManager().banPlayer(player, Message.BAN_AUTO_BAN_DUPE.getMessage(player),
+                                        1000 * 60 * 60 * 24 * 5L, ContextBan.GLOBAL, Message.BAN_AUTHOR_AUTO_BAN.getMessage(player));
                             }catch (Exception e) {
-                                sendMessageConsole(String.format(Message.BAN_ERROR.getMessage(), player.getName(),  Message.BAN_AUTO_BAN_SPAM.getMessage()), MessagesType.ERROR);
+                                sendMessageConsole(String.format(Message.BAN_ERROR.getMessage(player), player.getName(),  Message.BAN_AUTO_BAN_SPAM.getMessage(player)), MessagesType.ERROR);
                                 throw new RuntimeException(e);
                             }
                         });
@@ -153,10 +153,10 @@ public class CheckAutoBan {
 
         AviaTerraCore.enqueueTaskAsynchronously( () -> {
             try {
-                ModerationSection.getBanManager().banPlayer(player, Message.BAN_AUTO_BAN_ILEGAL_ITEMS.getMessage(),
-                        1000 * 60 * 60 * 24 * 10L, ContextBan.GLOBAL, Message.BAN_AUTHOR_AUTO_BAN.getMessage());
+                ModerationSection.getBanManager().banPlayer(player, Message.BAN_AUTO_BAN_ILEGAL_ITEMS.getMessage(player),
+                        1000 * 60 * 60 * 24 * 10L, ContextBan.GLOBAL, Message.BAN_AUTHOR_AUTO_BAN.getMessage(player));
             }catch (Exception e) {
-                sendMessageConsole(String.format(Message.BAN_ERROR.getMessage(), player.getName(),  Message.BAN_AUTO_BAN_SPAM.getMessage()), MessagesType.ERROR);
+                sendMessageConsole(String.format(Message.BAN_ERROR.getMessage(player), player.getName(),  Message.BAN_AUTO_BAN_SPAM.getMessage(player)), MessagesType.ERROR);
                 throw new RuntimeException(e);
             }
         });

@@ -5,6 +5,6 @@ import net.atcore.data.yml.CacheLimboFile;
 
 public class CacheLimboFlies extends FilesYams {
     public CacheLimboFlies() {
-        super("cacheLimbo", CacheLimboFile.class);
+        super("cacheLimbo", CacheLimboFile.class, true);
     }
 }

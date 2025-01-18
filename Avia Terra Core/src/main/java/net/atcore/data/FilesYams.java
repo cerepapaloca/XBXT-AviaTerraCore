@@ -15,10 +15,11 @@ public abstract class FilesYams {
     protected HashSet<FileYaml> configFiles;
     private final Class<? extends FileYaml> fileclass;
 
-    public FilesYams(String folderName, Class<? extends FileYaml> fileclass){
+    public FilesYams(String folderName, Class<? extends FileYaml> fileclass, boolean configure){
         this.folderName = folderName;
         this.configFiles = new HashSet<>();
         this.fileclass = fileclass;
+        if (configure) configure();
     }
 
     public void configure() {

@@ -229,7 +229,7 @@ public final class CommandUtils {
         if (sender == null) return;
         if (names.isEmpty()) return; // Si no esta vaciá es por un jugador no se pudo borrar por que no esta conectado
         if (safeMode) {
-            if (arg.charAt(0) != '!') MessagesManager.sendMessage(sender, String.format(Message.COMMAND_GENERIC_PLAYERS_NOT_FOUND.getMessage(), names), MessagesType.WARNING);
+            if (arg.charAt(0) != '!') MessagesManager.sendMessage(sender, String.format(Message.COMMAND_GENERIC_PLAYERS_NOT_FOUND.getMessage(sender), names), MessagesType.WARNING);
         }else {
             for (String name : names){ // Si no esta en modo seguro crea un TemporalPlayerData con los nombres de los usuarios
                 action.accept(new TemporalPlayerData(name, null));

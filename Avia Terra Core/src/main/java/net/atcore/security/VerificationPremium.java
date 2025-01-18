@@ -70,7 +70,7 @@ public class VerificationPremium {
                             if (ip.equals(inetAddress.getHostAddress())){// Mira si la ip son la misma ip
                                 // Se envía un paquete falso al servidor para que siga con el protocolo
                                 SimulateOnlineMode.FakeStartPacket(verification.getName(), verification.getId(), player);
-                                sendMessageConsole(String.format(Message.LOGIN_PREMIUM_VALIDATION_OK.getMessage(), name), MessagesType.SUCCESS, CategoryMessages.LOGIN);
+                                sendMessageConsole(String.format(Message.LOGIN_PREMIUM_VALIDATION_OK.getMessageLocatePrivate(), name), MessagesType.SUCCESS, CategoryMessages.LOGIN);
                                 String userName = verification.getName();
                                 LIST_UUID_PREMIUM.put(userName, verification);
                                 LoginData loginData = LoginManager.getDataLogin(userName);
@@ -82,24 +82,24 @@ public class VerificationPremium {
                                 LoginManager.updateLoginDataBase(name, inetAddress);
                                 //LoginManager.checkLoginIn(player, false);//esto para que siga el protocolo
                             }else{
-                                GlobalUtils.kickPlayer(player, Message.LOGIN_KICK_PREMIUM_VALIDATION.getMessage());
-                                sendMessageConsole(String.format(Message.LOGIN_PREMIUM_VALIDATION_FAILED_LOG_0.getMessage(), name, inetAddress), MessagesType.WARNING, CategoryMessages.LOGIN);
+                                GlobalUtils.kickPlayer(player, Message.LOGIN_KICK_PREMIUM_VALIDATION.getMessageLocateDefault());
+                                sendMessageConsole(String.format(Message.LOGIN_PREMIUM_VALIDATION_FAILED_LOG_0.getMessageLocatePrivate(), name, inetAddress), MessagesType.WARNING, CategoryMessages.LOGIN);
                             }
                         }else {
-                            GlobalUtils.kickPlayer(player, Message.LOGIN_KICK_PREMIUM_VALIDATION.getMessage());
-                            sendMessageConsole(String.format(Message.LOGIN_PREMIUM_VALIDATION_FAILED_LOG_1.getMessage(), name, inetAddress), MessagesType.WARNING, CategoryMessages.LOGIN);
+                            GlobalUtils.kickPlayer(player, Message.LOGIN_KICK_PREMIUM_VALIDATION.getMessageLocateDefault());
+                            sendMessageConsole(String.format(Message.LOGIN_PREMIUM_VALIDATION_FAILED_LOG_1.getMessageLocatePrivate(), name, inetAddress), MessagesType.WARNING, CategoryMessages.LOGIN);
                         }
                     }else{
-                        GlobalUtils.kickPlayer(player, Message.LOGIN_KICK_PREMIUM_VALIDATION.getMessage());
-                        sendMessageConsole(String.format(Message.LOGIN_PREMIUM_VALIDATION_FAILED_LOG_2.getMessage(), name, inetAddress), MessagesType.WARNING, CategoryMessages.LOGIN);
+                        GlobalUtils.kickPlayer(player, Message.LOGIN_KICK_PREMIUM_VALIDATION.getMessageLocateDefault());
+                        sendMessageConsole(String.format(Message.LOGIN_PREMIUM_VALIDATION_FAILED_LOG_2.getMessageLocatePrivate(), name, inetAddress), MessagesType.WARNING, CategoryMessages.LOGIN);
                     }
                 }else {
-                    GlobalUtils.kickPlayer(player, Message.LOGIN_KICK_PREMIUM_VALIDATION.getMessage());
-                    sendMessageConsole(String.format(Message.LOGIN_PREMIUM_VALIDATION_FAILED_LOG_3.getMessage(), name, inetAddress), MessagesType.WARNING, CategoryMessages.LOGIN);
+                    GlobalUtils.kickPlayer(player, Message.LOGIN_KICK_PREMIUM_VALIDATION.getMessageLocateDefault());
+                    sendMessageConsole(String.format(Message.LOGIN_PREMIUM_VALIDATION_FAILED_LOG_3.getMessageLocatePrivate(), name, inetAddress), MessagesType.WARNING, CategoryMessages.LOGIN);
                 }
             }else{
-                GlobalUtils.kickPlayer(player, Message.LOGIN_KICK_PREMIUM_VALIDATION.getMessage());
-                sendMessageConsole(String.format(Message.LOGIN_PREMIUM_VALIDATION_FAILED_LOG_4.getMessage(), inetAddress.toString()), MessagesType.WARNING, CategoryMessages.LOGIN);
+                GlobalUtils.kickPlayer(player, Message.LOGIN_KICK_PREMIUM_VALIDATION.getMessageLocateDefault());
+                sendMessageConsole(String.format(Message.LOGIN_PREMIUM_VALIDATION_FAILED_LOG_4.getMessageLocatePrivate(), inetAddress.toString()), MessagesType.WARNING, CategoryMessages.LOGIN);
             }
         } catch (Exception e) {
             throw new RuntimeException(e);

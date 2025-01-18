@@ -32,14 +32,14 @@ public class UnbanCommand extends BaseTabCommand {
         try {
             contextBan = ContextBan.valueOf(args[1].toUpperCase());
         }catch (Exception ignored) {
-            sendMessage(sender, Message.COMMAND_UNBAN_NOT_FOUND_CONTEXT.getMessage(), MessagesType.ERROR);
+            sendMessage(sender, Message.COMMAND_UNBAN_NOT_FOUND_CONTEXT, MessagesType.ERROR);
             return;
         }
         //en un hilo aparte por qué explota el servidor
         CommandUtils.executeForPlayer(sender, args[0], false, dataTemporalPlayer ->
                 AviaTerraCore.enqueueTaskAsynchronously(() ->
                         ModerationSection.getBanManager().removeBanPlayer(dataTemporalPlayer.name(), contextBan, sender.getName())));
-        sendMessage(sender, Message.COMMAND_UNBAN_SUCCESSFUL.getMessage(), MessagesType.INFO);
+        sendMessage(sender, Message.COMMAND_UNBAN_SUCCESSFUL, MessagesType.INFO);
     }
 
     @Override

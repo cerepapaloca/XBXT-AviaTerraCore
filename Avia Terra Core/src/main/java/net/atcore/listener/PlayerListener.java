@@ -2,15 +2,13 @@ package net.atcore.listener;
 
 import net.atcore.AviaTerraCore;
 import net.atcore.Config;
-import net.atcore.armament.*;
-import net.atcore.command.commnads.CheckBanCommand;
+import net.atcore.armament.ArmamentActions;
+import net.atcore.command.CommandManager;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.MessagesType;
-import net.atcore.command.CommandManager;
 import net.atcore.misc.FrameDupe;
-import net.atcore.misc.LimitWorld;
 import net.atcore.moderation.Freeze;
 import net.atcore.moderation.ban.ContextBan;
 import net.atcore.security.Login.LoginManager;
@@ -18,7 +16,8 @@ import net.atcore.utils.GlobalConstantes;
 import net.atcore.utils.GlobalUtils;
 import net.atcore.utils.RangeType;
 import net.luckperms.api.node.types.InheritanceNode;
-import org.bukkit.*;
+import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -85,9 +84,9 @@ public class PlayerListener implements Listener {
             type = MessagesType.WARNING;
         }
         if (COMMANDS_PRE_LOGIN.contains(command)) {
-            MessagesManager.sendMessageConsole(String.format(Message.COMMAND_GENERIC_RUN_LOG.getMessage(), player.getName(), "<gold>*Comando De Login*" + s), type, CategoryMessages.COMMANDS, false);
+            MessagesManager.sendMessageConsole(String.format(Message.COMMAND_GENERIC_RUN_LOG.getMessage(player), player.getName(), "<gold>*Comando De Login*" + s), type, CategoryMessages.COMMANDS, false);
         }else {
-            MessagesManager.sendMessageConsole(String.format(Message.COMMAND_GENERIC_RUN_LOG.getMessage(), player.getName(), "<gold>`" + event.getMessage() + "`" + s), type, CategoryMessages.COMMANDS, false);
+            MessagesManager.sendMessageConsole(String.format(Message.COMMAND_GENERIC_RUN_LOG.getMessage(player), player.getName(), "<gold>`" + event.getMessage() + "`" + s), type, CategoryMessages.COMMANDS, false);
         }
         event.setCancelled(isCancelled);
     }

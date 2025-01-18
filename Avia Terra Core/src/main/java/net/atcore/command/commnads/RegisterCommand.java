@@ -38,10 +38,10 @@ public class RegisterCommand extends BaseCommand {
                         if (Objects.equals(args[0], args[1])){
                             if (args[0].length() > LENGTH_MIN_PASSWORD){
                                 if (!args[0].equalsIgnoreCase(player.getName())){
-                                    sendMessage(player, Message.COMMAND_REGISTER_SUCCESSFUL_CHAT.getMessage(), MessagesType.SUCCESS);
+                                    sendMessage(player, Message.COMMAND_REGISTER_SUCCESSFUL_CHAT.getMessage(player), MessagesType.SUCCESS);
                                     LoginManager.newRegisterCracked(player,  args[0]);
-                                    MessagesManager.sendTitle(player, String.format( Message.COMMAND_REGISTER_SUCCESSFUL_TITLE.getMessage(), MessagesManager.PREFIX),
-                                            String.format(Message.COMMAND_REGISTER_SUCCESSFUL_SUBTITLE.getMessage(), player.getDisplayName())
+                                    MessagesManager.sendTitle(player, String.format( Message.COMMAND_REGISTER_SUCCESSFUL_TITLE.getMessage(player), MessagesManager.PREFIX),
+                                            String.format(Message.COMMAND_REGISTER_SUCCESSFUL_SUBTITLE.getMessage(player), player.getDisplayName())
                                             , 20, 20*3, 40, MessagesType.INFO);
                                     startPlaySessionCracked(player).getRegister().setTemporary(false);
                                     LoginManager.checkLoginIn(player);
@@ -49,7 +49,7 @@ public class RegisterCommand extends BaseCommand {
                                     sendMessage(player, Message.COMMAND_REGISTER_PASSWORD_EQUAL_NAME , MessagesType.ERROR);
                                 }
                             }else {
-                                sendMessage(player, String.format(Message.COMMAND_REGISTER_PASSWORD_TOO_SHORT.getMessage(), LENGTH_MIN_PASSWORD), MessagesType.ERROR);
+                                sendMessage(player, String.format(Message.COMMAND_REGISTER_PASSWORD_TOO_SHORT.getMessage(player), LENGTH_MIN_PASSWORD), MessagesType.ERROR);
                             }
                         }else{
                             sendMessage(player, Message.COMMAND_REGISTER_NO_EQUAL_PASSWORD, MessagesType.ERROR);

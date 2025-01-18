@@ -8,8 +8,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class MessageFile extends FileYaml {
-    public MessageFile() {
-        super("message", null, false, true);
+    public MessageFile(String name, String folder) {
+        super(name, folder, false, true);
     }
 
     public static final HashMap<EntityType, List<String>> MESSAGES_ENTITY = new HashMap<>();
@@ -18,7 +18,7 @@ public class MessageFile extends FileYaml {
     public void loadData() {
         loadConfig();
         EnumSet<EntityType> allEntityTypes = EnumSet.allOf(EntityType.class);
-
+        String tagLocale = fileName.replace(".yml", "");
         // Filtrar las entidades hostiles
         EnumSet<EntityType> hostileEntities = allEntityTypes.stream()
                 .filter(type -> type.getEntityClass() != null && (org.bukkit.entity.Monster.class.isAssignableFrom(type.getEntityClass()) ||
@@ -37,7 +37,18 @@ public class MessageFile extends FileYaml {
                 MESSAGES_ENTITY.put(entityType, List.of("<|%2$s|> mató a <|%1$s|>"));
             }
         }
-
+        for (String s : fileYaml.getKeys(true)){
+            if (fileYaml.isConfigurationSection(s)) continue;
+            if (s.startsWith("death-cause.entity")) continue;
+            try {
+                Message.valueOf(s.toUpperCase()
+                        .replace("-", "_")
+                        .replace(".", "_")
+                );
+            }catch (Exception e){
+                fileYaml.setComments(s, List.of("Este mensaje no se esta usando"));
+            }
+        }
         for (Message message : Message.values()) {
             String path = message.name().toLowerCase()
                     .replace("_", "-")
@@ -47,11 +58,11 @@ public class MessageFile extends FileYaml {
             String s = fileYaml.getString(finalPath);
             List<String> messages = fileYaml.getStringList(finalPath);
             if (s != null) {
-                message.setMessage(new String[]{s});
+                message.getMapMessageLocale().put(Locale.of(tagLocale), new String[]{s});
             }else if (!messages.isEmpty()) {
-                message.setMessage(messages.toArray(new String[0]));
+                message.getMapMessageLocale().put(Locale.of(tagLocale), messages.toArray(new String[0]));
             }else {
-                fileYaml.set(finalPath, message.getMessage());
+                fileYaml.set(finalPath, message.getMessageLocatePrivate());
             }
         }
         saveConfig();

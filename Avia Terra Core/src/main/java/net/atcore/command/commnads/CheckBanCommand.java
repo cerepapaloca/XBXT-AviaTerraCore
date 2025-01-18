@@ -80,8 +80,8 @@ public class CheckBanCommand extends BaseTabCommand {
                                     sendDataBan(sender, dataBan);
                                 }
                             }
-                            case YES -> sendMessage(sender,  String.format(Message.COMMAND_CHECK_BAN_FOUND_AND_KICK.getMessage(), player.getName(), contextBan), MessagesType.SUCCESS);
-                            case UNKNOWN -> sendMessage(sender,String.format(Message.COMMAND_CHECK_BAN_ERROR.getMessage(), player.getName()), MessagesType.ERROR);
+                            case YES -> sendMessage(sender,  String.format(Message.COMMAND_CHECK_BAN_FOUND_AND_KICK.getMessage(player), player.getName(), contextBan), MessagesType.SUCCESS);
+                            case UNKNOWN -> sendMessage(sender,String.format(Message.COMMAND_CHECK_BAN_ERROR.getMessage(player), player.getName()), MessagesType.ERROR);
 
                         }
                     }else {
@@ -103,7 +103,7 @@ public class CheckBanCommand extends BaseTabCommand {
         }else {
             time = GlobalUtils.timeToString(dataBan.getUnbanDate(), 1, true);
         }
-        sendMessage(sender,String.format(Message.COMMAND_CHECK_BAN_FOUND.getMessage(), dataBan.getContext(), time, dataBan.getReason()), MessagesType.INFO);
+        sendMessage(sender,String.format(Message.COMMAND_CHECK_BAN_FOUND.getMessage(sender), dataBan.getContext(), time, dataBan.getReason()), MessagesType.INFO);
     }
 
     @Override

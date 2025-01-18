@@ -41,7 +41,7 @@ public final class BanDebug implements RunTest {
         Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> {
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "aviaterracore:ban jugadorA,JugadorB global 100d Es una prueba automatizada seras de desbaneado");
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "aviaterracore:unban jugadorA,JugadorB global");
-            MessagesManager.sendMessageConsole(Message.TEST_FINISHED.getMessage(), MessagesType.SUCCESS);
+            MessagesManager.sendMessageConsole(Message.TEST_FINISHED, MessagesType.SUCCESS);
         });
     }
 }

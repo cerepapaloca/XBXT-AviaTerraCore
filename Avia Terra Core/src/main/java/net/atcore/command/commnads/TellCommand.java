@@ -35,10 +35,10 @@ public class TellCommand extends BaseCommand {
                     message = message.concat(args[i] + " ");
                 }
                 String finalMessage = message;
-                sendMessage(sender, String.format(Message.COMMAND_TELL_FEEDBACK.getMessage() ,args[0]), MessagesType.NULL);
+                sendMessage(sender, String.format(Message.COMMAND_TELL_FEEDBACK.getMessage(sender) ,args[0]), MessagesType.NULL);
                 CommandUtils.executeForPlayer(sender, args[0], true, dataTemporalPlayer -> {
                     Player player = dataTemporalPlayer.player();
-                    sendMessage(player,String.format(Message.COMMAND_TELL_FORMAT_MESSAGE.getMessage(), sender.getName(), finalMessage), MessagesType.NULL, CategoryMessages.PRIVATE, false);
+                    sendMessage(player,String.format(Message.COMMAND_TELL_FORMAT_MESSAGE.getMessage(player), sender.getName(), finalMessage), MessagesType.NULL, CategoryMessages.PRIVATE, false);
                 });
             }
         }

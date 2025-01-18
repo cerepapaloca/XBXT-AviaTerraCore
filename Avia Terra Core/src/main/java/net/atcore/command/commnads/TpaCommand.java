@@ -1,7 +1,5 @@
 package net.atcore.command.commnads;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import net.atcore.aviaterraplayer.AviaTerraPlayer;
 import net.atcore.command.ArgumentUse;
 import net.atcore.command.BaseTabCommand;
@@ -38,7 +36,7 @@ public class TpaCommand extends BaseTabCommand {
                     case "Y" -> {
                         AviaTerraPlayer atp = AviaTerraPlayer.getPlayer(p);
                         if (atp.getListTpa().isEmpty()){
-                            atp.sendMessage(Message.COMMAND_TPA_NO_FOUND.getMessage(), MessagesType.ERROR);
+                            atp.sendMessage(Message.COMMAND_TPA_NO_FOUND, MessagesType.ERROR);
                             return;
                         }
                         TpaRequest request = atp.getListTpa().getFirst();
@@ -68,8 +66,8 @@ public class TpaCommand extends BaseTabCommand {
                         }
                         if (player != null) {
                             AviaTerraPlayer atp = AviaTerraPlayer.getPlayer(player);
-                            MessagesManager.sendMessage(sender, String.format(Message.COMMAND_TPA_SEND.getMessage(), p.getName()), MessagesType.SUCCESS);
-                            atp.sendMessage(String.format(Message.COMMAND_TPA_RECEIVE.getMessage(), p.getName()), MessagesType.INFO);
+                            MessagesManager.sendMessage(sender, String.format(Message.COMMAND_TPA_SEND.getMessage(player), p.getName()), MessagesType.SUCCESS);
+                            atp.sendMessage(String.format(Message.COMMAND_TPA_RECEIVE.getMessage(player), p.getName()), MessagesType.INFO);
                             atp.getListTpa().add(new TpaRequest(p.getUniqueId(), System.currentTimeMillis() + 1000*60*5));
                         }else {
                             MessagesManager.sendMessage(sender, Message.COMMAND_GENERIC_PLAYER_NOT_FOUND, MessagesType.ERROR);

@@ -7,9 +7,6 @@ import net.atcore.messages.MessagesType;
 import net.atcore.moderation.ban.ContextBan;
 import net.atcore.moderation.ChatModeration;
 import net.atcore.security.Login.LoginManager;
-import net.luckperms.api.LuckPerms;
-import net.luckperms.api.LuckPermsProvider;
-import net.luckperms.api.model.user.User;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -18,7 +15,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
-import static net.atcore.messages.MessagesManager.*;
+import static net.atcore.messages.MessagesManager.sendMessage;
 import static net.atcore.moderation.ban.CheckAutoBan.checkAutoBanChat;
 @Setter
 @Getter
@@ -34,7 +31,7 @@ public class ChatListener implements Listener {
 
 
         if (!LoginManager.checkLoginIn(player)) {
-            sendMessage(player, Message.LOGIN_LIMBO_CHAT_WRITE.getMessage(), MessagesType.ERROR);
+            sendMessage(player, Message.LOGIN_LIMBO_CHAT_WRITE.getMessage(player), MessagesType.ERROR);
             event.setCancelled(true);
             return;
         }
@@ -49,7 +46,7 @@ public class ChatListener implements Listener {
             return;//hay algo indecente?
         }
         event.setMessage(ChatColor.GRAY + message);
-        event.setFormat(ChatColor.translateAlternateColorCodes('&', Message.EVENT_FORMAT_CHAT.getMessage()));
+        event.setFormat(ChatColor.translateAlternateColorCodes('&', Message.EVENT_FORMAT_CHAT.getMessage(player)));
 
         for (Player Player : Bukkit.getOnlinePlayers()) {//busca todos los jugadores
             if (message.contains(Player.getName())){

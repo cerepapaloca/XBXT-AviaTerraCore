@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import net.atcore.AviaTerraCore;
-import net.atcore.aviaterraplayer.AviaTerraPlayer;
 import net.atcore.data.DataSection;
 import net.atcore.data.yml.CacheLimboFile;
 import net.atcore.messages.CategoryMessages;
@@ -14,7 +13,6 @@ import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.MessagesType;
 import net.atcore.utils.GlobalUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -22,7 +20,6 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitTask;
-import org.geysermc.floodgate.api.FloodgateApi;
 
 import java.util.HashSet;
 import java.util.List;
@@ -64,12 +61,12 @@ public class LimboData {
         CacheLimboFile cacheLimbo = (CacheLimboFile) DataSection.getCacheLimboFlies().getConfigFile(GlobalUtils.getRealUUID(player).toString(), false);
         AviaTerraCore.enqueueTaskAsynchronously(() -> cacheLimbo.setRestored(true));
         cacheLimbo.removeLimbo();
-        if (packets != null) {// TODO: Muy baja fiabilidad en bedrock
+        if (packets != null) {
             for (PacketContainer packet : packets.stream().toList()) {
                 ProtocolLibrary.getProtocolManager().sendServerPacket(player, packet, true);
             }
         }
-        MessagesManager.sendMessageConsole(String.format(Message.LOGIN_LIMBO_EXIT.getMessage(), player.getName()), MessagesType.INFO, CategoryMessages.LOGIN);
+        MessagesManager.sendMessageConsole(String.format(Message.LOGIN_LIMBO_EXIT.getMessage(player), player.getName()), MessagesType.INFO, CategoryMessages.LOGIN);
 
     }
 }

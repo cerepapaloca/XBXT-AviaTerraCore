@@ -24,6 +24,7 @@ import java.util.Properties;
 import java.util.UUID;
 
 import static net.atcore.messages.Message.*;
+import static net.atcore.messages.MessagesManager.applyFinalProprieties;
 import static net.atcore.messages.MessagesManager.sendMessage;
 
 @UtilityClass
@@ -57,12 +58,13 @@ public class TwoFactorAuth {
         });
 
         try {
-            String name = GlobalUtils.getPlayer(code.getUuidPlayer()).getName();
+            Player player = GlobalUtils.getPlayer(code.getUuidPlayer());
+            String name = player.getName();
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(EMAIL));
             message.setRecipients(
                     Message.RecipientType.TO, InternetAddress.parse(recipientEmail));
-            message.setSubject(LOGIN_TWO_FACTOR_SUBJECT_GMAIL.getMessage());
+            message.setSubject(LOGIN_TWO_FACTOR_SUBJECT_GMAIL.getMessage(player));
             message.setContent(String.format(gmail,
                     name,
                     format.getTitle(),
@@ -70,7 +72,7 @@ public class TwoFactorAuth {
                     "text/html; charset=utf-8");
 
             Transport.send(message);
-            MessagesManager.sendMessageConsole(String.format(LOGIN_TWO_FACTOR_SEND_CODE_DISCORD_LOG.getMessage(), recipientEmail, name), MessagesType.INFO);
+            MessagesManager.sendMessageConsole(String.format(LOGIN_TWO_FACTOR_SEND_CODE_DISCORD_LOG.getMessage(player), recipientEmail, name), MessagesType.INFO);
 
         } catch (MessagingException e) {
             throw new RuntimeException(e);
@@ -93,7 +95,7 @@ public class TwoFactorAuth {
                 )
         ).queue(success -> sendMessage(player, LOGIN_TWO_FACTOR_ARRIVED_MESSAGE_DISCORD, MessagesType.SUCCESS));
 
-        MessagesManager.sendMessageConsole(String.format(LOGIN_TWO_FACTOR_SEND_CODE_GMAIL_LOG.getMessage(), player.getName(), id), MessagesType.INFO);
+        MessagesManager.sendMessageConsole(String.format(LOGIN_TWO_FACTOR_SEND_CODE_GMAIL_LOG.getMessage(player), player.getName(), id), MessagesType.INFO);
     }
 
     public boolean checkCode(Player player, String code) {

@@ -200,7 +200,7 @@ public class DataBaseBan extends DataBaseMySql {
                 tiempoDeBaneo = GlobalUtils.timeToString(dataBan.getUnbanDate() - dataBan.getBanDate(), 2);
             }
             reload();
-            sendMessageConsole(String.format(Message.DATA_BAN_ADD_OK.getMessage(), dataBan.getName(), dataBan.getContext(), tiempoDeBaneo, dataBan.getAuthor(), dataBan.getReason()), MessagesType.SUCCESS, CategoryMessages.BAN);
+            sendMessageConsole(String.format(Message.DATA_BAN_ADD_OK.getMessageLocatePrivate(), dataBan.getName(), dataBan.getContext(), tiempoDeBaneo, dataBan.getAuthor(), dataBan.getReason()), MessagesType.SUCCESS, CategoryMessages.BAN);
 
         } catch (SQLException e) {
             String tiempoDeBaneo;
@@ -209,7 +209,7 @@ public class DataBaseBan extends DataBaseMySql {
             }else {
                 tiempoDeBaneo = GlobalUtils.timeToString(dataBan.getUnbanDate() - dataBan.getBanDate(), 2);
             }
-            sendMessageConsole(String.format(Message.DATA_BAN_ADD_FAILED.getMessage(), dataBan.getName(), dataBan.getContext(), tiempoDeBaneo, dataBan.getAuthor(), dataBan.getReason()), MessagesType.SUCCESS, CategoryMessages.BAN);
+            sendMessageConsole(String.format(Message.DATA_BAN_ADD_FAILED.getMessageLocatePrivate(), dataBan.getName(), dataBan.getContext(), tiempoDeBaneo, dataBan.getAuthor(), dataBan.getReason()), MessagesType.SUCCESS, CategoryMessages.BAN);
             throw new RuntimeException(e);
         }
     }
@@ -222,9 +222,9 @@ public class DataBaseBan extends DataBaseMySql {
             statement.setString(2, context.name());
             statement.executeUpdate();
             reload();
-            sendMessageConsole(String.format(Message.DATA_BAN_REMOVE_OK.getMessage(), name, context.name(), author), MessagesType.SUCCESS, CategoryMessages.BAN);
+            sendMessageConsole(String.format(Message.DATA_BAN_REMOVE_OK.getMessageLocatePrivate(), name, context.name(), author), MessagesType.SUCCESS, CategoryMessages.BAN);
         } catch (SQLException e) {
-            sendMessageConsole(String.format(Message.DATA_BAN_REMOVE_FAILED.getMessage(), name, context.name(), author), MessagesType.ERROR, CategoryMessages.BAN);
+            sendMessageConsole(String.format(Message.DATA_BAN_REMOVE_FAILED.getMessageLocatePrivate(), name, context.name(), author), MessagesType.ERROR, CategoryMessages.BAN);
             throw new RuntimeException(e);
         }
     }

@@ -30,7 +30,6 @@ public class ChatModeration {
             mp.setPointChat(puntos);
             sendMessageConsole(bukkitPlayer.getName() + " » &7" + message + "&c [ELIMINADO: Spam]", MessagesType.INFO, CategoryMessages.MODERATION);
             double second = (puntos)/(Config.getLevelModerationChat());//formula para calcular el tiempo que le fata para volver a escribir
-            Bukkit.getLogger().warning(puntos + " puntos " + second);
             long secondLong = Math.round(Math.abs(second));
             sendMessage(bukkitPlayer, "mensaje eliminado por Spam espera <|" + secondLong + "|> segundos", MessagesType.ERROR);
             return true;
@@ -76,8 +75,6 @@ public class ChatModeration {
                 sendMessage(player, "mensaje eliminado por qué contiene palabras inadecuadas", MessagesType.ERROR);
                 return true;
             }
-
-
         }
         return false;
     }
