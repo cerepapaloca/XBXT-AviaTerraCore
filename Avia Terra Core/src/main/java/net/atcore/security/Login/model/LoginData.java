@@ -33,4 +33,8 @@ public class LoginData {
     public boolean isLimboMode() {
         return limbo != null;
     }
+
+    public boolean isBedrockPlayer(){
+        return register.getUuidBedrock() != null;
+    }
 }

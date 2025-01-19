@@ -20,23 +20,45 @@ import org.bukkit.scheduler.BukkitTask;
 import org.geysermc.floodgate.api.FloodgateApi;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 @UtilityClass
 public class LimboManager {
 
     public final int LIMBO_TIME = 20*60;
+    public final List<UUID> listInProcess = new ArrayList<>();
 
     public void startAsynchronouslyLimboMode(Player player, ReasonLimbo reasonLimbo) {
         try {
-            if (player.isOnline() && !LoginManager.isLimboMode(player)){
+            if (player.isOnline() && !LoginManager.isLimboMode(player) && !listInProcess.contains(player.getUniqueId())) {
+                listInProcess.add(player.getUniqueId());
                 if (Bukkit.isPrimaryThread()) {
-                    LimboManager.createLimboMode(player, reasonLimbo);
+                    switch (reasonLimbo) {
+                        case NO_SESSION -> {
+                            LoginData loginData = LoginManager.getDataLogin(player);
+                            boolean isOk = loginData.isBedrockPlayer() == FloodgateApi.getInstance().isFloodgatePlayer(player.getUniqueId());
+                            if (isOk) {
+                                if (loginData.isBedrockPlayer()){
+                                    LimboManager.createLimboMode(player, reasonLimbo);
+                                }else {
+                                    Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> LimboManager.createLimboMode(player, reasonLimbo));
+                                }
+                            }else {
+                                MessagesManager.sendMessageConsole(String.format("Los registros de %s y el floodGate dieron datos inconsistentes", player.getName()), MessagesType.WARNING, CategoryMessages.LOGIN);
+                                GlobalUtils.synchronizeKickPlayer(player, "Hubo un error con conexión del servidor, vuele a intentar a entrar");
+                            }
+                        }
+                        case NO_REGISTER -> Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> LimboManager.createLimboMode(player, reasonLimbo));
+                    }
                 }else {
                     Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> LimboManager.createLimboMode(player, reasonLimbo));
                 }
             }
         }catch (Exception e){// Esto es un porsi acaso hay un error. Es mejor hacer un kick por seguridad
+            listInProcess.remove(player.getUniqueId());
             MessagesManager.sendWaringException("Error al pasar al limbo mode", e);
             GlobalUtils.synchronizeKickPlayer(player, Message.LOGIN_KICK_ENTRY_LIMBO_ERROR.getMessage(player));
         }
@@ -47,14 +69,18 @@ public class LimboManager {
         LoginData loginData = LoginManager.getDataLogin(player);
         String uuidString = GlobalUtils.getRealUUID(player).toString();
         FileYaml file = DataSection.getCacheLimboFlies().getConfigFile(uuidString, false);
-
-
         AtomicBoolean aBoolean = new AtomicBoolean(true);
+        addLimboData(player, loginData);
         if (file != null) {// Si tiene un archivo eso quiere decir que no pudo aplicar las propiedades al usuario
             if (file instanceof CacheLimboFile cacheLimbo){
                 if (!cacheLimbo.isRestored()) {
                     aBoolean.set(false);
                     AviaTerraCore.enqueueTaskAsynchronously(() -> {
+                        try {
+                            Thread.sleep(1000*6L);
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
                         // Carga los datos del usuario
                         // Se realiza de manera asincrónica por qué no se requiere los datos del usuario para crear el LimboData
                         cacheLimbo.loadData();
@@ -63,23 +89,16 @@ public class LimboManager {
                 }
             }
         }
-        if (aBoolean.get()) addLimboData(player, loginData);
         // Lo ejecuta con un Tick de delay apara que el addLimbodata pueda con tiempo crear el limboData para los de bedrock
-        Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> AviaTerraCore.enqueueTaskAsynchronously(() -> {
-            if (aBoolean.get()) {
+        AviaTerraCore.enqueueTaskAsynchronously(() -> {
+            if (aBoolean.get()) {// TODO: los de bedrock no funciona bien aveces lo pilla y aveces no
                 CacheLimboFile limboFile = (CacheLimboFile) DataSection.getCacheLimboFlies()
                         .registerConfigFile(GlobalUtils.getRealUUID(player).toString());
                 limboFile.saveData();
                 limboFile.setRestored(false);
             }
             sendMessage(player, reasonLimbo);
-        }));
-
-        if (FloodgateApi.getInstance().isFloodgatePlayer(player.getUniqueId())) {
-            Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> clearPlayer(player));
-        }else {
-            clearPlayer(player);
-        }
+        });
     }
 
     private static void clearPlayer(Player player) {
@@ -115,15 +134,12 @@ public class LimboManager {
     private void addLimboData(Player player, LoginData loginData) {
         LimboData limboData = newLimboData(player);
         loginData.setLimbo(limboData);
-        if (FloodgateApi.getInstance().isFloodgatePlayer(player.getUniqueId())) {
-            Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> {
-                LimboData realLimboData = newLimboData(player);
-                loginData.setLimbo(realLimboData);
-            });
-        }
+        clearPlayer(player);
+        listInProcess.remove(player.getUniqueId());
     }
 
     private static @NotNull LimboData newLimboData(Player player) {
+        Bukkit.getLogger().severe(player.getLocation() + "| New");
         return new LimboData(player.getGameMode(),
                 player.getInventory().getContents(),
                 player.getLocation(),
