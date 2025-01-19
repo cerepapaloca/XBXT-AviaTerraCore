@@ -87,6 +87,8 @@ public enum Message {
     DATA_REGISTER_STATE_FAILED("data.register", "No se pudo cambiar el <|estado de la cuenta|> del jugador <|%s|>"),
     DATA_REGISTER_REMOVE_OK("data.register", "Se borro el <|registro|> del jugador <|%1$s|> por <|%2$s|>"),
     DATA_REGISTER_REMOVE_FAILED("data.register", "Hubo un error al borrar el <|registro|> del jugador <|%1$s|> por <|%2$s|>"),
+    DATA_REGISTER_UUID_BEDROCK_OK("data.register", "Se añadió la <|UUID de bedrock|> del jugador <|%s|> exitosamente"),
+    DATA_REGISTER_UUID_BEDROCK_FAILED("data.register", "Hubo un error al añadir <|UUID de bedrock|> del jugador <|%s|> exitosamente"),
     COMMAND_GENERIC_NO_PERMISSION("command", "No tienes autorización para ejecutar ese comando"),
     COMMAND_GENERIC_NO_LOGIN("command", "Primero inicia sessión usando <|/login|>"),
     COMMAND_GENERIC_NO_PERMISSION_CONSOLE("command", "No tienes autorización para ejecutar comandos en la consola"),

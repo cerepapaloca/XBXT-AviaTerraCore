@@ -18,7 +18,6 @@ public class CacheLimboFile extends FileYaml {
     @Override
     public void loadData() {
         loadConfig();
-        LoginData loginData = LoginManager.getDataLogin(UUID.fromString(fileName.replace(".yml", "")));
         List<?> rawList = fileYaml.getList("inventory", null);
         ItemStack[] inventory;
         if (rawList != null) {
@@ -67,14 +66,14 @@ public class CacheLimboFile extends FileYaml {
                 location,
                 fileYaml.getBoolean("op", false),
                 fileYaml.getInt("level-xp", 0),
-                fileYaml.getDouble("heath"),
+                fileYaml.getDouble("health", 10),
                 fileYaml.getInt("food-level"),
                 (float) fileYaml.getDouble("exhaustion"),
                 (float) fileYaml.getDouble("saturation"),
                 fileYaml.getInt("fire-tick"),
                 effects
-
         );
+        LoginData loginData = LoginManager.getDataLogin(UUID.fromString(fileName.replace(".yml", "")));
         loginData.setLimbo(limboData);
     }
 
@@ -90,6 +89,7 @@ public class CacheLimboFile extends FileYaml {
         fileYaml.set("game-mode", limboData.getGameMode().name());
         fileYaml.set("level-xp", limboData.getLevel());
         fileYaml.set("op", limboData.isOp());
+        fileYaml.set("food-level", limboData.getFoodLevel());
         fileYaml.set("inventory", limboData.getItems());
         fileYaml.set("effects", limboData.getEffects());
         fileYaml.set("health", limboData.getHealth());
@@ -100,7 +100,6 @@ public class CacheLimboFile extends FileYaml {
     }
 
     public boolean isRestored() {
-        loadConfig();
         return fileYaml.getBoolean("is-restored");
     }
 

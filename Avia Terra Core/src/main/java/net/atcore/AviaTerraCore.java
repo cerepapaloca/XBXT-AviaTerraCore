@@ -98,12 +98,6 @@ public final class AviaTerraCore extends JavaPlugin {
 
         workerThread.interrupt();
         Bukkit.getOnlinePlayers().forEach(player -> {
-            LoginData loginData = LoginManager.getDataLogin(player);
-            if (loginData != null){
-                if (LoginManager.isLimboMode(player)) {
-                    loginData.getLimbo().restorePlayer(player);
-                }
-            }
             GlobalUtils.kickPlayer(player, "El servidor va a cerrar, volveremos pronto...");
         });
         //if (jda != null) jda

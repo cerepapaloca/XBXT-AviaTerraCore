@@ -36,11 +36,7 @@ public class PremiumCommand extends BaseCommand {
                 case PREMIUM -> MessagesManager.sendMessage(player,"Esta cuenta ya es premium", MessagesType.ERROR);
                 case CRACKED -> MessagesManager.sendMessage(player,"El nombre de usuario no pertenece a mojan", MessagesType.ERROR);
                 case SEMI_CRACKED -> AviaTerraCore.enqueueTaskAsynchronously(() -> {
-                    if (FloodgateApi.getInstance().isFloodgatePlayer(player.getUniqueId())){
-                        DataBaseRegister.changeState(FloodgateApi.getInstance().getPlayer(player.getUniqueId()).getUsername(), StateLogins.PREMIUM);
-                    }else {
-                        DataBaseRegister.changeState(player.getName(), StateLogins.PREMIUM);
-                    }
+                    DataBaseRegister.changeState(GlobalUtils.getRealName(player), StateLogins.PREMIUM);
                     LoginData loginData = LoginManager.getDataLogin(player);
                     loginData.getRegister().setStateLogins(StateLogins.PREMIUM);
                     GlobalUtils.synchronizeKickPlayer(player, "Ya se hizo el cambio de tu cuenta. Ya es premium, vuelve a entrar");

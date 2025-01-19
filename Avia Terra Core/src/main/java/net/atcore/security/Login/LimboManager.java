@@ -20,6 +20,8 @@ import org.bukkit.scheduler.BukkitTask;
 import org.geysermc.floodgate.api.FloodgateApi;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 @UtilityClass
 public class LimboManager {
 
@@ -45,28 +47,34 @@ public class LimboManager {
         LoginData loginData = LoginManager.getDataLogin(player);
         String uuidString = GlobalUtils.getRealUUID(player).toString();
         FileYaml file = DataSection.getCacheLimboFlies().getConfigFile(uuidString, false);
-        addLimboData(player, loginData);
-        sendMessage(player, reasonLimbo);
+
+
+        AtomicBoolean aBoolean = new AtomicBoolean(true);
         if (file != null) {// Si tiene un archivo eso quiere decir que no pudo aplicar las propiedades al usuario
             if (file instanceof CacheLimboFile cacheLimbo){
-                AviaTerraCore.enqueueTaskAsynchronously(() -> {
-                    if (!cacheLimbo.isRestored()) {
+                if (!cacheLimbo.isRestored()) {
+                    aBoolean.set(false);
+                    AviaTerraCore.enqueueTaskAsynchronously(() -> {
                         // Carga los datos del usuario
                         // Se realiza de manera asincrónica por qué no se requiere los datos del usuario para crear el LimboData
                         cacheLimbo.loadData();
                         MessagesManager.sendMessageConsole(String.format("Se restauro el usuario %s usando el .yaml", player.getName()), MessagesType.INFO, CategoryMessages.LOGIN);
-
-                    }
-                });
-
+                    });
+                }
             }
         }
-        AviaTerraCore.enqueueTaskAsynchronously(() -> {
-            CacheLimboFile limboFile = (CacheLimboFile) DataSection.getCacheLimboFlies()
-                    .registerConfigFile(GlobalUtils.getRealUUID(player).toString());
-            limboFile.saveData();
-            limboFile.setRestored(false);
-        });
+        if (aBoolean.get()) addLimboData(player, loginData);
+        // Lo ejecuta con un Tick de delay apara que el addLimbodata pueda con tiempo crear el limboData para los de bedrock
+        Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> AviaTerraCore.enqueueTaskAsynchronously(() -> {
+            if (aBoolean.get()) {
+                CacheLimboFile limboFile = (CacheLimboFile) DataSection.getCacheLimboFlies()
+                        .registerConfigFile(GlobalUtils.getRealUUID(player).toString());
+                limboFile.saveData();
+                limboFile.setRestored(false);
+            }
+            sendMessage(player, reasonLimbo);
+        }));
+
         if (FloodgateApi.getInstance().isFloodgatePlayer(player.getUniqueId())) {
             Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> clearPlayer(player));
         }else {
@@ -105,8 +113,7 @@ public class LimboManager {
     }
 
     private void addLimboData(Player player, LoginData loginData) {
-        LimboData limboData;
-        limboData = newLimboData(player);
+        LimboData limboData = newLimboData(player);
         loginData.setLimbo(limboData);
         if (FloodgateApi.getInstance().isFloodgatePlayer(player.getUniqueId())) {
             Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> {
@@ -114,7 +121,6 @@ public class LimboManager {
                 loginData.setLimbo(realLimboData);
             });
         }
-        // Se guarda los datos cuando sé crea el limboData esto es solo por si hubo problema grave con el servidor
     }
 
     private static @NotNull LimboData newLimboData(Player player) {

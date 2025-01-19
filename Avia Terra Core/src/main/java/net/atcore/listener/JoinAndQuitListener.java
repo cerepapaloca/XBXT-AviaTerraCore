@@ -11,9 +11,9 @@ import net.atcore.moderation.ban.BanManager;
 import net.atcore.moderation.ban.ContextBan;
 import net.atcore.moderation.ban.DataBan;
 import net.atcore.security.AntiTwoPlayer;
+import net.atcore.security.Login.LoginManager;
 import net.atcore.security.Login.model.LimboData;
 import net.atcore.security.Login.model.LoginData;
-import net.atcore.security.Login.LoginManager;
 import net.atcore.security.SecuritySection;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.Bukkit;
@@ -31,7 +31,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-import static net.atcore.security.Login.LoginManager.*;
+import static net.atcore.security.Login.LoginManager.onEnteringServer;
 
 public class JoinAndQuitListener implements Listener {
 
@@ -47,7 +47,11 @@ public class JoinAndQuitListener implements Listener {
         if (LoginManager.getDataLogin(player) != null) {// si le llega a borrar el registro
             // Borra a los jugadores no premium que no pudieron registrarse para evitar tener jugadores fantasmas
             if (LoginManager.getDataLogin(player.getUniqueId()).getRegister().isTemporary()){
-                AviaTerraCore.enqueueTaskAsynchronously(() -> DataBaseRegister.removeRegister(player.getName(), "Servidor"));
+                AviaTerraCore.enqueueTaskAsynchronously(() -> {
+                    //FileYaml file = DataSection.getCacheLimboFlies().getConfigFile(GlobalUtils.getRealUUID(player).toString(), false);
+                    //file.saveData();
+                    DataBaseRegister.removeRegister(player.getName(), "Servidor");
+                });
             }
         }
 

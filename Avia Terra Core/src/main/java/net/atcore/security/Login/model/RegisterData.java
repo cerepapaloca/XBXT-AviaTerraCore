@@ -31,6 +31,7 @@ public class RegisterData {
     private StateLogins stateLogins;
     private UUID uuidPremium;
     private UUID uuidCracked;
+    private UUID uuidBedrock;
     private String passwordShaded;
     private boolean isTemporary;
     private long lastLoginDate;

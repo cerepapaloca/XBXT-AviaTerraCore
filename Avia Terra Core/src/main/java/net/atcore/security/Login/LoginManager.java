@@ -121,7 +121,8 @@ public final class LoginManager {
                 // Se guarda el registro en la base de datos
                 Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(), () ->
                         DataBaseRegister.addRegister(registerData.getUsername(),
-                        profileObj.getId().toString(), GlobalUtils.getUUIDByName(name).toString(),
+                        profileObj.getId().toString(),
+                                GlobalUtils.getUUIDByName(name).toString(),
                                 ip.getHostAddress(),
                                 ip.getHostAddress(),
                                 StateLogins.SEMI_CRACKED,
@@ -135,7 +136,8 @@ public final class LoginManager {
                 //se guarda el registro en la base de datos
                 Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(), () ->
                         DataBaseRegister.addRegister(registerData.getUsername(),
-                                null, GlobalUtils.getUUIDByName(name).toString(),
+                                null,
+                                GlobalUtils.getUUIDByName(name).toString(),
                                 ip.getHostAddress(),
                                 ip.getHostAddress(),
                                 StateLogins.CRACKED,
@@ -309,6 +311,12 @@ public final class LoginManager {
                 if (Config.getServerMode().equals(ServerMode.OFFLINE_MODE) || registerData.getStateLogins() != StateLogins.PREMIUM){
                     checkLoginIn(player, false, true);
                 }
+                AviaTerraCore.enqueueTaskAsynchronously(() -> {
+                    if (FloodgateApi.getInstance().isFloodgatePlayer(player.getUniqueId()) && loginData.getRegister().getUuidBedrock() == null) {
+                        DataBaseRegister.addUUIDBedrock(GlobalUtils.getRealName(player), player.getUniqueId());
+                        loginData.getRegister().setUuidBedrock(player.getUniqueId());
+                    }
+                });
             }else{
                 GlobalUtils.kickPlayer(player, Message.LOGIN_KICK_NO_REGISTER.getMessage(player));
             }
