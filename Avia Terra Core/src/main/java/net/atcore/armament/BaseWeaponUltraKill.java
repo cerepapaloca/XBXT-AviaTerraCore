@@ -68,9 +68,13 @@ public abstract class BaseWeaponUltraKill extends BaseWeapon {
                 BossBar bossBar = armamentPlayer.getBossBar();
                 TabPlayer tabPlayer = TabAPI.getInstance().getPlayer(player.getUniqueId());
                 if (tabPlayer != null){
-                    bossBar.setTitle(ChatColor.translateAlternateColorCodes('&', "&3&lCantidad De Munición: &6&l" + amountAmmo));
-                    bossBar.setProgress((((float) amountAmmo / (float) maxAmmo)*100));
-                    TabAPI.getInstance().getBossBarManager().sendBossBarTemporarily(tabPlayer, bossBar.getName(), 3);
+                    try {
+                        bossBar.setTitle(ChatColor.translateAlternateColorCodes('&', "&3&lCantidad De Munición: &6&l" + amountAmmo));
+                        bossBar.setProgress((((float) amountAmmo / (float) maxAmmo)*100));
+                        TabAPI.getInstance().getBossBarManager().sendBossBarTemporarily(tabPlayer, bossBar.getName(), 3);
+                    }catch (Exception ignored){
+
+                    }
                 }
                 updateLore(player.getInventory().getItemInMainHand(), null);
                 player.getWorld().playSound(player.getLocation(), Sound.ENTITY_SNOW_GOLEM_SHOOT, SoundCategory.PLAYERS, 1.1f, 0.8f);

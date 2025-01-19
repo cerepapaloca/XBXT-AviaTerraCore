@@ -14,6 +14,7 @@ import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.kyori.adventure.title.Title;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -249,7 +250,12 @@ public final class MessagesManager {
         Random r = new Random();
         for (Player p : Bukkit.getOnlinePlayers()) {
             String message;
-            if (killer != null && !(killer instanceof Player)) {
+            if ((killer != null && killer.getType() != EntityType.PLAYER && (
+                    cause.equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK) ||
+                    cause.equals(EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK) ||
+                    cause.equals(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION) ||
+                    cause.equals(EntityDamageEvent.DamageCause.PROJECTILE))
+            )) {//TODO: Incluir el dragon
                 message = MessageFile.MESSAGES_ENTITY.get(killer.getType()).get(r.nextInt(MessageFile.MESSAGES_ENTITY.get(killer.getType()).size()));
             }else {
                 message = Message.valueOf("DEATH_CAUSE_" + cause.name()).getMessage(p);
@@ -271,11 +277,10 @@ public final class MessagesManager {
                 }else {
                     Component customName = killer.customName();
                     if (customName != null) {
-                        componentKiller.append(customName).append(AviaTerraCore.getMiniMessage().deserialize(" (" + killer.getName() + ")"));
+                        componentKiller.append(customName).append(AviaTerraCore.getMiniMessage().deserialize(" (" + "<lang:entity.minecraft." + killer.getType().name().toLowerCase() + ">" + ")"));
                     }else {
-                        componentKiller.append(AviaTerraCore.getMiniMessage().deserialize(killer.getName()));
+                        componentKiller.append(AviaTerraCore.getMiniMessage().deserialize("<lang:entity.minecraft." + killer.getType().name().toLowerCase() + ">"));
                     }
-
                 }
                 componentKiller.hoverEvent(HoverEvent.showEntity(killer.asHoverEvent().value()));
                 TextReplacementConfig.Builder config2 = TextReplacementConfig.builder().matchLiteral("%2$s").replacement(componentKiller);

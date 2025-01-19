@@ -59,18 +59,22 @@ public class ArmamentPlayer extends AbstractAviaTerraPlayer implements Compartme
                                         createBossBar();
                                     }
                                     BossBarManager bossBarManager = TabAPI.getInstance().getBossBarManager();
-                                    if (amountAmmo < weapon.getMaxAmmo()){
-                                        amountAmmo++;
-                                        GlobalUtils.setPersistentData(itemArmament, "AmountAmmo", PersistentDataType.INTEGER, amountAmmo);
-                                        bossBar.setTitle(ChatColor.translateAlternateColorCodes('&', "&3&lCantidad De Munición: &6&l" + amountAmmo));
-                                        bossBar.setProgress((((float) amountAmmo / (float) weapon.getMaxAmmo())*100));
-                                        if (bossBarManager != null)bossBarManager.sendBossBarTemporarily(tabPlayer, bossBar.getName(), weapon.getReloadDelay()*20 + 20);
-                                        return;
-                                    }else {
-                                        player.getWorld().playSound(player.getLocation(), Sound.ITEM_ARMOR_EQUIP_IRON, SoundCategory.PLAYERS, 1, 1);
-                                        bossBar.setTitle(ChatColor.translateAlternateColorCodes('&', "&3&lCantidad De Munición: &6&l" + weapon.getMaxAmmo()));
-                                        bossBar.setProgress((((float) amountAmmo / (float) weapon.getMaxAmmo())*100));
-                                        if (bossBarManager != null)bossBarManager.sendBossBarTemporarily(tabPlayer, bossBar.getName(), 10);
+                                    try {
+                                        if (amountAmmo < weapon.getMaxAmmo()){
+                                            amountAmmo++;
+                                            GlobalUtils.setPersistentData(itemArmament, "AmountAmmo", PersistentDataType.INTEGER, amountAmmo);
+                                            bossBar.setTitle(ChatColor.translateAlternateColorCodes('&', "&3&lCantidad De Munición: &6&l" + amountAmmo));
+                                            bossBar.setProgress((((float) amountAmmo / (float) weapon.getMaxAmmo())*100));
+                                            if (bossBarManager != null)bossBarManager.sendBossBarTemporarily(tabPlayer, bossBar.getName(), weapon.getReloadDelay()*20 + 20);
+                                            return;
+                                        }else {
+                                            player.getWorld().playSound(player.getLocation(), Sound.ITEM_ARMOR_EQUIP_IRON, SoundCategory.PLAYERS, 1, 1);
+                                            bossBar.setTitle(ChatColor.translateAlternateColorCodes('&', "&3&lCantidad De Munición: &6&l" + weapon.getMaxAmmo()));
+                                            bossBar.setProgress((((float) amountAmmo / (float) weapon.getMaxAmmo())*100));
+                                            if (bossBarManager != null)bossBarManager.sendBossBarTemporarily(tabPlayer, bossBar.getName(), 10);
+                                        }
+                                    }catch (Exception ignored){
+                                        //TODO: hay que arreglar esto algún dia
                                     }
                                     weapon.updateLore(itemArmament, null);
                                 }

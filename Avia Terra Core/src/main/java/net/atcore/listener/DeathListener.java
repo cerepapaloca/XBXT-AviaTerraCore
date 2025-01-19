@@ -30,9 +30,14 @@ public class DeathListener implements Listener {
                 killer = e.getEntity().getKiller();
             } else {
                 // En caso de que no tenga un killer se usara la última entidad que le hizo daño
-                Entity entity = Bukkit.getEntity(MapLastDamagerEntity.get(player.getUniqueId()));
-                if (entity instanceof LivingEntity le) {
-                    killer = le;
+                UUID uuid = MapLastDamagerEntity.get(player.getUniqueId());
+                if (uuid != null){
+                    Entity entity = Bukkit.getEntity(uuid);
+                    if (entity instanceof LivingEntity le) {
+                        killer = le;
+                    }else {
+                        killer = null;
+                    }
                 }else {
                     killer = null;
                 }

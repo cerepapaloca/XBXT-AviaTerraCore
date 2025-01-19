@@ -76,11 +76,6 @@ public class LimboManager {
                 if (!cacheLimbo.isRestored()) {
                     aBoolean.set(false);
                     AviaTerraCore.enqueueTaskAsynchronously(() -> {
-                        try {
-                            Thread.sleep(1000*6L);
-                        } catch (InterruptedException e) {
-                            throw new RuntimeException(e);
-                        }
                         // Carga los datos del usuario
                         // Se realiza de manera asincrónica por qué no se requiere los datos del usuario para crear el LimboData
                         cacheLimbo.loadData();
@@ -139,7 +134,6 @@ public class LimboManager {
     }
 
     private static @NotNull LimboData newLimboData(Player player) {
-        Bukkit.getLogger().severe(player.getLocation() + "| New");
         return new LimboData(player.getGameMode(),
                 player.getInventory().getContents(),
                 player.getLocation(),

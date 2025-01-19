@@ -17,10 +17,10 @@ import net.atcore.messages.MessagesType;
 public abstract class DataBaseMySql implements Reloadable {
     private static Connection connection;
 
-    private static final String HOST = "localhost";//
+    private static final String HOST = "192.168.1.55";//localhost
     private static final String PORT = "3306";
     private static final String DATABASE = "xbxt";//aviaterra
-    private static final String USER = "xbxt-data-base";//root
+    private static final String USER ="xbxt-data-base";//root
     private static final String PASSWORD = "AdeptusAzurex1313#waos";//
 
     /**

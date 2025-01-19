@@ -60,7 +60,6 @@ public class LimboData {
         player.saveData();// Se guarda los datos del usuario en el servidor por si el servidor peta
         if (gameMode == GameMode.SURVIVAL) player.setAllowFlight(false);
         CacheLimboFile cacheLimbo = (CacheLimboFile) DataSection.getCacheLimboFlies().getConfigFile(GlobalUtils.getRealUUID(player).toString(), false);
-        Bukkit.getLogger().severe(location + "| Restore");
         AviaTerraCore.enqueueTaskAsynchronously(() -> cacheLimbo.setRestored(true));
         cacheLimbo.removeLimbo();
         if (packets != null) {

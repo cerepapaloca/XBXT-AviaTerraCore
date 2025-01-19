@@ -55,11 +55,11 @@ public class HomeCommand extends BaseTabCommand {
                             player.getWorld().playSound(player, Sound.ENTITY_PLAYER_TELEPORT, SoundCategory.PLAYERS, 1, 1);
                             player.teleport(loc, PlayerTeleportEvent.TeleportCause.COMMAND);
                         }else {
-                            MessagesManager.sendMessage(sender, String.format(Message.COMMAND_HOME_CLOSE_SPAWN.toString(), Math.round(distanceMinTp - distance)), MessagesType.ERROR);
+                            MessagesManager.sendMessage(sender, String.format(Message.COMMAND_HOME_CLOSE_SPAWN.getMessage(player), Math.round(distanceMinTp - distance)), MessagesType.ERROR);
                         }
 
                     }else {
-                        MessagesManager.sendMessage(sender, String.format(Message.COMMAND_HOME_NOT_FOUND.toString(), args[0]), MessagesType.ERROR);
+                        MessagesManager.sendMessage(sender, String.format(Message.COMMAND_HOME_NOT_FOUND.getMessage(player), args[0]), MessagesType.ERROR);
                     }
                 }
                 case 2 -> {
