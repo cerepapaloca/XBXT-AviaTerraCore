@@ -17,8 +17,8 @@ public class AviaTerraDebugCommand extends BaseTabCommand {
     public AviaTerraDebugCommand() {
         super("AviaTerraDebug",
                 new ArgumentUse("AviaTerraPruebas").addArg("Pruebas"),
-                "Commando para realizar pruebas del plugin"
-        );
+                "Commando para realizar pruebas del plugin",
+                false);
     }
 
     @Override

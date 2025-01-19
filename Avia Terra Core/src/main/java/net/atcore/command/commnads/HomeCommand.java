@@ -27,8 +27,8 @@ public class HomeCommand extends BaseTabCommand {
         super("home",
                 new ArgumentUse("home").addNote("Nombre de tu Home").addArgOptional().addArg("add", "remove"),
                 "*",
-                "Crear un home donde te puedes hacer tp"
-        );
+                "Crear un home donde te puedes hacer tp",
+                false);
     }
 
     private final Location spawnLocation = new Location(Bukkit.getWorlds().getFirst(), 0, 0, 0);

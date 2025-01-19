@@ -22,8 +22,8 @@ public class UnbanCommand extends BaseTabCommand {
                 new ArgumentUse("unban")
                         .addArgPlayer(ModeTabPlayers.ADVANCED)
                         .addArg("Contexto"),
-                "desbanea a al jugador que le caes bien"
-        );
+                "desbanea a al jugador que le caes bien",
+                false);
     }
 
     @Override

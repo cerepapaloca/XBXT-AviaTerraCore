@@ -14,7 +14,8 @@ public class SayCommand extends BaseCommand {
     public SayCommand() {
         super("say",//"info", "error", "waring", "susses"
                 new ArgumentUse("say").addArgPlayer(ModeTabPlayers.ADVANCED).addArg(MessagesType.values()).addFinalArg("Mensaje"),
-                "Envias un mensaje global como si fuese del plugin"
+                "Envias un mensaje global como si fuese del plugin",
+                false
         );
     }
 

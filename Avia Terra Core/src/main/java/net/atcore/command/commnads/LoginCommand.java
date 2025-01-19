@@ -28,8 +28,8 @@ public class LoginCommand extends BaseCommand {
                 new ArgumentUse("/login")
                         .addNote("contraseña"),
                 "**",
-                "Te logueas"
-        );
+                "Te logueas",
+                false);
     }
 
     private final HashMap<UUID, Integer> attempts = new HashMap<>();
@@ -91,7 +91,7 @@ public class LoginCommand extends BaseCommand {
             attempts.remove(player.getUniqueId());
             LoginManager.updateLoginDataBase(GlobalUtils.getRealName(player), Objects.requireNonNull(player.getAddress()).getAddress());
             MessagesManager.sendTitle(player, Message.COMMAND_LOGIN_SUCCESSFUL_TITLE.getMessage(player),
-                    String.format(Message.COMMAND_LOGIN_SUCCESSFUL_SUBTITLE.getMessage(player), player.getDisplayName()),
+                    String.format(Message.COMMAND_LOGIN_SUCCESSFUL_SUBTITLE.getMessage(player), player.getName()),
                     20, 20*3, 40, MessagesType.INFO);
             sendMessage(player, Message.COMMAND_LOGIN_SUCCESSFUL_CHAT, MessagesType.SUCCESS);
         });

@@ -25,8 +25,8 @@ public class ChangePasswordCommand extends BaseTabCommand {
         super("changePassword",
                 new ArgumentUse("changePassword").addNote("Contraseña", "Código").addNote("Nueva Contraseña"),
                 "*",
-                "cambias tu contraseña"
-        );
+                "cambias tu contraseña",
+                false);
     }
 
     @Override

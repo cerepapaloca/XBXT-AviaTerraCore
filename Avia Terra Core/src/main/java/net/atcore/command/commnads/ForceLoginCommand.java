@@ -18,7 +18,7 @@ public class ForceLoginCommand extends BaseCommand {
         super("forceLogin",
                 new ArgumentUse("forceLogin").addArgPlayer(ModeTabPlayers.NORMAL),
                 "!*",
-                "Fuerza a iniciar session como un jugador cracked");
+                "Fuerza a iniciar session como un jugador cracked", false);
     }
 
     @Override

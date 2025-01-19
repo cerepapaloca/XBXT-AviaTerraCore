@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 
 /**
@@ -204,7 +205,7 @@ public class ArgumentUse {
                     return List.of(argument.arg);
                 }
             }
-        }catch (IndexOutOfBoundsException e){
+        }catch (IndexOutOfBoundsException | NoSuchElementException e){
             return List.of();
         }
     }

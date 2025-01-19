@@ -3,9 +3,11 @@ package net.atcore.command;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.atcore.messages.Message;
+import net.atcore.messages.MessagesManager;
 import net.atcore.messages.MessagesType;
 import net.atcore.security.AntiExploit;
 import net.atcore.security.Login.LoginManager;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
@@ -21,6 +23,7 @@ import static net.atcore.messages.MessagesManager.*;
 @RequiredArgsConstructor //esta anotación crea un constructor con las variables que tenga el final
 public final class CommandHandler implements TabExecutor {
     private final HashSet<BaseCommand> commands = new HashSet<>();
+    public static final HashMap<UUID, String> SAVES_COMMANDS_CONFIRMS = new HashMap<>();
 
     /**
      * Este method es de bukkit y se dispara cada vez que un jugador ejecuta un comando
@@ -33,6 +36,20 @@ public final class CommandHandler implements TabExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {
         for (BaseCommand command : commands) {// Pasa por todas las clases para saber que comando es
             if (!(cmd.getName().equalsIgnoreCase(command.getName()))) continue;
+            if (command.isRequiredConfirm() && sender instanceof Player player) {
+                if (SAVES_COMMANDS_CONFIRMS.containsKey(player.getUniqueId())) {
+                    SAVES_COMMANDS_CONFIRMS.remove(player.getUniqueId());
+                } else {
+                    StringBuilder commandFinal = new StringBuilder();
+                    commandFinal.append(command.getName()).append(" ");
+                    for (String arg : args) {
+                        commandFinal.append(arg).append(" ");
+                    }
+                    SAVES_COMMANDS_CONFIRMS.put(player.getUniqueId(), commandFinal.toString());
+                    MessagesManager.sendMessage(sender, command.getMessageConfirm(), MessagesType.INFO);
+                    return true;
+                }
+            }
             if (sender instanceof Player player) {
                if (AntiExploit.checkOpAndCreative(player))return false;// mirar si el jugador tiene creativo o es OP
             }

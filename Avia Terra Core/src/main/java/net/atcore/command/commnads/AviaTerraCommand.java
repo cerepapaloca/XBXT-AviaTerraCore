@@ -22,8 +22,8 @@ public class AviaTerraCommand extends BaseTabCommand {
     public AviaTerraCommand() {
         super("AviaTerra",
                 new ArgumentUse("aviaTerra"),
-                "Se encarga de la configuración de algunos apartados del plugin"
-        );
+                "Se encarga de la configuración de algunos apartados del plugin",
+                false);
     }
 
     @Override

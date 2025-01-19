@@ -19,8 +19,8 @@ public class seeInventoryCommand extends BaseCommand {
         super("seeInventory",
                 new ArgumentUse("/seeInventory").addArgPlayer(ModeTabPlayers.NORMAL),
                 "Puedes ver y modificar el inventario del jugador a tiempo real y de manera remota",
-                "d"
-        );
+                "d",
+                false);
     }
 
     @Override

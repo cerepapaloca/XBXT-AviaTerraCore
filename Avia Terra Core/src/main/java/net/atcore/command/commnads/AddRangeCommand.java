@@ -28,8 +28,8 @@ public class AddRangeCommand extends BaseTabCommand {
     public AddRangeCommand() {
         super("addRange",
                 new ArgumentUse("addRange").addNote("Rango").addTime(true).addArgPlayer(ModeTabPlayers.ADVANCED),
-                "das una tags donde se puede dar un rango durante un tiempo determinado"
-        );
+                "das una tags donde se puede dar un rango durante un tiempo determinado",
+                false);
     }
 
     @Override

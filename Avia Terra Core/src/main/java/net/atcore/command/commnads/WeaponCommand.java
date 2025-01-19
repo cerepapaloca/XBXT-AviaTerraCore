@@ -25,8 +25,8 @@ public class WeaponCommand extends BaseTabCommand {
                         .addArg("Nombre Del Armamento")
                         .addArgOptional()
                         .addArg("Cantidad"),
-                "desbanea a al jugador que le caes bien"
-        );
+                "desbanea a al jugador que le caes bien",
+                false);
         if (ArmamentUtils.ARMAMENTS.isEmpty()) ArmamentSection.initialize();
         for (BaseArmament armament : ArmamentUtils.ARMAMENTS){
             if (armament instanceof BaseWeaponUltraKill){

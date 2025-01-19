@@ -83,6 +83,8 @@ public enum Message {
     DATA_REGISTER_PASSWORD_FAILED("data.register", "No se pudo actualizar la <|contraseña|> del jugador <|%s|>"),
     DATA_REGISTER_ADDRESS_OK("data.register", "Se actualizó la <|ip|> del jugador <|%s|> exitosamente"),
     DATA_REGISTER_ADDRESS_FAILED("data.register", "No se pudo actualizar la <|ip|> del jugador <|%s|>"),
+    DATA_REGISTER_STATE_OK("data.register", "Se actualizó la <|estado de la cuenta|> del jugador <|%s|> exitosamente"),
+    DATA_REGISTER_STATE_FAILED("data.register", "No se pudo cambiar el <|estado de la cuenta|> del jugador <|%s|>"),
     DATA_REGISTER_REMOVE_OK("data.register", "Se borro el <|registro|> del jugador <|%1$s|> por <|%2$s|>"),
     DATA_REGISTER_REMOVE_FAILED("data.register", "Hubo un error al borrar el <|registro|> del jugador <|%1$s|> por <|%2$s|>"),
     COMMAND_GENERIC_NO_PERMISSION("command", "No tienes autorización para ejecutar ese comando"),

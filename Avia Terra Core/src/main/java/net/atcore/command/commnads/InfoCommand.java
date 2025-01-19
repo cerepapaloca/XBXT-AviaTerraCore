@@ -18,7 +18,8 @@ public class InfoCommand extends BaseCommand {
     public InfoCommand() {
         super("info",
                 new ArgumentUse("/info"),
-                "Te logueas"
+                "Te logueas",
+                false
         );
     }
 

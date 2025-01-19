@@ -19,8 +19,8 @@ public class BanCommand extends BaseTabCommand {
     public BanCommand() {
         super("ban",
                 new ArgumentUse("jugador").addArg("Contexto").addTime(true).addNote("Ranzón"),
-                "Baneas a los jugador de un contexto por un tiempo determinado"
-        );
+                "Baneas a los jugador de un contexto por un tiempo determinado",
+                false);
     }
 
     @Override

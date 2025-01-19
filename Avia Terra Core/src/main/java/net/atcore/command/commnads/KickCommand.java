@@ -17,8 +17,8 @@ public class KickCommand extends BaseTabCommand {
     public KickCommand() {
         super("kick",
                 new ArgumentUse("kick").addArgPlayer(ModeTabPlayers.ADVANCED).addArg("razón"),
-                "Echas al jugador del servidor"
-        );
+                "Echas al jugador del servidor",
+                false);
     }
 
     @Override

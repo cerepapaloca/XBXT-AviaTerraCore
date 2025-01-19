@@ -24,8 +24,8 @@ public class TpaCommand extends BaseTabCommand {
         super("tpa",
                 new ArgumentUse("tpa").addArgPlayer(ModeTabPlayers.NORMAL),
                 "*",
-                "Puedes enviar una solicitud de tp a un jugador"
-        );
+                "Puedes enviar una solicitud de tp a un jugador",
+                false);
     }
 
     @Override

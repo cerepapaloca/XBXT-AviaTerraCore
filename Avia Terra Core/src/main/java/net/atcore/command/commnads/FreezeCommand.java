@@ -23,8 +23,8 @@ public class FreezeCommand extends BaseTabCommand {
                 new ArgumentUse("freeze")
                         .addArgPlayer(ModeTabPlayers.ADVANCED)
                         .addArg("true", "false"),
-                "Este comando congelas a un jugador por actividad sospechosa"
-        );
+                "Este comando congelas a un jugador por actividad sospechosa",
+                false);
     }
 
     @Override

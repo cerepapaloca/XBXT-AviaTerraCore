@@ -116,14 +116,16 @@ public final class LoginManager {
             RegisterData registerData;
             if (profile.isPresent()){
                 Profile profileObj = profile.get();
-                registerData = new RegisterData(profileObj.getName(), GlobalUtils.getUUIDByName(name), profileObj.getId(), StateLogins.PREMIUM, false);
+                registerData = new RegisterData(profileObj.getName(), GlobalUtils.getUUIDByName(name), profileObj.getId(), StateLogins.SEMI_CRACKED, false);
                 registerData.setLastAddress(ip);
                 // Se guarda el registro en la base de datos
                 Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(), () ->
                         DataBaseRegister.addRegister(registerData.getUsername(),
                         profileObj.getId().toString(), GlobalUtils.getUUIDByName(name).toString(),
-                        ip.getHostAddress(), ip.getHostAddress(),
-                        true, null,
+                                ip.getHostAddress(),
+                                ip.getHostAddress(),
+                                StateLogins.SEMI_CRACKED,
+                                null,
                         System.currentTimeMillis(), System.currentTimeMillis()
                 ));
 
@@ -133,9 +135,11 @@ public final class LoginManager {
                 //se guarda el registro en la base de datos
                 Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(), () ->
                         DataBaseRegister.addRegister(registerData.getUsername(),
-                        null, GlobalUtils.getUUIDByName(name).toString(),
-                        ip.getHostAddress(), ip.getHostAddress(),
-                        false, null,
+                                null, GlobalUtils.getUUIDByName(name).toString(),
+                                ip.getHostAddress(),
+                                ip.getHostAddress(),
+                                StateLogins.CRACKED,
+                                null,
                         System.currentTimeMillis(), System.currentTimeMillis()
                 ));
             }
@@ -237,14 +241,16 @@ public final class LoginManager {
         if (loginData.hasSession()) {// Mira si tiene una session
             SessionData sessionData = loginData.getSession();
             switch (sessionData.getState()) {
-                case CRACKED -> {
+                case CRACKED, SEMI_CRACKED -> {
                     if (loginData.getRegister().getPasswordShaded() != null) {// tiene una contraseña la cuenta?
                         if (!Config.getServerMode().equals(ServerMode.ONLINE_MODE)){// no puede ver cracked en modo online
                             if (GlobalUtils.equalIp(sessionData.getAddress(), player.getAddress().getAddress())) {// las ips tiene que ser iguales
                                 if (ignoreTime || loginData.getSession().getEndTimeLogin() > System.currentTimeMillis()) {// expiro? o no se tiene en cuenta
-                                    if (loginData.isLimboMode() && limboMode && player.isOnline()) {
-                                        Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> loginData.getLimbo().restorePlayer(player));
-                                    }
+                                    Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> {
+                                        if (loginData.isLimboMode() && limboMode && player.isOnline()) {
+                                            loginData.getLimbo().restorePlayer(player);
+                                        }
+                                    });
                                     return true;// sesión válida para los cracked
                                 }
                             }
@@ -300,7 +306,7 @@ public final class LoginManager {
         if (loginData != null) {
             RegisterData registerData = loginData.getRegister();
             if (registerData != null) {
-                if (Config.getServerMode().equals(ServerMode.OFFLINE_MODE) || registerData.getStateLogins() == StateLogins.CRACKED){
+                if (Config.getServerMode().equals(ServerMode.OFFLINE_MODE) || registerData.getStateLogins() != StateLogins.PREMIUM){
                     checkLoginIn(player, false, true);
                 }
             }else{

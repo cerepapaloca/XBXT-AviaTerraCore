@@ -28,7 +28,7 @@ public class RegisterData {
     }
 
     private final String username;
-    private final StateLogins stateLogins;
+    private StateLogins stateLogins;
     private UUID uuidPremium;
     private UUID uuidCracked;
     private String passwordShaded;

@@ -25,8 +25,8 @@ public class LinkCommand extends BaseTabCommand {
                         .addArg("gmail", "discord")
                         .addNote("Cuenta"),
                 "**",
-                "Vinculas una cuenta para que mayor seguridad en el servidor y tener la capacidad de iniciar session con la autenticación de 2 pasos"
-        );
+                "Vinculas una cuenta para que mayor seguridad en el servidor y tener la capacidad de iniciar session con la autenticación de 2 pasos",
+                false);
     }
 
     private static final long EXPIRATION_TIME = 1000*60*2;

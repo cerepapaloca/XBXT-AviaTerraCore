@@ -20,8 +20,8 @@ public class TellCommand extends BaseCommand {
                         .addArgPlayer(ModeTabPlayers.ADVANCED)
                         .addNote("Mensaje..."),
                 "*",
-                "Le envías un mensaje privado a un jugador o un grupo de estos"
-        );
+                "Le envías un mensaje privado a un jugador o un grupo de estos",
+                false);
     }
 
     @Override

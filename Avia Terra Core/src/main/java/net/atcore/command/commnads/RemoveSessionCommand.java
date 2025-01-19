@@ -16,7 +16,8 @@ public class RemoveSessionCommand extends BaseCommand {
     public RemoveSessionCommand() {
         super("removeSession",
                 new ArgumentUse("/removeSession").addArgPlayer(ModeTabPlayers.ADVANCED),
-                "Le borras la sesión al jugador"
+                "Le borras la sesión al jugador",
+                false
         );
     }
 

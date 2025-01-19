@@ -7,6 +7,7 @@ import me.neznamy.tab.api.TabPlayer;
 import me.neznamy.tab.api.bossbar.BarColor;
 import me.neznamy.tab.api.bossbar.BarStyle;
 import me.neznamy.tab.api.bossbar.BossBar;
+import me.neznamy.tab.api.bossbar.BossBarManager;
 import net.atcore.AviaTerraCore;
 import net.atcore.armament.ArmamentUtils;
 import net.atcore.armament.BaseWeapon;
@@ -57,18 +58,19 @@ public class ArmamentPlayer extends AbstractAviaTerraPlayer implements Compartme
                                     if (bossBar == null){
                                         createBossBar();
                                     }
+                                    BossBarManager bossBarManager = TabAPI.getInstance().getBossBarManager();
                                     if (amountAmmo < weapon.getMaxAmmo()){
                                         amountAmmo++;
                                         GlobalUtils.setPersistentData(itemArmament, "AmountAmmo", PersistentDataType.INTEGER, amountAmmo);
                                         bossBar.setTitle(ChatColor.translateAlternateColorCodes('&', "&3&lCantidad De Munición: &6&l" + amountAmmo));
                                         bossBar.setProgress((((float) amountAmmo / (float) weapon.getMaxAmmo())*100));
-                                        TabAPI.getInstance().getBossBarManager().sendBossBarTemporarily(tabPlayer, bossBar.getName(), weapon.getReloadDelay()*20 + 20);
+                                        if (bossBarManager != null)bossBarManager.sendBossBarTemporarily(tabPlayer, bossBar.getName(), weapon.getReloadDelay()*20 + 20);
                                         return;
                                     }else {
                                         player.getWorld().playSound(player.getLocation(), Sound.ITEM_ARMOR_EQUIP_IRON, SoundCategory.PLAYERS, 1, 1);
                                         bossBar.setTitle(ChatColor.translateAlternateColorCodes('&', "&3&lCantidad De Munición: &6&l" + weapon.getMaxAmmo()));
                                         bossBar.setProgress((((float) amountAmmo / (float) weapon.getMaxAmmo())*100));
-                                        TabAPI.getInstance().getBossBarManager().sendBossBarTemporarily(tabPlayer, bossBar.getName(), 10);
+                                        if (bossBarManager != null)bossBarManager.sendBossBarTemporarily(tabPlayer, bossBar.getName(), 10);
                                     }
                                     weapon.updateLore(itemArmament, null);
                                 }

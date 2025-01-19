@@ -25,7 +25,7 @@ import static net.atcore.messages.MessagesManager.sendMessageConsole;
 public class DataBaseRegister extends DataBaseMySql {
     @Override
     public void reload() {
-        String sql = "SELECT name, uuidPremium, uuidCracked, ipRegister, ipLogin, isPremium, password, lastLoginDate, registerDate, gmail, discord FROM register";
+        String sql = "SELECT name, uuidPremium, uuidCracked, ipRegister, ipLogin, stateAccount, password, lastLoginDate, registerDate, gmail, discord FROM register";
         HashMap<UUID, SessionData> sessions = new HashMap<>();
 
         try (Connection connection = getConnection();
@@ -39,7 +39,7 @@ public class DataBaseRegister extends DataBaseMySql {
                 String uuidCracked = resultSet.getString("uuidCracked");
                 String ipRegister = resultSet.getString("ipRegister");
                 String ipLogin = resultSet.getString("ipLogin");
-                int isPremium = resultSet.getInt("isPremium");
+                String stateAccount = resultSet.getString("stateAccount");
                 String password = resultSet.getString("password");
                 long lastLoginDate = resultSet.getLong("lastLoginDate");
                 long registerDate = resultSet.getLong("registerDate");
@@ -48,9 +48,13 @@ public class DataBaseRegister extends DataBaseMySql {
 
                 UUID uuid = UUID.fromString(uuidCracked);
 
-                RegisterData registerData = new RegisterData(name, uuid,
-                        uuidPremium != null ? UUID.fromString(uuidPremium) : null, isPremium == 1 ? StateLogins.PREMIUM : StateLogins.CRACKED,
-                        false);
+                RegisterData registerData = new RegisterData(
+                        name,
+                        uuid,
+                        uuidPremium != null ? UUID.fromString(uuidPremium) : null,
+                        StateLogins.valueOf(stateAccount.toUpperCase()),
+                        false
+                );
                 registerData.setRegisterAddress(InetAddress.getByName(ipRegister));
                 registerData.setLastAddress(InetAddress.getByName(ipLogin));
                 registerData.setPasswordShaded(password);
@@ -103,7 +107,7 @@ public class DataBaseRegister extends DataBaseMySql {
                 "uuidCracked VARCHAR(100) NOT NULL, " +
                 "ipRegister VARCHAR(45), " +
                 "ipLogin VARCHAR(45), " +
-                "isPremium TINYINT NOT NULL, " +
+                "stateAccount VARCHAR(45) NOT NULL, " +
                 "password VARCHAR(100), " +
                 "lastLoginDate BIGINT NOT NULL, " +
                 "registerDate BIGINT NOT NULL, " +
@@ -124,14 +128,14 @@ public class DataBaseRegister extends DataBaseMySql {
 
     public static void addRegister(String name, String uuidPremium,
                                    String uuidCracked, String ipRegister,
-                                   String ipLogin, Boolean isPremium,
+                                   String ipLogin, StateLogins state,
                                    String password, long lastLoginDate,
                                    long registerDate) {
-        String sql = "INSERT INTO register (name, uuidPremium, uuidCracked, ipRegister, ipLogin, isPremium, password, lastLoginDate, registerDate, gmail, discord) " +
+        String sql = "INSERT INTO register (name, uuidPremium, uuidCracked, ipRegister, ipLogin, stateAccount, password, lastLoginDate, registerDate, gmail, discord) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) " +
                 "ON DUPLICATE KEY UPDATE " +
                 "name = VALUES(name), uuidPremium = VALUES(uuidPremium), uuidCracked = VALUES(uuidCracked), ipRegister = VALUES(ipRegister), " +
-                "ipLogin = VALUES(ipLogin), isPremium = VALUES(isPremium), password = VALUES(password), lastLoginDate = VALUES(lastLoginDate)," +
+                "ipLogin = VALUES(ipLogin), stateAccount = VALUES(stateAccount), password = VALUES(password), lastLoginDate = VALUES(lastLoginDate)," +
                 "registerDate = VALUES(registerDate), gmail = VALUES(gmail), discord = VALUES(discord) ";
         try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -140,7 +144,7 @@ public class DataBaseRegister extends DataBaseMySql {
             statement.setString(3, uuidCracked);
             statement.setString(4, ipRegister.replace("/",""));
             statement.setString(5, ipLogin.replace("/",""));
-            statement.setInt(6, isPremium ? 1 : 0);
+            statement.setString(6, state.name());
             statement.setString(7, password);
             statement.setLong(8, lastLoginDate);
             statement.setLong(9, registerDate);
@@ -232,6 +236,22 @@ public class DataBaseRegister extends DataBaseMySql {
             return true;
         } catch (SQLException e) {
             sendMessageConsole(String.format(Message.DATA_REGISTER_ADDRESS_FAILED.getMessageLocatePrivate(), name), MessagesType.ERROR, CategoryMessages.LOGIN);
+            AviaTerraCore.getInstance().getLogger().warning(e.getMessage());
+            return false;
+        }
+    }
+
+    public static boolean changeState(String name, StateLogins stateLogins){
+        String sql = "UPDATE register SET stateAccount = ? WHERE name = ?";
+
+        try (PreparedStatement stmt = getConnection().prepareStatement(sql)) {
+            stmt.setString(1, stateLogins.name());
+            stmt.setString(2, name);
+            stmt.executeUpdate();
+            sendMessageConsole(String.format(Message.DATA_REGISTER_STATE_OK.getMessageLocatePrivate(), name), MessagesType.SUCCESS, CategoryMessages.LOGIN);
+            return true;
+        } catch (SQLException e) {
+            sendMessageConsole(String.format(Message.DATA_REGISTER_STATE_FAILED.getMessageLocatePrivate(), name), MessagesType.ERROR, CategoryMessages.LOGIN);
             AviaTerraCore.getInstance().getLogger().warning(e.getMessage());
             return false;
         }

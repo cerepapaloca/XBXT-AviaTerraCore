@@ -1,14 +1,9 @@
 package net.atcore.command.commnads;
 
 import net.atcore.command.*;
-import net.atcore.messages.MessagesManager;
 import net.atcore.messages.MessagesType;
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 
-import static net.atcore.messages.MessagesManager.PREFIX;
 import static net.atcore.messages.MessagesManager.sendMessage;
 
 public class PruebaCommand extends BaseCommand {
@@ -21,8 +16,8 @@ public class PruebaCommand extends BaseCommand {
                         .addNote("Note")
                         .addTime(true),
                 "!*",
-                "es un comando de prueba"
-        );
+                "es un comando de prueba",
+                false);
     }
 
     @Override

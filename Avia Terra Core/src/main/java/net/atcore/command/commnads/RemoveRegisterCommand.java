@@ -23,8 +23,8 @@ public class RemoveRegisterCommand extends BaseTabCommand {
     public RemoveRegisterCommand() {
         super("removeRegister",
                 new ArgumentUse("removeRegister").addArgPlayer(ModeTabPlayers.ADVANCED),
-                "Le borras el registro al jugador, util para jugadores temporales"
-        );
+                "Le borras el registro al jugador, util para jugadores temporales",
+                false);
     }
 
     @Override

@@ -74,7 +74,7 @@ public class SimulateOnlineMode {
         }
 
         LoginData loginData = LoginManager.getDataLogin(name);
-        // En caso que no tenga una sesión se le expiro se hace una nueva
+        // En caso de que no tenga una sesión se le expiró se hace una nueva
         if ((loginData == null || loginData.getSession() == null) || loginData.getSession().getEndTimeLogin() < System.currentTimeMillis()) {
             // Lo registra si no esta registrado
             StateLogins state = LoginManager.getStateAndRegister(inetAddress ,name);
