@@ -50,7 +50,7 @@ public class JoinAndQuitListener implements Listener {
                 AviaTerraCore.enqueueTaskAsynchronously(() -> {
                     //FileYaml file = DataSection.getCacheLimboFlies().getConfigFile(GlobalUtils.getRealUUID(player).toString(), false);
                     //file.saveData();
-                    DataBaseRegister.removeRegister(player.getName(), "Servidor");
+                    DataBaseRegister.removeRegister(player.getName(), "Servidor (EL registro es temporal)");
                 });
             }
         }

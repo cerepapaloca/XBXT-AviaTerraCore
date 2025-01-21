@@ -45,7 +45,7 @@ public class BanManager extends DataBaseBan {
         if (player != null) {
             dataBan.getContext().onBan(player, dataBan);
         }
-        AviaTerraCore.getInstance().enqueueTaskAsynchronously(() -> addBanPlayer(dataBan));
+        AviaTerraCore.enqueueTaskAsynchronously(() -> addBanPlayer(dataBan));
     }
 
     /**

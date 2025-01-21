@@ -1,5 +1,5 @@
 name: AviaTerraCore
-version: '1.3.0'
+version: '1.4.0'
 main: net.atcore.AviaTerraCore
 api-version: '1.21'
 depend: [ProtocolLib, TAB, LuckPerms]
@@ -29,7 +29,11 @@ commands:
   unban:
   checkban:
   login:
+    aliases:
+      - log
   register:
+    aliases:
+      - reg
   addrange:
   kick:
   changepassword:

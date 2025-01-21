@@ -10,8 +10,10 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.Member;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 import static net.atcore.messages.MessagesManager.sendMessage;
 
@@ -22,24 +24,19 @@ public class CommandManager {//nose si poner en esta clase aquí la verdad
     public final HashMap<String, String> COMMANDS_AVIA_TERRA = new HashMap<>();
 
     public boolean checkCommand(String command, Player player, boolean isSilent, boolean b){
-        if (!command.startsWith("/")) command = "/" + command;
-        if (COMMANDS.containsKey(command.toLowerCase())){
-            String permission = COMMANDS.get(command.toLowerCase());
-            if (permission == null){
+        if (COMMANDS.containsKey(command.toLowerCase()) || COMMANDS_AVIA_TERRA.containsKey(command.toLowerCase())) {
+            String permission = Objects.requireNonNullElse(COMMANDS.get(command.toLowerCase()), COMMANDS_AVIA_TERRA.get(command.toLowerCase()));
+            if (CommandUtils.hasPermission(permission, player, b)) {
                 return false;
-            }else{
-                if (CommandUtils.hasPermission(permission, player, b)){
-                    return false;
-                }else{
-                    if (!isSilent){
-                        if (LoginManager.checkLoginIn(player, true, b)){
-                            sendMessage(player, net.atcore.messages.Message.COMMAND_GENERIC_NO_PERMISSION, MessagesType.ERROR);
-                        }else {
-                            sendMessage(player, net.atcore.messages.Message.COMMAND_GENERIC_NO_LOGIN, MessagesType.ERROR);
-                        }
+            } else {
+                if (!isSilent) {
+                    if (LoginManager.checkLoginIn(player, true, b)) {
+                        sendMessage(player, net.atcore.messages.Message.COMMAND_GENERIC_NO_PERMISSION, MessagesType.ERROR);
+                    } else {
+                        sendMessage(player, net.atcore.messages.Message.COMMAND_GENERIC_NO_LOGIN, MessagesType.ERROR);
                     }
-                    return true;
                 }
+                return true;
             }
         }else{
             if (LoginManager.checkLoginIn(player, true, b)){

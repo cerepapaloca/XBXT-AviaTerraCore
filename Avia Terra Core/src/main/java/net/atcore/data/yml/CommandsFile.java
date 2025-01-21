@@ -20,7 +20,7 @@ public class CommandsFile extends FileYaml {
             section.getKeys(false).forEach(key -> {
                 CommandManager.COMMANDS.put(key, fileYaml.getString("comandos." + key));
             });
-        }
+        }//TODO: Arreglar esto que se buega con los permisos ** y cuando hay reload
     }
 
     @Override

@@ -16,6 +16,7 @@ import net.atcore.utils.GlobalConstantes;
 import net.atcore.utils.GlobalUtils;
 import net.atcore.utils.RangeType;
 import net.luckperms.api.node.types.InheritanceNode;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -72,19 +73,21 @@ public class PlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onExecuteCommand(@NotNull PlayerCommandPreprocessEvent event) {
-        String command = event.getMessage().split(" ")[0].substring(1).toLowerCase();
+        String command = event.getMessage().split(" ")[0].substring(1);
         Player player = event.getPlayer();
         String s = "";
         MessagesType type = MessagesType.INFO;
         ContextBan.CHAT.onContext(player, event);
         if (event.isCancelled()) return;
-        boolean isCancelled = CommandManager.checkCommand(command, player, false, true);
+        boolean isCancelled = CommandManager.checkCommand(command.toLowerCase(), player, false, true);
         if (isCancelled){
             s = " <red>(Cancelado)";
             type = MessagesType.WARNING;
         }
-        if (COMMANDS_PRE_LOGIN.contains(command)) {
-            MessagesManager.sendMessageConsole(String.format(Message.COMMAND_GENERIC_RUN_LOG.getMessage(player), player.getName(), "<gold>*Comando De Login*" + s), type, CategoryMessages.COMMANDS, false);
+        if (COMMANDS_PRE_LOGIN.contains(command.toLowerCase())) {
+            String commandComplete = event.getMessage().replaceFirst("/" + command, "");
+            String resultado = commandComplete.replaceAll("\\S", "*");
+            MessagesManager.sendMessageConsole(String.format(Message.COMMAND_GENERIC_RUN_LOG.getMessage(player), player.getName(), "<gold>`/" + command + resultado + "`" + s), type, CategoryMessages.COMMANDS, false);
         }else {
             MessagesManager.sendMessageConsole(String.format(Message.COMMAND_GENERIC_RUN_LOG.getMessage(player), player.getName(), "<gold>`" + event.getMessage() + "`" + s), type, CategoryMessages.COMMANDS, false);
         }

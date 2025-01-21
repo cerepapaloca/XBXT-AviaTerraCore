@@ -2,8 +2,10 @@ package net.atcore;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.UtilityClass;
 import net.atcore.security.Login.ServerMode;
 
+@UtilityClass
 public class Config {
 
     /**
@@ -11,14 +13,14 @@ public class Config {
      * no es Op
      */
 
-    @Getter @Setter private static boolean checkAntiIllegalItems = false;
+    @Getter @Setter private boolean checkAntiIllegalItems = false;
 
     /**
      * Al momento de ejecutar un comando se revisa si es op
      * si esí se lo quita (esto no aplica en local host)
      */
 
-    @Getter @Setter private static boolean checkAntiOp = false;
+    @Getter @Setter private boolean checkAntiOp = false;
 
     /**
      * Habilitará el protocolo de encriptación de minecraft
@@ -28,14 +30,14 @@ public class Config {
      * que todos tenga que usar el /login para iniciar sesión
      */
 
-    @Getter @Setter private static ServerMode serverMode = ServerMode.MIX_MODE;
+    @Getter @Setter private ServerMode serverMode = ServerMode.MIX_MODE;
 
     /**
      * Si está habilitado al momento de revisar si un jugador
      * está baneado se tiene en cuenta la ip si no, lo omite
      */
 
-    @Getter @Setter private static boolean checkBanByIp = false;
+    @Getter @Setter private boolean checkBanByIp = false;
 
     /**
      * Indica a partir de que fecha los tag de rango son validós
@@ -43,7 +45,7 @@ public class Config {
      * del mundo, es mejor dejar en 0
      */
 
-    @Getter @Setter private static long purgeTagRange = 0;
+    @Getter @Setter private long purgeTagRange = 0;
 
     /**
      * El tiempo de expiración de la session de los jugadores a loguearse
@@ -53,7 +55,7 @@ public class Config {
      * OnlineMode si no esto último no aplica
      */
 
-    @Getter @Setter private static long expirationSession = 1000;
+    @Getter @Setter private long expirationSession = 1000;
 
     /**
      * Índica la cantidad de punto de chat genera un jugador en un tick
@@ -62,12 +64,17 @@ public class Config {
      * chat
      */
 
-    @Getter @Setter private static double levelModerationChat = 0;
+    @Getter @Setter private double levelModerationChat = 0;
 
-    @Getter @Setter private static double chaceDupeFrame = 0.5;
+    /**
+     * El porcentaje de un jugador tenga la posibilidad de duplicar un
+     * item en el itemFrame
+     */
 
-    @Getter @Setter private static boolean antiBot = false;
+    @Getter @Setter private double chaceDupeFrame = 0.5;
 
-    @Getter @Setter private static boolean autoBan = false;
+    @Getter @Setter private boolean antiBot = false;
+
+    @Getter @Setter private boolean autoBan = false;
 
 }

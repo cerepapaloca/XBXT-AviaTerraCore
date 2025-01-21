@@ -6,13 +6,9 @@ import net.atcore.armament.ArmamentSection;
 import net.atcore.command.CommandManager;
 import net.atcore.command.CommandSection;
 import net.atcore.data.DataSection;
-import net.atcore.messages.CategoryMessages;
-import net.atcore.messages.MessageSection;
-import net.atcore.messages.MessagesManager;
-import net.atcore.messages.MessagesType;
+import net.atcore.messages.*;
 import net.atcore.listener.ListenerSection;
-import net.atcore.security.Login.model.LoginData;
-import net.atcore.security.Login.LoginManager;
+import net.atcore.messages.ConsoleDiscord;
 import net.atcore.security.SecuritySection;
 import net.atcore.utils.AviaRunnable;
 import net.atcore.utils.GlobalUtils;
@@ -82,7 +78,6 @@ public final class AviaTerraCore extends JavaPlugin {
                 new SecuritySection(),
                 new ArmamentSection()
         );
-        CommandManager.COMMANDS.putAll(CommandManager.COMMANDS_AVIA_TERRA);
         startMOTD();
         startBroadcast();
         isStarting = false;
@@ -95,7 +90,7 @@ public final class AviaTerraCore extends JavaPlugin {
             section.disable();
         }
         LIST_BROADCAST.clear();
-
+        if (ConsoleDiscord.stateTasks != null) ConsoleDiscord.stateTasks.cancel();
         workerThread.interrupt();
         Bukkit.getOnlinePlayers().forEach(player -> {
             GlobalUtils.kickPlayer(player, "El servidor va a cerrar, volveremos pronto...");

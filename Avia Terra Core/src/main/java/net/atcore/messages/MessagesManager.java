@@ -27,6 +27,7 @@ import java.util.Objects;
 import java.util.Random;
 
 import static net.kyori.adventure.text.event.ClickEvent.Action;
+import static org.reflections.Reflections.log;
 
 /**
  * En esta clase esta tod0 relacionado con los colores y el envío de mensajes. Todos los mensajes tienen que pasar por quí
@@ -183,15 +184,9 @@ public final class MessagesManager {
         return s + colorMain + message
                 .replace("<|", type.getSecondColor())
                 .replace("|>", "<reset>" + colorMain)
-                .replace("|!>","<reset>" + colorMain)
+                .replace("|!>", "<reset>" + colorMain)
                 .replace("`", "");
     }
-    //                        OPEN_URL,
-//                                OPEN_FILE,
-//                                RUN_COMMAND,
-//                                SUGGEST_COMMAND,
-//                                CHANGE_PAGE,
-//                                COPY_TO_CLIPBOARD;
 
     public static Component applyFinalProprieties(String message, @NotNull MessagesType type, CategoryMessages categoryMessages, boolean isPrefix) {
         if (categoryMessages != CategoryMessages.PRIVATE) {
