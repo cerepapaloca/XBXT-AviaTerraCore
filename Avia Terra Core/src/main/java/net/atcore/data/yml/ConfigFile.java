@@ -1,5 +1,6 @@
 package net.atcore.data.yml;
 
+import net.atcore.AviaTerraCore;
 import net.atcore.Config;
 import net.atcore.data.FileYaml;
 import net.atcore.messages.CategoryMessages;
@@ -30,6 +31,7 @@ public class ConfigFile extends FileYaml {
         Config.setServerMode(ServerMode.valueOf(fileYaml.getString("server-mode", Config.getServerMode().name().toLowerCase()).toUpperCase()));
         Config.setChaceDupeFrame(fileYaml.getDouble("chace-dupe-frame", Config.getChaceDupeFrame()));
         Config.setAutoBan(fileYaml.getBoolean("auto-ban", Config.isAutoBan()));
+        AviaTerraCore.setActiveTime(fileYaml.getLong("active-time", 0));
         saveData(); // Se guarda por si hay una liena faltante en la configuración
     }
 
@@ -48,6 +50,11 @@ public class ConfigFile extends FileYaml {
         fileYaml.set("server-mode", Config.getServerMode().name().toLowerCase());
         fileYaml.set("chace-dupe-frame", Config.getChaceDupeFrame());
         fileYaml.set("auto-ban", Config.isAutoBan());
+        saveConfig();
+    }
+
+    public void saveActiveTime(){
+        fileYaml.set("active-time", AviaTerraCore.getActiveTime());
         saveConfig();
     }
 }

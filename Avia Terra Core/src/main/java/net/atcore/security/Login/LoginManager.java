@@ -303,7 +303,8 @@ public final class LoginManager {
         }
     }
 
-    public void onEnteringServer(@NotNull Player player){
+    /*NO QUITAR EL STATIC POR QUE SINO SE BUEGA EL LOMBOK*/
+    public static void onEnteringServer(@NotNull Player player){
         LoginData loginData = getDataLogin(player);
         if (loginData != null) {
             RegisterData registerData = loginData.getRegister();

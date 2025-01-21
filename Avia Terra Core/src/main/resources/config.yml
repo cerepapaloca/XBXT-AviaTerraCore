@@ -11,3 +11,4 @@ purge-tag-range: 0
 check-anti-illegal-items: false
 check-ban-by-ip: false
 server-mode: online_mode
+active-time: 0

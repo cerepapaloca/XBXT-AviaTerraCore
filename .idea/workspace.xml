@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ArtifactsWorkspaceSettings">
     <artifacts-to-build>
-      <artifact name="AviaTerra:jar" />
+      <artifact name="Avia-Terra:jar" />
     </artifacts-to-build>
   </component>
   <component name="AutoImportSettings">
@@ -10,18 +10,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ea0f4ef9-10c7-4d19-b67e-e1a9046efa9d" name="Changes" comment="cambios menores a los mensajes de muerte">
+      <change afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/placeholder/BasePlaceHolder.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/placeholder/PlaceHolderHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/placeholder/PlaceHolderSection.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/placeholder/holders/ActiveTimeHolder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/artifacts/AviaTerra_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/Avia_Terra_jar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/AviaTerraCore.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/AviaTerraCore.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/Config.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/Config.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/command/CommandManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/command/CommandManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/data/yml/CommandsFile.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/data/yml/CommandsFile.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/listener/ConsoleDiscordListener.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/listener/JoinAndQuitListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/listener/JoinAndQuitListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/listener/PlayerListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/listener/PlayerListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/messages/ConsoleDiscord.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/messages/ConsoleDiscord.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/messages/MessagesManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/messages/MessagesManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/moderation/ban/BanManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/moderation/ban/BanManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/utils/RegisterManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/utils/RegisterManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/data/yml/ConfigFile.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/data/yml/ConfigFile.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/Login/LoginManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/Login/LoginManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/resources/config.yml" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/resources/config.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/resources/plugin.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -65,6 +65,7 @@
     <setting file="jar://$MAVEN_REPOSITORY$/org/checkerframework/checker-qual/3.33.0/checker-qual-3.33.0-sources.jar!/org/checkerframework/checker/initialization/qual/NotOnlyInitialized.java" root0="SKIP_INSPECTION" />
     <setting file="jar://$MAVEN_REPOSITORY$/org/spigotmc/spigot-api/1.21.1-R0.1-SNAPSHOT/spigot-api-1.21.1-R0.1-20241022.152140-54-sources.jar!/org/bukkit/Color.java" root0="SKIP_INSPECTION" />
     <setting file="jar://$MAVEN_REPOSITORY$/org/spigotmc/spigot-api/1.21.1-R0.1-SNAPSHOT/spigot-api-1.21.1-R0.1-20241022.152140-54-sources.jar!/org/bukkit/entity/Player.java" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/ArmamentUtils.java" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="ProblemsViewState">
     <option name="selectedTabId" value="CurrentFile" />
@@ -88,7 +89,7 @@
     "git-widget-placeholder": "master",
     "kotlin-language-version-configured": "true",
     "last.edited.regexp": "Test",
-    "last_opened_file_path": "C:/Users/Cagut/.m2/repository/com/comphenix/protocol/ProtocolLib/5.3.0-SNAPSHOT/ProtocolLib-5.3.0-SNAPSHOT.jar",
+    "last_opened_file_path": "C:/Users/Cagut/IdeaProjects/Avia-Terra/.idea",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -96,9 +97,9 @@
     "nodejs_package_manager_path": "npm",
     "project.structure.last.edited": "Artifacts",
     "project.structure.proportion": "0.15820312",
-    "project.structure.side.proportion": "0.29099306",
+    "project.structure.side.proportion": "0.5",
     "run.code.analysis.last.selected.profile": "pProject Default",
-    "settings.editor.selected.configurable": "Settings.Minecraft",
+    "settings.editor.selected.configurable": "reference.projectsettings.compiler.annotationProcessors",
     "vue.rearranger.settings.migration": "true"
   },
   "keyToStringList": {
@@ -136,8 +137,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-fdfe4dae3a2d-intellij.indexing.shared.core-IU-243.22562.218" />
-        <option value="bundled-js-predefined-d6986cc7102b-deb605915726-JavaScript-IU-243.22562.218" />
+        <option value="bundled-jdk-9823dce3aa75-125ca727e0f0-intellij.indexing.shared.core-IU-243.23654.117" />
+        <option value="bundled-js-predefined-d6986cc7102b-822845ee3bb5-JavaScript-IU-243.23654.117" />
       </set>
     </attachedChunks>
   </component>
@@ -218,6 +219,9 @@
       <workItem from="1737335456550" duration="1910000" />
       <workItem from="1737394319687" duration="5000" />
       <workItem from="1737407227526" duration="7796000" />
+      <workItem from="1737471556473" duration="614000" />
+      <workItem from="1737472182626" duration="31000" />
+      <workItem from="1737472299618" duration="6527000" />
     </task>
     <task id="LOCAL-00001" summary="cambios menores x2">
       <option name="closed" value="true" />

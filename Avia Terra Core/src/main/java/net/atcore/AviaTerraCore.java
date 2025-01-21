@@ -2,18 +2,18 @@ package net.atcore;
 
 import com.github.games647.craftapi.resolver.MojangResolver;
 import lombok.Getter;
+import lombok.Setter;
 import net.atcore.armament.ArmamentSection;
-import net.atcore.command.CommandManager;
 import net.atcore.command.CommandSection;
 import net.atcore.data.DataSection;
-import net.atcore.messages.*;
 import net.atcore.listener.ListenerSection;
-import net.atcore.messages.ConsoleDiscord;
+import net.atcore.messages.*;
+import net.atcore.moderation.ModerationSection;
+import net.atcore.placeholder.PlaceHolderSection;
 import net.atcore.security.SecuritySection;
 import net.atcore.utils.AviaRunnable;
 import net.atcore.utils.GlobalUtils;
 import net.atcore.utils.RegisterManager;
-import net.atcore.moderation.ModerationSection;
 import net.dv8tion.jda.api.JDA;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.luckperms.api.LuckPerms;
@@ -40,11 +40,13 @@ public final class AviaTerraCore extends JavaPlugin {
     public static final List<String> LIST_MOTD = new ArrayList<>();
     public static final List<String> LIST_BROADCAST = new ArrayList<>();
     public static JDA jda;
+    private static long startTime;
     @Getter private static LuckPerms lp;
     @Getter private static MojangResolver resolver;
     @Getter private static boolean isStarting;
     @Getter private static AviaTerraCore instance;
     @Getter private static MiniMessage miniMessage;
+    @Setter private static long activeTime;
 
 
     @Override
@@ -56,7 +58,7 @@ public final class AviaTerraCore extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        long timeCurrent = System.currentTimeMillis();
+        startTime = System.currentTimeMillis();
         sendMessageConsole("AviaTerra Iniciando...", MessagesType.SUCCESS, CategoryMessages.PRIVATE, false);
         isStarting = true;
         workerThread = new Thread(this::processQueue);
@@ -76,16 +78,22 @@ public final class AviaTerraCore extends JavaPlugin {
                 new ModerationSection(),
                 new ListenerSection(),
                 new SecuritySection(),
-                new ArmamentSection()
+                new ArmamentSection(),
+                new PlaceHolderSection()
         );
         startMOTD();
         startBroadcast();
         isStarting = false;
-        messageOn(timeCurrent);
+        messageOn(startTime);
+    }
+
+    public static long getActiveTime(){
+        return activeTime + (System.currentTimeMillis() - startTime);
     }
 
     @Override
     public void onDisable() {
+        DataSection.getConfigFile().saveActiveTime();
         for (Section section : RegisterManager.sections){
             section.disable();
         }
@@ -173,6 +181,7 @@ public final class AviaTerraCore extends JavaPlugin {
         Random random = new Random();
         new BukkitRunnable() {
             public void run() {
+                if (Bukkit.getOnlinePlayers().isEmpty()) return;
                 if (LIST_BROADCAST.isEmpty()) return;
                 int randomInt = random.nextInt(LIST_BROADCAST.size());
                 Bukkit.broadcast(MessagesManager.applyFinalProprieties(LIST_BROADCAST.get(randomInt), MessagesType.INFO, CategoryMessages.PRIVATE, true));
