@@ -10,6 +10,7 @@ import net.atcore.messages.MessagesType;
 import net.atcore.security.Login.LoginManager;
 import net.atcore.security.Login.StateLogins;
 import net.atcore.security.Login.model.LoginData;
+import net.atcore.security.Login.model.RegisterData;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -33,13 +34,14 @@ public class PremiumCommand extends BaseCommand {
         if (sender instanceof Player player) {
             LoginData data = LoginManager.getDataLogin(player);
             switch (data.getRegister().getStateLogins()){
-                case PREMIUM -> MessagesManager.sendMessage(player,"Esta cuenta ya es premium", MessagesType.ERROR);
-                case CRACKED -> MessagesManager.sendMessage(player,"El nombre de usuario no pertenece a mojan", MessagesType.ERROR);
+                case PREMIUM -> MessagesManager.sendMessage(player, Message.COMMAND_PREMIUM_IS_PREMIUM, MessagesType.ERROR);
+                case CRACKED -> MessagesManager.sendMessage(player, Message.COMMAND_PREMIUM_IS_CRACKED, MessagesType.ERROR);
                 case SEMI_CRACKED -> AviaTerraCore.enqueueTaskAsynchronously(() -> {
                     DataBaseRegister.changeState(GlobalUtils.getRealName(player), StateLogins.PREMIUM);
-                    LoginData loginData = LoginManager.getDataLogin(player);
-                    loginData.getRegister().setStateLogins(StateLogins.PREMIUM);
-                    GlobalUtils.synchronizeKickPlayer(player, "Ya se hizo el cambio de tu cuenta. Ya es premium, vuelve a entrar");
+                    RegisterData register = LoginManager.getDataLogin(player).getRegister();
+                    register.setStateLogins(StateLogins.PREMIUM);
+                    register.setTemporary(false);
+                    GlobalUtils.synchronizeKickPlayer(player, Message.COMMAND_PREMIUM_IS_CRACKED.getMessage(player));
                 });
             }
         }else {

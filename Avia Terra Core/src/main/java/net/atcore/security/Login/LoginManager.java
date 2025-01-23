@@ -40,6 +40,11 @@ public final class LoginManager {
         return listDataLogin.get(GlobalUtils.getUUIDByName(name));
     }
 
+    /**
+     * Retorna Login Data a través de la uuid real
+     * @param uuid La uuid real del jugador para sacar la uuid real es con {@link GlobalUtils#getRealUUID(Player)}
+     */
+
     public LoginData getDataLogin(UUID uuid) {
         if (FloodgateApi.getInstance().isFloodgatePlayer(uuid)){
             FloodgatePlayer playerFP = FloodgateApi.getInstance().getPlayer(uuid);
@@ -116,7 +121,7 @@ public final class LoginManager {
             RegisterData registerData;
             if (profile.isPresent()){
                 Profile profileObj = profile.get();
-                registerData = new RegisterData(profileObj.getName(), GlobalUtils.getUUIDByName(name), profileObj.getId(), StateLogins.SEMI_CRACKED, false);
+                registerData = new RegisterData(profileObj.getName(), GlobalUtils.getUUIDByName(name), profileObj.getId(), StateLogins.SEMI_CRACKED, true);
                 registerData.setLastAddress(ip);
                 // Se guarda el registro en la base de datos
                 Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(), () ->

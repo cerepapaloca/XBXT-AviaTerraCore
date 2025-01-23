@@ -41,17 +41,13 @@ public class JoinAndQuitListener implements Listener {
         LoginData login = LoginManager.getDataLogin(player);
         if (LoginManager.isLimboMode(player)) {//Esto es para que los jugadores no logueados
             LimboData limbo = login.getLimbo();
-            limbo.restorePlayer(player);//hace que el servidor guarde los datos del jugador como si tuviera logueado
+            limbo.restorePlayer(player);// Carga los datos del jugador para que el servidor guarde sus datos como si estuviera logueado
         }
 
         if (LoginManager.getDataLogin(player) != null) {// si le llega a borrar el registro
-            // Borra a los jugadores no premium que no pudieron registrarse para evitar tener jugadores fantasmas
-            if (LoginManager.getDataLogin(player.getUniqueId()).getRegister().isTemporary()){
-                AviaTerraCore.enqueueTaskAsynchronously(() -> {
-                    //FileYaml file = DataSection.getCacheLimboFlies().getConfigFile(GlobalUtils.getRealUUID(player).toString(), false);
-                    //file.saveData();
-                    DataBaseRegister.removeRegister(player.getName(), "Servidor (EL registro es temporal)");
-                });
+            // Borra a los jugadores cracked y semi cracked que no pudieron registrarse para evitar tener jugadores fantasmas
+            if (LoginManager.getDataLogin(player).getRegister().isTemporary()){
+                AviaTerraCore.enqueueTaskAsynchronously(() -> DataBaseRegister.removeRegister(player.getName(), "Servidor (EL registro es temporal)"));
             }
         }
 

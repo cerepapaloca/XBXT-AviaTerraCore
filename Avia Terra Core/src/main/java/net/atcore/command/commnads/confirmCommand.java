@@ -27,7 +27,7 @@ public class confirmCommand extends BaseCommand {
             if (command != null){
                 Bukkit.dispatchCommand(player, command);
             }else {
-                MessagesManager.sendMessage(player, "No tienes comandos por confirmar", MessagesType.ERROR);
+                MessagesManager.sendMessage(player, Message.COMMAND_CONFIRM_NOT_FOUND, MessagesType.ERROR);
             }
 
         }else {

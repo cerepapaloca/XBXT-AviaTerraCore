@@ -6,6 +6,7 @@ import net.atcore.command.CommandManager;
 import net.atcore.command.CommandSection;
 import net.atcore.command.CommandUtils;
 import net.atcore.messages.CategoryMessages;
+import net.atcore.messages.MessagesManager;
 import net.atcore.messages.MessagesType;
 import net.atcore.Section;
 import org.bukkit.Bukkit;
@@ -41,8 +42,8 @@ public class RegisterManager {
                 RegisterManager.sections.add(section);
                 sendMessageConsole(section.getName() + MessagesType.SUCCESS.getMainColor() + " Ok", MessagesType.INFO, CategoryMessages.PRIVATE, false);
             } catch (Exception e) {
-                sendMessageConsole("Error al cargar: " + section.getName() + ". Plugin deshabilitado", MessagesType.ERROR, CategoryMessages.PRIVATE, false);
-                throw new RuntimeException(e);
+                Bukkit.shutdown();
+                MessagesManager.sendErrorException("Error al cargar: " + section.getName() + ". Deteniendo el servidor...", e);
             }
         }
     }

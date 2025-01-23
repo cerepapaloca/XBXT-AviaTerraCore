@@ -1,9 +1,6 @@
 package net.atcore.command.commnads;
 
-import net.atcore.command.BaseTabCommand;
-import net.atcore.command.CommandUtils;
-import net.atcore.command.ModeTabPlayers;
-import net.atcore.command.ArgumentUse;
+import net.atcore.command.*;
 import net.atcore.messages.MessagesType;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.command.CommandSender;
@@ -12,11 +9,11 @@ import java.util.List;
 
 import static net.atcore.messages.MessagesManager.sendMessage;
 
-public class KickCommand extends BaseTabCommand {
+public class KickCommand extends BaseCommand {
 
     public KickCommand() {
         super("kick",
-                new ArgumentUse("kick").addArgPlayer(ModeTabPlayers.ADVANCED).addArg("razón"),
+                new ArgumentUse("kick").addArgPlayer(ModeTabPlayers.ADVANCED).addFinalArg("razón"),
                 "Echas al jugador del servidor",
                 false);
     }
@@ -35,13 +32,5 @@ public class KickCommand extends BaseTabCommand {
                 CommandUtils.executeForPlayer(sender, args[0], true, dataTemporalPlayer -> GlobalUtils.kickPlayer(dataTemporalPlayer.player(), finalReason));
             }
         }
-    }
-
-    @Override
-    public List<String> onTab(CommandSender sender, String[] args) {
-        if (args.length == 1) {
-            return CommandUtils.tabForPlayer(args[0]);
-        }
-        return List.of("Razón del kick...");
     }
 }

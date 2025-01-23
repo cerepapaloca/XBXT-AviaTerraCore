@@ -49,6 +49,7 @@ commands:
   confirm:
   forcelogin:
   namecolor:
+  passiverestart:
     aliases:
       - nc
   home:

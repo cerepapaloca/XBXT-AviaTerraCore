@@ -39,7 +39,8 @@ public class CommandSection implements Section {
                 new NameColorCommand(),
                 new ForceLoginCommand(),
                 new PremiumCommand(),
-                new confirmCommand()
+                new confirmCommand(),
+                new PassiveRestartCommand()
         );
     }
 
@@ -47,6 +48,8 @@ public class CommandSection implements Section {
     public void disable() {
         commandHandler.getCommands().clear();
         commandHandler = null;
+        CommandManager.COMMANDS_AVIA_TERRA.clear();
+        CommandManager.COMMANDS.clear();
     }
 
     @Override

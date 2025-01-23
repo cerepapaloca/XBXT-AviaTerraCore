@@ -1,6 +1,7 @@
 package net.atcore.command;
 
 import lombok.Getter;
+import net.atcore.utils.ModeTab;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
@@ -196,13 +197,9 @@ public class ArgumentUse {
                     return CommandUtils.tabForPlayer(lastArgString);
                 }
                 default -> {
-                    if (argument.note) {
-                        return List.of(argument.arg);
-                    }
-                    if (argument.useTime) {
-                        return CommandUtils.listTabTime(lastArgString, true);
-                    }
-                    return List.of(argument.arg);
+                    if (argument.note) return List.of(argument.arg);
+                    if (argument.useTime) return CommandUtils.listTabTime(lastArgString, argument.especialTime);
+                    return CommandUtils.listTab(lastArgString, argument.arg, ModeTab.CONTAINS);
                 }
             }
         }catch (IndexOutOfBoundsException | NoSuchElementException e){

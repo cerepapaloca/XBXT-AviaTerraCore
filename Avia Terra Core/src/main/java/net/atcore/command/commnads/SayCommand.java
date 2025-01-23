@@ -11,9 +11,11 @@ import org.bukkit.command.CommandSender;
 
 public class SayCommand extends BaseCommand {
 
+    private static final String SUB_PREFIX = "<dark_gray>[<b><gradient:#ff0400:#ff2f00>CONSOLE</gradient></b><dark_gray>]|!> ";
+
     public SayCommand() {
         super("say",//"info", "error", "waring", "susses"
-                new ArgumentUse("say").addArgPlayer(ModeTabPlayers.ADVANCED).addArg(MessagesType.values()).addFinalArg("Mensaje"),
+                new ArgumentUse("say").addArgPlayer(ModeTabPlayers.ADVANCED).addFinalArg("Mensaje"),
                 "Envias un mensaje global como si fuese del plugin",
                 false
         );
@@ -28,20 +30,13 @@ public class SayCommand extends BaseCommand {
         if (args.length == 1) {
             MessagesManager.sendMessage(sender, Message.COMMAND_SAY_MISSING_ARGS, MessagesType.ERROR);
         }else {
-            MessagesType type;
-            try {
-                type = MessagesType.valueOf(args[1].toUpperCase());
-            }catch (IllegalArgumentException e) {
-                MessagesManager.sendMessage(sender, Message.COMMAND_SAY_TYPE_MESSAGE_ERROR, MessagesType.ERROR);
-                return;
-            }
             StringBuilder message = new StringBuilder();
-            for (int i = 2; i < args.length; i++){
+            for (int i = 1; i < args.length; i++){
                 message.append(args[i]).append(" ");
             }
             CommandUtils.executeForPlayer(sender, args[0], true, dataTemporalPlayer ->
-                    MessagesManager.sendMessage(dataTemporalPlayer.player(), message.toString(), type));
-            MessagesManager.sendMessage(sender,  message.toString(), type);
+                    MessagesManager.sendMessage(dataTemporalPlayer.player(),SUB_PREFIX + message, MessagesType.INFO));
+            MessagesManager.sendMessage(sender,  message.toString(), MessagesType.INFO);
         }
     }
 }

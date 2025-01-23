@@ -1,8 +1,8 @@
 package net.atcore.utils;
 
 public enum ModeTab {
-    StartWith,
-    StartWithIgnoreCase,
-    Contains,
-    ContainsIgnoreCase,
+    START_WITH,
+    START_WITH_IGNORE_CASE,
+    CONTAINS,
+    CONTAINS_IGNORE_CASE,
 }

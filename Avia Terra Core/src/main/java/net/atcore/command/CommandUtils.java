@@ -107,7 +107,7 @@ public final class CommandUtils {
      */
 
     public @Nullable List<String> listTab(String arg, List<String> args){
-        return listTab(arg, args, ModeTab.StartWithIgnoreCase);
+        return listTab(arg, args, ModeTab.START_WITH_IGNORE_CASE);
     }
 
     /**
@@ -116,7 +116,7 @@ public final class CommandUtils {
      */
 
     public @Nullable List<String> listTab(String arg, String... args){
-        return listTab(arg, Arrays.stream(args).toList(), ModeTab.StartWithIgnoreCase);
+        return listTab(arg, Arrays.stream(args).toList(), ModeTab.START_WITH_IGNORE_CASE);
     }
 
     /**
@@ -130,22 +130,22 @@ public final class CommandUtils {
 
     public @Nullable List<String> listTab(String arg,  List<String> args, @NotNull ModeTab mode){
         switch (mode){
-            case Contains -> {
+            case CONTAINS -> {
                 return args.stream()
                         .filter(name -> name.contains(arg))
                         .collect(toList());
             }
-            case ContainsIgnoreCase -> {
+            case CONTAINS_IGNORE_CASE -> {
                 return args.stream()
                         .filter(name -> name.toLowerCase().contains(arg.toLowerCase()))
                         .collect(toList());
             }
-            case StartWith -> {
+            case START_WITH -> {
                 return args.stream()
                         .filter(name -> name.startsWith(arg))
                         .collect(toList());
             }
-            case StartWithIgnoreCase -> {
+            case START_WITH_IGNORE_CASE -> {
                 return args.stream()
                         .filter(name -> name.toLowerCase().startsWith(arg.toLowerCase()))
                         .collect(toList());

@@ -105,7 +105,7 @@ public final class AviaTerraCore extends JavaPlugin {
         });
         //if (jda != null) jda
         TASK_QUEUE.clear();
-        sendMessageConsole("XB XT Apagada", MessagesType.SUCCESS, CategoryMessages.PRIVATE, false);
+        sendMessageConsole("AviaTerra Apagada", MessagesType.SUCCESS, CategoryMessages.PRIVATE, false);
     }
 
     @Override
@@ -116,7 +116,7 @@ public final class AviaTerraCore extends JavaPlugin {
     }
 
     private void messageOn(long timeCurrent){
-        sendMessageConsole("XB XT Iniciado en <|" + (System.currentTimeMillis() - timeCurrent) + "ms" +
+        sendMessageConsole("AviaTerra Iniciado en <|" + (System.currentTimeMillis() - timeCurrent) + "ms" +
                 "\n" +
                 "<gradient:#571ecf:#3f39ea> ___    ___ ________     </gradient><gradient:#fb8015:#fbb71f> ___    ___ _________   </gradient>\n" +
                 "<gradient:#571ecf:#3f39ea>|\\  \\  /  /|\\   __  \\    </gradient><gradient:#fb8015:#fbb71f>|\\  \\  /  /|\\___   ___\\ </gradient>\n" +
@@ -187,6 +187,15 @@ public final class AviaTerraCore extends JavaPlugin {
                 Bukkit.broadcast(MessagesManager.applyFinalProprieties(LIST_BROADCAST.get(randomInt), MessagesType.INFO, CategoryMessages.PRIVATE, true));
             }
         }.runTaskTimer(this, 20*60*15L, 20*60*15L);
+    }
+
+    private void startAutoSaveTime(){
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                DataSection.getConfigFile().saveActiveTime();
+            }
+        }.runTaskTimerAsynchronously(this, 20*60*15L, 20*60*15L);
     }
 
     private void startMOTD(){
