@@ -5,7 +5,7 @@ import net.atcore.data.DataBaseMySql;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
-import net.atcore.messages.MessagesType;
+import net.atcore.messages.TypeMessages;
 import net.atcore.moderation.ban.ContextBan;
 import net.atcore.moderation.ban.DataBan;
 import net.atcore.security.Login.model.LoginData;
@@ -18,8 +18,6 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.sql.*;
 import java.util.*;
-
-import static net.atcore.messages.MessagesManager.sendMessageConsole;
 
 public class DataBaseBan extends DataBaseMySql {
 
@@ -62,7 +60,7 @@ public class DataBaseBan extends DataBaseMySql {
             MessagesManager.sendErrorException("Error al recargar la base de datos", e);
         }
 
-        if (!AviaTerraCore.isStarting()) sendMessageConsole("Baneos Recargado", MessagesType.SUCCESS);
+        if (!AviaTerraCore.isStarting()) MessagesManager.logConsole("Baneos Recargado", TypeMessages.SUCCESS);
     }
 
     @Override
@@ -72,7 +70,7 @@ public class DataBaseBan extends DataBaseMySql {
             try (ResultSet resultSet = dbMetaData.getTables(null, null, "bans", null)) {
                 if (resultSet.next()){
                     reload();
-                    sendMessageConsole("DataBase Bans " + MessagesType.SUCCESS.getMainColor() + "Ok", MessagesType.INFO, false);
+                    MessagesManager.logConsole("DataBase Bans " + TypeMessages.SUCCESS.getMainColor() + "Ok", TypeMessages.INFO, false);
                     return;
                 }
             }
@@ -95,7 +93,7 @@ public class DataBaseBan extends DataBaseMySql {
              Statement statement = connection.createStatement()) {
             statement.executeUpdate(createTableSQL);
             statement.executeUpdate(addUniqueKeySQL);
-            sendMessageConsole("DataBase Bans " + MessagesType.SUCCESS.getMainColor() + "Creada", MessagesType.INFO, false);
+            MessagesManager.logConsole("DataBase Bans " + TypeMessages.SUCCESS.getMainColor() + "Creada", TypeMessages.INFO, false);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -200,7 +198,7 @@ public class DataBaseBan extends DataBaseMySql {
                 tiempoDeBaneo = GlobalUtils.timeToString(dataBan.getUnbanDate() - dataBan.getBanDate(), 2);
             }
             reload();
-            sendMessageConsole(String.format(Message.DATA_BAN_ADD_OK.getMessageLocatePrivate(), dataBan.getName(), dataBan.getContext(), tiempoDeBaneo, dataBan.getAuthor(), dataBan.getReason()), MessagesType.SUCCESS, CategoryMessages.BAN);
+            MessagesManager.logConsole(String.format(Message.DATA_BAN_ADD_OK.getMessageLocatePrivate(), dataBan.getName(), dataBan.getContext(), tiempoDeBaneo, dataBan.getAuthor(), dataBan.getReason()), TypeMessages.SUCCESS, CategoryMessages.BAN);
 
         } catch (SQLException e) {
             String tiempoDeBaneo;
@@ -209,7 +207,7 @@ public class DataBaseBan extends DataBaseMySql {
             }else {
                 tiempoDeBaneo = GlobalUtils.timeToString(dataBan.getUnbanDate() - dataBan.getBanDate(), 2);
             }
-            sendMessageConsole(String.format(Message.DATA_BAN_ADD_FAILED.getMessageLocatePrivate(), dataBan.getName(), dataBan.getContext(), tiempoDeBaneo, dataBan.getAuthor(), dataBan.getReason()), MessagesType.SUCCESS, CategoryMessages.BAN);
+            MessagesManager.logConsole(String.format(Message.DATA_BAN_ADD_FAILED.getMessageLocatePrivate(), dataBan.getName(), dataBan.getContext(), tiempoDeBaneo, dataBan.getAuthor(), dataBan.getReason()), TypeMessages.SUCCESS, CategoryMessages.BAN);
             throw new RuntimeException(e);
         }
     }
@@ -222,9 +220,9 @@ public class DataBaseBan extends DataBaseMySql {
             statement.setString(2, context.name());
             statement.executeUpdate();
             reload();
-            sendMessageConsole(String.format(Message.DATA_BAN_REMOVE_OK.getMessageLocatePrivate(), name, context.name(), author), MessagesType.SUCCESS, CategoryMessages.BAN);
+            MessagesManager.logConsole(String.format(Message.DATA_BAN_REMOVE_OK.getMessageLocatePrivate(), name, context.name(), author), TypeMessages.SUCCESS, CategoryMessages.BAN);
         } catch (SQLException e) {
-            sendMessageConsole(String.format(Message.DATA_BAN_REMOVE_FAILED.getMessageLocatePrivate(), name, context.name(), author), MessagesType.ERROR, CategoryMessages.BAN);
+            MessagesManager.logConsole(String.format(Message.DATA_BAN_REMOVE_FAILED.getMessageLocatePrivate(), name, context.name(), author), TypeMessages.ERROR, CategoryMessages.BAN);
             throw new RuntimeException(e);
         }
     }

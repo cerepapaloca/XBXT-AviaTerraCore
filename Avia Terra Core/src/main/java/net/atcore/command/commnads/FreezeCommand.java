@@ -7,7 +7,7 @@ import net.atcore.command.CommandUtils;
 import net.atcore.command.ModeTabPlayers;
 import net.atcore.command.ArgumentUse;
 import net.atcore.messages.Message;
-import net.atcore.messages.MessagesType;
+import net.atcore.messages.TypeMessages;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -15,6 +15,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.List;
 
+import static net.atcore.messages.MessagesManager.sendArgument;
 import static net.atcore.messages.MessagesManager.sendMessage;
 
 public class FreezeCommand extends BaseTabCommand {
@@ -30,11 +31,11 @@ public class FreezeCommand extends BaseTabCommand {
     @Override
     public void execute(CommandSender sender, String[] args) {
         if (args.length == 0) {
-            sendMessage(sender, this.getUsage().toString(), MessagesType.ERROR);
+            sendArgument(sender, this.getUsage(), TypeMessages.ERROR);
             return;
         }
         if (args.length == 1) {
-            sendMessage(sender, Message.COMMAND_FREEZE_MISSING_ARGS_LAST, MessagesType.ERROR);
+            sendMessage(sender, Message.COMMAND_FREEZE_MISSING_ARGS_LAST);
             return;
         }
         CommandUtils.executeForPlayer(sender, args[0], true, dataTemporalPlayer -> {
@@ -43,13 +44,13 @@ public class FreezeCommand extends BaseTabCommand {
             switch (args[1].toLowerCase()){
                 case "true" -> {
                     if (moderationPlayer.isFreeze()) {
-                        sendMessage(sender, Message.COMMAND_FREEZE_ALREADY_FREEZE, MessagesType.ERROR);
+                        sendMessage(sender, Message.COMMAND_FREEZE_ALREADY_FREEZE);
                     }else {
                         moderationPlayer.setFreeze(true);
                         player.closeInventory();
                         player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, Integer.MAX_VALUE, 1));
-                        sendMessage(player, Message.COMMAND_FREEZE_FREEZE_TARGET, MessagesType.INFO);
-                        sendMessage(sender, Message.COMMAND_FREEZE_FREEZE_AUTHOR, MessagesType.SUCCESS);
+                        sendMessage(player, Message.COMMAND_FREEZE_FREEZE_TARGET);
+                        sendMessage(sender, Message.COMMAND_FREEZE_FREEZE_AUTHOR);
                     }
 
                 }
@@ -57,10 +58,10 @@ public class FreezeCommand extends BaseTabCommand {
                     if (moderationPlayer.isFreeze()) {
                         moderationPlayer.setFreeze(false);
                         player.removePotionEffect(PotionEffectType.BLINDNESS);
-                        sendMessage(sender, Message.COMMAND_FREEZE_UNFREEZE_AUTHOR, MessagesType.SUCCESS);
-                        sendMessage(player, Message.COMMAND_FREEZE_UNFREEZE_TARGET, MessagesType.INFO);
+                        sendMessage(sender, Message.COMMAND_FREEZE_UNFREEZE_AUTHOR);
+                        sendMessage(player, Message.COMMAND_FREEZE_UNFREEZE_TARGET);
                     }else{
-                        sendMessage(sender, Message.COMMAND_FREEZE_ALREADY_UNFREEZE, MessagesType.ERROR);
+                        sendMessage(sender, Message.COMMAND_FREEZE_ALREADY_UNFREEZE);
                     }
                 }
             }

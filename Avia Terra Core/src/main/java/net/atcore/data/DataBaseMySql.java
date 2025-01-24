@@ -10,9 +10,9 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 
-import static net.atcore.messages.MessagesManager.sendMessageConsole;
+import static net.atcore.messages.MessagesManager.logConsole;
 
-import net.atcore.messages.MessagesType;
+import net.atcore.messages.TypeMessages;
 
 public abstract class DataBaseMySql implements Reloadable {
     private static Connection connection;
@@ -36,7 +36,7 @@ public abstract class DataBaseMySql implements Reloadable {
         String url = "jdbc:mysql://" + HOST + ":" + PORT + "/" + DATABASE;
         try {
             connection = DriverManager.getConnection(url, USER, PASSWORD);
-            if (!AviaTerraCore.isStarting()) sendMessageConsole("Conexión establecida a MySQL", MessagesType.SUCCESS);
+            if (!AviaTerraCore.isStarting()) MessagesManager.logConsole("Conexión establecida a MySQL", TypeMessages.SUCCESS);
         } catch (SQLException e) {
             MessagesManager.sendErrorException("Error al conectar con la base de datos", e);
         }

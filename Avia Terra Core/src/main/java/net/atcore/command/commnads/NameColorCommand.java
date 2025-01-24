@@ -6,7 +6,7 @@ import net.atcore.command.BaseTabCommand;
 import net.atcore.command.CommandUtils;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
-import net.atcore.messages.MessagesType;
+import net.atcore.messages.TypeMessages;
 import net.atcore.utils.GlobalUtils;
 import net.kyori.adventure.text.Component;
 import org.bukkit.ChatColor;
@@ -34,18 +34,18 @@ public class NameColorCommand extends BaseTabCommand {
     @Override
     public void execute(CommandSender sender, String[] args) {
         if (!(sender instanceof Player player)) {
-            MessagesManager.sendMessage(sender, Message.COMMAND_GENERIC_NO_PLAYER, MessagesType.ERROR);
+            MessagesManager.sendMessage(sender, Message.COMMAND_GENERIC_NO_PLAYER);
             return;
         }
 
         if (args.length < 1) {
-            MessagesManager.sendMessage(sender, this.getUsage().toString(), MessagesType.ERROR);
+            MessagesManager.sendArgument(sender, this.getUsage(), TypeMessages.ERROR);
             return;
         }
 
         String colorName = args[0].toLowerCase();
         if (!colorOptions.contains(colorName)) {
-            MessagesManager.sendMessage(sender, "Estos colores no existe", MessagesType.ERROR);
+            MessagesManager.sendMessage(sender, Message.COMMAND_NAME_COLOR_NOT_FOUND);
             return;
         }else if (colorName.equalsIgnoreCase("reset")){
             AviaTerraPlayer atp = AviaTerraPlayer.getPlayer(player);

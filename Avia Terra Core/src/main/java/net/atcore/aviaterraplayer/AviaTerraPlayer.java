@@ -9,11 +9,12 @@ import net.atcore.data.yml.PlayerDataFile;
 import net.atcore.inventory.InventorySection;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
-import net.atcore.messages.MessagesType;
+import net.atcore.messages.TypeMessages;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.jetbrains.annotations.Contract;
 
 import java.util.ArrayList;
@@ -49,12 +50,12 @@ public class AviaTerraPlayer {
 
     private InventorySection inventorySection = null;
 
-    public void sendMessage(String message, MessagesType type) {
-        MessagesManager.sendMessage(GlobalUtils.getPlayer(uuid), message, type);
+    public void sendMessage(Message message) {
+        MessagesManager.sendMessage(GlobalUtils.getPlayer(uuid), message);
     }
 
-    public void sendMessage(Message message, MessagesType type) {
-        MessagesManager.sendMessage(GlobalUtils.getPlayer(uuid), message, type);
+    public void sendString(String message, TypeMessages type) {
+        MessagesManager.sendString(getPlayer(), message, type);
     }
 
     @Contract(pure = true)
@@ -81,35 +82,41 @@ public class AviaTerraPlayer {
 
     public void joinEvent(Player player) {
         updateChuck(player);
+        Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> {
+            if (nameColor != null) player.displayName(GlobalUtils.chatColorLegacyToComponent(nameColor));
+        });
         AviaTerraCore.enqueueTaskAsynchronously(() -> playerDataFile.loadData());
     }
 
     public void updateChuck(Player player) {
-        AviaTerraCore.enqueueTaskAsynchronously(() -> {
-            player.setSimulationDistance(6);
-            player.setSendViewDistance(6);
-            boolean b1 = true;
-            boolean b2 = true;
-            for (int i = 32; i > 6; i--) {
-                if (!b1 && !b2) break;
-                if (b1){
-                    if (player.hasPermission(AviaTerraCore.getInstance().getName().toLowerCase() + ".simulationdistance." + i)) {
-                        player.setSimulationDistance(i);
-                        b1 = false;
-                    }
-                }
-
-                if (b2){
-                    if (player.hasPermission(AviaTerraCore.getInstance().getName().toLowerCase() + ".viewdistance." + i)) {
-                        player.setSendViewDistance(i);
-                        b2 = false;
-                    }
-                }
-            }
-            Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> {
-                if (nameColor != null) player.displayName(GlobalUtils.chatColorLegacyToComponent(nameColor));
-            });
-        });
+        int renderDistance = getMaxPermission(player, "simulationdistance");
+        player.setSendViewDistance(renderDistance);
+        player.setViewDistance(renderDistance);
     }
 
+    public int getMaxHome(){
+        Player player = getPlayer();
+        return getMaxPermission(player, "maxhome");
+    }
+
+    private static int getMaxPermission(Player player, String permissionName) {
+        int renderDistance = 4;
+        int maxChunks = 4;
+        for (String permission : player.getEffectivePermissions().stream().map(PermissionAttachmentInfo::getPermission).toList()) {
+            if (permission.startsWith(AviaTerraCore.getInstance().getName().toLowerCase() + "." + permissionName + ".")) {
+                String chunksStr = permission.replace(AviaTerraCore.getInstance().getName().toLowerCase() + "." + permissionName + ".", "");
+                try {
+                    int chunks = Integer.parseInt(chunksStr);
+                    chunks = Math.max(4, Math.min(32, chunks));
+
+                    if (chunks > maxChunks) {
+                        maxChunks = chunks;
+                    }
+                    renderDistance = maxChunks;
+                } catch (NumberFormatException ignored) {
+                }
+            }
+        }
+        return renderDistance;
+    }
 }

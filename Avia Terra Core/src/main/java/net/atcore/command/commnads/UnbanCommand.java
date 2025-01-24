@@ -6,7 +6,7 @@ import net.atcore.command.CommandUtils;
 import net.atcore.command.ModeTabPlayers;
 import net.atcore.command.ArgumentUse;
 import net.atcore.messages.Message;
-import net.atcore.messages.MessagesType;
+import net.atcore.messages.TypeMessages;
 import net.atcore.moderation.ban.ContextBan;
 import net.atcore.moderation.ModerationSection;
 import org.bukkit.command.CommandSender;
@@ -32,14 +32,14 @@ public class UnbanCommand extends BaseTabCommand {
         try {
             contextBan = ContextBan.valueOf(args[1].toUpperCase());
         }catch (Exception ignored) {
-            sendMessage(sender, Message.COMMAND_UNBAN_NOT_FOUND_CONTEXT, MessagesType.ERROR);
+            sendMessage(sender, Message.COMMAND_UNBAN_NOT_FOUND_CONTEXT);
             return;
         }
         //en un hilo aparte por qué explota el servidor
         CommandUtils.executeForPlayer(sender, args[0], false, dataTemporalPlayer ->
                 AviaTerraCore.enqueueTaskAsynchronously(() ->
                         ModerationSection.getBanManager().removeBanPlayer(dataTemporalPlayer.name(), contextBan, sender.getName())));
-        sendMessage(sender, Message.COMMAND_UNBAN_SUCCESSFUL, MessagesType.INFO);
+        sendMessage(sender, Message.COMMAND_UNBAN_SUCCESSFUL);
     }
 
     @Override

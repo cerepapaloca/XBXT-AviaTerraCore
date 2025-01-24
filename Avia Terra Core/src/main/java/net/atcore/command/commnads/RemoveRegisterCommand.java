@@ -7,14 +7,14 @@ import net.atcore.command.ModeTabPlayers;
 import net.atcore.command.ArgumentUse;
 import net.atcore.data.sql.DataBaseRegister;
 import net.atcore.messages.Message;
-import net.atcore.messages.MessagesType;
+import net.atcore.messages.TypeMessages;
 import net.atcore.security.Login.LoginManager;
 import org.bukkit.command.CommandSender;
 
 import java.util.HashSet;
 import java.util.List;
 
-import static net.atcore.messages.MessagesManager.sendMessage;
+import static net.atcore.messages.MessagesManager.*;
 
 public class RemoveRegisterCommand extends BaseTabCommand {
 
@@ -33,14 +33,14 @@ public class RemoveRegisterCommand extends BaseTabCommand {
             CommandUtils.executeForPlayer(sender, args[0], false, dataTemporalPlayer ->
                     AviaTerraCore.enqueueTaskAsynchronously(() -> {
                         if (DataBaseRegister.removeRegister(dataTemporalPlayer.name(), sender.getName())){
-                            sendMessage(sender, String.format(Message.COMMAND_REMOVE_REGISTER_SUCCESSFUL.getMessage(sender), dataTemporalPlayer.name()), MessagesType.SUCCESS);
+                            sendFormatMessage(sender, Message.COMMAND_REMOVE_REGISTER_SUCCESSFUL, dataTemporalPlayer.name());
                         }else {
-                            sendMessage(sender, String.format(Message.COMMAND_REMOVE_REGISTER_ERROR.getMessage(sender), dataTemporalPlayer.name()), MessagesType.ERROR);
+                            sendFormatMessage(sender, Message.COMMAND_REMOVE_REGISTER_ERROR, dataTemporalPlayer.name());
                         }
                         LoginManager.removeDataLogin(dataTemporalPlayer.name());
                     }));
         }else{
-            sendMessage(sender, this.getUsage().toString(), MessagesType.ERROR);
+            sendArgument(sender, this.getUsage(), TypeMessages.ERROR);
         }
     }
 

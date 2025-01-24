@@ -1,10 +1,12 @@
 package net.atcore.command.commnads;
 
 import net.atcore.command.*;
-import net.atcore.messages.MessagesType;
+import net.atcore.messages.Message;
+import net.atcore.messages.TypeMessages;
 import org.bukkit.command.CommandSender;
 
 import static net.atcore.messages.MessagesManager.sendMessage;
+import static net.atcore.messages.MessagesManager.sendString;
 
 public class PruebaCommand extends BaseCommand {
 
@@ -22,6 +24,6 @@ public class PruebaCommand extends BaseCommand {
 
     @Override
     public void execute(CommandSender sender, String[] args) {
-        sendMessage(sender, "Hola Mundo!", MessagesType.SUCCESS);
+        sendMessage(sender, Message.TEST_MESSAGE);
     }
 }

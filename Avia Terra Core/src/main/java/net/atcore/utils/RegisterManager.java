@@ -7,7 +7,7 @@ import net.atcore.command.CommandSection;
 import net.atcore.command.CommandUtils;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.MessagesManager;
-import net.atcore.messages.MessagesType;
+import net.atcore.messages.TypeMessages;
 import net.atcore.Section;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandException;
@@ -40,7 +40,7 @@ public class RegisterManager {
             try {
                 section.enable();
                 RegisterManager.sections.add(section);
-                sendMessageConsole(section.getName() + MessagesType.SUCCESS.getMainColor() + " Ok", MessagesType.INFO, CategoryMessages.PRIVATE, false);
+                logConsole(section.getName() + TypeMessages.SUCCESS.getMainColor() + " Ok", TypeMessages.INFO, CategoryMessages.PRIVATE, false);
             } catch (Exception e) {
                 Bukkit.shutdown();
                 MessagesManager.sendErrorException("Error al cargar: " + section.getName() + ". Deteniendo el servidor...", e);

@@ -9,7 +9,7 @@ import net.atcore.aviaterraplayer.ArmamentPlayer;
 import net.atcore.aviaterraplayer.AviaTerraPlayer;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
-import net.atcore.messages.MessagesType;
+import net.atcore.messages.TypeMessages;
 import net.atcore.utils.GlobalUtils;
 import net.kyori.adventure.text.Component;
 import org.bukkit.*;
@@ -52,7 +52,7 @@ public abstract class BaseWeaponUltraKill extends BaseWeapon {
         if (item.getItemMeta() == null)return;
         AviaTerraPlayer aviaPlayer = AviaTerraPlayer.getPlayer(player);
         if (aviaPlayer.getArmamentPlayer().isReloading()){
-            MessagesManager.sendTitle(player, "", MessagesType.ERROR.getMainColor() + "Estas Recargando", 0, 10, 30, MessagesType.ERROR);
+            MessagesManager.sendTitle(player, "", TypeMessages.ERROR.getMainColor() + "Estas Recargando", 0, 10, 30, TypeMessages.ERROR);
             return;
         }
         Integer amountAmmo = (Integer) GlobalUtils.getPersistenData(item,"AmountAmmo", PersistentDataType.INTEGER);
@@ -81,7 +81,7 @@ public abstract class BaseWeaponUltraKill extends BaseWeapon {
                 return;
             }
         }
-        MessagesManager.sendTitle(player, "", MessagesType.ERROR.getMainColor() + "Sin munición", 0, 10, 30, MessagesType.ERROR);
+        MessagesManager.sendTitle(player, "", TypeMessages.ERROR.getMainColor() + "Sin munición", 0, 10, 30, TypeMessages.ERROR);
     }
 
     @Override
@@ -100,7 +100,7 @@ public abstract class BaseWeaponUltraKill extends BaseWeapon {
                 maxDistance
         );
         List<Component> lore = GlobalUtils.stringToLoreComponent(s, true);
-        lore.addAll(GlobalUtils.stringToLoreComponent(Message.MISC_WARING_ANTI_DUPE.getMessageLocateDefault(), false, MessagesType.WARNING.getMainColor()));;
+        lore.addAll(GlobalUtils.stringToLoreComponent(Message.MISC_WARING_ANTI_DUPE.getMessageLocateDefault(), false, TypeMessages.WARNING.getMainColor()));;
         meta.lore(lore);
         itemStack.setItemMeta(meta);
     }

@@ -28,7 +28,7 @@ import java.util.Random;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import static net.atcore.messages.MessagesManager.sendMessageConsole;
+import static net.atcore.messages.MessagesManager.logConsole;
 import static net.atcore.utils.RegisterManager.register;
 
 public final class AviaTerraCore extends JavaPlugin {
@@ -59,7 +59,7 @@ public final class AviaTerraCore extends JavaPlugin {
     @Override
     public void onEnable() {
         startTime = System.currentTimeMillis();
-        sendMessageConsole("AviaTerra Iniciando...", MessagesType.SUCCESS, CategoryMessages.PRIVATE, false);
+        MessagesManager.logConsole("AviaTerra Iniciando...", TypeMessages.SUCCESS, CategoryMessages.PRIVATE, false);
         isStarting = true;
         workerThread = new Thread(this::processQueue);
         workerThread.setName("AviaTerraCore WorkerThread");
@@ -83,6 +83,8 @@ public final class AviaTerraCore extends JavaPlugin {
         );
         startMOTD();
         startBroadcast();
+        startAutoSaveTime();
+        startAutoRestart();
         isStarting = false;
         messageOn(startTime);
     }
@@ -100,12 +102,11 @@ public final class AviaTerraCore extends JavaPlugin {
         LIST_BROADCAST.clear();
         if (ConsoleDiscord.stateTasks != null) ConsoleDiscord.stateTasks.cancel();
         workerThread.interrupt();
-        Bukkit.getOnlinePlayers().forEach(player -> {
-            GlobalUtils.kickPlayer(player, "El servidor va a cerrar, volveremos pronto...");
-        });
+        Bukkit.getOnlinePlayers().forEach(player ->
+                GlobalUtils.kickPlayer(player, "El servidor va a cerrar, volveremos pronto..."));
         //if (jda != null) jda
         TASK_QUEUE.clear();
-        sendMessageConsole("AviaTerra Apagada", MessagesType.SUCCESS, CategoryMessages.PRIVATE, false);
+        MessagesManager.logConsole("AviaTerra Apagada", TypeMessages.SUCCESS, CategoryMessages.PRIVATE, false);
     }
 
     @Override
@@ -116,7 +117,7 @@ public final class AviaTerraCore extends JavaPlugin {
     }
 
     private void messageOn(long timeCurrent){
-        sendMessageConsole("AviaTerra Iniciado en <|" + (System.currentTimeMillis() - timeCurrent) + "ms" +
+        MessagesManager.logConsole("AviaTerra Iniciado en <|" + (System.currentTimeMillis() - timeCurrent) + "ms" +
                 "\n" +
                 "<gradient:#571ecf:#3f39ea> ___    ___ ________     </gradient><gradient:#fb8015:#fbb71f> ___    ___ _________   </gradient>\n" +
                 "<gradient:#571ecf:#3f39ea>|\\  \\  /  /|\\   __  \\    </gradient><gradient:#fb8015:#fbb71f>|\\  \\  /  /|\\___   ___\\ </gradient>\n" +
@@ -126,8 +127,28 @@ public final class AviaTerraCore extends JavaPlugin {
                 "<gradient:#571ecf:#3f39ea> /  /\\   \\    \\ \\_______\\ </gradient><gradient:#fb8015:#fbb71f>/  /\\   \\        \\ \\__\\ </gradient>\n" +
                 "<gradient:#571ecf:#3f39ea>/__/ /\\ __\\    \\|_______|</gradient><gradient:#fb8015:#fbb71f>/__/ /\\ __\\        \\|__|</gradient>\n" +
                 "<gradient:#571ecf:#3f39ea>|__|/ \\|__|              </gradient><gradient:#fb8015:#fbb71f>|__|/ \\|__|             </gradient>",
-                MessagesType.SUCCESS, CategoryMessages.PRIVATE, false);
+                TypeMessages.SUCCESS, CategoryMessages.PRIVATE, false);
     }
+    /*De pronto en un futuro se use
+    public static void runTask(Runnable task){
+        Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), task);
+    }
+
+    public static void runTaskLater(long delay, Runnable task){
+        Bukkit.getScheduler().runTaskLater(AviaTerraCore.getInstance(), task, delay);
+    }
+
+    public static void runTaskLaterAsynchronously(long delay, Runnable task){
+        Bukkit.getScheduler().runTaskLaterAsynchronously(AviaTerraCore.getInstance(), task, delay);
+    }
+
+    public static void runTaskTimer(long delay, long period,Runnable task){
+        Bukkit.getScheduler().runTaskTimer(AviaTerraCore.getInstance(), task, delay, period);
+    }
+
+    public static void runTaskTimerAsynchronously(long delay, long period, Runnable task){
+        Bukkit.getScheduler().runTaskTimerAsynchronously(AviaTerraCore.getInstance(), task, delay, period);
+    }*/
 
     /**
      * @see #enqueueTaskAsynchronously(boolean, Runnable)
@@ -150,10 +171,10 @@ public final class AviaTerraCore extends JavaPlugin {
 
     public static void enqueueTaskAsynchronously(boolean isHeavyProcess, Runnable task) {
         if (!TASK_QUEUE.offer(new AviaRunnable(task, isHeavyProcess))){
-            MessagesManager.sendMessageConsole("Error al añadir una tarea la cola", MessagesType.ERROR);
+            MessagesManager.logConsole("Error al añadir una tarea la cola", TypeMessages.ERROR);
         }
         if (TASK_QUEUE.size() > 6){
-            MessagesManager.sendMessageConsole(String.format("Hay <|%s|> tareas en cola, Hilo sobre cargador", TASK_QUEUE.size()), MessagesType.WARNING, CategoryMessages.SYSTEM, false);
+            MessagesManager.logConsole(String.format("Hay <|%s|> tareas en cola, Hilo sobre cargador", TASK_QUEUE.size()), TypeMessages.WARNING, CategoryMessages.SYSTEM, false);
         }
     }
 
@@ -184,7 +205,7 @@ public final class AviaTerraCore extends JavaPlugin {
                 if (Bukkit.getOnlinePlayers().isEmpty()) return;
                 if (LIST_BROADCAST.isEmpty()) return;
                 int randomInt = random.nextInt(LIST_BROADCAST.size());
-                Bukkit.broadcast(MessagesManager.applyFinalProprieties(LIST_BROADCAST.get(randomInt), MessagesType.INFO, CategoryMessages.PRIVATE, true));
+                Bukkit.broadcast(MessagesManager.applyFinalProprieties(LIST_BROADCAST.get(randomInt), TypeMessages.INFO, CategoryMessages.PRIVATE, true));
             }
         }.runTaskTimer(this, 20*60*15L, 20*60*15L);
     }
@@ -207,5 +228,13 @@ public final class AviaTerraCore extends JavaPlugin {
                 Bukkit.motd(AviaTerraCore.getMiniMessage().deserialize(String.format("<#4B2FDE><bold>XB<reset>  <gold>%s \n<#FF8C00><bold>XT", LIST_MOTD.get(randomInt))));
             }
         }.runTaskTimer(this, 20L, 20L);
+    }
+
+    private void startAutoRestart(){
+        new BukkitRunnable() {
+            public void run() {
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "passiverestart");
+            }
+        }.runTaskLater(this, 20*60*60*24L);
     }
 }

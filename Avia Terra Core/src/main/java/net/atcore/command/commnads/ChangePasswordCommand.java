@@ -6,7 +6,7 @@ import net.atcore.command.ArgumentUse;
 import net.atcore.data.sql.DataBaseRegister;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.Message;
-import net.atcore.messages.MessagesType;
+import net.atcore.messages.TypeMessages;
 import net.atcore.security.EncryptService;
 import net.atcore.security.Login.LoginManager;
 import net.atcore.security.Login.TwoFactorAuth;
@@ -16,8 +16,7 @@ import org.bukkit.entity.Player;
 import java.util.List;
 import java.util.UUID;
 
-import static net.atcore.messages.MessagesManager.sendMessage;
-import static net.atcore.messages.MessagesManager.sendMessageConsole;
+import static net.atcore.messages.MessagesManager.*;
 
 public class ChangePasswordCommand extends BaseTabCommand {
 
@@ -42,28 +41,28 @@ public class ChangePasswordCommand extends BaseTabCommand {
                     if (LoginManager.isEqualPassword(player, args[0])){
                         onChange(player, password, "contraseña");
                     }else{
-                        sendMessage(sender, Message.COMMAND_CHANGE_PASSWORD_NOT_EQUAL_PASSWORD, MessagesType.ERROR);
+                        sendMessage(sender, Message.COMMAND_CHANGE_PASSWORD_NOT_EQUAL_PASSWORD);
                     }
                 }
             }else{
-                sendMessage(sender, Message.COMMAND_GENERIC_NO_PLAYER, MessagesType.ERROR);
+                sendMessage(sender, Message.COMMAND_GENERIC_NO_PLAYER);
             }
         }else{
-            sendMessage(sender, this.getUsage().toString(), MessagesType.ERROR);
+            sendArgument(sender, this.getUsage(), TypeMessages.ERROR);
         }
     }
 
     private static void onChange(Player player, String password, String reason) {
         LoginManager.getDataLogin(player).getRegister().setPasswordShaded(password);
-        AviaTerraCore.getInstance().enqueueTaskAsynchronously(() -> {
+        AviaTerraCore.enqueueTaskAsynchronously(() -> {
             if (DataBaseRegister.updatePassword(player.getName(), password)){
-                sendMessage(player, Message.COMMAND_CHANGE_PASSWORD_SUCCESSFUL, MessagesType.SUCCESS);
+                sendMessage(player, Message.COMMAND_CHANGE_PASSWORD_SUCCESSFUL);
             }else {
-                sendMessage(player, Message.COMMAND_CHANGE_PASSWORD_ERROR, MessagesType.ERROR);
+                sendMessage(player, Message.COMMAND_CHANGE_PASSWORD_ERROR);
             }
         });
 
-        sendMessageConsole( String.format(Message.COMMAND_CHANGE_PASSWORD_SUCCESSFUL_LOG.getMessage(player), player.getName(), reason), MessagesType.INFO, CategoryMessages.LOGIN);
+        logConsole( String.format(Message.COMMAND_CHANGE_PASSWORD_SUCCESSFUL_LOG.getMessage(player), player.getName(), reason), TypeMessages.INFO, CategoryMessages.LOGIN);
         TwoFactorAuth.CODES.remove(player.getUniqueId());
     }
 

@@ -4,10 +4,9 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
-import net.atcore.messages.MessagesType;
+import net.atcore.messages.TypeMessages;
 import net.atcore.security.AntiExploit;
 import net.atcore.security.Login.LoginManager;
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
@@ -46,7 +45,7 @@ public final class CommandHandler implements TabExecutor {
                         commandFinal.append(arg).append(" ");
                     }
                     SAVES_COMMANDS_CONFIRMS.put(player.getUniqueId(), commandFinal.toString());
-                    MessagesManager.sendMessage(sender, command.getMessageConfirm(), MessagesType.INFO);
+                    MessagesManager.sendString(sender, command.getMessageConfirm(), TypeMessages.INFO);
                     return true;
                 }
             }
@@ -60,9 +59,9 @@ public final class CommandHandler implements TabExecutor {
                         return true;
                     }else{
                         if (LoginManager.checkLoginIn(player)){
-                            sendMessage(sender, Message.COMMAND_GENERIC_NO_PERMISSION, MessagesType.ERROR);
+                            sendMessage(sender, Message.COMMAND_GENERIC_NO_PERMISSION);
                         }else {
-                            sendMessage(player, Message.COMMAND_GENERIC_NO_LOGIN, MessagesType.ERROR);
+                            sendMessage(player, Message.COMMAND_GENERIC_NO_LOGIN);
                         }
                     }
                 }else {
@@ -70,7 +69,7 @@ public final class CommandHandler implements TabExecutor {
                     return true;
                 }
             }catch (Exception e) {
-                sendMessage(sender, Message.COMMAND_GENERIC_EXCEPTION_ERROR, MessagesType.ERROR);
+                sendMessage(sender, Message.COMMAND_GENERIC_EXCEPTION_ERROR);
                 sendErrorException("Error al ejecutar el comando", e);
                 return false;
             }

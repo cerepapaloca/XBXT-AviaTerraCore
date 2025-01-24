@@ -1,10 +1,9 @@
 package net.atcore.messages;
 
 import lombok.Getter;
-import net.kyori.adventure.text.minimessage.tag.Tag;
 
 @Getter
-public enum MessagesType {
+public enum TypeMessages {
     SUCCESS("<dark_green>", "<green>"),
     INFO("<dark_aqua>", "<aqua>"),
     WARNING("<yellow>", "<gold>"),
@@ -12,7 +11,7 @@ public enum MessagesType {
     KICK("<red>","<dark_red><b>"),
     NULL("<gray>","<dark_gray>"),;
 
-    MessagesType(String mainColor, String secondTag) {
+    TypeMessages(String mainColor, String secondTag) {
         this.mainColor = mainColor;
         this.secondColor = secondTag;
     }

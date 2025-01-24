@@ -6,7 +6,7 @@ import net.atcore.utils.debug.TypeTest;
 import net.atcore.command.BaseTabCommand;
 import net.atcore.command.CommandUtils;
 import net.atcore.messages.MessagesManager;
-import net.atcore.messages.MessagesType;
+import net.atcore.messages.TypeMessages;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -30,12 +30,12 @@ public class AviaTerraDebugCommand extends BaseTabCommand {
                 try {
                     typeTest = TypeTest.valueOf(args[0].toUpperCase());
                 }catch (Exception e) {
-                    MessagesManager.sendMessage(player, "Esta prueba no existe", MessagesType.ERROR);
+                    MessagesManager.sendMessage(player, "Esta prueba no existe", TypeMessages.ERROR);
                     return;
                 }
                 typeTest.runtTest(atp);
             }else {
-                MessagesManager.sendMessage(player, this.getUsage().toString(), MessagesType.ERROR);
+                MessagesManager.sendMessage(player, this.getUsage().toString(), TypeMessages.ERROR);
             }
         }
     }

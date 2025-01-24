@@ -5,7 +5,7 @@ import lombok.Setter;
 import net.atcore.AviaTerraCore;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
-import net.atcore.messages.MessagesType;
+import net.atcore.messages.TypeMessages;
 import net.atcore.utils.GlobalUtils;
 import net.kyori.adventure.text.Component;
 import org.bukkit.*;
@@ -57,7 +57,7 @@ public abstract class BaseMagazine extends BaseArmament implements Compartment {
             if (setLore){
 
                 List<Component> lore = GlobalUtils.stringToLoreComponent(finalLore, true);
-                lore.addAll(GlobalUtils.stringToLoreComponent(Message.MISC_WARING_ANTI_DUPE.getMessageLocateDefault(), false, MessagesType.WARNING.getMainColor()));
+                lore.addAll(GlobalUtils.stringToLoreComponent(Message.MISC_WARING_ANTI_DUPE.getMessageLocateDefault(), false, TypeMessages.WARNING.getMainColor()));
                 meta.lore(lore);
                 item.setItemMeta(meta);
             }
@@ -121,7 +121,7 @@ public abstract class BaseMagazine extends BaseArmament implements Compartment {
                             if (ArmamentUtils.stringToList(ammoNameList).size() < ammoMax) {
                                 onReload(player);
                             }else {
-                                MessagesManager.sendTitle(player,"", "Recargado Completada", 0, 0,30, MessagesType.SUCCESS);
+                                MessagesManager.sendTitle(player,"", "Recargado Completada", 0, 0,30, TypeMessages.SUCCESS);
                                 player.removePotionEffect(PotionEffectType.SLOWNESS);
                                 reloadTask.remove(player.getUniqueId());
                                 cancel();
@@ -129,18 +129,18 @@ public abstract class BaseMagazine extends BaseArmament implements Compartment {
                             return;
                         }
                     }
-                    MessagesManager.sendTitle(player,"", "Recargado Cancelada", 0, 0,30, MessagesType.ERROR);
+                    MessagesManager.sendTitle(player,"", "Recargado Cancelada", 0, 0,30, TypeMessages.ERROR);
                     player.removePotionEffect(PotionEffectType.SLOWNESS);
                     reloadTask.remove(player.getUniqueId());
                     cancel();
                 }
             }.runTaskTimer(AviaTerraCore.getInstance(), 3, 3);
-            MessagesManager.sendTitle(player,"", "Recargando...", 0, 0,30, MessagesType.INFO);
+            MessagesManager.sendTitle(player,"", "Recargando...", 0, 0,30, TypeMessages.INFO);
             player.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, Integer.MAX_VALUE, 3, true, false, false));
             reloadTask.put(player.getUniqueId(), task);
             return true;
         }else {
-            MessagesManager.sendTitle(player,"", "No tiene balas en el inventario", 0, 0,30, MessagesType.ERROR);
+            MessagesManager.sendTitle(player,"", "No tiene balas en el inventario", 0, 0,30, TypeMessages.ERROR);
         }
         return false;
     }
@@ -167,13 +167,13 @@ public abstract class BaseMagazine extends BaseArmament implements Compartment {
                 return;
             }
             reloadTask.get(player.getUniqueId()).cancel();
-            MessagesManager.sendTitle(player,"", "Recargado Completada", 0, 0,30, MessagesType.SUCCESS);
+            MessagesManager.sendTitle(player,"", "Recargado Completada", 0, 0,30, TypeMessages.SUCCESS);
             player.removePotionEffect(PotionEffectType.SLOWNESS);
             reloadTask.remove(player.getUniqueId());
             player.getWorld().playSound(player.getLocation(), Sound.ITEM_ARMOR_EQUIP_IRON, SoundCategory.PLAYERS, 1, 1);
         }else{
             reloadTask.get(player.getUniqueId()).cancel();
-            MessagesManager.sendTitle(player,"", "Recargado Cancelada", 0, 0,30, MessagesType.SUCCESS);
+            MessagesManager.sendTitle(player,"", "Recargado Cancelada", 0, 0,30, TypeMessages.SUCCESS);
             player.removePotionEffect(PotionEffectType.SLOWNESS);
             reloadTask.remove(player.getUniqueId());
         }

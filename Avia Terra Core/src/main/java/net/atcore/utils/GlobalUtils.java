@@ -9,10 +9,7 @@ import lombok.experimental.UtilityClass;
 import net.atcore.AviaTerraCore;
 import net.atcore.data.DataSection;
 import net.atcore.listener.NuVotifierListener;
-import net.atcore.messages.CategoryMessages;
-import net.atcore.messages.Message;
-import net.atcore.messages.MessagesManager;
-import net.atcore.messages.MessagesType;
+import net.atcore.messages.*;
 import net.atcore.security.Login.LoginManager;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -129,7 +126,7 @@ public final class GlobalUtils {
         List<Component> components = meta.lore();
         List<Component> addLore;
         if (warningMessage) {
-            addLore = GlobalUtils.stringToLoreComponent(Message.MISC_WARING_ANTI_DUPE.getMessageLocatePrivate(), true, MessagesType.WARNING.getMainColor());
+            addLore = GlobalUtils.stringToLoreComponent(Message.MISC_WARING_ANTI_DUPE.getMessageLocatePrivate(), true, TypeMessages.WARNING.getMainColor());
         }else {
             addLore = new ArrayList<>();
         }
@@ -194,11 +191,20 @@ public final class GlobalUtils {
         world.dropItemNaturally(location, item);
     }
 
-    public void synchronizeKickPlayer(@NotNull Player player, @Nullable String reason){
+    public void synchronizeKickPlayer(@NotNull Player player, Message message){
         if (Bukkit.isPrimaryThread()){
-            kickPlayer(player, reason);
+            kickPlayer(player, message);
         }else {
-            Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> kickPlayer(player, reason));
+            Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> kickPlayer(player, message));
+        }
+    }
+
+    public String kickPlayer(@NotNull Player player, @NotNull Message message){
+        try {
+            return kickPlayer(player, message.getMessage(player));
+        }catch (Exception e){
+            MessagesManager.sendWaringException("as", e);
+            return kickPlayer(player, message.getMessageLocateDefault());
         }
     }
 
@@ -207,10 +213,20 @@ public final class GlobalUtils {
      * y respetando el formato de razón del kick
      */
 
-    public String kickPlayer(@NotNull Player player,@Nullable String reason) {
-        reason = MessagesManager.addProprieties(Message.MISC_KICK_UPPER.getMessageLocateDefault()
-                + "&4" + (reason == null ? "Has sido expulsado" : reason) + "&c" +
-                Message.MISC_KICK_LOWER.getMessageLocateDefault(), MessagesType.KICK, false, false);
+    public String kickPlayer(@NotNull Player player, @Nullable String reason) {
+        String upper;
+        String lower;
+        try {
+            upper = Message.MISC_KICK_UPPER.getMessage(player);
+            lower = Message.MISC_KICK_LOWER.getMessage(player);
+        }catch (Exception e){
+            upper = Message.MISC_KICK_UPPER.getMessageLocateDefault();
+            lower = Message.MISC_KICK_LOWER.getMessageLocateDefault();
+        }
+        reason = MessagesManager.addProprieties(upper
+                + "|!>" + (reason == null ? "Has sido expulsado" : reason) +
+                lower,
+                TypeMessages.KICK, false, false);
         if (Bukkit.isPrimaryThread()){
             kickFinal(player, reason);
         }else{
@@ -351,7 +367,7 @@ public final class GlobalUtils {
                     }
                 }
 
-                lineas.add(MessagesManager.applyFinalProprieties(GlobalUtils.convertToMiniMessageFormat(color) + parte.substring(inicio, fin), MessagesType.NULL, CategoryMessages.PRIVATE, false));
+                lineas.add(MessagesManager.applyFinalProprieties(GlobalUtils.convertToMiniMessageFormat(color) + parte.substring(inicio, fin), TypeMessages.NULL, CategoryMessages.PRIVATE, false));
                 inicio = fin + 1; // Salta el espacio
             }
         }
@@ -490,7 +506,7 @@ public final class GlobalUtils {
             if (NuVotifierListener.LIST_VOTE.contains(player.getName())){
                 AviaTerraCore.getLp().getUserManager().modifyUser(player.getUniqueId(), user ->
                         user.data().add(InheritanceNode.builder("vote").build()));
-                MessagesManager.sendTitle(player, "Nuevo Rango Adquirido", "Gracias por votar", 20, 40, 30, MessagesType.SUCCESS);
+                MessagesManager.sendTitle(player, "Nuevo Rango Adquirido", "Gracias por votar", 20, 40, 30, TypeMessages.SUCCESS);
                 player.getWorld().playSound(player, Sound.ENTITY_PLAYER_LEVELUP, 1 ,1);
                 NuVotifierListener.LIST_VOTE.remove(player.getName());
                 DataSection.getCacheVoteFile().saveData();

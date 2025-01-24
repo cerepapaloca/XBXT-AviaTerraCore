@@ -6,7 +6,7 @@ import net.atcore.command.CommandUtils;
 import net.atcore.command.ArgumentUse;
 import net.atcore.data.sql.DataBaseRegister;
 import net.atcore.messages.Message;
-import net.atcore.messages.MessagesType;
+import net.atcore.messages.TypeMessages;
 import net.atcore.security.Login.*;
 import net.atcore.security.Login.model.CodeAuth;
 import net.atcore.security.Login.model.LoginData;
@@ -37,7 +37,7 @@ public class LinkCommand extends BaseTabCommand {
             UUID uuid = player.getUniqueId();
             LoginData loginData = LoginManager.getDataLogin(player);
             if (args.length == 0) {
-                sendMessage(sender, Message.COMMAND_LINK_MISSING_ARGS.getMessage(player), MessagesType.ERROR);
+                sendMessage(sender, Message.COMMAND_LINK_MISSING_ARGS);
                 return;
             }
             switch (args[0].toLowerCase()) {
@@ -53,36 +53,36 @@ public class LinkCommand extends BaseTabCommand {
                                 );
                                 TwoFactorAuth.CODES.put(uuid, codeAuth);
 
-                                sendMessage(sender,String.format(Message.COMMAND_LINK_SEND_GMAIL_1.getMessage(player), args[1]), MessagesType.INFO);
+                                sendMessage(sender, Message.COMMAND_LINK_SEND_GMAIL_1);
                                 if (loginData.getRegister().getGmail() != null){
-                                    sendMessage(sender, Message.COMMAND_LINK_ALREADY_GMAIL, MessagesType.WARNING);
+                                    sendMessage(sender, Message.COMMAND_LINK_ALREADY_GMAIL);
                                 }
                                 AviaTerraCore.enqueueTaskAsynchronously(() -> {
                                     TwoFactorAuth.sendVerificationEmail(args[1], codeAuth, FormatMessage.LINK);
-                                    sendMessage(sender, Message.COMMAND_LINK_ARRIVED_MESSAGE_GMAIL, MessagesType.SUCCESS);
+                                    sendMessage(sender, Message.COMMAND_LINK_ARRIVED_MESSAGE_GMAIL);
                                 });
                             }else {
-                                sendMessage(sender, Message.COMMAND_LINK_MISSING_ARGS_GMAIL, MessagesType.ERROR);
+                                sendMessage(sender, Message.COMMAND_LINK_MISSING_ARGS_GMAIL);
                             }
                         }else {
-                            sendMessage(sender, Message.COMMAND_LINK_GMAIL_NO_LOGIN, MessagesType.ERROR);
+                            sendMessage(sender, Message.COMMAND_LINK_GMAIL_NO_LOGIN);
                         }
                     }else {
                         if (loginData.getRegister().getGmail() != null){
                             CodeAuth codeAuth = new CodeAuth(UUID.randomUUID(),
-                                    System.currentTimeMillis()+(EXPIRATION_TIME),
+                                    System.currentTimeMillis() + (EXPIRATION_TIME),
                                     uuid,
                                     loginData.getRegister().getGmail(),
                                     TwoFactorAuth.MediaAuth.GMAIL
                             );
                             TwoFactorAuth.CODES.put(uuid, codeAuth);
-                            sendMessage(sender, Message.COMMAND_LINK_SEND_GMAIL_2, MessagesType.INFO);
+                            sendMessage(sender, Message.COMMAND_LINK_SEND_GMAIL_2);
                             AviaTerraCore.enqueueTaskAsynchronously(() -> {
                                 TwoFactorAuth.sendVerificationEmail(loginData.getRegister().getGmail(), codeAuth, FormatMessage.CODE);
-                                sendMessage(sender, Message.COMMAND_LINK_ARRIVED_MESSAGE_GMAIL, MessagesType.SUCCESS);
+                                sendMessage(sender, Message.COMMAND_LINK_ARRIVED_MESSAGE_GMAIL);
                             });
                         }else {
-                            sendMessage(sender, Message.COMMAND_LINK_NOT_FOUND_GMAIL, MessagesType.ERROR);
+                            sendMessage(sender, Message.COMMAND_LINK_NOT_FOUND_GMAIL);
                         }
                     }
                 }
@@ -99,16 +99,16 @@ public class LinkCommand extends BaseTabCommand {
                                 );
                                 TwoFactorAuth.CODES.put(uuid, codeAuth);
 
-                                sendMessage(sender, Message.COMMAND_LINK_SEND_DISCORD_1, MessagesType.INFO);
+                                sendMessage(sender, Message.COMMAND_LINK_SEND_DISCORD_1);
                                 if (loginData.getRegister().getDiscord() != null){
-                                    sendMessage(sender, Message.COMMAND_LINK_ALREADY_DISCORD, MessagesType.WARNING);
+                                    sendMessage(sender, Message.COMMAND_LINK_ALREADY_DISCORD);
                                 }
-                                AviaTerraCore.getInstance().enqueueTaskAsynchronously(() -> TwoFactorAuth.sendVerificationDiscord(args[1], player, FormatMessage.LINK));
+                                AviaTerraCore.enqueueTaskAsynchronously(() -> TwoFactorAuth.sendVerificationDiscord(args[1], player, FormatMessage.LINK));
                             }else {
-                                sendMessage(player, Message.COMMAND_LINK_MISSING_ARGS_DISCORD, MessagesType.ERROR);
+                                sendMessage(player, Message.COMMAND_LINK_MISSING_ARGS_DISCORD);
                             }
                         }else {
-                            sendMessage(sender, Message.COMMAND_LINK_DISCORD_NO_LOGIN, MessagesType.ERROR);
+                            sendMessage(sender, Message.COMMAND_LINK_DISCORD_NO_LOGIN);
                         }
                     }else {
                         if (loginData.getRegister().getDiscord() != null){
@@ -121,11 +121,11 @@ public class LinkCommand extends BaseTabCommand {
                             );
                             TwoFactorAuth.CODES.put(uuid, codeAuth);
 
-                            sendMessage(sender, Message.COMMAND_LINK_SEND_DISCORD_2, MessagesType.INFO);
-                            AviaTerraCore.getInstance().enqueueTaskAsynchronously(() ->
+                            sendMessage(sender, Message.COMMAND_LINK_SEND_DISCORD_2);
+                            AviaTerraCore.enqueueTaskAsynchronously(() ->
                                     TwoFactorAuth.sendVerificationDiscord(loginData.getRegister().getDiscord(), player, FormatMessage.CODE));
                         }else {
-                            sendMessage(sender, Message.COMMAND_LINK_NOT_FOUNT_DISCORD, MessagesType.ERROR);
+                            sendMessage(sender, Message.COMMAND_LINK_NOT_FOUNT_DISCORD);
                         }
                     }
                 }
@@ -133,34 +133,34 @@ public class LinkCommand extends BaseTabCommand {
                     CodeAuth codeAuth = TwoFactorAuth.CODES.get(uuid);
                     if (codeAuth != null && TwoFactorAuth.checkCode(player, args[0])){
                         switch (codeAuth.getMediaAuth()){
-                            case DISCORD -> AviaTerraCore.getInstance().enqueueTaskAsynchronously(() -> {
+                            case DISCORD -> AviaTerraCore.enqueueTaskAsynchronously(() -> {
                                 if (DataBaseRegister.updateDiscord(player.getName(), TwoFactorAuth.CODES.get(uuid).getMedia())){
                                     LoginData login = LoginManager.getDataLogin(player);
                                     login.getRegister().setDiscord(TwoFactorAuth.CODES.get(uuid).getMedia());
-                                    sendMessage(player, Message.COMMAND_LINK_SUCCESSFUL, MessagesType.SUCCESS);
+                                    sendMessage(player, Message.COMMAND_LINK_SUCCESSFUL);
                                 }else {
-                                    sendMessage(player, Message.COMMAND_LINK_ERROR, MessagesType.ERROR);
+                                    sendMessage(player, Message.COMMAND_LINK_ERROR);
                                 }
                                 TwoFactorAuth.CODES.remove(uuid);
                             });
-                            case GMAIL -> AviaTerraCore.getInstance().enqueueTaskAsynchronously(() -> {
+                            case GMAIL -> AviaTerraCore.enqueueTaskAsynchronously(() -> {
                                 if (DataBaseRegister.updateGmail(player.getName(), TwoFactorAuth.CODES.get(uuid).getMedia())){
                                     LoginData login = LoginManager.getDataLogin(player);
                                     login.getRegister().setGmail(TwoFactorAuth.CODES.get(uuid).getMedia());
-                                    sendMessage(player, Message.COMMAND_LINK_SUCCESSFUL, MessagesType.SUCCESS);
+                                    sendMessage(player, Message.COMMAND_LINK_SUCCESSFUL);
                                 }else {
-                                    sendMessage(player, Message.COMMAND_LINK_ERROR, MessagesType.ERROR);
+                                    sendMessage(player, Message.COMMAND_LINK_ERROR);
                                 }
                                 TwoFactorAuth.CODES.remove(uuid);
                             });
                         }
                     }else {
-                        sendMessage(sender, Message.LOGIN_TWO_FACTOR_NO_FOUND_CODE, MessagesType.ERROR);
+                        sendMessage(sender, Message.LOGIN_TWO_FACTOR_NO_FOUND_CODE);
                     }
                 }
             }
         }else {
-            sendMessage(sender, Message.COMMAND_GENERIC_NO_PLAYER, MessagesType.ERROR);
+            sendMessage(sender, Message.COMMAND_GENERIC_NO_PLAYER);
         }
     }
 

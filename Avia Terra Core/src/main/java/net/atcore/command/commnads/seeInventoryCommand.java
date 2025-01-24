@@ -6,7 +6,7 @@ import net.atcore.command.ModeTabPlayers;
 import net.atcore.command.ArgumentUse;
 import net.atcore.inventory.InventorySection;
 import net.atcore.messages.Message;
-import net.atcore.messages.MessagesType;
+import net.atcore.messages.TypeMessages;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -39,16 +39,16 @@ public class seeInventoryCommand extends BaseCommand {
                         //atp2.setInventorySection(InventorySection.MANIPULATED);
                         atp2.getModerationPlayer().getManipulatorInventoryPlayer().add(player.getUniqueId());
                     }else {
-                        sendMessage(sender, Message.COMMAND_SEE_INVENTORY_ERROR, MessagesType.ERROR);
+                        sendMessage(sender, Message.COMMAND_SEE_INVENTORY_ERROR);
                     }
                 }else{
-                    sendMessage(sender, Message.COMMAND_GENERIC_PLAYER_NOT_FOUND, MessagesType.ERROR);
+                    sendMessage(sender, Message.COMMAND_GENERIC_PLAYER_NOT_FOUND);
                 }
             }else {
-                sendMessage(sender, Message.COMMAND_SEE_INVENTORY_MISSING_ARGS, MessagesType.ERROR);
+                sendMessage(sender, Message.COMMAND_SEE_INVENTORY_MISSING_ARGS);
             }
         }else{
-            sendMessage(sender, Message.COMMAND_GENERIC_NO_PLAYER, MessagesType.ERROR);
+            sendMessage(sender, Message.COMMAND_GENERIC_NO_PLAYER);
         }
     }
 }

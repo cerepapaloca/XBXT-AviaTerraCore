@@ -1,6 +1,7 @@
 package net.atcore.messages;
 
 import net.atcore.AviaTerraCore;
+import net.atcore.command.ArgumentUse;
 import net.atcore.data.yml.MessageFile;
 import net.atcore.utils.GlobalUtils;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
@@ -23,11 +24,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.time.Duration;
-import java.util.Objects;
 import java.util.Random;
 
 import static net.kyori.adventure.text.event.ClickEvent.Action;
-import static org.reflections.Reflections.log;
 
 /**
  * En esta clase esta tod0 relacionado con los colores y el envío de mensajes. Todos los mensajes tienen que pasar por quí
@@ -36,7 +35,7 @@ import static org.reflections.Reflections.log;
 
 public final class MessagesManager {
 
-    public static final String LINK_DISCORD = "&a&n<click:open_url:https://discord.gg/7ubQQFVMWF>[Discord]</click>";
+    public static final String LINK_DISCORD = "&a&n<click:open_url:https://discord.gg/7ubQQFVMWF>discord.gg/7ubQQFVMWF</click>";
     //"&8[" + GlobalUtils.applyGradient("<#00CCCC>AviaTerra<#00FFFF>",'l') + "&8]&r " ;
     public static final String PREFIX = "<dark_gray>[<b><#4B2FDE>XT<#ff8C00>XB<dark_gray></b>] ";
     public static final LocaleAvailable DEFAULT_LOCALE_USER = LocaleAvailable.EN;
@@ -45,48 +44,64 @@ public final class MessagesManager {
     /// ////////////////////////
     /// ////////////////////////
 
-    public static void sendMessage(CommandSender sender, Message message, @NotNull MessagesType type) {
+    public static void sendFormatMessage(@NotNull CommandSender sender, @NotNull Message message, Object... args) {
+        sendMessage(sender, String.format(message.getMessage(sender), args), message.getTypeMessages(), CategoryMessages.PRIVATE, false);
+    }
+
+    public static void sendFormatMessage(@NotNull CommandSender sender, @NotNull Message message, CategoryMessages category, Object... args) {
+        sendMessage(sender, String.format(message.getMessage(sender), args), message.getTypeMessages(), category, false);
+    }
+
+    public static void sendMessage(CommandSender sender, Message message) {
+        sendMessage(sender, message.getMessage(sender), message.getTypeMessages(), CategoryMessages.PRIVATE, true);
+    }
+
+    private static void sendMessage(CommandSender sender, Message message, @NotNull TypeMessages type) {
         sendMessage(sender, message.getMessage(sender), type, CategoryMessages.PRIVATE, true);
     }
 
-    public static void sendMessage(CommandSender sender, String message, @NotNull MessagesType type) {
+    public static void sendString(CommandSender sender, String message, @NotNull TypeMessages type) {
         sendMessage(sender, message, type, CategoryMessages.PRIVATE, true);
     }
 
-    public static void sendMessage(CommandSender sender, String message, @NotNull MessagesType type, CategoryMessages categoryMessages) {
+    public static void sendString(CommandSender sender, String message, @NotNull TypeMessages type, CategoryMessages categoryMessages) {
         sendMessage(sender, message, type, categoryMessages, true);
     }
 
-    public static void sendMessage(CommandSender sender, String message, @NotNull MessagesType type, CategoryMessages categoryMessages, boolean isPrefix) {
+    public static void sendMessage(CommandSender sender, String message, @NotNull TypeMessages type, CategoryMessages categoryMessages, boolean isPrefix) {
         if (sender instanceof Player player) {
             sendMessage(player, message, type, categoryMessages, isPrefix);
         } else {
-            sendMessageConsole(message, type, categoryMessages, isPrefix);
+            logConsole(message, type, categoryMessages, isPrefix);
         }
+    }
+
+    public static void sendArgument(CommandSender sender, ArgumentUse argumentUse, @NotNull TypeMessages type) {
+        sendMessage(sender, argumentUse.toString(), type, CategoryMessages.PRIVATE, true);
     }
 
     ///////////////////////////
     ///////////////////////////
 
     /**
-     * @see #sendMessage(Player, String, MessagesType, CategoryMessages, boolean) sendMessage()
+     * @see #sendMessage(Player, String, TypeMessages, CategoryMessages, boolean) sendMessage()
      */
 
-    public static void sendMessage(Player player, String message, @NotNull MessagesType type) {
+    public static void sendMessage(Player player, String message, @NotNull TypeMessages type) {
         sendMessage(player, message, type, CategoryMessages.PRIVATE, true);
     }
 
     /**
-     * @see #sendMessage(Player, String, MessagesType, CategoryMessages, boolean) sendMessage()
+     * @see #sendMessage(Player, String, TypeMessages, CategoryMessages, boolean) sendMessage()
      */
 
-    public static void sendMessage(Player player, String message, @NotNull MessagesType type, CategoryMessages categoryMessages) {
+    public static void sendMessage(Player player, String message, @NotNull TypeMessages type, CategoryMessages categoryMessages) {
         sendMessage(player, message, type, categoryMessages, true);
     }
 
     /**
      * Todos los mensajes del plugin tiene que pasar por este metodo o por el metodo
-     * {@link #sendMessageConsole(String, MessagesType, CategoryMessages, boolean) sendMessageConsole}.
+     * {@link #logConsole(String, TypeMessages, CategoryMessages, boolean) sendMessageConsole}.
      * Para que todos los mensajes tenga el mismo formato de color y diseño
      *
      * @param player           al jugador que le vas a enviar el mensaje
@@ -99,31 +114,36 @@ public final class MessagesManager {
      * @see #addProprieties
      */
 
-    public static void sendMessage(Player player, String message, @NotNull MessagesType type, CategoryMessages categoryMessages, boolean isPrefix) {
+    public static void sendMessage(Player player, String message, @NotNull TypeMessages type, CategoryMessages categoryMessages, boolean isPrefix) {
         player.sendMessage(applyFinalProprieties(message, type, categoryMessages, isPrefix));
     }
 
     /////////////////////////////
     ////////////////////////////
 
-    public static void sendMessageConsole(Message message, MessagesType type) {
-        sendMessageConsole(message.getMessageLocatePrivate(), type, CategoryMessages.PRIVATE);
+    public static void logConsole(Message message, TypeMessages type) {
+        logConsole(message.getMessageLocatePrivate(), type, CategoryMessages.PRIVATE);
     }
 
-    public static void sendMessageConsole(String message, MessagesType type) {
-        sendMessageConsole(message, type, CategoryMessages.PRIVATE);
+    public static void logConsole(String message, TypeMessages type) {
+        logConsole(message, type, CategoryMessages.PRIVATE);
     }
 
-    public static void sendMessageConsole(String message, MessagesType type, boolean prefix) {
-        sendMessageConsole(message, type, CategoryMessages.PRIVATE, prefix);
+    public static void logConsole(String message, TypeMessages type, boolean prefix) {
+        logConsole(message, type, CategoryMessages.PRIVATE, prefix);
     }
 
-    public static void sendMessageConsole(String message, @NotNull MessagesType type, CategoryMessages categoryMessages) {
-        sendMessageConsole(message, type, categoryMessages, true);
+    public static void logConsole(String message, @NotNull TypeMessages type, CategoryMessages categoryMessages) {
+        logConsole(message, type, categoryMessages, true);
     }
 
-    public static void sendMessageConsole(String message, @NotNull MessagesType type, CategoryMessages categoryMessages, boolean isPrefix) {
-        Bukkit.getConsoleSender().sendMessage(applyFinalProprieties(message, type, categoryMessages, isPrefix));
+    public static void logConsole(String message, @NotNull TypeMessages type, CategoryMessages categoryMessages, boolean isPrefix) {
+        Component component = applyFinalProprieties(message, type, categoryMessages, isPrefix);
+        switch (type){
+            case ERROR -> AviaTerraCore.getInstance().getComponentLogger().error(component);
+            case WARNING -> AviaTerraCore.getInstance().getComponentLogger().warn(component);
+            default -> AviaTerraCore.getInstance().getComponentLogger().info(component);
+        }
     }
 
     ///////////////////////////
@@ -166,7 +186,7 @@ public final class MessagesManager {
      * @return regresa el texto con todos las aplicadas
      */
 
-    public static String addProprieties(String message, @Nullable MessagesType type, boolean isResister, boolean showPrefix) {
+    public static String addProprieties(String message, @Nullable TypeMessages type, boolean isResister, boolean showPrefix) {
         if (isResister) {
             while (Character.isSpaceChar(message.charAt(message.length() - 1))) {
                 message = message.substring(0, message.length() - 1);
@@ -179,7 +199,7 @@ public final class MessagesManager {
         } else {
             s = "";
         }
-        if (type == null) type = MessagesType.NULL;
+        if (type == null) type = TypeMessages.NULL;
         String colorMain = type.getMainColor();
         return s + colorMain + message
                 .replace("<|", type.getSecondColor())
@@ -188,7 +208,7 @@ public final class MessagesManager {
                 .replace("`", "");
     }
 
-    public static Component applyFinalProprieties(String message, @NotNull MessagesType type, CategoryMessages categoryMessages, boolean isPrefix) {
+    public static Component applyFinalProprieties(String message, @NotNull TypeMessages type, CategoryMessages categoryMessages, boolean isPrefix) {
         if (categoryMessages != CategoryMessages.PRIVATE) {
             sendMessageLogDiscord(type, categoryMessages, message);
         }
@@ -196,14 +216,14 @@ public final class MessagesManager {
         return AviaTerraCore.getMiniMessage().deserialize(s);
     }
 
-    private static void sendMessageLogDiscord(MessagesType type, CategoryMessages categoryMessages, String message) {
+    private static void sendMessageLogDiscord(TypeMessages type, CategoryMessages categoryMessages, String message) {
         Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(),() -> {
             String finalMessage;
             switch (type) {
-                case SUCCESS -> finalMessage = "『🟩』 " + message;
-                case INFO -> finalMessage = "『🟦』 " + message;
-                case WARNING -> finalMessage = "『🟨』 " + message;
-                case ERROR -> finalMessage = "『🟥』 " + message;
+                case SUCCESS -> finalMessage = "🟩 " + message;
+                case INFO -> finalMessage = "🟦 " + message;
+                case WARNING -> finalMessage = "🟨 " + message;
+                case ERROR -> finalMessage = "🟥 " + message;
                 default -> {
                     return;
                 }
@@ -225,10 +245,10 @@ public final class MessagesManager {
     }
 
     /**
-     * Le manda un título a jugador respetando el formato de {@link #addProprieties(String, MessagesType, boolean, boolean) addProprieties}
+     * Le manda un título a jugador respetando el formato de {@link #addProprieties(String, TypeMessages, boolean, boolean) addProprieties}
      */
 
-    public static void sendTitle(Player player, String title, String subtitle, int fadeIn, int stay, int fadeOut, MessagesType type) {
+    public static void sendTitle(Player player, String title, String subtitle, int fadeIn, int stay, int fadeOut, TypeMessages type) {
         final Title.Times times = Title.Times.times(Duration.ofMillis(20L *fadeIn), Duration.ofMillis(20L *stay), Duration.ofMillis(20L *fadeOut));
         // Using the times object this title will use 500ms to fade in, stay on screen for 3000ms and then fade out for 1000ms
         final Title t = Title.title(
@@ -256,7 +276,7 @@ public final class MessagesManager {
                 message = Message.valueOf("DEATH_CAUSE_" + cause.name()).getMessage(p);
             }
             Builder tc = Component.text();
-            Component component = tc.append(applyFinalProprieties(message, MessagesType.INFO, CategoryMessages.PRIVATE, true)).build();
+            Component component = tc.append(applyFinalProprieties(message, TypeMessages.INFO, CategoryMessages.PRIVATE, true)).build();
 
             Builder componentVictim = Component.text();
             componentVictim.append(victim.displayName());

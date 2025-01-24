@@ -9,7 +9,7 @@ import net.atcore.data.DataSection;
 import net.atcore.data.FileYaml;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
-import net.atcore.messages.MessagesType;
+import net.atcore.messages.TypeMessages;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
@@ -38,7 +38,7 @@ public class HomeCommand extends BaseTabCommand {
         if (sender instanceof Player player){
             AviaTerraPlayer atp = AviaTerraPlayer.getPlayer(player);
             if (args.length == 0) {
-                MessagesManager.sendMessage(sender, this.getUsage().toString(), MessagesType.ERROR);
+                MessagesManager.sendArgument(sender, this.getUsage(), TypeMessages.ERROR);
                 return;
             }
             switch (args.length) {
@@ -55,11 +55,11 @@ public class HomeCommand extends BaseTabCommand {
                             player.getWorld().playSound(player, Sound.ENTITY_PLAYER_TELEPORT, SoundCategory.PLAYERS, 1, 1);
                             player.teleport(loc, PlayerTeleportEvent.TeleportCause.COMMAND);
                         }else {
-                            MessagesManager.sendMessage(sender, String.format(Message.COMMAND_HOME_CLOSE_SPAWN.getMessage(player), Math.round(distanceMinTp - distance)), MessagesType.ERROR);
+                            MessagesManager.sendFormatMessage(sender, Message.COMMAND_HOME_CLOSE_SPAWN, Math.round(distanceMinTp - distance));
                         }
 
                     }else {
-                        MessagesManager.sendMessage(sender, String.format(Message.COMMAND_HOME_NOT_FOUND.getMessage(player), args[0]), MessagesType.ERROR);
+                        MessagesManager.sendFormatMessage(sender, Message.COMMAND_HOME_NOT_FOUND, args[0]);
                     }
                 }
                 case 2 -> {
@@ -67,35 +67,35 @@ public class HomeCommand extends BaseTabCommand {
                     switch (args[1].toLowerCase()){
                         case "add" -> AviaTerraCore.enqueueTaskAsynchronously(() -> {
                             if (args[0].contains(".")){
-                                MessagesManager.sendMessage(sender, Message.COMMAND_HOME_CONTAINS_POINT, MessagesType.ERROR);
+                                MessagesManager.sendMessage(sender, Message.COMMAND_HOME_CONTAINS_POINT);
                                 return;
                             }
                             if (!Character.isAlphabetic(args[0].charAt(0))) {
-                                MessagesManager.sendMessage(sender, Message.COMMAND_HOME_IS_NOT_ALPHABETICAL, MessagesType.ERROR);
+                                MessagesManager.sendMessage(sender, Message.COMMAND_HOME_IS_NOT_ALPHABETICAL);
                                 return;
                             }
-                            if (atp.getHomes().size() >= 5) {
-                                MessagesManager.sendMessage(sender, Message.COMMAND_HOME_MAX_HOME, MessagesType.ERROR);
+                            if (atp.getHomes().size() >= AviaTerraPlayer.getPlayer(player).getMaxHome()) {
+                                MessagesManager.sendMessage(sender, Message.COMMAND_HOME_MAX_HOME);
                                 return;
                             }
                             atp.getHomes().put(args[0], player.getLocation());
                             fileYaml.saveData();
-                            MessagesManager.sendMessage(sender, Message.COMMAND_HOME_ADD_SUCCESSFUL, MessagesType.SUCCESS);
+                            MessagesManager.sendMessage(sender, Message.COMMAND_HOME_ADD_SUCCESSFUL);
                         });
                         case "remove" -> AviaTerraCore.enqueueTaskAsynchronously(() -> {
                             if (atp.getHomes().containsKey(args[0])) {
                                 atp.getHomes().remove(args[0]);
                                 fileYaml.saveData();
-                                MessagesManager.sendMessage(sender, Message.COMMAND_HOME_REMOVE_SUCCESSFUL, MessagesType.SUCCESS);
+                                MessagesManager.sendMessage(sender, Message.COMMAND_HOME_REMOVE_SUCCESSFUL);
                             }else {
-                                MessagesManager.sendMessage(sender, Message.COMMAND_HOME_NOT_FOUND_REMOVE, MessagesType.ERROR);
+                                MessagesManager.sendMessage(sender, Message.COMMAND_HOME_NOT_FOUND_REMOVE);
                             }
                         });
                     }
                 }
             }
         }else {
-            MessagesManager.sendMessage(sender, Message.COMMAND_GENERIC_NO_PLAYER, MessagesType.ERROR);
+            MessagesManager.sendMessage(sender, Message.COMMAND_GENERIC_NO_PLAYER);
         }
     }
 

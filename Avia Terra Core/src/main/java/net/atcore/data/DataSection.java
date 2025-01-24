@@ -14,7 +14,7 @@ import net.atcore.data.yml.ymls.CacheLimboFlies;
 import net.atcore.data.yml.ymls.MessagesLocaleFile;
 import net.atcore.data.yml.ymls.PlayersDataFiles;
 import net.atcore.messages.MessagesManager;
-import net.atcore.messages.MessagesType;
+import net.atcore.messages.TypeMessages;
 
 import java.util.HashSet;
 
@@ -66,10 +66,10 @@ public class DataSection implements Section {
                     file.reloadFile();
                     file.loadData();
                 }
-                if (!AviaTerraCore.isStarting()) MessagesManager.sendMessageConsole(String.format("Archivo %s recargador exitosamente", file), MessagesType.SUCCESS);
+                if (!AviaTerraCore.isStarting()) MessagesManager.logConsole(String.format("Archivo %s recargador exitosamente", file), TypeMessages.SUCCESS);
             }
             cacheLimboFlies.reloadConfigs();
-            MessagesManager.sendMessageConsole("La cache del limbo fue recarga exitosamente", MessagesType.SUCCESS);
+            MessagesManager.logConsole("La cache del limbo fue recarga exitosamente", TypeMessages.SUCCESS);
         });
     }
 

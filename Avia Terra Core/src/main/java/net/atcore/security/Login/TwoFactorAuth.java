@@ -4,7 +4,7 @@ import lombok.Setter;
 import lombok.experimental.UtilityClass;
 import net.atcore.AviaTerraCore;
 import net.atcore.messages.MessagesManager;
-import net.atcore.messages.MessagesType;
+import net.atcore.messages.TypeMessages;
 import net.atcore.security.Login.model.CodeAuth;
 import net.atcore.utils.GlobalUtils;
 import net.dv8tion.jda.api.entities.User;
@@ -24,7 +24,6 @@ import java.util.Properties;
 import java.util.UUID;
 
 import static net.atcore.messages.Message.*;
-import static net.atcore.messages.MessagesManager.applyFinalProprieties;
 import static net.atcore.messages.MessagesManager.sendMessage;
 
 @UtilityClass
@@ -72,7 +71,7 @@ public class TwoFactorAuth {
                     "text/html; charset=utf-8");
 
             Transport.send(message);
-            MessagesManager.sendMessageConsole(String.format(LOGIN_TWO_FACTOR_SEND_CODE_DISCORD_LOG.getMessage(player), recipientEmail, name), MessagesType.INFO);
+            MessagesManager.logConsole(String.format(LOGIN_TWO_FACTOR_SEND_CODE_DISCORD_LOG.getMessage(player), recipientEmail, name), TypeMessages.INFO);
 
         } catch (MessagingException e) {
             throw new RuntimeException(e);
@@ -93,9 +92,9 @@ public class TwoFactorAuth {
                         String.format(format.getSubtitle().toString(), code.getCode().toString())
                        )
                 )
-        ).queue(success -> sendMessage(player, LOGIN_TWO_FACTOR_ARRIVED_MESSAGE_DISCORD, MessagesType.SUCCESS));
+        ).queue(success -> sendMessage(player, LOGIN_TWO_FACTOR_ARRIVED_MESSAGE_DISCORD));
 
-        MessagesManager.sendMessageConsole(String.format(LOGIN_TWO_FACTOR_SEND_CODE_GMAIL_LOG.getMessage(player), player.getName(), id), MessagesType.INFO);
+        MessagesManager.logConsole(String.format(LOGIN_TWO_FACTOR_SEND_CODE_GMAIL_LOG.getMessage(player), player.getName(), id), TypeMessages.INFO);
     }
 
     public boolean checkCode(Player player, String code) {
@@ -106,23 +105,23 @@ public class TwoFactorAuth {
                     if (code.equals(codeAuth.getCode().toString())) {
                         return true;
                     }else {
-                        sendMessage(player, LOGIN_TWO_FACTOR_CODE_NO_EQUAL, MessagesType.ERROR);
+                        sendMessage(player, LOGIN_TWO_FACTOR_CODE_NO_EQUAL);
                     }
                 }else {
-                    sendMessage(player, LOGIN_TWO_FACTOR_EXPIRE_CODE, MessagesType.ERROR);
+                    sendMessage(player, LOGIN_TWO_FACTOR_EXPIRE_CODE);
                     CODES.remove(player.getUniqueId());
                 }
             }else {
-                sendMessage(player, LOGIN_TWO_FACTOR_UUID_NO_EQUAL, MessagesType.ERROR);
+                sendMessage(player, LOGIN_TWO_FACTOR_UUID_NO_EQUAL);
             }
         }else {
-            sendMessage(player, LOGIN_TWO_FACTOR_NO_FOUND_CODE, MessagesType.ERROR);
+            sendMessage(player, LOGIN_TWO_FACTOR_NO_FOUND_CODE);
         }
         return false;
     }
 
     public enum MediaAuth {
         DISCORD,
-        GMAIL;
+        GMAIL
     }
 }

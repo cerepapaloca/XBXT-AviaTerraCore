@@ -6,7 +6,7 @@ import net.atcore.command.CommandUtils;
 import net.atcore.command.ModeTabPlayers;
 import net.atcore.command.ArgumentUse;
 import net.atcore.messages.Message;
-import net.atcore.messages.MessagesType;
+import net.atcore.messages.TypeMessages;
 import net.atcore.utils.GlobalUtils;
 import net.atcore.utils.RangeType;
 import net.luckperms.api.model.group.Group;
@@ -20,6 +20,7 @@ import org.bukkit.persistence.PersistentDataType;
 import java.util.ArrayList;
 import java.util.List;
 
+import static net.atcore.messages.MessagesManager.sendArgument;
 import static net.atcore.messages.MessagesManager.sendMessage;
 import static net.atcore.utils.GlobalUtils.addItemPlayer;
 
@@ -35,8 +36,8 @@ public class AddRangeCommand extends BaseTabCommand {
     @Override
     public void execute(CommandSender sender, String[] args) {
         switch (args.length){
-            case 0 -> sendMessage(sender, this.getUsage().toString(), MessagesType.ERROR);
-            case 1 -> sendMessage(sender, Message.COMMAND_ADD_RANGE_MISSING_ARGUMENT_TIME, MessagesType.ERROR);
+            case 0 -> sendArgument(sender, this.getUsage(), TypeMessages.ERROR);
+            case 1 -> sendMessage(sender, Message.COMMAND_ADD_RANGE_MISSING_ARGUMENT_TIME);
             default -> {
                 List<Group> groups = AviaTerraCore.getLp().getGroupManager().getLoadedGroups().stream().toList();
                 List<String> nameRage = new ArrayList<>();
@@ -47,7 +48,7 @@ public class AddRangeCommand extends BaseTabCommand {
                     try {
                         time = CommandUtils.StringToMilliseconds(args[1], true);
                     }catch (RuntimeException e){
-                        sendMessage(sender, Message.COMMAND_GENERIC_FORMAT_DATE_ERROR, MessagesType.ERROR);
+                        sendMessage(sender, Message.COMMAND_GENERIC_FORMAT_DATE_ERROR);
                         return;
                     }
                     RangeType range = RangeType.valueOf(args[0].toUpperCase());
@@ -71,14 +72,14 @@ public class AddRangeCommand extends BaseTabCommand {
                         if (sender instanceof Player playerSender){
                             addItemPlayer(item, playerSender, false, true, true);
                         }else{
-                            sendMessage(sender, Message.COMMAND_GENERIC_NO_PLAYER, MessagesType.ERROR);
+                            sendMessage(sender, Message.COMMAND_GENERIC_NO_PLAYER);
                         }
                     }else{
                         CommandUtils.executeForPlayer(sender, args[2], true, fakePlayer -> GlobalUtils.addItemPlayer(item, fakePlayer.player(), false, true, true));
-                        sendMessage(sender, Message.COMMAND_ADD_RANGE_SUCCESSFUL, MessagesType.SUCCESS);
+                        sendMessage(sender, Message.COMMAND_ADD_RANGE_SUCCESSFUL);
                     }
                 }else{
-                    sendMessage(sender, Message.COMMAND_ADD_RANGE_MISSING_ARGUMENT_TIME, MessagesType.ERROR);
+                    sendMessage(sender, Message.COMMAND_ADD_RANGE_MISSING_ARGUMENT_TIME);
                 }
             }
 

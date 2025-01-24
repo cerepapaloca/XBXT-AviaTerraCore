@@ -6,7 +6,7 @@ import net.atcore.command.CommandUtils;
 import net.atcore.command.ModeTabPlayers;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
-import net.atcore.messages.MessagesType;
+import net.atcore.messages.TypeMessages;
 import org.bukkit.command.CommandSender;
 
 public class SayCommand extends BaseCommand {
@@ -24,19 +24,19 @@ public class SayCommand extends BaseCommand {
     @Override
     public void execute(CommandSender sender, String[] args) throws Exception {
         if (args.length == 0){
-            MessagesManager.sendMessage(sender, this.getUsage().toString(), MessagesType.ERROR);
+            MessagesManager.sendArgument(sender, this.getUsage(), TypeMessages.ERROR);
             return;
         }
         if (args.length == 1) {
-            MessagesManager.sendMessage(sender, Message.COMMAND_SAY_MISSING_ARGS, MessagesType.ERROR);
+            MessagesManager.sendMessage(sender, Message.COMMAND_SAY_MISSING_ARGS);
         }else {
             StringBuilder message = new StringBuilder();
             for (int i = 1; i < args.length; i++){
                 message.append(args[i]).append(" ");
             }
             CommandUtils.executeForPlayer(sender, args[0], true, dataTemporalPlayer ->
-                    MessagesManager.sendMessage(dataTemporalPlayer.player(),SUB_PREFIX + message, MessagesType.INFO));
-            MessagesManager.sendMessage(sender,  message.toString(), MessagesType.INFO);
+                    MessagesManager.sendMessage(dataTemporalPlayer.player(),SUB_PREFIX + message, TypeMessages.INFO));
+            MessagesManager.sendString(sender,  message.toString(), TypeMessages.INFO);
         }
     }
 }

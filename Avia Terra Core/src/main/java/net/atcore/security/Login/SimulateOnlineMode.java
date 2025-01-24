@@ -11,6 +11,7 @@ import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 
 import lombok.RequiredArgsConstructor;
+import net.atcore.messages.MessagesManager;
 import net.atcore.security.Login.model.LoginData;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -34,8 +35,8 @@ import lombok.Getter;
 import net.atcore.Config;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.Message;
-import static net.atcore.messages.MessagesManager.sendMessageConsole;
-import net.atcore.messages.MessagesType;
+import static net.atcore.messages.MessagesManager.logConsole;
+import net.atcore.messages.TypeMessages;
 import net.atcore.security.AntiBot;
 import net.atcore.security.SecuritySection;
 import net.atcore.security.VerificationPremium;
@@ -86,7 +87,7 @@ public class SimulateOnlineMode {
                 case PREMIUM -> startLoginPremium(name, uuid, player);
                 case UNKNOWN -> GlobalUtils.kickPlayer(player, Message.LOGIN_KICK_GENERIC.getMessage(player));
             }
-            sendMessageConsole(String.format(Message.LOGIN_START_PROTOCOL_LOG.getMessageLocatePrivate(), state.name().toLowerCase(), name, inetAddress.getHostName(), inetAddress.getHostAddress()), MessagesType.INFO, CategoryMessages.LOGIN);
+            logConsole(String.format(Message.LOGIN_START_PROTOCOL_LOG.getMessageLocatePrivate(), state.name().toLowerCase(), name, inetAddress.getHostName(), inetAddress.getHostAddress()), TypeMessages.INFO, CategoryMessages.LOGIN);
             return state == StateLogins.PREMIUM; //se cancela por que asi el servidor no se da cuenta de que a recibido un paquete
         }
         return false;
@@ -146,7 +147,7 @@ public class SimulateOnlineMode {
      */
 
     public static boolean enableEncryption(SecretKey loginKey, Player player) throws IllegalArgumentException {
-        sendMessageConsole("Se inicio cifrado", MessagesType.INFO);
+        MessagesManager.logConsole("Se inicio cifrado", TypeMessages.INFO);
         // Initialize method reflections
         if (encryptKeyMethod == null || encryptMethod == null) {
             Class<?> networkManagerClass = MinecraftReflection.getNetworkManagerClass();

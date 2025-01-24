@@ -60,7 +60,7 @@ public class ConsoleDiscord {
                     );
 
                 }).attach().schedule();
-                MessagesManager.sendMessageConsole("discord bot " + MessagesType.SUCCESS.getMainColor() + "Ok", MessagesType.INFO, false);
+                MessagesManager.logConsole("discord bot " + TypeMessages.SUCCESS.getMainColor() + "Ok", TypeMessages.INFO, false);
 
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);

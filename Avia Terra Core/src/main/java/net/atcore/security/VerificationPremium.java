@@ -8,7 +8,7 @@ import com.google.common.hash.Hashing;
 import net.atcore.AviaTerraCore;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.Message;
-import net.atcore.messages.MessagesType;
+import net.atcore.messages.TypeMessages;
 import net.atcore.security.Login.model.LoginData;
 import net.atcore.security.Login.model.SessionData;
 import net.atcore.security.Login.LoginManager;
@@ -27,7 +27,7 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
 
-import static net.atcore.messages.MessagesManager.sendMessageConsole;
+import static net.atcore.messages.MessagesManager.logConsole;
 import static net.atcore.security.Login.SimulateOnlineMode.LIST_UUID_PREMIUM;
 import static net.atcore.security.Login.SimulateOnlineMode.MAP_TOKENS;
 
@@ -70,7 +70,7 @@ public class VerificationPremium {
                             if (ip.equals(inetAddress.getHostAddress())){// Mira si la ip son la misma ip
                                 // Se envía un paquete falso al servidor para que siga con el protocolo
                                 SimulateOnlineMode.FakeStartPacket(verification.getName(), verification.getId(), player);
-                                sendMessageConsole(String.format(Message.LOGIN_PREMIUM_VALIDATION_OK.getMessageLocatePrivate(), name), MessagesType.SUCCESS, CategoryMessages.LOGIN);
+                                logConsole(String.format(Message.LOGIN_PREMIUM_VALIDATION_OK.getMessageLocatePrivate(), name), TypeMessages.SUCCESS, CategoryMessages.LOGIN);
                                 String userName = verification.getName();
                                 LIST_UUID_PREMIUM.put(userName, verification);
                                 LoginData loginData = LoginManager.getDataLogin(userName);
@@ -83,23 +83,23 @@ public class VerificationPremium {
                                 //LoginManager.checkLoginIn(player, false);//esto para que siga el protocolo
                             }else{
                                 GlobalUtils.kickPlayer(player, Message.LOGIN_KICK_PREMIUM_VALIDATION.getMessageLocateDefault());
-                                sendMessageConsole(String.format(Message.LOGIN_PREMIUM_VALIDATION_FAILED_LOG_0.getMessageLocatePrivate(), name, inetAddress), MessagesType.WARNING, CategoryMessages.LOGIN);
+                                logConsole(String.format(Message.LOGIN_PREMIUM_VALIDATION_FAILED_LOG_0.getMessageLocatePrivate(), name, inetAddress), TypeMessages.WARNING, CategoryMessages.LOGIN);
                             }
                         }else {
                             GlobalUtils.kickPlayer(player, Message.LOGIN_KICK_PREMIUM_VALIDATION.getMessageLocateDefault());
-                            sendMessageConsole(String.format(Message.LOGIN_PREMIUM_VALIDATION_FAILED_LOG_1.getMessageLocatePrivate(), name, inetAddress), MessagesType.WARNING, CategoryMessages.LOGIN);
+                            logConsole(String.format(Message.LOGIN_PREMIUM_VALIDATION_FAILED_LOG_1.getMessageLocatePrivate(), name, inetAddress), TypeMessages.WARNING, CategoryMessages.LOGIN);
                         }
                     }else{
                         GlobalUtils.kickPlayer(player, Message.LOGIN_KICK_PREMIUM_VALIDATION.getMessageLocateDefault());
-                        sendMessageConsole(String.format(Message.LOGIN_PREMIUM_VALIDATION_FAILED_LOG_2.getMessageLocatePrivate(), name, inetAddress), MessagesType.WARNING, CategoryMessages.LOGIN);
+                        logConsole(String.format(Message.LOGIN_PREMIUM_VALIDATION_FAILED_LOG_2.getMessageLocatePrivate(), name, inetAddress), TypeMessages.WARNING, CategoryMessages.LOGIN);
                     }
                 }else {
                     GlobalUtils.kickPlayer(player, Message.LOGIN_KICK_PREMIUM_VALIDATION.getMessageLocateDefault());
-                    sendMessageConsole(String.format(Message.LOGIN_PREMIUM_VALIDATION_FAILED_LOG_3.getMessageLocatePrivate(), name, inetAddress), MessagesType.WARNING, CategoryMessages.LOGIN);
+                    logConsole(String.format(Message.LOGIN_PREMIUM_VALIDATION_FAILED_LOG_3.getMessageLocatePrivate(), name, inetAddress), TypeMessages.WARNING, CategoryMessages.LOGIN);
                 }
             }else{
                 GlobalUtils.kickPlayer(player, Message.LOGIN_KICK_PREMIUM_VALIDATION.getMessageLocateDefault());
-                sendMessageConsole(String.format(Message.LOGIN_PREMIUM_VALIDATION_FAILED_LOG_4.getMessageLocatePrivate(), inetAddress.toString()), MessagesType.WARNING, CategoryMessages.LOGIN);
+                logConsole(String.format(Message.LOGIN_PREMIUM_VALIDATION_FAILED_LOG_4.getMessageLocatePrivate(), inetAddress.toString()), TypeMessages.WARNING, CategoryMessages.LOGIN);
             }
         } catch (Exception e) {
             throw new RuntimeException(e);

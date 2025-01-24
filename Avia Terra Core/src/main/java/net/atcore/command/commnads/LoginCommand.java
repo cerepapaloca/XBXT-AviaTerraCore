@@ -5,7 +5,7 @@ import net.atcore.command.BaseCommand;
 import net.atcore.command.ArgumentUse;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
-import net.atcore.messages.MessagesType;
+import net.atcore.messages.TypeMessages;
 import net.atcore.moderation.ban.ContextBan;
 import net.atcore.moderation.ModerationSection;
 import net.atcore.security.Login.*;
@@ -40,7 +40,7 @@ public class LoginCommand extends BaseCommand {
             if (args.length > 0) {
                 LoginData loginData = LoginManager.getDataLogin(player);
                 if (loginData.getRegister().getStateLogins() == StateLogins.PREMIUM){
-                    MessagesManager.sendMessage(player, Message.COMMAND_REGISTER_IS_PREMIUM, MessagesType.ERROR);
+                    MessagesManager.sendMessage(player, Message.COMMAND_REGISTER_IS_PREMIUM);
                     return;
                 }
                 if (loginData.getRegister().getPasswordShaded() != null) {
@@ -58,17 +58,17 @@ public class LoginCommand extends BaseCommand {
                         }
                     }
                 }else {
-                    sendMessage(player, Message.COMMAND_LOGIN_NO_REGISTER, MessagesType.ERROR);
+                    sendMessage(player, Message.COMMAND_LOGIN_NO_REGISTER);
                 }
             }else {
-                sendMessage(player, Message.COMMAND_LOGIN_MISSING_ARGS, MessagesType.ERROR);
+                sendMessage(player, Message.COMMAND_LOGIN_MISSING_ARGS);
             }
         }
     }
 
     private void preStartPlay(Player player, LoginData loginData) {
         if (LoginManager.checkLoginIn(player)){
-            sendMessage(player, Message.COMMAND_LOGIN_ALREADY, MessagesType.ERROR);
+            sendMessage(player, Message.COMMAND_LOGIN_ALREADY);
             return;
         }
         TwoFactorAuth.CODES.remove(player.getUniqueId());
@@ -92,8 +92,8 @@ public class LoginCommand extends BaseCommand {
             LoginManager.updateLoginDataBase(GlobalUtils.getRealName(player), Objects.requireNonNull(player.getAddress()).getAddress());
             MessagesManager.sendTitle(player, Message.COMMAND_LOGIN_SUCCESSFUL_TITLE.getMessage(player),
                     String.format(Message.COMMAND_LOGIN_SUCCESSFUL_SUBTITLE.getMessage(player), player.getName()),
-                    20, 20*3, 40, MessagesType.INFO);
-            sendMessage(player, Message.COMMAND_LOGIN_SUCCESSFUL_CHAT, MessagesType.SUCCESS);
+                    20, 20*3, 40, TypeMessages.INFO);
+            sendMessage(player, Message.COMMAND_LOGIN_SUCCESSFUL_CHAT);
         });
     }
 

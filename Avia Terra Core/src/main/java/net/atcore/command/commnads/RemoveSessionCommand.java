@@ -5,10 +5,11 @@ import net.atcore.command.CommandUtils;
 import net.atcore.command.ModeTabPlayers;
 import net.atcore.command.ArgumentUse;
 import net.atcore.messages.Message;
-import net.atcore.messages.MessagesType;
+import net.atcore.messages.TypeMessages;
 import net.atcore.security.Login.LoginManager;
 import org.bukkit.command.CommandSender;
 
+import static net.atcore.messages.MessagesManager.sendArgument;
 import static net.atcore.messages.MessagesManager.sendMessage;
 
 public class RemoveSessionCommand extends BaseCommand {
@@ -28,9 +29,9 @@ public class RemoveSessionCommand extends BaseCommand {
                 LoginManager.getDataLogin(dataTemporalPlayer.player()).setSession(null);
                 //GlobalUtils.kickPlayer(dataTemporalPlayer.player(), "Vuelve a iniciar sesión");
             });
-            sendMessage(sender, Message.COMMAND_REMOVE_SESSION_SUCCESSFUL, MessagesType.SUCCESS);
+            sendMessage(sender, Message.COMMAND_REMOVE_SESSION_SUCCESSFUL);
         }else{
-            sendMessage(sender, this.getUsage().toString(), MessagesType.ERROR);
+            sendArgument(sender, this.getUsage(), TypeMessages.ERROR);
         }
     }
 }

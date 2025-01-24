@@ -6,7 +6,7 @@ import net.atcore.command.BaseTabCommand;
 import net.atcore.command.ModeTabPlayers;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
-import net.atcore.messages.MessagesType;
+import net.atcore.messages.TypeMessages;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
@@ -36,13 +36,13 @@ public class TpaCommand extends BaseTabCommand {
                     case "Y" -> {
                         AviaTerraPlayer atp = AviaTerraPlayer.getPlayer(p);
                         if (atp.getListTpa().isEmpty()){
-                            atp.sendMessage(Message.COMMAND_TPA_NO_FOUND, MessagesType.ERROR);
+                            atp.sendMessage(Message.COMMAND_TPA_NO_FOUND);
                             return;
                         }
                         TpaRequest request = atp.getListTpa().getFirst();
                         Player player = Bukkit.getPlayer(request.uuid);
                         if (request.dateCreated < System.currentTimeMillis()) {
-                            MessagesManager.sendMessage(sender, Message.COMMAND_TPA_EXPIRE, MessagesType.ERROR);
+                            MessagesManager.sendMessage(sender, Message.COMMAND_TPA_EXPIRE);
                             atp.getListTpa().clear();
                             return;
                         }
@@ -50,7 +50,7 @@ public class TpaCommand extends BaseTabCommand {
                             player.teleport(p, PlayerTeleportEvent.TeleportCause.COMMAND);
                             player.getWorld().playSound(player, Sound.ENTITY_PLAYER_TELEPORT, SoundCategory.PLAYERS, 1, 1);
                         }else {
-                            MessagesManager.sendMessage(sender, Message.COMMAND_TPA_WAS_DISCONNECTED, MessagesType.ERROR);
+                            MessagesManager.sendMessage(sender, Message.COMMAND_TPA_WAS_DISCONNECTED);
                         }
                         atp.getListTpa().clear();
                     }
@@ -61,22 +61,22 @@ public class TpaCommand extends BaseTabCommand {
                     default -> {
                         Player player = Bukkit.getPlayer(args[0]);
                         if (p.getName().equals(args[0])) {
-                            MessagesManager.sendMessage(sender, Message.COMMAND_TPA_NO_FOUND, MessagesType.ERROR);
+                            MessagesManager.sendMessage(sender, Message.COMMAND_TPA_NO_FOUND);
                             return;
                         }
                         if (player != null) {
                             AviaTerraPlayer atp = AviaTerraPlayer.getPlayer(player);
-                            MessagesManager.sendMessage(sender, String.format(Message.COMMAND_TPA_SEND.getMessage(player), p.getName()), MessagesType.SUCCESS);
-                            atp.sendMessage(String.format(Message.COMMAND_TPA_RECEIVE.getMessage(player), p.getName()), MessagesType.INFO);
+                            MessagesManager.sendFormatMessage(sender, Message.COMMAND_TPA_SEND, p.getName());
+                            MessagesManager.sendFormatMessage(atp.getPlayer(), Message.COMMAND_TPA_RECEIVE, p.getName());
                             atp.getListTpa().add(new TpaRequest(p.getUniqueId(), System.currentTimeMillis() + 1000*60*5));
                         }else {
-                            MessagesManager.sendMessage(sender, Message.COMMAND_GENERIC_PLAYER_NOT_FOUND, MessagesType.ERROR);
+                            MessagesManager.sendMessage(sender, Message.COMMAND_GENERIC_PLAYER_NOT_FOUND);
                         }
                     }
                 }
             }
         }else {
-            MessagesManager.sendMessage(sender, Message.COMMAND_GENERIC_NO_PLAYER, MessagesType.ERROR);
+            MessagesManager.sendMessage(sender, Message.COMMAND_GENERIC_NO_PLAYER);
         }
     }
 

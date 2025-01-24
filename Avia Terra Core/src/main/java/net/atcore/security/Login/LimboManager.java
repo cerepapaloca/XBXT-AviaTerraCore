@@ -8,7 +8,7 @@ import net.atcore.data.yml.CacheLimboFile;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
-import net.atcore.messages.MessagesType;
+import net.atcore.messages.TypeMessages;
 import net.atcore.security.Login.model.LimboData;
 import net.atcore.security.Login.model.LoginData;
 import net.atcore.utils.GlobalUtils;
@@ -47,8 +47,8 @@ public class LimboManager {
                                     Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> LimboManager.createLimboMode(player, reasonLimbo));
                                 }
                             }else {
-                                MessagesManager.sendMessageConsole(String.format("Los registros de %s y el floodGate dieron datos inconsistentes", player.getName()), MessagesType.WARNING, CategoryMessages.LOGIN);
-                                GlobalUtils.synchronizeKickPlayer(player, "Hubo un error con conexión del servidor, vuele a intentar a entrar");
+                                MessagesManager.logConsole(String.format("Los registros de %s y el floodGate dieron datos inconsistentes", player.getName()), TypeMessages.WARNING, CategoryMessages.LOGIN);
+                                GlobalUtils.synchronizeKickPlayer(player, Message.LOGIN_LIMBO_BEDROCK_ERROR);
                             }
                         }
                         case NO_REGISTER -> Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> LimboManager.createLimboMode(player, reasonLimbo));
@@ -60,12 +60,12 @@ public class LimboManager {
         }catch (Exception e){// Esto es un porsi acaso hay un error. Es mejor hacer un kick por seguridad
             listInProcess.remove(player.getUniqueId());
             MessagesManager.sendWaringException("Error al pasar al limbo mode", e);
-            GlobalUtils.synchronizeKickPlayer(player, Message.LOGIN_KICK_ENTRY_LIMBO_ERROR.getMessage(player));
+            GlobalUtils.synchronizeKickPlayer(player, Message.LOGIN_KICK_ENTRY_LIMBO_ERROR);
         }
     }
 
     public void createLimboMode(Player player, ReasonLimbo reasonLimbo){
-        MessagesManager.sendMessageConsole(String.format(Message.LOGIN_LIMBO_INITIATED_LOG.getMessage(player), player.getName()), MessagesType.INFO, CategoryMessages.LOGIN);
+        MessagesManager.logConsole(String.format(Message.LOGIN_LIMBO_INITIATED_LOG.getMessage(player), player.getName()), TypeMessages.INFO, CategoryMessages.LOGIN);
         LoginData loginData = LoginManager.getDataLogin(player);
         String uuidString = GlobalUtils.getRealUUID(player).toString();
         FileYaml file = DataSection.getCacheLimboFlies().getConfigFile(uuidString, false);
@@ -79,7 +79,7 @@ public class LimboManager {
                         // Carga los datos del usuario
                         // Se realiza de manera asincrónica por qué no se requiere los datos del usuario para crear el LimboData
                         cacheLimbo.loadData();
-                        MessagesManager.sendMessageConsole(String.format("Se restauro el usuario %s usando el .yaml", player.getName()), MessagesType.INFO, CategoryMessages.LOGIN);
+                        MessagesManager.logConsole(String.format("Se restauro el usuario %s usando el .yaml", player.getName()), TypeMessages.INFO, CategoryMessages.LOGIN);
                     });
                 }
             }
@@ -114,13 +114,13 @@ public class LimboManager {
     private void sendMessage(Player player, ReasonLimbo reasonLimbo) {
         switch (reasonLimbo){
             case NO_SESSION -> {
-                MessagesManager.sendTitle(player, Message.LOGIN_LIMBO_INITIATED_BY_SESSION_TITLE.getMessage(player), Message.LOGIN_LIMBO_INITIATED_BY_SESSION_SUBTITLE.getMessage(player), 30, LIMBO_TIME, 30, MessagesType.INFO);
-                MessagesManager.sendMessage(player, Message.LOGIN_LIMBO_INITIATED_BY_SESSION_CHAT.getMessage(player), MessagesType.INFO);
+                MessagesManager.sendTitle(player, Message.LOGIN_LIMBO_INITIATED_BY_SESSION_TITLE.getMessage(player), Message.LOGIN_LIMBO_INITIATED_BY_SESSION_SUBTITLE.getMessage(player), 30, LIMBO_TIME, 30, TypeMessages.INFO);
+                MessagesManager.sendMessage(player, Message.LOGIN_LIMBO_INITIATED_BY_SESSION_CHAT.getMessage(player), TypeMessages.INFO);
                 startTimeOut(player, Message.LOGIN_LIMBO_TIME_OUT_SESSION.getMessage(player));
             }
             case NO_REGISTER -> {
-                MessagesManager.sendTitle(player, Message.LOGIN_LIMBO_INITIATED_BY_REGISTER_TITLE.getMessage(player), Message.LOGIN_LIMBO_INITIATED_BY_REGISTER_SUBTITLE.getMessage(player), 30, LIMBO_TIME, 30, MessagesType.INFO);
-                MessagesManager.sendMessage(player, Message.LOGIN_LIMBO_INITIATED_BY_REGISTER_CHAT.getMessage(player), MessagesType.INFO);
+                MessagesManager.sendTitle(player, Message.LOGIN_LIMBO_INITIATED_BY_REGISTER_TITLE.getMessage(player), Message.LOGIN_LIMBO_INITIATED_BY_REGISTER_SUBTITLE.getMessage(player), 30, LIMBO_TIME, 30, TypeMessages.INFO);
+                MessagesManager.sendMessage(player, Message.LOGIN_LIMBO_INITIATED_BY_REGISTER_CHAT.getMessage(player), TypeMessages.INFO);
                 startTimeOut(player, Message.LOGIN_LIMBO_TIME_OUT_REGISTER.getMessage(player));
             }
         }

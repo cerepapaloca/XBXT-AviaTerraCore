@@ -6,7 +6,7 @@ import net.atcore.command.BaseCommand;
 import net.atcore.data.sql.DataBaseRegister;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
-import net.atcore.messages.MessagesType;
+import net.atcore.messages.TypeMessages;
 import net.atcore.security.Login.LoginManager;
 import net.atcore.security.Login.StateLogins;
 import net.atcore.security.Login.model.LoginData;
@@ -14,7 +14,6 @@ import net.atcore.security.Login.model.RegisterData;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.geysermc.floodgate.api.FloodgateApi;
 
 public class PremiumCommand extends BaseCommand {
 
@@ -34,18 +33,18 @@ public class PremiumCommand extends BaseCommand {
         if (sender instanceof Player player) {
             LoginData data = LoginManager.getDataLogin(player);
             switch (data.getRegister().getStateLogins()){
-                case PREMIUM -> MessagesManager.sendMessage(player, Message.COMMAND_PREMIUM_IS_PREMIUM, MessagesType.ERROR);
-                case CRACKED -> MessagesManager.sendMessage(player, Message.COMMAND_PREMIUM_IS_CRACKED, MessagesType.ERROR);
+                case PREMIUM -> MessagesManager.sendMessage(player, Message.COMMAND_PREMIUM_IS_PREMIUM);
+                case CRACKED -> MessagesManager.sendMessage(player, Message.COMMAND_PREMIUM_IS_CRACKED);
                 case SEMI_CRACKED -> AviaTerraCore.enqueueTaskAsynchronously(() -> {
                     DataBaseRegister.changeState(GlobalUtils.getRealName(player), StateLogins.PREMIUM);
                     RegisterData register = LoginManager.getDataLogin(player).getRegister();
                     register.setStateLogins(StateLogins.PREMIUM);
                     register.setTemporary(false);
-                    GlobalUtils.synchronizeKickPlayer(player, Message.COMMAND_PREMIUM_IS_CRACKED.getMessage(player));
+                    GlobalUtils.synchronizeKickPlayer(player, Message.COMMAND_PREMIUM_IS_CRACKED);
                 });
             }
         }else {
-            MessagesManager.sendMessage(sender, Message.COMMAND_GENERIC_NO_PLAYER, MessagesType.ERROR);
+            MessagesManager.sendMessage(sender, Message.COMMAND_GENERIC_NO_PLAYER);
         }
     }
 }

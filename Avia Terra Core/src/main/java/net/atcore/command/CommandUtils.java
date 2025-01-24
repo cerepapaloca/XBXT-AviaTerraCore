@@ -4,7 +4,7 @@ import lombok.experimental.UtilityClass;
 import net.atcore.AviaTerraCore;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
-import net.atcore.messages.MessagesType;
+import net.atcore.messages.TypeMessages;
 import net.atcore.security.Login.LoginManager;
 import net.atcore.utils.GlobalConstantes;
 import net.atcore.utils.ModeTab;
@@ -89,10 +89,6 @@ public final class CommandUtils {
             return listTab(arg, listOthers.toArray(new String[0]));
         }
     }
-
-    /**
-     * Variación de {@link #listTab(String, List, ModeTab)}
-     */
 
     /**
      * Variación de {@link #listTab(String, List, ModeTab)}
@@ -229,7 +225,7 @@ public final class CommandUtils {
         if (sender == null) return;
         if (names.isEmpty()) return; // Si no esta vaciá es por un jugador no se pudo borrar por que no esta conectado
         if (safeMode) {
-            if (arg.charAt(0) != '!') MessagesManager.sendMessage(sender, String.format(Message.COMMAND_GENERIC_PLAYERS_NOT_FOUND.getMessage(sender), names), MessagesType.WARNING);
+            if (arg.charAt(0) != '!') MessagesManager.sendFormatMessage(sender, Message.COMMAND_GENERIC_PLAYERS_NOT_FOUND, names);
         }else {
             for (String name : names){ // Si no esta en modo seguro crea un TemporalPlayerData con los nombres de los usuarios no conectados
                 action.accept(new TemporalPlayerData(name, null));

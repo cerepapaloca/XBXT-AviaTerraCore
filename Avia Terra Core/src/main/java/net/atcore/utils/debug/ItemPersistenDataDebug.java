@@ -1,7 +1,7 @@
 package net.atcore.utils.debug;
 
 import net.atcore.aviaterraplayer.AviaTerraPlayer;
-import net.atcore.messages.MessagesType;
+import net.atcore.messages.TypeMessages;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -18,16 +18,16 @@ public final class ItemPersistenDataDebug implements RunTest {
     @Override
     public void runTest(AviaTerraPlayer player) {
         if (player.getPlayer().getInventory().getItemInMainHand().getItemMeta() == null){
-            player.sendMessage("Tiene que tener un item en la mano", MessagesType.ERROR);
+            player.sendString("Tiene que tener un item en la mano", TypeMessages.ERROR);
             return;
         }
         Map<String, Object> map = getPersistentData(player.getPlayer().getInventory().getItemInMainHand());
         if (map.isEmpty()){
-            player.sendMessage("No contiene datos el item", MessagesType.INFO);
+            player.sendString("No contiene datos el item", TypeMessages.INFO);
             return;
         }
         for (String key : map.keySet()) {
-            player.sendMessage(String.format("Llave: <|%s|> Contiene: <|%s|>", key, map.get(key)), MessagesType.INFO);
+            player.sendString(String.format("Llave: <|%s|> Contiene: <|%s|>", key, map.get(key)), TypeMessages.INFO);
         }
     }
 

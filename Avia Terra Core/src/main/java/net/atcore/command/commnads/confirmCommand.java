@@ -5,7 +5,7 @@ import net.atcore.command.BaseCommand;
 import net.atcore.command.CommandHandler;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
-import net.atcore.messages.MessagesType;
+import net.atcore.messages.TypeMessages;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -27,11 +27,11 @@ public class confirmCommand extends BaseCommand {
             if (command != null){
                 Bukkit.dispatchCommand(player, command);
             }else {
-                MessagesManager.sendMessage(player, Message.COMMAND_CONFIRM_NOT_FOUND, MessagesType.ERROR);
+                MessagesManager.sendMessage(player, Message.COMMAND_CONFIRM_NOT_FOUND);
             }
 
         }else {
-            MessagesManager.sendMessage(sender, Message.COMMAND_GENERIC_NO_PLAYER, MessagesType.ERROR);
+            MessagesManager.sendMessage(sender, Message.COMMAND_GENERIC_NO_PLAYER);
         }
     }
 }

@@ -11,9 +11,8 @@ import net.atcore.data.yml.CacheLimboFile;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
-import net.atcore.messages.MessagesType;
+import net.atcore.messages.TypeMessages;
 import net.atcore.utils.GlobalUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -67,6 +66,6 @@ public class LimboData {
                 ProtocolLibrary.getProtocolManager().sendServerPacket(player, packet, true);
             }
         }
-        MessagesManager.sendMessageConsole(String.format(Message.LOGIN_LIMBO_EXIT.getMessage(player), player.getName()), MessagesType.INFO, CategoryMessages.LOGIN);
+        MessagesManager.logConsole(String.format(Message.LOGIN_LIMBO_EXIT.getMessage(player), player.getName()), TypeMessages.INFO, CategoryMessages.LOGIN);
     }
 }

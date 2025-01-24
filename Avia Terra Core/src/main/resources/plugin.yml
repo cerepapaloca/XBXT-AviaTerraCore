@@ -1,9 +1,9 @@
 name: AviaTerraCore
-version: '1.5.0'
+version: '1.7.0'
 main: net.atcore.AviaTerraCore
 api-version: '1.21'
 depend: [ProtocolLib, TAB, LuckPerms]
-prefix: AviaTerraCore
+prefix: ""
 authors: [Ceres, Vitah, EvaProject]
 description: Las bases del servidor
 folia-supported: true

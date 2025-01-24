@@ -7,7 +7,7 @@ import net.atcore.command.CommandManager;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
-import net.atcore.messages.MessagesType;
+import net.atcore.messages.TypeMessages;
 import net.atcore.misc.FrameDupe;
 import net.atcore.moderation.Freeze;
 import net.atcore.moderation.ban.ContextBan;
@@ -16,7 +16,6 @@ import net.atcore.utils.GlobalConstantes;
 import net.atcore.utils.GlobalUtils;
 import net.atcore.utils.RangeType;
 import net.luckperms.api.node.types.InheritanceNode;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -76,20 +75,20 @@ public class PlayerListener implements Listener {
         String command = event.getMessage().split(" ")[0].substring(1);
         Player player = event.getPlayer();
         String s = "";
-        MessagesType type = MessagesType.INFO;
+        TypeMessages type = TypeMessages.INFO;
         ContextBan.CHAT.onContext(player, event);
         if (event.isCancelled()) return;
         boolean isCancelled = CommandManager.checkCommand(command.toLowerCase(), player, false, true);
         if (isCancelled){
             s = " <red>(Cancelado)";
-            type = MessagesType.WARNING;
+            type = TypeMessages.WARNING;
         }
         if (COMMANDS_PRE_LOGIN.contains(command.toLowerCase())) {
             String commandComplete = event.getMessage().replaceFirst("/" + command, "");
             String resultado = commandComplete.replaceAll("\\S", "*");
-            MessagesManager.sendMessageConsole(String.format(Message.COMMAND_GENERIC_RUN_LOG.getMessage(player), player.getName(), "<gold>`/" + command + resultado + "`" + s), type, CategoryMessages.COMMANDS, false);
+            MessagesManager.logConsole(String.format(Message.COMMAND_GENERIC_RUN_LOG.getMessage(player), player.getName(), "<gold>`/" + command + resultado + "`" + s), type, CategoryMessages.COMMANDS, false);
         }else {
-            MessagesManager.sendMessageConsole(String.format(Message.COMMAND_GENERIC_RUN_LOG.getMessage(player), player.getName(), "<gold>`" + event.getMessage() + "`" + s), type, CategoryMessages.COMMANDS, false);
+            MessagesManager.logConsole(String.format(Message.COMMAND_GENERIC_RUN_LOG.getMessage(player), player.getName(), "<gold>`" + event.getMessage() + "`" + s), type, CategoryMessages.COMMANDS, false);
         }
         event.setCancelled(isCancelled);
     }
@@ -148,7 +147,7 @@ public class PlayerListener implements Listener {
                     ">" +
                     rangeType.getDisplayName() +
                     "</gradient>";
-            MessagesManager.sendTitle(player,"Nuevo Rango", s, 20, 60, 40, MessagesType.INFO);
+            MessagesManager.sendTitle(player,"Nuevo Rango", s, 20, 60, 40, TypeMessages.INFO);
         }
     }
 }

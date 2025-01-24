@@ -5,7 +5,7 @@ import net.atcore.command.ArgumentUse;
 import net.atcore.command.BaseCommand;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
-import net.atcore.messages.MessagesType;
+import net.atcore.messages.TypeMessages;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -28,20 +28,20 @@ public class PassiveRestartCommand extends BaseCommand {
         if (args.length > 0) {
             if (args[0].equalsIgnoreCase("cancel")) {
                 task.cancel();
-                MessagesManager.sendMessage(sender, Message.COMMAND_PASSIVE_RESTART_CANCEL, MessagesType.INFO);
+                MessagesManager.sendMessage(sender, Message.COMMAND_PASSIVE_RESTART_CANCEL);
             }
         }else {
             task = new BukkitRunnable() {
                 @Override
                 public void run() {
                     if (Bukkit.getOnlinePlayers().isEmpty()) {
-                        MessagesManager.sendMessage(sender, Message.COMMAND_PASSIVE_RESTART_START, MessagesType.INFO);
+                        MessagesManager.sendMessage(sender, Message.COMMAND_PASSIVE_RESTART_START);
                         Bukkit.shutdown();
                         cancel();
                     }
                 }
             }.runTaskTimer(AviaTerraCore.getInstance(), 20*10, 20*5);
-            MessagesManager.sendMessage(sender, Message.COMMAND_PASSIVE_RESTART_INIT, MessagesType.INFO);
+            MessagesManager.sendMessage(sender, Message.COMMAND_PASSIVE_RESTART_INIT);
         }
     }
 }

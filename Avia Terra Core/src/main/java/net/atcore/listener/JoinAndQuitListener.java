@@ -6,7 +6,7 @@ import net.atcore.data.sql.DataBaseRegister;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
-import net.atcore.messages.MessagesType;
+import net.atcore.messages.TypeMessages;
 import net.atcore.moderation.ban.BanManager;
 import net.atcore.moderation.ban.ContextBan;
 import net.atcore.moderation.ban.DataBan;
@@ -55,7 +55,7 @@ public class JoinAndQuitListener implements Listener {
         UUIDPlayers.forEach(UUID -> Objects.requireNonNull(Bukkit.getPlayer(UUID)).closeInventory());
         event.quitMessage(GlobalUtils.chatColorLegacyToComponent(MessagesManager.addProprieties(
                 String.format(Message.EVENT_QUIT.getMessage(player), event.getPlayer().getName()),
-                MessagesType.INFO, false, false)));
+                TypeMessages.INFO, false, false)));
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -63,7 +63,7 @@ public class JoinAndQuitListener implements Listener {
         Player player = event.getPlayer();
         event.joinMessage(GlobalUtils.chatColorLegacyToComponent(MessagesManager.addProprieties(
                 String.format(Message.EVENT_JOIN.getMessage(player), event.getPlayer().getName()),
-                MessagesType.INFO, false, false)));
+                TypeMessages.INFO, false, false)));
         onEnteringServer(player);
         new BukkitRunnable() {
             @Override
@@ -76,13 +76,15 @@ public class JoinAndQuitListener implements Listener {
     @EventHandler
     public void onLogin(PlayerLoginEvent event) {
         Player player = event.getPlayer();
-        AviaTerraPlayer.addPlayer(player);
-        SecuritySection.getSimulateOnlineMode().applySkin(player);
         DataBan ban = ContextBan.GLOBAL.onContext(player, event);
         if (ban != null){
-            event.kickMessage(MessagesManager.applyFinalProprieties(GlobalUtils.kickPlayer(player, BanManager.formadMessageBan(ban)), MessagesType.KICK, CategoryMessages.PRIVATE, false));
+            event.kickMessage(MessagesManager.applyFinalProprieties(GlobalUtils.kickPlayer(player, BanManager.formadMessageBan(ban)), TypeMessages.KICK, CategoryMessages.PRIVATE, false));
             event.setResult(PlayerLoginEvent.Result.KICK_BANNED);
+            return;
         }
+        AviaTerraPlayer.addPlayer(player);
+        SecuritySection.getSimulateOnlineMode().applySkin(player);
+
 
     }
 
@@ -90,7 +92,7 @@ public class JoinAndQuitListener implements Listener {
     public void onPreLogin(AsyncPlayerPreLoginEvent event) {
         if (AntiTwoPlayer.checkTwoPlayer(event.getName())){
             event.setLoginResult(AsyncPlayerPreLoginEvent.Result.KICK_OTHER);
-            event.kickMessage(MessagesManager.applyFinalProprieties(Message.SECURITY_KICK_ANTI_TWO_PLAYER.getMessageLocateDefault(), MessagesType.KICK, CategoryMessages.LOGIN, false));
+            event.kickMessage(MessagesManager.applyFinalProprieties(Message.SECURITY_KICK_ANTI_TWO_PLAYER.getMessageLocateDefault(), TypeMessages.KICK, CategoryMessages.LOGIN, false));
         }
     }
 }

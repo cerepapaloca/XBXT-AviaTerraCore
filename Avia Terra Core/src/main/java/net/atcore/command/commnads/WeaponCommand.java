@@ -6,13 +6,14 @@ import net.atcore.command.CommandUtils;
 import net.atcore.command.ModeTabPlayers;
 import net.atcore.command.ArgumentUse;
 import net.atcore.messages.Message;
-import net.atcore.messages.MessagesType;
+import net.atcore.messages.TypeMessages;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static net.atcore.messages.MessagesManager.sendArgument;
 import static net.atcore.messages.MessagesManager.sendMessage;
 
 public class WeaponCommand extends BaseTabCommand {
@@ -47,14 +48,14 @@ public class WeaponCommand extends BaseTabCommand {
     @Override
     public void execute(CommandSender sender, String[] args) {
         switch (args.length) {
-            case 0, 1 -> sendMessage(sender, this.getUsage().toString(), MessagesType.ERROR);
-            case 2 -> sendMessage(sender, Message.COMMAND_WEAPON_MISSING_ARGS_NAME, MessagesType.ERROR);
+            case 0, 1 -> sendArgument(sender, this.getUsage(), TypeMessages.ERROR);
+            case 2 -> sendMessage(sender, Message.COMMAND_WEAPON_MISSING_ARGS_NAME);
             default -> {
                 TypeArmament typeArmament;
                 try {
                     typeArmament = TypeArmament.valueOf(args[1].toUpperCase());
                 }catch (Exception e) {
-                    sendMessage(sender, Message.COMMAND_WEAPON_MISSING_ARGS_TYPE, MessagesType.ERROR);
+                    sendMessage(sender, Message.COMMAND_WEAPON_MISSING_ARGS_TYPE);
                     return;
                 }
                 BaseArmament baseArmament;
@@ -76,9 +77,9 @@ public class WeaponCommand extends BaseTabCommand {
                                 GlobalUtils.addItemPlayer(baseArmament.getItemArmament(), dataTemporalPlayer.player(),
                                         true, typeArmament != TypeArmament.AMMO, false));
                     }
-                    sendMessage(sender, Message.COMMAND_WEAPON_SUCCESSFUL, MessagesType.SUCCESS);
+                    sendMessage(sender, Message.COMMAND_WEAPON_SUCCESSFUL);
                 }else{
-                    sendMessage(sender, Message.COMMAND_WEAPON_NOT_FOUND_TYPE, MessagesType.ERROR);
+                    sendMessage(sender, Message.COMMAND_WEAPON_NOT_FOUND_TYPE);
                 }
             }
         }
@@ -98,7 +99,7 @@ public class WeaponCommand extends BaseTabCommand {
                 try {
                     typeArmament = TypeArmament.valueOf(args[1].toUpperCase());
                 }catch (Exception e) {
-                    return List.of( MessagesType.ERROR.getMainColor() + "En tipo de armamento no existe");
+                    return List.of( TypeMessages.ERROR.getMainColor() + "En tipo de armamento no existe");
                 }
                 switch (typeArmament) {
                     case WEAPON_TARKOV -> {

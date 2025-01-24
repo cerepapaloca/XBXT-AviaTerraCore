@@ -2,7 +2,7 @@ package net.atcore.security;
 
 import net.atcore.Config;
 import net.atcore.messages.MessagesManager;
-import net.atcore.messages.MessagesType;
+import net.atcore.messages.TypeMessages;
 import org.jetbrains.annotations.NotNull;
 
 import java.net.InetAddress;
@@ -67,7 +67,7 @@ public final class AntiBot {
         }else {
             Bukkit.getLogger().warning("**PASS**");
         }*/
-        MessagesManager.sendMessageConsole(String.format("AntiBot <|%s|> -> <|%s|>", Math.round(oldDiscrepancy*100)+"%", Math.round(discrepancy*100))+"%", MessagesType.INFO);
+        MessagesManager.logConsole(String.format("AntiBot <|%s|> -> <|%s|>", Math.round(oldDiscrepancy*100)+"%", Math.round(discrepancy*100))+"%", TypeMessages.INFO);
         return discrepancy > 1;
     }
 

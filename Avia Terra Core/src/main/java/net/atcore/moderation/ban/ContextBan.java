@@ -1,7 +1,7 @@
 package net.atcore.moderation.ban;
 
 import net.atcore.messages.MessagesManager;
-import net.atcore.messages.MessagesType;
+import net.atcore.messages.TypeMessages;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
@@ -9,7 +9,6 @@ import org.bukkit.event.Event;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
-import org.eclipse.aether.internal.impl.collect.DefaultVersionFilterContext;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
@@ -38,7 +37,7 @@ public enum ContextBan {
             if (isBan.equals(IsBan.YES)) {
                 e.setCancelled(true);
                 DataBan dataBan = BanManager.getDataBan(player.getName()).get(ContextBan.CHAT);
-                MessagesManager.sendMessage(player, " \n" + BanManager.formadMessageBan(dataBan), MessagesType.KICK);
+                MessagesManager.sendMessage(player, " \n" + BanManager.formadMessageBan(dataBan), TypeMessages.KICK);
                 return dataBan;
             }
             return null;
@@ -46,7 +45,7 @@ public enum ContextBan {
 
         @Override
         public void onBan(Player player, DataBan dataBan){
-            MessagesManager.sendMessage(player, BanManager.formadMessageBan(dataBan), MessagesType.KICK);
+            MessagesManager.sendMessage(player, BanManager.formadMessageBan(dataBan), TypeMessages.KICK);
         }
     },
     GLOBAL() {

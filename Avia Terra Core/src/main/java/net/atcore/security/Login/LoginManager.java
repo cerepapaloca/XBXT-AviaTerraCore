@@ -204,7 +204,7 @@ public final class LoginManager {
         data.setPasswordShaded(s);
         AviaTerraCore.enqueueTaskAsynchronously(() -> {
             if (!updatePassword(name, s)){
-                GlobalUtils.synchronizeKickPlayer(player, Message.LOGIN_KICK_PASSWORD_ERROR.getMessage(player));
+                GlobalUtils.synchronizeKickPlayer(player, Message.LOGIN_KICK_PASSWORD_ERROR);
             }
         });
         updateLoginDataBase(name, player.getAddress().getAddress());
@@ -216,7 +216,7 @@ public final class LoginManager {
             if (!b) { // En caso de un error hace un kick al jugador para que vuelva a entrar
                 Player player = Bukkit.getPlayer(name);
                 if (player == null) return;
-                GlobalUtils.synchronizeKickPlayer(player, Message.LOGIN_KICK_ADDRESS_ERROR.getMessage(player));
+                GlobalUtils.synchronizeKickPlayer(player, Message.LOGIN_KICK_ADDRESS_ERROR);
             }
         });
         RegisterData registerData = getDataLogin(name).getRegister();
@@ -242,7 +242,7 @@ public final class LoginManager {
         if (player.getAddress() == null) return false; // Esto por qué el jugador no terminado de entrar al servidor
         LoginData loginData = getDataLogin(player);
         if (loginData == null){
-            GlobalUtils.synchronizeKickPlayer(player, Message.LOGIN_KICK_REGISTER_ERROR.getMessage(player));
+            GlobalUtils.synchronizeKickPlayer(player, Message.LOGIN_KICK_REGISTER_ERROR);
             return false;
         }
         if (loginData.hasSession()) {// Mira si tiene una session
@@ -263,7 +263,7 @@ public final class LoginManager {
                             }
                             if (limboMode) LimboManager.startAsynchronouslyLimboMode(player, ReasonLimbo.NO_SESSION);
                         }else {
-                            GlobalUtils.synchronizeKickPlayer(player, Message.LOGIN_KICK_ONLINE_MODE.getMessage(player));
+                            GlobalUtils.synchronizeKickPlayer(player, Message.LOGIN_KICK_ONLINE_MODE);
                         }
                     }else {
                         if (limboMode) LimboManager.startAsynchronouslyLimboMode(player, ReasonLimbo.NO_REGISTER);
@@ -275,7 +275,7 @@ public final class LoginManager {
                     if (!Config.getServerMode().equals(ServerMode.OFFLINE_MODE)) {// no puede haber sesiónes premium si esta offline
                         if (GlobalUtils.equalIp(sessionData.getAddress(), player.getAddress().getAddress())){// esto no tendría que dar falso
                             if (sessionData.getSharedSecret() == null) {// no tiene el secreto compartido lo cual tiene que ser imposible.
-                                GlobalUtils.synchronizeKickPlayer(player, Message.LOGIN_KICK_KEY_ERROR.getMessage(player));
+                                GlobalUtils.synchronizeKickPlayer(player, Message.LOGIN_KICK_KEY_ERROR);
                                 loginData.setSession(null);
                             } else {
                                 return true;// sesión válida para los premium

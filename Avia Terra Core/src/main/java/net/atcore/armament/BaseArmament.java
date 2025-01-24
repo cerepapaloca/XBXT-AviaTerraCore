@@ -5,7 +5,7 @@ import lombok.Setter;
 import net.atcore.AviaTerraCore;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.MessagesManager;
-import net.atcore.messages.MessagesType;
+import net.atcore.messages.TypeMessages;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -26,7 +26,7 @@ public abstract class BaseArmament {
         this.name = this.getClass().getName();
         ItemMeta meta = itemArmament.getItemMeta();
         if (meta == null) return;
-        meta.displayName(MessagesManager.applyFinalProprieties(displayName, MessagesType.ERROR, CategoryMessages.PRIVATE, false));
+        meta.displayName(MessagesManager.applyFinalProprieties(displayName, TypeMessages.ERROR, CategoryMessages.PRIVATE, false));
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);//se oculta datos del item para que no se vea feo
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);

@@ -3,7 +3,7 @@ package net.atcore.listener;
 import lombok.Getter;
 import lombok.Setter;
 import net.atcore.messages.Message;
-import net.atcore.messages.MessagesType;
+import net.atcore.messages.TypeMessages;
 import net.atcore.moderation.ban.ContextBan;
 import net.atcore.moderation.ChatModeration;
 import net.atcore.security.Login.LoginManager;
@@ -31,7 +31,7 @@ public class ChatListener implements Listener {
 
 
         if (!LoginManager.checkLoginIn(player)) {
-            sendMessage(player, Message.LOGIN_LIMBO_CHAT_WRITE.getMessage(player), MessagesType.ERROR);
+            sendMessage(player, Message.LOGIN_LIMBO_CHAT_WRITE.getMessage(player), TypeMessages.ERROR);
             event.setCancelled(true);
             return;
         }
