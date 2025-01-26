@@ -6,7 +6,6 @@ import net.atcore.command.BaseCommand;
 import net.atcore.data.sql.DataBaseRegister;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
-import net.atcore.messages.TypeMessages;
 import net.atcore.security.Login.LoginManager;
 import net.atcore.security.Login.StateLogins;
 import net.atcore.security.Login.model.LoginData;
@@ -37,11 +36,15 @@ public class PremiumCommand extends BaseCommand {
                 case PREMIUM -> MessagesManager.sendMessage(player, Message.COMMAND_PREMIUM_IS_PREMIUM);
                 case CRACKED -> MessagesManager.sendMessage(player, Message.COMMAND_PREMIUM_IS_CRACKED);
                 case SEMI_CRACKED -> AviaTerraCore.enqueueTaskAsynchronously(() -> {
-                    DataBaseRegister.changeState(GlobalUtils.getRealName(player), StateLogins.PREMIUM);
-                    RegisterData register = LoginManager.getDataLogin(player).getRegister();
-                    register.setStateLogins(StateLogins.PREMIUM);
-                    register.setTemporary(false);
-                    GlobalUtils.synchronizeKickPlayer(player, Message.COMMAND_PREMIUM_IS_CRACKED);
+                    if (DataBaseRegister.changeState(GlobalUtils.getRealName(player), StateLogins.PREMIUM)){
+                        RegisterData register = LoginManager.getDataLogin(player).getRegister();
+                        register.setStateLogins(StateLogins.PREMIUM);
+                        register.setTemporary(false);
+                        GlobalUtils.synchronizeKickPlayer(player, Message.COMMAND_PREMIUM_SUCCESSFUL);
+                    }else {
+                        MessagesManager.sendMessage(player, Message.COMMAND_PREMIUM_ERROR);
+                    }
+
                 });
             }
         }else {

@@ -1,7 +1,6 @@
 package net.atcore.command;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
@@ -13,10 +12,13 @@ import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.UUID;
 
-import static net.atcore.messages.MessagesManager.*;
+import static net.atcore.messages.MessagesManager.sendErrorException;
+import static net.atcore.messages.MessagesManager.sendMessage;
 
 @Getter
 public final class CommandHandler implements TabExecutor {

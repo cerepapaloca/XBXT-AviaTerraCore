@@ -1,5 +1,6 @@
 package net.atcore.command.commnads;
 
+import net.atcore.AviaTerraCore;
 import net.atcore.command.BaseCommand;
 import net.atcore.Config;
 import net.atcore.command.ArgumentUse;
@@ -8,9 +9,12 @@ import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import net.atcore.security.Login.*;
 import net.atcore.security.Login.model.LoginData;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
+import java.sql.BatchUpdateException;
 import java.util.Objects;
 
 import static net.atcore.messages.MessagesManager.sendFormatMessage;
@@ -41,6 +45,7 @@ public class RegisterCommand extends BaseCommand {
                                 if (!args[0].equalsIgnoreCase(player.getName())){
                                     sendMessage(player, Message.COMMAND_REGISTER_SUCCESSFUL_CHAT.getMessage(player), TypeMessages.SUCCESS);
                                     LoginManager.newRegisterCracked(player,  args[0]);
+                                    sendDiscord(sender);
                                     MessagesManager.sendTitle(player, String.format( Message.COMMAND_REGISTER_SUCCESSFUL_TITLE.getMessage(player), MessagesManager.PREFIX),
                                             String.format(Message.COMMAND_REGISTER_SUCCESSFUL_SUBTITLE.getMessage(player), player.getName())
                                             , 20, 20*3, 40, TypeMessages.INFO);
@@ -65,5 +70,13 @@ public class RegisterCommand extends BaseCommand {
                 sendMessage(player, Message.COMMAND_REGISTER_ALREADY);
             }
         }
+    }
+    public void sendDiscord(CommandSender sender) {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                MessagesManager.sendFormatMessage(sender, Message.COMMAND_DISCORD_MESSAGE, MessagesManager.LINK_DISCORD);
+            }
+        }.runTaskLater(AviaTerraCore.getInstance(), 20*5);
     }
 }

@@ -4,7 +4,6 @@ import net.atcore.AviaTerraCore;
 import net.atcore.aviaterraplayer.AviaTerraPlayer;
 import net.atcore.aviaterraplayer.ModerationPlayer;
 import net.atcore.inventory.BaseInventory;
-import net.atcore.inventory.InventorySection;
 import net.atcore.inventory.InventoryUtils;
 import net.atcore.messages.Message;
 import net.atcore.utils.GlobalUtils;
@@ -17,7 +16,9 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Objects;
+import java.util.UUID;
 
 public class ManipulatorInventory extends BaseInventory {
 

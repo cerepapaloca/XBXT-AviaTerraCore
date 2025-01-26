@@ -172,7 +172,7 @@ public final class LoginManager {
 
     public static @NotNull LoginData startPlaySessionCracked(@NotNull Player player){
         LoginData loginData = getDataLogin(player);
-        SessionData sessionData = new SessionData(player, StateLogins.CRACKED);
+        SessionData sessionData = new SessionData(player, StateLogins.CRACKED);//TODO: Cambiar si es un Cracked o un semi cracked
         sessionData.setEndTimeLogin(Config.getExpirationSession());
         loginData.setSession(sessionData);
         Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> {
@@ -212,7 +212,7 @@ public final class LoginManager {
 
     public void updateLoginDataBase(String name, InetAddress inetAddress){
         AviaTerraCore.enqueueTaskAsynchronously(() -> {
-            boolean b = updateAddress(name, inetAddress.getHostAddress().replace("/","")) && updateLoginDate(name, System.currentTimeMillis());
+            boolean b = updateAddress(name, inetAddress.getHostAddress()) && updateLoginDate(name, System.currentTimeMillis());
             if (!b) { // En caso de un error hace un kick al jugador para que vuelva a entrar
                 Player player = Bukkit.getPlayer(name);
                 if (player == null) return;

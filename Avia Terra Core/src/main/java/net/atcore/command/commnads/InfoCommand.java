@@ -1,8 +1,8 @@
 package net.atcore.command.commnads;
 
 import net.atcore.AviaTerraCore;
-import net.atcore.command.BaseCommand;
 import net.atcore.command.ArgumentUse;
+import net.atcore.command.BaseCommand;
 import net.atcore.command.CommandUtils;
 import net.atcore.command.ModeTabPlayers;
 import net.atcore.messages.CategoryMessages;
@@ -17,7 +17,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
-import java.util.Date;
 
 import static net.atcore.messages.MessagesManager.sendMessage;
 
@@ -66,7 +65,7 @@ public class InfoCommand extends BaseCommand {
                 send(sender, String.format("Tiempo Logueado: <|%s|>", GlobalUtils.timeToString(data.getRegister().getLastLoginDate(), 1)));
                 send(sender, String.format("Tiempo Registrado: <|%s|>", GlobalUtils.timeToString(data.getRegister().getRegisterDate(), 1)));
                 send(sender, String.format("Ping: <|%s|>", player.getPing()));
-                send(sender, String.format("Ip: <|%s|>", player.getAddress().getAddress().getHostAddress()));
+                send(sender, String.format("Ip: <|%s|>", player.getAddress() == null ? null : player.getAddress().getAddress().getHostAddress()));
                 if (args.length == 1 || !args[1].equalsIgnoreCase("more")) return;
                 send(sender, String.format("Modo de juego: <|%s|>", player.getGameMode().name().toLowerCase()));
                 send(sender, String.format("Tipo de cuanta: <|%s|>", data.getRegister().getStateLogins().name().toLowerCase()));
@@ -83,6 +82,7 @@ public class InfoCommand extends BaseCommand {
                 send(sender, String.format("Comida: <|%s|>", player.getFoodLevel()));
                 send(sender, String.format("Nivel: <|%s|>", player.getLevel()));
                 send(sender, String.format("Efectos: <|%s|>", player.getEffectivePermissions()));
+                send(sender, String.format("Idioma: <|%s|>", player.locale()));
             }));
         }
     }

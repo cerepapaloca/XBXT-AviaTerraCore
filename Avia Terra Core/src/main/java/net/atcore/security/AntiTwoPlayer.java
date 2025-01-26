@@ -1,7 +1,5 @@
 package net.atcore.security;
 
-import net.atcore.messages.Message;
-import net.atcore.utils.GlobalUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 

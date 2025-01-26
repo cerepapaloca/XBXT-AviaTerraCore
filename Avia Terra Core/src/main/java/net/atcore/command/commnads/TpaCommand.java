@@ -6,7 +6,6 @@ import net.atcore.command.BaseTabCommand;
 import net.atcore.command.ModeTabPlayers;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
-import net.atcore.messages.TypeMessages;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
@@ -17,7 +16,6 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 public class TpaCommand extends BaseTabCommand {
 

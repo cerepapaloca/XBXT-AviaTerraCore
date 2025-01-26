@@ -201,11 +201,15 @@ public final class GlobalUtils {
 
     public String kickPlayer(@NotNull Player player, @NotNull Message message){
         try {
-            return kickPlayer(player, message.getMessage(player));
+            return kickPlayer(player, message.getMessage(player), message.getTypeMessages());
         }catch (Exception e){
             MessagesManager.sendWaringException("as", e);
-            return kickPlayer(player, message.getMessageLocateDefault());
+            return kickPlayer(player, message.getMessageLocateDefault(), message.getTypeMessages());
         }
+    }
+
+    public String kickPlayer(@NotNull Player player, @Nullable String reason){
+        return kickPlayer(player, reason, TypeMessages.KICK);
     }
 
     /**
@@ -213,7 +217,7 @@ public final class GlobalUtils {
      * y respetando el formato de razón del kick
      */
 
-    public String kickPlayer(@NotNull Player player, @Nullable String reason) {
+    public String kickPlayer(@NotNull Player player, @Nullable String reason, TypeMessages type) {
         String upper;
         String lower;
         try {

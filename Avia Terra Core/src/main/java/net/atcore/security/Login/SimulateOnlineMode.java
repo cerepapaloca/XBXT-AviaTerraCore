@@ -78,10 +78,11 @@ public class SimulateOnlineMode {
         // En caso de que no tenga una sesión se le expiró se hace una nueva
         if ((loginData == null || loginData.getSession() == null) || loginData.getSession().getEndTimeLogin() < System.currentTimeMillis()) {
             // Lo registra si no esta registrado
-            StateLogins state = LoginManager.getStateAndRegister(inetAddress ,name);
+            StateLogins state;
             switch (Config.getServerMode()){
                 case OFFLINE_MODE -> state = StateLogins.CRACKED;
                 case ONLINE_MODE -> state = StateLogins.PREMIUM;
+                default -> state = LoginManager.getStateAndRegister(inetAddress ,name);
             }
             switch (state){
                 case PREMIUM -> startLoginPremium(name, uuid, player);

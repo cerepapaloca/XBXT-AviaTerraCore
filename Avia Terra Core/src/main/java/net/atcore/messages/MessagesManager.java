@@ -36,6 +36,7 @@ import static net.kyori.adventure.text.event.ClickEvent.Action;
 public final class MessagesManager {
 
     public static final String LINK_DISCORD = "&a&n<click:open_url:https://discord.gg/7ubQQFVMWF>discord.gg/7ubQQFVMWF</click>";
+    public static final String LINK_VOTE = "&a&n<click:open_url:https://minecraft-mp.com/server-s339858>minecraft-mp.com/server-s339858</click>";
     //"&8[" + GlobalUtils.applyGradient("<#00CCCC>AviaTerra<#00FFFF>",'l') + "&8]&r " ;
     public static final String PREFIX = "<dark_gray>[<b><#4B2FDE>XT<#ff8C00>XB<dark_gray></b>] ";
     public static final LocaleAvailable DEFAULT_LOCALE_USER = LocaleAvailable.EN;

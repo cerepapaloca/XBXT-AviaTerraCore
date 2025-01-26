@@ -1,5 +1,5 @@
 name: AviaTerraCore
-version: '1.7.0'
+version: '1.8.0'
 main: net.atcore.AviaTerraCore
 api-version: '1.21'
 depend: [ProtocolLib, TAB, LuckPerms]
@@ -45,6 +45,10 @@ commands:
   info:
   tpa:
   say:
+  discord:
+    aliases:
+      - dc
+  vote:
   premium:
   confirm:
   forcelogin:
