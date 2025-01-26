@@ -15,6 +15,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -28,7 +29,7 @@ public class ManipulatorInventory extends BaseInventory {
     public static final HashMap<UUID, BukkitTask> TASKS = new HashMap<>();
 
     @Override
-    public Inventory createInventory(AviaTerraPlayer player) {
+    public Inventory createInventory(@NotNull AviaTerraPlayer player) {
         ModerationPlayer moderationPlayer = player.getModerationPlayer();
         if (!TASKS.containsKey(moderationPlayer.getManipulatedInventoryPlayer())) {
             UUID uuid = moderationPlayer.getManipulatedInventoryPlayer();
@@ -40,9 +41,7 @@ public class ManipulatorInventory extends BaseInventory {
                         int currentHash = getInventoryHash(player); // Se obtiene el hash para saber si su inventarió á cambiado
                         if (currentHash != previousHash) { // Revisa si lo hash son diferente en caso de que si le envía él inventarió
                             previousHash = currentHash; // Actualiza el Hash
-                            if (InventorySection.MANIPULATOR.getBaseInventory() instanceof ManipulatorInventory manipulatorInventory) {
-                                manipulatorInventory.updateInventoryManipulator(GlobalUtils.getPlayer(moderationPlayer.getManipulatedInventoryPlayer()));
-                            }
+                            updateInventoryManipulator(GlobalUtils.getPlayer(moderationPlayer.getManipulatedInventoryPlayer()));
                         }
                     } else {
                         TASKS.remove(uuid);
@@ -56,7 +55,7 @@ public class ManipulatorInventory extends BaseInventory {
         return updateInventoryManipulator(GlobalUtils.getPlayer(moderationPlayer.getManipulatedInventoryPlayer()));
     }
 
-    private int getInventoryHash(AviaTerraPlayer player) {
+    private int getInventoryHash(@NotNull AviaTerraPlayer player) {
         ModerationPlayer moderationPlayer = player.getModerationPlayer();
         Inventory inventory = GlobalUtils.getPlayer(moderationPlayer.getManipulatedInventoryPlayer()).getInventory();
         int hash = 7;//se inicia por 7 por qué es un número primo facilitando una mayor aleatoriedad

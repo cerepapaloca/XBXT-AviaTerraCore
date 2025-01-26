@@ -1,7 +1,7 @@
 package net.atcore.inventory;
 
 import lombok.Getter;
-import net.atcore.inventory.Action.ManipulatorAction;
+import net.atcore.inventory.action.ManipulatorAction;
 import net.atcore.inventory.inventors.ManipulatorInventory;
 
 @Getter
@@ -19,17 +19,11 @@ public enum InventorySection {
     private final boolean protectedInventory;
 
     public void init() {
-        if (baseActions != null) {
-            baseActions.setSection(this);
-        }
-        if (baseInventory != null) {
-            baseInventory.setSection(this);
-        }
+        if (baseActions != null) baseActions.setSection(this);
+        if (baseInventory != null) baseInventory.setSection(this);
     }
 
     static {
-        for (InventorySection section : values()) {
-            section.init();
-        }
+        for (InventorySection section : values()) section.init();
     }
 }

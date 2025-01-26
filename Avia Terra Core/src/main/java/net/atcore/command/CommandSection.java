@@ -29,7 +29,7 @@ public class CommandSection implements Section {
                 new ChangePasswordCommand(),
                 new RemoveSessionCommand(),
                 new WeaponCommand(),
-                new seeInventoryCommand(),
+                new SeeInventoryCommand(),
                 new AviaTerraDebugCommand(),
                 new LinkCommand(),
                 new TellCommand(),

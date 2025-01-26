@@ -6,20 +6,18 @@ import net.atcore.command.ModeTabPlayers;
 import net.atcore.command.ArgumentUse;
 import net.atcore.inventory.InventorySection;
 import net.atcore.messages.Message;
-import net.atcore.messages.TypeMessages;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import static net.atcore.messages.MessagesManager.sendMessage;
 
-public class seeInventoryCommand extends BaseCommand {
+public class SeeInventoryCommand extends BaseCommand {
 
-    public seeInventoryCommand() {
+    public SeeInventoryCommand() {
         super("seeInventory",
                 new ArgumentUse("/seeInventory").addArgPlayer(ModeTabPlayers.NORMAL),
                 "Puedes ver y modificar el inventario del jugador a tiempo real y de manera remota",
-                "d",
                 false);
     }
 

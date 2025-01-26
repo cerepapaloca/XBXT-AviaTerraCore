@@ -17,6 +17,7 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class TpaCommand extends BaseTabCommand {
 
@@ -24,8 +25,9 @@ public class TpaCommand extends BaseTabCommand {
         super("tpa",
                 new ArgumentUse("tpa").addArgPlayer(ModeTabPlayers.NORMAL),
                 "*",
-                "Puedes enviar una solicitud de tp a un jugador",
-                false);
+                "Puedes enviás una solicitud de tp a un jugador",
+                false
+        );
     }
 
     @Override

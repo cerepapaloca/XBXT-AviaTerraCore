@@ -42,7 +42,7 @@ public class ConsoleDiscord {
                     getServer().getPluginManager().disablePlugin(AviaTerraCore.getInstance());
                     return;
                 }
-                SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");
+                SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
                 sdf.setTimeZone(TimeZone.getTimeZone("GMT-5"));
                 handler = new ChannelLoggingHandler(() -> logChannel, handlerConfig -> {
                     handlerConfig.setColored(true);

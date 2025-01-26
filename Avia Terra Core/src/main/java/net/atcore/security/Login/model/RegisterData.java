@@ -39,7 +39,7 @@ public class RegisterData {
     private InetAddress lastAddress;
     private InetAddress registerAddress;
     @Nullable
-    private String gmail;
+    private String mail;
     @Nullable
     private String discord;
 }

@@ -28,7 +28,7 @@ public class LoginCommand extends BaseCommand {
                 new ArgumentUse("/login")
                         .addNote("contraseña"),
                 "**",
-                "Te logueas",
+                "Inicias session con tu contraseña",
                 false);
     }
 

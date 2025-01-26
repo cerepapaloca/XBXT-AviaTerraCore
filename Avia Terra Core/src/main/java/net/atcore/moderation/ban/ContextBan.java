@@ -16,7 +16,6 @@ import java.util.Set;
 
 public enum ContextBan {
     CHAT() {
-
         private static final Set<String> SET_COMMANDS_SOCIAL = Set.of("tell", "w", "whipper", "r");
         @Override
         public DataBan onContext(Player player, Event event) {
@@ -37,7 +36,7 @@ public enum ContextBan {
             if (isBan.equals(IsBan.YES)) {
                 e.setCancelled(true);
                 DataBan dataBan = BanManager.getDataBan(player.getName()).get(ContextBan.CHAT);
-                MessagesManager.sendMessage(player, " \n" + BanManager.formadMessageBan(dataBan), TypeMessages.KICK);
+                MessagesManager.sendMessage(player, BanManager.formadMessageBan(dataBan), TypeMessages.KICK);
                 return dataBan;
             }
             return null;

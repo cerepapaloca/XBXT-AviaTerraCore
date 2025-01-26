@@ -23,7 +23,7 @@ public class RegisterCommand extends BaseCommand {
         super("register",
                 new ArgumentUse("/register").addNote("contraseña").addNote("contraseña"),//"/register <contraseña> <contraseña>"
                 "**",
-                "Te registras",
+                "Te registras en el servidor añadiendo una contraseña",
                 false);
     }
 

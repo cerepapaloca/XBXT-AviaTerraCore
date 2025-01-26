@@ -18,7 +18,7 @@ public class PassiveRestartCommand extends BaseCommand {
     public PassiveRestartCommand() {
         super("passiveRestart",
                 new ArgumentUse("passiveRestart").addArgOptional().addArg("cancel"),
-                "reinicia el servidor",
+                "reinicia el servidor cuando no hay nadié conectado",
                 false
         );
     }

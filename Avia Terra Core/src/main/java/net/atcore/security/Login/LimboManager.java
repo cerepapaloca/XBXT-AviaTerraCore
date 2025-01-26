@@ -1,5 +1,6 @@
 package net.atcore.security.Login;
 
+import com.google.common.collect.Sets;
 import lombok.experimental.UtilityClass;
 import net.atcore.AviaTerraCore;
 import net.atcore.data.DataSection;
@@ -22,6 +23,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -29,12 +31,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class LimboManager {
 
     public final int LIMBO_TIME = 20*60;
-    public final List<UUID> listInProcess = new ArrayList<>();
+    public final Set<UUID> LIST_IN_PROCESS = Sets.newHashSet();
 
     public void startAsynchronouslyLimboMode(Player player, ReasonLimbo reasonLimbo) {
         try {
-            if (player.isOnline() && !LoginManager.isLimboMode(player) && !listInProcess.contains(player.getUniqueId())) {
-                listInProcess.add(player.getUniqueId());
+            if (player.isOnline() && !LoginManager.isLimboMode(player) && !LIST_IN_PROCESS.contains(player.getUniqueId())) {
+                LIST_IN_PROCESS.add(player.getUniqueId());
                 if (Bukkit.isPrimaryThread()) {
                     switch (reasonLimbo) {
                         case NO_SESSION -> {
@@ -58,7 +60,7 @@ public class LimboManager {
                 }
             }
         }catch (Exception e){// Esto es un porsi acaso hay un error. Es mejor hacer un kick por seguridad
-            listInProcess.remove(player.getUniqueId());
+            LIST_IN_PROCESS.remove(player.getUniqueId());
             MessagesManager.sendWaringException("Error al pasar al limbo mode", e);
             GlobalUtils.synchronizeKickPlayer(player, Message.LOGIN_KICK_ENTRY_LIMBO_ERROR);
         }
@@ -130,7 +132,7 @@ public class LimboManager {
         LimboData limboData = newLimboData(player);
         loginData.setLimbo(limboData);
         clearPlayer(player);
-        listInProcess.remove(player.getUniqueId());
+        LIST_IN_PROCESS.remove(player.getUniqueId());
     }
 
     private static @NotNull LimboData newLimboData(Player player) {

@@ -1,4 +1,4 @@
-package net.atcore.inventory.Action;
+package net.atcore.inventory.action;
 
 import java.util.Arrays;
 

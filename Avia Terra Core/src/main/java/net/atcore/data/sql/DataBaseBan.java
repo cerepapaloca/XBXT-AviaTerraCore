@@ -197,7 +197,7 @@ public class DataBaseBan extends DataBaseMySql {
             }else {
                 tiempoDeBaneo = GlobalUtils.timeToString(dataBan.getUnbanDate() - dataBan.getBanDate(), 2);
             }
-            reload();
+            reload();// TODO: Esto no es lo más optimo
             MessagesManager.logConsole(String.format(Message.DATA_BAN_ADD_OK.getMessageLocatePrivate(), dataBan.getName(), dataBan.getContext(), tiempoDeBaneo, dataBan.getAuthor(), dataBan.getReason()), TypeMessages.SUCCESS, CategoryMessages.BAN);
 
         } catch (SQLException e) {

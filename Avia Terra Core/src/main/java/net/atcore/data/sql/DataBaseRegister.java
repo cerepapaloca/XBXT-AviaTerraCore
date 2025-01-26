@@ -63,7 +63,7 @@ public class DataBaseRegister extends DataBaseMySql {
                 registerData.setPasswordShaded(password);
                 registerData.setLastLoginDate(lastLoginDate);
                 registerData.setRegisterDate(registerDate);
-                registerData.setGmail(gmail);
+                registerData.setMail(gmail);
                 registerData.setDiscord(discord);
 
                 LoginData loginData = LoginManager.addDataLogin(name, registerData);

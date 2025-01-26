@@ -26,7 +26,7 @@ public class WeaponCommand extends BaseTabCommand {
                         .addArg("Nombre Del Armamento")
                         .addArgOptional()
                         .addArg("Cantidad"),
-                "desbanea a al jugador que le caes bien",
+                "Crea añades un armamento",
                 false);
         if (ArmamentUtils.ARMAMENTS.isEmpty()) ArmamentSection.initialize();
         for (BaseArmament armament : ArmamentUtils.ARMAMENTS){

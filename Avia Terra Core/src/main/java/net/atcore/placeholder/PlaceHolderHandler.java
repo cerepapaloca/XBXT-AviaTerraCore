@@ -5,6 +5,7 @@ import net.atcore.AviaTerraCore;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+@SuppressWarnings("deprecation")
 public class PlaceHolderHandler extends PlaceholderExpansion {
 
     @Override
@@ -14,7 +15,7 @@ public class PlaceHolderHandler extends PlaceholderExpansion {
 
     @Override
     public @NotNull String getAuthor() {
-        return AviaTerraCore.getInstance().getDescription().getAuthors().get(0);
+        return AviaTerraCore.getInstance().getDescription().getAuthors().getFirst();
     }
 
     @Override

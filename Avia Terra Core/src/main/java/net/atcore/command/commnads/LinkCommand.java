@@ -6,7 +6,6 @@ import net.atcore.command.CommandUtils;
 import net.atcore.command.ArgumentUse;
 import net.atcore.data.sql.DataBaseRegister;
 import net.atcore.messages.Message;
-import net.atcore.messages.TypeMessages;
 import net.atcore.security.Login.*;
 import net.atcore.security.Login.model.CodeAuth;
 import net.atcore.security.Login.model.LoginData;
@@ -54,7 +53,7 @@ public class LinkCommand extends BaseTabCommand {
                                 TwoFactorAuth.CODES.put(uuid, codeAuth);
 
                                 sendMessage(sender, Message.COMMAND_LINK_SEND_GMAIL_1);
-                                if (loginData.getRegister().getGmail() != null){
+                                if (loginData.getRegister().getMail() != null){
                                     sendMessage(sender, Message.COMMAND_LINK_ALREADY_GMAIL);
                                 }
                                 AviaTerraCore.enqueueTaskAsynchronously(() -> {
@@ -68,17 +67,17 @@ public class LinkCommand extends BaseTabCommand {
                             sendMessage(sender, Message.COMMAND_LINK_GMAIL_NO_LOGIN);
                         }
                     }else {
-                        if (loginData.getRegister().getGmail() != null){
+                        if (loginData.getRegister().getMail() != null){
                             CodeAuth codeAuth = new CodeAuth(UUID.randomUUID(),
                                     System.currentTimeMillis() + (EXPIRATION_TIME),
                                     uuid,
-                                    loginData.getRegister().getGmail(),
+                                    loginData.getRegister().getMail(),
                                     TwoFactorAuth.MediaAuth.GMAIL
                             );
                             TwoFactorAuth.CODES.put(uuid, codeAuth);
                             sendMessage(sender, Message.COMMAND_LINK_SEND_GMAIL_2);
                             AviaTerraCore.enqueueTaskAsynchronously(() -> {
-                                TwoFactorAuth.sendVerificationEmail(loginData.getRegister().getGmail(), codeAuth, FormatMessage.CODE);
+                                TwoFactorAuth.sendVerificationEmail(loginData.getRegister().getMail(), codeAuth, FormatMessage.CODE);
                                 sendMessage(sender, Message.COMMAND_LINK_ARRIVED_MESSAGE_GMAIL);
                             });
                         }else {
@@ -146,7 +145,7 @@ public class LinkCommand extends BaseTabCommand {
                             case GMAIL -> AviaTerraCore.enqueueTaskAsynchronously(() -> {
                                 if (DataBaseRegister.updateGmail(player.getName(), TwoFactorAuth.CODES.get(uuid).getMedia())){
                                     LoginData login = LoginManager.getDataLogin(player);
-                                    login.getRegister().setGmail(TwoFactorAuth.CODES.get(uuid).getMedia());
+                                    login.getRegister().setMail(TwoFactorAuth.CODES.get(uuid).getMedia());
                                     sendMessage(player, Message.COMMAND_LINK_SUCCESSFUL);
                                 }else {
                                     sendMessage(player, Message.COMMAND_LINK_ERROR);

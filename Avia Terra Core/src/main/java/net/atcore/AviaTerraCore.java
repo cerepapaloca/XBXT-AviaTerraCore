@@ -28,7 +28,6 @@ import java.util.Random;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import static net.atcore.messages.MessagesManager.logConsole;
 import static net.atcore.utils.RegisterManager.register;
 
 public final class AviaTerraCore extends JavaPlugin {
@@ -233,6 +232,7 @@ public final class AviaTerraCore extends JavaPlugin {
     private void startAutoRestart(){
         new BukkitRunnable() {
             public void run() {
+                MessagesManager.logConsole("Reinició automático iniciado", TypeMessages.INFO, CategoryMessages.SYSTEM);
                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "passiverestart");
             }
         }.runTaskLater(this, 20*60*60*24L);

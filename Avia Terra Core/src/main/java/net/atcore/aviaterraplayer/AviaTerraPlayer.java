@@ -81,14 +81,14 @@ public class AviaTerraPlayer {
     }
 
     public void joinEvent(Player player) {
-        updateChuck(player);
+        updateView(player);
         Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> {
             if (nameColor != null) player.displayName(GlobalUtils.chatColorLegacyToComponent(nameColor));
         });
         AviaTerraCore.enqueueTaskAsynchronously(() -> playerDataFile.loadData());
     }
 
-    public void updateChuck(Player player) {
+    public void updateView(Player player) {
         int renderDistance = getMaxPermission(player, "simulationdistance");
         player.setSendViewDistance(renderDistance);
         player.setViewDistance(renderDistance);
@@ -100,6 +100,7 @@ public class AviaTerraPlayer {
     }
 
     private static int getMaxPermission(Player player, String permissionName) {
+        if (player.isOp()) return 32;
         int renderDistance = 4;
         int maxChunks = 4;
         for (String permission : player.getEffectivePermissions().stream().map(PermissionAttachmentInfo::getPermission).toList()) {

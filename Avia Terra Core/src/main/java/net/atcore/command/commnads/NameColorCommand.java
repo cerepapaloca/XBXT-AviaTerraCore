@@ -25,7 +25,7 @@ public class NameColorCommand extends BaseTabCommand {
         //noinspection deprecation
         super("nameColor",
                 new ArgumentUse("nameColor").addArg(ChatColor.values()),
-                "Puedes modificar el color de tu nombre",
+                "Cambias de color tu nombre",
                 false);
         colorOptions = getColorOptions();
         styleOptions = getStyleOptions();

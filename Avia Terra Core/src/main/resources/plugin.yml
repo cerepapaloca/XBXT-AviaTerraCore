@@ -78,3 +78,13 @@ permissions:
     default: false
   aviaterracore.simulationdistance.32:
     default: false
+  aviaterracore.maxhome.4:
+    default: false
+  aviaterracore.maxhome.6:
+    default: false
+  aviaterracore.maxhome.8:
+    default: false
+  aviaterracore.maxhome.16:
+    default: false
+  aviaterracore.maxhome.32:
+    default: false

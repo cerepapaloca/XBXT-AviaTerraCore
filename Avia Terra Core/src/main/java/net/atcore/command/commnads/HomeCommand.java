@@ -70,12 +70,9 @@ public class HomeCommand extends BaseTabCommand {
                                 MessagesManager.sendMessage(sender, Message.COMMAND_HOME_CONTAINS_POINT);
                                 return;
                             }
-                            if (!Character.isAlphabetic(args[0].charAt(0))) {
-                                MessagesManager.sendMessage(sender, Message.COMMAND_HOME_IS_NOT_ALPHABETICAL);
-                                return;
-                            }
-                            if (atp.getHomes().size() >= AviaTerraPlayer.getPlayer(player).getMaxHome()) {
-                                MessagesManager.sendMessage(sender, Message.COMMAND_HOME_MAX_HOME);
+                            int maxHome = AviaTerraPlayer.getPlayer(player).getMaxHome();
+                            if (atp.getHomes().size() >= maxHome) {
+                                MessagesManager.sendFormatMessage(sender, Message.COMMAND_HOME_MAX_HOME, maxHome);
                                 return;
                             }
                             atp.getHomes().put(args[0], player.getLocation());

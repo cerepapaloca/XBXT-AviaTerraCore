@@ -21,7 +21,8 @@ public class PremiumCommand extends BaseCommand {
         super("premium",
                 new ArgumentUse("premium"),
                 "**",
-                "Tu cuenta de usuario semi-cracked pasa a ser de premium",
+                "La cuenta de un usuario semi-cracked pasa a ser de premium esto provoca que no use su contraseña" +
+                        " y haga el protocolo de encriptación",
                 true
         );
         this.setMessageConfirm("<red><b>Advertencia</b></red> Solo ejecutar cuando tiene una cuenta oficial de microsoft," +
