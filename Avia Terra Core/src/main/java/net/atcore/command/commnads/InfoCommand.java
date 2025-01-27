@@ -62,8 +62,8 @@ public class InfoCommand extends BaseCommand {
                 send(sender, String.format("UUID Premium: <|%s|>", data.getRegister().getUuidPremium()));
                 send(sender, String.format("UUID Bedrock: <|%s|>", data.getRegister().getUuidBedrock()));
                 send(sender, String.format("Localización: <|%s|>", locationToString(player.getLocation())));
-                send(sender, String.format("Tiempo Logueado: <|%s|>", GlobalUtils.timeToString(data.getRegister().getLastLoginDate(), 1)));
-                send(sender, String.format("Tiempo Registrado: <|%s|>", GlobalUtils.timeToString(data.getRegister().getRegisterDate(), 1)));
+                send(sender, String.format("Tiempo Logueado: <|%s|>", GlobalUtils.timeToString(System.currentTimeMillis() - data.getRegister().getLastLoginDate(), 1)));
+                send(sender, String.format("Tiempo Registrado: <|%s|>", GlobalUtils.timeToString(System.currentTimeMillis() - data.getRegister().getRegisterDate(), 1)));
                 send(sender, String.format("Ping: <|%s|>", player.getPing()));
                 send(sender, String.format("Ip: <|%s|>", player.getAddress() == null ? null : player.getAddress().getAddress().getHostAddress()));
                 if (args.length == 1 || !args[1].equalsIgnoreCase("more")) return;
@@ -71,7 +71,7 @@ public class InfoCommand extends BaseCommand {
                 send(sender, String.format("Tipo de cuanta: <|%s|>", data.getRegister().getStateLogins().name().toLowerCase()));
                 send(sender, String.format("Código de encriptación: <|%s|>", Arrays.toString(data.getSession().getSharedSecret())));
                 send(sender, String.format("Modo Limbo: <|%s|>", data.isLimboMode()));
-                send(sender, String.format("Contraseña:  <|%s|>", data.getRegister().getPasswordShaded()));
+                send(sender, String.format("Contraseña: <|%s|>", data.getRegister().getPasswordShaded()));
                 send(sender, String.format("Tiene sesión: <|%s|>", data.getSession() != null));
                 send(sender, String.format("Cliente: <|%s|>", player.getClientBrandName()));
                 send(sender, String.format("Discord: <|%s|>", data.getRegister().getDiscord()));
@@ -81,7 +81,6 @@ public class InfoCommand extends BaseCommand {
                 send(sender, String.format("Vida: <|%s|>", player.getHealth()));
                 send(sender, String.format("Comida: <|%s|>", player.getFoodLevel()));
                 send(sender, String.format("Nivel: <|%s|>", player.getLevel()));
-                send(sender, String.format("Efectos: <|%s|>", player.getEffectivePermissions()));
                 send(sender, String.format("Idioma: <|%s|>", player.locale()));
             }));
         }

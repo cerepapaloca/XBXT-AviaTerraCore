@@ -7,8 +7,10 @@ import lombok.experimental.UtilityClass;
 import net.atcore.AviaTerraCore;
 import net.atcore.Config;
 import net.atcore.data.sql.DataBaseRegister;
+import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
+import net.atcore.messages.TypeMessages;
 import net.atcore.security.EncryptService;
 import net.atcore.security.Login.model.LoginData;
 import net.atcore.security.Login.model.RegisterData;
@@ -33,11 +35,11 @@ import static net.atcore.data.sql.DataBaseRegister.*;
 @UtilityClass
 public final class LoginManager {
 
-    private final HashMap<UUID, LoginData> listDataLogin = new HashMap<>();
+    private final HashMap<UUID, LoginData> LIST_DATA_LOGIN = new HashMap<>();
 
     //la llave es el nombre de usuario
     public LoginData getDataLogin(String name) {
-        return listDataLogin.get(GlobalUtils.getUUIDByName(name));
+        return LIST_DATA_LOGIN.get(GlobalUtils.getUUIDByName(name));
     }
 
     /**
@@ -48,25 +50,25 @@ public final class LoginManager {
     public LoginData getDataLogin(UUID uuid) {
         if (FloodgateApi.getInstance().isFloodgatePlayer(uuid)){
             FloodgatePlayer playerFP = FloodgateApi.getInstance().getPlayer(uuid);
-            return listDataLogin.get(GlobalUtils.getUUIDByName(playerFP.getUsername()));
+            return LIST_DATA_LOGIN.get(GlobalUtils.getUUIDByName(playerFP.getUsername()));
         }else {
-            return listDataLogin.get(uuid);
+            return LIST_DATA_LOGIN.get(uuid);
         }
 
     }
 
     public LoginData getDataLogin(@NotNull Player player) {
-        return listDataLogin.get(GlobalUtils.getUUIDByName(GlobalUtils.getRealName(player)));
+        return LIST_DATA_LOGIN.get(GlobalUtils.getUUIDByName(GlobalUtils.getRealName(player)));
     }
 
     public @NotNull LoginData addDataLogin(String name , RegisterData registerData) {
         LoginData loginData = new LoginData(registerData);
-        listDataLogin.put(GlobalUtils.getUUIDByName(name) , loginData);
+        LIST_DATA_LOGIN.put(GlobalUtils.getUUIDByName(name) , loginData);
         return loginData;
     }
 
     public void clearDataLogin() {
-        listDataLogin.clear();
+        LIST_DATA_LOGIN.clear();
     }
 
     public void removeDataLogin(String name) {
@@ -74,15 +76,15 @@ public final class LoginManager {
         if (player != null) {
             if (FloodgateApi.getInstance().isFloodgatePlayer(player.getUniqueId())) {
                 FloodgatePlayer playerFP = FloodgateApi.getInstance().getPlayer(player.getUniqueId());
-                listDataLogin.remove(GlobalUtils.getUUIDByName(playerFP.getUsername()));
+                LIST_DATA_LOGIN.remove(GlobalUtils.getUUIDByName(playerFP.getUsername()));
             }
         }
-        listDataLogin.remove(GlobalUtils.getUUIDByName(name));
+        LIST_DATA_LOGIN.remove(GlobalUtils.getUUIDByName(name));
     }
 
     @Contract(" -> new")
     public @NotNull HashSet<LoginData> getDataLogin() {
-        return new HashSet<>(listDataLogin.values());
+        return new HashSet<>(LIST_DATA_LOGIN.values());
     }
 
     public boolean isLimboMode(Player player) {
@@ -185,6 +187,7 @@ public final class LoginManager {
                 GlobalUtils.addRangeVote(player);
             }
         }.runTaskLater(AviaTerraCore.getInstance(), 20*3);
+        MessagesManager.logConsole(String.format("Inicio de sesión cracked valida para <|%s|>", player.getName()) , TypeMessages.SUCCESS, CategoryMessages.LOGIN);
         return loginData;
     }
 
@@ -217,6 +220,8 @@ public final class LoginManager {
                 Player player = Bukkit.getPlayer(name);
                 if (player == null) return;
                 GlobalUtils.synchronizeKickPlayer(player, Message.LOGIN_KICK_ADDRESS_ERROR);
+            }else {
+                MessagesManager.logConsole(String.format("Se creó exitosamente el registro de %s", name) , TypeMessages.SUCCESS, CategoryMessages.LOGIN);
             }
         });
         RegisterData registerData = getDataLogin(name).getRegister();

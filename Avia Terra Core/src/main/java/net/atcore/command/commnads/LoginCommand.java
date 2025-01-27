@@ -43,6 +43,10 @@ public class LoginCommand extends BaseCommand {
                     MessagesManager.sendMessage(player, Message.COMMAND_REGISTER_IS_PREMIUM);
                     return;
                 }
+                if (LoginManager.checkLoginIn(player)){
+                    sendMessage(player, Message.COMMAND_LOGIN_ALREADY);
+                    return;
+                }
                 if (loginData.getRegister().getPasswordShaded() != null) {
                     if (isUUID(args[0])){
                         if (TwoFactorAuth.checkCode(player, args[0])) {
@@ -67,10 +71,6 @@ public class LoginCommand extends BaseCommand {
     }
 
     private void preStartPlay(Player player, LoginData loginData) {
-        if (LoginManager.checkLoginIn(player)){
-            sendMessage(player, Message.COMMAND_LOGIN_ALREADY);
-            return;
-        }
         TwoFactorAuth.CODES.remove(player.getUniqueId());
         try {
             if (!loginData.isLimboMode()) {

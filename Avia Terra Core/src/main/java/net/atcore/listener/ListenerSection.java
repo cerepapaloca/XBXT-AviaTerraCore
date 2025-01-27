@@ -1,13 +1,9 @@
 package net.atcore.listener;
 
 import lombok.Getter;
-import net.atcore.AviaTerraCore;
 import net.atcore.Section;
-import org.bukkit.Bukkit;
-import org.bukkit.scheduler.BukkitRunnable;
 
-import static net.atcore.AviaTerraCore.jda;
-import static net.atcore.utils.RegisterManager.*;
+import static net.atcore.utils.RegisterManager.register;
 
 public class ListenerSection implements Section {
 

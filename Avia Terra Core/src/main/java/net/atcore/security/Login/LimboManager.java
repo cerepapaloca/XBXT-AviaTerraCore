@@ -15,16 +15,16 @@ import net.atcore.security.Login.model.LoginData;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import org.geysermc.floodgate.api.FloodgateApi;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 @UtilityClass
@@ -32,6 +32,7 @@ public class LimboManager {
 
     public final int LIMBO_TIME = 20*60;
     public final Set<UUID> LIST_IN_PROCESS = Sets.newHashSet();
+    private final PotionEffect BLINDNESS_EFFECT = new PotionEffect(PotionEffectType.BLINDNESS, PotionEffect.INFINITE_DURATION,1, true, false);
 
     public void startAsynchronouslyLimboMode(Player player, ReasonLimbo reasonLimbo) {
         try {
@@ -43,10 +44,10 @@ public class LimboManager {
                             LoginData loginData = LoginManager.getDataLogin(player);
                             boolean isOk = loginData.isBedrockPlayer() == FloodgateApi.getInstance().isFloodgatePlayer(player.getUniqueId());
                             if (isOk) {
-                                if (loginData.isBedrockPlayer()){
-                                    LimboManager.createLimboMode(player, reasonLimbo);
-                                }else {
+                                if (loginData.isBedrockPlayer()) {
                                     Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> LimboManager.createLimboMode(player, reasonLimbo));
+                                } else {
+                                    LimboManager.createLimboMode(player, reasonLimbo);
                                 }
                             }else {
                                 MessagesManager.logConsole(String.format("Los registros de %s y el floodGate dieron datos inconsistentes", player.getName()), TypeMessages.WARNING, CategoryMessages.LOGIN);
@@ -73,6 +74,7 @@ public class LimboManager {
         FileYaml file = DataSection.getCacheLimboFlies().getConfigFile(uuidString, false);
         AtomicBoolean aBoolean = new AtomicBoolean(true);
         addLimboData(player, loginData);
+        if (loginData.isBedrockPlayer()) player.addPotionEffect(BLINDNESS_EFFECT);
         if (file != null) {// Si tiene un archivo eso quiere decir que no pudo aplicar las propiedades al usuario
             if (file instanceof CacheLimboFile cacheLimbo){
                 if (!cacheLimbo.isRestored()) {
@@ -98,18 +100,23 @@ public class LimboManager {
         });
     }
 
+    private final Location LIMBO_LOCATION = new Location(Bukkit.getWorlds().getFirst(), 0, 100, 0);
+
     private static void clearPlayer(Player player) {
         player.getInventory().clear();
-        player.teleport(player.getWorld().getSpawnLocation());
+        player.teleport(LIMBO_LOCATION);
         player.setOp(false);
         player.setGameMode(GameMode.SPECTATOR);
         player.setLevel(0);
         player.setAllowFlight(true);
+        player.setFlying(true);
         player.setHealth(20);
         player.setFoodLevel(20);
         player.setExhaustion(0);
         player.setSaturation(0);
         player.setFireTicks(0);
+        player.setInvisible(true);
+        player.setInvulnerable(true);
         player.clearActivePotionEffects();
     }
 

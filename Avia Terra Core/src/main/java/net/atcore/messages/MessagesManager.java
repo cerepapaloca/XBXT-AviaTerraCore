@@ -24,7 +24,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.time.Duration;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Random;
+import java.util.TimeZone;
 
 import static net.kyori.adventure.text.event.ClickEvent.Action;
 
@@ -238,7 +242,11 @@ public final class MessagesManager {
             if (chanelId == null)return;
             TextChannel channel = AviaTerraCore.jda.getTextChannelById(chanelId);
             if (channel !=  null) {
-                channel.sendMessage(s.replace("<|", "**").replace("|>", "**").replace("|!>", "")).queue();
+                Instant instant = Instant.ofEpochMilli(System.currentTimeMillis());
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss").withZone(TimeZone.getTimeZone("GMT-5").toZoneId());
+
+                channel.sendMessage("`[" + formatter.format(instant) + "]` " +
+                        s.replace("<|", "**").replace("|>", "**").replace("|!>", "")).queue();
             } else {
                 throw new IllegalArgumentException("No se encontró canal de discord para los registro " + categoryMessages.name());
             }

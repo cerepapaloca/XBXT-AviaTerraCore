@@ -89,14 +89,20 @@ public class AviaTerraPlayer {
     }
 
     public void updateView(Player player) {
-        int renderDistance = getMaxPermission(player, "simulationdistance");
+        int renderDistance = getMaxPermission(player, "viewdistance");
         player.setSendViewDistance(renderDistance);
         player.setViewDistance(renderDistance);
+        player.setSimulationDistance(getMaxPermission(player, "simulationdistance"));
     }
 
     public int getMaxHome(){
         Player player = getPlayer();
         return getMaxPermission(player, "maxhome");
+    }
+
+    public int getViewDistance(){
+        Player player = getPlayer();
+        return getMaxPermission(player, "viewdistance");
     }
 
     private static int getMaxPermission(Player player, String permissionName) {

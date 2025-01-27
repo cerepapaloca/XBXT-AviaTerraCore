@@ -14,6 +14,8 @@ import net.atcore.security.Login.LoginManager;
 import net.atcore.security.Login.model.LimboData;
 import net.atcore.security.Login.model.LoginData;
 import net.atcore.security.SecuritySection;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 
 import java.util.HashMap;
@@ -70,7 +72,7 @@ public class PacketListenerManager {
                     PACKET_LISTENERS.get(uuid).add(event.getPacket());
                     return;
                 }
-                if (login.hasSession()){
+                if (login.hasSession() || login.isBedrockPlayer()){
                     PACKET_LISTENERS.remove(uuid);
                     return;
                 }

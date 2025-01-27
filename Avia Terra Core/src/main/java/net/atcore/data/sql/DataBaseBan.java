@@ -198,8 +198,12 @@ public class DataBaseBan extends DataBaseMySql {
                 tiempoDeBaneo = GlobalUtils.timeToString(dataBan.getUnbanDate() - dataBan.getBanDate(), 2);
             }
             reload();// TODO: Esto no es lo más optimo
-            MessagesManager.logConsole(String.format(Message.DATA_BAN_ADD_OK.getMessageLocatePrivate(), dataBan.getName(), dataBan.getContext(), tiempoDeBaneo, dataBan.getAuthor(), dataBan.getReason()), TypeMessages.SUCCESS, CategoryMessages.BAN);
-
+            MessagesManager.logConsole(String.format("El jugador <|%1$s|> fue baneado de <|%2$s|> durante <|%3$s|> por <|%4$s|> y la razón es <|%5$s|>",
+                    dataBan.getName(),
+                    dataBan.getContext(),
+                    tiempoDeBaneo,
+                    dataBan.getAuthor(),
+                    dataBan.getReason()), TypeMessages.SUCCESS, CategoryMessages.BAN);
         } catch (SQLException e) {
             String tiempoDeBaneo;
             if (dataBan.getUnbanDate() == GlobalConstantes.NUMERO_PERMA){
@@ -207,8 +211,13 @@ public class DataBaseBan extends DataBaseMySql {
             }else {
                 tiempoDeBaneo = GlobalUtils.timeToString(dataBan.getUnbanDate() - dataBan.getBanDate(), 2);
             }
-            MessagesManager.logConsole(String.format(Message.DATA_BAN_ADD_FAILED.getMessageLocatePrivate(), dataBan.getName(), dataBan.getContext(), tiempoDeBaneo, dataBan.getAuthor(), dataBan.getReason()), TypeMessages.SUCCESS, CategoryMessages.BAN);
-            throw new RuntimeException(e);
+            MessagesManager.logConsole(String.format("Error al banear al jugador <|%1$s|> Contexto: <|%2$s|> Tiempo de baneo: <|%3$s|> Autor: <|%4$s|> razón de baneo: <|%5$s|>",
+                    dataBan.getName(),
+                    dataBan.getContext(),
+                    tiempoDeBaneo,
+                    dataBan.getAuthor(),
+                    dataBan.getReason()), TypeMessages.ERROR, CategoryMessages.BAN);
+            MessagesManager.sendErrorException(Message.DATA_MYSQL_EXCEPTION.getMessageLocatePrivate(), e);
         }
     }
 
@@ -220,10 +229,16 @@ public class DataBaseBan extends DataBaseMySql {
             statement.setString(2, context.name());
             statement.executeUpdate();
             reload();
-            MessagesManager.logConsole(String.format(Message.DATA_BAN_REMOVE_OK.getMessageLocatePrivate(), name, context.name(), author), TypeMessages.SUCCESS, CategoryMessages.BAN);
+            MessagesManager.logConsole(String.format("Se Desbano el jugador <|%1$s|> en el contexto <|%2$s|> por <|%3$s|>",
+                    name,
+                    context.name(),
+                    author), TypeMessages.SUCCESS, CategoryMessages.BAN);
         } catch (SQLException e) {
-            MessagesManager.logConsole(String.format(Message.DATA_BAN_REMOVE_FAILED.getMessageLocatePrivate(), name, context.name(), author), TypeMessages.ERROR, CategoryMessages.BAN);
-            throw new RuntimeException(e);
+            MessagesManager.logConsole(String.format("Error al desbanear al jugador <|%1$s|> del contexto <|%2$s|> por <|%3$s|>",
+                    name,
+                    context.name(),
+                    author), TypeMessages.ERROR, CategoryMessages.BAN);
+            MessagesManager.sendErrorException(Message.DATA_MYSQL_EXCEPTION.getMessageLocatePrivate(), e);
         }
     }
 

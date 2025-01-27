@@ -172,13 +172,11 @@ public class DataBaseRegister extends DataBaseMySql {
         try (PreparedStatement stmt = getConnection().prepareStatement(sql)) {
             stmt.setLong(1, time);
             stmt.setString(2, name);
-
             stmt.executeUpdate();
-            logConsole(String.format(Message.DATA_REGISTER_DATE_OK.getMessageLocatePrivate(), name), TypeMessages.SUCCESS, CategoryMessages.LOGIN);
             return true;
         } catch (SQLException e) {
-            logConsole(String.format(Message.DATA_REGISTER_DATE_FAILED.getMessageLocatePrivate(), name), TypeMessages.ERROR, CategoryMessages.LOGIN);
-            AviaTerraCore.getInstance().getLogger().warning(e.getMessage());
+            logConsole(String.format("No se pudo actualizar la <|fecha del ultimo login|> del jugador <|%s|>", name), TypeMessages.ERROR, CategoryMessages.LOGIN);
+            MessagesManager.sendErrorException(Message.DATA_MYSQL_EXCEPTION.getMessageLocatePrivate(), e);
             return false;
         }
     }
@@ -191,11 +189,10 @@ public class DataBaseRegister extends DataBaseMySql {
             stmt.setString(2, name);
 
             stmt.executeUpdate();
-            logConsole(String.format(Message.DATA_REGISTER_GMAIL_OK.getMessageLocatePrivate(), name), TypeMessages.SUCCESS, CategoryMessages.LOGIN);
             return true;
         } catch (SQLException e) {
-            logConsole(String.format(Message.DATA_REGISTER_GMAIL_FAILED.getMessageLocatePrivate(), name), TypeMessages.ERROR, CategoryMessages.LOGIN);
-            AviaTerraCore.getInstance().getLogger().warning(e.getMessage());
+                logConsole(String.format("No se pudo actualizar el <|gmail|> del jugador <|%s|>", name), TypeMessages.ERROR, CategoryMessages.LOGIN);
+            MessagesManager.sendErrorException(Message.DATA_MYSQL_EXCEPTION.getMessageLocatePrivate(), e);
             return false;
         }
     }
@@ -208,11 +205,10 @@ public class DataBaseRegister extends DataBaseMySql {
             stmt.setString(2, name);
 
             stmt.executeUpdate();
-            logConsole(String.format(Message.DATA_REGISTER_DISCORD_OK.getMessageLocatePrivate(), name), TypeMessages.SUCCESS, CategoryMessages.LOGIN);
             return true;
         } catch (SQLException e) {
-            logConsole(String.format(Message.DATA_REGISTER_DISCORD_FAILED.getMessageLocatePrivate(), name), TypeMessages.ERROR, CategoryMessages.LOGIN);
-            AviaTerraCore.getInstance().getLogger().warning(e.getMessage());
+            logConsole(String.format("No se pudo actualizar el <|discord|> del jugador <|%s|>", name), TypeMessages.ERROR, CategoryMessages.LOGIN);
+            MessagesManager.sendErrorException(Message.DATA_MYSQL_EXCEPTION.getMessageLocatePrivate(), e);
             return false;
         }
     }
@@ -225,11 +221,10 @@ public class DataBaseRegister extends DataBaseMySql {
             stmt.setString(2, name);
 
             stmt.executeUpdate();
-            logConsole(String.format(Message.DATA_REGISTER_PASSWORD_OK.getMessageLocatePrivate(), name), TypeMessages.SUCCESS, CategoryMessages.LOGIN);
             return true;
         } catch (SQLException e) {
-            logConsole(String.format(Message.DATA_REGISTER_PASSWORD_FAILED.getMessageLocatePrivate(), name), TypeMessages.ERROR, CategoryMessages.LOGIN);
-            AviaTerraCore.getInstance().getLogger().warning(e.getMessage());
+            logConsole(String.format("No se pudo actualizar la <|contraseña|> del jugador <|%s|>", name), TypeMessages.ERROR, CategoryMessages.LOGIN);
+            MessagesManager.sendErrorException(Message.DATA_MYSQL_EXCEPTION.getMessageLocatePrivate(), e);
             return false;
         }
     }
@@ -242,11 +237,10 @@ public class DataBaseRegister extends DataBaseMySql {
             stmt.setString(2, name);
 
             stmt.executeUpdate();
-            logConsole(String.format(Message.DATA_REGISTER_ADDRESS_OK.getMessageLocatePrivate(), name), TypeMessages.SUCCESS, CategoryMessages.LOGIN);
             return true;
         } catch (SQLException e) {
-            logConsole(String.format(Message.DATA_REGISTER_ADDRESS_FAILED.getMessageLocatePrivate(), name), TypeMessages.ERROR, CategoryMessages.LOGIN);
-            AviaTerraCore.getInstance().getLogger().warning(e.getMessage());
+            logConsole(String.format("No se pudo actualizar la <|ip|> del jugador <|%s|>", name), TypeMessages.ERROR, CategoryMessages.LOGIN);
+            MessagesManager.sendErrorException(Message.DATA_MYSQL_EXCEPTION.getMessageLocatePrivate(), e);
             return false;
         }
     }
@@ -258,11 +252,10 @@ public class DataBaseRegister extends DataBaseMySql {
             stmt.setString(1, stateLogins.name());
             stmt.setString(2, name);
             stmt.executeUpdate();
-            logConsole(String.format(Message.DATA_REGISTER_STATE_OK.getMessageLocatePrivate(), name), TypeMessages.SUCCESS, CategoryMessages.LOGIN);
             return true;
         } catch (SQLException e) {
-            logConsole(String.format(Message.DATA_REGISTER_STATE_FAILED.getMessageLocatePrivate(), name), TypeMessages.ERROR, CategoryMessages.LOGIN);
-            AviaTerraCore.getInstance().getLogger().warning(e.getMessage());
+            logConsole(String.format("No se pudo cambiar el <|estado de la cuenta|> del jugador <|%s|>", name), TypeMessages.ERROR, CategoryMessages.LOGIN);
+            MessagesManager.sendErrorException(Message.DATA_MYSQL_EXCEPTION.getMessageLocatePrivate(), e);
             return false;
         }
     }
@@ -280,11 +273,11 @@ public class DataBaseRegister extends DataBaseMySql {
             stmt.setString(1, name);
 
             stmt.executeUpdate();
-            logConsole(String.format(Message.DATA_REGISTER_REMOVE_OK.getMessageLocatePrivate(), name, author), TypeMessages.SUCCESS, CategoryMessages.LOGIN);
+            logConsole(String.format("Se borro el <|registro|> del jugador <|%1$s|> por <|%2$s|>", name, author), TypeMessages.SUCCESS, CategoryMessages.LOGIN);
             return true;
         }catch(SQLException e){
-            logConsole(String.format(Message.DATA_REGISTER_REMOVE_FAILED.getMessageLocatePrivate(), name, author), TypeMessages.ERROR, CategoryMessages.LOGIN);
-            AviaTerraCore.getInstance().getLogger().warning(e.getMessage());
+            logConsole(String.format("Se borro el <|registro|> del jugador <|%1$s|> por <|%2$s|>", name, author), TypeMessages.ERROR, CategoryMessages.LOGIN);
+            MessagesManager.sendErrorException(Message.DATA_MYSQL_EXCEPTION.getMessageLocatePrivate(), e);
             return false;
         }
     }
@@ -296,10 +289,10 @@ public class DataBaseRegister extends DataBaseMySql {
             stmt.setString(1, uuid.toString());
             stmt.setString(2, name);
             stmt.executeUpdate();
-            logConsole(String.format(Message.DATA_REGISTER_UUID_BEDROCK_OK.getMessageLocatePrivate(), name), TypeMessages.SUCCESS, CategoryMessages.LOGIN);
+
         } catch (SQLException e) {
-            logConsole(String.format(Message.DATA_REGISTER_UUID_BEDROCK_FAILED.getMessageLocatePrivate(), name), TypeMessages.ERROR, CategoryMessages.LOGIN);
-            AviaTerraCore.getInstance().getLogger().warning(e.getMessage());
+            logConsole(String.format("Hubo un error al añadir <|UUID de bedrock|> del jugador <|%s|>", name), TypeMessages.ERROR, CategoryMessages.LOGIN);
+            MessagesManager.sendErrorException(Message.DATA_MYSQL_EXCEPTION.getMessageLocatePrivate(), e);
         }
     }
 }

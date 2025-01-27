@@ -19,7 +19,6 @@ import java.util.Objects;
 
 import static net.atcore.messages.MessagesManager.sendFormatMessage;
 import static net.atcore.messages.MessagesManager.sendMessage;
-import static net.atcore.security.Login.LoginManager.startPlaySessionCracked;
 
 public class RegisterCommand extends BaseCommand {
 
@@ -45,11 +44,11 @@ public class RegisterCommand extends BaseCommand {
                                 if (!args[0].equalsIgnoreCase(player.getName())){
                                     sendMessage(player, Message.COMMAND_REGISTER_SUCCESSFUL_CHAT.getMessage(player), TypeMessages.SUCCESS);
                                     LoginManager.newRegisterCracked(player,  args[0]);
+                                    LoginManager.startPlaySessionCracked(player).getRegister().setTemporary(false);
                                     sendDiscord(sender);
                                     MessagesManager.sendTitle(player, String.format( Message.COMMAND_REGISTER_SUCCESSFUL_TITLE.getMessage(player), MessagesManager.PREFIX),
                                             String.format(Message.COMMAND_REGISTER_SUCCESSFUL_SUBTITLE.getMessage(player), player.getName())
                                             , 20, 20*3, 40, TypeMessages.INFO);
-                                    startPlaySessionCracked(player).getRegister().setTemporary(false);
                                     LoginManager.checkLoginIn(player);
                                 }else {
                                     sendMessage(player, Message.COMMAND_REGISTER_PASSWORD_EQUAL_NAME);

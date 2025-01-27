@@ -66,6 +66,7 @@ public final class GlobalUtils {
 
     @Contract(pure = true)
     public String timeToString(long time, int format, boolean isGlobalDate) {
+
         if (time == GlobalConstantes.NUMERO_PERMA) return "permanente";
         if (isGlobalDate) time = time - System.currentTimeMillis();
         long days = TimeUnit.MILLISECONDS.toDays(time);

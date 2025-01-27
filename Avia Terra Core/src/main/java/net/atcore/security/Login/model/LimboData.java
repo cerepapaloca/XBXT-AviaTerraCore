@@ -6,13 +6,16 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import net.atcore.AviaTerraCore;
+import net.atcore.aviaterraplayer.AviaTerraPlayer;
 import net.atcore.data.DataSection;
 import net.atcore.data.yml.CacheLimboFile;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
+import net.atcore.security.Login.LoginManager;
 import net.atcore.utils.GlobalUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -23,6 +26,8 @@ import org.bukkit.scheduler.BukkitTask;
 
 import java.util.HashSet;
 import java.util.List;
+
+import static org.bukkit.Bukkit.getViewDistance;
 
 @Getter
 @Setter
@@ -45,6 +50,7 @@ public class LimboData {
     private HashSet<PacketContainer> packets;
 
     public void restorePlayer(Player player) {
+        player.clearActivePotionEffects();
         player.setGameMode(gameMode);
         player.setOp(op);
         player.setLevel(level);
@@ -56,6 +62,9 @@ public class LimboData {
         player.setSaturation(saturation);
         player.addPotionEffects(effects);
         player.setFireTicks(fireTicks);
+        player.setInvisible(false);
+        player.setInvulnerable(false);
+        player.setFlying(false);
         player.saveData();// Se guarda los datos del usuario en el servidor por si el servidor peta
         if (gameMode == GameMode.SURVIVAL) player.setAllowFlight(false);
         CacheLimboFile cacheLimbo = (CacheLimboFile) DataSection.getCacheLimboFlies().getConfigFile(GlobalUtils.getRealUUID(player).toString(), false);
