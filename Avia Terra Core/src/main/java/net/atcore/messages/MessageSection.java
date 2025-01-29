@@ -8,7 +8,7 @@ public class MessageSection implements Section {
 
     @Override
     public void enable() {
-        ConsoleDiscord.startConsoleAndBot();
+        DiscordBot.startDiscordBot();
     }
 
     @Override
@@ -18,8 +18,8 @@ public class MessageSection implements Section {
 
     @Override
     public void reload() {
-        ConsoleDiscord.handler.shutdown();
-        ConsoleDiscord.startConsoleAndBot();
+        DiscordBot.handler.shutdown();
+        DiscordBot.startDiscordBot();
     }
 
     @Override

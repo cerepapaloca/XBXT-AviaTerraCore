@@ -16,6 +16,7 @@ import net.atcore.security.Login.model.LimboData;
 import net.atcore.security.Login.model.LoginData;
 import net.atcore.security.SecuritySection;
 import net.atcore.utils.GlobalUtils;
+import net.atcore.utils.Service;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -47,7 +48,10 @@ public class JoinAndQuitListener implements Listener {
         if (LoginManager.getDataLogin(player) != null) {// si le llega a borrar el registro
             // Borra a los jugadores cracked y semi cracked que no pudieron registrarse para evitar tener jugadores fantasmas
             if (LoginManager.getDataLogin(player).getRegister().isTemporary()){
-                AviaTerraCore.enqueueTaskAsynchronously(() -> DataBaseRegister.removeRegister(player.getName(), "Servidor (EL registro es temporal)"));
+                AviaTerraCore.enqueueTaskAsynchronously(() -> {
+                    DataBaseRegister.removeRegister(player.getName(), "Servidor (EL registro es temporal)");
+                    Service.removeStatsPlayer(player);
+                });
             }
         }
 

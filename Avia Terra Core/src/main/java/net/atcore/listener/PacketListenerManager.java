@@ -5,18 +5,11 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
-import com.comphenix.protocol.wrappers.WrappedChatComponent;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import net.atcore.AviaTerraCore;
 import net.atcore.security.Login.LoginManager;
 import net.atcore.security.Login.model.LimboData;
 import net.atcore.security.Login.model.LoginData;
 import net.atcore.security.SecuritySection;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Sound;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -103,7 +96,7 @@ public class PacketListenerManager {
         });
 
         ///////////////////////////////////////////////////////////////////////////////
-
+        /*
         ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(
                 AviaTerraCore.getInstance(),
                 PacketType.Play.Server.CHAT
@@ -154,7 +147,7 @@ public class PacketListenerManager {
                 }
             }
         });
-
+        */
         ///////////////////////////////////////////////////////////////////////////////
     }
 }

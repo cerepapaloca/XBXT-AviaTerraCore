@@ -4,7 +4,7 @@ import net.atcore.AviaTerraCore;
 import net.atcore.Config;
 import net.atcore.data.FileYaml;
 import net.atcore.messages.CategoryMessages;
-import net.atcore.messages.ConsoleDiscord;
+import net.atcore.messages.DiscordBot;
 import net.atcore.security.Login.ServerMode;
 
 public class ConfigFile extends FileYaml {
@@ -20,7 +20,10 @@ public class ConfigFile extends FileYaml {
             String message = fileYaml.getString("canales-de-discord." + messages.name().toLowerCase());
             messages.setIdChannel(message);
         }
-        ConsoleDiscord.consoleId = fileYaml.getString("canales-de-discord.console");
+
+        DiscordBot.consoleId = fileYaml.getString("canales-de-discord.console");
+        DiscordBot.chatId = fileYaml.getString("canales-de-discord.chat-bridge");
+
         Config.setAntiBot(fileYaml.getBoolean("anti-bot", Config.isAntiBot()));
         Config.setExpirationSession(fileYaml.getLong("expiration-session", Config.getExpirationSession()));
         Config.setLevelModerationChat(fileYaml.getDouble("level-moderation-chat", Config.getLevelModerationChat()));

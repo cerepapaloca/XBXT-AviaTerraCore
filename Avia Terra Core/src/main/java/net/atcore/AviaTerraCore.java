@@ -99,7 +99,7 @@ public final class AviaTerraCore extends JavaPlugin {
             section.disable();
         }
         LIST_BROADCAST.clear();
-        if (ConsoleDiscord.stateTasks != null) ConsoleDiscord.stateTasks.cancel();
+        if (DiscordBot.stateTasks != null) DiscordBot.stateTasks.cancel();
         workerThread.interrupt();
         Bukkit.getOnlinePlayers().forEach(player ->
                 GlobalUtils.kickPlayer(player, "El servidor va a cerrar, volveremos pronto..."));

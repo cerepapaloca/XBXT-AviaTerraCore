@@ -24,18 +24,19 @@ import static net.atcore.AviaTerraCore.TOKEN_BOT;
 import static net.atcore.AviaTerraCore.jda;
 import static org.bukkit.Bukkit.getServer;
 
-public class ConsoleDiscord {
+public class DiscordBot extends ListenerAdapter{
 
     public static String consoleId = "1294324285602795550";
+    public static String chatId = "1294324328401207389";
     public static ChannelLoggingHandler handler;
     public static BukkitTask stateTasks = null;
 
-    public static void startConsoleAndBot(){
+    public static void startDiscordBot(){
         AviaTerraCore.enqueueTaskAsynchronously(true, () -> {
             jda = JDABuilder.createDefault(TOKEN_BOT).enableIntents(GatewayIntent.MESSAGE_CONTENT).build();
             try {
                 jda.awaitReady();
-                jda.addEventListener(new ConsoleDiscordListener());
+                jda.addEventListener(new DiscordBot());
                 startStateBot();
                 TextChannel logChannel = jda.getTextChannelById(consoleId);
                 if (logChannel == null) {
@@ -81,20 +82,25 @@ public class ConsoleDiscord {
         }
     }
 
-    public static class ConsoleDiscordListener extends ListenerAdapter {
+    @Override
+    public void onMessageReceived(@NotNull MessageReceivedEvent event) {
+        if (event.getAuthor().isBot()) return;
 
-        @Override
-        public void onMessageReceived(@NotNull MessageReceivedEvent event) {
-            if (event.getAuthor().isBot()) return;
+        Member member = event.getMember();
+        assert member != null;
 
-            Member member = event.getMember();
-            assert member != null;
-
-            Message message = event.getMessage();
-            String channel = event.getChannel().getId();
-            if (channel.equals(ConsoleDiscord.consoleId)){
-                if (message.getContentRaw().startsWith("-")) CommandManager.processCommandFromDiscord(message, member);
-            }
+        Message message = event.getMessage();
+        String channel = event.getChannel().getId();
+        net.atcore.messages.Message format = net.atcore.messages.Message.EVENT_FORMAT_CHAT;
+        if (channel.equals(DiscordBot.consoleId)){
+            if (message.getContentRaw().startsWith("-")) CommandManager.processCommandFromDiscord(message, member);
+        }else if (channel.equals(DiscordBot.chatId)){
+            Bukkit.getOnlinePlayers().forEach(player ->
+                    MessagesManager.sendString(player,
+                            String.format(MessagesManager.PREFIX_CHAT_DISCORD + format.getMessage(player), member.getUser().getGlobalName(), message.getContentRaw()),
+                            format.getTypeMessages()
+                    )
+            );
         }
     }
 }
