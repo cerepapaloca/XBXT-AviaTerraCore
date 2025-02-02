@@ -205,12 +205,13 @@ public final class LoginManager {
         RegisterData data = getDataLogin(name).getRegister();
         data.setTemporary(false);
         data.setPasswordShaded(s);
+        updateLoginDataBase(name, player.getAddress().getAddress());
         AviaTerraCore.enqueueTaskAsynchronously(() -> {
             if (!updatePassword(name, s)){
                 GlobalUtils.synchronizeKickPlayer(player, Message.LOGIN_KICK_PASSWORD_ERROR);
             }
+            MessagesManager.logConsole(String.format("Se creó exitosamente el registro de %s", name) , TypeMessages.SUCCESS, CategoryMessages.LOGIN);
         });
-        updateLoginDataBase(name, player.getAddress().getAddress());
     }
 
     public void updateLoginDataBase(String name, InetAddress inetAddress){
@@ -220,8 +221,6 @@ public final class LoginManager {
                 Player player = Bukkit.getPlayer(name);
                 if (player == null) return;
                 GlobalUtils.synchronizeKickPlayer(player, Message.LOGIN_KICK_ADDRESS_ERROR);
-            }else {
-                MessagesManager.logConsole(String.format("Se creó exitosamente el registro de %s", name) , TypeMessages.SUCCESS, CategoryMessages.LOGIN);
             }
         });
         RegisterData registerData = getDataLogin(name).getRegister();

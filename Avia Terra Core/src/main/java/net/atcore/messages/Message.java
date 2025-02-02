@@ -258,7 +258,7 @@ public enum Message {
         return getMessageLocate(DEFAULT_LOCALE_PRIVATE);
     }
 
-    public String getMessageLocateDefault() {
+    public String getMessageLocaleDefault() {
         return getMessageLocate(DEFAULT_LOCALE_USER);
     }
 }

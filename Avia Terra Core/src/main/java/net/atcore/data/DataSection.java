@@ -42,6 +42,7 @@ public class DataSection implements Section {
         playersDataFiles = new PlayersDataFiles();
         cacheVoteFile = new CacheVoteFile();
         cacheLimboFlies = new CacheLimboFlies();
+
         for (DataBaseMySql db : DATA_BASE) db.createTable();
         for (File fileYaml : FILES) fileYaml.loadData();
     }

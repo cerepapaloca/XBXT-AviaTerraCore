@@ -100,7 +100,7 @@ public abstract class BaseWeaponUltraKill extends BaseWeapon {
                 maxDistance
         );
         List<Component> lore = GlobalUtils.stringToLoreComponent(s, true);
-        lore.addAll(GlobalUtils.stringToLoreComponent(Message.MISC_WARING_ANTI_DUPE.getMessageLocateDefault(), false, TypeMessages.WARNING.getMainColor()));;
+        lore.addAll(GlobalUtils.stringToLoreComponent(Message.MISC_WARING_ANTI_DUPE.getMessageLocaleDefault(), false, TypeMessages.WARNING.getMainColor()));;
         meta.lore(lore);
         itemStack.setItemMeta(meta);
     }

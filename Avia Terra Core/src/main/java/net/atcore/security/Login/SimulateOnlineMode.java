@@ -181,7 +181,7 @@ public class SimulateOnlineMode {
                 encryptMethod.invoke(networkManager, decryptionCipher, encryptionCipher);
             }
         } catch (Exception ex) {
-            Bukkit.getConsoleSender().sendMessage(ex.getMessage());
+            MessagesManager.sendWaringException("Error al iniciar el encriptado", ex);
             return false;
         }
 

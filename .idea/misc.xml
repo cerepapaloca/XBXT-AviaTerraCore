@@ -6,7 +6,17 @@
       <list>
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/Avia Terra Core/pom.xml" />
+        <option value="$PROJECT_DIR$/AviaTerraSpring/pom.xml" />
+        <option value="$PROJECT_DIR$/avia-terra-quarkus/pom.xml" />
+        <option value="$PROJECT_DIR$/Avia Terra Micronaut/pom.xml" />
       </list>
+    </option>
+    <option name="ignoredFiles">
+      <set>
+        <option value="$PROJECT_DIR$/Avia Terra Micronaut/pom.xml" />
+        <option value="$PROJECT_DIR$/Avia Terra Quarkus/pom.xml" />
+        <option value="$PROJECT_DIR$/Avia Terra Spring/pom.xml" />
+      </set>
     </option>
   </component>
   <component name="PWA">

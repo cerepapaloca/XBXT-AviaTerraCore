@@ -3,6 +3,13 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/Avia Terra Core/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/Avia Terra Core/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Avia Terra Micronaut/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Avia Terra Micronaut/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Avia Terra Quarkus/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Avia Terra Quarkus/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Avia Terra Spring/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/avia-terra-quarkus/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/avia-terra-quarkus/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
   </component>

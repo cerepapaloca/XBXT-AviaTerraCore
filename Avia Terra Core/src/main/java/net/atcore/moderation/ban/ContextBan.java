@@ -1,5 +1,6 @@
 package net.atcore.moderation.ban;
 
+import io.papermc.paper.event.player.AsyncChatEvent;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import net.atcore.utils.GlobalUtils;
@@ -19,7 +20,7 @@ public enum ContextBan {
         private static final Set<String> SET_COMMANDS_SOCIAL = Set.of("tell", "w", "whipper", "r");
         @Override
         public DataBan onContext(Player player, Event event) {
-            if (event instanceof AsyncPlayerChatEvent e) {
+            if (event instanceof AsyncChatEvent e) {
                 return ban(player, e);
             }
             if (event instanceof PlayerCommandPreprocessEvent e) {

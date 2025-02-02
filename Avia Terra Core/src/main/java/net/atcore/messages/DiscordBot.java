@@ -4,6 +4,7 @@ import me.scarsz.jdaappender.ChannelLoggingHandler;
 import me.scarsz.jdaappender.ExtensionBuilder;
 import net.atcore.AviaTerraCore;
 import net.atcore.command.CommandManager;
+import net.atcore.utils.GlobalUtils;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Member;
@@ -12,6 +13,7 @@ import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
@@ -27,7 +29,7 @@ import static org.bukkit.Bukkit.getServer;
 public class DiscordBot extends ListenerAdapter{
 
     public static String consoleId = "1294324285602795550";
-    public static String chatId = "1294324328401207389";
+    public static String chatId = "1294324328401207389";//
     public static ChannelLoggingHandler handler;
     public static BukkitTask stateTasks = null;
 
@@ -87,20 +89,22 @@ public class DiscordBot extends ListenerAdapter{
         if (event.getAuthor().isBot()) return;
 
         Member member = event.getMember();
-        assert member != null;
+        if (member == null) return;
 
         Message message = event.getMessage();
         String channel = event.getChannel().getId();
         net.atcore.messages.Message format = net.atcore.messages.Message.EVENT_FORMAT_CHAT;
+
         if (channel.equals(DiscordBot.consoleId)){
             if (message.getContentRaw().startsWith("-")) CommandManager.processCommandFromDiscord(message, member);
         }else if (channel.equals(DiscordBot.chatId)){
-            Bukkit.getOnlinePlayers().forEach(player ->
-                    MessagesManager.sendString(player,
-                            String.format(MessagesManager.PREFIX_CHAT_DISCORD + format.getMessage(player), member.getUser().getGlobalName(), message.getContentRaw()),
-                            format.getTypeMessages()
-                    )
-            );
+            Bukkit.broadcast(MessagesManager.applyFinalProprieties(String.format(
+                    MessagesManager.PREFIX_CHAT_DISCORD + format.getMessageLocaleDefault(),
+                    member.getColor() == null ?
+                            "<#AAAAAA>" + member.getUser().getGlobalName() :
+                            "<" + GlobalUtils.javaColorToStringHex(member.getColor()) + ">" + member.getUser().getGlobalName(),
+                    "<" + NamedTextColor.GRAY.asHexString() + ">" + message.getContentRaw()
+            ), TypeMessages.NULL, CategoryMessages.PRIVATE, false));
         }
     }
 }

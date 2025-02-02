@@ -205,7 +205,7 @@ public final class GlobalUtils {
             return kickPlayer(player, message.getMessage(player), message.getTypeMessages());
         }catch (Exception e){
             MessagesManager.sendWaringException("as", e);
-            return kickPlayer(player, message.getMessageLocateDefault(), message.getTypeMessages());
+            return kickPlayer(player, message.getMessageLocaleDefault(), message.getTypeMessages());
         }
     }
 
@@ -225,8 +225,8 @@ public final class GlobalUtils {
             upper = Message.MISC_KICK_UPPER.getMessage(player);
             lower = Message.MISC_KICK_LOWER.getMessage(player);
         }catch (Exception e){
-            upper = Message.MISC_KICK_UPPER.getMessageLocateDefault();
-            lower = Message.MISC_KICK_LOWER.getMessageLocateDefault();
+            upper = Message.MISC_KICK_UPPER.getMessageLocaleDefault();
+            lower = Message.MISC_KICK_LOWER.getMessageLocaleDefault();
         }
         reason = MessagesManager.addProprieties(upper
                 + "|!>" + (reason == null ? "Has sido expulsado" : reason) +

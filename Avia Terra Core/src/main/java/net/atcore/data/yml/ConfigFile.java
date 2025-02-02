@@ -22,7 +22,7 @@ public class ConfigFile extends FileYaml {
         }
 
         DiscordBot.consoleId = fileYaml.getString("canales-de-discord.console");
-        DiscordBot.chatId = fileYaml.getString("canales-de-discord.chat-bridge");
+        DiscordBot.chatId = fileYaml.getString("canales-de-discord.chat-bridge", DiscordBot.chatId);
 
         Config.setAntiBot(fileYaml.getBoolean("anti-bot", Config.isAntiBot()));
         Config.setExpirationSession(fileYaml.getLong("expiration-session", Config.getExpirationSession()));

@@ -79,7 +79,7 @@ public abstract class FilesYams {
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
     public void deleteConfigFile(String nameFile) {
-        nameFile = nameFile + ".yml";
+        if (!nameFile.endsWith(".yml")) nameFile = nameFile + ".yml";
         for (FileYaml configFile : configFiles) {
             if (folderName != null){
                 nameFile = folderName + File.separator + nameFile;

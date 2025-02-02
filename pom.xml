@@ -11,6 +11,7 @@
 
     <modules>
         <module>Avia Terra Core</module>
+        <module>Avia Terra micronaut</module>
     </modules>
 
     <properties>

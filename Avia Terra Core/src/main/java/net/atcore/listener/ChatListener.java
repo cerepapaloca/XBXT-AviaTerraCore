@@ -1,36 +1,31 @@
 package net.atcore.listener;
 
-import io.papermc.paper.chat.ChatRenderer;
 import io.papermc.paper.event.player.AsyncChatEvent;
-import io.papermc.paper.event.player.ChatEvent;
 import lombok.Getter;
 import lombok.Setter;
 import net.atcore.AviaTerraCore;
-import net.atcore.data.DataSection;
 import net.atcore.messages.*;
-import net.atcore.moderation.ban.ContextBan;
 import net.atcore.moderation.ChatModeration;
+import net.atcore.moderation.ban.ContextBan;
 import net.atcore.security.Login.LoginManager;
 import net.atcore.utils.GlobalUtils;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
-import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextReplacementConfig;
+import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextColor;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.Statistic;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 import static net.atcore.messages.MessagesManager.sendMessage;
+import static net.atcore.messages.MessagesManager.sendString;
 import static net.atcore.moderation.ban.CheckAutoBan.checkAutoBanChat;
 @Setter
 @Getter
@@ -58,30 +53,45 @@ public class ChatListener implements Listener {
         }
 
         for (Player target : Bukkit.getOnlinePlayers()) {//busca todos los jugadores
-            player.sendMessage(finalFormat(message, player, target, textPlain.contains(player.getName())));
+            target.sendMessage(mainFormat(message, player, target, textPlain.contains(target.getName())));
         }
+        Bukkit.getConsoleSender().sendMessage(mainFormat(message, player, player, textPlain.contains(player.getName())));
 
         TextChannel channel = AviaTerraCore.jda.getTextChannelById(DiscordBot.chatId);
         if (channel !=  null) {
-            channel.sendMessage(textPlain).queue();
+            channel.sendMessage(PlainTextComponentSerializer.plainText().serialize(
+                    GlobalUtils.chatColorLegacyToComponent(
+                            String.format(Message.EVENT_FORMAT_CHAT.getMessageLocaleDefault(), "**" + player.getName() + "**", textPlain))
+            )).queue();
         }
     }
 
-    public Component finalFormat(Component message, Player sender, Player target, boolean isMention) {
-        Component displayName = sender.displayName();
+    public Component mainFormat(Component message, Player sender, Player target, boolean isMention) {
         int distanceWalked = sender.getStatistic(Statistic.WALK_ONE_CM) + sender.getStatistic(Statistic.SPRINT_ONE_CM);
-        double distanceWalkedKm = distanceWalked / 100000.0;
+        double distanceWalkedKm = Math.round(distanceWalked / 100000.0);
         int timePlayedTicks = sender.getStatistic(Statistic.PLAY_ONE_MINUTE);
-        double timePlayedHours = timePlayedTicks / 20.0 / 3600.0;
+        double timePlayedHours = Math.round(timePlayedTicks / 20.0 / 3600.0);
+        String locale = sender.locale().getDisplayName();
 
         Component hoverText = MessagesManager.applyFinalProprieties(
                 String.format("""
                 Distancia recorrida: <|%s KM|>
                 Tiempo jugado: <|%s H|>
-                Nombre: <|%s|>
-                """, distanceWalkedKm, timePlayedHours, sender.getName()), TypeMessages.INFO, CategoryMessages.PRIVATE, false
+                Nombre Real: <|%s|>
+                Idioma: <|%s|>""", distanceWalkedKm, timePlayedHours, sender.getName(), locale), TypeMessages.INFO, CategoryMessages.PRIVATE, false
         );
         if (isMention) target.playSound(target, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.7f, 1);
-        return displayName.hoverEvent(HoverEvent.showText(hoverText)).append(Component.text(" > ")).append(isMention ? message.color(NamedTextColor.AQUA) : message);
+
+        TextReplacementConfig.Builder config1 = TextReplacementConfig.builder().matchLiteral("%1$s")
+                .replacement(sender.displayName()
+                .hoverEvent(HoverEvent.showText(hoverText))
+                .clickEvent(ClickEvent.suggestCommand("/w " + sender.getName()))
+        );
+        TextReplacementConfig.Builder config2 = TextReplacementConfig.builder().matchLiteral("%2$s")
+                .replacement(isMention ? message.color(NamedTextColor.AQUA) : message.color(NamedTextColor.GRAY));
+
+        return GlobalUtils.chatColorLegacyToComponent(Message.EVENT_FORMAT_CHAT.getMessage(target))
+                .replaceText(config1.build())
+                .replaceText(config2.build());
     }
 }

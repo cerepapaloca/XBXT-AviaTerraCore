@@ -1,6 +1,7 @@
 package net.atcore;
 
 import com.github.games647.craftapi.resolver.MojangResolver;
+import fi.iki.elonen.NanoHTTPD;
 import lombok.Getter;
 import lombok.Setter;
 import net.atcore.armament.ArmamentSection;
@@ -18,19 +19,23 @@ import net.dv8tion.jda.api.JDA;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.luckperms.api.LuckPerms;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.io.IOException;
+import java.util.*;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import static com.vexsoftware.votifier.util.GsonInst.gson;
+import static fi.iki.elonen.NanoHTTPD.newFixedLengthResponse;
 import static net.atcore.utils.RegisterManager.register;
+import static org.bukkit.Bukkit.getOnlinePlayers;
 
-public final class AviaTerraCore extends JavaPlugin {
+
+public class AviaTerraCore extends JavaPlugin {
 
     private static final BlockingQueue<AviaRunnable> TASK_QUEUE = new LinkedBlockingQueue<>();
     private Thread workerThread;
@@ -38,6 +43,7 @@ public final class AviaTerraCore extends JavaPlugin {
     public static final String TOKEN_BOT = "MTI5MTUzODM1MjY0NjEzMTc3NA.GDwtcq.azwlvX6fWKbusXk8sOyzRMK78Qe9CwbHy_pmWk";
     public static final List<String> LIST_MOTD = new ArrayList<>();
     public static final List<String> LIST_BROADCAST = new ArrayList<>();
+    public static final List<String> LIST_MODULE = new ArrayList<>(List.of("net.atmi.Application"));
     public static JDA jda;
     private static long startTime;
     @Getter private static LuckPerms lp;
@@ -66,6 +72,8 @@ public final class AviaTerraCore extends JavaPlugin {
         RegisteredServiceProvider<LuckPerms> provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
         if (provider != null) {
             lp = provider.getProvider();
+        }else {
+            throw new RuntimeException("LuckPerms not found");
         }
         if (Bukkit.getOnlineMode()){
             throw new IllegalStateException("modo online esta activo");
@@ -80,6 +88,9 @@ public final class AviaTerraCore extends JavaPlugin {
                 new ArmamentSection(),
                 new PlaceHolderSection()
         );
+        new WebServer();
+        //initModules();
+        //AnsiConsole.systemInstall();
         startMOTD();
         startBroadcast();
         startAutoSaveTime();
@@ -88,12 +99,15 @@ public final class AviaTerraCore extends JavaPlugin {
         messageOn(startTime);
     }
 
+
+
     public static long getActiveTime(){
         return activeTime + (System.currentTimeMillis() - startTime);
     }
 
     @Override
     public void onDisable() {
+        //AnsiConsole.systemUninstall();
         DataSection.getConfigFile().saveActiveTime();
         for (Section section : RegisterManager.sections){
             section.disable();
@@ -101,7 +115,7 @@ public final class AviaTerraCore extends JavaPlugin {
         LIST_BROADCAST.clear();
         if (DiscordBot.stateTasks != null) DiscordBot.stateTasks.cancel();
         workerThread.interrupt();
-        Bukkit.getOnlinePlayers().forEach(player ->
+        getOnlinePlayers().forEach(player ->
                 GlobalUtils.kickPlayer(player, "El servidor va a cerrar, volveremos pronto..."));
         //if (jda != null) jda
         TASK_QUEUE.clear();
@@ -197,11 +211,30 @@ public final class AviaTerraCore extends JavaPlugin {
         }
     }
 
+    /*
+    public static void initModules() {
+        for (String className : LIST_MODULE) {
+            try {
+                Class<?> clazz = Class.forName(className);
+                if (Module.class.isAssignableFrom(clazz)) {
+                    Module module = (Module) clazz.getDeclaredConstructor().newInstance();
+                    module.init();
+                    System.out.println("Módulo cargado: " + className);
+                } else {
+                    System.out.println("La clase " + className + " no implementa Module.");
+                }
+            } catch (Exception e) {
+                MessagesManager.sendWaringException("Error al cargar el modulo de: " + className, e);
+            }
+        }
+    }*/
+
+
     private void startBroadcast(){
         Random random = new Random();
         new BukkitRunnable() {
             public void run() {
-                if (Bukkit.getOnlinePlayers().isEmpty()) return;
+                if (getOnlinePlayers().isEmpty()) return;
                 if (LIST_BROADCAST.isEmpty()) return;
                 int randomInt = random.nextInt(LIST_BROADCAST.size());
                 Bukkit.broadcast(MessagesManager.applyFinalProprieties(LIST_BROADCAST.get(randomInt), TypeMessages.INFO, CategoryMessages.PRIVATE, true));
@@ -236,5 +269,35 @@ public final class AviaTerraCore extends JavaPlugin {
                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "passiverestart");
             }
         }.runTaskLater(this, 20*60*60*24L);
+    }
+
+    public static class WebServer extends NanoHTTPD {
+
+        public WebServer() {
+            super(8080);  // Puerto donde escuchará
+            try {
+                start(NanoHTTPD.SOCKET_READ_TIMEOUT, false);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        @Override
+        public Response serve(NanoHTTPD.IHTTPSession session) {
+            // Obtener información del servidor
+            Map<String, Object> data = new HashMap<>();
+            data.put("jugadores_online", Bukkit.getOnlinePlayers().size());
+            data.put("max_jugadores", Bukkit.getMaxPlayers());
+
+            // Lista de jugadores en línea
+            String[] jugadores = Bukkit.getOnlinePlayers().stream().map(Player::getName).toArray(String[]::new);
+            data.put("jugadores", jugadores);
+
+            // Convertir el mapa a JSON
+            String jsonResponse = gson.toJson(data);
+
+            // Responder con JSON
+            return newFixedLengthResponse(Response.Status.OK, "application/json", jsonResponse);
+        }
     }
 }

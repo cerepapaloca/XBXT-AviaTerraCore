@@ -57,7 +57,7 @@ public abstract class BaseMagazine extends BaseArmament implements Compartment {
             if (setLore){
 
                 List<Component> lore = GlobalUtils.stringToLoreComponent(finalLore, true);
-                lore.addAll(GlobalUtils.stringToLoreComponent(Message.MISC_WARING_ANTI_DUPE.getMessageLocateDefault(), false, TypeMessages.WARNING.getMainColor()));
+                lore.addAll(GlobalUtils.stringToLoreComponent(Message.MISC_WARING_ANTI_DUPE.getMessageLocaleDefault(), false, TypeMessages.WARNING.getMainColor()));
                 meta.lore(lore);
                 item.setItemMeta(meta);
             }

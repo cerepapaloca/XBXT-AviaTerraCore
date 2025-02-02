@@ -50,7 +50,15 @@ public class JoinAndQuitListener implements Listener {
             if (LoginManager.getDataLogin(player).getRegister().isTemporary()){
                 AviaTerraCore.enqueueTaskAsynchronously(() -> {
                     DataBaseRegister.removeRegister(player.getName(), "Servidor (EL registro es temporal)");
-                    Service.removeStatsPlayer(player);
+                    /*if (!Service.removeStatsPlayer(player.getUniqueId())){
+                        MessagesManager.logConsole(String.format("Error al borrar las stats del jugador <|%s|>", player.getName()), TypeMessages.WARNING);
+                    }
+                    if (!AviaTerraPlayer.getPlayer(player).getPlayerDataFile().getFile().delete()){
+                        MessagesManager.logConsole(String.format("Error al borrar ATPF del jugador <|%s|>", player.getName()), TypeMessages.WARNING);
+                    }
+                    if (!Service.removePlayerData(player.getUniqueId())){
+                        MessagesManager.logConsole(String.format("Error al borrar PlayerData del jugador <|%s|>", player.getName()), TypeMessages.WARNING);
+                    }*/
                 });
             }
         }
@@ -96,7 +104,7 @@ public class JoinAndQuitListener implements Listener {
     public void onPreLogin(AsyncPlayerPreLoginEvent event) {
         if (AntiTwoPlayer.checkTwoPlayer(event.getName())){
             event.setLoginResult(AsyncPlayerPreLoginEvent.Result.KICK_OTHER);
-            event.kickMessage(MessagesManager.applyFinalProprieties(Message.SECURITY_KICK_ANTI_TWO_PLAYER.getMessageLocateDefault(), TypeMessages.KICK, CategoryMessages.LOGIN, false));
+            event.kickMessage(MessagesManager.applyFinalProprieties(Message.SECURITY_KICK_ANTI_TWO_PLAYER.getMessageLocaleDefault(), TypeMessages.KICK, CategoryMessages.LOGIN, false));
         }
     }
 }
