@@ -77,4 +77,6 @@ public class Config {
 
     @Getter @Setter private boolean autoBan = false;
 
+    @Getter @Setter private String passwordSSL = "";
+
 }

@@ -1,7 +1,6 @@
 package net.atcore;
 
 import com.github.games647.craftapi.resolver.MojangResolver;
-import fi.iki.elonen.NanoHTTPD;
 import lombok.Getter;
 import lombok.Setter;
 import net.atcore.armament.ArmamentSection;
@@ -9,6 +8,7 @@ import net.atcore.command.CommandSection;
 import net.atcore.data.DataSection;
 import net.atcore.listener.ListenerSection;
 import net.atcore.messages.*;
+import net.atcore.misc.WebServer;
 import net.atcore.moderation.ModerationSection;
 import net.atcore.placeholder.PlaceHolderSection;
 import net.atcore.security.SecuritySection;
@@ -19,18 +19,16 @@ import net.dv8tion.jda.api.JDA;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.luckperms.api.LuckPerms;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import static com.vexsoftware.votifier.util.GsonInst.gson;
-import static fi.iki.elonen.NanoHTTPD.newFixedLengthResponse;
 import static net.atcore.utils.RegisterManager.register;
 import static org.bukkit.Bukkit.getOnlinePlayers;
 
@@ -72,15 +70,11 @@ public class AviaTerraCore extends JavaPlugin {
         RegisteredServiceProvider<LuckPerms> provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
         if (provider != null) {
             lp = provider.getProvider();
-        }else {
-            throw new RuntimeException("LuckPerms not found");
-        }
-        if (Bukkit.getOnlineMode()){
-            throw new IllegalStateException("modo online esta activo");
-        }
+        }else throw new RuntimeException("LuckPerms not found");
+        if (Bukkit.getOnlineMode()) throw new IllegalStateException("modo online esta activo");
         register(
                 new MessageSection(),
-                new DataSection(),// Los Datos Primero
+                new DataSection(),
                 new CommandSection(),
                 new ModerationSection(),
                 new ListenerSection(),
@@ -271,33 +265,5 @@ public class AviaTerraCore extends JavaPlugin {
         }.runTaskLater(this, 20*60*60*24L);
     }
 
-    public static class WebServer extends NanoHTTPD {
 
-        public WebServer() {
-            super(8080);  // Puerto donde escuchará
-            try {
-                start(NanoHTTPD.SOCKET_READ_TIMEOUT, false);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-        @Override
-        public Response serve(NanoHTTPD.IHTTPSession session) {
-            // Obtener información del servidor
-            Map<String, Object> data = new HashMap<>();
-            data.put("jugadores_online", Bukkit.getOnlinePlayers().size());
-            data.put("max_jugadores", Bukkit.getMaxPlayers());
-
-            // Lista de jugadores en línea
-            String[] jugadores = Bukkit.getOnlinePlayers().stream().map(Player::getName).toArray(String[]::new);
-            data.put("jugadores", jugadores);
-
-            // Convertir el mapa a JSON
-            String jsonResponse = gson.toJson(data);
-
-            // Responder con JSON
-            return newFixedLengthResponse(Response.Status.OK, "application/json", jsonResponse);
-        }
-    }
 }

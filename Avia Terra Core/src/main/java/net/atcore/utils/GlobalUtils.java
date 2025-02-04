@@ -27,6 +27,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.File;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
@@ -563,6 +564,27 @@ public final class GlobalUtils {
         input = input.replace("&f", "<white>");
 
         return input;
+    }
+
+    public static long getFolderSize(File folder) {
+        long totalSize = 0;
+
+        // Verificar que la ruta es un directorio
+        if (folder.exists() && folder.isDirectory()) {
+            File[] files = folder.listFiles(); // Obtener lista de archivos
+
+            if (files != null) {
+                for (File file : files) {
+                    if (file.isFile()) {
+                        totalSize += file.length(); // Sumar tamaño del archivo
+                    } else if (file.isDirectory()) {
+                        totalSize += getFolderSize(file); // Recursividad para subdirectorios
+                    }
+                }
+            }
+        }
+
+        return totalSize; // Retornar el tamaño total en bytes
     }
 
     /**

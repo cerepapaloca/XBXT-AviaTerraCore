@@ -34,6 +34,7 @@ public class ConfigFile extends FileYaml {
         Config.setServerMode(ServerMode.valueOf(fileYaml.getString("server-mode", Config.getServerMode().name().toLowerCase()).toUpperCase()));
         Config.setChaceDupeFrame(fileYaml.getDouble("chace-dupe-frame", Config.getChaceDupeFrame()));
         Config.setAutoBan(fileYaml.getBoolean("auto-ban", Config.isAutoBan()));
+        Config.setPasswordSSL(fileYaml.getString("password-ssl", Config.getPasswordSSL()));
         AviaTerraCore.setActiveTime(fileYaml.getLong("active-time", 0));
         saveData(); // Se guarda por si hay una liena faltante en la configuración
     }
