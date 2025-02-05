@@ -3,6 +3,7 @@ package net.atcore.command.commnads;
 import net.atcore.AviaTerraCore;
 import net.atcore.Config;
 import net.atcore.Section;
+import net.atcore.aviaterraplayer.AviaTerraPlayer;
 import net.atcore.command.BaseTabCommand;
 import net.atcore.command.CommandUtils;
 import net.atcore.command.ArgumentUse;
@@ -30,9 +31,7 @@ public class AviaTerraCommand extends BaseTabCommand {
     public void execute(CommandSender sender, String[] args) {
         switch (args[0].toLowerCase().replace("_","")) {
             case "reload" -> {
-                for (Section section : RegisterManager.sections){
-                    section.reload();
-                }
+                AviaTerraCore.getInstance().reloadConfig();
                 AviaTerraCore.enqueueTaskAsynchronously(() -> sendString(sender,"Reload Terminado", TypeMessages.SUCCESS));
             }
             case "antiop" -> {

@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("deprecation")
-public class PlaceHolderHandler extends PlaceholderExpansion {
+public final class PlaceHolderHandler extends PlaceholderExpansion {
 
     @Override
     public @NotNull String getIdentifier() {

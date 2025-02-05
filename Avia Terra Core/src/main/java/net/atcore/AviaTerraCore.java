@@ -8,13 +8,13 @@ import net.atcore.command.CommandSection;
 import net.atcore.data.DataSection;
 import net.atcore.listener.ListenerSection;
 import net.atcore.messages.*;
-import net.atcore.misc.WebServer;
 import net.atcore.moderation.ModerationSection;
 import net.atcore.placeholder.PlaceHolderSection;
 import net.atcore.security.SecuritySection;
 import net.atcore.utils.AviaRunnable;
 import net.atcore.utils.GlobalUtils;
 import net.atcore.utils.RegisterManager;
+import net.atcore.webapi.ApiSection;
 import net.dv8tion.jda.api.JDA;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.luckperms.api.LuckPerms;
@@ -29,6 +29,7 @@ import java.util.Random;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import static net.atcore.messages.MessagesManager.sendString;
 import static net.atcore.utils.RegisterManager.register;
 import static org.bukkit.Bukkit.getOnlinePlayers;
 
@@ -72,19 +73,17 @@ public class AviaTerraCore extends JavaPlugin {
             lp = provider.getProvider();
         }else throw new RuntimeException("LuckPerms not found");
         if (Bukkit.getOnlineMode()) throw new IllegalStateException("modo online esta activo");
+        DiscordBot.startDiscordBot();
         register(
-                new MessageSection(),
                 new DataSection(),
                 new CommandSection(),
                 new ModerationSection(),
                 new ListenerSection(),
                 new SecuritySection(),
                 new ArmamentSection(),
-                new PlaceHolderSection()
+                new PlaceHolderSection(),
+                new ApiSection()
         );
-        new WebServer();
-        //initModules();
-        //AnsiConsole.systemInstall();
         startMOTD();
         startBroadcast();
         startAutoSaveTime();
@@ -101,7 +100,6 @@ public class AviaTerraCore extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        //AnsiConsole.systemUninstall();
         DataSection.getConfigFile().saveActiveTime();
         for (Section section : RegisterManager.sections){
             section.disable();
@@ -111,13 +109,15 @@ public class AviaTerraCore extends JavaPlugin {
         workerThread.interrupt();
         getOnlinePlayers().forEach(player ->
                 GlobalUtils.kickPlayer(player, "El servidor va a cerrar, volveremos pronto..."));
-        //if (jda != null) jda
         TASK_QUEUE.clear();
-        MessagesManager.logConsole("AviaTerra Apagada", TypeMessages.SUCCESS, CategoryMessages.PRIVATE, false);
+        DiscordBot.handler.shutdown();
+        MessagesManager.logConsole("AviaTerra Se fue a dormir cómodamente", TypeMessages.SUCCESS, CategoryMessages.PRIVATE, false);
     }
 
     @Override
     public void reloadConfig(){
+        DiscordBot.handler.shutdown();
+        DiscordBot.startDiscordBot();
         for (Section section : RegisterManager.sections){
             section.reload();
         }

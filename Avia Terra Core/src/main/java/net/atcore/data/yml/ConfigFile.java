@@ -54,6 +54,7 @@ public class ConfigFile extends FileYaml {
         fileYaml.set("server-mode", Config.getServerMode().name().toLowerCase());
         fileYaml.set("chace-dupe-frame", Config.getChaceDupeFrame());
         fileYaml.set("auto-ban", Config.isAutoBan());
+        fileYaml.set("password-ssl", Config.getPasswordSSL());
         saveConfig();
     }
 

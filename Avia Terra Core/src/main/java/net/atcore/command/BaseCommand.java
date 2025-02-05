@@ -10,13 +10,13 @@ import org.jetbrains.annotations.Nullable;
 @Getter
 public abstract class BaseCommand {
 
-    private final String name;
-    private final String permissions;
-    private final String description;
-    private final ArgumentUse usage;
-    private final boolean requiredConfirm;
+    protected final String name;
+    protected final String permissions;
+    protected final String description;
+    protected final ArgumentUse usage;
+    protected final boolean requiredConfirm;
     @Setter
-    private String messageConfirm = "Tiene que confirmar con <|<Click:suggest_command:/confirm>/confirm</click>|> para ejecutar este comandos";
+    protected String messageConfirm = "Tiene que confirmar con <|<Click:suggest_command:/confirm>/confirm</click>|> para ejecutar este comandos";
 
     public BaseCommand(@NotNull String name,
                        @NotNull ArgumentUse usage,

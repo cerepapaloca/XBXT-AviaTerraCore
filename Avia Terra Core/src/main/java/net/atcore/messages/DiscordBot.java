@@ -64,9 +64,9 @@ public class DiscordBot extends ListenerAdapter{
 
                 }).attach().schedule();
                 MessagesManager.logConsole("discord bot " + TypeMessages.SUCCESS.getMainColor() + "Ok", TypeMessages.INFO, false);
-
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+            } catch (Exception e) {
+                MessagesManager.sendErrorException("No se pudo iniciar el bot de discord (Reinicio Iniciado)", e);
+                Bukkit.shutdown();
             }
         });
     }
