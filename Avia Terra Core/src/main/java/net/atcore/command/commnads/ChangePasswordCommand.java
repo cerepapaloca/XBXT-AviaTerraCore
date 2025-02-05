@@ -48,7 +48,7 @@ public class ChangePasswordCommand extends BaseTabCommand {
                 sendMessage(sender, Message.COMMAND_GENERIC_NO_PLAYER);
             }
         }else{
-            sendArgument(sender, this.getUsage(), TypeMessages.ERROR);
+            sendArgument(sender, this.getAviaTerraUsage(), TypeMessages.ERROR);
         }
     }
 

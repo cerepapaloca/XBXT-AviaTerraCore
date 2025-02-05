@@ -53,8 +53,7 @@ public class InfoCommand extends BaseCommand {
             }
             send(sender," ");
         }else {
-            AviaTerraCore.enqueueTaskAsynchronously(() -> CommandUtils.executeForPlayer(sender, args[0], true, temporalPlayerData -> {
-                Player player = temporalPlayerData.player();
+            AviaTerraCore.enqueueTaskAsynchronously(() -> CommandUtils.executeForPlayer(sender, args[0], true, (name, player) -> {
                 LoginData data = LoginManager.getDataLogin(player);
                 send(sender, String.format("Nombres: <|%s|>", player.getName()));
                 send(sender, String.format("Display name: <|%s|>", player.displayName()));

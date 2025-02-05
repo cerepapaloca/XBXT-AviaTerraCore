@@ -24,7 +24,7 @@ public class SayCommand extends BaseCommand {
     @Override
     public void execute(CommandSender sender, String[] args) throws Exception {
         if (args.length == 0){
-            MessagesManager.sendArgument(sender, this.getUsage(), TypeMessages.ERROR);
+            MessagesManager.sendArgument(sender, this.getAviaTerraUsage(), TypeMessages.ERROR);
             return;
         }
         if (args.length == 1) {
@@ -34,8 +34,8 @@ public class SayCommand extends BaseCommand {
             for (int i = 1; i < args.length; i++){
                 message.append(args[i]).append(" ");
             }
-            CommandUtils.executeForPlayer(sender, args[0], true, dataTemporalPlayer ->
-                    MessagesManager.sendMessage(dataTemporalPlayer.player(),SUB_PREFIX + message, TypeMessages.INFO));
+            CommandUtils.executeForPlayer(sender, args[0], true, (name, player) ->
+                    MessagesManager.sendMessage(player,SUB_PREFIX + message, TypeMessages.INFO));
             MessagesManager.sendString(sender,  message.toString(), TypeMessages.INFO);
         }
     }

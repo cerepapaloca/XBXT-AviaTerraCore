@@ -19,6 +19,7 @@ public class AviaTerraDebugCommand extends BaseTabCommand {
                 new ArgumentUse("AviaTerraPruebas").addArg("Pruebas"),
                 "Commando para realizar pruebas del plugin",
                 false);
+        addAlias("atd");
     }
 
     @Override
@@ -35,7 +36,7 @@ public class AviaTerraDebugCommand extends BaseTabCommand {
                 }
                 typeTest.runtTest(atp);
             }else {
-                MessagesManager.sendMessage(player, this.getUsage().toString(), TypeMessages.ERROR);
+                MessagesManager.sendMessage(player, this.getAviaTerraUsage().toString(), TypeMessages.ERROR);
             }
         }
     }

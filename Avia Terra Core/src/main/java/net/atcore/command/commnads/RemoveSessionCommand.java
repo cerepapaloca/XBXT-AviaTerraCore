@@ -25,13 +25,13 @@ public class RemoveSessionCommand extends BaseCommand {
     @Override
     public void execute(CommandSender sender, String[] args) {
         if (args.length == 1) {
-            CommandUtils.executeForPlayer(sender, args[0], true, dataTemporalPlayer -> {
-                LoginManager.getDataLogin(dataTemporalPlayer.player()).setSession(null);
+            CommandUtils.executeForPlayer(sender, args[0], true, (name, player) -> {
+                LoginManager.getDataLogin(player).setSession(null);
                 //GlobalUtils.kickPlayer(dataTemporalPlayer.player(), "Vuelve a iniciar sesión");
             });
             sendMessage(sender, Message.COMMAND_REMOVE_SESSION_SUCCESSFUL);
         }else{
-            sendArgument(sender, this.getUsage(), TypeMessages.ERROR);
+            sendArgument(sender, this.getAviaTerraUsage(), TypeMessages.ERROR);
         }
     }
 }

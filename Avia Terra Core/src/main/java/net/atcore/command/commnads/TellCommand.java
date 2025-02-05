@@ -10,8 +10,7 @@ import net.atcore.messages.TypeMessages;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import static net.atcore.messages.MessagesManager.sendFormatMessage;
-import static net.atcore.messages.MessagesManager.sendMessage;
+import static net.atcore.messages.MessagesManager.*;
 
 public class TellCommand extends BaseCommand {
 
@@ -23,6 +22,7 @@ public class TellCommand extends BaseCommand {
                 "*",
                 "Le envías un mensaje privado a un jugador o un grupo de estos",
                 false);
+        addAlias("msg", "w", "r");
     }
 
     @Override
@@ -37,8 +37,7 @@ public class TellCommand extends BaseCommand {
                 }
                 String finalMessage = message;
                 sendFormatMessage(sender,Message.COMMAND_TELL_FEEDBACK ,args[0]);
-                CommandUtils.executeForPlayer(sender, args[0], true, dataTemporalPlayer -> {
-                    Player player = dataTemporalPlayer.player();
+                CommandUtils.executeForPlayer(sender, args[0], true, (name, player) -> {
                     sendMessage(player,String.format(Message.COMMAND_TELL_FORMAT_MESSAGE.getMessage(player), sender.getName(), finalMessage), TypeMessages.NULL, CategoryMessages.PRIVATE, false);
                 });
             }

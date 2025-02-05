@@ -9,56 +9,6 @@ description: Las bases del servidor
 folia-supported: true
 
 # noinspection YAMLSchemaValidation
-commands:
-  tell:
-    aliases:
-      - msg
-      - w
-      - r
-  prueba:
-    aliases:
-      - test
-  aviaterra:
-    aliases:
-      - at
-  aviaterradebug:
-    aliases:
-      - atd
-  freeze:
-  ban:
-  unban:
-  checkban:
-  login:
-    aliases:
-      - log
-  register:
-    aliases:
-      - reg
-  addrange:
-  kick:
-  changepassword:
-  removeregister:
-  removesession:
-  weapon:
-  seeinventory:
-  link:
-  info:
-  tpa:
-  say:
-  discord:
-    aliases:
-      - dc
-  vote:
-  premium:
-  confirm:
-  forcelogin:
-  namecolor:
-  passiverestart:
-    aliases:
-      - nc
-  home:
-    aliases:
-      - h
 permissions:
   aviaterracore.commnad.*:
     description: Todos los permisos del comandos de AviaTerraCore

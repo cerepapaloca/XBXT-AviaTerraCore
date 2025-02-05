@@ -30,6 +30,7 @@ public class LoginCommand extends BaseCommand {
                 "**",
                 "Inicias session con tu contraseña",
                 false);
+        addAlias("log");
     }
 
     private final HashMap<UUID, Integer> attempts = new HashMap<>();

@@ -23,6 +23,7 @@ import static net.atcore.messages.MessagesManager.sendMessage;
 @Getter
 public final class CommandHandler implements TabExecutor {
     private final HashSet<BaseCommand> commands = new HashSet<>();
+    private final HashMap<String, CommandAliase> aliases = new HashMap<>();
     public static final HashMap<UUID, String> SAVES_COMMANDS_CONFIRMS = new HashMap<>();
 
     @Override
@@ -48,8 +49,8 @@ public final class CommandHandler implements TabExecutor {
             }
             try {
                 if (sender instanceof Player player) {
-                    if (CommandUtils.hasPermission(command.getPermissions(), player, true)) {
-                        command.execute(sender, args);
+                    if (CommandUtils.hasPermission(command.getAviaTerraPermissions(), player, true)) {
+                        executedCommand(sender, label, args, command);
                         return true;
                     }else{
                         if (LoginManager.checkLoginIn(player)){
@@ -59,7 +60,7 @@ public final class CommandHandler implements TabExecutor {
                         }
                     }
                 }else {
-                    command.execute(sender, args);
+                    executedCommand(sender, label, args, command);
                     return true;
                 }
             }catch (Exception e) {
@@ -71,8 +72,22 @@ public final class CommandHandler implements TabExecutor {
         return false;
     }
 
+    private static void executedCommand(@NotNull CommandSender sender, @NotNull String label, String[] args, BaseCommand command) throws Exception {
+        if (command instanceof CommandAliase commandAlias) {
+            for (int i = 0; i < commandAlias.getCommandsAliases().size(); i++) {
+                String alias = commandAlias.getCommandsAliases().get(i);
+                if (alias.equalsIgnoreCase(label)) {
+                    // Si el comando tiene un aliase se va ejecutar el alise
+                    commandAlias.getExecuteAliase().get(i).accept(sender, args);
+                    return;
+                }
+            }
+        }
+        command.execute(sender, args);
+    }
+
     @Override
-    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String alias, String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {
         for (BaseCommand command : commands) {
             if (!(cmd.getName().equalsIgnoreCase(command.getName()))) continue;
             List<String> list;
@@ -80,17 +95,27 @@ public final class CommandHandler implements TabExecutor {
             if (command instanceof BaseTabCommand tabCommand){
                 list = tabCommand.onTab(sender, args);
             }else {
-                list = command.getUsage().onTab(args);
+                list = command.getAviaTerraUsage().onTab(args);
             }
 
-            ArgumentUse argsUse = command.getUsage();
+            if (command instanceof CommandAliase commandAlias) {
+                for (int i = 0; i < commandAlias.getCommandsAliases().size(); i++) {
+                    String alias = commandAlias.getCommandsAliases().get(i);
+                    if (alias.equalsIgnoreCase(label)) {
+                        list = commandAlias.getTabAliase().get(i).apply(sender, args);
+                        break;
+                    }
+                }
+            }
+
+            ArgumentUse argsUse = command.getAviaTerraUsage();
             if (list == null)return null;
 
             if (list.size() == 1) {
                 if (list.getFirst().equalsIgnoreCase(args[args.length - 1])) {
                     if (argsUse.getLength() >= args.length) {
                         try {
-                            if (command.getUsage().getArg(args.length).isRequired()) {
+                            if (command.getAviaTerraUsage().getArg(args.length).isRequired()) {
                                 return List.of("§c" + String.format(// La única vez que se tiene que usar '§'
                                         Message.COMMAND_GENERIC_ARGS_ERROR.getMessage(sender),
                                         CommandUtils.useToUseDisplay(argsUse.getArgRaw(args.length))

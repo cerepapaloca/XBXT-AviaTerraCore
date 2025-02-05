@@ -29,6 +29,7 @@ public class NameColorCommand extends BaseTabCommand {
                 false);
         colorOptions = getColorOptions();
         styleOptions = getStyleOptions();
+        addAlias("nc");
     }
 
     @Override
@@ -39,7 +40,7 @@ public class NameColorCommand extends BaseTabCommand {
         }
 
         if (args.length < 1) {
-            MessagesManager.sendArgument(sender, this.getUsage(), TypeMessages.ERROR);
+            MessagesManager.sendArgument(sender, this.getAviaTerraUsage(), TypeMessages.ERROR);
             return;
         }
 

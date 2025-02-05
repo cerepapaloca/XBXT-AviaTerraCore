@@ -24,8 +24,8 @@ public class PremiumCommand extends BaseCommand {
                         " y haga el protocolo de encriptación",
                 true
         );
-        this.setMessageConfirm("<red><b>Advertencia</b></red> Solo ejecutar cuando tiene una cuenta oficial de microsoft," +
-                " En caso que sea asi ejecuta este commando <|<Click:suggest_command:/confirm>/confirm</click>|> para pasar al modo premium");
+        this.messageConfirm = "<red><b>Advertencia</b></red> Solo ejecutar cuando tiene una cuenta oficial de microsoft," +
+                " En caso que sea asi ejecuta este commando <|<Click:suggest_command:/confirm>/confirm</click>|> para pasar al modo premium";
     }
 
     @Override

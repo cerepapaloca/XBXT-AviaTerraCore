@@ -15,6 +15,7 @@ public class DiscordCommand extends BaseCommand {
                 "Te enviá el link de invitación de discord",
                 false
         );
+        addAlias("dc");
     }
 
     @Override

@@ -2,9 +2,7 @@ package net.atcore.command.commnads;
 
 import net.atcore.AviaTerraCore;
 import net.atcore.aviaterraplayer.AviaTerraPlayer;
-import net.atcore.command.ArgumentUse;
-import net.atcore.command.BaseTabCommand;
-import net.atcore.command.CommandUtils;
+import net.atcore.command.*;
 import net.atcore.data.DataSection;
 import net.atcore.data.FileYaml;
 import net.atcore.messages.Message;
@@ -17,28 +15,32 @@ import org.bukkit.SoundCategory;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 
-public class HomeCommand extends BaseTabCommand {
+public class HomeCommandAliase extends BaseTabCommand implements CommandAliase {
 
-    public HomeCommand() {
+    public HomeCommandAliase() {
         super("home",
                 new ArgumentUse("home").addNote("Nombre de tu Home").addArgOptional().addArg("add", "remove"),
                 "*",
                 "Crear un home donde te puedes hacer tp",
                 false);
+        addAlias("h");
     }
 
     private final Location spawnLocation = new Location(Bukkit.getWorlds().getFirst(), 0, 0, 0);
 
     @Override
-    public void execute(CommandSender sender, String[] args) throws Exception {
+    public void execute(CommandSender sender, String[] args) {
         if (sender instanceof Player player){
             AviaTerraPlayer atp = AviaTerraPlayer.getPlayer(player);
             if (args.length == 0) {
-                MessagesManager.sendArgument(sender, this.getUsage(), TypeMessages.ERROR);
+                MessagesManager.sendArgument(sender, this.getAviaTerraUsage(), TypeMessages.ERROR);
                 return;
             }
             switch (args.length) {
@@ -102,7 +104,12 @@ public class HomeCommand extends BaseTabCommand {
             AviaTerraPlayer atp = AviaTerraPlayer.getPlayer(player);
             switch (args.length) {
                 case 1 -> {
-                    return CommandUtils.listTab(args[0], new ArrayList<>(atp.getHomes().keySet()));
+                    List<String> names = new ArrayList<>(atp.getHomes().keySet());
+                    if (names.isEmpty()) {
+                        return List.of("nombre");
+                    }else {
+                        return CommandUtils.listTab(args[0], names);
+                    }
                 }
                 case 2 -> {
                     return CommandUtils.listTab(args[1], "add", "remove");
@@ -110,5 +117,44 @@ public class HomeCommand extends BaseTabCommand {
             }
         }
         return new ArrayList<>();
+    }
+
+    @Override
+    public @NotNull List<String> getCommandsAliases() {
+        return List.of("setHome", "delHome");
+    }
+
+    @Override
+    public List<BiConsumer<CommandSender, String[]>> getExecuteAliase() {
+        var list = new ArrayList<BiConsumer<CommandSender, String[]>>();
+        list.add((sender, args) -> {
+            if (args.length > 0) {
+                this.execute(sender, String.format("%s add", args[0]).split(" "));
+            }else {
+                MessagesManager.sendArgument(sender, this.getAviaTerraUsage(), TypeMessages.ERROR);
+            }
+        });
+        list.add((sender, args) -> {
+            if (args.length > 0) {
+                this.execute(sender, String.format("%s remove", args[0]).split(" "));
+            }else {
+                MessagesManager.sendArgument(sender, this.getAviaTerraUsage(), TypeMessages.ERROR);
+            }
+        });
+        return list;
+    }
+
+    @Override
+    public List<BiFunction<CommandSender, String[], List<String>>> getTabAliase() {
+        var list = new ArrayList<BiFunction<CommandSender, String[], List<String>>>();
+        list.add((sender, args) -> new ArgumentUse("sethome").addNote("nombre").onTab(args));
+        list.add(((sender, args) -> {
+            if (sender instanceof Player player && args.length == 1) {
+                AviaTerraPlayer atp = AviaTerraPlayer.getPlayer(player);
+                return CommandUtils.listTab(args[0], new ArrayList<>(atp.getHomes().keySet()));
+            }
+            return List.of();
+        }));
+        return list;
     }
 }

@@ -15,7 +15,9 @@ public class ApiSection implements Section {
 
     @Override
     public void disable() {
-        ApiHandler.server.stop();
+        if (ApiHandler.server != null) {
+            ApiHandler.server.stop();
+        }
     }
 
     @Override
@@ -25,7 +27,9 @@ public class ApiSection implements Section {
 
     @Override
     public void reload() {
-        ApiHandler.server.stop();
+        if (ApiHandler.server != null) {
+            ApiHandler.server.stop();
+        }
         new ApiHandler();
     }
 }

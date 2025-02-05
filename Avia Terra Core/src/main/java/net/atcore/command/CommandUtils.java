@@ -20,6 +20,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -178,9 +179,9 @@ public final class CommandUtils {
         };
     }
 
-    public void executeForPlayer(@Nullable CommandSender sender, @NotNull String arg, boolean safeMode, Consumer<TemporalPlayerData> action){
+    public void executeForPlayer(@Nullable CommandSender sender, @NotNull String arg, boolean safeMode, BiConsumer<String, Player> action){
         if (arg.startsWith("*")){
-            Bukkit.getOnlinePlayers().forEach(player ->  action.accept(new TemporalPlayerData(player.getName(), player)));
+            Bukkit.getOnlinePlayers().forEach(player ->  action.accept(player.getName(), player));
             return;
         }
         if (arg.startsWith("#") || arg.startsWith("!#")){
@@ -201,7 +202,7 @@ public final class CommandUtils {
             });
             for (UUID uuid : uuids){
                 Player player = Bukkit.getPlayer(uuid);
-                if (player != null) action.accept(new TemporalPlayerData(player.getName(), player));
+                if (player != null) action.accept(player.getName(), player);
             }
 
             return;
@@ -210,7 +211,7 @@ public final class CommandUtils {
         for (Player player :  Bukkit.getOnlinePlayers()) {
             if (arg.charAt(0) == '!') { // En caso de que este invertido la lista
                 if (!names.contains(player.getName())) { // No tiene que estar en la lista de jugadores
-                    action.accept(new TemporalPlayerData(player.getName(), player));
+                    action.accept(player.getName(), player);
                 }/*else {
                     names.remove(player.getName());
                 }*/
@@ -218,7 +219,7 @@ public final class CommandUtils {
                 if (names.contains(player.getName())) {
                     // Se borra los nombres de los jugadores. En teoría si todos los jugadores de la lista están conectados debe estar vació al final del for
                     names.remove(player.getName());
-                    action.accept(new TemporalPlayerData(player.getName(), player));
+                    action.accept(player.getName(), player);
                 }
             }
         }
@@ -228,7 +229,7 @@ public final class CommandUtils {
             if (arg.charAt(0) != '!') MessagesManager.sendFormatMessage(sender, Message.COMMAND_GENERIC_PLAYERS_NOT_FOUND, names);
         }else {
             for (String name : names){ // Si no esta en modo seguro crea un TemporalPlayerData con los nombres de los usuarios no conectados
-                action.accept(new TemporalPlayerData(name, null));
+                action.accept(name, null);
             }
         }
     }

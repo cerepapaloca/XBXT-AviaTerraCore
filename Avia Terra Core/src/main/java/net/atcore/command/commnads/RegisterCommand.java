@@ -28,6 +28,7 @@ public class RegisterCommand extends BaseCommand {
                 "**",
                 "Te registras en el servidor añadiendo una contraseña",
                 false);
+        addAlias("reg");
     }
 
     private static final int LENGTH_MIN_PASSWORD = 4;

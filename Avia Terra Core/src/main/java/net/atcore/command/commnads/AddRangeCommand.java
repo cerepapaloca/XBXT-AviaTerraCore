@@ -36,7 +36,7 @@ public class AddRangeCommand extends BaseTabCommand {
     @Override
     public void execute(CommandSender sender, String[] args) {
         switch (args.length){
-            case 0 -> sendArgument(sender, this.getUsage(), TypeMessages.ERROR);
+            case 0 -> sendArgument(sender, this.getAviaTerraUsage(), TypeMessages.ERROR);
             case 1 -> sendMessage(sender, Message.COMMAND_ADD_RANGE_MISSING_ARGUMENT_TIME);
             default -> {
                 List<Group> groups = AviaTerraCore.getLp().getGroupManager().getLoadedGroups().stream().toList();
@@ -75,7 +75,8 @@ public class AddRangeCommand extends BaseTabCommand {
                             sendMessage(sender, Message.COMMAND_GENERIC_NO_PLAYER);
                         }
                     }else{
-                        CommandUtils.executeForPlayer(sender, args[2], true, fakePlayer -> GlobalUtils.addItemPlayer(item, fakePlayer.player(), false, true, true));
+                        CommandUtils.executeForPlayer(sender, args[2], true, (name, player) ->
+                                GlobalUtils.addItemPlayer(item, player, false, true, true));
                         sendMessage(sender, Message.COMMAND_ADD_RANGE_SUCCESSFUL);
                     }
                 }else{

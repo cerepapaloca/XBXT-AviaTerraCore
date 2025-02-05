@@ -33,7 +33,7 @@ public class CommandSection implements Section {
                 new AviaTerraDebugCommand(),
                 new LinkCommand(),
                 new TellCommand(),
-                new HomeCommand(),
+                new HomeCommandAliase(),
                 new TpaCommand(),
                 new SayCommand(),
                 new NameColorCommand(),

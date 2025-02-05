@@ -3,6 +3,7 @@ package net.atcore.command.commnads;
 import net.atcore.aviaterraplayer.AviaTerraPlayer;
 import net.atcore.command.ArgumentUse;
 import net.atcore.command.BaseTabCommand;
+import net.atcore.command.CommandAliase;
 import net.atcore.command.ModeTabPlayers;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
@@ -16,8 +17,10 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 
-public class TpaCommand extends BaseTabCommand {
+public class TpaCommand extends BaseTabCommand implements CommandAliase {
 
     public TpaCommand() {
         super("tpa",
@@ -29,7 +32,7 @@ public class TpaCommand extends BaseTabCommand {
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args) throws Exception {
+    public void execute(CommandSender sender, String... args) {
         if (sender instanceof Player p) {
             if (args.length > 0) {
                 switch (args[0].toUpperCase()) {
@@ -91,5 +94,27 @@ public class TpaCommand extends BaseTabCommand {
         }
         return List.of();
     }
+
+    @Override
+    public List<String> getCommandsAliases() {
+        return List.of("tpaYes", "tpaNo");
+    }
+
+    @Override
+    public List<BiConsumer<CommandSender, String[]>> getExecuteAliase() {
+        var aliases = new ArrayList<BiConsumer<CommandSender, String[]>>();
+        aliases.add((sender, args) -> execute(sender, "y"));
+        aliases.add((sender, args) -> execute(sender, "n"));
+        return aliases;
+    }
+
+    @Override
+    public List<BiFunction<CommandSender, String[], List<String>>> getTabAliase() {
+        var aliases = new ArrayList<BiFunction<CommandSender, String[], List<String>>>();
+        aliases.add(((sender, strings) -> List.of()));
+        aliases.add(((sender, strings) -> List.of()));
+        return aliases;
+    }
+
     public record TpaRequest(UUID uuid, long dateCreated){}
 }

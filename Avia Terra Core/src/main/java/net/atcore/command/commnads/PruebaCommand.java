@@ -4,6 +4,7 @@ import net.atcore.command.*;
 import net.atcore.messages.Message;
 import net.atcore.messages.TypeMessages;
 import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
 
 import static net.atcore.messages.MessagesManager.sendMessage;
 import static net.atcore.messages.MessagesManager.sendString;
@@ -20,6 +21,7 @@ public class PruebaCommand extends BaseCommand {
                 "!*",
                 "es un comando de prueba",
                 false);
+        addAlias("test");
     }
 
     @Override

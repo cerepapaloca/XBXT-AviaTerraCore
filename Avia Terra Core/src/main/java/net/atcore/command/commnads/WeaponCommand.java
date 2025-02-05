@@ -48,7 +48,7 @@ public class WeaponCommand extends BaseTabCommand {
     @Override
     public void execute(CommandSender sender, String[] args) {
         switch (args.length) {
-            case 0, 1 -> sendArgument(sender, this.getUsage(), TypeMessages.ERROR);
+            case 0, 1 -> sendArgument(sender, this.getAviaTerraUsage(), TypeMessages.ERROR);
             case 2 -> sendMessage(sender, Message.COMMAND_WEAPON_MISSING_ARGS_NAME);
             default -> {
                 TypeArmament typeArmament;
@@ -73,8 +73,8 @@ public class WeaponCommand extends BaseTabCommand {
                         cantidad = 1;
                     }
                     for (int i = 0; i < cantidad; i++) {
-                        CommandUtils.executeForPlayer(sender, args[0], true, dataTemporalPlayer ->
-                                GlobalUtils.addItemPlayer(baseArmament.getItemArmament(), dataTemporalPlayer.player(),
+                        CommandUtils.executeForPlayer(sender, args[0], true, (name, player) ->
+                                GlobalUtils.addItemPlayer(baseArmament.getItemArmament(), player,
                                         true, typeArmament != TypeArmament.AMMO, false));
                     }
                     sendMessage(sender, Message.COMMAND_WEAPON_SUCCESSFUL);

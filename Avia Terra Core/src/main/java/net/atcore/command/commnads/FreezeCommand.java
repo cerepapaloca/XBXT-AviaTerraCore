@@ -9,7 +9,6 @@ import net.atcore.command.ArgumentUse;
 import net.atcore.messages.Message;
 import net.atcore.messages.TypeMessages;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -31,16 +30,15 @@ public class FreezeCommand extends BaseTabCommand {
     @Override
     public void execute(CommandSender sender, String[] args) {
         if (args.length == 0) {
-            sendArgument(sender, this.getUsage(), TypeMessages.ERROR);
+            sendArgument(sender, this.getAviaTerraUsage(), TypeMessages.ERROR);
             return;
         }
         if (args.length == 1) {
             sendMessage(sender, Message.COMMAND_FREEZE_MISSING_ARGS_LAST);
             return;
         }
-        CommandUtils.executeForPlayer(sender, args[0], true, dataTemporalPlayer -> {
-            ModerationPlayer moderationPlayer = AviaTerraPlayer.getPlayer(dataTemporalPlayer.player()).getModerationPlayer();
-            Player player = dataTemporalPlayer.player();
+        CommandUtils.executeForPlayer(sender, args[0], true, (name, player) -> {
+            ModerationPlayer moderationPlayer = AviaTerraPlayer.getPlayer(player).getModerationPlayer();
             switch (args[1].toLowerCase()){
                 case "true" -> {
                     if (moderationPlayer.isFreeze()) {

@@ -26,7 +26,7 @@ public class BanCommand extends BaseTabCommand {
     @Override
     public void execute(CommandSender sender, String[] args) {
         switch (args.length) {
-            case 1 -> sendArgument(sender, this.getUsage(), TypeMessages.ERROR);
+            case 1 -> sendArgument(sender, this.getAviaTerraUsage(), TypeMessages.ERROR);
             case 2 -> sendMessage(sender, Message.COMMAND_BAN_MISSING_ARGUMENT_TIME);
             case 3 -> sendMessage(sender, Message.COMMAND_BAN_MISSING_ARGUMENT_REASON);
             default -> {
@@ -50,12 +50,12 @@ public class BanCommand extends BaseTabCommand {
                     reason = reason.concat(args[i] + " ");
                 }
                 String finalReason = reason;
-                CommandUtils.executeForPlayer(sender, args[0], false, player1 -> {
+                CommandUtils.executeForPlayer(sender, args[0], false, (name, player) -> {
                     try {
-                        if (player1.player() != null) {
-                            ModerationSection.getBanManager().banPlayer(player1.player(), finalReason, time, contextBan, sender.getName());
+                        if (player != null) {
+                            ModerationSection.getBanManager().banPlayer(player, finalReason, time, contextBan, sender.getName());
                         }else {
-                            ModerationSection.getBanManager().banPlayer(player1.name(), GlobalUtils.getUUIDByName(player1.name()), null, finalReason, time, contextBan, sender.getName());
+                            ModerationSection.getBanManager().banPlayer(name, GlobalUtils.getUUIDByName(name), null, finalReason, time, contextBan, sender.getName());
                         }
                     }catch (Exception ignored) {
                         sendMessage(sender, Message.COMMAND_BAN_DATA_BASE_ERROR);
