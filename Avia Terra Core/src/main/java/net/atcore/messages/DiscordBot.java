@@ -30,6 +30,7 @@ public class DiscordBot extends ListenerAdapter{
 
     public static String consoleId = "1294324285602795550";
     public static String chatId = "1294324328401207389";//
+    public static String JoinAndLeave = "1338315306585817158";
     public static ChannelLoggingHandler handler;
     public static BukkitTask stateTasks = null;
 
@@ -37,6 +38,7 @@ public class DiscordBot extends ListenerAdapter{
         AviaTerraCore.enqueueTaskAsynchronously(true, () -> {
             jda = JDABuilder.createDefault(TOKEN_BOT).enableIntents(GatewayIntent.MESSAGE_CONTENT).build();
             try {
+                jda.removeEventListener(DiscordBot.class);
                 jda.awaitReady();
                 jda.addEventListener(new DiscordBot());
                 startStateBot();

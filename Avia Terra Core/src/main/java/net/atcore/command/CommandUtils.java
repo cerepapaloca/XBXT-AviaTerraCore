@@ -4,7 +4,6 @@ import lombok.experimental.UtilityClass;
 import net.atcore.AviaTerraCore;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
-import net.atcore.messages.TypeMessages;
 import net.atcore.security.Login.LoginManager;
 import net.atcore.utils.GlobalConstantes;
 import net.atcore.utils.ModeTab;
@@ -21,7 +20,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;

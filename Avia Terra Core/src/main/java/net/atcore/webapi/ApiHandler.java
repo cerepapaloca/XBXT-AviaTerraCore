@@ -10,6 +10,7 @@ import net.atcore.messages.MessagesManager;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import java.io.File;
+import java.net.http.HttpResponse;
 import java.security.KeyStore;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -54,7 +55,9 @@ public final class ApiHandler {
                             return;
                         }
                         exchange.setStatusCode(404);
-                        exchange.getResponseSender().send(gson.toJson(new HashMap<String, String[]>().put("Allow Sections", APIS.stream().map(BaseApi::getIdentifier).toArray(String[]::new))));
+                        HashMap<String, String[]> response = new HashMap<>();
+                        response.put("Allow Sections", APIS.stream().map(BaseApi::getIdentifier).toArray(String[]::new));
+                        exchange.getResponseSender().send(gson.toJson(response));
                     }).build();
             server.start();
             ApiHandler.server = server;

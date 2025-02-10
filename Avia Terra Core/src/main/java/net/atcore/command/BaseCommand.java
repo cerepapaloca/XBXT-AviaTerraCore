@@ -2,7 +2,6 @@ package net.atcore.command;
 
 import lombok.Getter;
 import net.atcore.AviaTerraCore;
-import net.atcore.Section;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import org.bukkit.Bukkit;
@@ -14,7 +13,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 /**
@@ -72,12 +70,10 @@ public abstract class BaseCommand extends Command {
         setUsage(usage.toString());
         if (hasBukkitPermission) {
             setPermission(canonicalPermission);
-            Bukkit.getLogger().info("Using " + canonicalPermission);
         }
         if (this instanceof CommandAliase commandAliase) {
             List<String> aliases = new ArrayList<>(aviaTerraAliases);
             aliases.addAll(commandAliase.getCommandsAliases().stream().map(String::toLowerCase).toList());
-            Bukkit.getLogger().info("Using Aliases: " + aliases);
             setAliases(aliases);
         }
     }

@@ -1,12 +1,10 @@
 package net.atcore.listener;
 
 import net.atcore.AviaTerraCore;
+import net.atcore.Config;
 import net.atcore.aviaterraplayer.AviaTerraPlayer;
 import net.atcore.data.sql.DataBaseRegister;
-import net.atcore.messages.CategoryMessages;
-import net.atcore.messages.Message;
-import net.atcore.messages.MessagesManager;
-import net.atcore.messages.TypeMessages;
+import net.atcore.messages.*;
 import net.atcore.moderation.ban.BanManager;
 import net.atcore.moderation.ban.ContextBan;
 import net.atcore.moderation.ban.DataBan;
@@ -16,7 +14,8 @@ import net.atcore.security.Login.model.LimboData;
 import net.atcore.security.Login.model.LoginData;
 import net.atcore.security.SecuritySection;
 import net.atcore.utils.GlobalUtils;
-import net.atcore.utils.Service;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -28,6 +27,7 @@ import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.awt.*;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -68,6 +68,13 @@ public class JoinAndQuitListener implements Listener {
         event.quitMessage(GlobalUtils.chatColorLegacyToComponent(MessagesManager.addProprieties(
                 String.format(Message.EVENT_QUIT.getMessage(player), event.getPlayer().getName()),
                 TypeMessages.INFO, false, false)));
+
+        EmbedBuilder embed = new EmbedBuilder();
+        embed.setTitle(String.format("%s Se salio del servidor", player.getName()));
+        embed.setColor(Color.RED);
+        TextChannel textChannel = AviaTerraCore.jda.getTextChannelById(DiscordBot.JoinAndLeave);
+        assert textChannel != null;
+        textChannel.sendMessageEmbeds(embed.build()).queue();
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -83,6 +90,13 @@ public class JoinAndQuitListener implements Listener {
                 GlobalUtils.addRangeVote(player);
             }
         }.runTaskLater(AviaTerraCore.getInstance(), 20L*2);
+
+        EmbedBuilder embed = new EmbedBuilder();
+        embed.setTitle(String.format("%s Se unió al servidor", player.getName()));
+        embed.setColor(Color.GREEN);
+        TextChannel textChannel = AviaTerraCore.jda.getTextChannelById(DiscordBot.JoinAndLeave);
+        assert textChannel != null;
+        textChannel.sendMessageEmbeds(embed.build()).queue();
     }
 
     @EventHandler
@@ -96,8 +110,6 @@ public class JoinAndQuitListener implements Listener {
         }
         AviaTerraPlayer.addPlayer(player);
         SecuritySection.getSimulateOnlineMode().applySkin(player);
-
-
     }
 
     @EventHandler(priority = EventPriority.LOW)

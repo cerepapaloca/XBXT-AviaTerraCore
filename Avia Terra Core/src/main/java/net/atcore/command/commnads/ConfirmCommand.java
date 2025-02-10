@@ -5,13 +5,12 @@ import net.atcore.command.BaseCommand;
 import net.atcore.command.CommandHandler;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
-import net.atcore.messages.TypeMessages;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class confirmCommand extends BaseCommand {
-    public confirmCommand() {
+public class ConfirmCommand extends BaseCommand {
+    public ConfirmCommand() {
         super("confirm",
                 new ArgumentUse("confirm"),
                 "**",

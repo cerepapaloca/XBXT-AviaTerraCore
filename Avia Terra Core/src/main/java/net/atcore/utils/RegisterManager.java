@@ -10,22 +10,18 @@ import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import org.bukkit.Bukkit;
-import org.bukkit.Server;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.SimplePluginManager;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
 
 import static net.atcore.messages.MessagesManager.logConsole;
-import static org.bukkit.Bukkit.*;
+import static org.bukkit.Bukkit.getServer;
 
 /**
  * Esta es una clase que se dedica a registrar e inicializar los listener o comando u otras cosas
@@ -70,7 +66,7 @@ public class RegisterManager {
                 pluginCommand.setUsage(baseCommand.getUsage());
                 pluginCommand.setPermission(baseCommand.getPermission());
 
-                // La instancia la registra dentro de bukkit
+                // La instancia de PluginCommand la registra dentro de bukkit
                 CommandMap commandMap = Bukkit.getCommandMap();
                 commandMap.register(AviaTerraCore.getInstance().getName(), pluginCommand);
 
@@ -82,11 +78,9 @@ public class RegisterManager {
                 // Se añade el gestor de la ejecución tab del comando
                 pluginCommand.setExecutor(CommandSection.getCommandHandler());
                 pluginCommand.setTabCompleter(CommandSection.getCommandHandler());
-            } catch (NoSuchMethodException | InvocationTargetException | InstantiationException |
-                     IllegalAccessException e) {
+            } catch (NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
                 throw new RuntimeException(e);
             }
         }
-        Bukkit.getLogger().severe(CommandManager.COMMANDS_AVIA_TERRA.toString());
     }
 }

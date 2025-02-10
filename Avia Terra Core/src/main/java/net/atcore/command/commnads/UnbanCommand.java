@@ -1,14 +1,13 @@
 package net.atcore.command.commnads;
 
 import net.atcore.AviaTerraCore;
+import net.atcore.command.ArgumentUse;
 import net.atcore.command.BaseTabCommand;
 import net.atcore.command.CommandUtils;
 import net.atcore.command.ModeTabPlayers;
-import net.atcore.command.ArgumentUse;
 import net.atcore.messages.Message;
-import net.atcore.messages.TypeMessages;
-import net.atcore.moderation.ban.ContextBan;
 import net.atcore.moderation.ModerationSection;
+import net.atcore.moderation.ban.ContextBan;
 import org.bukkit.command.CommandSender;
 
 import java.util.List;

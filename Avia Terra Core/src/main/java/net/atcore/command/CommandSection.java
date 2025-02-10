@@ -39,7 +39,7 @@ public class CommandSection implements Section {
                 new NameColorCommand(),
                 new ForceLoginCommand(),
                 new PremiumCommand(),
-                new confirmCommand(),
+                new ConfirmCommand(),
                 new PassiveRestartCommand(),
                 new VoteCommand(),
                 new DiscordCommand()

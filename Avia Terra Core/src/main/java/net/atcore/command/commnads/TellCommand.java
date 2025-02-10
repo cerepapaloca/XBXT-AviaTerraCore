@@ -8,9 +8,9 @@ import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.Message;
 import net.atcore.messages.TypeMessages;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
-import static net.atcore.messages.MessagesManager.*;
+import static net.atcore.messages.MessagesManager.sendFormatMessage;
+import static net.atcore.messages.MessagesManager.sendMessage;
 
 public class TellCommand extends BaseCommand {
 

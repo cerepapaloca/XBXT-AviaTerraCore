@@ -1,6 +1,7 @@
 package net.atcore.command;
 
 import lombok.Getter;
+import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
@@ -12,6 +13,7 @@ import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.Console;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -34,12 +36,7 @@ public final class CommandHandler implements TabExecutor {
                 if (SAVES_COMMANDS_CONFIRMS.containsKey(player.getUniqueId())) {
                     SAVES_COMMANDS_CONFIRMS.remove(player.getUniqueId());
                 } else {
-                    StringBuilder commandFinal = new StringBuilder();
-                    commandFinal.append(command.getName()).append(" ");
-                    for (String arg : args) {
-                        commandFinal.append(arg).append(" ");
-                    }
-                    SAVES_COMMANDS_CONFIRMS.put(player.getUniqueId(), commandFinal.toString());
+                    SAVES_COMMANDS_CONFIRMS.put(player.getUniqueId(), label + " " + String.join(" ", args));
                     MessagesManager.sendString(sender, command.getMessageConfirm(), TypeMessages.INFO);
                     return true;
                 }
@@ -65,6 +62,10 @@ public final class CommandHandler implements TabExecutor {
                 }
             }catch (Exception e) {
                 sendMessage(sender, Message.COMMAND_GENERIC_EXCEPTION_ERROR);
+                StringBuilder sb = new StringBuilder();
+                sb.append(label).append(" ");
+                for (String arg : args) sb.append(arg).append(" ");
+                MessagesManager.logConsole(String.format("[%s] <|%s|> -> `%s`",e.getMessage(), sender.getName(), sb), TypeMessages.ERROR, CategoryMessages.COMMANDS);
                 sendErrorException("Error al ejecutar el comando", e);
                 return false;
             }

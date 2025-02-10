@@ -1,13 +1,12 @@
 package net.atcore.command.commnads;
 
-import net.atcore.command.*;
+import net.atcore.command.ArgumentUse;
+import net.atcore.command.BaseCommand;
+import net.atcore.command.ModeTabPlayers;
 import net.atcore.messages.Message;
-import net.atcore.messages.TypeMessages;
 import org.bukkit.command.CommandSender;
-import org.jetbrains.annotations.NotNull;
 
 import static net.atcore.messages.MessagesManager.sendMessage;
-import static net.atcore.messages.MessagesManager.sendString;
 
 public class PruebaCommand extends BaseCommand {
 
@@ -18,9 +17,8 @@ public class PruebaCommand extends BaseCommand {
                         .addArgPlayer(ModeTabPlayers.ADVANCED)
                         .addNote("Note")
                         .addTime(true),
-                "!*",
                 "es un comando de prueba",
-                false);
+                true);
         addAlias("test");
     }
 
