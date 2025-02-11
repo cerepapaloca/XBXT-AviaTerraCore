@@ -29,7 +29,7 @@ public class CommandManager {//nose si poner en esta clase aquí la verdad
                 return false;
             } else {
                 if (!isSilent) {
-                    if (LoginManager.checkLoginIn(player, true, b)) {
+                    if (LoginManager.checkLogin(player, true, b)) {
                         sendMessage(player, net.atcore.messages.Message.COMMAND_GENERIC_NO_PERMISSION);
                     } else {
                         sendMessage(player, net.atcore.messages.Message.COMMAND_GENERIC_NO_LOGIN);
@@ -38,7 +38,7 @@ public class CommandManager {//nose si poner en esta clase aquí la verdad
                 return true;
             }
         }else{
-            if (LoginManager.checkLoginIn(player, true, b)){
+            if (LoginManager.checkLogin(player, true, b)){
                 if (player.isOp()){
                     return false;
                 }else {

@@ -44,7 +44,7 @@ public class LoginCommand extends BaseCommand {
                     MessagesManager.sendMessage(player, Message.COMMAND_REGISTER_IS_PREMIUM);
                     return;
                 }
-                if (LoginManager.checkLoginIn(player)){
+                if (LoginManager.checkLogin(player)){
                     sendMessage(player, Message.COMMAND_LOGIN_ALREADY);
                     return;
                 }

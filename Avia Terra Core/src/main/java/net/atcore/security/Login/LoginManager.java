@@ -175,7 +175,7 @@ public final class LoginManager {
     public static @NotNull LoginData startPlaySessionCracked(@NotNull Player player){
         LoginData loginData = getDataLogin(player);
         SessionData sessionData = new SessionData(player, StateLogins.CRACKED);//TODO: Cambiar si es un Cracked o un semi cracked
-        sessionData.setEndTimeLogin(Config.getExpirationSession());
+        sessionData.setEndTimeLogin(Config.getExpirationSession() + System.currentTimeMillis());
         loginData.setSession(sessionData);
         Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> {
             loginData.getLimbo().restorePlayer(player);
@@ -228,8 +228,8 @@ public final class LoginManager {
         registerData.setLastLoginDate(System.currentTimeMillis());
     }
 
-    public boolean checkLoginIn(@NotNull Player player){
-        return checkLoginIn(player, true, true);
+    public boolean checkLogin(@NotNull Player player){
+        return checkLogin(player, true, true);
     }
 
     /**
@@ -242,7 +242,7 @@ public final class LoginManager {
      * @return verdadero cuando está logueado, falso cuando no lo está
      */
 
-    public boolean checkLoginIn(@NotNull Player player, boolean ignoreTime, boolean limboMode){
+    public boolean checkLogin(@NotNull Player player, boolean ignoreTime, boolean limboMode){
         if (player.getAddress() == null) return false; // Esto por qué el jugador no terminado de entrar al servidor
         LoginData loginData = getDataLogin(player);
         if (loginData == null){
@@ -254,25 +254,31 @@ public final class LoginManager {
             switch (sessionData.getState()) {
                 case CRACKED, SEMI_CRACKED -> {
                     if (loginData.getRegister().getPasswordShaded() != null) {// tiene una contraseña la cuenta?
-                        if (!Config.getServerMode().equals(ServerMode.ONLINE_MODE)){// no puede ver cracked en modo online
-                            if (GlobalUtils.equalIp(sessionData.getAddress(), player.getAddress().getAddress())) {// las ips tiene que ser iguales
-                                if (ignoreTime || loginData.getSession().getEndTimeLogin() > System.currentTimeMillis()) {// expiro? o no se tiene en cuenta
-                                    Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> {
-                                        if (loginData.isLimboMode() && limboMode && player.isOnline()) {
-                                            loginData.getLimbo().restorePlayer(player);
-                                        }
-                                    });
-                                    return true;// sesión válida para los cracked
-                                }
-                            }
-                            if (limboMode) LimboManager.startAsynchronouslyLimboMode(player, ReasonLimbo.NO_SESSION);
-                        }else {
+                        // no puede ver cracked en modo online
+                        if (Config.getServerMode().equals(ServerMode.ONLINE_MODE)) {
                             GlobalUtils.synchronizeKickPlayer(player, Message.LOGIN_KICK_ONLINE_MODE);
+                            return false;
+                        }
+                        if (GlobalUtils.equalIp(sessionData.getAddress(), player.getAddress().getAddress())) {// las ips tiene que ser iguales
+                            if (ignoreTime || loginData.getSession().getEndTimeLogin() > System.currentTimeMillis()) {// expiro? o no se tiene en cuenta
+                                Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> {
+                                    if (loginData.isLimboMode() && limboMode && player.isOnline()) {
+                                        loginData.getLimbo().restorePlayer(player);
+                                    }
+                                });
+                                return true;// sesión válida para los cracked
+                            }
+                        }
+                        if (limboMode) {
+                            loginData.setSession(null);
+                            LimboManager.startAsynchronouslyLimboMode(player, ReasonLimbo.NO_SESSION);
                         }
                     }else {
-                        if (limboMode) LimboManager.startAsynchronouslyLimboMode(player, ReasonLimbo.NO_REGISTER);
+                        if (limboMode) {
+                            loginData.setSession(null);
+                            LimboManager.startAsynchronouslyLimboMode(player, ReasonLimbo.NO_REGISTER);
+                        }
                     }
-                    loginData.setSession(null);
                     return false;
                 }
                 case PREMIUM -> {
@@ -319,7 +325,7 @@ public final class LoginManager {
             RegisterData registerData = loginData.getRegister();
             if (registerData != null) {
                 if (Config.getServerMode().equals(ServerMode.OFFLINE_MODE) || registerData.getStateLogins() != StateLogins.PREMIUM){
-                    checkLoginIn(player, false, true);
+                    checkLogin(player, false, true);
                 }
                 AviaTerraCore.enqueueTaskAsynchronously(() -> {
                     if (FloodgateApi.getInstance().isFloodgatePlayer(player.getUniqueId()) && loginData.getRegister().getUuidBedrock() == null) {

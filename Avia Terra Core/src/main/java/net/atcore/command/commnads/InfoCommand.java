@@ -76,7 +76,7 @@ public class InfoCommand extends BaseCommand {
                 send(sender, String.format("Discord: <|%s|>", data.getRegister().getDiscord()));
                 send(sender, String.format("Mail: <|%s|>", data.getRegister().getMail()));
                 send(sender, String.format("OP: <|%s|>", player.isOp()));
-                send(sender, String.format("Sesión Expirada: <|%s|>", LoginManager.checkLoginIn(player, false, false)));
+                send(sender, String.format("Sesión Expirada: <|%s|>", !LoginManager.checkLogin(player, false, false)));
                 send(sender, String.format("Vida: <|%s|>", player.getHealth()));
                 send(sender, String.format("Comida: <|%s|>", player.getFoodLevel()));
                 send(sender, String.format("Nivel: <|%s|>", player.getLevel()));

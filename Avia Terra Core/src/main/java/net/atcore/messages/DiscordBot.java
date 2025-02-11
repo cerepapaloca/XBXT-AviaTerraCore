@@ -1,5 +1,6 @@
 package net.atcore.messages;
 
+import me.clip.placeholderapi.libs.kyori.adventure.util.ComponentMessageThrowable;
 import me.scarsz.jdaappender.ChannelLoggingHandler;
 import me.scarsz.jdaappender.ExtensionBuilder;
 import net.atcore.AviaTerraCore;
@@ -13,7 +14,10 @@ import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
@@ -100,13 +104,17 @@ public class DiscordBot extends ListenerAdapter{
         if (channel.equals(DiscordBot.consoleId)){
             if (message.getContentRaw().startsWith("-")) CommandManager.processCommandFromDiscord(message, member);
         }else if (channel.equals(DiscordBot.chatId)){
-            Bukkit.broadcast(MessagesManager.applyFinalProprieties(String.format(
+            Component component = MessagesManager.applyFinalProprieties(String.format(
                     MessagesManager.PREFIX_CHAT_DISCORD + format.getMessageLocaleDefault(),
                     member.getColor() == null ?
                             "<#AAAAAA>" + member.getUser().getGlobalName() :
                             "<" + GlobalUtils.javaColorToStringHex(member.getColor()) + ">" + member.getUser().getGlobalName(),
                     "<" + NamedTextColor.GRAY.asHexString() + ">" + message.getContentRaw()
-            ), TypeMessages.NULL, CategoryMessages.PRIVATE, false));
+            ), TypeMessages.NULL, CategoryMessages.PRIVATE, false);
+            Component roles = Component.text("Roles: ");
+            member.getRoles().forEach(role -> roles.append(Component.text(role.getName()).color(TextColor.color(role.getColorRaw())).appendSpace()));
+            component.hoverEvent(HoverEvent.showText(roles));
+            Bukkit.broadcast(component);
         }
     }
 }

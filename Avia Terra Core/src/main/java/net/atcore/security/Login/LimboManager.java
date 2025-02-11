@@ -161,7 +161,7 @@ public class LimboManager {
         BukkitTask task = new BukkitRunnable() {
             @Override
             public void run() {
-                if (LoginManager.checkLoginIn(player)) return;
+                if (LoginManager.checkLogin(player)) return;
                 GlobalUtils.kickPlayer(player, reason);
             }
         }.runTaskLater(AviaTerraCore.getInstance(), LIMBO_TIME);

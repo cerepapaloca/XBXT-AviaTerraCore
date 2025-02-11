@@ -13,7 +13,6 @@ import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.Console;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -50,7 +49,7 @@ public final class CommandHandler implements TabExecutor {
                         executedCommand(sender, label, args, command);
                         return true;
                     }else{
-                        if (LoginManager.checkLoginIn(player)){
+                        if (LoginManager.checkLogin(player)){
                             sendMessage(sender, Message.COMMAND_GENERIC_NO_PERMISSION);
                         }else {
                             sendMessage(player, Message.COMMAND_GENERIC_NO_LOGIN);

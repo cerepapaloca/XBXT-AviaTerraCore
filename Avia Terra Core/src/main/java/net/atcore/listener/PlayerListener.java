@@ -15,6 +15,7 @@ import net.atcore.security.Login.LoginManager;
 import net.atcore.utils.GlobalConstantes;
 import net.atcore.utils.GlobalUtils;
 import net.atcore.utils.RangeType;
+import net.dv8tion.jda.api.events.channel.update.ChannelUpdateArchivedEvent;
 import net.luckperms.api.node.types.InheritanceNode;
 import org.bukkit.Material;
 import org.bukkit.Sound;

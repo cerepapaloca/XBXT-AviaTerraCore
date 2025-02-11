@@ -76,7 +76,7 @@ public class DataBaseRegister extends DataBaseMySql {
                 session.setAddress(InetAddress.getByName(ipLogin));
                 session.setStartTimeLogin(lastLoginDate);
                 loginData.setSession(session);// añade la sesión rescatada
-                if (!LoginManager.checkLoginIn(player)){// Revisa si son validas las sesiones
+                if (!LoginManager.checkLogin(player)){// Revisa si son validas las sesiones
                     GlobalUtils.synchronizeKickPlayer(player, Message.LOGIN_KICK_SESSION_ERROR);
                 }
             }

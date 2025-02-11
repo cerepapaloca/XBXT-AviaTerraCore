@@ -317,7 +317,7 @@ public final class CommandUtils {
         //permission = permission.replace(permissionBase, "");
 
         if (permission.equals("!*"))return false;
-        if (LoginManager.checkLoginIn(player, true, limbo)) {
+        if (LoginManager.checkLogin(player, true, limbo)) {
             if (player.isOp()) return true;
             if (permission.contains("!")) permission = "!" + permission.replace("!", "");
             if (permission.equals("*") || permission.equals("**")) {

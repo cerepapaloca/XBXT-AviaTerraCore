@@ -11,7 +11,7 @@ public class VoteCommand extends BaseCommand {
         super("vote",
                 new ArgumentUse("vote"),
                 "*",
-                "te enviá el link de la pagina de vote",
+                "Te enviá el link de la pagina de votos.",
                 false
         );
     }

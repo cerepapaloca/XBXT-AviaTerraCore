@@ -24,7 +24,7 @@ public class LinkCommand extends BaseTabCommand {
                         .addArg("gmail", "discord")
                         .addNote("Cuenta"),
                 "**",
-                "Vinculas una cuenta para que mayor seguridad en el servidor y tener la capacidad de iniciar session con la autenticación de 2 pasos",
+                "Vinculas una cuenta para la autenticación de 2 pasos",
                 false);
     }
 
@@ -42,7 +42,7 @@ public class LinkCommand extends BaseTabCommand {
             switch (args[0].toLowerCase()) {
                 case "gmail" -> {
                     if (args.length >= 2) {
-                        if (LoginManager.checkLoginIn(player)){
+                        if (LoginManager.checkLogin(player)){
                             if (args[1].contains("@")){
                                 CodeAuth codeAuth = new CodeAuth(UUID.randomUUID(),
                                         System.currentTimeMillis()+(EXPIRATION_TIME),
@@ -87,7 +87,7 @@ public class LinkCommand extends BaseTabCommand {
                 }
                 case "discord" -> {
                     if (args.length >= 2) {
-                        if (LoginManager.checkLoginIn(player)){
+                        if (LoginManager.checkLogin(player)){
                             if (args[1].length() == 18){
 
                                 CodeAuth codeAuth = new CodeAuth(UUID.randomUUID(),

@@ -7,7 +7,10 @@ import net.atcore.armament.ArmamentSection;
 import net.atcore.command.CommandSection;
 import net.atcore.data.DataSection;
 import net.atcore.listener.ListenerSection;
-import net.atcore.messages.*;
+import net.atcore.messages.CategoryMessages;
+import net.atcore.messages.DiscordBot;
+import net.atcore.messages.MessagesManager;
+import net.atcore.messages.TypeMessages;
 import net.atcore.moderation.ModerationSection;
 import net.atcore.placeholder.PlaceHolderSection;
 import net.atcore.security.SecuritySection;
@@ -29,7 +32,6 @@ import java.util.Random;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import static net.atcore.messages.MessagesManager.sendString;
 import static net.atcore.utils.RegisterManager.register;
 import static org.bukkit.Bukkit.getOnlinePlayers;
 

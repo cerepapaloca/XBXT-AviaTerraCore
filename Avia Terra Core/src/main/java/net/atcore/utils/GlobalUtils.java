@@ -410,6 +410,7 @@ public final class GlobalUtils {
     public boolean equalIp(@Nullable InetAddress ipA, @Nullable InetAddress ipB){
         if (ipA == null || ipB == null) return false;
         return ipA.equals(ipB);
+
     }
 
     /**
@@ -508,7 +509,7 @@ public final class GlobalUtils {
     }
 
     public void addRangeVote(Player player){
-        if (LoginManager.checkLoginIn(player)){
+        if (LoginManager.checkLogin(player)){
             if (NuVotifierListener.LIST_VOTE.contains(player.getName())){
                 AviaTerraCore.getLp().getUserManager().modifyUser(player.getUniqueId(), user ->
                         user.data().add(InheritanceNode.builder("vote").build()));

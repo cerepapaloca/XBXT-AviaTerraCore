@@ -50,7 +50,7 @@ public class RegisterCommand extends BaseCommand {
                                     MessagesManager.sendTitle(player, String.format( Message.COMMAND_REGISTER_SUCCESSFUL_TITLE.getMessage(player), MessagesManager.PREFIX),
                                             String.format(Message.COMMAND_REGISTER_SUCCESSFUL_SUBTITLE.getMessage(player), player.getName())
                                             , 20, 20*3, 40, TypeMessages.INFO);
-                                    LoginManager.checkLoginIn(player);
+                                    LoginManager.checkLogin(player);
                                 }else {
                                     sendMessage(player, Message.COMMAND_REGISTER_PASSWORD_EQUAL_NAME);
                                 }

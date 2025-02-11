@@ -21,11 +21,12 @@ import static net.atcore.messages.MessagesManager.*;
 public class ChangePasswordCommand extends BaseTabCommand {
 
     public ChangePasswordCommand(){
-        super("changePassword",
-                new ArgumentUse("changePassword").addNote("Contraseña", "Código").addNote("Nueva Contraseña"),
+        super("changePass",
+                new ArgumentUse("changePass").addNote("Contraseña", "Código").addNote("Nueva Contraseña"),
                 "*",
                 "cambias tu contraseña",
                 false);
+        addAlias("changePassword");
     }
 
     @Override

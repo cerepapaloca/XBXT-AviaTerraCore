@@ -10,7 +10,7 @@ public final class LoginRemoveDebug implements RunTest {
     @Override
     public void runTest(AviaTerraPlayer player) {
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "removesession " + player.getPlayer().getName());
-        LoginManager.checkLoginIn(player.getPlayer());
+        LoginManager.checkLogin(player.getPlayer());
         Bukkit.dispatchCommand(player.getPlayer(), "test");
     }
 }

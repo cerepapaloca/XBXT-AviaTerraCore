@@ -28,7 +28,7 @@ public class HomeCommandAliase extends BaseTabCommand implements CommandAliase {
         super("home",
                 new ArgumentUse("home").addNote("Nombre de tu Home").addArgOptional().addArg("add", "remove"),
                 "*",
-                "Crear un home donde te puedes hacer tp",
+                "Puedes crear un home donde te puedes hacer tp en cualquier momento",
                 false);
         addAlias("h");
     }
