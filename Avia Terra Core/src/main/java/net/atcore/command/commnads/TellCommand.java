@@ -1,9 +1,6 @@
 package net.atcore.command.commnads;
 
-import net.atcore.command.ArgumentUse;
-import net.atcore.command.BaseCommand;
-import net.atcore.command.CommandUtils;
-import net.atcore.command.ModeTabPlayers;
+import net.atcore.command.*;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.Message;
 import net.atcore.messages.TypeMessages;
@@ -19,9 +16,8 @@ public class TellCommand extends BaseCommand {
                 new ArgumentUse("tell")
                         .addArgPlayer(ModeTabPlayers.ADVANCED)
                         .addNote("Mensaje..."),
-                "*",
-                "Le envías un mensaje privado a un jugador o un grupo de estos",
-                false);
+                CommandVisibility.PUBLIC,
+                "Le envías un mensaje privado a un jugador o un grupo de estos");
         addAlias("msg", "w", "r");
     }
 

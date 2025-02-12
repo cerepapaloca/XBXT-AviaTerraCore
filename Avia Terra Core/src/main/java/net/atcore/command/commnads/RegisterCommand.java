@@ -4,6 +4,7 @@ import net.atcore.AviaTerraCore;
 import net.atcore.Config;
 import net.atcore.command.ArgumentUse;
 import net.atcore.command.BaseCommand;
+import net.atcore.command.CommandVisibility;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
@@ -25,9 +26,9 @@ public class RegisterCommand extends BaseCommand {
     public RegisterCommand() {
         super("register",
                 new ArgumentUse("/register").addNote("contraseña").addNote("contraseña"),//"/register <contraseña> <contraseña>"
-                "**",
-                "Te registras en el servidor añadiendo una contraseña",
-                false);
+                CommandVisibility.ALL,
+                "Te registras en el servidor añadiendo una contraseña"
+        );
         addAlias("reg");
     }
 

@@ -1,7 +1,7 @@
 package net.atcore.webapi.response;
 
 import io.undertow.server.HttpServerExchange;
-import net.atcore.command.CommandSection;
+import net.atcore.command.CommandHandler;
 import net.atcore.webapi.BaseApi;
 
 import java.util.ArrayList;
@@ -16,9 +16,10 @@ public class Commands extends BaseApi {
     @Override
     public Object onRequest(HttpServerExchange request) {
         List<Command> commands = new ArrayList<>();
-        CommandSection.getCommandHandler().getCommands().forEach(command -> {
-            if (command.getAviaTerraPermissions().equals("*") || command.getAviaTerraPermissions().equals("**")){
-                commands.add(new Command(command.getName(), command.getDescription(), command.getUsage()));
+        CommandHandler.AVIA_TERRA_COMMANDS.forEach(command -> {
+            switch (command.getVisibility()) {
+                case PUBLIC, ALL -> commands.add(new Command(command.getName(), command.getDescription(), command.getUsage()));
+                case SEMI_PUBLIC -> commands.add(new Command(command.getName(), command.getDescription(), command.getUsage(), command.getPermission()));
             }
         });
 
@@ -30,11 +31,20 @@ public class Commands extends BaseApi {
         private final String name;
         private final String description;
         private final String usage;
+        private final String permission;
 
         public Command(String name, String description, String usage) {
             this.name = "/" + name.toLowerCase();
             this.description = description;
             this.usage = usage;
+            this.permission = null;
+        }
+
+        public Command(String name, String description, String usage, String permission) {
+            this.name = "/" + name.toLowerCase();
+            this.description = description;
+            this.usage = usage;
+            this.permission = permission;
         }
     }
 }

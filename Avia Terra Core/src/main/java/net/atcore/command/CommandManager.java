@@ -19,13 +19,17 @@ import static net.atcore.messages.MessagesManager.sendMessage;
 @UtilityClass
 public class CommandManager {//nose si poner en esta clase aquí la verdad
 
-    public final HashMap<String, String> COMMANDS = new HashMap<>();
-    public final HashMap<String, String> COMMANDS_AVIA_TERRA = new HashMap<>();
+    public final HashMap<String, String> COMMANDS = new HashMap<>(); // TODO: Esta deshabilitado, habilitar para el futuro
+
+    /**
+     * Comprueba que el comando que esta ejecutado es valido
+     * @return verdadero sí hubo un problema
+     */
 
     public boolean checkCommand(String command, Player player, boolean isSilent, boolean b){
-        if (COMMANDS.containsKey(command.toLowerCase()) || COMMANDS_AVIA_TERRA.containsKey(command.toLowerCase())) {
-            String permission = Objects.requireNonNullElse(COMMANDS.get(command.toLowerCase()), COMMANDS_AVIA_TERRA.get(command.toLowerCase()));
-            if (CommandUtils.hasPermission(permission, player, b)) {
+        BaseCommand baseCommand = CommandHandler.getCommand(command);
+        if (baseCommand != null) {
+            if (CommandUtils.hasPermission(baseCommand, player, b)) {
                 return false;
             } else {
                 if (!isSilent) {

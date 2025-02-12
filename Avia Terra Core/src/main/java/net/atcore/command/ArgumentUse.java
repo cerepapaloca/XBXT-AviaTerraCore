@@ -12,7 +12,7 @@ import java.util.NoSuchElementException;
 
 /**
  * Creas el cómo tiene que usar el comando y Autogenera un TAB en caso la clase extienda de {@link BaseCommand} si extiende de
- * {@link BaseTabCommand} se usara el {@link BaseTabCommand#onTab(CommandSender, String[]) onTab()} para crear el TAB
+ * {@link BaseTabCommand} se usara él {@link BaseTabCommand#onTab(CommandSender, String[]) onTab()} para crear el TAB
  * <p>
  * Un ejemplo de como crear los argumentos.
  * <blockquote><pre>
@@ -29,6 +29,7 @@ public class ArgumentUse {
 
     private final String command;
     private boolean isRequired = true;
+    private static final int MAX_ARGS_DISPLAY = 5;
 
     public ArgumentUse(@NotNull String s) {
         if (s.startsWith("/")){
@@ -151,13 +152,19 @@ public class ArgumentUse {
         Argument arg = args.get(i);
         StringBuilder sbArgs = new StringBuilder();
         boolean first = true;
+        int j = 0;
         for (String s : arg.arg) {
+            if (MAX_ARGS_DISPLAY <= j) {
+                sbArgs.append("...");
+                break;
+            }
             if (first) {
                 first = false;
                 sbArgs.append(s);
             }else {
                 sbArgs.append(" | ").append(s);
             }
+            j++;
         }
         if (arg.isFinal) {
             return "<" + sbArgs + "...";

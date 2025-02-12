@@ -1,10 +1,7 @@
 package net.atcore.command.commnads;
 
 import net.atcore.AviaTerraCore;
-import net.atcore.command.BaseTabCommand;
-import net.atcore.command.CommandUtils;
-import net.atcore.command.ModeTabPlayers;
-import net.atcore.command.ArgumentUse;
+import net.atcore.command.*;
 import net.atcore.data.sql.DataBaseRegister;
 import net.atcore.messages.Message;
 import net.atcore.messages.TypeMessages;
@@ -23,8 +20,9 @@ public class RemoveRegisterCommand extends BaseTabCommand {
     public RemoveRegisterCommand() {
         super("removeRegister",
                 new ArgumentUse("removeRegister").addArgPlayer(ModeTabPlayers.ADVANCED),
-                "Le borras el registro al jugador, util para jugadores temporales",
-                false);
+                CommandVisibility.PRIVATE,
+                "Le borras el registro al jugador, util para jugadores temporales"
+        );
     }
 
     @Override

@@ -3,6 +3,7 @@ package net.atcore.command.commnads;
 import net.atcore.command.BaseTabCommand;
 import net.atcore.command.CommandUtils;
 import net.atcore.command.ArgumentUse;
+import net.atcore.command.CommandVisibility;
 import net.atcore.messages.Message;
 import net.atcore.messages.TypeMessages;
 import net.atcore.moderation.ban.ContextBan;
@@ -19,8 +20,9 @@ public class BanCommand extends BaseTabCommand {
     public BanCommand() {
         super("ban",
                 new ArgumentUse("jugador").addArg("Contexto").addTime(true).addNote("Ranzón"),
-                "Baneas a los jugador de un contexto por un tiempo determinado",
-                false);
+                CommandVisibility.PRIVATE,
+                "Baneas a los jugador de un contexto por un tiempo determinado"
+        );
     }
 
     @Override

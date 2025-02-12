@@ -2,6 +2,7 @@ package net.atcore.command.commnads;
 
 import net.atcore.command.ArgumentUse;
 import net.atcore.command.BaseCommand;
+import net.atcore.command.CommandVisibility;
 import net.atcore.command.ModeTabPlayers;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
@@ -17,8 +18,9 @@ public class ForceLoginCommand extends BaseCommand {
     public ForceLoginCommand() {
         super("forceLogin",
                 new ArgumentUse("forceLogin").addArgPlayer(ModeTabPlayers.NORMAL),
-                "!*",
-                "Fuerza a iniciar session como un jugador cracked", false);
+                CommandVisibility.ONLY_CONSOLE,
+                "Fuerza a iniciar session como un jugador cracked"
+        );
     }
 
     @Override

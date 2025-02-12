@@ -1,6 +1,5 @@
 package net.atcore.messages;
 
-import me.clip.placeholderapi.libs.kyori.adventure.util.ComponentMessageThrowable;
 import me.scarsz.jdaappender.ChannelLoggingHandler;
 import me.scarsz.jdaappender.ExtensionBuilder;
 import net.atcore.AviaTerraCore;
@@ -10,6 +9,7 @@ import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -25,6 +25,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.text.SimpleDateFormat;
 import java.util.TimeZone;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static net.atcore.AviaTerraCore.TOKEN_BOT;
 import static net.atcore.AviaTerraCore.jda;
@@ -67,7 +68,6 @@ public class DiscordBot extends ListenerAdapter{
                             .text("[").level().text("]").space()
                             .build()
                     );
-
                 }).attach().schedule();
                 MessagesManager.logConsole("discord bot " + TypeMessages.SUCCESS.getMainColor() + "Ok", TypeMessages.INFO, false);
             } catch (Exception e) {
@@ -112,9 +112,10 @@ public class DiscordBot extends ListenerAdapter{
                     "<" + NamedTextColor.GRAY.asHexString() + ">" + message.getContentRaw()
             ), TypeMessages.NULL, CategoryMessages.PRIVATE, false);
             Component roles = Component.text("Roles: ");
-            member.getRoles().forEach(role -> roles.append(Component.text(role.getName()).color(TextColor.color(role.getColorRaw())).appendSpace()));
-            component.hoverEvent(HoverEvent.showText(roles));
-            Bukkit.broadcast(component);
+            for (Role role : member.getRoles()) {
+                roles = roles.append(Component.text(role.getName()).color(TextColor.color(role.getColorRaw())).appendSpace());
+            }
+            Bukkit.broadcast(component.hoverEvent(HoverEvent.showText(roles)));
         }
     }
 }

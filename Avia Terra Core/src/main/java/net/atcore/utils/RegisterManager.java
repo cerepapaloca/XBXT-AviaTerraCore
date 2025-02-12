@@ -4,6 +4,7 @@ import lombok.experimental.UtilityClass;
 import net.atcore.AviaTerraCore;
 import net.atcore.Section;
 import net.atcore.command.BaseCommand;
+import net.atcore.command.CommandHandler;
 import net.atcore.command.CommandManager;
 import net.atcore.command.CommandSection;
 import net.atcore.messages.CategoryMessages;
@@ -53,7 +54,7 @@ public class RegisterManager {
 
     public static void register(@NotNull BaseCommand... commands) {
         for (BaseCommand baseCommand : commands) {
-            CommandSection.getCommandHandler().getCommands().add(baseCommand);
+            CommandHandler.AVIA_TERRA_COMMANDS.add(baseCommand);
             try {
                 // Se crea una instancia manualmente de PluginCommand
                 Constructor<PluginCommand> constructor = PluginCommand.class.getDeclaredConstructor(String.class, Plugin.class);
@@ -69,11 +70,6 @@ public class RegisterManager {
                 // La instancia de PluginCommand la registra dentro de bukkit
                 CommandMap commandMap = Bukkit.getCommandMap();
                 commandMap.register(AviaTerraCore.getInstance().getName(), pluginCommand);
-
-                // Agrega el commando a la lista de commandos de Avia Terra para el manejo de permisos
-                CommandManager.COMMANDS_AVIA_TERRA.put(baseCommand.getName().toLowerCase(), baseCommand.getAviaTerraPermissions());
-                baseCommand.getAliases().stream().map(String::toLowerCase).forEach(alias ->
-                        CommandManager.COMMANDS_AVIA_TERRA.put(alias, baseCommand.getAviaTerraPermissions()));
 
                 // Se añade el gestor de la ejecución tab del comando
                 pluginCommand.setExecutor(CommandSection.getCommandHandler());

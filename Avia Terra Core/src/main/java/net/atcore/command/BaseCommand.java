@@ -4,7 +4,6 @@ import lombok.Getter;
 import net.atcore.AviaTerraCore;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
@@ -24,12 +23,9 @@ import java.util.List;
 @Getter
 public abstract class BaseCommand extends Command {
 
-    protected final String aviaTerraPermissions;
-    protected final String canonicalPermission;
+    protected final CommandVisibility visibility;
     protected final ArgumentUse aviaTerraUsage;
-    protected final boolean requiredConfirm;
     protected final boolean hasBukkitPermission;
-    protected String messageConfirm = "Tiene que confirmar con <|<Click:suggest_command:/confirm>/confirm</click>|> para ejecutar este comandos";
 
     /**
      * La lista de alias reales de los comandos es decir no incluyen los alias de {@link CommandAliase},
@@ -47,29 +43,17 @@ public abstract class BaseCommand extends Command {
 
     public BaseCommand(@NotNull String name,
                        @NotNull ArgumentUse usage,
-                       @Nullable String description,
-                       boolean requiredConfirm
-    ) {
-        this(name, usage, "", description, requiredConfirm);
-    }
-
-    public BaseCommand(@NotNull String name,
-                       @NotNull ArgumentUse usage,
-                       @NotNull String permissions,
-                       @Nullable String description,
-                       boolean requiredConfirm
+                       @NotNull CommandVisibility visibility,
+                       @Nullable String description
     ) {
         super(name);
         this.aviaTerraUsage = usage;
-        this.requiredConfirm = requiredConfirm;
-        this.canonicalPermission = AviaTerraCore.getInstance().getName().toLowerCase() + ".command." + getName().toLowerCase();
-        this.hasBukkitPermission = (!permissions.equals("*") && !permissions.equals("**"));
-        this.aviaTerraPermissions = hasBukkitPermission ? canonicalPermission + "," + permissions : permissions;
-
+        this.hasBukkitPermission = CommandVisibility.PRIVATE.equals(visibility) || CommandVisibility.SEMI_PUBLIC.equals(visibility);
+        this.visibility = visibility;
         setDescription(description == null || description.isEmpty() ? "&oSin Descripción" : description);
         setUsage(usage.toString());
         if (hasBukkitPermission) {
-            setPermission(canonicalPermission);
+            setPermission(AviaTerraCore.getInstance().getName().toLowerCase() + ".command." + getName().toLowerCase());
         }
         if (this instanceof CommandAliase commandAliase) {
             List<String> aliases = new ArrayList<>(aviaTerraAliases);

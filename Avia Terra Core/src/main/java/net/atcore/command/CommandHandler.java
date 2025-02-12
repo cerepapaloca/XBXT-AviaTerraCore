@@ -7,6 +7,7 @@ import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import net.atcore.security.AntiExploit;
 import net.atcore.security.Login.LoginManager;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
@@ -23,20 +24,21 @@ import static net.atcore.messages.MessagesManager.sendMessage;
 
 @Getter
 public final class CommandHandler implements TabExecutor {
-    private final HashSet<BaseCommand> commands = new HashSet<>();
+
     private final HashMap<String, CommandAliase> aliases = new HashMap<>();
+    public static final HashSet<BaseCommand> AVIA_TERRA_COMMANDS = new HashSet<>();
     public static final HashMap<UUID, String> SAVES_COMMANDS_CONFIRMS = new HashMap<>();
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {
-        for (BaseCommand command : commands) {// Pasa por todas las clases para saber que comando es
+        for (BaseCommand command : AVIA_TERRA_COMMANDS) {// Pasa por todas las clases para saber que comando es
             if (!(cmd.getName().equalsIgnoreCase(command.getName()))) continue;
-            if (command.isRequiredConfirm() && sender instanceof Player player) {
+            if (command instanceof Confirmable confirmable && sender instanceof Player player) {
                 if (SAVES_COMMANDS_CONFIRMS.containsKey(player.getUniqueId())) {
                     SAVES_COMMANDS_CONFIRMS.remove(player.getUniqueId());
                 } else {
                     SAVES_COMMANDS_CONFIRMS.put(player.getUniqueId(), label + " " + String.join(" ", args));
-                    MessagesManager.sendString(sender, command.getMessageConfirm(), TypeMessages.INFO);
+                    MessagesManager.sendString(sender, confirmable.getMessageConfirm(), TypeMessages.INFO);
                     return true;
                 }
             }
@@ -45,7 +47,7 @@ public final class CommandHandler implements TabExecutor {
             }
             try {
                 if (sender instanceof Player player) {
-                    if (CommandUtils.hasPermission(command.getAviaTerraPermissions(), player, true)) {
+                    if (CommandUtils.hasPermission(command, player, true)) {
                         executedCommand(sender, label, args, command);
                         return true;
                     }else{
@@ -88,7 +90,7 @@ public final class CommandHandler implements TabExecutor {
 
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {
-        for (BaseCommand command : commands) {
+        for (BaseCommand command : AVIA_TERRA_COMMANDS) {
             if (!(cmd.getName().equalsIgnoreCase(command.getName()))) continue;
             List<String> list;
 
@@ -128,6 +130,20 @@ public final class CommandHandler implements TabExecutor {
                 }
             }
             return list;
+        }
+        return null;
+    }
+
+    public static BaseCommand getCommand(String name) {
+        for (BaseCommand baseCommand : AVIA_TERRA_COMMANDS){
+            for  (String aliase : baseCommand.getAliases()){
+                if (aliase.equalsIgnoreCase(name)){
+                    return baseCommand;
+                }
+            }
+            if (baseCommand.getName().equalsIgnoreCase(name)){
+                return baseCommand;
+            }
         }
         return null;
     }

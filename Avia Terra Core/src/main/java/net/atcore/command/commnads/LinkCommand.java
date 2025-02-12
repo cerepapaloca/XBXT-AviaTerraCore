@@ -4,6 +4,7 @@ import net.atcore.AviaTerraCore;
 import net.atcore.command.BaseTabCommand;
 import net.atcore.command.CommandUtils;
 import net.atcore.command.ArgumentUse;
+import net.atcore.command.CommandVisibility;
 import net.atcore.data.sql.DataBaseRegister;
 import net.atcore.messages.Message;
 import net.atcore.security.Login.*;
@@ -23,9 +24,9 @@ public class LinkCommand extends BaseTabCommand {
                 new ArgumentUse("link")
                         .addArg("gmail", "discord")
                         .addNote("Cuenta"),
-                "**",
-                "Vinculas una cuenta para la autenticación de 2 pasos",
-                false);
+                CommandVisibility.ALL,
+                "Vinculas una cuenta para la autenticación de 2 pasos"
+        );
     }
 
     private static final long EXPIRATION_TIME = 1000*60*2;

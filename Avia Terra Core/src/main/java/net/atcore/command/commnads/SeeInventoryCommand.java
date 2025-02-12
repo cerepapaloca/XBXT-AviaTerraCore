@@ -2,6 +2,7 @@ package net.atcore.command.commnads;
 
 import net.atcore.aviaterraplayer.AviaTerraPlayer;
 import net.atcore.command.BaseCommand;
+import net.atcore.command.CommandVisibility;
 import net.atcore.command.ModeTabPlayers;
 import net.atcore.command.ArgumentUse;
 import net.atcore.inventory.InventorySection;
@@ -17,8 +18,9 @@ public class SeeInventoryCommand extends BaseCommand {
     public SeeInventoryCommand() {
         super("seeInventory",
                 new ArgumentUse("/seeInventory").addArgPlayer(ModeTabPlayers.NORMAL),
-                "Puedes ver y modificar el inventario del jugador a tiempo real y de manera remota",
-                false);
+                CommandVisibility.PRIVATE,
+                "Puedes ver y modificar el inventario del jugador a tiempo real y de manera remota"
+                );
     }
 
     @Override

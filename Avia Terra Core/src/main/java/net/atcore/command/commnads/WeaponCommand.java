@@ -1,10 +1,7 @@
 package net.atcore.command.commnads;
 
 import net.atcore.armament.*;
-import net.atcore.command.BaseTabCommand;
-import net.atcore.command.CommandUtils;
-import net.atcore.command.ModeTabPlayers;
-import net.atcore.command.ArgumentUse;
+import net.atcore.command.*;
 import net.atcore.messages.Message;
 import net.atcore.messages.TypeMessages;
 import net.atcore.utils.GlobalUtils;
@@ -26,8 +23,9 @@ public class WeaponCommand extends BaseTabCommand {
                         .addArg("Nombre Del Armamento")
                         .addArgOptional()
                         .addArg("Cantidad"),
-                "Crea añades un armamento",
-                false);
+                CommandVisibility.PRIVATE,
+                "Crea añades un armamento"
+        );
         if (ArmamentUtils.ARMAMENTS.isEmpty()) ArmamentSection.initialize();
         for (BaseArmament armament : ArmamentUtils.ARMAMENTS){
             if (armament instanceof BaseWeaponUltraKill){

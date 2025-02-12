@@ -3,6 +3,8 @@ package net.atcore.command.commnads;
 import net.atcore.AviaTerraCore;
 import net.atcore.command.ArgumentUse;
 import net.atcore.command.BaseCommand;
+import net.atcore.command.CommandVisibility;
+import net.atcore.command.Confirmable;
 import net.atcore.data.sql.DataBaseRegister;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
@@ -14,18 +16,15 @@ import net.atcore.utils.GlobalUtils;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class PremiumCommand extends BaseCommand {
+public class PremiumCommand extends BaseCommand implements Confirmable {
 
     public PremiumCommand() {
         super("premium",
                 new ArgumentUse("premium"),
-                "**",
+                CommandVisibility.ALL,
                 "La cuenta de un usuario semi-cracked pasa a ser de premium esto provoca que no use su contraseña" +
-                        " y haga el protocolo de encriptación",
-                true
+                        " y haga el protocolo de encriptación"
         );
-        this.messageConfirm = "<red><b>Advertencia</b></red> Solo ejecutar cuando tiene una cuenta oficial de microsoft," +
-                " En caso que sea asi ejecuta este commando <|<Click:suggest_command:/confirm>/confirm</click>|> para pasar al modo premium";
     }
 
     @Override
@@ -50,5 +49,11 @@ public class PremiumCommand extends BaseCommand {
         }else {
             MessagesManager.sendMessage(sender, Message.COMMAND_GENERIC_NO_PLAYER);
         }
+    }
+
+    @Override
+    public String getMessageConfirm() {
+        return "<red><b>Advertencia</b></red> Solo ejecutar cuando tiene una cuenta oficial de microsoft," +
+                " En caso que sea asi ejecuta este commando <|<Click:suggest_command:/confirm>/confirm</click>|> para pasar al modo premium";
     }
 }

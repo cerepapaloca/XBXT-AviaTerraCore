@@ -1,9 +1,6 @@
 package net.atcore.command.commnads;
 
-import net.atcore.command.BaseCommand;
-import net.atcore.command.CommandUtils;
-import net.atcore.command.ModeTabPlayers;
-import net.atcore.command.ArgumentUse;
+import net.atcore.command.*;
 import net.atcore.messages.Message;
 import net.atcore.messages.TypeMessages;
 import net.atcore.security.Login.LoginManager;
@@ -17,8 +14,8 @@ public class RemoveSessionCommand extends BaseCommand {
     public RemoveSessionCommand() {
         super("removeSession",
                 new ArgumentUse("/removeSession").addArgPlayer(ModeTabPlayers.ADVANCED),
-                "Le borras la sesión al jugador",
-                false
+                CommandVisibility.PRIVATE,
+                "Le borras la sesión al jugador"
         );
     }
 

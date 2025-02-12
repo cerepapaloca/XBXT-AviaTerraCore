@@ -305,18 +305,37 @@ public final class CommandUtils {
      * no estén logueados, si el permiso comienza con {@code !} el jgador no debe tener
      * ese permiso. Se puede unir varios permisos con {@code ,}estó permisos extras hace
      * de "o" es decir la condición será verdadera cuando cumpla uno de los permisos
-     * @param permission Los permisos suele ser así {@code aviaterracore.command.prueba}
      * @param player el jugador que le va hace el check
      * @param limbo ¿Puede entrar en modo limbo?
      * @return verdadero sí tiene permiso
      */
 
-    public boolean hasPermission(String permission, Player player, boolean limbo){
+    public boolean hasPermission(@NotNull BaseCommand command, Player player, boolean limbo){
         //String permissionBase = AviaTerraCore.getInstance().getName().toLowerCase() + ".command." + command.toLowerCase();
         //if (player.hasPermission(permissionBase)) return true;
         //permission = permission.replace(permissionBase, "");
 
-        if (permission.equals("!*"))return false;
+        switch (command.getVisibility()) {
+            case ALL -> {
+                return true;
+            }
+            case PUBLIC -> {
+                return LoginManager.checkLogin(player, true, limbo);
+            }
+            case PRIVATE, SEMI_PUBLIC -> {
+                if (LoginManager.checkLogin(player, true, limbo)) {
+                    String permission = command.getPermission();
+                    if (permission != null) {
+                        return player.hasPermission(permission);
+                    }
+                }
+                return false;
+            }
+            default -> {
+                return false;
+            }
+        }
+        /*if (permission.equals("!*"))return false;
         if (LoginManager.checkLogin(player, true, limbo)) {
             if (player.isOp()) return true;
             if (permission.contains("!")) permission = "!" + permission.replace("!", "");
@@ -334,7 +353,7 @@ public final class CommandUtils {
             return b;
         }else {
             return permission.equals("**");
-        }
+        }*/
     }
 
     @Contract(pure = true)

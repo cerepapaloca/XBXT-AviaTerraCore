@@ -2,6 +2,7 @@ package net.atcore.command.commnads;
 
 import net.atcore.aviaterraplayer.AviaTerraPlayer;
 import net.atcore.command.ArgumentUse;
+import net.atcore.command.CommandVisibility;
 import net.atcore.utils.debug.TypeTest;
 import net.atcore.command.BaseTabCommand;
 import net.atcore.command.CommandUtils;
@@ -17,8 +18,9 @@ public class AviaTerraDebugCommand extends BaseTabCommand {
     public AviaTerraDebugCommand() {
         super("AviaTerraDebug",
                 new ArgumentUse("AviaTerraPruebas").addArg("Pruebas"),
-                "Commando para realizar pruebas del plugin",
-                false);
+                CommandVisibility.PRIVATE,
+                "Commando para realizar pruebas del plugin"
+        );
         addAlias("atd");
     }
 

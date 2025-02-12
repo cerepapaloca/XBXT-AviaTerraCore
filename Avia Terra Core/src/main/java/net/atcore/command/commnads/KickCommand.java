@@ -1,9 +1,6 @@
 package net.atcore.command.commnads;
 
-import net.atcore.command.ArgumentUse;
-import net.atcore.command.BaseCommand;
-import net.atcore.command.CommandUtils;
-import net.atcore.command.ModeTabPlayers;
+import net.atcore.command.*;
 import net.atcore.messages.TypeMessages;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.command.CommandSender;
@@ -15,8 +12,8 @@ public class KickCommand extends BaseCommand {
     public KickCommand() {
         super("kick",
                 new ArgumentUse("kick").addArgPlayer(ModeTabPlayers.ADVANCED).addFinalArg("razón"),
-                "Echas al jugador del servidor",
-                false
+                CommandVisibility.PRIVATE,
+                "Echas al jugador del servidor"
         );
     }
 

@@ -43,15 +43,15 @@ public class CommandSection implements Section {
                 new LogOutCommand(),
                 new PassiveRestartCommand(),
                 new VoteCommand(),
-                new DiscordCommand()
+                new DiscordCommand(),
+                new HelpCommand()
         );
     }
 
     @Override
     public void disable() {
-        commandHandler.getCommands().clear();
+        CommandHandler.AVIA_TERRA_COMMANDS.clear();
         commandHandler = null;
-        CommandManager.COMMANDS_AVIA_TERRA.clear();
         CommandManager.COMMANDS.clear();
     }
 

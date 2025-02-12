@@ -2,10 +2,7 @@ package net.atcore.command.commnads;
 
 import net.atcore.aviaterraplayer.AviaTerraPlayer;
 import net.atcore.aviaterraplayer.ModerationPlayer;
-import net.atcore.command.BaseTabCommand;
-import net.atcore.command.CommandUtils;
-import net.atcore.command.ModeTabPlayers;
-import net.atcore.command.ArgumentUse;
+import net.atcore.command.*;
 import net.atcore.messages.Message;
 import net.atcore.messages.TypeMessages;
 import org.bukkit.command.CommandSender;
@@ -23,8 +20,9 @@ public class FreezeCommand extends BaseTabCommand {
                 new ArgumentUse("freeze")
                         .addArgPlayer(ModeTabPlayers.ADVANCED)
                         .addArg("true", "false"),
-                "Este comando congelas a un jugador por actividad sospechosa",
-                false);
+                CommandVisibility.PRIVATE,
+                "Este comando congelas a un jugador por actividad sospechosa"
+        );
     }
 
     @Override

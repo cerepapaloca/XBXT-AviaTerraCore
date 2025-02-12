@@ -3,6 +3,7 @@ package net.atcore.command.commnads;
 import net.atcore.AviaTerraCore;
 import net.atcore.command.BaseTabCommand;
 import net.atcore.command.ArgumentUse;
+import net.atcore.command.CommandVisibility;
 import net.atcore.data.sql.DataBaseRegister;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.Message;
@@ -23,9 +24,9 @@ public class ChangePasswordCommand extends BaseTabCommand {
     public ChangePasswordCommand(){
         super("changePass",
                 new ArgumentUse("changePass").addNote("Contraseña", "Código").addNote("Nueva Contraseña"),
-                "*",
-                "cambias tu contraseña",
-                false);
+                CommandVisibility.PUBLIC,
+                "cambias tu contraseña"
+        );
         addAlias("changePassword");
     }
 

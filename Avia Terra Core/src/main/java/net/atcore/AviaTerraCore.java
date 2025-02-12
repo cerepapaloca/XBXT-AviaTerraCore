@@ -44,7 +44,7 @@ public class AviaTerraCore extends JavaPlugin {
     public static final String TOKEN_BOT = "MTI5MTUzODM1MjY0NjEzMTc3NA.GDwtcq.azwlvX6fWKbusXk8sOyzRMK78Qe9CwbHy_pmWk";
     public static final List<String> LIST_MOTD = new ArrayList<>();
     public static final List<String> LIST_BROADCAST = new ArrayList<>();
-    public static final List<String> LIST_MODULE = new ArrayList<>(List.of("net.atmi.Application"));
+    //public static final List<String> LIST_MODULE = new ArrayList<>(List.of("net.atmi.Application"));
     public static JDA jda;
     private static long startTime;
     @Getter private static LuckPerms lp;

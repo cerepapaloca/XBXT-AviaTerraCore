@@ -23,6 +23,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.jetbrains.annotations.NotNull;
 
 import static net.atcore.messages.MessagesManager.sendMessage;
 import static net.atcore.messages.MessagesManager.sendString;
@@ -66,19 +67,20 @@ public class ChatListener implements Listener {
         }
     }
 
-    public Component mainFormat(Component message, Player sender, Player target, boolean isMention) {
+    public Component mainFormat(Component message, @NotNull Player sender, Player target, boolean isMention) {
         int distanceWalked = sender.getStatistic(Statistic.WALK_ONE_CM) + sender.getStatistic(Statistic.SPRINT_ONE_CM);
-        double distanceWalkedKm = Math.round(distanceWalked / 100000.0);
+        long distanceWalkedKm = Math.round((distanceWalked / 100000.0)*10);
         int timePlayedTicks = sender.getStatistic(Statistic.PLAY_ONE_MINUTE);
-        double timePlayedHours = Math.round(timePlayedTicks / 20.0 / 3600.0);
+        long timePlayedHours = Math.round((timePlayedTicks / 20.0 / 3600.0)*10);
         String locale = sender.locale().getDisplayName();
 
         Component hoverText = MessagesManager.applyFinalProprieties(
                 String.format("""
-                Distancia recorrida: <|%s KM|>
-                Tiempo jugado: <|%s H|>
+                Distancia recorrida: <|%sKM|>
+                Tiempo jugado: <|%sH|>
                 Nombre Real: <|%s|>
-                Idioma: <|%s|>""", distanceWalkedKm, timePlayedHours, sender.getName(), locale), TypeMessages.INFO, CategoryMessages.PRIVATE, false
+                Idioma: <|%s|>
+                """,(float) distanceWalkedKm/10,(float) timePlayedHours/10, sender.getName(), locale), TypeMessages.INFO, CategoryMessages.PRIVATE, false
         );
         if (isMention) target.playSound(target, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.7f, 1);
 

@@ -3,6 +3,7 @@ package net.atcore.command.commnads;
 import net.atcore.AviaTerraCore;
 import net.atcore.command.ArgumentUse;
 import net.atcore.command.BaseCommand;
+import net.atcore.command.CommandVisibility;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
 import org.bukkit.Bukkit;
@@ -17,8 +18,8 @@ public class PassiveRestartCommand extends BaseCommand {
     public PassiveRestartCommand() {
         super("passiveRestart",
                 new ArgumentUse("passiveRestart").addArgOptional().addArg("cancel"),
-                "reinicia el servidor cuando no hay nadié conectado",
-                false
+                CommandVisibility.PRIVATE,
+                "reinicia el servidor cuando no hay nadié conectado"
         );
     }
 

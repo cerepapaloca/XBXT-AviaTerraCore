@@ -1,10 +1,7 @@
 package net.atcore.command.commnads;
 
 import net.atcore.AviaTerraCore;
-import net.atcore.command.BaseTabCommand;
-import net.atcore.command.CommandUtils;
-import net.atcore.command.ModeTabPlayers;
-import net.atcore.command.ArgumentUse;
+import net.atcore.command.*;
 import net.atcore.messages.Message;
 import net.atcore.messages.TypeMessages;
 import net.atcore.utils.GlobalUtils;
@@ -29,8 +26,9 @@ public class AddRangeCommand extends BaseTabCommand {
     public AddRangeCommand() {
         super("addRange",
                 new ArgumentUse("addRange").addNote("Rango").addTime(true).addArgPlayer(ModeTabPlayers.ADVANCED),
-                "das una tags donde se puede dar un rango durante un tiempo determinado",
-                false);
+                CommandVisibility.PRIVATE,
+                "das una tags donde se puede dar un rango durante un tiempo determinado"
+        );
     }
 
     @Override

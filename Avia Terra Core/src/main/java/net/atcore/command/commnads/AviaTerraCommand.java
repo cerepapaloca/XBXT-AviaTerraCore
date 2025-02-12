@@ -5,6 +5,7 @@ import net.atcore.Config;
 import net.atcore.command.ArgumentUse;
 import net.atcore.command.BaseTabCommand;
 import net.atcore.command.CommandUtils;
+import net.atcore.command.CommandVisibility;
 import net.atcore.data.DataSection;
 import net.atcore.messages.TypeMessages;
 import net.atcore.security.Login.ServerMode;
@@ -20,8 +21,9 @@ public class AviaTerraCommand extends BaseTabCommand {
     public AviaTerraCommand() {
         super("AviaTerra",
                 new ArgumentUse("aviaTerra"),
-                "Se encarga de la configuración de algunos apartados del plugin",
-                false);
+                CommandVisibility.PRIVATE,
+                "Se encarga de la configuración de algunos apartados del plugin"
+        );
         addAlias("at");
     }
 

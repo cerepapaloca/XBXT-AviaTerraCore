@@ -1,10 +1,7 @@
 package net.atcore.command.commnads;
 
 import net.atcore.aviaterraplayer.AviaTerraPlayer;
-import net.atcore.command.ArgumentUse;
-import net.atcore.command.BaseTabCommand;
-import net.atcore.command.CommandAliase;
-import net.atcore.command.ModeTabPlayers;
+import net.atcore.command.*;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
 import org.bukkit.Bukkit;
@@ -25,9 +22,8 @@ public class TpaCommand extends BaseTabCommand implements CommandAliase {
     public TpaCommand() {
         super("tpa",
                 new ArgumentUse("tpa").addArgPlayer(ModeTabPlayers.NORMAL),
-                "*",
-                "Puedes enviás una solicitud de tp a un jugador",
-                false
+                CommandVisibility.PUBLIC,
+                "Puedes enviás una solicitud de tp a un jugador"
         );
     }
 

@@ -4,6 +4,7 @@ import net.atcore.aviaterraplayer.AviaTerraPlayer;
 import net.atcore.command.ArgumentUse;
 import net.atcore.command.BaseTabCommand;
 import net.atcore.command.CommandUtils;
+import net.atcore.command.CommandVisibility;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
@@ -25,8 +26,9 @@ public class NameColorCommand extends BaseTabCommand {
         //noinspection deprecation
         super("nameColor",
                 new ArgumentUse("nameColor").addArg(ChatColor.values()),
-                "Cambias de color tu nombre",
-                false);
+                CommandVisibility.SEMI_PUBLIC,
+                "Cambias de color tu nombre"
+        );
         colorOptions = getColorOptions();
         styleOptions = getStyleOptions();
         addAlias("nc");

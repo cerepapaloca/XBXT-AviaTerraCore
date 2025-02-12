@@ -3,6 +3,7 @@ package net.atcore.command.commnads;
 import net.atcore.AviaTerraCore;
 import net.atcore.command.BaseCommand;
 import net.atcore.command.ArgumentUse;
+import net.atcore.command.CommandVisibility;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
@@ -27,9 +28,9 @@ public class LoginCommand extends BaseCommand {
         super("login",
                 new ArgumentUse("/login")
                         .addNote("contraseña"),
-                "**",
-                "Inicias session con tu contraseña",
-                false);
+                CommandVisibility.ALL,
+                "Inicias session con tu contraseña"
+        );
         addAlias("log");
     }
 

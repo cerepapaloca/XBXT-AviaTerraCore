@@ -1,10 +1,7 @@
 package net.atcore.command.commnads;
 
 import net.atcore.AviaTerraCore;
-import net.atcore.command.ArgumentUse;
-import net.atcore.command.BaseCommand;
-import net.atcore.command.CommandUtils;
-import net.atcore.command.ModeTabPlayers;
+import net.atcore.command.*;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.TypeMessages;
 import net.atcore.security.Login.LoginManager;
@@ -25,8 +22,8 @@ public class InfoCommand extends BaseCommand {
     public InfoCommand() {
         super("info",
                 new ArgumentUse("info").addArgOptional().addArgPlayer(ModeTabPlayers.ADVANCED).addArg("more"),
-                "Te logueas",
-                false
+                CommandVisibility.PRIVATE,
+                "Te logueas"
         );
     }
 

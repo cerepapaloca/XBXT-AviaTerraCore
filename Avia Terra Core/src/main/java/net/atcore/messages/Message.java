@@ -85,6 +85,7 @@ public enum Message {
     COMMAND_NAME_COLOR_NOT_FOUND("command.name-color", "Estos colores no existe", ERROR),
     COMMAND_DISCORD_MESSAGE("command.discord", "Únete a nuestra comunidad de discord: %s", INFO),
     COMMAND_VOTE_MESSAGE("command.vote", "Seria un agradecimiento si votaras aquí: %s", INFO),
+    COMMAND_HELP_MESSAGE("command.help", "Haz click &a&n<click:open_url:https://xbxt.xyz/commands/>[Aqui]</click> para ver lista de comandos que tiene el servidor", INFO),
     COMMAND_ADD_RANGE_NOT_FOUND_RANGE("command.add-range", "El rango no existe", ERROR),
     COMMAND_ADD_RANGE_SUCCESSFUL("command.add-range", "El item se le dio exitosamente", SUCCESS),
     COMMAND_ADD_RANGE_NAME("command.add-range", "Rango %1$s por %2$s", INFO),

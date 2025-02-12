@@ -1,9 +1,6 @@
 package net.atcore.command.commnads;
 
-import net.atcore.command.ArgumentUse;
-import net.atcore.command.BaseCommand;
-import net.atcore.command.CommandUtils;
-import net.atcore.command.ModeTabPlayers;
+import net.atcore.command.*;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
@@ -16,8 +13,8 @@ public class SayCommand extends BaseCommand {
     public SayCommand() {
         super("say",//"info", "error", "waring", "susses"
                 new ArgumentUse("say").addArgPlayer(ModeTabPlayers.ADVANCED).addFinalArg("Mensaje"),
-                "Enviás un mensaje a un usuario o a varios",
-                false
+                CommandVisibility.PRIVATE,
+                "Enviás un mensaje a un usuario o a varios"
         );
     }
 

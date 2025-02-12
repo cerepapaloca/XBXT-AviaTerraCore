@@ -3,6 +3,7 @@ package net.atcore.command.commnads;
 import net.atcore.command.ArgumentUse;
 import net.atcore.command.BaseCommand;
 import net.atcore.command.CommandHandler;
+import net.atcore.command.CommandVisibility;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
 import org.bukkit.Bukkit;
@@ -13,9 +14,8 @@ public class ConfirmCommand extends BaseCommand {
     public ConfirmCommand() {
         super("confirm",
                 new ArgumentUse("confirm"),
-                "**",
-                "Confirmas comando importantes",
-                false
+                CommandVisibility.ALL,
+                "Confirmas comando importantes"
         );
     }
 

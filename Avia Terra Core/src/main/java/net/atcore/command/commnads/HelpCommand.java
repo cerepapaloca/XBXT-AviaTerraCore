@@ -7,17 +7,18 @@ import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
 import org.bukkit.command.CommandSender;
 
-public class VoteCommand extends BaseCommand {
-    public VoteCommand() {
-        super("vote",
-                new ArgumentUse("vote"),
+public class HelpCommand extends BaseCommand {
+    public HelpCommand() {
+        super("help",
+                new ArgumentUse("help"),
                 CommandVisibility.PUBLIC,
-                "Te enviá el link de la pagina de votos."
+                "Te pasa un link de la pagina para ver los comandos"
         );
+        addAlias("?");
     }
 
     @Override
     public void execute(CommandSender sender, String[] args) {
-        MessagesManager.sendFormatMessage(sender, Message.COMMAND_VOTE_MESSAGE, MessagesManager.LINK_VOTE);
+        MessagesManager.sendMessage(sender, Message.COMMAND_HELP_MESSAGE);
     }
 }
