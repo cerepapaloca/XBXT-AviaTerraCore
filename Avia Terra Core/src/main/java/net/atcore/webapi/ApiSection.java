@@ -2,6 +2,7 @@ package net.atcore.webapi;
 
 import net.atcore.Section;
 import net.atcore.webapi.response.Commands;
+import net.atcore.webapi.response.PlayerStats;
 import net.atcore.webapi.response.Statistic;
 
 @SuppressWarnings("InstantiationOfUtilityClass")
@@ -13,6 +14,7 @@ public class ApiSection implements Section {
         new ApiHandler();
         new Statistic();
         new Commands();
+        new PlayerStats();
     }
 
     @Override

@@ -7,11 +7,13 @@ import lombok.Getter;
 public abstract class BaseApi {
 
     private final String identifier;
+    protected boolean isJson = false;
 
     public BaseApi(String identifier) {
         this.identifier = identifier;
         ApiHandler.APIS.add(this);
     }
+
 
     public abstract Object onRequest(HttpServerExchange request);
 

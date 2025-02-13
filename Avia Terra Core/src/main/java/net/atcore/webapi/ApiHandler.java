@@ -1,5 +1,6 @@
 package net.atcore.webapi;
 
+import com.google.common.io.Files;
 import io.undertow.Undertow;
 import io.undertow.util.Headers;
 import io.undertow.util.HttpString;
@@ -10,7 +11,7 @@ import net.atcore.messages.MessagesManager;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import java.io.File;
-import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 import java.security.KeyStore;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -49,9 +50,13 @@ public final class ApiHandler {
                             return;
                         }
                         for (BaseApi api : APIS) {
-                            if (!exchange.getRequestPath().equals("/" + api.getIdentifier())) continue;
+                            if (!exchange.getRequestPath().startsWith("/" + api.getIdentifier())) continue;
                             exchange.setStatusCode(200);
-                            exchange.getResponseSender().send(gson.toJson(api.onRequest(exchange)));
+                            if (api.isJson) {
+                                exchange.getResponseSender().send(Files.asCharSource((File) api.onRequest(exchange), StandardCharsets.UTF_8).read());
+                            }else {
+                                exchange.getResponseSender().send(gson.toJson(api.onRequest(exchange)));
+                            }
                             return;
                         }
                         exchange.setStatusCode(404);
