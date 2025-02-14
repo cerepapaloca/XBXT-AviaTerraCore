@@ -13,6 +13,7 @@ public enum LocaleAvailable {
     }
     private final Locale locale;
 
+
     public static LocaleAvailable getLocate(Locale locale) {
         String lang = locale.getLanguage().split("-")[0];
         try {

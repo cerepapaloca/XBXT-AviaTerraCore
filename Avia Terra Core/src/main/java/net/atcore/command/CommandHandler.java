@@ -47,7 +47,7 @@ public final class CommandHandler implements TabExecutor {
             }
             try {
                 if (sender instanceof Player player) {
-                    if (CommandUtils.hasPermission(command, player, true)) {
+                    if (CommandUtils.hasPermission(command, command.getVisibility(), player, true)) {
                         executedCommand(sender, label, args, command);
                         return true;
                     }else{

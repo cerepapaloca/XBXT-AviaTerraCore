@@ -25,7 +25,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.text.SimpleDateFormat;
 import java.util.TimeZone;
-import java.util.concurrent.atomic.AtomicReference;
 
 import static net.atcore.AviaTerraCore.TOKEN_BOT;
 import static net.atcore.AviaTerraCore.jda;
@@ -99,7 +98,7 @@ public class DiscordBot extends ListenerAdapter{
 
         Message message = event.getMessage();
         String channel = event.getChannel().getId();
-        net.atcore.messages.Message format = net.atcore.messages.Message.EVENT_FORMAT_CHAT;
+        net.atcore.messages.Message format = net.atcore.messages.Message.EVENT_CHAT_FORMAT;
 
         if (channel.equals(DiscordBot.consoleId)){
             if (message.getContentRaw().startsWith("-")) CommandManager.processCommandFromDiscord(message, member);

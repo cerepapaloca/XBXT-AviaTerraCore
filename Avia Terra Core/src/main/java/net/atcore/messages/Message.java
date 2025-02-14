@@ -62,7 +62,13 @@ public enum Message {
     SECURITY_REMOVE_TAG("security", "Tag Eliminada", INFO),
     EVENT_QUIT("event", "&8[&4-&8]|!> El jugador <|%s|> se a desconecto", INFO),
     EVENT_JOIN("event", "&8[&a+&8]|!> El jugador <click:suggest_command:/w %1$s><|%1$s|></click> se a unido", INFO),
-    EVENT_FORMAT_CHAT("event", "%1$s&r » %2$s", NULL),// Dejar el &r
+    EVENT_CHAT_FORMAT("event.chat", "%1$s&r » %2$s", NULL),// Dejar el &r
+    EVENT_CHAT_HOVER("event.chat", """
+                Distancia recorrida: <|%sKM|>
+                Tiempo jugado: <|%sH|>
+                Nombre Real: <|%s|>
+                Idioma: <|%s|>
+                """, INFO),
     BAN_ERROR("ban", "Hubo un problema con las bases de datos al banear <|%s|> por <|%s|>", ERROR),
     BAN_AUTO_BAN_BOT("ban", "Uso de bots (Baneo Automático)", KICK),
     BAN_AUTO_BAN_BOT_LOG("ban", "Purga de bots terminada", SUCCESS),
@@ -73,7 +79,8 @@ public enum Message {
     INVENTORY_MANIPULATOR_TITLE("inventory.manipulator", "Inventario de moderación", NULL),
     DATA_MYSQL_EXCEPTION("data.mysql", "Hubo un error al modificar los datos", ERROR),
     COMMAND_GENERIC_NO_PERMISSION("command", "No tienes autorización para ejecutar ese comando", ERROR),
-    COMMAND_GENERIC_NO_LOGIN("command", "Primero inicia sessión usando <|/login|>", ERROR),
+    COMMAND_GENERIC_NOT_FOUND("command", "El comandos no existe haz click <green><click:open_url:https://xbxt.xyz/commands>[Aquí]</click></green> para ver los comandos", ERROR),
+    COMMAND_GENERIC_NO_LOGIN("command", "Primero inicia sessión usando <|<click:suggest_command:/login>/login</click>|> si estas registrado si no usa <|<click:suggest_command:/register>/register</click>|>", ERROR),
     COMMAND_GENERIC_NO_PERMISSION_CONSOLE("command", "No tienes autorización para ejecutar comandos en la consola", ERROR),
     COMMAND_GENERIC_RUN_LOG("command", "<|%s|> -> %s", INFO),
     COMMAND_GENERIC_EXCEPTION_ERROR("command", "Ops!! Hubo un error al ejecutar el comando contacta con el desarrollador", ERROR),
@@ -85,7 +92,7 @@ public enum Message {
     COMMAND_NAME_COLOR_NOT_FOUND("command.name-color", "Estos colores no existe", ERROR),
     COMMAND_DISCORD_MESSAGE("command.discord", "Únete a nuestra comunidad de discord: %s", INFO),
     COMMAND_VOTE_MESSAGE("command.vote", "Seria un agradecimiento si votaras aquí: %s", INFO),
-    COMMAND_HELP_MESSAGE("command.help", "Haz click &a&n<click:open_url:https://xbxt.xyz/commands/>[Aqui]</click> para ver lista de comandos que tiene el servidor", INFO),
+    COMMAND_HELP_MESSAGE("command.help", "Haz click <green><click:open_url:https://xbxt.xyz/commands>[Aquí]</click></green> para ver lista de comandos que tiene el servidor", INFO),
     COMMAND_ADD_RANGE_NOT_FOUND_RANGE("command.add-range", "El rango no existe", ERROR),
     COMMAND_ADD_RANGE_SUCCESSFUL("command.add-range", "El item se le dio exitosamente", SUCCESS),
     COMMAND_ADD_RANGE_NAME("command.add-range", "Rango %1$s por %2$s", INFO),
@@ -247,6 +254,7 @@ public enum Message {
     private String getMessageLocate(LocaleAvailable locale) {
         if (!MapMessageLocale.containsKey(locale)) locale = DEFAULT_LOCALE_USER;
         String[] strings = this.MapMessageLocale.get(locale);
+        if (strings == null) strings = this.MapMessageLocale.get(DEFAULT_LOCALE_PRIVATE);
         if (strings.length == 1) {
             return strings[0];
         }else {

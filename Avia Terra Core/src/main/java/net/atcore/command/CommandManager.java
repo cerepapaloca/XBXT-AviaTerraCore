@@ -9,8 +9,10 @@ import net.atcore.security.Login.LoginManager;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.Member;
 import org.bukkit.Bukkit;
+import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 
+import java.beans.Visibility;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -19,7 +21,7 @@ import static net.atcore.messages.MessagesManager.sendMessage;
 @UtilityClass
 public class CommandManager {//nose si poner en esta clase aquí la verdad
 
-    public final HashMap<String, String> COMMANDS = new HashMap<>(); // TODO: Esta deshabilitado, habilitar para el futuro
+    public final HashMap<String, CommandVisibility> COMMANDS = new HashMap<>(); // TODO: Esta deshabilitado, habilitar para el futuro
 
     /**
      * Comprueba que el comando que esta ejecutado es valido
@@ -27,9 +29,15 @@ public class CommandManager {//nose si poner en esta clase aquí la verdad
      */
 
     public boolean checkCommand(String command, Player player, boolean isSilent, boolean b){
-        BaseCommand baseCommand = CommandHandler.getCommand(command);
-        if (baseCommand != null) {
-            if (CommandUtils.hasPermission(baseCommand, player, b)) {
+        try {
+            Command bukkitCommand = Objects.requireNonNullElse(CommandHandler.getCommand(command), Bukkit.getPluginCommand(command));
+            boolean hasPermission;
+            if (bukkitCommand instanceof BaseCommand baseCommand) {
+                hasPermission = CommandUtils.hasPermission(bukkitCommand, baseCommand.getVisibility(), player, b);
+            }else {
+                hasPermission = CommandUtils.hasPermission(bukkitCommand, COMMANDS.get(bukkitCommand.getName()), player, b);
+            }
+            if (hasPermission) {
                 return false;
             } else {
                 if (!isSilent) {
@@ -41,12 +49,14 @@ public class CommandManager {//nose si poner en esta clase aquí la verdad
                 }
                 return true;
             }
-        }else{
+        }catch (NullPointerException e){
             if (LoginManager.checkLogin(player, true, b)){
                 if (player.isOp()){
                     return false;
                 }else {
-                    if (!isSilent) MessagesManager.sendMessage(player, net.atcore.messages.Message.COMMAND_GENERIC_NO_PERMISSION);
+                    if (!isSilent) {
+                        sendMessage(player, net.atcore.messages.Message.COMMAND_GENERIC_NOT_FOUND);
+                    }
                 }
             }else {
                 if (!isSilent)sendMessage(player, net.atcore.messages.Message.COMMAND_GENERIC_NO_LOGIN);

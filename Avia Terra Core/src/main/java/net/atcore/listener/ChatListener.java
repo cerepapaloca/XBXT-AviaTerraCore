@@ -25,6 +25,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.jetbrains.annotations.NotNull;
 
+import static net.atcore.messages.Message.EVENT_CHAT_HOVER;
 import static net.atcore.messages.MessagesManager.sendMessage;
 import static net.atcore.messages.MessagesManager.sendString;
 import static net.atcore.moderation.ban.CheckAutoBan.checkAutoBanChat;
@@ -62,7 +63,7 @@ public class ChatListener implements Listener {
         if (channel !=  null) {
             channel.sendMessage(PlainTextComponentSerializer.plainText().serialize(
                     GlobalUtils.chatColorLegacyToComponent(
-                            String.format(Message.EVENT_FORMAT_CHAT.getMessageLocaleDefault(), "**" + player.getName() + "**", textPlain))
+                            String.format(Message.EVENT_CHAT_FORMAT.getMessageLocaleDefault(), "**" + player.getName() + "**", textPlain))
             )).queue();
         }
     }
@@ -75,12 +76,8 @@ public class ChatListener implements Listener {
         String locale = sender.locale().getDisplayName();
 
         Component hoverText = MessagesManager.applyFinalProprieties(
-                String.format("""
-                Distancia recorrida: <|%sKM|>
-                Tiempo jugado: <|%sH|>
-                Nombre Real: <|%s|>
-                Idioma: <|%s|>
-                """,(float) distanceWalkedKm/10,(float) timePlayedHours/10, sender.getName(), locale), TypeMessages.INFO, CategoryMessages.PRIVATE, false
+                String.format(EVENT_CHAT_HOVER.getMessage(sender), (float) distanceWalkedKm/10, (float) timePlayedHours/10, sender.getName(), locale),
+                TypeMessages.INFO, CategoryMessages.PRIVATE, false
         );
         if (isMention) target.playSound(target, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.7f, 1);
 
@@ -92,7 +89,7 @@ public class ChatListener implements Listener {
         TextReplacementConfig.Builder config2 = TextReplacementConfig.builder().matchLiteral("%2$s")
                 .replacement(isMention ? message.color(NamedTextColor.AQUA) : message.color(NamedTextColor.GRAY));
 
-        return GlobalUtils.chatColorLegacyToComponent(Message.EVENT_FORMAT_CHAT.getMessage(target))
+        return GlobalUtils.chatColorLegacyToComponent(Message.EVENT_CHAT_FORMAT.getMessage(target))
                 .replaceText(config1.build())
                 .replaceText(config2.build());
     }

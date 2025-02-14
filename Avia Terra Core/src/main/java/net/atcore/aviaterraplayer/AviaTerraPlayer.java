@@ -100,11 +100,6 @@ public class AviaTerraPlayer {
         return getMaxPermission(player, "maxhome");
     }
 
-    public int getViewDistance(){
-        Player player = getPlayer();
-        return getMaxPermission(player, "viewdistance");
-    }
-
     private static int getMaxPermission(Player player, String permissionName) {
         if (player.isOp()) return 32;
         int renderDistance = 4;

@@ -26,10 +26,10 @@ public class DataSection implements Section {
     @Getter private static PlayersDataFiles playersDataFiles;
     @Getter private static ConfigFile configFile;
     @Getter private static CacheVoteFile cacheVoteFile;
+    @Getter private static MessagesLocaleFile messagesLocaleFile;
 
     @Override
     public void enable() {
-        ConfigFile configFile = new ConfigFile();
         new DataBaseBan();
         new DataBaseRegister();
         new CommandsFile();
@@ -37,8 +37,8 @@ public class DataSection implements Section {
         new Email();
         new MOTDFile();
         new BroadcastMessageFile();
-        new MessagesLocaleFile();
-        DataSection.configFile = configFile;
+        configFile = new ConfigFile();
+        messagesLocaleFile = new MessagesLocaleFile();
         playersDataFiles = new PlayersDataFiles();
         cacheVoteFile = new CacheVoteFile();
         cacheLimboFlies = new CacheLimboFlies();

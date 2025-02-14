@@ -22,6 +22,12 @@ import net.dv8tion.jda.api.JDA;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.luckperms.api.LuckPerms;
 import org.bukkit.Bukkit;
+import org.bukkit.Server;
+import org.bukkit.command.Command;
+import org.bukkit.command.PluginCommand;
+import org.bukkit.permissions.Permission;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -86,12 +92,34 @@ public class AviaTerraCore extends JavaPlugin {
                 new PlaceHolderSection(),
                 new ApiSection()
         );
+        registerPermission();
         startMOTD();
         startBroadcast();
         startAutoSaveTime();
         startAutoRestart();
         isStarting = false;
         messageOn(startTime);
+    }
+
+    private void registerPermission(){
+        PluginManager pm = Bukkit.getPluginManager();
+        for (int i = 4; i < 32; i++){
+            pm.addPermission(new Permission(this.getName().toLowerCase() + ".viewdistance." + i, "Asigna la distancia de renderizado"));
+            pm.addPermission(new Permission(this.getName().toLowerCase() + ".simulationdistance." + i, "Asigna la distancia de simulación"));
+            pm.addPermission(new Permission(this.getName().toLowerCase() + ".maxhome." + i, "La cantidad maxima de home que puede tener"));
+        }
+        for (Command command : Bukkit.getCommandMap().getKnownCommands().values()){
+            if (command.getPermission() == null){
+                PluginCommand pluginCommand = Bukkit.getPluginCommand(command.getName());
+                if (pluginCommand != null){
+                    try {
+                        pm.addPermission(new Permission(this.getName().toLowerCase() + ".command." + pluginCommand.getName() + "." + command.getName()));
+                    }catch (Exception ignored){
+                        // En caso de que el comando tenga alise saltara una excepción
+                    }
+                }
+            }
+        }
     }
 
 

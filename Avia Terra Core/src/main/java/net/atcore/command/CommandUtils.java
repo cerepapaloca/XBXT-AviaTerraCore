@@ -12,7 +12,9 @@ import net.luckperms.api.model.group.Group;
 import net.luckperms.api.model.user.User;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -299,23 +301,8 @@ public final class CommandUtils {
         }
     }
 
-    /**
-     * Comprueba que si el jugador tiene los permisos. Si el permiso tiene {@code *}
-     * todos los jugadores logueados tienen permiso, pero si tiene {@code **} todos aunque
-     * no estén logueados, si el permiso comienza con {@code !} el jgador no debe tener
-     * ese permiso. Se puede unir varios permisos con {@code ,}estó permisos extras hace
-     * de "o" es decir la condición será verdadera cuando cumpla uno de los permisos
-     * @param player el jugador que le va hace el check
-     * @param limbo ¿Puede entrar en modo limbo?
-     * @return verdadero sí tiene permiso
-     */
-
-    public boolean hasPermission(@NotNull BaseCommand command, Player player, boolean limbo){
-        //String permissionBase = AviaTerraCore.getInstance().getName().toLowerCase() + ".command." + command.toLowerCase();
-        //if (player.hasPermission(permissionBase)) return true;
-        //permission = permission.replace(permissionBase, "");
-
-        switch (command.getVisibility()) {
+    public boolean hasPermission(@NotNull Command command, CommandVisibility visibility, Player player, boolean limbo){
+        switch (visibility) {
             case ALL -> {
                 return true;
             }
@@ -327,6 +314,15 @@ public final class CommandUtils {
                     String permission = command.getPermission();
                     if (permission != null) {
                         return player.hasPermission(permission);
+                    }else {
+                        if (command instanceof PluginCommand pluginCommand) {
+                            return player.hasPermission(AviaTerraCore.getInstance().getName().toLowerCase() +
+                                    ".command." +
+                                    pluginCommand.getPlugin().getName() +
+                                    "." +
+                                    pluginCommand.getName()
+                            );
+                        }
                     }
                 }
                 return false;
@@ -335,25 +331,6 @@ public final class CommandUtils {
                 return false;
             }
         }
-        /*if (permission.equals("!*"))return false;
-        if (LoginManager.checkLogin(player, true, limbo)) {
-            if (player.isOp()) return true;
-            if (permission.contains("!")) permission = "!" + permission.replace("!", "");
-            if (permission.equals("*") || permission.equals("**")) {
-                return true;
-            }
-            boolean b = false;
-            for (String s : permission.replace("!","").split(",")){
-                if (permission.startsWith("!")) {
-                    b = b || !player.hasPermission(s);
-                } else {
-                    b = b || player.hasPermission(s);
-                }
-            }
-            return b;
-        }else {
-            return permission.equals("**");
-        }*/
     }
 
     @Contract(pure = true)

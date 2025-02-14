@@ -2,7 +2,9 @@ package net.atcore.messages;
 
 import net.atcore.AviaTerraCore;
 import net.atcore.command.ArgumentUse;
+import net.atcore.data.DataSection;
 import net.atcore.data.yml.MessageFile;
+import net.atcore.data.yml.ymls.MessagesLocaleFile;
 import net.atcore.utils.GlobalUtils;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.kyori.adventure.text.Component;
@@ -26,8 +28,7 @@ import org.jetbrains.annotations.Nullable;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
-import java.util.Random;
-import java.util.TimeZone;
+import java.util.*;
 
 import static net.kyori.adventure.text.event.ClickEvent.Action;
 
@@ -274,14 +275,22 @@ public final class MessagesManager {
     public static void deathMessage(@NotNull Player victim, @Nullable LivingEntity killer, @Nullable ItemStack stack, @NotNull EntityDamageEvent.DamageCause cause) {
         Random r = new Random();
         for (Player p : Bukkit.getOnlinePlayers()) {
-            String message;
+            String message;//TODO: Incluir el dragon;
             if ((killer != null && killer.getType() != EntityType.PLAYER && (
                     cause.equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK) ||
                     cause.equals(EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK) ||
                     cause.equals(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION) ||
                     cause.equals(EntityDamageEvent.DamageCause.PROJECTILE))
-            )) {//TODO: Incluir el dragon
-                message = MessageFile.MESSAGES_ENTITY.get(killer.getType()).get(r.nextInt(MessageFile.MESSAGES_ENTITY.get(killer.getType()).size()));
+            )) {
+                // Obtener el MessageFile del idioma del jugador
+                MessageFile messageFile = (MessageFile) DataSection.getMessagesLocaleFile().getConfigFile(LocaleAvailable.getLocate(p.locale()).name().toLowerCase(), false);
+                // Obtiene la lista de mensajes, en caso de que no existe tomara el idioma defecto
+                List<String> messages = Objects.requireNonNullElseGet(messageFile.messagesEntity.get(killer.getType()), () -> {
+                    MessageFile mf = (MessageFile) DataSection.getMessagesLocaleFile().getConfigFile(MessagesManager.DEFAULT_LOCALE_PRIVATE.name().toLowerCase(), false);
+                    return mf.messagesEntity.get(killer.getType());
+                });
+                // Obtiene un mensaje aleatorio
+                message = messages.get(r.nextInt(messages.size()));
             }else {
                 message = Message.valueOf("DEATH_CAUSE_" + cause.name()).getMessage(p);
             }

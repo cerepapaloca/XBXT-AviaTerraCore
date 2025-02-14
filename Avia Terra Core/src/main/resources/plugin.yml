@@ -1,5 +1,5 @@
 name: AviaTerraCore
-version: '1.13.0'
+version: '1.14.0'
 main: net.atcore.AviaTerraCore
 api-version: '1.21'
 depend: [ProtocolLib, TAB, LuckPerms]
@@ -7,38 +7,3 @@ prefix: ""
 authors: [Ceres, Vitah, EvaProject]
 description: Las bases del servidor
 folia-supported: true
-
-# noinspection YAMLSchemaValidation
-permissions:
-  aviaterracore.commnad.*:
-    description: Todos los permisos del comandos de AviaTerraCore
-  aviaterracore.viewdistance.4:
-    default: false
-  aviaterracore.viewdistance.6:
-    default: false
-  aviaterracore.viewdistance.8:
-    default: false
-  aviaterracore.viewdistance.16:
-    default: false
-  aviaterracore.viewdistance.32:
-    default: false
-  aviaterracore.simulationdistance.4:
-    default: false
-  aviaterracore.simulationdistance.6:
-    default: false
-  aviaterracore.simulationdistance.8:
-    default: false
-  aviaterracore.simulationdistance.16:
-    default: false
-  aviaterracore.simulationdistance.32:
-    default: false
-  aviaterracore.maxhome.4:
-    default: false
-  aviaterracore.maxhome.6:
-    default: false
-  aviaterracore.maxhome.8:
-    default: false
-  aviaterracore.maxhome.16:
-    default: false
-  aviaterracore.maxhome.32:
-    default: false
