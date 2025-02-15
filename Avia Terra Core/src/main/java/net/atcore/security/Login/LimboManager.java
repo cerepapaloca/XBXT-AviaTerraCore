@@ -31,7 +31,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class LimboManager {
 
     public final int LIMBO_TIME = 20*60;
+    // Evita que el jugador entré el modo limbo dos veces por el delay de los hilos asincrónicos
     public final Set<UUID> LIST_IN_PROCESS = Sets.newHashSet();
+    public final Location LIMBO_LOCATION = new Location(Bukkit.getWorlds().getFirst(), 0, 100, 0);
     private final PotionEffect BLINDNESS_EFFECT = new PotionEffect(PotionEffectType.BLINDNESS, PotionEffect.INFINITE_DURATION,1, true, false);
 
     public void startAsynchronouslyLimboMode(Player player, ReasonLimbo reasonLimbo) {
@@ -42,9 +44,11 @@ public class LimboManager {
                     switch (reasonLimbo) {
                         case NO_SESSION -> {
                             LoginData loginData = LoginManager.getDataLogin(player);
+                            // Evita que el Floodgate de un falso positivo
                             boolean isOk = loginData.isBedrockPlayer() == FloodgateApi.getInstance().isFloodgatePlayer(player.getUniqueId());
                             if (isOk) {
                                 if (loginData.isBedrockPlayer()) {
+                                    // En caso de que sea de bedrock lo ejecuta con un tick de delay
                                     Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> LimboManager.createLimboMode(player, reasonLimbo));
                                 } else {
                                     LimboManager.createLimboMode(player, reasonLimbo);
@@ -54,6 +58,7 @@ public class LimboManager {
                                 GlobalUtils.synchronizeKickPlayer(player, Message.LOGIN_LIMBO_BEDROCK_ERROR);
                             }
                         }
+                        // Si no esta registrado lo hace con un delay si o si
                         case NO_REGISTER -> Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> LimboManager.createLimboMode(player, reasonLimbo));
                     }
                 }else {
@@ -88,9 +93,8 @@ public class LimboManager {
                 }
             }
         }
-        // Lo ejecuta con un Tick de delay apara que el addLimbodata pueda con tiempo crear el limboData para los de bedrock
         AviaTerraCore.enqueueTaskAsynchronously(() -> {
-            if (aBoolean.get()) {// TODO: los de bedrock no funciona bien aveces lo pilla y aveces no
+            if (aBoolean.get()) {
                 CacheLimboFile limboFile = (CacheLimboFile) DataSection.getCacheLimboFlies()
                         .registerConfigFile(GlobalUtils.getRealUUID(player).toString());
                 limboFile.saveData();
@@ -99,8 +103,6 @@ public class LimboManager {
             sendMessage(player, reasonLimbo);
         });
     }
-
-    private final Location LIMBO_LOCATION = new Location(Bukkit.getWorlds().getFirst(), 0, 100, 0);
 
     private static void clearPlayer(Player player) {
         player.getInventory().clear();

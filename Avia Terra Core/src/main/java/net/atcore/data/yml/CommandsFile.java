@@ -4,7 +4,6 @@ import net.atcore.command.CommandManager;
 import net.atcore.command.CommandVisibility;
 import net.atcore.data.FileYaml;
 import net.atcore.messages.MessagesManager;
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 
 public class CommandsFile extends FileYaml {
@@ -29,7 +28,7 @@ public class CommandsFile extends FileYaml {
                     }
                 }
             });
-        }//TODO: Arreglar esto que se buega con los permisos ** y cuando hay reload
+        }
     }
 
     @Override

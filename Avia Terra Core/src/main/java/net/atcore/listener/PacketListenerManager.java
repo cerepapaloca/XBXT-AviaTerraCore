@@ -6,10 +6,14 @@ import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
 import net.atcore.AviaTerraCore;
+import net.atcore.security.Login.LimboManager;
 import net.atcore.security.Login.LoginManager;
 import net.atcore.security.Login.model.LimboData;
 import net.atcore.security.Login.model.LoginData;
 import net.atcore.security.SecuritySection;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -30,12 +34,13 @@ public class PacketListenerManager {
             @Override
             public void onPacketReceiving(PacketEvent event) {
                 Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&6Cliente " + "Names " + event.getPacketType()));
-                //Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&6datos " + event.getPacket().getModifier().getValues().toString()));
+                Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&6datos " + event.getPacket().getModifier().getValues().toString()));
             }
             @Override
             public void onPacketSending(PacketEvent event) {
+                if (event.getPacketType() == PacketType.Play.Server.MAP_CHUNK) return;
                 Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&bServer " + "Names " + event.getPacketType()));
-                //Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&bdatos " + event.getPacket().getModifier().getValues().toString()));
+                Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&bdatos " + event.getPacket().getModifier().getValues().toString()));
             }
         });*/
 
@@ -96,58 +101,25 @@ public class PacketListenerManager {
         });
 
         ///////////////////////////////////////////////////////////////////////////////
-        /*
+
         ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(
                 AviaTerraCore.getInstance(),
-                PacketType.Play.Server.CHAT
+                PacketType.Play.Server.POSITION
         ) {
             @Override
             public void onPacketSending(PacketEvent event) {
-                ChatListener chatListener = ListenerSection.getChatListener();
-                if (chatListener.getLastPlayerMention() == null) return;
-                UUID playerUUID = chatListener.getLastPlayerMention().getUniqueId();
-
-                if (!playerUUID.equals(event.getPlayer().getUniqueId())) return;
-                event.getPlayer().playSound(event.getPlayer(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.7f, 1);
-                chatListener.setLastPlayerMention(null);
-
-                // Obtener el mensaje original en formato JSON
-                WrappedChatComponent chatComponent = event.getPacket().getChatComponents().read(0);
-
-                if (chatComponent != null) {
-                    String originalJsonMessage = chatComponent.getJson();
-                    // Convertir el mensaje JSON en un objeto JsonObject
-                    JsonObject jsonObject = JsonParser.parseString(originalJsonMessage).getAsJsonObject();
-
-                    // Cambiar el color en la parte "extra"
-                    if (jsonObject.has("extra")) {
-                        JsonArray extraArray = jsonObject.getAsJsonArray("extra");
-
-                        // Iterar a través de los elementos en "extra"
-                        for (int i = 0; i < extraArray.size(); i++) {
-                            try {
-                                JsonObject extraObject = extraArray.get(i).getAsJsonObject();
-                                if (extraObject.has("text")) {
-                                    // Si el primer elemento tiene color eso quieres decir que se está tomando el nombre de usuario
-                                    if (extraObject.has("color") && i == 0) continue;
-                                    // Cambiar el color del texto
-                                    extraObject.addProperty("color", "gold");
-                                }
-                            } catch (Exception ignored) {
-                                //throw new RuntimeException("Couldn't parse extra");
-                            }
-                        }
-                    }
-
-                    // Convertir el objeto JSON de nuevo a cadena
-                    String modifiedJsonMessage = jsonObject.toString();
-
-                    // Actualizar el paquete con el nuevo mensaje JSON modificado
-                    event.getPacket().getChatComponents().write(0, WrappedChatComponent.fromJson(modifiedJsonMessage));
+                Player player = event.getPlayer();
+                if (!LoginManager.getDataLogin(player).hasSession()) {
+                    PacketContainer packet = event.getPacket();
+                    packet.getDoubles().write(0, LimboManager.LIMBO_LOCATION.getX());
+                    packet.getDoubles().write(1, LimboManager.LIMBO_LOCATION.getY());
+                    packet.getDoubles().write(2, LimboManager.LIMBO_LOCATION.getZ());
+                    packet.getFloat().write(0, LimboManager.LIMBO_LOCATION.getYaw());
+                    packet.getFloat().write(1, LimboManager.LIMBO_LOCATION.getPitch());
                 }
             }
         });
-        */
+
         ///////////////////////////////////////////////////////////////////////////////
     }
 }

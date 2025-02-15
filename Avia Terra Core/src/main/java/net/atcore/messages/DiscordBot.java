@@ -6,13 +6,12 @@ import net.atcore.AviaTerraCore;
 import net.atcore.command.CommandManager;
 import net.atcore.utils.GlobalUtils;
 import net.dv8tion.jda.api.JDABuilder;
-import net.dv8tion.jda.api.entities.Activity;
-import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.managers.Presence;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.HoverEvent;
@@ -23,6 +22,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 
+import java.awt.*;
 import java.text.SimpleDateFormat;
 import java.util.TimeZone;
 
@@ -83,7 +83,11 @@ public class DiscordBot extends ListenerAdapter{
             stateTasks = new BukkitRunnable() {
                 @Override
                 public void run() {
-                    jda.getPresence().setActivity(Activity.playing(String.format("Jugadores: %s/%s", Bukkit.getOnlinePlayers().size(), Bukkit.getMaxPlayers())));
+                    jda.getPresence().setActivity(Activity.of(
+                            Activity.ActivityType.PLAYING,
+                            String.format("Jugadores: %s/%s", Bukkit.getOnlinePlayers().size(), Bukkit.getMaxPlayers()),
+                            "https://xbxt.xyz"
+                    ));
                 }
             }.runTaskTimerAsynchronously(AviaTerraCore.getInstance(), 0L, 20L);
         }
