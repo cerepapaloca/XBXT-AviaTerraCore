@@ -192,7 +192,7 @@ public enum Message {
     COMMAND_SAY_MISSING_ARGS("command.say", "Te falta el mensaje", ERROR),
     COMMAND_TELL_MISSING_TARGET("command.tell", "Tienes que poner el nombre del jugador", ERROR),
     COMMAND_TELL_MISSING_MESSAGE("command.tell", "Te falta el mensaje", ERROR),
-    COMMAND_TELL_FEEDBACK("command.tell", "&ole haz susurrado a %s", NULL),
+    COMMAND_TELL_FEEDBACK("command.tell", "&ole haz susurrado a %s -> %s", NULL),
     COMMAND_TELL_FORMAT_MESSAGE("command.tell", "&o %s -> %s", NULL),
     MISC_KICK_UPPER("misc", "<dark_gray>< <b><st>           </st> <#4B2FDE>XT <#ff8C00>XB <dark_gray><st>           </st></b> >\n\n&r", NULL),
     MISC_KICK_LOWER("misc", "\n\n<dark_gray>< <st>                  </st> | <st>                  </st> >", NULL),

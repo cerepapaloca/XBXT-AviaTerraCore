@@ -4,6 +4,7 @@ import io.papermc.paper.event.player.AsyncChatEvent;
 import lombok.Getter;
 import lombok.Setter;
 import net.atcore.AviaTerraCore;
+import net.atcore.command.commnads.TellCommand;
 import net.atcore.messages.*;
 import net.atcore.moderation.ChatModeration;
 import net.atcore.moderation.ban.ContextBan;
@@ -38,6 +39,7 @@ public class ChatListener implements Listener {
         Player player = event.getPlayer();
         Component message = event.message();
         event.setCancelled(true);
+
         String textPlain = PlainTextComponentSerializer.plainText().serialize(message);
 
         if (!LoginManager.checkLogin(player)) {
@@ -54,10 +56,13 @@ public class ChatListener implements Listener {
             return;//hay algo indecente?
         }
 
+        TellCommand.lastNamePlayer = player.getName();
+
         for (Player target : Bukkit.getOnlinePlayers()) {//busca todos los jugadores
-            target.sendMessage(mainFormat(message, player, target, textPlain.contains(target.getName())));
+            target.sendMessage(setFormat(message, player, target, textPlain.contains(target.getName())));
         }
-        Bukkit.getConsoleSender().sendMessage(mainFormat(message, player, player, textPlain.contains(player.getName())));
+
+        Bukkit.getConsoleSender().sendMessage(setFormat(message, player, player, textPlain.contains(player.getName())));
 
         TextChannel channel = AviaTerraCore.jda.getTextChannelById(DiscordBot.chatId);
         if (channel !=  null) {
@@ -68,7 +73,7 @@ public class ChatListener implements Listener {
         }
     }
 
-    public Component mainFormat(Component message, @NotNull Player sender, Player target, boolean isMention) {
+    public Component setFormat(Component message, @NotNull Player sender, Player target, boolean isMention) {
         int distanceWalked = sender.getStatistic(Statistic.WALK_ONE_CM) + sender.getStatistic(Statistic.SPRINT_ONE_CM);
         long distanceWalkedKm = Math.round((distanceWalked / 100000.0)*10);
         int timePlayedTicks = sender.getStatistic(Statistic.PLAY_ONE_MINUTE);

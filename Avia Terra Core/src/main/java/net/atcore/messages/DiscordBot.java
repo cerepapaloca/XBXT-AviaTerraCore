@@ -5,6 +5,7 @@ import me.scarsz.jdaappender.ExtensionBuilder;
 import net.atcore.AviaTerraCore;
 import net.atcore.command.CommandManager;
 import net.atcore.utils.GlobalUtils;
+import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.entities.Message;
@@ -31,6 +32,8 @@ import static net.atcore.AviaTerraCore.jda;
 import static org.bukkit.Bukkit.getServer;
 
 public class DiscordBot extends ListenerAdapter{
+
+    public static final char PREFIX_COMMAND = '-';
 
     public static String consoleId = "1294324285602795550";
     public static String chatId = "1294324328401207389";//
@@ -105,14 +108,19 @@ public class DiscordBot extends ListenerAdapter{
         net.atcore.messages.Message format = net.atcore.messages.Message.EVENT_CHAT_FORMAT;
 
         if (channel.equals(DiscordBot.consoleId)){
-            if (message.getContentRaw().startsWith("-")) CommandManager.processCommandFromDiscord(message, member);
+            if (message.getContentRaw().startsWith(Character.toString(PREFIX_COMMAND))) CommandManager.processCommandFromDiscord(message, member);
         }else if (channel.equals(DiscordBot.chatId)){
+            String rowContent;
+            if (message.getContentRaw().startsWith("https")){
+                rowContent = "<click:open_url:" + message.getContentRaw() + ">" + message.getContentRaw() + "</click>";
+            }else {
+                rowContent = message.getContentRaw();
+            }
             Component component = MessagesManager.applyFinalProprieties(String.format(
                     MessagesManager.PREFIX_CHAT_DISCORD + format.getMessageLocaleDefault(),
-                    member.getColor() == null ?
-                            "<#AAAAAA>" + member.getUser().getGlobalName() :
+                    member.getColor() == null ? "<#AAAAAA>" + member.getUser().getGlobalName() :
                             "<" + GlobalUtils.javaColorToStringHex(member.getColor()) + ">" + member.getUser().getGlobalName(),
-                    "<" + NamedTextColor.GRAY.asHexString() + ">" + message.getContentRaw()
+                    "<" + NamedTextColor.GRAY.asHexString() + ">" + rowContent
             ), TypeMessages.NULL, CategoryMessages.PRIVATE, false);
             Component roles = Component.text("Roles: ");
             for (Role role : member.getRoles()) {

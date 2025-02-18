@@ -65,7 +65,7 @@ public class PlayerListener implements Listener {
     }
 
     @EventHandler
-    public void onPlayerJoin(@NotNull EntityDamageByEntityEvent event) {
+    public void onDamageEntity(@NotNull EntityDamageByEntityEvent event) {
         FrameDupe.dupeItem(event);
     }
 

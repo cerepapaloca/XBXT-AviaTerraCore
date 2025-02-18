@@ -35,7 +35,12 @@ public class CommandManager {//nose si poner en esta clase aquí la verdad
             if (bukkitCommand instanceof BaseCommand baseCommand) {
                 hasPermission = CommandUtils.hasPermission(bukkitCommand, baseCommand.getVisibility(), player, b);
             }else {
-                hasPermission = CommandUtils.hasPermission(bukkitCommand, COMMANDS.get(bukkitCommand.getName()), player, b);
+                CommandVisibility visibility = COMMANDS.get(bukkitCommand.getName());
+                if (visibility == null) {
+                    hasPermission = false;
+                }else {
+                    hasPermission = CommandUtils.hasPermission(bukkitCommand, visibility, player, b);
+                }
             }
             if (hasPermission) {
                 return false;
@@ -55,7 +60,11 @@ public class CommandManager {//nose si poner en esta clase aquí la verdad
                     return false;
                 }else {
                     if (!isSilent) {
-                        sendMessage(player, net.atcore.messages.Message.COMMAND_GENERIC_NOT_FOUND);
+                        if (Bukkit.getCommandMap().getCommand(command) == null) {
+                            sendMessage(player, net.atcore.messages.Message.COMMAND_GENERIC_NOT_FOUND);
+                        }else {
+                            sendMessage(player, net.atcore.messages.Message.COMMAND_GENERIC_NO_PERMISSION);
+                        }
                     }
                 }
             }else {

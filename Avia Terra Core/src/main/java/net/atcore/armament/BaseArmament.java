@@ -33,7 +33,7 @@ public abstract class BaseArmament {
         meta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
         meta.addItemFlags(ItemFlag.HIDE_ARMOR_TRIM);
         meta.addItemFlags(ItemFlag.HIDE_DESTROYS);
-        itemArmament.setItemMeta(meta);
+        itemArmament.setItemMeta(meta);// TODO: Cambiar a esto por un sistema de uuids
         new BukkitRunnable(){
             public void run() {
                 GlobalUtils.setPersistentData(itemArmament,armament + "Name", PersistentDataType.STRING, name);

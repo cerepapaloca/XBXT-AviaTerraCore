@@ -109,13 +109,17 @@ public class PacketListenerManager {
             @Override
             public void onPacketSending(PacketEvent event) {
                 Player player = event.getPlayer();
-                if (!LoginManager.getDataLogin(player).hasSession()) {
-                    PacketContainer packet = event.getPacket();
-                    packet.getDoubles().write(0, LimboManager.LIMBO_LOCATION.getX());
-                    packet.getDoubles().write(1, LimboManager.LIMBO_LOCATION.getY());
-                    packet.getDoubles().write(2, LimboManager.LIMBO_LOCATION.getZ());
-                    packet.getFloat().write(0, LimboManager.LIMBO_LOCATION.getYaw());
-                    packet.getFloat().write(1, LimboManager.LIMBO_LOCATION.getPitch());
+                try {
+                    if (!LoginManager.getDataLogin(player).hasSession()) {
+                        PacketContainer packet = event.getPacket();
+                        packet.getDoubles().write(0, LimboManager.LIMBO_LOCATION.getX());
+                        packet.getDoubles().write(1, LimboManager.LIMBO_LOCATION.getY());
+                        packet.getDoubles().write(2, LimboManager.LIMBO_LOCATION.getZ());
+                        packet.getFloat().write(0, LimboManager.LIMBO_LOCATION.getYaw());
+                        packet.getFloat().write(1, LimboManager.LIMBO_LOCATION.getPitch());
+                    }
+                }catch (Exception ignored){
+
                 }
             }
         });

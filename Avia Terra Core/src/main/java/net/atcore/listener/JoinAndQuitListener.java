@@ -69,12 +69,7 @@ public class JoinAndQuitListener implements Listener {
                 String.format(Message.EVENT_QUIT.getMessage(player), event.getPlayer().getName()),
                 TypeMessages.INFO, false, false)));
 
-        EmbedBuilder embed = new EmbedBuilder();
-        embed.setTitle(String.format("%s Se salio del servidor", player.getName()));
-        embed.setColor(Color.RED);
-        TextChannel textChannel = AviaTerraCore.jda.getTextChannelById(DiscordBot.JoinAndLeave);
-        assert textChannel != null;
-        textChannel.sendMessageEmbeds(embed.build()).queue();
+        sendEmbed(player, Color.RED, "%s Se salio del servidor");
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -91,9 +86,18 @@ public class JoinAndQuitListener implements Listener {
             }
         }.runTaskLater(AviaTerraCore.getInstance(), 20L*2);
 
+        if (LoginManager.getDataLogin(player).getRegister().isTemporary()) {
+            sendEmbed(player, Color.YELLOW, "%s Se unió por primera vez");
+        }else {
+            sendEmbed(player, Color.GREEN, "%s Se unió al servidor");
+        }
+    }
+
+    private static void sendEmbed(Player player, Color color, String message) {
+        LoginData login = LoginManager.getDataLogin(player);
         EmbedBuilder embed = new EmbedBuilder();
-        embed.setTitle(String.format("%s Se unió al servidor", player.getName()));
-        embed.setColor(Color.GREEN);
+        embed.setColor(color);
+        embed.setAuthor(String.format(message, player.getName()), null, "https://crafthead.net/cube/" + login.getRegister().getUsername());
         TextChannel textChannel = AviaTerraCore.jda.getTextChannelById(DiscordBot.JoinAndLeave);
         assert textChannel != null;
         textChannel.sendMessageEmbeds(embed.build()).queue();
