@@ -54,6 +54,7 @@ public class PremiumCommand extends BaseCommand implements Confirmable {
     @Override
     public String getMessageConfirm() {
         return "<red><b>Advertencia</b></red> Solo ejecutar cuando tiene una cuenta oficial de microsoft," +
-                " En caso que sea asi ejecuta este commando <|<Click:suggest_command:/confirm>/confirm</click>|> para pasar al modo premium";
+                " En caso que sea asi ejecuta este commando <|<Click:suggest_command:/confirm>/confirm</click>|> o " +
+                "<|<Click:suggest_command:/premium>/premium</click>|> para pasar al modo premium";
     }
 }

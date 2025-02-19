@@ -126,7 +126,28 @@ public final class LoginManager {
             MojangResolver resolver = AviaTerraCore.getResolver();
             Optional<Profile> profile = resolver.findProfile(name);
             RegisterData registerData;
-            if (profile.isPresent()){
+            boolean b = profile.isPresent();
+
+            StateLogins state = b ? StateLogins.SEMI_CRACKED : StateLogins.CRACKED;
+            Profile profileObj = b ? profile.get() : null;
+            registerData = new RegisterData(name,
+                    GlobalUtils.getUUIDByName(name),
+                    b ? profileObj.getId() : null,
+                    state,
+                    true
+            );
+            registerData.setLastAddress(ip);
+            // Se guarda el registro en la base de datos
+            AviaTerraCore.enqueueTaskAsynchronously(() -> DataBaseRegister.addRegister(registerData.getUsername(),
+                    GlobalUtils.getUUIDByName(name).toString(),
+                    b ? profileObj.getId().toString() : null,
+                    ip.getHostAddress(),
+                    ip.getHostAddress(),
+                    state,
+                    null,
+                    System.currentTimeMillis(), System.currentTimeMillis()
+            ));
+            /*if (profile.isPresent()){
                 Profile profileObj = profile.get();
                 registerData = new RegisterData(profileObj.getName(), GlobalUtils.getUUIDByName(name), profileObj.getId(), StateLogins.SEMI_CRACKED, true);
                 registerData.setLastAddress(ip);
@@ -156,7 +177,7 @@ public final class LoginManager {
                                 null,
                         System.currentTimeMillis(), System.currentTimeMillis()
                 ));
-            }
+            }*/
             return registerData;
         } catch (IOException | RateLimitException e) {
             MessagesManager.sendWaringException("Error al iniciar el registro del jugador", e);

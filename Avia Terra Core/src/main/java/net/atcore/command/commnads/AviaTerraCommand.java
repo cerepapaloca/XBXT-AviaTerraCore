@@ -132,21 +132,6 @@ public class AviaTerraCommand extends BaseTabCommand {
                 }
                 DataSection.getConfigFile().saveData();
             }
-
-            case "antibot" -> {
-                if (args.length >= 2) {
-                    if (CommandUtils.isTrueOrFalse(args[1])){
-                        Config.setAntiBot(true);
-                        sendString(sender,"AntiBot <|Activado|>", TypeMessages.INFO);
-                    }else{
-                        Config.setAntiBot(false);
-                        sendString(sender,"AntiBot <|Desactivado|>", TypeMessages.INFO);
-                    }
-                }else{
-                    sendString(sender,"El sistema antiBot esta <|" + CommandUtils.booleanToString(Config.isAntiBot()) + "|>", TypeMessages.INFO);
-                }
-                DataSection.getConfigFile().saveData();
-            }
             case "autoban" -> {
                 if (args.length >= 2) {
                     if (CommandUtils.isTrueOrFalse(args[1])){
@@ -157,7 +142,7 @@ public class AviaTerraCommand extends BaseTabCommand {
                         sendString(sender,"autoBan <|Desactivado|>", TypeMessages.INFO);
                     }
                 }else{
-                    sendString(sender,"El sistema autoBan esta <|" + CommandUtils.booleanToString(Config.isAntiBot()) + "|>", TypeMessages.INFO);
+                    sendString(sender,"El sistema autoBan esta <|" + CommandUtils.booleanToString(Config.isAutoBan()) + "|>", TypeMessages.INFO);
                 }
             }
         }

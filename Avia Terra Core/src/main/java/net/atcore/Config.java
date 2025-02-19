@@ -73,8 +73,6 @@ public class Config {
 
     @Getter @Setter private double chaceDupeFrame = 0.5;
 
-    @Getter @Setter private boolean antiBot = false;
-
     @Getter @Setter private boolean autoBan = false;
 
     @Getter @Setter private String passwordSSL = "";

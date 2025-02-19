@@ -4,7 +4,6 @@ import net.atcore.AviaTerraCore;
 import net.atcore.command.ArgumentUse;
 import net.atcore.data.DataSection;
 import net.atcore.data.yml.MessageFile;
-import net.atcore.data.yml.ymls.MessagesLocaleFile;
 import net.atcore.utils.GlobalUtils;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.kyori.adventure.text.Component;
@@ -16,6 +15,7 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.kyori.adventure.title.Title;
 import org.bukkit.Bukkit;
+import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -28,7 +28,10 @@ import org.jetbrains.annotations.Nullable;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
+import java.util.Random;
+import java.util.TimeZone;
 
 import static net.kyori.adventure.text.event.ClickEvent.Action;
 
@@ -295,7 +298,7 @@ public final class MessagesManager {
                 message = Message.valueOf("DEATH_CAUSE_" + cause.name()).getMessage(p);
             }
             Builder tc = Component.text();
-            Component component = tc.append(applyFinalProprieties(message, TypeMessages.INFO, CategoryMessages.PRIVATE, true)).build();
+            Component component = tc.append(AviaTerraCore.getMiniMessage().deserialize("<dark_gray>[<dark_red>☠</dark_red>]</dark_gray> ")).append(applyFinalProprieties(message, TypeMessages.INFO, CategoryMessages.PRIVATE, false)).build();
 
             Builder componentVictim = Component.text();
             componentVictim.append(victim.displayName());
@@ -332,6 +335,7 @@ public final class MessagesManager {
                 component = component.replaceText(config3.build());
             }
             p.sendMessage(component);
+            Bukkit.getConsoleSender().sendMessage(component);
         }
     }
 }

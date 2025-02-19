@@ -26,6 +26,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.util.List;
@@ -73,7 +74,7 @@ public class JoinAndQuitListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onJoin(PlayerJoinEvent event) {
+    public void onJoin(@NotNull PlayerJoinEvent event) {
         Player player = event.getPlayer();
         event.joinMessage(GlobalUtils.chatColorLegacyToComponent(MessagesManager.addProprieties(
                 String.format(Message.EVENT_JOIN.getMessage(player), event.getPlayer().getName()),
@@ -93,18 +94,18 @@ public class JoinAndQuitListener implements Listener {
         }
     }
 
-    private static void sendEmbed(Player player, Color color, String message) {
-        LoginData login = LoginManager.getDataLogin(player);
+    private void sendEmbed(@NotNull Player player, Color color, String message) {
         EmbedBuilder embed = new EmbedBuilder();
         embed.setColor(color);
-        embed.setAuthor(String.format(message, player.getName()), null, "https://crafthead.net/cube/" + login.getRegister().getUsername());
+        String normalizedName = player.getName().startsWith(".") ? player.getName().substring(1) : player.getName();
+        embed.setAuthor(String.format(message, player.getName()), null, "https://crafthead.net/cube/" + normalizedName);
         TextChannel textChannel = AviaTerraCore.jda.getTextChannelById(DiscordBot.JoinAndLeave);
         assert textChannel != null;
         textChannel.sendMessageEmbeds(embed.build()).queue();
     }
 
     @EventHandler
-    public void onLogin(PlayerLoginEvent event) {
+    public void onLogin(@NotNull PlayerLoginEvent event) {
         Player player = event.getPlayer();
         DataBan ban = ContextBan.GLOBAL.onContext(player, event);
         if (ban != null){
@@ -117,7 +118,7 @@ public class JoinAndQuitListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.LOW)
-    public void onPreLogin(AsyncPlayerPreLoginEvent event) {
+    public void onPreLogin(@NotNull AsyncPlayerPreLoginEvent event) {
         if (AntiTwoPlayer.checkTwoPlayer(event.getName())){
             event.setLoginResult(AsyncPlayerPreLoginEvent.Result.KICK_OTHER);
             event.kickMessage(MessagesManager.applyFinalProprieties(Message.SECURITY_KICK_ANTI_TWO_PLAYER.getMessageLocaleDefault(), TypeMessages.KICK, CategoryMessages.LOGIN, false));

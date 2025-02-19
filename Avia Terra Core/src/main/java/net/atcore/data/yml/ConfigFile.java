@@ -25,7 +25,6 @@ public class ConfigFile extends FileYaml {
         DiscordBot.chatId = fileYaml.getString("canales-de-discord.chat-bridge", DiscordBot.chatId);
         DiscordBot.JoinAndLeave = fileYaml.getString("canales-de-discord.join-and-leave", DiscordBot.JoinAndLeave);
 
-        Config.setAntiBot(fileYaml.getBoolean("anti-bot", Config.isAntiBot()));
         Config.setExpirationSession(fileYaml.getLong("expiration-session", Config.getExpirationSession()));
         Config.setLevelModerationChat(fileYaml.getDouble("level-moderation-chat", Config.getLevelModerationChat()));
         Config.setCheckAntiOp(fileYaml.getBoolean("check-anti-op", Config.isCheckAntiOp()));
@@ -48,7 +47,6 @@ public class ConfigFile extends FileYaml {
         fileYaml.set("canales-de-discord.chat-bridge", DiscordBot.chatId);
         fileYaml.set("canales-de-discord.join-and-leave", DiscordBot.JoinAndLeave);
 
-        fileYaml.set("anti-bot", Config.isAntiBot());
         fileYaml.set("expiration-session", Config.getExpirationSession());
         fileYaml.set("level-moderation-chat", Config.getLevelModerationChat());
         fileYaml.set("check-anti-op", Config.isCheckAntiOp());

@@ -131,8 +131,8 @@ public class DataBaseRegister extends DataBaseMySql {
     }
 
     public static void addRegister(String name,
-                                   String uuidPremium,
                                    String uuidCracked,
+                                   String uuidPremium,
                                    String ipRegister,
                                    String ipLogin,
                                    StateLogins state,

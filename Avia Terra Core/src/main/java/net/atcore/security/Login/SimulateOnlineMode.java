@@ -13,7 +13,6 @@ import javax.crypto.SecretKey;
 import lombok.RequiredArgsConstructor;
 import net.atcore.messages.MessagesManager;
 import net.atcore.security.Login.model.LoginData;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import com.comphenix.protocol.PacketType;
@@ -37,7 +36,6 @@ import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.Message;
 import static net.atcore.messages.MessagesManager.logConsole;
 import net.atcore.messages.TypeMessages;
-import net.atcore.security.AntiBot;
 import net.atcore.security.SecuritySection;
 import net.atcore.security.VerificationPremium;
 import net.atcore.utils.GlobalUtils;
@@ -70,13 +68,10 @@ public class SimulateOnlineMode {
 
         UUID uuid = packet.getUUIDs().read(0);
         String name = packet.getStrings().read(0);
-        if (AntiBot.checkBot(inetAddress, name)){
-            return true;
-        }
 
         LoginData loginData = LoginManager.getDataLogin(name);
         // En caso de que no tenga una sesión se le expiró se hace una nueva
-        if ((loginData == null || loginData.getSession() == null) || loginData.getSession().getEndTimeLogin() < System.currentTimeMillis()) {
+        if (loginData == null || loginData.getSession() == null || loginData.getSession().getEndTimeLogin() < System.currentTimeMillis()) {
             // Lo registra si no esta registrado
             StateLogins state;
             switch (Config.getServerMode()){
@@ -144,7 +139,7 @@ public class SimulateOnlineMode {
      * method dentro del servidor por eso es mejor no tocar. Ni sé de donde saco esto la verdad
      * @param loginKey Este es secreto compartido entre servidor y el cliente
      * @param player El jugador que le va a afectar el modo online
-     * @return da true cuando esta bien false si dio un error
+     * @return da true cuando está bien false si dio un error
      */
 
     public static boolean enableEncryption(SecretKey loginKey, Player player) throws IllegalArgumentException {
