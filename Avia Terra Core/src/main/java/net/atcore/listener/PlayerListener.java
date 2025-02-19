@@ -76,13 +76,16 @@ public class PlayerListener implements Listener {
         String command = event.getMessage().split(" ")[0].substring(1);
         Player player = event.getPlayer();
         String s = "";
-        TypeMessages type = TypeMessages.INFO;
+
         ContextBan.CHAT.onContext(player, event);
         if (event.isCancelled()) return;
         boolean isCancelled = CommandManager.checkCommand(command.toLowerCase(), player, false, true);
+        TypeMessages type;
         if (isCancelled){
             s = " <red>(Cancelado)";
             type = TypeMessages.WARNING;
+        }else {
+            type = TypeMessages.INFO;
         }
         if (COMMANDS_PRE_LOGIN.contains(command.toLowerCase())) {
             String commandComplete = event.getMessage().replaceFirst("/" + command, "");

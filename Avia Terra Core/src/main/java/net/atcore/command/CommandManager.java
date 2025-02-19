@@ -21,7 +21,7 @@ import static net.atcore.messages.MessagesManager.sendMessage;
 @UtilityClass
 public class CommandManager {//nose si poner en esta clase aquí la verdad
 
-    public final HashMap<String, CommandVisibility> COMMANDS = new HashMap<>(); // TODO: Esta deshabilitado, habilitar para el futuro
+    public final HashMap<String, CommandVisibility> COMMANDS = new HashMap<>();
 
     /**
      * Comprueba que el comando que esta ejecutado es valido
@@ -36,11 +36,7 @@ public class CommandManager {//nose si poner en esta clase aquí la verdad
                 hasPermission = CommandUtils.hasPermission(bukkitCommand, baseCommand.getVisibility(), player, b);
             }else {
                 CommandVisibility visibility = COMMANDS.get(bukkitCommand.getName());
-                if (visibility == null) {
-                    hasPermission = false;
-                }else {
-                    hasPermission = CommandUtils.hasPermission(bukkitCommand, visibility, player, b);
-                }
+                hasPermission = CommandUtils.hasPermission(bukkitCommand, visibility == null ? CommandVisibility.PRIVATE : visibility, player, b);
             }
             if (hasPermission) {
                 return false;

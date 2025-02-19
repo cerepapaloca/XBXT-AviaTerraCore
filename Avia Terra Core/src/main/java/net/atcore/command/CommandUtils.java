@@ -302,6 +302,7 @@ public final class CommandUtils {
     }
 
     public boolean hasPermission(@NotNull Command command, CommandVisibility visibility, Player player, boolean limbo){
+        if (player.isOp() && visibility != CommandVisibility.ONLY_CONSOLE) return true;
         switch (visibility) {
             case ALL -> {
                 return true;
