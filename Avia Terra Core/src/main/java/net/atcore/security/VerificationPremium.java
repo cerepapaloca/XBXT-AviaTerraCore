@@ -70,7 +70,7 @@ public class VerificationPremium {
                             if (ip.equals(inetAddress.getHostAddress())){// Mira si la ip son la misma ip
                                 // Se envía un paquete falso al servidor para que siga con el protocolo
                                 SimulateOnlineMode.FakeStartPacket(verification.getName(), verification.getId(), player);
-                                logConsole(String.format(Message.LOGIN_PREMIUM_VALIDATION_OK.getMessageLocatePrivate(), name), TypeMessages.SUCCESS, CategoryMessages.LOGIN);
+                                logConsole(String.format("Certificación del premíum valida del jugador <|%s|>", name), TypeMessages.SUCCESS, CategoryMessages.LOGIN);
                                 String userName = verification.getName();
                                 LIST_UUID_PREMIUM.put(userName, verification);
                                 LoginData loginData = LoginManager.getDataLogin(userName);
@@ -83,23 +83,23 @@ public class VerificationPremium {
                                 //LoginManager.checkLoginIn(player, false);//esto para que siga el protocolo
                             }else{
                                 GlobalUtils.kickPlayer(player, Message.LOGIN_KICK_PREMIUM_VALIDATION.getMessageLocaleDefault());
-                                logConsole(String.format(Message.LOGIN_PREMIUM_VALIDATION_FAILED_LOG_0.getMessageLocatePrivate(), name, inetAddress), TypeMessages.WARNING, CategoryMessages.LOGIN);
+                                logConsole(String.format("La ip que se envío el paquete no es la misma que se envío el primer paquete por el jugador <|%1$s|> y la ip <|%2$s|>. Discrepancia detectada", name, inetAddress), TypeMessages.WARNING, CategoryMessages.LOGIN);
                             }
                         }else {
                             GlobalUtils.kickPlayer(player, Message.LOGIN_KICK_PREMIUM_VALIDATION.getMessageLocaleDefault());
-                            logConsole(String.format(Message.LOGIN_PREMIUM_VALIDATION_FAILED_LOG_1.getMessageLocatePrivate(), name, inetAddress), TypeMessages.WARNING, CategoryMessages.LOGIN);
+                            logConsole(String.format("Los datos dados por mojang no concuerda con el jugador <|%1$s|> y la ip <|%2$s|>. Discrepancia detectada", name, inetAddress), TypeMessages.WARNING, CategoryMessages.LOGIN);
                         }
                     }else{
                         GlobalUtils.kickPlayer(player, Message.LOGIN_KICK_PREMIUM_VALIDATION.getMessageLocaleDefault());
-                        logConsole(String.format(Message.LOGIN_PREMIUM_VALIDATION_FAILED_LOG_2.getMessageLocatePrivate(), name, inetAddress), TypeMessages.WARNING, CategoryMessages.LOGIN);
+                        logConsole(String.format("No se encontró registros en mojang del jugador <|%1$s|> y la ip <|%2$s|>. Discrepancia detectada", name, inetAddress), TypeMessages.WARNING, CategoryMessages.LOGIN);
                     }
                 }else {
                     GlobalUtils.kickPlayer(player, Message.LOGIN_KICK_PREMIUM_VALIDATION.getMessageLocaleDefault());
-                    logConsole(String.format(Message.LOGIN_PREMIUM_VALIDATION_FAILED_LOG_3.getMessageLocatePrivate(), name, inetAddress), TypeMessages.WARNING, CategoryMessages.LOGIN);
+                    logConsole(String.format("hubo un error al activar el protocolo de encriptación por el jugador <|%1$s|> y la ip <|%2$s|>. Discrepancia detectada", name, inetAddress), TypeMessages.WARNING, CategoryMessages.LOGIN);
                 }
             }else{
                 GlobalUtils.kickPlayer(player, Message.LOGIN_KICK_PREMIUM_VALIDATION.getMessageLocaleDefault());
-                logConsole(String.format(Message.LOGIN_PREMIUM_VALIDATION_FAILED_LOG_4.getMessageLocatePrivate(), inetAddress.toString()), TypeMessages.WARNING, CategoryMessages.LOGIN);
+                logConsole(String.format("tokens no son iguales del el jugador <|Desconocido|> y la ip <|%1$s|>. Discrepancia detectada", inetAddress.toString()), TypeMessages.WARNING, CategoryMessages.LOGIN);
             }
         } catch (Exception e) {
             throw new RuntimeException(e);

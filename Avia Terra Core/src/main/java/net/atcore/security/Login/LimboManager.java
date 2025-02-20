@@ -73,7 +73,7 @@ public class LimboManager {
     }
 
     public void createLimboMode(Player player, ReasonLimbo reasonLimbo){
-        MessagesManager.logConsole(String.format(Message.LOGIN_LIMBO_INITIATED_LOG.getMessage(player), player.getName()), TypeMessages.INFO, CategoryMessages.LOGIN);
+        MessagesManager.logConsole(String.format("El jugador <|%s|> entro en modo limbo", player.getName()), TypeMessages.INFO, CategoryMessages.LOGIN);
         LoginData loginData = LoginManager.getDataLogin(player);
         String uuidString = GlobalUtils.getRealUUID(player).toString();
         FileYaml file = DataSection.getCacheLimboFlies().getConfigFile(uuidString, false);

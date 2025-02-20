@@ -75,6 +75,6 @@ public class LimboData {
                 ProtocolLibrary.getProtocolManager().sendServerPacket(player, packet, true);
             }
         }
-        MessagesManager.logConsole(String.format(Message.LOGIN_LIMBO_EXIT.getMessage(player), player.getName()), TypeMessages.INFO, CategoryMessages.LOGIN);
+        MessagesManager.logConsole(String.format("El jugador <|%s|> salio del modo limbo", player.getName()), TypeMessages.INFO, CategoryMessages.LOGIN);
     }
 }

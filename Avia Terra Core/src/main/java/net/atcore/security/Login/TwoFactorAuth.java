@@ -71,7 +71,7 @@ public class TwoFactorAuth {
                     "text/html; charset=utf-8");
 
             Transport.send(message);
-            MessagesManager.logConsole(String.format(LOGIN_TWO_FACTOR_SEND_CODE_DISCORD_LOG.getMessage(player), recipientEmail, name), TypeMessages.INFO);
+            MessagesManager.logConsole(String.format("Se envió código de verificación a <|%1$s|> (%2$s)", recipientEmail, name), TypeMessages.INFO);
 
         } catch (MessagingException e) {
             throw new RuntimeException(e);
@@ -94,7 +94,7 @@ public class TwoFactorAuth {
                 )
         ).queue(success -> sendMessage(player, LOGIN_TWO_FACTOR_ARRIVED_MESSAGE_DISCORD));
 
-        MessagesManager.logConsole(String.format(LOGIN_TWO_FACTOR_SEND_CODE_GMAIL_LOG.getMessage(player), player.getName(), id), TypeMessages.INFO);
+        MessagesManager.logConsole(String.format("Se envió código de verificación a <|%1$s|> (%2$s)", player.getName(), id), TypeMessages.INFO);
     }
 
     public boolean checkCode(Player player, String code) {
