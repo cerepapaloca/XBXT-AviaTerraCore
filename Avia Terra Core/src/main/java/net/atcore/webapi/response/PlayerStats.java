@@ -3,7 +3,6 @@ package net.atcore.webapi.response;
 import io.undertow.server.HttpServerExchange;
 import net.atcore.security.Login.LoginManager;
 import net.atcore.security.Login.model.LoginData;
-import net.atcore.utils.GlobalUtils;
 import net.atcore.webapi.BaseApi;
 import org.bukkit.Bukkit;
 

@@ -53,7 +53,12 @@ public final class ApiHandler {
                             if (!exchange.getRequestPath().startsWith("/" + api.getIdentifier())) continue;
                             exchange.setStatusCode(200);
                             if (api.isJson) {
-                                exchange.getResponseSender().send(Files.asCharSource((File) api.onRequest(exchange), StandardCharsets.UTF_8).read());
+                                Object o = api.onRequest(exchange);
+                                if (o instanceof File file) {
+                                    exchange.getResponseSender().send(Files.asCharSource(file, StandardCharsets.UTF_8).read());
+                                }else {
+                                    exchange.getResponseSender().send(gson.toJson(null));
+                                }
                             }else {
                                 exchange.getResponseSender().send(gson.toJson(api.onRequest(exchange)));
                             }

@@ -44,7 +44,8 @@ public class CommandSection implements Section {
                 new PassiveRestartCommand(),
                 new VoteCommand(),
                 new DiscordCommand(),
-                new HelpCommand()
+                new HelpCommand(),
+                new OffHandCommand()
         );
     }
 

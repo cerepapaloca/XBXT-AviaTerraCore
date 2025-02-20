@@ -3,6 +3,8 @@ package net.atcore.messages;
 import lombok.Getter;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Random;
@@ -26,7 +28,6 @@ public enum Message {
     LOGIN_KICK_UNKNOWN_STATE("login", "Vuelve a entrar, Hubo un problema con tu cuenta", KICK),
     LOGIN_KICK_ENTRY_LIMBO_ERROR("login", "Error al entrar al modo limbo mode, Por favor vuelve a entrar", KICK),
     LOGIN_KICK_NO_REGISTER("login", "No estas registrado, vuelve a entrar al servidor", KICK),
-    LOGIN_START_PROTOCOL_LOG("login", "Iniciando login: <|%1$s|> para el jugador: <|%2$s|> Ip: <|%3$s|> (%4$s)", INFO),
     LOGIN_LIMBO_INITIATED_BY_SESSION_CHAT("login", "Para Loguear utiliza el siguiente comando:\n <|<click:suggest_command:/login>/login</click>|>", TypeMessages.INFO),
     LOGIN_LIMBO_INITIATED_BY_SESSION_TITLE("login", "Utiliza Este Comando", INFO),
     LOGIN_LIMBO_INITIATED_BY_SESSION_SUBTITLE("login", "<|/login <Contraseña>|>", INFO),
@@ -59,7 +60,6 @@ public enum Message {
                 """, INFO),
     BAN_ERROR("ban", "Hubo un problema con las bases de datos al banear <|%s|> por <|%s|>", ERROR),
     BAN_AUTO_BAN_BOT("ban", "Uso de bots (Baneo Automático)", KICK),
-    BAN_AUTO_BAN_BOT_LOG("ban", "Purga de bots terminada", SUCCESS),
     BAN_AUTO_BAN_SPAM("ban", "Por enviar mensajes automatizado en el chat (Baneo Automático)", KICK),
     BAN_AUTO_BAN_DUPE("ban", "Uso de Dupes (Baneo Automático)", KICK),
     BAN_AUTO_BAN_ILEGAL_ITEMS("ban", "Obtención de items ilegal (Baneo Automático)", KICK),
@@ -148,7 +148,7 @@ public enum Message {
     COMMAND_REGISTER_SUCCESSFUL_TITLE("command.register", "Bienvenido A %s", INFO),
     COMMAND_REGISTER_SUCCESSFUL_SUBTITLE("command.register", "<|&o%s|>", INFO),
     COMMAND_REGISTER_NO_EQUAL_PASSWORD("command.register", "Las contraseñas no son iguales", ERROR),
-    COMMAND_REGISTER_MISSING_ARGS_PASSWORD("command.register", "Tienes que escribir la contraseña de nuevo", ERROR),
+    COMMAND_REGISTER_MISSING_ARGS_PASSWORD("command.register", "Tienes que escribir la contraseña dos veces asi /register <contraseña> <contraseña>", ERROR),
     COMMAND_REGISTER_PASSWORD_EQUAL_NAME("command.register", "Tu contraseña no puede ser igual a nombre de usuario", ERROR),
     COMMAND_REGISTER_PASSWORD_TOO_SHORT("command.register", "La contraseña es muy corta tiene que ser mayor a %s letras", ERROR),
     COMMAND_REGISTER_IS_PREMIUM("command.register", "Los premium no se registran", ERROR),
@@ -229,6 +229,8 @@ public enum Message {
     private final String parent;
     private final HashMap<LocaleAvailable, String[]> MapMessageLocale = new HashMap<>();
 
+    @NotNull
+    @Contract(pure = true)
     public String getMessage(CommandSender sender) {
         LocaleAvailable locale;
         if (sender instanceof Player player) {
@@ -239,7 +241,8 @@ public enum Message {
         return getMessageLocate(locale);
     }
 
-    private String getMessageLocate(LocaleAvailable locale) {
+    @Contract(pure = true)
+    private @NotNull String getMessageLocate(@NotNull LocaleAvailable locale) {
         if (!MapMessageLocale.containsKey(locale)) locale = DEFAULT_LOCALE_USER;
         String[] strings = this.MapMessageLocale.get(locale);
         if (strings == null) strings = this.MapMessageLocale.get(DEFAULT_LOCALE_PRIVATE);

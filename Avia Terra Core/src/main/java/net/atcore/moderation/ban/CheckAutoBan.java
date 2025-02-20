@@ -49,7 +49,7 @@ public class CheckAutoBan {
                                     ModerationSection.getBanManager().banPlayer(player, Message.BAN_AUTO_BAN_BOT.getMessage(player)
                                             ,1000 * 60 * 60 * 24 * 5L, ContextBan.CHAT, Message.BAN_AUTHOR_AUTO_BAN.getMessage(player));
                                 }
-                                logConsole(Message.BAN_AUTO_BAN_BOT_LOG.getMessage(player), TypeMessages.SUCCESS, CategoryMessages.BAN);
+                                logConsole("Purga de bots terminada", TypeMessages.SUCCESS, CategoryMessages.BAN);
                             }
                             ChatBotTime.clear();
                         });

@@ -83,7 +83,7 @@ public class SimulateOnlineMode {
                 case PREMIUM -> startLoginPremium(name, uuid, player);
                 case UNKNOWN -> GlobalUtils.kickPlayer(player, Message.LOGIN_KICK_GENERIC.getMessage(player));
             }
-            logConsole(String.format(Message.LOGIN_START_PROTOCOL_LOG.getMessageLocatePrivate(), state.name().toLowerCase(), name, inetAddress.getHostName(), inetAddress.getHostAddress()), TypeMessages.INFO, CategoryMessages.LOGIN);
+            logConsole(String.format("Iniciando login: <|%1$s|> para el jugador: <|%2$s|> Ip: <|%3$s|> (%4$s)", state.name().toLowerCase(), name, inetAddress.getHostName(), inetAddress.getHostAddress()), TypeMessages.INFO, CategoryMessages.LOGIN);
             return state == StateLogins.PREMIUM; //se cancela por que asi el servidor no se da cuenta de que a recibido un paquete
         }
         return false;
