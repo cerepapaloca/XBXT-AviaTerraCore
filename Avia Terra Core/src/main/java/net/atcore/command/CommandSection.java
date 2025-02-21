@@ -45,7 +45,8 @@ public class CommandSection implements Section {
                 new VoteCommand(),
                 new DiscordCommand(),
                 new HelpCommand(),
-                new OffHandCommand()
+                new OffHandCommand(),
+                new RemovePasswordCommand()
         );
     }
 

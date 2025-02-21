@@ -63,7 +63,7 @@ public final class LoginManager {
     }
 
     public LoginData getDataLogin(@NotNull Player player) {
-        return LIST_DATA_LOGIN.get(GlobalUtils.getUUIDByName(GlobalUtils.getRealName(player)));
+        return LIST_DATA_LOGIN.get(GlobalUtils.getRealUUID(player));
     }
 
     public @NotNull LoginData addDataLogin(String name , RegisterData registerData) {

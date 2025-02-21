@@ -15,7 +15,6 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.kyori.adventure.title.Title;
 import org.bukkit.Bukkit;
-import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -28,10 +27,7 @@ import org.jetbrains.annotations.Nullable;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.Objects;
-import java.util.Random;
-import java.util.TimeZone;
+import java.util.*;
 
 import static net.kyori.adventure.text.event.ClickEvent.Action;
 
@@ -277,7 +273,9 @@ public final class MessagesManager {
 
     public static void deathMessage(@NotNull Player victim, @Nullable LivingEntity killer, @Nullable ItemStack stack, @NotNull EntityDamageEvent.DamageCause cause) {
         Random r = new Random();
-        for (Player p : Bukkit.getOnlinePlayers()) {
+        List<CommandSender> senders = new ArrayList<>(Bukkit.getOnlinePlayers());
+        senders.add(Bukkit.getConsoleSender());
+        for (CommandSender p : senders) {
             String message;//TODO: Incluir el dragon;
             if ((killer != null && killer.getType() != EntityType.PLAYER && (
                     cause.equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK) ||
@@ -285,8 +283,15 @@ public final class MessagesManager {
                     cause.equals(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION) ||
                     cause.equals(EntityDamageEvent.DamageCause.PROJECTILE))
             )) {
+                Locale locale;
+                if (p instanceof Player player) {
+                    locale = player.locale();
+                }else {
+                    locale = DEFAULT_LOCALE_PRIVATE.getLocale();
+                }
+
                 // Obtener el MessageFile del idioma del jugador
-                MessageFile messageFile = (MessageFile) DataSection.getMessagesLocaleFile().getConfigFile(LocaleAvailable.getLocate(p.locale()).name().toLowerCase(), false);
+                MessageFile messageFile = (MessageFile) DataSection.getMessagesLocaleFile().getConfigFile(LocaleAvailable.getLocate(locale).name().toLowerCase(), false);
                 // Obtiene la lista de mensajes, en caso de que no existe tomara el idioma defecto
                 List<String> messages = Objects.requireNonNullElseGet(messageFile.messagesEntity.get(killer.getType()), () -> {
                     MessageFile mf = (MessageFile) DataSection.getMessagesLocaleFile().getConfigFile(MessagesManager.DEFAULT_LOCALE_PRIVATE.name().toLowerCase(), false);
@@ -335,7 +340,6 @@ public final class MessagesManager {
                 component = component.replaceText(config3.build());
             }
             p.sendMessage(component);
-            Bukkit.getConsoleSender().sendMessage(component);
         }
     }
 }

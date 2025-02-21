@@ -3,6 +3,7 @@ package net.atcore.security.Login.model;
 import lombok.Getter;
 import lombok.Setter;
 import net.atcore.security.Login.StateLogins;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
@@ -22,6 +23,7 @@ public class LoginData {
         this.register = new RegisterData(username, uuidCracked, stateLogins, isTemporary);
     }
 
+    @NotNull
     final private RegisterData register;
     private SessionData session = null;
     private LimboData limbo = null;
