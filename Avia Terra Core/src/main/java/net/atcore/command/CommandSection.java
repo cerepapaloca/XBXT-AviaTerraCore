@@ -46,7 +46,8 @@ public class CommandSection implements Section {
                 new DiscordCommand(),
                 new HelpCommand(),
                 new OffHandCommand(),
-                new RemovePasswordCommand()
+                new RemovePasswordCommand(),
+                new CrackedCommand()
         );
     }
 

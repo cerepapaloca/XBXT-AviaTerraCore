@@ -1,6 +1,5 @@
 package net.atcore.command.commnads;
 
-import net.atcore.AviaTerraCore;
 import net.atcore.aviaterraplayer.AviaTerraPlayer;
 import net.atcore.command.ArgumentUse;
 import net.atcore.command.BaseTabCommand;
@@ -11,7 +10,6 @@ import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import net.atcore.utils.GlobalUtils;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -28,7 +26,7 @@ public class NameColorCommand extends BaseTabCommand {
         //noinspection deprecation
         super("nameColor",
                 new ArgumentUse("nameColor").addArg(ChatColor.values()),
-                CommandVisibility.SEMI_PUBLIC,
+                CommandVisibility.PUBLIC,
                 "Cambias de color tu nombre"
         );
         colorOptions = getColorOptions();

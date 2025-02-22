@@ -27,7 +27,7 @@ public class RemovePasswordCommand extends BaseCommand {
         if (args.length == 1) {
             CommandUtils.executeForPlayer(sender, args[0], false, (name, player) ->
                     AviaTerraCore.enqueueTaskAsynchronously(() -> {
-                        if (DataBaseRegister.updatePassword(player.getName(), null)){
+                        if (DataBaseRegister.updatePassword(name, null)){
                             sendFormatMessage(sender, Message.COMMAND_REMOVE_PASSWORD_SUCCESSFUL, name);
                         }else {
                             sendFormatMessage(sender, Message.COMMAND_REMOVE_PASSWORD_ERROR, name);

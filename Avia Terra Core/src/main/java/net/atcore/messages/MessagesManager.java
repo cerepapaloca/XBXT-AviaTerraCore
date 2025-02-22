@@ -24,6 +24,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.text.MessageFormat;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
@@ -38,7 +39,7 @@ import static net.kyori.adventure.text.event.ClickEvent.Action;
 
 public final class MessagesManager {
 
-    public static final String LINK_DISCORD = "&a&n<click:open_url:http://discord.xbxt.xyz>discord.xbxt.xyz</click>";
+    public static final String LINK_DISCORD = "&a&n<click:open_url:http://discord.xbxt.xyz>http://discord.xbxt.xyz</click>";
     public static final String LINK_WEBSITE = "&a&n<click:open_url:https://xbxt.xyz>xbxt.xyz</click>";
     public static final String LINK_VOTE = "&a&n<click:open_url:https://minecraft-mp.com/server-s339858>minecraft-mp.com/server-s339858</click>";
     //"&8[" + GlobalUtils.applyGradient("<#00CCCC>AviaTerra<#00FFFF>",'l') + "&8]&r " ;
@@ -277,6 +278,7 @@ public final class MessagesManager {
         senders.add(Bukkit.getConsoleSender());
         for (CommandSender p : senders) {
             String message;//TODO: Incluir el dragon;
+            if (killer != null ) Bukkit.getLogger().severe(killer.getType() + " Name");
             if ((killer != null && killer.getType() != EntityType.PLAYER && (
                     cause.equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK) ||
                     cause.equals(EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK) ||
@@ -300,7 +302,11 @@ public final class MessagesManager {
                 // Obtiene un mensaje aleatorio
                 message = messages.get(r.nextInt(messages.size()));
             }else {
-                message = Message.valueOf("DEATH_CAUSE_" + cause.name()).getMessage(p);
+                if (killer != null && killer.getType() == EntityType.PLAYER && cause.equals(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION)) {
+                    message = Message.DEATH_CAUSE_END_CRYSTAL.getMessage(p);
+                }else {
+                    message = Message.valueOf("DEATH_CAUSE_" + cause.name()).getMessage(p);
+                }
             }
             Builder tc = Component.text();
             Component component = tc.append(AviaTerraCore.getMiniMessage().deserialize("<dark_gray>[<dark_red>☠</dark_red>]</dark_gray> ")).append(applyFinalProprieties(message, TypeMessages.INFO, CategoryMessages.PRIVATE, false)).build();

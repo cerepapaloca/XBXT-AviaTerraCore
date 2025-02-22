@@ -59,7 +59,7 @@ public class PacketListenerManager {
         ///////////////////////////////////////////////////////////////////////////////
 
         ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(AviaTerraCore.getInstance(),
-                PacketType.Play.Server.MAP_CHUNK
+                PacketType.Play.Server.MAP_CHUNK, PacketType.Play.Server.STATISTIC
         ) {
             @Override
             public void onPacketSending(PacketEvent event) {

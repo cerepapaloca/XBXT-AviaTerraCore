@@ -5,6 +5,7 @@ import net.atcore.command.*;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
 import org.bukkit.Bukkit;
+import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.command.CommandSender;
@@ -46,8 +47,10 @@ public class TpaCommand extends BaseTabCommand implements CommandAliase {
                             return;
                         }
                         if (player != null) {
+                            player.getWorld().spawnParticle(Particle.PORTAL, player.getLocation(), 10, 0.5, 1,0.5);
                             player.teleport(p, PlayerTeleportEvent.TeleportCause.COMMAND);
-                            player.getWorld().playSound(player, Sound.ENTITY_PLAYER_TELEPORT, SoundCategory.PLAYERS, 1, 1);
+                            player.getWorld().playSound(player, Sound.ENTITY_PLAYER_TELEPORT, SoundCategory.PLAYERS, 1, 1, -1);
+                            player.getWorld().spawnParticle(Particle.REVERSE_PORTAL, player.getLocation(), 10, 0.5, 1,0.5);
                         }else {
                             MessagesManager.sendMessage(sender, Message.COMMAND_TPA_WAS_DISCONNECTED);
                         }

@@ -8,10 +8,7 @@ import net.atcore.data.FileYaml;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Sound;
-import org.bukkit.SoundCategory;
+import org.bukkit.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
@@ -54,8 +51,10 @@ public class HomeCommandAliase extends BaseTabCommand implements CommandAliase {
                         if (player.getWorld().isUltraWarm()) distance *= 8;
                         int distanceMinTp = 100;
                         if (distance > distanceMinTp){
-                            player.getWorld().playSound(player, Sound.ENTITY_PLAYER_TELEPORT, SoundCategory.PLAYERS, 1, 1);
+                            player.getWorld().spawnParticle(Particle.PORTAL, player.getLocation(), 10, 0.5, 1,0.5);
                             player.teleport(loc, PlayerTeleportEvent.TeleportCause.COMMAND);
+                            player.getWorld().playSound(player, Sound.ENTITY_PLAYER_TELEPORT, SoundCategory.PLAYERS, 1, 1, -1);
+                            player.getWorld().spawnParticle(Particle.REVERSE_PORTAL, player.getLocation(), 10, 0.5, 1,0.5);
                         }else {
                             MessagesManager.sendFormatMessage(sender, Message.COMMAND_HOME_CLOSE_SPAWN, Math.round(distanceMinTp - distance));
                         }
