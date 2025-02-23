@@ -43,7 +43,7 @@ public class InfoCommand extends BaseCommand {
             for (Player p : Bukkit.getOnlinePlayers()) {
                 send(sender,
                         "|" + applySpace(p.getName())
-                        + "|" + applySpace(locationToString(p.getLocation()))
+                        + "|" + applySpace(GlobalUtils.locationToString(p.getLocation()))
                         + "|" + applySpace(groupName)
                         + "|" + applySpace(String.valueOf(p.getPing()))
                 );
@@ -57,7 +57,7 @@ public class InfoCommand extends BaseCommand {
                 send(sender, String.format("UUID Cracked: <|%s|>", data.getRegister().getUuidCracked()));
                 send(sender, String.format("UUID Premium: <|%s|>", data.getRegister().getUuidPremium()));
                 send(sender, String.format("UUID Bedrock: <|%s|>", data.getRegister().getUuidBedrock()));
-                send(sender, String.format("Localización: <|%s|>", locationToString(player.getLocation())));
+                send(sender, String.format("Localización: <|%s|>", GlobalUtils.locationToString(player.getLocation())));
                 send(sender, String.format("Tiempo Logueado: <|%s|>", GlobalUtils.timeToString(System.currentTimeMillis() - data.getRegister().getLastLoginDate(), 1)));
                 send(sender, String.format("Tiempo Registrado: <|%s|>", GlobalUtils.timeToString(System.currentTimeMillis() - data.getRegister().getRegisterDate(), 1)));
                 send(sender, String.format("Ping: <|%s|>", player.getPing()));
@@ -88,9 +88,5 @@ public class InfoCommand extends BaseCommand {
 
     private String applySpace(String s){
         return  s + " ".repeat(Math.max(0, SPACE - s.length()));
-    }
-
-    private String locationToString(Location loc){
-        return "[" + loc.getWorld().getName() + "] " + loc.getBlockX() + " " + loc.getBlockY() + " " + loc.getBlockZ();
     }
 }

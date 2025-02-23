@@ -37,7 +37,7 @@ public class CrackedCommand extends BaseCommand implements Confirmable {
                     if (DataBaseRegister.changeState(GlobalUtils.getRealName(player), StateLogins.SEMI_CRACKED)) {
                         RegisterData register = LoginManager.getDataLogin(player).getRegister();
                         register.setStateLogins(StateLogins.SEMI_CRACKED);
-                        register.setTemporary(false);
+                        register.setTemporary(false);//TODO: Revisar si esto funciona bien
                         GlobalUtils.synchronizeKickPlayer(player, Message.COMMAND_CRACKED_SUCCESSFUL);
                     }else {
                         MessagesManager.sendMessage(player, Message.COMMAND_CRACKED_ERROR);

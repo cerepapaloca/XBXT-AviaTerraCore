@@ -95,7 +95,7 @@ public class AviaTerraCore extends JavaPlugin {
         registerPermission();
         startMOTD();
         startBroadcast();
-        startAutoSaveTime();
+        //startAutoSaveTime();
         startAutoRestart();
         isStarting = false;
         messageOn(startTime);

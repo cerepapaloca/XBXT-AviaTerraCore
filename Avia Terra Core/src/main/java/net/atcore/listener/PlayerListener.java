@@ -32,6 +32,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.ConsoleHandler;
 
 import static net.atcore.armament.BaseWeaponTarkov.checkReload;
 
@@ -153,5 +154,16 @@ public class PlayerListener implements Listener {
                     "</gradient>";
             MessagesManager.sendTitle(player,"Nuevo Rango", s, 20, 60, 40, TypeMessages.INFO);
         }
+    }
+
+    @EventHandler
+    public void onTeleport(@NotNull PlayerTeleportEvent event) {
+        Player player = event.getPlayer();
+        MessagesManager.logConsole(String.format("EL jugador: <|%S|> se teletransportó de %s a %s por %s",
+                player.getName(),
+                GlobalUtils.locationToString(event.getFrom()),
+                GlobalUtils.locationToString(event.getTo()),
+                event.getCause()
+        ), TypeMessages.INFO, CategoryMessages.PLAY);
     }
 }

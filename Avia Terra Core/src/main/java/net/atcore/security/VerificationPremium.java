@@ -15,6 +15,7 @@ import net.atcore.security.Login.LoginManager;
 import net.atcore.security.Login.StateLogins;
 import net.atcore.security.Login.SimulateOnlineMode;
 import net.atcore.utils.GlobalUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -120,7 +121,7 @@ public class VerificationPremium {
     public static boolean checkNameAndUUID(@NotNull Verification verification, String name, String uuid) {
         String realUsername = verification.getName();
         String realUUID = verification.getId().toString();
-        return realUsername != null && Objects.equals(name, realUsername) && Objects.equals(realUUID, uuid);
+        return (realUsername != null && Objects.equals(name, realUsername) && Objects.equals(realUUID, uuid)) || uuid.equals("00000000-0000-0000-0000-000000000000");
     }
 
 }

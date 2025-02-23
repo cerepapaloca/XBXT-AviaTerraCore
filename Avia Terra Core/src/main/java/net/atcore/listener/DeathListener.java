@@ -1,6 +1,9 @@
 package net.atcore.listener;
 
+import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.MessagesManager;
+import net.atcore.messages.TypeMessages;
+import net.atcore.utils.GlobalUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.*;
@@ -23,7 +26,7 @@ public class DeathListener implements Listener {
     public void onDeath(PlayerDeathEvent e) {
         Player player = e.getEntity();
         if (player.getLastDamageCause() != null){
-            e.deathMessage(null);
+
 
             LivingEntity killer;
             if (e.getEntity().getKiller() != null) {
@@ -44,7 +47,9 @@ public class DeathListener implements Listener {
             }
 
             ItemStack item = getItemStack(killer);
+            MessagesManager.logConsole(String.format("Jugador: %s murió en %s", player.getName(), GlobalUtils.locationToString(player.getLocation())), TypeMessages.INFO, CategoryMessages.PLAY);
             MessagesManager.deathMessage(player, killer, item, player.getLastDamageCause().getCause());
+            e.deathMessage(null);
         }
     }
 

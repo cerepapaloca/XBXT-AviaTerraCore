@@ -9,7 +9,7 @@ public enum CategoryMessages {
     BAN,
     MODERATION,
     LOGIN,
-    PVP,
+    PLAY,
     SYSTEM;
 
     private String idChannel;

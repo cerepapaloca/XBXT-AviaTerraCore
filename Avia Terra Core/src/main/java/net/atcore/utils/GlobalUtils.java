@@ -22,6 +22,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.checkerframework.checker.units.qual.C;
 import org.geysermc.floodgate.api.FloodgateApi;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -616,5 +617,10 @@ public final class GlobalUtils {
     @Contract(pure = true)
     public UUID getRealUUID(Player player) {
         return GlobalUtils.getUUIDByName(getRealName(player));
+    }
+
+    @Contract(pure = true)
+    public String locationToString(Location loc){
+        return "[" + loc.getWorld().getName() + "] " + loc.getBlockX() + " " + loc.getBlockY() + " " + loc.getBlockZ();
     }
 }
