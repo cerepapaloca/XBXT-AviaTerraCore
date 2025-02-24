@@ -6,6 +6,7 @@ import net.atcore.data.FileYaml;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.DiscordBot;
 import net.atcore.security.Login.ServerMode;
+import net.atcore.security.checker.BaseChecker;
 
 public class ConfigFile extends FileYaml {
 
@@ -24,6 +25,10 @@ public class ConfigFile extends FileYaml {
         DiscordBot.consoleId = fileYaml.getString("canales-de-discord.console");
         DiscordBot.chatId = fileYaml.getString("canales-de-discord.chat-bridge", DiscordBot.chatId);
         DiscordBot.JoinAndLeave = fileYaml.getString("canales-de-discord.join-and-leave", DiscordBot.JoinAndLeave);
+
+        for (BaseChecker<?> check : BaseChecker.REGISTERED_CHECKS) {
+            check.enabled = fileYaml.getBoolean("checker." + check.getClass().getSimpleName(), check.enabled);
+        }
 
         Config.setExpirationSession(fileYaml.getLong("expiration-session", Config.getExpirationSession()));
         Config.setLevelModerationChat(fileYaml.getDouble("level-moderation-chat", Config.getLevelModerationChat()));
@@ -47,6 +52,10 @@ public class ConfigFile extends FileYaml {
         fileYaml.set("canales-de-discord.chat-bridge", DiscordBot.chatId);
         fileYaml.set("canales-de-discord.join-and-leave", DiscordBot.JoinAndLeave);
 
+        for (BaseChecker<?> check : BaseChecker.REGISTERED_CHECKS) {
+            fileYaml.set("checker." + check.getClass().getSimpleName(), check.enabled);
+        }
+
         fileYaml.set("expiration-session", Config.getExpirationSession());
         fileYaml.set("level-moderation-chat", Config.getLevelModerationChat());
         fileYaml.set("check-anti-op", Config.isCheckAntiOp());
@@ -57,6 +66,7 @@ public class ConfigFile extends FileYaml {
         fileYaml.set("chace-dupe-frame", Config.getChaceDupeFrame());
         fileYaml.set("auto-ban", Config.isAutoBan());
         fileYaml.set("password-ssl", Config.getPasswordSSL());
+
         saveConfig();
     }
 

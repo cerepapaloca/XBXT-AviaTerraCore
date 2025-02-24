@@ -94,14 +94,6 @@ public final class MessagesManager {
      * @see #sendMessage(Player, String, TypeMessages, CategoryMessages, boolean) sendMessage()
      */
 
-    public static void sendMessage(Player player, String message, @NotNull TypeMessages type) {
-        sendMessage(player, message, type, CategoryMessages.PRIVATE, true);
-    }
-
-    /**
-     * @see #sendMessage(Player, String, TypeMessages, CategoryMessages, boolean) sendMessage()
-     */
-
     public static void sendMessage(Player player, String message, @NotNull TypeMessages type, CategoryMessages categoryMessages) {
         sendMessage(player, message, type, categoryMessages, true);
     }
@@ -278,7 +270,6 @@ public final class MessagesManager {
         senders.add(Bukkit.getConsoleSender());
         for (CommandSender p : senders) {
             String message;//TODO: Incluir el dragon;
-            if (killer != null ) Bukkit.getLogger().severe(killer.getType() + " Name");
             if ((killer != null && killer.getType() != EntityType.PLAYER && (
                     cause.equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK) ||
                     cause.equals(EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK) ||

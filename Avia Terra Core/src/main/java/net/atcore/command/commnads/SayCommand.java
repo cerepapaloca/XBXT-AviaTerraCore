@@ -32,7 +32,7 @@ public class SayCommand extends BaseCommand {
                 message.append(args[i]).append(" ");
             }
             CommandUtils.executeForPlayer(sender, args[0], true, (name, player) ->
-                    MessagesManager.sendMessage(player,SUB_PREFIX + message, TypeMessages.INFO));
+                    MessagesManager.sendString(player,SUB_PREFIX + message, TypeMessages.INFO));
             MessagesManager.sendString(sender,  message.toString(), TypeMessages.INFO);
         }
     }

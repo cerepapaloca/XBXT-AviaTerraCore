@@ -98,7 +98,18 @@ public abstract class BaseWeapon extends BaseArmament implements ShootWeapon{
 
     protected void processRayShoot(Player player, BaseAmmo ammo, @Nullable BaseMagazine charger) {
         List<ShootData> data = new ArrayList<>();
-        for (int i = 0 ; i < ammo.getProjectiles() ; i++){
+        int projectiles;
+        if (ammo instanceof Shot shot){
+            projectiles = shot.getAmount();
+        }else if (charger instanceof Shot shot){
+            projectiles = shot.getAmount();
+        }else if (this instanceof Shot shot){
+            projectiles = shot.getAmount();
+        }else {
+            projectiles = 1;
+        }
+
+        for (int i = 0 ; i < projectiles; i++){
             Vector direction = player.getEyeLocation().getDirection();
             Location location = player.getEyeLocation();
             // Añade la imprecision del arma

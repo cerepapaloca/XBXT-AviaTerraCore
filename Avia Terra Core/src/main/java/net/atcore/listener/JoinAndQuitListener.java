@@ -1,7 +1,6 @@
 package net.atcore.listener;
 
 import net.atcore.AviaTerraCore;
-import net.atcore.Config;
 import net.atcore.aviaterraplayer.AviaTerraPlayer;
 import net.atcore.data.sql.DataBaseRegister;
 import net.atcore.messages.*;
@@ -80,6 +79,7 @@ public class JoinAndQuitListener implements Listener {
                 String.format(Message.EVENT_JOIN.getMessage(player), event.getPlayer().getName()),
                 TypeMessages.INFO, false, false)));
         onEnteringServer(player);
+
         new BukkitRunnable() {
             @Override
             public void run() {

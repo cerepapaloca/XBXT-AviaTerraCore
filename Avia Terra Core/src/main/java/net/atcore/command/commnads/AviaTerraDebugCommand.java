@@ -33,12 +33,12 @@ public class AviaTerraDebugCommand extends BaseTabCommand {
                 try {
                     typeTest = TypeTest.valueOf(args[0].toUpperCase());
                 }catch (Exception e) {
-                    MessagesManager.sendMessage(player, "Esta prueba no existe", TypeMessages.ERROR);
+                    MessagesManager.sendString(player, "Esta prueba no existe", TypeMessages.ERROR);
                     return;
                 }
                 typeTest.runtTest(atp);
             }else {
-                MessagesManager.sendMessage(player, this.getAviaTerraUsage().toString(), TypeMessages.ERROR);
+                MessagesManager.sendArgument(player, this.getAviaTerraUsage(), TypeMessages.ERROR);
             }
         }
     }

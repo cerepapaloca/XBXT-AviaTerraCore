@@ -37,7 +37,7 @@ public enum ContextBan {
             if (isBan.equals(IsBan.YES)) {
                 e.setCancelled(true);
                 DataBan dataBan = BanManager.getDataBan(player.getName()).get(ContextBan.CHAT);
-                MessagesManager.sendMessage(player, BanManager.formadMessageBan(dataBan), TypeMessages.KICK);
+                MessagesManager.sendString(player, BanManager.formadMessageBan(dataBan), TypeMessages.KICK);
                 return dataBan;
             }
             return null;
@@ -45,7 +45,7 @@ public enum ContextBan {
 
         @Override
         public void onBan(Player player, DataBan dataBan){
-            MessagesManager.sendMessage(player, BanManager.formadMessageBan(dataBan), TypeMessages.KICK);
+            MessagesManager.sendString(player, BanManager.formadMessageBan(dataBan), TypeMessages.KICK);
         }
     },
     GLOBAL() {

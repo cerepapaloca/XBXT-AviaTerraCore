@@ -8,14 +8,13 @@ import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
-import net.atcore.misc.FrameDupe;
+import net.atcore.misc.Dupe;
 import net.atcore.moderation.Freeze;
 import net.atcore.moderation.ban.ContextBan;
 import net.atcore.security.Login.LoginManager;
 import net.atcore.utils.GlobalConstantes;
 import net.atcore.utils.GlobalUtils;
 import net.atcore.utils.RangeType;
-import net.dv8tion.jda.api.events.channel.update.ChannelUpdateArchivedEvent;
 import net.luckperms.api.node.types.InheritanceNode;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -32,7 +31,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.ConsoleHandler;
 
 import static net.atcore.armament.BaseWeaponTarkov.checkReload;
 
@@ -67,7 +65,7 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onDamageEntity(@NotNull EntityDamageByEntityEvent event) {
-        FrameDupe.dupeItem(event);
+        Dupe.frameDupe(event);
     }
 
     private final List<String> COMMANDS_PRE_LOGIN = List.of("login", "register", "log", "reg");

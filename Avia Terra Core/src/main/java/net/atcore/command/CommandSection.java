@@ -48,7 +48,8 @@ public class CommandSection implements Section {
                 new OffHandCommand(),
                 new RemovePasswordCommand(),
                 new CrackedCommand(),
-                new KillCommand()
+                new KillCommand(),
+                new CheckersCommand()
         );
     }
 

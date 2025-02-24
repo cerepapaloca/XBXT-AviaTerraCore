@@ -44,7 +44,7 @@ public class RegisterCommand extends BaseCommand {
                         if (Objects.equals(args[0], args[1])){
                             if (args[0].length() > LENGTH_MIN_PASSWORD){
                                 if (!args[0].equalsIgnoreCase(player.getName())){
-                                    sendMessage(player, Message.COMMAND_REGISTER_SUCCESSFUL_CHAT.getMessage(player), TypeMessages.SUCCESS);
+                                    sendMessage(player, Message.COMMAND_REGISTER_SUCCESSFUL_CHAT);
                                     LoginManager.newRegisterCracked(player,  args[0]);
                                     LoginManager.startPlaySessionCracked(player).getRegister().setTemporary(false);
                                     sendDiscord(sender);

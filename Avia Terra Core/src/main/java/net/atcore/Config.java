@@ -77,6 +77,8 @@ public class Config {
 
     @Getter @Setter private String passwordSSL = "";
 
+    @Getter @Setter private boolean roofNether = true;
+
 
 
 }

@@ -5,7 +5,6 @@ import net.atcore.AviaTerraCore;
 import net.atcore.Section;
 import net.atcore.command.BaseCommand;
 import net.atcore.command.CommandHandler;
-import net.atcore.command.CommandManager;
 import net.atcore.command.CommandSection;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.MessagesManager;

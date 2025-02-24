@@ -191,6 +191,7 @@ public enum Message {
     MISC_KICK_UPPER("misc", "<dark_gray>< <b><st>           </st> <#4B2FDE>XT <#ff8C00>XB <dark_gray><st>           </st></b> >\n\n&r", NULL),
     MISC_KICK_LOWER("misc", "\n\n<dark_gray>< <st>                  </st> | <st>                  </st> >", NULL),
     MISC_WARING_ANTI_DUPE("misc", "⚠ Este Item Esta protegido, si intenta dupear se BORRA TODO tu inventario automáticamente ⚠", WARNING),
+    MISC_NETHER_ROOF("misc", "Techo del nether deshabilitado", WARNING),
     DEATH_CAUSE_KILL("death-cause", "<|%1$s|> se murió por que si", INFO),
     DEATH_CAUSE_WORLD_BORDER("death-cause","<|%1$s|> murió por el world border", INFO),
     DEATH_CAUSE_CONTACT("death-cause", "<|%1$s|> murió por estaba tocando algo que no debía", INFO),

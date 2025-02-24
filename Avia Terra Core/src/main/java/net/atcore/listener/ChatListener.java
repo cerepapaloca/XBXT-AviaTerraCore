@@ -43,7 +43,7 @@ public class ChatListener implements Listener {
         String textPlain = PlainTextComponentSerializer.plainText().serialize(message);
 
         if (!LoginManager.checkLogin(player)) {
-            sendMessage(player, Message.LOGIN_LIMBO_CHAT_WRITE.getMessage(player), TypeMessages.ERROR);
+            sendMessage(player, Message.LOGIN_LIMBO_CHAT_WRITE);
             return;
         }
 

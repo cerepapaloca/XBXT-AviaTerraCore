@@ -19,7 +19,6 @@ public class InventoryListener implements Listener {
         Player player = (Player) event.getWhoClicked();
         ClickType clickType = event.getClick();
         Inventory inventory = event.getClickedInventory() != null ? event.getClickedInventory() : player.getInventory();
-        CheckAutoBan.checkAntiIlegalItems(player, inventory);
         if (clickType.equals(ClickType.LEFT) || clickType.equals(ClickType.RIGHT)) CheckAutoBan.checkDupe(player, inventory);
         event.setCancelled(Freeze.isFreeze(player) ||
                 ActionsInventoryManager.clickEvent(event) ||
@@ -31,7 +30,6 @@ public class InventoryListener implements Listener {
     public void onInventoryOpen(@NotNull InventoryOpenEvent event) {
         Player player = (Player) event.getPlayer();
         Inventory inventory = event.getInventory();
-        CheckAutoBan.checkAntiIlegalItems(player ,inventory);
         CheckAutoBan.checkDupe(player, inventory);
         AntiExploit.checkRangePurge(inventory);
         event.setCancelled(Freeze.isFreeze(player));

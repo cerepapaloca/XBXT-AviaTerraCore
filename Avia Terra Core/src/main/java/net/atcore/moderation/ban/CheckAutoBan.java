@@ -25,6 +25,7 @@ import static net.atcore.Config.*;
 import static net.atcore.messages.MessagesManager.logConsole;
 import static org.bukkit.Material.*;
 
+@Deprecated
 public class CheckAutoBan {
 
     private static final HashMap<UUID, Long> timePunishChat = new HashMap<>();
@@ -135,33 +136,5 @@ public class CheckAutoBan {
         }.runTaskLater(AviaTerraCore.getInstance(), 1);
     }
 
-    private static final Set<Material> ILEGAL_ITEMS = Set.of(BEDROCK, END_PORTAL_FRAME, COMMAND_BLOCK, BARRIER,
-            STRUCTURE_VOID, STRUCTURE_BLOCK, REPEATING_COMMAND_BLOCK, CHAIN_COMMAND_BLOCK, COMMAND_BLOCK_MINECART, SPAWNER, REINFORCED_DEEPSLATE);
 
-    public static void checkAntiIlegalItems(Player player ,Inventory inventory) {
-        if (!Config.isCheckAntiIllegalItems())return;
-        if (player.isOp()) return;
-        boolean b = false;
-        for (ItemStack item: inventory.getContents()){
-            if (item == null) continue;
-            if (ILEGAL_ITEMS.contains(item.getType())){
-                MessagesManager.logConsole(String.format("Se eliminó <|%s|> de <|%s|>", item.getType().toString().toLowerCase(), player.getName()), TypeMessages.WARNING, CategoryMessages.PLAY);
-                item.setAmount(0);
-                b = true;
-            }
-        }
-        if (!isAutoBan()) return;
-        if (!b)return;
-
-        AviaTerraCore.enqueueTaskAsynchronously( () -> {
-            try {
-                ModerationSection.getBanManager().banPlayer(player, Message.BAN_AUTO_BAN_ILEGAL_ITEMS.getMessage(player),
-                        1000 * 60 * 60 * 24 * 10L, ContextBan.GLOBAL, Message.BAN_AUTHOR_AUTO_BAN.getMessage(player));
-            }catch (Exception e) {
-                MessagesManager.logConsole(String.format(Message.BAN_ERROR.getMessage(player), player.getName(),  Message.BAN_AUTO_BAN_SPAM.getMessage(player)), TypeMessages.ERROR);
-                throw new RuntimeException(e);
-            }
-        });
-        player.getInventory().clear();
-    }
 }

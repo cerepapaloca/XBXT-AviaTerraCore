@@ -144,13 +144,28 @@ public class AviaTerraCommand extends BaseTabCommand {
                 }else{
                     sendString(sender,"El sistema autoBan esta <|" + CommandUtils.booleanToString(Config.isAutoBan()) + "|>", TypeMessages.INFO);
                 }
+                DataSection.getConfigFile().saveData();
+            }
+            case "roofnether" -> {
+                if (args.length >= 2) {
+                    if (CommandUtils.isTrueOrFalse(args[1])){
+                        Config.setRoofNether(true);
+                        sendString(sender,"Techo del nether <|Activado|>", TypeMessages.INFO);
+                    }else{
+                        Config.setRoofNether(false);
+                        sendString(sender,"Techo del nether <|Desactivado|>", TypeMessages.INFO);
+                    }
+                }else{
+                    sendString(sender,"Techo del nether esta <|" + CommandUtils.booleanToString(Config.isRoofNether()) + "|>", TypeMessages.INFO);
+                }
+                DataSection.getConfigFile().saveData();
             }
         }
     }
 
     @Override
     public List<String> onTab(CommandSender sender, String[] args) {
-        String[] argsRoot = new String[]{"antiBot","reload", "antiOp", "antiIlegalItems", "serverMode", "checkBanPorIp", "purgaRangos","tiempoDeSession", "levelModerationChat", "autoBan"};
+        String[] argsRoot = new String[]{"antiBot","reload", "antiOp", "antiIlegalItems", "serverMode", "checkBanPorIp", "purgaRangos","tiempoDeSession", "levelModerationChat", "autoBan", "roofNether"};
         if (args.length >= 2) {
             switch (args[0].toLowerCase().replace("_","")) {
                 case "antiop", "antiilegalitems", "checkbanporip", "antiBot", "autban" -> {

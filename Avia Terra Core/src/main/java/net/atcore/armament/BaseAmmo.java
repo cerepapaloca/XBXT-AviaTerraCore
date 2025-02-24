@@ -3,7 +3,6 @@ package net.atcore.armament;
 import lombok.Getter;
 import lombok.Setter;
 import net.atcore.utils.GlobalUtils;
-import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -17,16 +16,14 @@ public abstract class BaseAmmo extends BaseArmament {
 
     protected BaseAmmo(double damage,
                        String displayName,
-                       float penetration,
-                       int projectiles
+                       float penetration
     ) {
         this(damage,
                 displayName,
                 Color.fromRGB(80,80,80),
                 false,
                 1F,
-                penetration,
-                projectiles
+                penetration
         );
     }
 
@@ -35,8 +32,7 @@ public abstract class BaseAmmo extends BaseArmament {
                        Color color,
                        boolean isTrace,
                        float densityTrace,
-                       float penetration,
-                       int projectiles
+                       float penetration
     ) {
         super(displayName, new ItemStack(Material.END_ROD), "ammo");
         this.damage = damage;
@@ -44,7 +40,6 @@ public abstract class BaseAmmo extends BaseArmament {
         this.isTrace = isTrace;
         this.densityTrace = densityTrace;
         this.penetration = penetration;
-        this.projectiles = projectiles;
         updateLore(itemArmament, null);
     }
 
@@ -53,7 +48,6 @@ public abstract class BaseAmmo extends BaseArmament {
     private final Color color;
     private final boolean isTrace;
     private final float densityTrace;
-    private final int projectiles;
 
     public String getProperties(){
         StringBuilder properties = new StringBuilder();

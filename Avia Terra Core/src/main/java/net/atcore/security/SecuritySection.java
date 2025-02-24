@@ -3,6 +3,8 @@ package net.atcore.security;
 import lombok.Getter;
 import net.atcore.Section;
 import net.atcore.security.Login.SimulateOnlineMode;
+import net.atcore.security.checker.AntiIlegal;
+import net.atcore.security.checker.RoofNether;
 
 public class SecuritySection implements Section {
 
@@ -15,6 +17,8 @@ public class SecuritySection implements Section {
     public void enable() {
         encryptService = new EncryptService();
         simulateOnlineMode = new SimulateOnlineMode();
+        new RoofNether();
+        new AntiIlegal();
     }
 
     @Override

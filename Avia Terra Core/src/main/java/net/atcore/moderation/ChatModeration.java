@@ -12,8 +12,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Set;
 
-import static net.atcore.messages.MessagesManager.sendMessage;
-import static net.atcore.messages.MessagesManager.logConsole;
+import static net.atcore.messages.MessagesManager.*;
 
 
 public class ChatModeration {
@@ -31,7 +30,7 @@ public class ChatModeration {
             logConsole(bukkitPlayer.getName() + " » &7" + message + "&c [ELIMINADO: Spam]", TypeMessages.INFO, CategoryMessages.MODERATION);
             double second = (puntos)/(Config.getLevelModerationChat());//formula para calcular el tiempo que le fata para volver a escribir
             long secondLong = Math.round(Math.abs(second));
-            sendMessage(bukkitPlayer, "mensaje eliminado por Spam espera <|" + secondLong + "|> segundos", TypeMessages.ERROR);
+            sendString(bukkitPlayer, "mensaje eliminado por Spam espera <|" + secondLong + "|> segundos", TypeMessages.ERROR);
             return true;
         }else {
             puntos = puntos - ((message.length()*3F) + 70F);//por cada letra más puntos le resta y por cada mensaje resta 15
@@ -72,7 +71,7 @@ public class ChatModeration {
                     message.contains(word.replace("ñ", "n"))
             ){
                 logConsole( player.getName() + " » &7" + message + "&c [ELIMINADO: Malas Palabras]", TypeMessages.INFO, CategoryMessages.MODERATION);
-                sendMessage(player, "mensaje eliminado por qué contiene palabras inadecuadas", TypeMessages.ERROR);
+                sendString(player, "mensaje eliminado por qué contiene palabras inadecuadas", TypeMessages.ERROR);
                 return true;
             }
         }
