@@ -92,7 +92,7 @@ public class DiscordBot extends ListenerAdapter{
                             "https://xbxt.xyz"
                     ));
                 }
-            }.runTaskTimerAsynchronously(AviaTerraCore.getInstance(), 0L, 20L);
+            }.runTaskTimerAsynchronously(AviaTerraCore.getInstance(), 0L, 20L*2);
         }
     }
 

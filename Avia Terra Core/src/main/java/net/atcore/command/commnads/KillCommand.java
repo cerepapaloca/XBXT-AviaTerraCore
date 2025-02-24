@@ -11,7 +11,11 @@ import org.bukkit.entity.Player;
 public class KillCommand extends BaseCommand {
 
     public KillCommand() {
-        super("kill", new ArgumentUse("kill"), CommandVisibility.PUBLIC, "Te matás");
+        super("kill",
+                new ArgumentUse("kill"),
+                CommandVisibility.PUBLIC,
+                "Te matás"
+        );
     }
 
     @Override

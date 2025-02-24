@@ -145,6 +145,7 @@ public class CheckAutoBan {
         for (ItemStack item: inventory.getContents()){
             if (item == null) continue;
             if (ILEGAL_ITEMS.contains(item.getType())){
+                MessagesManager.logConsole(String.format("Se eliminó <|%s|> de <|%s|>", item.getType().toString().toLowerCase(), player.getName()), TypeMessages.WARNING, CategoryMessages.PLAY);
                 item.setAmount(0);
                 b = true;
             }

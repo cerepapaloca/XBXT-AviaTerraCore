@@ -68,7 +68,7 @@ public class TpaCommand extends BaseTabCommand implements CommandAliase {
                         }
                         if (player != null) {
                             AviaTerraPlayer atp = AviaTerraPlayer.getPlayer(player);
-                            MessagesManager.sendFormatMessage(sender, Message.COMMAND_TPA_SEND, p.getName());
+                            MessagesManager.sendFormatMessage(sender, Message.COMMAND_TPA_SEND, player.getName());
                             MessagesManager.sendFormatMessage(atp.getPlayer(), Message.COMMAND_TPA_RECEIVE, p.getName());
                             atp.getListTpa().add(new TpaRequest(p.getUniqueId(), System.currentTimeMillis() + 1000*60*5));
                         }else {

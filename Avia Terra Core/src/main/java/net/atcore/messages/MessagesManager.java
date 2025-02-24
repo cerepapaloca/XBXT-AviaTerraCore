@@ -52,7 +52,7 @@ public final class MessagesManager {
     /// ////////////////////////
 
     public static void sendFormatMessage(@NotNull CommandSender sender, @NotNull Message message, Object... args) {
-        sendMessage(sender, String.format(message.getMessage(sender), args), message.getTypeMessages(), CategoryMessages.PRIVATE, false);
+        sendMessage(sender, String.format(message.getMessage(sender), args), message.getTypeMessages(), CategoryMessages.PRIVATE, true);
     }
 
     public static void sendFormatMessage(@NotNull CommandSender sender, @NotNull Message message, CategoryMessages category, Object... args) {

@@ -159,7 +159,7 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onTeleport(@NotNull PlayerTeleportEvent event) {
         Player player = event.getPlayer();
-        MessagesManager.logConsole(String.format("EL jugador: <|%S|> se teletransportó de %s a %s por %s",
+        MessagesManager.logConsole(String.format("EL jugador: <|%S|> se teletransportó de <|%s|> a <|%s|> por <|%s|>",
                 player.getName(),
                 GlobalUtils.locationToString(event.getFrom()),
                 GlobalUtils.locationToString(event.getTo()),

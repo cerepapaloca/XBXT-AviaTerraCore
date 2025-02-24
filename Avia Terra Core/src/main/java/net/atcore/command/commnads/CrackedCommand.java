@@ -8,7 +8,6 @@ import net.atcore.command.Confirmable;
 import net.atcore.data.sql.DataBaseRegister;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
-import net.atcore.messages.TypeMessages;
 import net.atcore.security.Login.LoginManager;
 import net.atcore.security.Login.StateLogins;
 import net.atcore.security.Login.model.LoginData;
