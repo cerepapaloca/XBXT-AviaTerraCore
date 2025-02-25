@@ -42,9 +42,6 @@ public final class CommandHandler implements TabExecutor {
                     return true;
                 }
             }
-            if (sender instanceof Player player) {
-               if (AntiExploit.checkOpAndCreative(player))return false;// mirar si el jugador tiene creativo o es OP
-            }
             try {
                 if (sender instanceof Player player) {
                     if (CommandUtils.hasPermission(command, command.getVisibility(), player, true)) {

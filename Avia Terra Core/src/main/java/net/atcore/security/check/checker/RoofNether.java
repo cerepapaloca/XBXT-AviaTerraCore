@@ -1,7 +1,8 @@
-package net.atcore.security.checker;
+package net.atcore.security.check.checker;
 
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
+import net.atcore.security.check.BaseChecker;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.World;
@@ -16,7 +17,7 @@ public class RoofNether extends BaseChecker<PlayerMoveEvent> {
     public void onCheck(PlayerMoveEvent event) {
         Player player = event.getPlayer();
         World world = player.getWorld();
-        if (world.isUltraWarm()){
+        if (world.getEnvironment() == World.Environment.NETHER){
             Location location = player.getLocation();
             if (location.getBlockY() > 127){
                 Location loc = location.clone().add(0, -6, 0);

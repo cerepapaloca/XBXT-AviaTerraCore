@@ -173,7 +173,7 @@ public enum Message {
     COMMAND_TPA_SEND("command.tpa", "Solicitud enviada a %s", INFO),
     COMMAND_TPA_WAS_DISCONNECTED("command.tpa", "El jugador que te invito se desconecto", ERROR),
     COMMAND_TPA_NO_FOUND("command.tpa", "No tienes solicitudes de tpa", ERROR),
-    COMMAND_TPA_RECEIVE("command.tpa", "Tienes una solicitud de %s Tpa, Click para <click:run_command:/tpa y><green>[Aceptar]</click> |!>o <click:run_command:/tpa n><green><red>[Denegar]</click> ", INFO),
+    COMMAND_TPA_RECEIVE("command.tpa", "Tienes una solicitud de <|%s|> Tpa, Click para <click:run_command:/tpa y><green>[Aceptar]</click> |!>o <click:run_command:/tpa n><green><red>[Denegar]</click> ", INFO),
     COMMAND_TPA_SELF("command.tpa", "No puedes enviar una solicitud a ti mismo", ERROR),
     COMMAND_TPA_EXPIRE("command.tpa","Ya expiro el la solicitud de tpa", ERROR),
     COMMAND_HOME_ADD_SUCCESSFUL("command.home", "El home fue creado", SUCCESS),

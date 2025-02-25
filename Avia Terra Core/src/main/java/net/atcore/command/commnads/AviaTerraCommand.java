@@ -34,21 +34,6 @@ public class AviaTerraCommand extends BaseTabCommand {
                 AviaTerraCore.getInstance().reloadConfig();
                 AviaTerraCore.enqueueTaskAsynchronously(() -> sendString(sender,"Reload Terminado", TypeMessages.SUCCESS));
             }
-            case "antiop" -> {
-                if (args.length >= 2) {
-                    if (CommandUtils.isTrueOrFalse(args[1])){
-                        Config.setCheckAntiOp(true);
-                        sendString(sender,"Anti Op <|Activado|>", TypeMessages.INFO);
-                    }else{
-                        Config.setCheckAntiOp(false);
-                        sendString(sender,"Anti Op <|Desactivado|>", TypeMessages.INFO);
-                    }
-
-                }else{
-                    sendString(sender,"El anti Op esta <|" + CommandUtils.booleanToString(Config.isCheckAntiOp()) + "|>", TypeMessages.INFO);
-                }
-                DataSection.getConfigFile().saveData();
-            }
             case "antiilegalitems" -> {
                 if (args.length >= 2) {
                     if (CommandUtils.isTrueOrFalse(args[1])){
@@ -132,20 +117,6 @@ public class AviaTerraCommand extends BaseTabCommand {
                 }
                 DataSection.getConfigFile().saveData();
             }
-            case "autoban" -> {
-                if (args.length >= 2) {
-                    if (CommandUtils.isTrueOrFalse(args[1])){
-                        Config.setAutoBan(true);
-                        sendString(sender,"autoBan <|Activado|>", TypeMessages.INFO);
-                    }else{
-                        Config.setAutoBan(false);
-                        sendString(sender,"autoBan <|Desactivado|>", TypeMessages.INFO);
-                    }
-                }else{
-                    sendString(sender,"El sistema autoBan esta <|" + CommandUtils.booleanToString(Config.isAutoBan()) + "|>", TypeMessages.INFO);
-                }
-                DataSection.getConfigFile().saveData();
-            }
             case "roofnether" -> {
                 if (args.length >= 2) {
                     if (CommandUtils.isTrueOrFalse(args[1])){
@@ -165,10 +136,10 @@ public class AviaTerraCommand extends BaseTabCommand {
 
     @Override
     public List<String> onTab(CommandSender sender, String[] args) {
-        String[] argsRoot = new String[]{"antiBot","reload", "antiOp", "antiIlegalItems", "serverMode", "checkBanPorIp", "purgaRangos","tiempoDeSession", "levelModerationChat", "autoBan", "roofNether"};
+        String[] argsRoot = new String[]{"antiBot","reload", "antiIlegalItems", "serverMode", "checkBanPorIp", "purgaRangos","tiempoDeSession", "levelModerationChat"};
         if (args.length >= 2) {
             switch (args[0].toLowerCase().replace("_","")) {
-                case "antiop", "antiilegalitems", "checkbanporip", "antiBot", "autban" -> {
+                case "antiop", "antiilegalitems", "checkbanporip" -> {
                     return CommandUtils.listTab(args[1], "true", "false");
                 }
                 case "servermode" -> {

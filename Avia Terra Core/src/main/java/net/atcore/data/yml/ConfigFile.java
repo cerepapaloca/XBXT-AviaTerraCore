@@ -6,7 +6,7 @@ import net.atcore.data.FileYaml;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.DiscordBot;
 import net.atcore.security.Login.ServerMode;
-import net.atcore.security.checker.BaseChecker;
+import net.atcore.security.check.BaseChecker;
 
 public class ConfigFile extends FileYaml {
 
@@ -32,13 +32,10 @@ public class ConfigFile extends FileYaml {
 
         Config.setExpirationSession(fileYaml.getLong("expiration-session", Config.getExpirationSession()));
         Config.setLevelModerationChat(fileYaml.getDouble("level-moderation-chat", Config.getLevelModerationChat()));
-        Config.setCheckAntiOp(fileYaml.getBoolean("check-anti-op", Config.isCheckAntiOp()));
         Config.setPurgeTagRange(fileYaml.getLong("purge-tag-range", Config.getPurgeTagRange()));
-        Config.setCheckAntiIllegalItems(fileYaml.getBoolean("check-anti-illegal-items", Config.isCheckAntiIllegalItems()));
         Config.setCheckBanByIp(fileYaml.getBoolean("check-ban-by-ip", Config.isCheckBanByIp()));
         Config.setServerMode(ServerMode.valueOf(fileYaml.getString("server-mode", Config.getServerMode().name().toLowerCase()).toUpperCase()));
         Config.setChaceDupeFrame(fileYaml.getDouble("chace-dupe-frame", Config.getChaceDupeFrame()));
-        Config.setAutoBan(fileYaml.getBoolean("auto-ban", Config.isAutoBan()));
         Config.setPasswordSSL(fileYaml.getString("password-ssl", Config.getPasswordSSL()));
         AviaTerraCore.setActiveTime(fileYaml.getLong("active-time", 0));
         saveData(); // Se guarda por si hay una liena faltante en la configuración
@@ -58,13 +55,10 @@ public class ConfigFile extends FileYaml {
 
         fileYaml.set("expiration-session", Config.getExpirationSession());
         fileYaml.set("level-moderation-chat", Config.getLevelModerationChat());
-        fileYaml.set("check-anti-op", Config.isCheckAntiOp());
         fileYaml.set("purge-tag-range", Config.getPurgeTagRange());
-        fileYaml.set("check-anti-illegal-items", Config.isCheckAntiIllegalItems());
         fileYaml.set("check-ban-by-ip", Config.isCheckBanByIp());
         fileYaml.set("server-mode", Config.getServerMode().name().toLowerCase());
         fileYaml.set("chace-dupe-frame", Config.getChaceDupeFrame());
-        fileYaml.set("auto-ban", Config.isAutoBan());
         fileYaml.set("password-ssl", Config.getPasswordSSL());
 
         saveConfig();

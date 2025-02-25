@@ -28,8 +28,7 @@ import org.jetbrains.annotations.NotNull;
 
 import static net.atcore.messages.Message.EVENT_CHAT_HOVER;
 import static net.atcore.messages.MessagesManager.sendMessage;
-import static net.atcore.messages.MessagesManager.sendString;
-import static net.atcore.moderation.ban.CheckAutoBan.checkAutoBanChat;
+
 @Setter
 @Getter
 public class ChatListener implements Listener {
@@ -47,7 +46,6 @@ public class ChatListener implements Listener {
             return;
         }
 
-        checkAutoBanChat(player , textPlain);//se le va a banear?
         if (ContextBan.CHAT.onContext(player, event) != null){//está baneado?
             return;
         }

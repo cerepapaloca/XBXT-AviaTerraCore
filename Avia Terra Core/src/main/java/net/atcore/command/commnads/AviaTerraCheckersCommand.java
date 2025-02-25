@@ -1,24 +1,27 @@
 package net.atcore.command.commnads;
 
+import net.atcore.AviaTerraCore;
 import net.atcore.command.ArgumentUse;
 import net.atcore.command.BaseTabCommand;
 import net.atcore.command.CommandUtils;
 import net.atcore.command.CommandVisibility;
+import net.atcore.data.DataSection;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
-import net.atcore.security.checker.BaseChecker;
+import net.atcore.security.check.BaseChecker;
 import org.bukkit.command.CommandSender;
 
 import java.util.List;
 
-public class CheckersCommand extends BaseTabCommand {
+public class AviaTerraCheckersCommand extends BaseTabCommand {
 
-    public CheckersCommand() {
+    public AviaTerraCheckersCommand() {
         super("checkers",
                 new ArgumentUse("Checkers"),
                 CommandVisibility.PRIVATE,
                 null
         );
+        addAlias("atc");
     }
 
 
@@ -38,6 +41,7 @@ public class CheckersCommand extends BaseTabCommand {
                     if (check.getClass().getSimpleName().equalsIgnoreCase(args[0])) {
                         check.enabled = CommandUtils.isTrueOrFalse(args[1]);
                         MessagesManager.sendString(sender, String.format("El %s se cambio a %s", check.getClass().getSimpleName(), CommandUtils.booleanToString(check.enabled)), TypeMessages.INFO);
+                        AviaTerraCore.enqueueTaskAsynchronously(() -> DataSection.getConfigFile().saveData());
                         return;
                     }
                 }

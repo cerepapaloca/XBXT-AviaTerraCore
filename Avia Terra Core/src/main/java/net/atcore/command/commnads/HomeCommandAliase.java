@@ -48,7 +48,7 @@ public class HomeCommandAliase extends BaseTabCommand implements CommandAliase {
                         l.setWorld(player.getWorld());
                         double distance = player.getLocation().distance(l);
                         // Esto quiere decir si está en el nether
-                        if (player.getWorld().isUltraWarm()) distance *= 8;
+                        if (player.getWorld().getEnvironment() == World.Environment.NETHER) distance *= 8;
                         int distanceMinTp = 100;
                         if (distance > distanceMinTp){
                             player.getWorld().spawnParticle(Particle.PORTAL, player.getLocation(), 10, 0.5, 1,0.5);

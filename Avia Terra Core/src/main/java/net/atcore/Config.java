@@ -16,13 +16,6 @@ public class Config {
     @Getter @Setter private boolean checkAntiIllegalItems = false;
 
     /**
-     * Al momento de ejecutar un comando se revisa si es op
-     * si esí se lo quita (esto no aplica en local host)
-     */
-
-    @Getter @Setter private boolean checkAntiOp = false;
-
-    /**
      * Habilitará el protocolo de encriptación de minecraft
      * para los usuarios premium. Mientras los cracked no tiene
      * que pasar por este protocolo. Sí se deshabilita todos los
@@ -72,8 +65,6 @@ public class Config {
      */
 
     @Getter @Setter private double chaceDupeFrame = 0.5;
-
-    @Getter @Setter private boolean autoBan = false;
 
     @Getter @Setter private String passwordSSL = "";
 
