@@ -95,7 +95,7 @@ public class AviaTerraCore extends JavaPlugin {
         registerPermission();
         startMOTD();
         startBroadcast();
-        //startAutoSaveTime();
+        startAutoSaveTime();
         startAutoRestart();
         isStarting = false;
         messageOn(startTime);
@@ -292,7 +292,7 @@ public class AviaTerraCore extends JavaPlugin {
                 MessagesManager.logConsole("Reinició automático iniciado", TypeMessages.INFO, CategoryMessages.SYSTEM);
                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "passiverestart");
             }
-        }.runTaskLater(this, 20*60*60*24L);
+        }.runTaskLater(this, 20*60*60*24L*2);
     }
 
 

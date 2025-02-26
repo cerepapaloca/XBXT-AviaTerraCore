@@ -7,6 +7,7 @@ import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.DiscordBot;
 import net.atcore.security.Login.ServerMode;
 import net.atcore.security.check.BaseChecker;
+import org.bukkit.Bukkit;
 
 public class ConfigFile extends FileYaml {
 
@@ -25,10 +26,6 @@ public class ConfigFile extends FileYaml {
         DiscordBot.consoleId = fileYaml.getString("canales-de-discord.console");
         DiscordBot.chatId = fileYaml.getString("canales-de-discord.chat-bridge", DiscordBot.chatId);
         DiscordBot.JoinAndLeave = fileYaml.getString("canales-de-discord.join-and-leave", DiscordBot.JoinAndLeave);
-
-        for (BaseChecker<?> check : BaseChecker.REGISTERED_CHECKS) {
-            check.enabled = fileYaml.getBoolean("checker." + check.getClass().getSimpleName(), check.enabled);
-        }
 
         Config.setExpirationSession(fileYaml.getLong("expiration-session", Config.getExpirationSession()));
         Config.setLevelModerationChat(fileYaml.getDouble("level-moderation-chat", Config.getLevelModerationChat()));

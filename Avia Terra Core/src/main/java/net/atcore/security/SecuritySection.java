@@ -2,11 +2,14 @@ package net.atcore.security;
 
 import lombok.Getter;
 import net.atcore.Section;
+import net.atcore.data.DataSection;
 import net.atcore.security.Login.SimulateOnlineMode;
+import net.atcore.security.check.BaseChecker;
 import net.atcore.security.check.checker.AntiIlegalBlock;
 import net.atcore.security.check.checker.AntiIlegalItem;
 import net.atcore.security.check.checker.AntiOP;
 import net.atcore.security.check.checker.RoofNether;
+import org.bukkit.Bukkit;
 
 public class SecuritySection implements Section {
 
@@ -23,6 +26,13 @@ public class SecuritySection implements Section {
         new RoofNether();
         new AntiOP();
         new AntiIlegalBlock();
+        init();
+    }
+
+    private void init() {
+        for (BaseChecker<?> check : BaseChecker.REGISTERED_CHECKS) {
+            check.enabled = DataSection.getConfigFile().getConfig().getBoolean("checker." + check.getClass().getSimpleName(), check.enabled);
+        }
     }
 
     @Override
@@ -32,7 +42,7 @@ public class SecuritySection implements Section {
 
     @Override
     public void reload() {
-
+        init();
     }
 
     @Override
