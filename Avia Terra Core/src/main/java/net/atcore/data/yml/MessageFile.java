@@ -1,13 +1,14 @@
 package net.atcore.data.yml;
 
-import net.atcore.data.DataSection;
 import net.atcore.data.FileYaml;
 import net.atcore.messages.LocaleAvailable;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
 import org.bukkit.entity.EntityType;
 
-import java.util.*;
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class MessageFile extends FileYaml {

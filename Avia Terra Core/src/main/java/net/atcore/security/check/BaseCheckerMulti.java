@@ -20,6 +20,7 @@ public abstract class BaseCheckerMulti extends BaseChecker<Event>  {
         }
     }
 
+    @Override
     protected void instance(Event event) {
         for (Class<? extends Event> eventClass : eventClasses) {
             if (eventClass.isInstance(event)) {

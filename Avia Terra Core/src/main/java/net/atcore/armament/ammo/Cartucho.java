@@ -8,9 +8,6 @@ public final class Cartucho extends BaseAmmo implements Shot {
     public Cartucho() {
         super(2,
                 "Cartucho de escopeta",
-                Color.fromRGB(180,20,20),
-                true,
-                1,
                 2
         );
     }

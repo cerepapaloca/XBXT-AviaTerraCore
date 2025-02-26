@@ -42,13 +42,10 @@ import net.atcore.utils.GlobalUtils;
 
 public class SimulateOnlineMode {
 
-
-    @Getter
-    private static final HashMap<String, InetAddress> IPS = new HashMap<>();
     public static final HashMap<String, BasicDataPlayer> MAP_TOKENS = new HashMap<>();
     public static final HashMap<String, Verification> LIST_UUID_PREMIUM = new HashMap<>();
 
-    public void startEncryption(Player player, PacketContainer packet){
+    public void startProtocol(Player player, PacketContainer packet){
 
         if (player.getAddress() == null){
             GlobalUtils.kickPlayer(player, Message.LOGIN_KICK_GENERIC.getMessage(player));

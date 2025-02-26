@@ -18,38 +18,17 @@ public abstract class BaseAmmo extends BaseArmament {
                        String displayName,
                        float penetration
     ) {
-        this(damage,
-                displayName,
-                Color.fromRGB(80,80,80),
-                false,
-                1F,
-                penetration
-        );
-    }
-
-    protected BaseAmmo(double damage,
-                       String displayName,
-                       Color color,
-                       boolean isTrace,
-                       float densityTrace,
-                       float penetration
-    ) {
         super(displayName, new ItemStack(Material.END_ROD), "ammo");
         this.damage = damage;
-        this.color = color;
-        this.isTrace = isTrace;
-        this.densityTrace = densityTrace;
         this.penetration = penetration;
         updateLore(itemArmament, null);
     }
 
     private final float penetration;
     private final double damage;
-    private final Color color;
-    private final boolean isTrace;
-    private final float densityTrace;
 
     public String getProperties(){
+        boolean isTrace = this instanceof Trace;
         StringBuilder properties = new StringBuilder();
         properties.append(String.format("""
                   \n
@@ -63,12 +42,13 @@ public abstract class BaseAmmo extends BaseArmament {
                 isTrace ? "<|si|>" : "<|no|>"
         ));
         if (!isTrace) return properties.toString();
+        Trace trace = (Trace) this;
         properties.append(String.format("""
                                     Color: <|%s|>
                                     Densidad del trazo: <|%s|>
                                     """,
-                "<" + GlobalUtils.BukkitColorToStringHex(color) + ">" + GlobalUtils.BukkitColorToStringHex(color),
-                densityTrace
+                "<" + GlobalUtils.BukkitColorToStringHex(trace.getColorTrace()) + ">" + GlobalUtils.BukkitColorToStringHex(trace.getColorTrace()),
+                trace.getDensityTrace()
         ));
         return properties.toString();
     }

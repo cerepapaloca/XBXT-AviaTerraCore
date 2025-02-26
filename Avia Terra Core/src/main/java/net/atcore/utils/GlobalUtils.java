@@ -22,7 +22,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
-import org.checkerframework.checker.units.qual.C;
 import org.geysermc.floodgate.api.FloodgateApi;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -30,6 +29,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.net.InetAddress;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -251,6 +252,16 @@ public final class GlobalUtils {
             ProtocolLibrary.getProtocolManager().sendServerPacket(player, kickPack);
         }else {
             player.kick(GlobalUtils.chatColorLegacyToComponent(finalReason));
+        }
+    }
+
+    private static final MessageDigest MD;
+
+    static {
+        try {
+            MD = MessageDigest.getInstance("MD5");
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
         }
     }
 

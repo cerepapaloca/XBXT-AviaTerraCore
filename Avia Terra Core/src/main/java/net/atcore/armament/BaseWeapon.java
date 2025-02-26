@@ -168,7 +168,9 @@ public abstract class BaseWeapon extends BaseArmament implements ShootWeapon{
             }else {
                 finalLocation = ArmamentUtils.getLookLocation(directionRandom, location, distance, 0.25);
             }
-            ArmamentUtils.drawParticleLine(player.getEyeLocation(), finalLocation, ammo.getColor(), ammo.getDensityTrace());
+            if (ammo instanceof Trace trace){
+                ArmamentUtils.drawParticleLine(player.getEyeLocation(), finalLocation, trace.getColorTrace(), trace.getDensityTrace());
+            }
         }
 
         onShoot(data);

@@ -122,8 +122,6 @@ public class AviaTerraCore extends JavaPlugin {
         }
     }
 
-
-
     public static long getActiveTime(){
         return activeTime + (System.currentTimeMillis() - startTime);
     }
@@ -141,7 +139,7 @@ public class AviaTerraCore extends JavaPlugin {
                 GlobalUtils.kickPlayer(player, "El servidor va a cerrar, volveremos pronto..."));
         TASK_QUEUE.clear();
         DiscordBot.handler.shutdown();
-        MessagesManager.logConsole("AviaTerra Se fue a dormir cómodamente", TypeMessages.SUCCESS, CategoryMessages.PRIVATE, false);
+        MessagesManager.logConsole("AviaTerra Se fue a dormir cómodamente", TypeMessages.SUCCESS, CategoryMessages.SYSTEM, false);
     }
 
     @Override

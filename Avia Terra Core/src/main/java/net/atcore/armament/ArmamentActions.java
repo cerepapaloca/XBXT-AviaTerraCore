@@ -2,6 +2,7 @@ package net.atcore.armament;
 
 import lombok.experimental.UtilityClass;
 import net.atcore.aviaterraplayer.AviaTerraPlayer;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
@@ -25,6 +26,7 @@ public class ArmamentActions {
     }
 
     public boolean outAction(ClickType clickType, Player player, ItemStack currentItem) {
+        if (currentItem.getItemMeta() == null) return false;
         if (clickType == ClickType.SWAP_OFFHAND) {
             Compartment compartment = ArmamentUtils.getCompartment(currentItem);
             if (compartment != null) {

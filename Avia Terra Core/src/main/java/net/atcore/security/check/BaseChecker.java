@@ -6,26 +6,24 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryEvent;
 import org.bukkit.event.inventory.InventoryInteractEvent;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.plugin.EventExecutor;
-import org.codehaus.plexus.interpolation.PrefixedObjectValueSource;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 public abstract class BaseChecker<T extends Event> implements Listener {
 
     public static final HashSet<BaseChecker<? extends Event>> REGISTERED_CHECKS = new HashSet<>();
 
-    protected Class<T> eventClass;
+
     protected final EventExecutor eventExecutor;
     protected boolean byPassOp = true;
     public boolean enabled = true;
+    private Class<T> eventClass;
 
     @SuppressWarnings("unchecked")
     public BaseChecker() {
@@ -37,8 +35,8 @@ public abstract class BaseChecker<T extends Event> implements Listener {
                     if (playerEvent.getPlayer().isOp()) {
                         return;
                     }
-                }else if (event instanceof InventoryInteractEvent interactEvent) {
-                    if (interactEvent.getWhoClicked().isOp()) {
+                }else if (event instanceof InventoryEvent inventoryEvent) {
+                    if (inventoryEvent.getView().getPlayer().isOp()) {
                         return;
                     }
                 }

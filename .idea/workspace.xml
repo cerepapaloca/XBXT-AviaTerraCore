@@ -9,11 +9,23 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ea0f4ef9-10c7-4d19-b67e-e1a9046efa9d" name="Changes" comment="se añadió BaseCheckerMulti">
+    <list default="true" id="ea0f4ef9-10c7-4d19-b67e-e1a9046efa9d" name="Changes" comment="cambios menores">
+      <change afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/Trace.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/data/yml/ConfigFile.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/data/yml/ConfigFile.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/SecuritySection.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/SecuritySection.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/resources/plugin.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/AviaTerraCore.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/AviaTerraCore.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/ArmamentActions.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/ArmamentActions.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/BaseAmmo.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/BaseAmmo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/BaseWeapon.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/BaseWeapon.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/ammo/Cartucho.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/ammo/Cartucho.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/ammo/MM45Otan.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/ammo/MM45Otan.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/ammo/MM45OtanVerde.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/ammo/MM45OtanVerde.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/ammo/MMxxPrueba.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/ammo/MMxxPrueba.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/data/yml/MessageFile.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/data/yml/MessageFile.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/listener/PacketListenerManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/listener/PacketListenerManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/Login/SimulateOnlineMode.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/Login/SimulateOnlineMode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/check/BaseChecker.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/check/BaseChecker.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/check/BaseCheckerMulti.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/check/BaseCheckerMulti.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/utils/GlobalUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/utils/GlobalUtils.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,8 +60,8 @@
         <option value="JUnit5 Test Class" />
         <option value="AnnotationType" />
         <option value="Enum" />
-        <option value="Interface" />
         <option value="Class" />
+        <option value="Interface" />
       </list>
     </option>
   </component>
@@ -401,15 +413,10 @@
       <workItem from="1740413337797" duration="10782000" />
       <workItem from="1740424350179" duration="16430000" />
       <workItem from="1740497597920" duration="8494000" />
-      <workItem from="1740534408076" duration="4717000" />
-    </task>
-    <task id="LOCAL-00023" summary="refactor y mejoras al mode limbo">
-      <option name="closed" value="true" />
-      <created>1735844349784</created>
-      <option name="number" value="00023" />
-      <option name="presentableId" value="LOCAL-00023" />
-      <option name="project" value="LOCAL" />
-      <updated>1735844349784</updated>
+      <workItem from="1740534408076" duration="5345000" />
+      <workItem from="1740541301802" duration="740000" />
+      <workItem from="1740543397077" duration="1027000" />
+      <workItem from="1740577051107" duration="5136000" />
     </task>
     <task id="LOCAL-00024" summary="La Shotgun on Top!!">
       <option name="closed" value="true" />
@@ -795,14 +802,21 @@
       <option name="project" value="LOCAL" />
       <updated>1740507301175</updated>
     </task>
-    <option name="localTasksCounter" value="72" />
+    <task id="LOCAL-00072" summary="cambios menores">
+      <option name="closed" value="true" />
+      <created>1740539666707</created>
+      <option name="number" value="00072" />
+      <option name="presentableId" value="LOCAL-00072" />
+      <option name="project" value="LOCAL" />
+      <updated>1740539666708</updated>
+    </task>
+    <option name="localTasksCounter" value="73" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Las pequeñas acciones da grandes resultados" />
     <MESSAGE value="+ Commando Discord y vote" />
     <MESSAGE value="bug fix con los de bedrock y mejoras en los logs" />
     <MESSAGE value="beta de del chat bridge" />
@@ -827,7 +841,8 @@
     <MESSAGE value="mini fix con el prefijo de algunos mensajes y fix del bot de discord" />
     <MESSAGE value="mejorando los checkers" />
     <MESSAGE value="se añadió BaseCheckerMulti" />
-    <option name="LAST_COMMIT_MESSAGE" value="se añadió BaseCheckerMulti" />
+    <MESSAGE value="cambios menores" />
+    <option name="LAST_COMMIT_MESSAGE" value="cambios menores" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

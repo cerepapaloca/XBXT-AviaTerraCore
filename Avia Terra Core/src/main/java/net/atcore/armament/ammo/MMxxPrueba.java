@@ -11,9 +11,6 @@ public final class MMxxPrueba extends BaseAmmo {
     public MMxxPrueba() {
         super(10,
                 "prueba",
-                Color.fromRGB(255,255,255),
-                false,
-                2,
                 10
         );
     }
