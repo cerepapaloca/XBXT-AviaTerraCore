@@ -7,12 +7,15 @@ import net.atcore.command.BaseTabCommand;
 import net.atcore.command.CommandUtils;
 import net.atcore.command.CommandVisibility;
 import net.atcore.data.DataSection;
+import net.atcore.data.yml.MapArtFile;
 import net.atcore.messages.TypeMessages;
 import net.atcore.security.Login.ServerMode;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.command.CommandSender;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static net.atcore.messages.MessagesManager.sendString;
 
@@ -33,20 +36,6 @@ public class AviaTerraCommand extends BaseTabCommand {
             case "reload" -> {
                 AviaTerraCore.getInstance().reloadConfig();
                 AviaTerraCore.enqueueTaskAsynchronously(() -> sendString(sender,"Reload Terminado", TypeMessages.SUCCESS));
-            }
-            case "antiilegalitems" -> {
-                if (args.length >= 2) {
-                    if (CommandUtils.isTrueOrFalse(args[1])){
-                        Config.setCheckAntiIllegalItems(true);
-                        sendString(sender,"Anti Items Ilegales <|Activado|>", TypeMessages.INFO);
-                    }else{
-                        Config.setCheckAntiIllegalItems(false);
-                        sendString(sender,"Anti Items Ilegales <|Desactivado|>", TypeMessages.INFO);
-                    }
-                }else{
-                    sendString(sender,"el Anti Items Ilegales esta <|" + CommandUtils.booleanToString(Config.isCheckAntiIllegalItems()) + "|>", TypeMessages.INFO);
-                }
-                DataSection.getConfigFile().saveData();
             }
             case "servermode" -> {
                 if (args.length >= 2) {
@@ -117,26 +106,37 @@ public class AviaTerraCommand extends BaseTabCommand {
                 }
                 DataSection.getConfigFile().saveData();
             }
-            case "roofnether" -> {
+            case "mapart" -> {
                 if (args.length >= 2) {
-                    if (CommandUtils.isTrueOrFalse(args[1])){
-                        Config.setRoofNether(true);
-                        sendString(sender,"Techo del nether <|Activado|>", TypeMessages.INFO);
-                    }else{
-                        Config.setRoofNether(false);
-                        sendString(sender,"Techo del nether <|Desactivado|>", TypeMessages.INFO);
+                    switch (args[1]) {
+                        case "add" -> {
+                            List<Integer> list = new ArrayList<>();
+                            for (int i = 4; i < args.length; i++){
+                                list.add(Integer.parseInt(args[i]));
+                            }
+                            String[] size = args[2].split(",");
+                            MapArtFile.MapData mapArt = new MapArtFile.MapData(args[3], list, Integer.parseInt(size[0]), Integer.parseInt(size[1]));
+                            MapArtFile.MAP_DATA_LIST.add(mapArt);
+                            AviaTerraCore.enqueueTaskAsynchronously(() -> DataSection.getMapArtsFiles().getConfigFile(mapArt.getId(), true).saveData());
+                        }
+                        case "remove" -> {
+                            MapArtFile.MapData mapArt = MapArtFile.getMapData(args[2]);
+                            if (mapArt == null) {
+                                sendString(sender, "El art no existe", TypeMessages.ERROR);
+                                return;
+                            }
+                            MapArtFile.MAP_DATA_LIST.remove(mapArt);
+                            DataSection.getMapArtsFiles().deleteConfigFile(mapArt.getId());
+                        }
                     }
-                }else{
-                    sendString(sender,"Techo del nether esta <|" + CommandUtils.booleanToString(Config.isRoofNether()) + "|>", TypeMessages.INFO);
                 }
-                DataSection.getConfigFile().saveData();
             }
         }
     }
 
     @Override
     public List<String> onTab(CommandSender sender, String[] args) {
-        String[] argsRoot = new String[]{"antiBot","reload", "antiIlegalItems", "serverMode", "checkBanPorIp", "purgaRangos","tiempoDeSession", "levelModerationChat"};
+        String[] argsRoot = new String[]{"antiBot","reload", "mapArt", "serverMode", "checkBanPorIp", "purgaRangos","tiempoDeSession", "levelModerationChat"};
         if (args.length >= 2) {
             switch (args[0].toLowerCase().replace("_","")) {
                 case "antiop", "antiilegalitems", "checkbanporip" -> {
@@ -150,6 +150,30 @@ public class AviaTerraCommand extends BaseTabCommand {
                 }
                 case "levelmoderationchat" -> {
                     return List.of("#.#");
+                }
+                case "mapart" -> {
+                    if (args.length >= 3) {
+                        switch (args[1].toLowerCase()) {
+                            case "add" -> {
+                                switch (args.length) {
+                                    case 3 -> {
+                                        return List.of("X,Y");
+                                    }
+                                    case 4 -> {
+                                        return null;
+                                    }
+                                    default -> {
+                                        return List.of("#");
+                                    }
+                                }
+                            }
+                            case "remove" -> {
+                                return MapArtFile.MAP_DATA_LIST.stream().map(MapArtFile.MapData::getId).collect(Collectors.toList());
+                            }
+                        }
+                    }else {
+                        return CommandUtils.listTab(args[1], "add", "remove");
+                    }
                 }
             }
         }

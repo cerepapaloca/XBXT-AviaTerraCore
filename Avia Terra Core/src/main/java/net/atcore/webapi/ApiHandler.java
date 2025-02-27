@@ -7,10 +7,12 @@ import io.undertow.util.HttpString;
 import net.atcore.AviaTerraCore;
 import net.atcore.Config;
 import net.atcore.messages.MessagesManager;
+import org.bukkit.Bukkit;
 
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import java.io.File;
+import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyStore;
 import java.util.HashMap;
@@ -39,7 +41,7 @@ public final class ApiHandler {
             Undertow server = Undertow.builder()
                     .addHttpsListener(8443, "0.0.0.0", sslContext)
                     .setHandler(exchange -> {
-                        exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "application/json");
+
                         exchange.getResponseHeaders().put(HttpString.tryFromString(ACCESS_CONTROL_ALLOW_ORIGIN), "*");
                         exchange.getResponseHeaders().put(HttpString.tryFromString(ACCESS_CONTROL_ALLOW_METHODS), "GET, POST, OPTIONS");
                         exchange.getResponseHeaders().put(HttpString.tryFromString(ACCESS_CONTROL_ALLOW_HEADERS), "Content-Type, Authorization");
@@ -52,18 +54,37 @@ public final class ApiHandler {
                         for (BaseApi api : APIS) {
                             if (!exchange.getRequestPath().startsWith("/" + api.getIdentifier())) continue;
                             exchange.setStatusCode(200);
-                            if (api.isJson) {
-                                Object o = api.onRequest(exchange);
-                                if (o instanceof File file) {
-                                    exchange.getResponseSender().send(Files.asCharSource(file, StandardCharsets.UTF_8).read());
-                                }else {
-                                    exchange.getResponseSender().send(gson.toJson(null));
-                                }
+
+
+                            Object o = api.onRequest(exchange);
+
+                            if (o == null) {
+                                exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, ContentType.APPLICATION_JSON.getType());
+                                exchange.setStatusCode(404);
+                                exchange.getResponseSender().send(gson.toJson(null));
+                                return;
                             }else {
-                                exchange.getResponseSender().send(gson.toJson(api.onRequest(exchange)));
+                                exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, api.getContentType().getType());
+                            }
+
+                            switch (api.getContentType()) {
+                                case APPLICATION_JSON -> {
+                                    if (o instanceof File file) {
+                                        exchange.getResponseSender().send(Files.asCharSource(file, StandardCharsets.UTF_8).read());
+                                    }else {
+                                        exchange.getResponseSender().send(gson.toJson(o));
+                                    }
+                                }
+                                case IMAGE_PNG -> {
+                                    if (o instanceof byte[] image) {
+                                        exchange.getResponseHeaders().put(Headers.CONTENT_LENGTH, image.length);
+                                        exchange.getResponseSender().send(ByteBuffer.wrap(image));
+                                    }
+                                }
                             }
                             return;
                         }
+                        exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, ContentType.APPLICATION_JSON.getType());
                         exchange.setStatusCode(404);
                         HashMap<String, String[]> response = new HashMap<>();
                         response.put("Allow Sections", APIS.stream().map(BaseApi::getIdentifier).toArray(String[]::new));

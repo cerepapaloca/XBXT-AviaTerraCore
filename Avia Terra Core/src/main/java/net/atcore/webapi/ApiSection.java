@@ -1,9 +1,8 @@
 package net.atcore.webapi;
 
 import net.atcore.Section;
-import net.atcore.webapi.response.Commands;
-import net.atcore.webapi.response.PlayerStats;
-import net.atcore.webapi.response.Statistic;
+import net.atcore.data.yml.MapArtFile;
+import net.atcore.webapi.response.*;
 
 @SuppressWarnings("InstantiationOfUtilityClass")
 public class ApiSection implements Section {
@@ -15,6 +14,8 @@ public class ApiSection implements Section {
         new Statistic();
         new Commands();
         new PlayerStats();
+        new MapArtData();
+        new MapArtImg();
     }
 
     @Override

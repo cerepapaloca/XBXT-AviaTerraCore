@@ -3,6 +3,7 @@ package net.atcore.webapi.response;
 import io.undertow.server.HttpServerExchange;
 import net.atcore.command.CommandHandler;
 import net.atcore.webapi.BaseApi;
+import net.atcore.webapi.ContentType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.List;
 public class Commands extends BaseApi {
 
     public Commands() {
-        super("commands");
+        super("commands", ContentType.APPLICATION_JSON);
     }
 
     @Override

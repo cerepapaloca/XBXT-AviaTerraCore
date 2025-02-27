@@ -11,6 +11,7 @@ import net.atcore.data.txt.BroadcastMessageFile;
 import net.atcore.data.txt.MOTDFile;
 import net.atcore.data.yml.*;
 import net.atcore.data.yml.ymls.CacheLimboFlies;
+import net.atcore.data.yml.ymls.MapArtsFiles;
 import net.atcore.data.yml.ymls.MessagesLocaleFile;
 import net.atcore.data.yml.ymls.PlayersDataFiles;
 import net.atcore.messages.MessagesManager;
@@ -27,6 +28,7 @@ public class DataSection implements Section {
     @Getter private static ConfigFile configFile;
     @Getter private static CacheVoteFile cacheVoteFile;
     @Getter private static MessagesLocaleFile messagesLocaleFile;
+    @Getter private static MapArtsFiles mapArtsFiles;
 
     @Override
     public void enable() {
@@ -42,6 +44,7 @@ public class DataSection implements Section {
         playersDataFiles = new PlayersDataFiles();
         cacheVoteFile = new CacheVoteFile();
         cacheLimboFlies = new CacheLimboFlies();
+        mapArtsFiles = new MapArtsFiles();
 
         for (DataBaseMySql db : DATA_BASE) db.createTable();
         for (File fileYaml : FILES) fileYaml.loadData();
@@ -70,7 +73,8 @@ public class DataSection implements Section {
                 if (!AviaTerraCore.isStarting()) MessagesManager.logConsole(String.format("Archivo %s recargador exitosamente", file), TypeMessages.SUCCESS);
             }
             cacheLimboFlies.reloadConfigs();
-            MessagesManager.logConsole("La cache del limbo fue recarga exitosamente", TypeMessages.SUCCESS);
+            mapArtsFiles.reloadConfigs();
+            MessagesManager.logConsole("Archivos recargador exitosamente", TypeMessages.SUCCESS);
         });
     }
 

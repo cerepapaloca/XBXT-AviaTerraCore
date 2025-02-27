@@ -216,7 +216,7 @@ public final class MessagesManager {
     }
 
     private static void sendMessageLogDiscord(TypeMessages type, CategoryMessages categoryMessages, String message) {
-        Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(),() -> {
+        AviaTerraCore.enqueueTaskAsynchronously(() -> {
             String finalMessage;
             switch (type) {
                 case SUCCESS -> finalMessage = "🟩 " + message;

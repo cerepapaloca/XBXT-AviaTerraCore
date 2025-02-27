@@ -6,6 +6,7 @@ import net.atcore.Config;
 import net.atcore.security.Login.LoginManager;
 import net.atcore.utils.GlobalUtils;
 import net.atcore.webapi.BaseApi;
+import net.atcore.webapi.ContentType;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -16,7 +17,7 @@ import java.util.Map;
 public class Statistic extends BaseApi {
 
     public Statistic() {
-        super("statistic");
+        super("statistic", ContentType.APPLICATION_JSON);
     }
 
     @Override
