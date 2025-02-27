@@ -9,13 +9,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ea0f4ef9-10c7-4d19-b67e-e1a9046efa9d" name="Changes" comment="se añadió el soporte a los map Arts">
+    <list default="true" id="ea0f4ef9-10c7-4d19-b67e-e1a9046efa9d" name="Changes" comment="fix con un bucle con los log">
+      <change afterPath="$PROJECT_DIR$/Avia Terra Core/libs/authlib-3.13.56.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Avia Terra Core/libs/craftapi-0.8.1.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/AviaTerraCore.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/AviaTerraCore.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/data/DataSection.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/data/DataSection.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/data/yml/MapArtFile.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/data/yml/MapArtFile.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/messages/MessagesManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/messages/MessagesManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/resources/plugin.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/command/commnads/NameColorCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/command/commnads/NameColorCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -167,11 +166,11 @@
       <recent name="net.atcore.security.Encrypt" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Cagut\IdeaProjects\Avia-Terra\Avia Terra Core\libs" />
       <recent name="C:\Users\Cagut\IdeaProjects\Avia-Terra\Avia Terra Core\src\main\resources" />
       <recent name="C:\Users\Cagut\IdeaProjects\Avia-Terra\Avia Terra Spring\src\main\resources\META-INF" />
       <recent name="C:\Users\Cagut\IdeaProjects\Avia-Terra\AviaTerraSpring\src\main\resources\META-INF" />
       <recent name="C:\Users\Cagut\IdeaProjects\Avia-Terra\AviaTerraSpring\src\main\resources" />
-      <recent name="C:\Users\Cagut\IdeaProjects\Avia-Terra\Avia Terra Core\libs" />
     </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
       <recent name="net.atsb" />
@@ -410,15 +409,7 @@
       <workItem from="1740609440227" duration="241000" />
       <workItem from="1740626150703" duration="6024000" />
       <workItem from="1740632228710" duration="1921000" />
-      <workItem from="1740665659234" duration="13575000" />
-    </task>
-    <task id="LOCAL-00026" summary="No hay aviaTerra?">
-      <option name="closed" value="true" />
-      <created>1735946720041</created>
-      <option name="number" value="00026" />
-      <option name="presentableId" value="LOCAL-00026" />
-      <option name="project" value="LOCAL" />
-      <updated>1735946720041</updated>
+      <workItem from="1740665659234" duration="21575000" />
     </task>
     <task id="LOCAL-00027" summary="Sistemas de vote y MOTD">
       <option name="closed" value="true" />
@@ -804,14 +795,21 @@
       <option name="project" value="LOCAL" />
       <updated>1740682927068</updated>
     </task>
-    <option name="localTasksCounter" value="75" />
+    <task id="LOCAL-00075" summary="fix con un bucle con los log">
+      <option name="closed" value="true" />
+      <created>1740684508439</created>
+      <option name="number" value="00075" />
+      <option name="presentableId" value="LOCAL-00075" />
+      <option name="project" value="LOCAL" />
+      <updated>1740684508439</updated>
+    </task>
+    <option name="localTasksCounter" value="76" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="beta de del chat bridge" />
     <MESSAGE value="back-end por fin!!!" />
     <MESSAGE value="Back-end ahora sí. ¡Por fin!!!" />
     <MESSAGE value="Mejorando la api" />
@@ -836,7 +834,8 @@
     <MESSAGE value="cambios menores" />
     <MESSAGE value="Mejoras en las armas" />
     <MESSAGE value="se añadió el soporte a los map Arts" />
-    <option name="LAST_COMMIT_MESSAGE" value="se añadió el soporte a los map Arts" />
+    <MESSAGE value="fix con un bucle con los log" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix con un bucle con los log" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
