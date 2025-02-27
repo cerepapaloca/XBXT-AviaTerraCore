@@ -215,6 +215,7 @@ public final class MessagesManager {
         return AviaTerraCore.getMiniMessage().deserialize(s);
     }
 
+
     private static void sendMessageLogDiscord(TypeMessages type, CategoryMessages categoryMessages, String message) {
         AviaTerraCore.enqueueTaskAsynchronously(() -> {
             String finalMessage;

@@ -23,7 +23,6 @@ public class MapArtFile extends FileYaml {
         List<?> raws = fileYaml.getList("maps-ids");
         if (raws == null) return;
         List<Integer> mapsIds = raws.stream().filter(raw -> raw instanceof Integer).map(raw -> (Integer) raw).toList();
-        Bukkit.getLogger().info("Loaded " + mapsIds + " maps");
         MapArtFile.MAP_DATA_LIST.add(new MapData(author, mapsIds, cols, rows));
     }
 

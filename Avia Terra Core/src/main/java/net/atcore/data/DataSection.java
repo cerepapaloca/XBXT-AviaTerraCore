@@ -38,7 +38,7 @@ public class DataSection implements Section {
         new Discord();
         new Email();
         new MOTDFile();
-        new BroadcastMessageFile();
+        new BroadcastMessageFile(); // TODO: Tengo un lio con los datos hay que refactorizar todo esto
         configFile = new ConfigFile();
         messagesLocaleFile = new MessagesLocaleFile();
         playersDataFiles = new PlayersDataFiles();

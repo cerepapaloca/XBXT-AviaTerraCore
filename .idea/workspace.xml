@@ -9,25 +9,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ea0f4ef9-10c7-4d19-b67e-e1a9046efa9d" name="Changes" comment="Mejoras en las armas">
-      <change afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/data/yml/MapArtFile.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/data/yml/ymls/MapArtsFiles.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/webapi/ContentType.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/webapi/response/MapArtData.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/webapi/response/MapArtImg.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/AviaTerra_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/AviaTerra_jar.xml" afterDir="false" />
+    <list default="true" id="ea0f4ef9-10c7-4d19-b67e-e1a9046efa9d" name="Changes" comment="se añadió el soporte a los map Arts">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/command/commnads/AviaTerraCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/command/commnads/AviaTerraCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/AviaTerraCore.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/AviaTerraCore.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/data/DataSection.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/data/DataSection.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/data/yml/MapArtFile.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/data/yml/MapArtFile.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/messages/MessagesManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/messages/MessagesManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/check/checker/AntiIlegalBlock.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/check/checker/AntiIlegalBlock.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/webapi/ApiHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/webapi/ApiHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/webapi/ApiSection.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/webapi/ApiSection.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/webapi/BaseApi.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/webapi/BaseApi.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/webapi/response/Commands.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/webapi/response/Commands.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/webapi/response/PlayerStats.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/webapi/response/PlayerStats.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/webapi/response/Statistic.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/webapi/response/Statistic.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/resources/plugin.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -422,15 +410,7 @@
       <workItem from="1740609440227" duration="241000" />
       <workItem from="1740626150703" duration="6024000" />
       <workItem from="1740632228710" duration="1921000" />
-      <workItem from="1740665659234" duration="11833000" />
-    </task>
-    <task id="LOCAL-00025" summary="TextComponent ON TOP!!!!!">
-      <option name="closed" value="true" />
-      <created>1735876934354</created>
-      <option name="number" value="00025" />
-      <option name="presentableId" value="LOCAL-00025" />
-      <option name="project" value="LOCAL" />
-      <updated>1735876934354</updated>
+      <workItem from="1740665659234" duration="13575000" />
     </task>
     <task id="LOCAL-00026" summary="No hay aviaTerra?">
       <option name="closed" value="true" />
@@ -816,14 +796,21 @@
       <option name="project" value="LOCAL" />
       <updated>1740590377924</updated>
     </task>
-    <option name="localTasksCounter" value="74" />
+    <task id="LOCAL-00074" summary="se añadió el soporte a los map Arts">
+      <option name="closed" value="true" />
+      <created>1740682927068</created>
+      <option name="number" value="00074" />
+      <option name="presentableId" value="LOCAL-00074" />
+      <option name="project" value="LOCAL" />
+      <updated>1740682927068</updated>
+    </task>
+    <option name="localTasksCounter" value="75" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="bug fix con los de bedrock y mejoras en los logs" />
     <MESSAGE value="beta de del chat bridge" />
     <MESSAGE value="back-end por fin!!!" />
     <MESSAGE value="Back-end ahora sí. ¡Por fin!!!" />
@@ -848,7 +835,8 @@
     <MESSAGE value="se añadió BaseCheckerMulti" />
     <MESSAGE value="cambios menores" />
     <MESSAGE value="Mejoras en las armas" />
-    <option name="LAST_COMMIT_MESSAGE" value="Mejoras en las armas" />
+    <MESSAGE value="se añadió el soporte a los map Arts" />
+    <option name="LAST_COMMIT_MESSAGE" value="se añadió el soporte a los map Arts" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
