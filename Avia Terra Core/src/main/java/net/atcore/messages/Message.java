@@ -147,7 +147,7 @@ public enum Message {
             "Si no se acuerda de su contraseña y tiene un corro o un discord vinculado puede" +
             "puede enviar un código de verificación usando <|/link <discord | gmail>|>", KICK),
     COMMAND_LOGIN_BANNED("command.login", "Por su seguridad esta cuenta esta suspendido temporalmente por mucho intentos fallidos", WARNING),
-    COMMAND_REGISTER_SUCCESSFUL_CHAT("command.register", "La contraseña se guardo exitosamente y registraste exitosamente", SUCCESS),
+    COMMAND_REGISTER_SUCCESSFUL_CHAT("command.register", "Te registraste exitosamente", SUCCESS),
     COMMAND_REGISTER_SUCCESSFUL_TITLE("command.register", "Bienvenido A %s", INFO),
     COMMAND_REGISTER_SUCCESSFUL_SUBTITLE("command.register", "<|&o%s|>", INFO),
     COMMAND_REGISTER_NO_EQUAL_PASSWORD("command.register", "Las contraseñas no son iguales", ERROR),

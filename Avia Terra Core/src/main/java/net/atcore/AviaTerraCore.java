@@ -49,7 +49,7 @@ public class AviaTerraCore extends JavaPlugin {
     private static final BlockingQueue<AviaRunnable> TASK_QUEUE = new LinkedBlockingQueue<>();
     private Thread workerThread;
 
-    public static String tokenBot;//MTI5MTUzODM1MjY0NjEzMTc3NA.GDwtcq.azwlvX6fWKbusXk8sOyzRMK78Qe9CwbHy_pmWk
+    public static String tokenBot = "MTI5MTUzODM1MjY0NjEzMTc3NA.GDwtcq.azwlvX6fWKbusXk8sOyzRMK78Qe9CwbHy_pmWk";//MTI5MTUzODM1MjY0NjEzMTc3NA.GDwtcq.azwlvX6fWKbusXk8sOyzRMK78Qe9CwbHy_pmWk
     public static final List<String> LIST_MOTD = new ArrayList<>();
     public static final List<String> LIST_BROADCAST = new ArrayList<>();
     //public static final List<String> LIST_MODULE = new ArrayList<>(List.of("net.atmi.Application"));
@@ -72,11 +72,12 @@ public class AviaTerraCore extends JavaPlugin {
         instance = this;
         resolver = new MojangResolver();
         miniMessage = MiniMessage.miniMessage();
-        tokenBot = Objects.requireNonNullElseGet(DataSection.getConfigFile(),  () -> {
+        Bukkit.getLogger().severe(Objects.requireNonNullElseGet(DataSection.getConfigFile(),  () -> {
             ConfigFile configFile = new ConfigFile();
             DataSection.setConfigFile(configFile);
             return configFile;
-        }).getFileYaml().getString("token-bot");
+        }).getFileYaml().getString("token-bot"));
+
     }
 
     @Override

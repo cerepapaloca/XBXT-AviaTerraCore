@@ -149,12 +149,12 @@ public final class MessagesManager {
     ///////////////////////////
 
     public static void sendErrorException(String message, Exception exception) {
-        sendMessageLogDiscord(TypeMessages.ERROR, CategoryMessages.SYSTEM, String.format("%s [%s=%s]", message, exception.getClass().getSimpleName(), exception.getMessage()));
+        //sendMessageLogDiscord(TypeMessages.ERROR, CategoryMessages.SYSTEM, String.format("%s [%s=%s]", message, exception.getClass().getSimpleName(), exception.getMessage()));
         AviaTerraCore.getInstance().getLogger().severe(setFormatException(message, exception));
     }
 
     public static void sendWaringException(String message, Exception exception) {
-        sendMessageLogDiscord(TypeMessages.WARNING, CategoryMessages.SYSTEM, String.format("%s [%s=%s]", message, exception.getClass().getSimpleName(), exception.getMessage()));
+        //sendMessageLogDiscord(TypeMessages.WARNING, CategoryMessages.SYSTEM, String.format("%s [%s=%s]", message, exception.getClass().getSimpleName(), exception.getMessage()));
         AviaTerraCore.getInstance().getLogger().warning(setFormatException(message, exception));
     }
 
