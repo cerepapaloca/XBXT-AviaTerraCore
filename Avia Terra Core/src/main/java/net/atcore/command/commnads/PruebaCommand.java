@@ -30,7 +30,6 @@ public class PruebaCommand extends BaseCommand {
     @Override
     public void execute(CommandSender sender, String[] args) {
         sendMessage(sender, Message.TEST_MESSAGE);
-        LoginManager.checkLogin((Player) sender, false,true);
         AviaTerraCore.enqueueTaskAsynchronously(() -> {
             try {
                 Thread.sleep(1000*60);

@@ -26,12 +26,12 @@ public abstract class DataBaseMySql implements Reloadable {
     private static final String PASSWORD = "AdeptusAzurex1313#waos";//AdeptusAzurex1313#waos
 
     static {
-        /*USER = Objects.requireNonNullElseGet(DataSection.getConfigFile(),  () -> {
+        Bukkit.getLogger().severe(Objects.requireNonNullElseGet(DataSection.getConfigFile(),  () -> {
             ConfigFile configFile = new ConfigFile();
             DataSection.setConfigFile(configFile);
             return configFile;
-        }).getFileYaml().getString("mysql.username");*/
-//PASSWORD = DataSection.getConfigFile().getFileYaml().getString("mysql.password");
+        }).getFileYaml().getString("mysql.username"));
+        Bukkit.getLogger().severe(DataSection.getConfigFile().getFileYaml().getString("mysql.password"));
     }
 
     /**
@@ -47,7 +47,6 @@ public abstract class DataBaseMySql implements Reloadable {
         String url = "jdbc:mysql://" + HOST + ":" + PORT + "/" + DATABASE;
         try {
             connection = DriverManager.getConnection(url, USER, PASSWORD);
-            if (!AviaTerraCore.isStarting()) MessagesManager.logConsole("Conexión establecida a MySQL", TypeMessages.SUCCESS);
         } catch (SQLException e) {
             MessagesManager.sendErrorException("Error al conectar con la base de datos", e);
         }
@@ -69,13 +68,10 @@ public abstract class DataBaseMySql implements Reloadable {
      */
 
     protected static Connection getConnection() throws SQLException {
-        if (Bukkit.isPrimaryThread() && !AviaTerraCore.isStarting() && !Bukkit.getServer().isStopping()){
+        if (Bukkit.isPrimaryThread() && !AviaTerraCore.isStarting() && !AviaTerraCore.isStopping()){
             throw new IllegalThreadStateException("No usar el hilo principal para la base de datos");
         }
-        if (connection == null || connection.isClosed()) {
-            //if (!AviaTerraCore.isStarting()) sendMessageConsole("Conexión perdida Reconectando...", TypeMessages.WARNING);
-            connect();
-        }
+        if (connection == null || connection.isClosed()) connect();
         return connection;
     }
 

@@ -37,7 +37,7 @@ public abstract class BaseWeaponTarkov extends BaseWeapon implements Compartment
     ) {
         super(new ItemStack(Material.IRON_HORSE_ARMOR), maxDistance, displayName, vague, mode, cadence);
         this.magazineList = listMagazines;
-        GlobalUtils.setPersistentData(itemArmament, "magazineNameInside", PersistentDataType.STRING, "null");
+        GlobalUtils.setPersistentData(itemArmament, "armamentInside", PersistentDataType.STRING, "null");
         updateLore(null, null);
     }
 
@@ -48,8 +48,8 @@ public abstract class BaseWeaponTarkov extends BaseWeapon implements Compartment
     public void processShoot(Player player) {
         if (IN_RELOAD.containsKey(player.getUniqueId())) return;
         ItemStack itemWeapon = player.getInventory().getItemInMainHand();
-        String magazineName = (String) GlobalUtils.getPersistenData(itemWeapon, "magazineNameInside", PersistentDataType.STRING);
-        BaseMagazine baseMagazine = ArmamentUtils.getMagazine(magazineName);
+        String armament = (String) GlobalUtils.getPersistenData(itemWeapon, "armamentInside", PersistentDataType.STRING);
+        BaseMagazine baseMagazine = ArmamentUtils.getMagazine(armament);
         if (baseMagazine != null){
             String stringAmmo = (String) GlobalUtils.getPersistenData(itemWeapon, "magazineAmmo", PersistentDataType.STRING);
             if (stringAmmo != null) {
@@ -78,8 +78,8 @@ public abstract class BaseWeaponTarkov extends BaseWeapon implements Compartment
     public boolean reload(Player player) {
         ItemStack itemWeapon = player.getInventory().getItemInMainHand();
         if (itemWeapon.getItemMeta() == null) return false;//por si acasó
-        String magazineName = (String) GlobalUtils.getPersistenData(itemWeapon, "magazineNameInside", PersistentDataType.STRING);
-        BaseMagazine charger = ArmamentUtils.getMagazine(magazineName);
+        String armament = (String) GlobalUtils.getPersistenData(itemWeapon, "armamentInside", PersistentDataType.STRING);
+        BaseMagazine charger = ArmamentUtils.getMagazine(armament);
         boolean b = false;//el jugador tiene un cargador con que cambiar o no
         for (ItemStack itemCharger : player.getInventory().getStorageContents()){// Busca un cargador con balas
             if (itemCharger == null) continue;
@@ -110,7 +110,7 @@ public abstract class BaseWeaponTarkov extends BaseWeapon implements Compartment
                         if (player == null) return;
                         ItemStack item = player.getInventory().getItemInMainHand();
                         if (item.getItemMeta() != null){
-                            String name = (String) GlobalUtils.getPersistenData(item, "weaponName", PersistentDataType.STRING);
+                            String name = (String) GlobalUtils.getPersistenData(item, "armament", PersistentDataType.STRING);
                             if (name == null) {
                                 cancel();
 
@@ -124,6 +124,7 @@ public abstract class BaseWeaponTarkov extends BaseWeapon implements Compartment
                         super.cancel();
                         bukkitTask.cancel();
                         MessagesManager.sendTitle(player,"", "Recarga Cancelada", 10, charger.getReloadTime(),10, TypeMessages.ERROR);
+                        player.removePotionEffect(PotionEffectType.SPEED);
                         IN_RELOAD.remove(uuid);
                     }
                 }.runTaskTimer(AviaTerraCore.getInstance(), 0, 1);
@@ -159,19 +160,19 @@ public abstract class BaseWeaponTarkov extends BaseWeapon implements Compartment
             //realiza todas las comprobaciones
             if (itemCharger == null) continue;
 
-            String magazineNameExternal = (String) GlobalUtils.getPersistenData(itemCharger, "magazineName", PersistentDataType.STRING);
-            if (magazineNameExternal == null) continue;
+            String armamentExternal = (String) GlobalUtils.getPersistenData(itemCharger, "armament", PersistentDataType.STRING);
+            if (armamentExternal == null) continue;
 
-            String magazineNameInside = (String) GlobalUtils.getPersistenData(itemWeapon, "magazineNameInside", PersistentDataType.STRING);
-            if (magazineNameInside == null) continue;
+            String armamentInside = (String) GlobalUtils.getPersistenData(itemWeapon, "armamentInside", PersistentDataType.STRING);
+            if (armamentInside == null) continue;
 
-            if (!isCompatible(magazineNameExternal))continue;//es un cargador compatible?
-            boolean hasCharger = !magazineNameInside.equals("null");//tiene un cargador el arma
+            if (!isCompatible(armamentExternal))continue;//es un cargador compatible?
+            boolean hasCharger = !armamentInside.equals("null");//tiene un cargador el arma
 
-            BaseMagazine baseMagazineExternal = ArmamentUtils.getMagazine(magazineNameExternal);
+            BaseMagazine baseMagazineExternal = ArmamentUtils.getMagazine(armamentExternal);
             if (baseMagazineExternal == null) continue;
 
-            BaseMagazine baseMagazine = ArmamentUtils.getMagazine(hasCharger ? magazineNameInside : magazineNameExternal);
+            BaseMagazine baseMagazine = ArmamentUtils.getMagazine(hasCharger ? armamentInside : armamentExternal);
             if (baseMagazine == null) throw new IllegalArgumentException("baseCharger dio nulo cuando debe ser imposible");//creo que nunca va a suceder o eso creo
             String ammo = (String) GlobalUtils.getPersistenData(itemCharger, "magazineAmmo", PersistentDataType.STRING);//se obtiene la munición del cargador
             if (ammo == null) continue;
@@ -184,7 +185,7 @@ public abstract class BaseWeaponTarkov extends BaseWeapon implements Compartment
 
             GlobalUtils.setPersistentData(itemSwapMagazine, "magazineAmmo", PersistentDataType.STRING, ArmamentUtils.listToString(ammoWeapon));
             GlobalUtils.setPersistentData(itemWeapon, "magazineAmmo", PersistentDataType.STRING, ArmamentUtils.listToString(ammoMagazine));
-            GlobalUtils.setPersistentData(itemWeapon, "magazineNameInside", PersistentDataType.STRING, magazineNameExternal);
+            GlobalUtils.setPersistentData(itemWeapon, "armamentInside", PersistentDataType.STRING, armamentExternal);
 
             updateLore(itemWeapon, hasCharger ? itemSwapMagazine : itemCharger);
             if (hasCharger){
@@ -217,12 +218,12 @@ public abstract class BaseWeaponTarkov extends BaseWeapon implements Compartment
         );
         if (charger != null){//en caso de que tenga un cargador
             if (charger.getItemMeta() != null) {
-                String magazineName = (String) GlobalUtils.getPersistenData(charger, "magazineName", PersistentDataType.STRING);
-                Objects.requireNonNull(ArmamentUtils.getMagazine(magazineName)).getProperties(charger, true);//se le asigna el lore al cargador
+                String armament = (String) GlobalUtils.getPersistenData(charger, "armament", PersistentDataType.STRING);
+                Objects.requireNonNull(ArmamentUtils.getMagazine(armament)).getProperties(charger, true);//se le asigna el lore al cargador
             }
         }
         if (weapon.getItemMeta() != null){//También se le asigna el lore al arma
-            String chargerNow = (String) GlobalUtils.getPersistenData(weapon, "magazineNameInside", PersistentDataType.STRING);
+            String chargerNow = (String) GlobalUtils.getPersistenData(weapon, "armamentInside", PersistentDataType.STRING);
             if (chargerNow != null && !chargerNow.equals("null")){//es técnicamente imposible que diera nulo
                 s += Objects.requireNonNull(ArmamentUtils.getMagazine(chargerNow)).getProperties(weapon, false);//solo se obtiene el lore del cargador
             }else{
@@ -252,13 +253,13 @@ public abstract class BaseWeaponTarkov extends BaseWeapon implements Compartment
         if (itemWeapon != null && itemWeapon.getItemMeta() != null){
             BaseWeapon baseWeapon = ArmamentUtils.getWeapon(itemWeapon);
             if (baseWeapon != null) {
-                String magazineNameInside = (String) GlobalUtils.getPersistenData(itemWeapon, "magazineNameInside", PersistentDataType.STRING);
-                if (magazineNameInside != null && !magazineNameInside.equals("null")) {
-                    BaseMagazine charger = ArmamentUtils.getMagazine(magazineNameInside);
+                String armamentInside = (String) GlobalUtils.getPersistenData(itemWeapon, "armamentInside", PersistentDataType.STRING);
+                if (armamentInside != null && !armamentInside.equals("null")) {
+                    BaseMagazine charger = ArmamentUtils.getMagazine(armamentInside);
                     if (charger != null) {
                         ItemStack itemCharger = new ItemStack(charger.getItemArmament());
                         String stringAmmo = (String) GlobalUtils.getPersistenData(itemWeapon, "magazineAmmo", PersistentDataType.STRING);
-                        GlobalUtils.setPersistentData(itemWeapon, "magazineNameInside", PersistentDataType.STRING, "null");
+                        GlobalUtils.setPersistentData(itemWeapon, "armamentInside", PersistentDataType.STRING, "null");
                         GlobalUtils.setPersistentData(itemWeapon, "magazineAmmo", PersistentDataType.STRING, "");
                         GlobalUtils.setPersistentData(itemCharger, "magazineAmmo", PersistentDataType.STRING, stringAmmo);
                         GlobalUtils.addProtectionAntiDupe(itemCharger, false);

@@ -15,8 +15,6 @@ import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import net.atcore.moderation.ModerationSection;
 import net.atcore.placeholder.PlaceHolderSection;
-import net.atcore.security.Login.LoginManager;
-import net.atcore.security.Login.model.LoginData;
 import net.atcore.security.SecuritySection;
 import net.atcore.utils.AviaRunnable;
 import net.atcore.utils.GlobalUtils;
@@ -33,6 +31,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,7 +57,7 @@ public class AviaTerraCore extends JavaPlugin {
     @Getter private static LuckPerms lp;
     @Getter private static MojangResolver resolver;
     @Getter private static boolean isStarting = true;
-    @Getter private static boolean isStoping = false;
+    @Getter private static boolean isStopping = false;
     @Getter private static AviaTerraCore instance;
     @Getter private static MiniMessage miniMessage;
     @Setter private static long activeTime;
@@ -76,15 +75,15 @@ public class AviaTerraCore extends JavaPlugin {
             ConfigFile configFile = new ConfigFile();
             DataSection.setConfigFile(configFile);
             return configFile;
-        }).getFileYaml().getString("token-bot"));
+        }).getFileYaml().getKeys(true).toString());
+        Bukkit.getLogger().severe(DataSection.getConfigFile().getFileYaml().getString("token-bot"));
 
     }
 
     @Override
     public void onEnable() {
-
-        startTime = System.currentTimeMillis();
         MessagesManager.logConsole("AviaTerra Iniciando...", TypeMessages.SUCCESS, CategoryMessages.PRIVATE, false);
+        startTime = System.currentTimeMillis();
         isStarting = true;
         workerThread = new Thread(this::processQueue);
         workerThread.setName("AviaTerraCore WorkerThread");
@@ -141,21 +140,21 @@ public class AviaTerraCore extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        isStoping = true;
+        isStopping = true;
         DataSection.getConfigFile().saveActiveTime();
         for (Section section : RegisterManager.sections){
             section.disable();
         }
         LIST_BROADCAST.clear();
         if (DiscordBot.stateTasks != null) DiscordBot.stateTasks.cancel();
-        workerThread.interrupt();
         getOnlinePlayers().forEach(player -> {
             GlobalUtils.kickPlayer(player, "El servidor va a cerrar, volveremos pronto...");
             DataBaseRegister.checkRegister(player);
         });
         TASK_QUEUE.clear();
         DiscordBot.handler.shutdown();
-        isStoping = false;
+        workerThread.interrupt();
+        isStopping = false;
         MessagesManager.logConsole("AviaTerra Se fue a dormir cómodamente", TypeMessages.SUCCESS, CategoryMessages.SYSTEM, false);
     }
 
@@ -211,11 +210,16 @@ public class AviaTerraCore extends JavaPlugin {
         enqueueTaskAsynchronously(false, task);
     }
 
+    public static void taskSynchronously(Runnable task) {
+        Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), task);
+    }
+
     /**
      * Realiza tareas de manera asincrónica y lo añade a una cola para evitar problemas de sincronización y que se haga
      * los proceso de manera consecutiva.
      * <p>
      * Si la tarea tarda mucho en realizarse mucho en realize (<1000 ms) salta una excepción indicando el problema
+     * </p>
      * @param task El proceso que va a realizar
      * @param isHeavyProcess indica si la tarea es pesada haciendo una omisión del waring que se
      *                       produce cuando la tarea tarda en completable
@@ -242,27 +246,35 @@ public class AviaTerraCore extends JavaPlugin {
                 try {
                     future.get(1000*45, TimeUnit.MILLISECONDS);
                 } catch (TimeoutException e) {
+                    StringBuilder builder = getStackTrace(task);
                     future.cancel(true); // Cancelamos la tarea si tarda demasiado
-                    MessagesManager.sendErrorException("La tarea ha tardado demasiado y fue cancelada", e);
+                    AviaTerraCore.getInstance().getLogger().severe("La tarea fue cancelada por que tardo mucho en procesarse" + "\n" + builder);
+                    return;
                 } catch (ExecutionException e) {
-                    MessagesManager.sendErrorException("Error en la ejecución de la tarea", e);
+                    StringBuilder builder = getStackTrace(task);
+                    AviaTerraCore.getInstance().getLogger().severe("Hubo un error al iniciar la tarea [" + e.getMessage() + "]" + "\n" + builder);
+                    return;
                 }
 
                 long elapsedNanos = System.nanoTime() - startTime;
                 if (elapsedNanos > 1_000_000_000L && !task.isHeavyProcess()) { // 1s en nanosegundos
-                    StringBuilder builder = new StringBuilder();
-                    for (StackTraceElement element : task.getStackTraceElements()) {
-                        builder.append(element.toString()).append("\n\t");
-                    }
+                    StringBuilder builder = getStackTrace(task);
                     AviaTerraCore.getInstance().getLogger().warning(
                             String.format("La tarea tardó %s ms en procesarse", elapsedNanos * 0.000001D) + "\n" + builder
                     );
                 }
             }
         } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            if (!isStoping) MessagesManager.sendErrorException("Hilo del AviaTerra interrumpido", e);
+            if (!isStopping) MessagesManager.sendErrorException("Hilo del AviaTerra hubo una excepción de interrupción", e);
         }
+    }
+
+    private static @NotNull StringBuilder getStackTrace(AviaRunnable task) {
+        StringBuilder builder = new StringBuilder();
+        for (StackTraceElement element : task.getStackTraceElements()) {
+            builder.append(element.toString()).append("\n\t");
+        }
+        return builder;
     }
 
     /*

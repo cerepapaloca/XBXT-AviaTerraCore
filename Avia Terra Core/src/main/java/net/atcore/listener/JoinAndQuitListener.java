@@ -48,8 +48,6 @@ public class JoinAndQuitListener implements Listener {
 
 
         if (LoginManager.getDataLogin(player) != null) {// si le llega a borrar el registro
-
-
             RegisterData register = login.getRegister();
 
             AviaTerraCore.enqueueTaskAsynchronously(() -> {

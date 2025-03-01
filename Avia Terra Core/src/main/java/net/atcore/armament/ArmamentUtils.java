@@ -37,8 +37,7 @@ public class ArmamentUtils {
     @Nullable
     public Compartment getCompartment(@NotNull ItemStack item){
         for (BaseArmament armament : ARMAMENTS){
-            if (armament.getName().equals(GlobalUtils.getPersistenData(item, "magazineName", PersistentDataType.STRING)) ||
-            armament.getName().equals(GlobalUtils.getPersistenData(item, "weaponName", PersistentDataType.STRING))){
+            if (armament.getName().equals(GlobalUtils.getPersistenData(item, "armament", PersistentDataType.STRING))){
                 if (armament instanceof Compartment compartment){
                     return compartment;
                 }
@@ -49,20 +48,20 @@ public class ArmamentUtils {
 
     public BaseMagazine getMagazine(@NotNull ItemStack item) {
         if (item.getItemMeta() == null) return null;
-        String chargeName = (String) GlobalUtils.getPersistenData(item, "magazineName", PersistentDataType.STRING);
+        String chargeName = (String) GlobalUtils.getPersistenData(item, "armament", PersistentDataType.STRING);
         if (chargeName == null) return null;
         return getMagazine(chargeName);
     }
 
     public BaseWeapon getWeapon(@NotNull ItemStack item) {
         if (item.getItemMeta() == null) return null;
-        String weaponName = (String) GlobalUtils.getPersistenData(item, "weaponName", PersistentDataType.STRING);
-        if (weaponName == null) return null;
-        return getWeapon(weaponName);
+        String armament = (String) GlobalUtils.getPersistenData(item, "armament", PersistentDataType.STRING);
+        if (armament == null) return null;
+        return getWeapon(armament);
     }
 
     public BaseAmmo getAmmo(Player player){
-        return getAmmo((String) GlobalUtils.getPersistenData(player.getInventory().getItemInMainHand(), "ammoName", PersistentDataType.STRING));
+        return getAmmo((String) GlobalUtils.getPersistenData(player.getInventory().getItemInMainHand(), "armament", PersistentDataType.STRING));
     }
 
     public @Nullable BaseAmmo getAmmo(Class<? extends BaseAmmo> clazz) {
@@ -113,13 +112,23 @@ public class ArmamentUtils {
         return null;
     }
 
-
-    public @Nullable BaseWeapon getWeapon(@Nullable String s) {
+    @Nullable
+    public BaseWeapon getWeapon(@Nullable String s) {
         for (BaseArmament armament : ARMAMENTS){
             if (armament instanceof BaseWeapon weapon){
                 if (weapon.getClass().getName().equals(s)){
                     return weapon;
                 }
+            }
+        }
+        return null;
+    }
+    
+    public @Nullable BaseArmament getArmament(@NotNull ItemStack item) {
+        String name = (String) GlobalUtils.getPersistenData(item, "armament", PersistentDataType.STRING);
+        for (BaseArmament armament : ARMAMENTS){
+            if (armament.getClass().getName().equals(name)){
+                return armament;
             }
         }
         return null;

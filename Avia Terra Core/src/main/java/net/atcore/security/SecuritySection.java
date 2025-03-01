@@ -5,11 +5,7 @@ import net.atcore.Section;
 import net.atcore.data.DataSection;
 import net.atcore.security.Login.SimulateOnlineMode;
 import net.atcore.security.check.BaseChecker;
-import net.atcore.security.check.checker.AntiIlegalBlock;
-import net.atcore.security.check.checker.AntiIlegalItem;
-import net.atcore.security.check.checker.AntiOP;
-import net.atcore.security.check.checker.RoofNether;
-import org.bukkit.Bukkit;
+import net.atcore.security.check.checker.*;
 
 public class SecuritySection implements Section {
 
@@ -26,6 +22,8 @@ public class SecuritySection implements Section {
         new RoofNether();
         new AntiOP();
         new AntiIlegalBlock();
+        new AntiArmament();
+        new AntiDupe();
         init();
     }
 

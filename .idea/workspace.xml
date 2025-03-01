@@ -9,12 +9,26 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ea0f4ef9-10c7-4d19-b67e-e1a9046efa9d" name="Changes" comment="Nuevo sistema de redudancia y protección con tareas largas">
+    <list default="true" id="ea0f4ef9-10c7-4d19-b67e-e1a9046efa9d" name="Changes" comment="regresando al pasado (No funciona)">
+      <change afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/check/CheckerUtils.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/check/checker/AntiArmament.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/check/checker/AntiDupe.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/check/checker/InventoryChecker.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/AviaTerraCore.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/AviaTerraCore.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/ArmamentUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/ArmamentUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/BaseAmmo.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/BaseAmmo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/BaseArmament.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/BaseArmament.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/BaseMagazine.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/BaseMagazine.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/BaseWeapon.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/BaseWeapon.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/BaseWeaponTarkov.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/BaseWeaponTarkov.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/command/commnads/PruebaCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/command/commnads/PruebaCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/data/DataBaseMySql.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/data/DataBaseMySql.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/listener/JoinAndQuitListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/listener/JoinAndQuitListener.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/messages/Message.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/messages/Message.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/messages/MessagesManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/messages/MessagesManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/SecuritySection.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/SecuritySection.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/check/checker/AntiIlegalItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/check/checker/AntiIlegalItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/utils/GlobalUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/utils/GlobalUtils.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/resources/plugin.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -415,15 +429,8 @@
       <workItem from="1740704803311" duration="24000" />
       <workItem from="1740704882319" duration="234000" />
       <workItem from="1740705251338" duration="2243000" />
-      <workItem from="1740759069488" duration="24623000" />
-    </task>
-    <task id="LOCAL-00029" summary="cambio de api">
-      <option name="closed" value="true" />
-      <created>1736142907207</created>
-      <option name="number" value="00029" />
-      <option name="presentableId" value="LOCAL-00029" />
-      <option name="project" value="LOCAL" />
-      <updated>1736142907207</updated>
+      <workItem from="1740759069488" duration="25328000" />
+      <workItem from="1740851981881" duration="11655000" />
     </task>
     <task id="LOCAL-00030" summary="Se añadió los mensajes de muerte">
       <option name="closed" value="true" />
@@ -809,14 +816,21 @@
       <option name="project" value="LOCAL" />
       <updated>1740791202457</updated>
     </task>
-    <option name="localTasksCounter" value="78" />
+    <task id="LOCAL-00078" summary="regresando al pasado (No funciona)">
+      <option name="closed" value="true" />
+      <created>1740801523443</created>
+      <option name="number" value="00078" />
+      <option name="presentableId" value="LOCAL-00078" />
+      <option name="project" value="LOCAL" />
+      <updated>1740801523443</updated>
+    </task>
+    <option name="localTasksCounter" value="79" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Mejorando la api" />
     <MESSAGE value="Se añadió los alias especiales" />
     <MESSAGE value="No me acuerdo de nada" />
     <MESSAGE value="logOut y mejoras de api" />
@@ -841,7 +855,8 @@
     <MESSAGE value="fix con un bucle con los log" />
     <MESSAGE value="por FIN!!!, arreglé él POM.XMl" />
     <MESSAGE value="Nuevo sistema de redudancia y protección con tareas largas" />
-    <option name="LAST_COMMIT_MESSAGE" value="Nuevo sistema de redudancia y protección con tareas largas" />
+    <MESSAGE value="regresando al pasado (No funciona)" />
+    <option name="LAST_COMMIT_MESSAGE" value="regresando al pasado (No funciona)" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

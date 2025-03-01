@@ -47,7 +47,7 @@ public abstract class BaseWeapon extends BaseArmament implements ShootWeapon{
                       WeaponMode mode,
                       int coolDown
     ) {
-        super(displayName, item, "weapon");
+        super(displayName, item);
         this.maxDistance = MaxDistance;
         this.vague = vague;
         this.mode = mode;

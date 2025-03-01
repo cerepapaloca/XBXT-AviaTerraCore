@@ -27,7 +27,7 @@ import java.util.*;
 public abstract class BaseMagazine extends BaseArmament implements Compartment {
 
     public BaseMagazine(List<Class<? extends BaseAmmo>> compatibleCaliber, List<Class<? extends BaseAmmo>> defaultCaliber, int ammoMax, String displayName, int reloadTime) {
-        super(displayName, new ItemStack(Material.SUGAR), "magazine");
+        super(displayName, new ItemStack(Material.SUGAR));
         this.displayName = displayName;
         this.DefaultammonList = listAmmoFill(defaultCaliber);
         this.compatibleAmmonList = listAmmoClassToListBaseAmmo(compatibleCaliber);
@@ -52,7 +52,7 @@ public abstract class BaseMagazine extends BaseArmament implements Compartment {
         String stringAmmo = (String) GlobalUtils.getPersistenData(item, "magazineAmmo", PersistentDataType.STRING);
         List<BaseAmmo> AmmoBaseList = new ArrayList<>();
         if (stringAmmo != null) {
-            for (String ammoName : ArmamentUtils.stringToList(stringAmmo)) AmmoBaseList.add(ArmamentUtils.getAmmo(ammoName));
+            for (String armament : ArmamentUtils.stringToList(stringAmmo)) AmmoBaseList.add(ArmamentUtils.getAmmo(armament));
             String finalLore = getFinalLore(setLore, AmmoBaseList);
             if (setLore){
 
@@ -104,9 +104,9 @@ public abstract class BaseMagazine extends BaseArmament implements Compartment {
         boolean b = false;
         for (ItemStack item : player.getInventory().getContents()) {//busca si tienes al menos una bala en el inventario
             if (item == null) continue;
-            String ammoName = (String) GlobalUtils.getPersistenData(item, "ammoName", PersistentDataType.STRING);
-            if (ammoName == null) continue;
-            BaseAmmo baseAmmo = ArmamentUtils.getAmmo(ammoName);
+            String armament = (String) GlobalUtils.getPersistenData(item, "armament", PersistentDataType.STRING);
+            if (armament == null) continue;
+            BaseAmmo baseAmmo = ArmamentUtils.getAmmo(armament);
             if (baseAmmo == null) continue;
             b = true;//se confirma que tiene al menos un bala
             break;
@@ -116,9 +116,9 @@ public abstract class BaseMagazine extends BaseArmament implements Compartment {
                 public void run() {
                     ItemStack charger = player.getInventory().getItemInMainHand();
                     if (charger.getItemMeta() != null){
-                        String ammoNameList = (String) GlobalUtils.getPersistenData(charger, "magazineAmmo", PersistentDataType.STRING);
-                        if (ammoNameList != null) {
-                            if (ArmamentUtils.stringToList(ammoNameList).size() < ammoMax) {
+                        String armamentList = (String) GlobalUtils.getPersistenData(charger, "magazineAmmo", PersistentDataType.STRING);
+                        if (armamentList != null) {
+                            if (ArmamentUtils.stringToList(armamentList).size() < ammoMax) {
                                 onReload(player);
                             }else {
                                 MessagesManager.sendTitle(player,"", "Recargado Completada", 0, 0,30, TypeMessages.SUCCESS);
@@ -148,18 +148,18 @@ public abstract class BaseMagazine extends BaseArmament implements Compartment {
     private void onReload(@NotNull Player player){
         PlayerInventory inv = player.getInventory();
         ItemStack ItemCharger = inv.getItemInMainHand();
-        String s = (String) GlobalUtils.getPersistenData(ItemCharger,"weaponName", PersistentDataType.STRING);
-        if (ItemCharger.getItemMeta() != null && s == null) {//se mira que no sea un arma o que sea aire
+        String s = (String) GlobalUtils.getPersistenData(ItemCharger,"armament", PersistentDataType.STRING);
+        if (ItemCharger.getItemMeta() != null && s != null) {//se mira que no sea un arma o que sea aire
             for (ItemStack ItemAmmo : inv.getStorageContents()) {
                 if (ItemAmmo == null) continue;
                 if (ItemAmmo.getItemMeta() == null) continue;
-                String ammoName = (String) GlobalUtils.getPersistenData(ItemAmmo, "ammoName", PersistentDataType.STRING);
-                BaseAmmo baseAmmo = ArmamentUtils.getAmmo(ammoName);
+                String armament = (String) GlobalUtils.getPersistenData(ItemAmmo, "armament", PersistentDataType.STRING);
+                BaseAmmo baseAmmo = ArmamentUtils.getAmmo(armament);
                 if (baseAmmo == null) continue;
                 if (!compatibleAmmonList.contains(baseAmmo)) continue;
-                String ammoNameList = (String) GlobalUtils.getPersistenData(ItemCharger, "magazineAmmo", PersistentDataType.STRING);
-                if (ammoNameList == null) continue;
-                List<String> ammoList = ArmamentUtils.stringToList(ammoNameList);
+                String armamentList = (String) GlobalUtils.getPersistenData(ItemCharger, "magazineAmmo", PersistentDataType.STRING);
+                if (armamentList == null) continue;
+                List<String> ammoList = ArmamentUtils.stringToList(armamentList);
                 ammoList.add(baseAmmo.getName());
                 ItemAmmo.setAmount(ItemAmmo.getAmount() - 1);
                 GlobalUtils.setPersistentData(ItemCharger, "magazineAmmo", PersistentDataType.STRING, ArmamentUtils.listToString(ammoList));
@@ -173,7 +173,7 @@ public abstract class BaseMagazine extends BaseArmament implements Compartment {
             player.getWorld().playSound(player.getLocation(), Sound.ITEM_ARMOR_EQUIP_IRON, SoundCategory.PLAYERS, 1, 1);
         }else{
             reloadTask.get(player.getUniqueId()).cancel();
-            MessagesManager.sendTitle(player,"", "Recargado Cancelada", 0, 0,30, TypeMessages.SUCCESS);
+            MessagesManager.sendTitle(player,"", "Recargado Cancelada", 0, 0,30, TypeMessages.ERROR);
             player.removePotionEffect(PotionEffectType.SLOWNESS);
             reloadTask.remove(player.getUniqueId());
         }
@@ -184,7 +184,7 @@ public abstract class BaseMagazine extends BaseArmament implements Compartment {
         if (ItemCharger != null && itemArmament.getItemMeta() != null){
             BaseMagazine baseMagazine = ArmamentUtils.getMagazine(ItemCharger);
             if (baseMagazine != null) {
-                String ammonName = (String) GlobalUtils.getPersistenData(ItemCharger, "magazineName", PersistentDataType.STRING);
+                String ammonName = (String) GlobalUtils.getPersistenData(ItemCharger, "armament", PersistentDataType.STRING);
                 if (ammonName != null) {
                     String stringAmmo = (String) GlobalUtils.getPersistenData(ItemCharger, "magazineAmmo", PersistentDataType.STRING);
                     GlobalUtils.setPersistentData(ItemCharger, "magazineAmmo", PersistentDataType.STRING, "");

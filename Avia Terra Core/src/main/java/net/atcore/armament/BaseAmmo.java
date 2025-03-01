@@ -3,7 +3,6 @@ package net.atcore.armament;
 import lombok.Getter;
 import lombok.Setter;
 import net.atcore.utils.GlobalUtils;
-import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -18,7 +17,7 @@ public abstract class BaseAmmo extends BaseArmament {
                        String displayName,
                        float penetration
     ) {
-        super(displayName, new ItemStack(Material.END_ROD), "ammo");
+        super(displayName, new ItemStack(Material.END_ROD));
         this.damage = damage;
         this.penetration = penetration;
         updateLore(itemArmament, null);

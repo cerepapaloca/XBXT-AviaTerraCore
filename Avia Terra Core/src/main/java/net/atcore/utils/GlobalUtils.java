@@ -157,7 +157,7 @@ public final class GlobalUtils {
      */
 
     @SuppressWarnings({"rawtypes", "unchecked"})
-    public void setPersistentData(@NotNull ItemStack itemStack, String nameKey, PersistentDataType type, Object data){
+    public void setPersistentData(@NotNull ItemStack itemStack, String nameKey, PersistentDataType  type, Object data){
         ItemMeta meta = itemStack.getItemMeta();
         if (meta == null) return;
         NamespacedKey key = new NamespacedKey(AviaTerraCore.getInstance(), nameKey);
@@ -166,8 +166,7 @@ public final class GlobalUtils {
     }
 
     @Contract(pure = true)
-    @SuppressWarnings({"rawtypes", "unchecked"})
-    public Object getPersistenData(@NotNull ItemStack item, String nameKey, PersistentDataType type){
+    public Object getPersistenData(@NotNull ItemStack item, String nameKey, PersistentDataType<?, ?> type){
         ItemMeta meta = item.getItemMeta();
         assert meta != null;
         PersistentDataContainer dataContainer = meta.getPersistentDataContainer();

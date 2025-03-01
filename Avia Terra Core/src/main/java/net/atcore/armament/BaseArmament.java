@@ -20,7 +20,7 @@ import java.util.List;
 @Setter
 public abstract class BaseArmament {
 
-    public BaseArmament(String displayName, ItemStack item, String armament) {
+    public BaseArmament(String displayName, ItemStack item) {
         this.displayName = displayName;
         this.itemArmament = item;
         this.name = this.getClass().getName();
@@ -36,7 +36,7 @@ public abstract class BaseArmament {
         itemArmament.setItemMeta(meta);// TODO: Cambiar a esto por un sistema de uuids
         new BukkitRunnable(){
             public void run() {
-                GlobalUtils.setPersistentData(itemArmament,armament + "Name", PersistentDataType.STRING, name);
+                GlobalUtils.setPersistentData(itemArmament,"armament", PersistentDataType.STRING, name);
             }
         }.runTaskLater(AviaTerraCore.getInstance(), 1);
         ArmamentUtils.ARMAMENTS.add(this);
