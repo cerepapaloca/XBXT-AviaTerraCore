@@ -41,7 +41,7 @@ public final class ApiHandler {
             Undertow server = Undertow.builder()
                     .addHttpsListener(8443, "0.0.0.0", sslContext)
                     .setHandler(exchange -> {
-
+                        //Se le añade las propiedades del encabezado
                         exchange.getResponseHeaders().put(HttpString.tryFromString(ACCESS_CONTROL_ALLOW_ORIGIN), "*");
                         exchange.getResponseHeaders().put(HttpString.tryFromString(ACCESS_CONTROL_ALLOW_METHODS), "GET, POST, OPTIONS");
                         exchange.getResponseHeaders().put(HttpString.tryFromString(ACCESS_CONTROL_ALLOW_HEADERS), "Content-Type, Authorization");

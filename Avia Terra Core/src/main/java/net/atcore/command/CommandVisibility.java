@@ -1,5 +1,9 @@
 package net.atcore.command;
 
+/**
+ * Define la visibilidad del comando al ser ejecutadó
+ */
+
 public enum CommandVisibility {
     /**
      * El comando puede ser ejecutado por todos aunque no esté logueado

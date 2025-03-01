@@ -1,5 +1,12 @@
 package net.atcore.webapi;
 
+import lombok.Getter;
+
+/**
+ * Los tipos de contenido que soporta un navegador
+ */
+
+@Getter
 public enum ContentType {
     TEXT_PLAIN("text/plain"),
     TEXT_HTML("text/html"),
@@ -24,10 +31,6 @@ public enum ContentType {
 
     ContentType(String type) {
         this.type = type;
-    }
-
-    public String getType() {
-        return type;
     }
 
     @Override

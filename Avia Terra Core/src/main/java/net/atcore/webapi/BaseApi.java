@@ -17,6 +17,11 @@ public abstract class BaseApi {
         ApiHandler.APIS.add(this);
     }
 
+    /**
+     * Se llama cuando tiene una petición
+     * @param request la solicitud
+     * @return la repuesta de la solicitud
+     */
 
     public abstract Object onRequest(HttpServerExchange request);
 

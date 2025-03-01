@@ -1,5 +1,6 @@
 package net.atcore.command.commnads;
 
+import net.atcore.AviaTerraCore;
 import net.atcore.command.ArgumentUse;
 import net.atcore.command.BaseCommand;
 import net.atcore.command.CommandVisibility;
@@ -30,5 +31,12 @@ public class PruebaCommand extends BaseCommand {
     public void execute(CommandSender sender, String[] args) {
         sendMessage(sender, Message.TEST_MESSAGE);
         LoginManager.checkLogin((Player) sender, false,true);
+        AviaTerraCore.enqueueTaskAsynchronously(() -> {
+            try {
+                Thread.sleep(1000*60);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 }

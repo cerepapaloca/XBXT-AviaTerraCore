@@ -1,6 +1,7 @@
 package net.atcore.data;
 
 import lombok.Getter;
+import lombok.Setter;
 import net.atcore.AviaTerraCore;
 import net.atcore.Section;
 import net.atcore.data.html.Email;
@@ -25,7 +26,8 @@ public class DataSection implements Section {
     public final static HashSet<DataBaseMySql> DATA_BASE = new HashSet<>();
     @Getter private static CacheLimboFlies cacheLimboFlies;
     @Getter private static PlayersDataFiles playersDataFiles;
-    @Getter private static ConfigFile configFile;
+    @Getter @Setter
+    private static ConfigFile configFile;
     @Getter private static CacheVoteFile cacheVoteFile;
     @Getter private static MessagesLocaleFile messagesLocaleFile;
     @Getter private static MapArtsFiles mapArtsFiles;
@@ -39,7 +41,7 @@ public class DataSection implements Section {
         new Email();
         new MOTDFile();
         new BroadcastMessageFile(); // TODO: Tengo un lio con los datos hay que refactorizar todo esto
-        configFile = new ConfigFile();
+
         messagesLocaleFile = new MessagesLocaleFile();
         playersDataFiles = new PlayersDataFiles();
         cacheVoteFile = new CacheVoteFile();

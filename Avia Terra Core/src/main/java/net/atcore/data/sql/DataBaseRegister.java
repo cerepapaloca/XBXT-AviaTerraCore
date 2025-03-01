@@ -20,7 +20,6 @@ import java.sql.*;
 import java.util.HashMap;
 import java.util.UUID;
 
-import static net.atcore.command.commnads.RemoveRegisterCommand.names;
 import static net.atcore.messages.MessagesManager.logConsole;
 
 public class DataBaseRegister extends DataBaseMySql {
@@ -84,7 +83,6 @@ public class DataBaseRegister extends DataBaseMySql {
             throw new RuntimeException(e);
         }
         sessions.clear();
-        LoginManager.getDataLogin().forEach(login -> names.add(login.getRegister().getUsername()));
 
         if (!AviaTerraCore.isStarting()) MessagesManager.logConsole("Registros Recargado", TypeMessages.SUCCESS);
     }
@@ -164,6 +162,23 @@ public class DataBaseRegister extends DataBaseMySql {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static boolean isExistRegister(Player player) {
+        String query = "SELECT EXISTS(SELECT 1 FROM register WHERE uuidCracked = ?)";
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, GlobalUtils.getRealUUID(player).toString());
+            ResultSet rs = stmt.executeQuery();
+            ResultSet resultSet = stmt.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getBoolean(1);
+            }
+        } catch (SQLException e) {
+            logConsole(String.format("Error al conocer el nombre del jugador %s", player.getName()), TypeMessages.ERROR, CategoryMessages.LOGIN);
+            MessagesManager.sendErrorException(Message.DATA_MYSQL_EXCEPTION.getMessageLocatePrivate(), e);
+        }
+        return false;
     }
 
     public static boolean updateLoginDate(String name ,long time){
@@ -293,6 +308,25 @@ public class DataBaseRegister extends DataBaseMySql {
         } catch (SQLException e) {
             logConsole(String.format("Hubo un error al añadir <|UUID de bedrock|> del jugador <|%s|>", name), TypeMessages.ERROR, CategoryMessages.LOGIN);
             MessagesManager.sendErrorException(Message.DATA_MYSQL_EXCEPTION.getMessageLocatePrivate(), e);
+        }
+    }
+
+    public static void checkRegister(Player player) {
+        LoginData login = LoginManager.getDataLogin(player);
+        RegisterData register = login.getRegister();
+        boolean isExist = DataBaseRegister.isExistRegister(player);
+        if (!isExist) {
+            DataBaseRegister.addRegister(register.getUsername(),
+                    register.getUuidCracked().toString(),
+                    register.getUuidPremium() == null ? null : register.getUuidPremium().toString(),
+                    register.getRegisterAddress().getHostAddress(),
+                    login.getSession().getAddress().getHostAddress(),
+                    register.getStateLogins(),
+                    register.getPasswordShaded(),
+                    login.getSession().getStartTimeLogin(),
+                    login.getRegister().getRegisterDate()
+            );
+            MessagesManager.logConsole("Se añadió un registro de " + player.getName() + " que no existía", TypeMessages.WARNING, CategoryMessages.LOGIN);
         }
     }
 }

@@ -8,6 +8,10 @@ import org.bukkit.event.EventPriority;
 
 import java.util.*;
 
+/**
+ * Es escuchar multiples eventos pero {@link #onCheck(Event) onCheck} tendrá como parámetro {@link Event}
+ */
+
 public abstract class BaseCheckerMulti extends BaseChecker<Event>  {
 
     protected final List<Class<? extends Event>> eventClasses = new ArrayList<>();

@@ -3,6 +3,8 @@ package net.atcore.security.Login;
 import lombok.Setter;
 import lombok.experimental.UtilityClass;
 import net.atcore.AviaTerraCore;
+import net.atcore.data.DataSection;
+import net.atcore.data.yml.ConfigFile;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import net.atcore.security.Login.model.CodeAuth;
@@ -20,6 +22,7 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.Properties;
 import java.util.UUID;
 
@@ -29,8 +32,17 @@ import static net.atcore.messages.MessagesManager.sendMessage;
 @UtilityClass
 public class TwoFactorAuth {
 
-    private final String EMAIL = "contacto.ceres.yt@gmail.com";
-    private final String PASSWORD = "qxwg cioy ipzq dkif";
+    private final String EMAIL;//contacto.ceres.yt@gmail.com
+    private final String PASSWORD;//qxwg cioy ipzq dkif
+
+    static {
+        PASSWORD = Objects.requireNonNullElseGet(DataSection.getConfigFile(),  () -> {
+            ConfigFile configFile = new ConfigFile();
+            DataSection.setConfigFile(configFile);
+            return configFile;
+        }).getFileYaml().getString("email.password");
+        EMAIL = DataSection.getConfigFile().getConfig().getString("email.name");
+    }
 
     public static final HashMap<UUID, CodeAuth> CODES = new HashMap<>();
 
@@ -66,8 +78,8 @@ public class TwoFactorAuth {
             message.setSubject(LOGIN_TWO_FACTOR_SUBJECT_GMAIL.getMessage(player));
             message.setContent(String.format(gmail,
                     name,
-                    format.getTitle(),
-                    String.format(format.getSubtitle().toString(), code.getCode().toString())),
+                    format.getTitle().getMessage(player),
+                    String.format(format.getSubtitle().getMessage(player), code.getCode().toString())),
                     "text/html; charset=utf-8");
 
             Transport.send(message);
@@ -88,8 +100,8 @@ public class TwoFactorAuth {
                 String.format(
                 discord,
                         player.getName(),
-                        format.getTitle(),
-                        String.format(format.getSubtitle().toString(), code.getCode().toString())
+                        format.getTitle().getMessage(player),
+                        String.format(format.getSubtitle().getMessage(player), code.getCode().toString())
                        )
                 )
         ).queue(success -> sendMessage(player, LOGIN_TWO_FACTOR_ARRIVED_MESSAGE_DISCORD));

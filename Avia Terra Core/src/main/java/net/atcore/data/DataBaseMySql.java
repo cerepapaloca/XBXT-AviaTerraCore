@@ -2,12 +2,14 @@ package net.atcore.data;
 
 import net.atcore.AviaTerraCore;
 import net.atcore.Reloadable;
+import net.atcore.data.yml.ConfigFile;
 import net.atcore.messages.MessagesManager;
 import org.bukkit.Bukkit;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Objects;
 
 
 import static net.atcore.messages.MessagesManager.logConsole;
@@ -20,8 +22,17 @@ public abstract class DataBaseMySql implements Reloadable {
     private static final String HOST = "192.168.1.55";//localhost
     private static final String PORT = "3306";
     private static final String DATABASE = "xbxt";//aviaterra
-    private static final String USER ="xbxt-data-base";//root
-    private static final String PASSWORD = "AdeptusAzurex1313#waos";//
+    private static final String USER;//xbxt-data-base
+    private static final String PASSWORD;//AdeptusAzurex1313#waos
+
+    static {
+        USER = Objects.requireNonNullElseGet(DataSection.getConfigFile(),  () -> {
+            ConfigFile configFile = new ConfigFile();
+            DataSection.setConfigFile(configFile);
+            return configFile;
+        }).getFileYaml().getString("mysql.username");
+        PASSWORD = DataSection.getConfigFile().getFileYaml().getString("mysql.password");
+    }
 
     /**
      * No usar este method para tener la conexión con la base de datos
@@ -58,7 +69,7 @@ public abstract class DataBaseMySql implements Reloadable {
      */
 
     protected static Connection getConnection() throws SQLException {
-        if (Bukkit.isPrimaryThread() && !AviaTerraCore.isStarting()){
+        if (Bukkit.isPrimaryThread() && !AviaTerraCore.isStarting() && !Bukkit.getServer().isStopping()){
             throw new IllegalThreadStateException("No usar el hilo principal para la base de datos");
         }
         if (connection == null || connection.isClosed()) {

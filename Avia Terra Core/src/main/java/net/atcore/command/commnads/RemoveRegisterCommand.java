@@ -15,8 +15,6 @@ import static net.atcore.messages.MessagesManager.*;
 
 public class RemoveRegisterCommand extends BaseTabCommand {
 
-    public static final HashSet<String> names = new HashSet<>();
-
     public RemoveRegisterCommand() {
         super("removeRegister",
                 new ArgumentUse("removeRegister").addArgPlayer(ModeTabPlayers.ADVANCED),
@@ -45,7 +43,7 @@ public class RemoveRegisterCommand extends BaseTabCommand {
     @Override
     public List<String> onTab(CommandSender sender, String[] args) {
         if (args.length == 1) {
-            return CommandUtils.listTab(args[0], names.stream().toList());
+            return CommandUtils.listTab(args[0], LoginManager.getDataLogin().stream().map(dataLogin -> dataLogin.getRegister().getUsername()).toList());
         }
         return List.of();
     }

@@ -19,7 +19,7 @@ import java.util.Objects;
 import static net.atcore.messages.MessagesManager.sendMessage;
 
 @UtilityClass
-public class CommandManager {//nose si poner en esta clase aquí la verdad
+public class CommandManager {
 
     public final HashMap<String, CommandVisibility> COMMANDS = new HashMap<>();
 

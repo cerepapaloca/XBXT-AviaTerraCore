@@ -5,14 +5,12 @@ import me.scarsz.jdaappender.ExtensionBuilder;
 import net.atcore.AviaTerraCore;
 import net.atcore.command.CommandManager;
 import net.atcore.utils.GlobalUtils;
-import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import net.dv8tion.jda.api.managers.Presence;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.HoverEvent;
@@ -23,12 +21,10 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 
-import java.awt.*;
 import java.text.SimpleDateFormat;
 import java.util.TimeZone;
 
-import static net.atcore.AviaTerraCore.TOKEN_BOT;
-import static net.atcore.AviaTerraCore.jda;
+import static net.atcore.AviaTerraCore.*;
 import static org.bukkit.Bukkit.getServer;
 
 public class DiscordBot extends ListenerAdapter{
@@ -43,7 +39,7 @@ public class DiscordBot extends ListenerAdapter{
 
     public static void startDiscordBot(){
         AviaTerraCore.enqueueTaskAsynchronously(true, () -> {
-            jda = JDABuilder.createDefault(TOKEN_BOT).enableIntents(GatewayIntent.MESSAGE_CONTENT).build();
+            jda = JDABuilder.createDefault(tokenBot).enableIntents(GatewayIntent.MESSAGE_CONTENT).build();
             try {
                 jda.removeEventListener(DiscordBot.class);
                 jda.awaitReady();

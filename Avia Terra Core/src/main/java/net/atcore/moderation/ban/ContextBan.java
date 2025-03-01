@@ -17,7 +17,7 @@ import java.util.Set;
 
 public enum ContextBan {
     CHAT() {
-        private static final Set<String> SET_COMMANDS_SOCIAL = Set.of("tell", "w", "whipper", "r");
+        private static final Set<String> SET_COMMANDS_SOCIAL = Set.of("tell", "w", "whipper", "r", "msg");
         @Override
         public DataBan onContext(Player player, Event event) {
             if (event instanceof AsyncChatEvent e) {

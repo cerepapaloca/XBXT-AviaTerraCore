@@ -11,6 +11,7 @@ import net.atcore.security.AntiTwoPlayer;
 import net.atcore.security.Login.LoginManager;
 import net.atcore.security.Login.model.LimboData;
 import net.atcore.security.Login.model.LoginData;
+import net.atcore.security.Login.model.RegisterData;
 import net.atcore.security.SecuritySection;
 import net.atcore.utils.GlobalUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -45,7 +46,16 @@ public class JoinAndQuitListener implements Listener {
             limbo.restorePlayer(player);// Carga los datos del jugador para que el servidor guarde sus datos como si estuviera logueado
         }
 
+
         if (LoginManager.getDataLogin(player) != null) {// si le llega a borrar el registro
+
+
+            RegisterData register = login.getRegister();
+
+            AviaTerraCore.enqueueTaskAsynchronously(() -> {
+                DataBaseRegister.checkRegister(player);
+            });
+
             // Borra a los jugadores cracked y semi cracked que no pudieron registrarse para evitar tener jugadores fantasmas
             if (LoginManager.getDataLogin(player).getRegister().isTemporary()){
                 AviaTerraCore.enqueueTaskAsynchronously(() -> {

@@ -26,6 +26,7 @@ public class ArmamentActions {
     }
 
     public boolean outAction(ClickType clickType, Player player, ItemStack currentItem) {
+        if (currentItem == null) return false;
         if (currentItem.getItemMeta() == null) return false;
         if (clickType == ClickType.SWAP_OFFHAND) {
             Compartment compartment = ArmamentUtils.getCompartment(currentItem);

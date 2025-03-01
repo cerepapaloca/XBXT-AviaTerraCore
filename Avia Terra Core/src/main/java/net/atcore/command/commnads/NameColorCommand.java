@@ -43,12 +43,11 @@ public class NameColorCommand extends BaseTabCommand {
         new Gradient("red", "#BF0C1F", "#DE4E4E");
         new Gradient("aqua", "#4FF3EA", "#00828D");
         new Gradient("retro", "#F34F4F", "#65008D");
-        new Gradient("mango", "#2BBFA7","#FFC600");
+        new Gradient("mango", "#87BF2B","#FFC600");
         new Gradient("orange", "#FF9800", "#BC4664");
         new Gradient("red_dark", "#212121", "#f4143f");
         new Gradient("rick", "#98f8dd", "#F6FF58");
         new Gradient("purple", "#d481d2", "#703b94");
-        new Gradient("meat", "meat");
         colorOptions = getColorOptions();
         styleOptions = getStyleOptions();
         addAlias("nc");

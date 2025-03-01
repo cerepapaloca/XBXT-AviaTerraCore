@@ -16,6 +16,7 @@ import org.bukkit.entity.Player;
 import java.util.List;
 import java.util.UUID;
 
+import static net.atcore.messages.MessagesManager.sendFormatMessage;
 import static net.atcore.messages.MessagesManager.sendMessage;
 
 public class LinkCommand extends BaseTabCommand {
@@ -53,7 +54,7 @@ public class LinkCommand extends BaseTabCommand {
                                 );
                                 TwoFactorAuth.CODES.put(uuid, codeAuth);
 
-                                sendMessage(sender, Message.COMMAND_LINK_SEND_GMAIL_1);
+                                sendFormatMessage(sender, Message.COMMAND_LINK_SEND_GMAIL_1, args[1]);
                                 if (loginData.getRegister().getMail() != null){
                                     sendMessage(sender, Message.COMMAND_LINK_ALREADY_GMAIL);
                                 }

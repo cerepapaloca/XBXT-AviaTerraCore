@@ -15,6 +15,11 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.HashSet;
 
+/**
+ * A través de esta clase se puede añadir un evento para una situación en concreta
+ * @param <T> El evento que se tiene que escuchar y el parámetro que se vá usar en {@link #onCheck(Event)}
+ */
+
 public abstract class BaseChecker<T extends Event> implements Listener {
 
     public static final HashSet<BaseChecker<? extends Event>> REGISTERED_CHECKS = new HashSet<>();

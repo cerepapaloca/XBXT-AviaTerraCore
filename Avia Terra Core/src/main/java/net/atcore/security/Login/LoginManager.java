@@ -111,6 +111,7 @@ public final class LoginManager {
         if (getDataLogin(name) != null){//se pone nulo por qué es imposible no tener un registro sin tener un login data es decir si uno da nulo el otro también
             return getDataLogin(name).getRegister().getStateLogins();
         }else{//si no existe crea un registro
+            MessagesManager.logConsole("Creando registro para <|" + name + "|>" , TypeMessages.INFO);
             RegisterData registerData = startRegister(ip, name);
             if (registerData != null){
                 addDataLogin(name, registerData);
@@ -137,6 +138,9 @@ public final class LoginManager {
                     true
             );
             registerData.setLastAddress(ip);
+            registerData.setRegisterAddress(ip);
+            registerData.setRegisterDate(System.currentTimeMillis());
+            registerData.setLastLoginDate(System.currentTimeMillis());
             // Se guarda el registro en la base de datos
             AviaTerraCore.enqueueTaskAsynchronously(() -> DataBaseRegister.addRegister(registerData.getUsername(),
                     GlobalUtils.getUUIDByName(name).toString(),

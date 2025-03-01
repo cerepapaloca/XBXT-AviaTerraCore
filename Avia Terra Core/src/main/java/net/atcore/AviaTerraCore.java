@@ -6,6 +6,8 @@ import lombok.Setter;
 import net.atcore.armament.ArmamentSection;
 import net.atcore.command.CommandSection;
 import net.atcore.data.DataSection;
+import net.atcore.data.sql.DataBaseRegister;
+import net.atcore.data.yml.ConfigFile;
 import net.atcore.listener.ListenerSection;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.DiscordBot;
@@ -13,6 +15,8 @@ import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import net.atcore.moderation.ModerationSection;
 import net.atcore.placeholder.PlaceHolderSection;
+import net.atcore.security.Login.LoginManager;
+import net.atcore.security.Login.model.LoginData;
 import net.atcore.security.SecuritySection;
 import net.atcore.utils.AviaRunnable;
 import net.atcore.utils.GlobalUtils;
@@ -22,11 +26,9 @@ import net.dv8tion.jda.api.JDA;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.luckperms.api.LuckPerms;
 import org.bukkit.Bukkit;
-import org.bukkit.Server;
 import org.bukkit.command.Command;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.permissions.Permission;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -34,9 +36,9 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.*;
 
 import static net.atcore.utils.RegisterManager.register;
 import static org.bukkit.Bukkit.getOnlinePlayers;
@@ -47,7 +49,7 @@ public class AviaTerraCore extends JavaPlugin {
     private static final BlockingQueue<AviaRunnable> TASK_QUEUE = new LinkedBlockingQueue<>();
     private Thread workerThread;
 
-    public static final String TOKEN_BOT = "MTI5MTUzODM1MjY0NjEzMTc3NA.GDwtcq.azwlvX6fWKbusXk8sOyzRMK78Qe9CwbHy_pmWk";
+    public static String tokenBot;//MTI5MTUzODM1MjY0NjEzMTc3NA.GDwtcq.azwlvX6fWKbusXk8sOyzRMK78Qe9CwbHy_pmWk
     public static final List<String> LIST_MOTD = new ArrayList<>();
     public static final List<String> LIST_BROADCAST = new ArrayList<>();
     //public static final List<String> LIST_MODULE = new ArrayList<>(List.of("net.atmi.Application"));
@@ -55,21 +57,31 @@ public class AviaTerraCore extends JavaPlugin {
     private static long startTime;
     @Getter private static LuckPerms lp;
     @Getter private static MojangResolver resolver;
-    @Getter private static boolean isStarting;
+    @Getter private static boolean isStarting = true;
+    @Getter private static boolean isStoping = false;
     @Getter private static AviaTerraCore instance;
     @Getter private static MiniMessage miniMessage;
     @Setter private static long activeTime;
 
+    static {
+
+    }
 
     @Override
     public void onLoad(){
         instance = this;
         resolver = new MojangResolver();
         miniMessage = MiniMessage.miniMessage();
+        tokenBot = Objects.requireNonNullElseGet(DataSection.getConfigFile(),  () -> {
+            ConfigFile configFile = new ConfigFile();
+            DataSection.setConfigFile(configFile);
+            return configFile;
+        }).getFileYaml().getString("token-bot");
     }
 
     @Override
     public void onEnable() {
+
         startTime = System.currentTimeMillis();
         MessagesManager.logConsole("AviaTerra Iniciando...", TypeMessages.SUCCESS, CategoryMessages.PRIVATE, false);
         isStarting = true;
@@ -128,6 +140,7 @@ public class AviaTerraCore extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        isStoping = true;
         DataSection.getConfigFile().saveActiveTime();
         for (Section section : RegisterManager.sections){
             section.disable();
@@ -135,10 +148,13 @@ public class AviaTerraCore extends JavaPlugin {
         LIST_BROADCAST.clear();
         if (DiscordBot.stateTasks != null) DiscordBot.stateTasks.cancel();
         workerThread.interrupt();
-        getOnlinePlayers().forEach(player ->
-                GlobalUtils.kickPlayer(player, "El servidor va a cerrar, volveremos pronto..."));
+        getOnlinePlayers().forEach(player -> {
+            GlobalUtils.kickPlayer(player, "El servidor va a cerrar, volveremos pronto...");
+            DataBaseRegister.checkRegister(player);
+        });
         TASK_QUEUE.clear();
         DiscordBot.handler.shutdown();
+        isStoping = false;
         MessagesManager.logConsole("AviaTerra Se fue a dormir cómodamente", TypeMessages.SUCCESS, CategoryMessages.SYSTEM, false);
     }
 
@@ -213,23 +229,38 @@ public class AviaTerraCore extends JavaPlugin {
         }
     }
 
+    private static final ExecutorService EXECUTOR = Executors.newCachedThreadPool();
+
     private void processQueue() {
         try {
             while (!Thread.currentThread().isInterrupted()) {
-                // Toma una tarea de la cola y la ejecuta
                 AviaRunnable task = TASK_QUEUE.take();
-                long startTime = System. nanoTime();
-                task.run();
-                long elapsedNanos = System. nanoTime() - startTime;
-                // 1000 ms
-                if (elapsedNanos > 1000000*1000 && !task.isHeavyProcess()){
+                long startTime = System.nanoTime();
+
+                Future<?> future = EXECUTOR.submit(task);
+                try {
+                    future.get(1000*45, TimeUnit.MILLISECONDS);
+                } catch (TimeoutException e) {
+                    future.cancel(true); // Cancelamos la tarea si tarda demasiado
+                    MessagesManager.sendErrorException("La tarea ha tardado demasiado y fue cancelada", e);
+                } catch (ExecutionException e) {
+                    MessagesManager.sendErrorException("Error en la ejecución de la tarea", e);
+                }
+
+                long elapsedNanos = System.nanoTime() - startTime;
+                if (elapsedNanos > 1_000_000_000L && !task.isHeavyProcess()) { // 1s en nanosegundos
                     StringBuilder builder = new StringBuilder();
-                    for (StackTraceElement element : task.getStackTraceElements()) builder.append(element.toString()).append("\n\t");
-                    AviaTerraCore.getInstance().getLogger().warning(String.format("La tarea tardo %s Ms en procesarse", elapsedNanos*0.000001D) + "\n" + builder);
+                    for (StackTraceElement element : task.getStackTraceElements()) {
+                        builder.append(element.toString()).append("\n\t");
+                    }
+                    AviaTerraCore.getInstance().getLogger().warning(
+                            String.format("La tarea tardó %s ms en procesarse", elapsedNanos * 0.000001D) + "\n" + builder
+                    );
                 }
             }
         } catch (InterruptedException e) {
-            Thread.currentThread().interrupt(); // Si es interrumpido, detenemos el hilo
+            Thread.currentThread().interrupt();
+            if (!isStoping) MessagesManager.sendErrorException("Hilo del AviaTerra interrumpido", e);
         }
     }
 

@@ -54,7 +54,7 @@ public class ManipulatorAction extends BaseActions {
         new BukkitRunnable() {
             final AviaTerraPlayer player = p;
             public void run() {
-                Inventory inv = Bukkit.createInventory(null, 54, "temporal");
+                Inventory inv = Bukkit.createInventory(null, 54, "");
                 for (int i = 0; i < 54; i++){
                     ItemStack item = ManipulatorInventory.INVENTORIES.get(victim.getUniqueId()).getItem(i);
                     if (item != null) {
