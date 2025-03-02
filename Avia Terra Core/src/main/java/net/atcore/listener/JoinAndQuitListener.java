@@ -40,16 +40,15 @@ public class JoinAndQuitListener implements Listener {
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
-        LoginData login = LoginManager.getDataLogin(player);
+
         if (LoginManager.isLimboMode(player)) {//Esto es para que los jugadores no logueados
+            LoginData login = LoginManager.getDataLogin(player);
             LimboData limbo = login.getLimbo();
             limbo.restorePlayer(player);// Carga los datos del jugador para que el servidor guarde sus datos como si estuviera logueado
         }
 
 
         if (LoginManager.getDataLogin(player) != null) {// si le llega a borrar el registro
-            RegisterData register = login.getRegister();
-
             AviaTerraCore.enqueueTaskAsynchronously(() -> {
                 DataBaseRegister.checkRegister(player);
             });

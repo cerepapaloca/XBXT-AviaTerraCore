@@ -39,12 +39,7 @@ public final class LoginManager {
 
     public LoginData getDataLogin(String name) {
         String normalizeName = name.startsWith(".") ? name.substring(1) : name;
-        for (LoginData data : LIST_DATA_LOGIN.values()) {
-            if (data.getRegister().getUsername().equals(normalizeName)){
-                return data;
-            }
-        }
-        return null;
+        return LIST_DATA_LOGIN.get(GlobalUtils.getUUIDByName(normalizeName));
     }
 
     /**

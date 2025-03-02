@@ -32,6 +32,7 @@ import java.net.InetAddress;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -617,10 +618,15 @@ public final class GlobalUtils {
     @NotNull
     @Contract(pure = true)
     public String getRealName(Player player) {
-        if (FloodgateApi.getInstance().isFloodgatePlayer(player.getUniqueId())){
-            return FloodgateApi.getInstance().getPlayer(player.getUniqueId()).getUsername();
+        if (player.isOnline()){
+            if (FloodgateApi.getInstance().isFloodgatePlayer(player.getUniqueId())){
+                return FloodgateApi.getInstance().getPlayer(player.getUniqueId()).getUsername();
+            }else {
+                return player.getName();
+            }
         }else {
-            return player.getName();
+            // En caso de que un jugador de bedrock se desconecte
+            return LoginManager.getDataLogin(player.getName()).getRegister().getUsername();
         }
     }
 
