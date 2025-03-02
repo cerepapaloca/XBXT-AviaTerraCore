@@ -21,17 +21,17 @@ public abstract class DataBaseMySql implements Reloadable {
 
     private static final String HOST = "192.168.1.55";//localhost
     private static final String PORT = "3306";
-    private static final String DATABASE = "xbxt";//aviaterra
-    private static final String USER = "xbxt-data-base";//xbxt-data-base
-    private static final String PASSWORD = "AdeptusAzurex1313#waos";//AdeptusAzurex1313#waos
+    private static final String DATABASE = "xbxt";
+    private static final String USER;
+    private static final String PASSWORD;
 
     static {
-        Bukkit.getLogger().severe(Objects.requireNonNullElseGet(DataSection.getConfigFile(),  () -> {
+        USER = Objects.requireNonNullElseGet(DataSection.getConfigFile(),  () -> {
             ConfigFile configFile = new ConfigFile();
             DataSection.setConfigFile(configFile);
             return configFile;
-        }).getFileYaml().getString("mysql.username"));
-        Bukkit.getLogger().severe(DataSection.getConfigFile().getFileYaml().getString("mysql.password"));
+        }).getFileYaml().getString("mysql.username");
+        PASSWORD = DataSection.getConfigFile().getFileYaml().getString("mysql.password");
     }
 
     /**

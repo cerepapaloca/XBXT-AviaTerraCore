@@ -4,11 +4,9 @@ import lombok.AllArgsConstructor;
 import net.atcore.AviaTerraCore;
 import net.atcore.security.check.CheckerUtils;
 import net.atcore.utils.GlobalUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 import org.bukkit.event.inventory.InventoryEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
@@ -27,7 +25,6 @@ public class AntiDupe extends InventoryChecker {
         if (event instanceof InventoryEvent invEvent) {
             List<ItemStack> itemsToRemove = CheckerUtils.getItems(invEvent).stream().map(itemStack -> {
                 if (itemStack.getItemMeta() == null) return null;
-                if (itemStack.getAmount() != 1) itemStack.setAmount(1);
                 String string = (String) GlobalUtils.getPersistenData(itemStack, "uuid", PersistentDataType.STRING);
                 if (string == null) return null;
                 if (string.equals("?")) {
@@ -41,14 +38,12 @@ public class AntiDupe extends InventoryChecker {
                 for (ItemStack item : itemsToRemove) {
                     if (item == null) continue;
                     if (item.getItemMeta() == null) continue;
-                    PersistentDataContainer dataContainer = item.getItemMeta().getPersistentDataContainer();
-                    if (dataContainer.has(GlobalUtils.KEY_ANTI_DUPE, PersistentDataType.STRING)) {
-                        String uniqueId = dataContainer.get(GlobalUtils.KEY_ANTI_DUPE, PersistentDataType.STRING);
-                        if (uniqueId != null){
-                            AntiDupeItem antiDupeItem = itemCounts.getOrDefault(uniqueId, new AntiDupeItem(uniqueId));
-                            antiDupeItem.items.add(item);
-                            itemCounts.put(uniqueId, antiDupeItem);
-                        }
+                    String uniqueId = (String) GlobalUtils.getPersistenData(item, "uuid", PersistentDataType.STRING);
+                    if (uniqueId != null){
+                        if (item.getAmount() != 1) item.setAmount(1);
+                        AntiDupeItem antiDupeItem = itemCounts.getOrDefault(uniqueId, new AntiDupeItem(uniqueId));
+                        antiDupeItem.items.add(item);
+                        itemCounts.put(uniqueId, antiDupeItem);
                     }
                 }
                 AviaTerraCore.taskSynchronously(() -> {

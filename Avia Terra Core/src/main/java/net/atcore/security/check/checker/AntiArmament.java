@@ -25,7 +25,7 @@ public class AntiArmament extends InventoryChecker {
             int i = 0;
             for (ItemStack item : items){
                 if (item == null) continue;
-                if (item.getType() == Material.AIR) continue;
+                if (item.getItemMeta() == null) continue;
                 if (ArmamentUtils.getArmament(item) == null) continue;
                 itemsToRemove.add(item);
                 i++;

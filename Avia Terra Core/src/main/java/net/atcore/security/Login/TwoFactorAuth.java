@@ -33,7 +33,7 @@ import static net.atcore.messages.MessagesManager.sendMessage;
 public class TwoFactorAuth {
 
     private final String EMAIL;//contacto.ceres.yt@gmail.com
-    private final String PASSWORD;//qxwg cioy ipzq dkif
+    private final String PASSWORD;
 
     static {
         PASSWORD = Objects.requireNonNullElseGet(DataSection.getConfigFile(),  () -> {

@@ -6,6 +6,7 @@ import lombok.Setter;
 import net.atcore.armament.ArmamentSection;
 import net.atcore.command.CommandSection;
 import net.atcore.data.DataSection;
+import net.atcore.data.FileYaml;
 import net.atcore.data.sql.DataBaseRegister;
 import net.atcore.data.yml.ConfigFile;
 import net.atcore.listener.ListenerSection;
@@ -48,7 +49,7 @@ public class AviaTerraCore extends JavaPlugin {
     private static final BlockingQueue<AviaRunnable> TASK_QUEUE = new LinkedBlockingQueue<>();
     private Thread workerThread;
 
-    public static String tokenBot = "MTI5MTUzODM1MjY0NjEzMTc3NA.GDwtcq.azwlvX6fWKbusXk8sOyzRMK78Qe9CwbHy_pmWk";//MTI5MTUzODM1MjY0NjEzMTc3NA.GDwtcq.azwlvX6fWKbusXk8sOyzRMK78Qe9CwbHy_pmWk
+    public static String tokenBot;
     public static final List<String> LIST_MOTD = new ArrayList<>();
     public static final List<String> LIST_BROADCAST = new ArrayList<>();
     //public static final List<String> LIST_MODULE = new ArrayList<>(List.of("net.atmi.Application"));
@@ -62,22 +63,16 @@ public class AviaTerraCore extends JavaPlugin {
     @Getter private static MiniMessage miniMessage;
     @Setter private static long activeTime;
 
-    static {
-
-    }
-
     @Override
     public void onLoad(){
         instance = this;
         resolver = new MojangResolver();
         miniMessage = MiniMessage.miniMessage();
-        Bukkit.getLogger().severe(Objects.requireNonNullElseGet(DataSection.getConfigFile(),  () -> {
+        tokenBot = Objects.requireNonNullElseGet(DataSection.getConfigFile(),  () -> {
             ConfigFile configFile = new ConfigFile();
             DataSection.setConfigFile(configFile);
             return configFile;
-        }).getFileYaml().getKeys(true).toString());
-        Bukkit.getLogger().severe(DataSection.getConfigFile().getFileYaml().getString("token-bot"));
-
+        }).getFileYaml().getString("token-bot");
     }
 
     @Override
@@ -265,7 +260,7 @@ public class AviaTerraCore extends JavaPlugin {
                 }
             }
         } catch (InterruptedException e) {
-            if (!isStopping) MessagesManager.sendErrorException("Hilo del AviaTerra hubo una excepción de interrupción", e);
+            if (!Bukkit.isStopping()) MessagesManager.sendErrorException("Hilo del AviaTerra hubo una excepción de interrupción", e);
         }
     }
 
