@@ -2,6 +2,7 @@ package net.atcore.data.sql;
 
 import net.atcore.AviaTerraCore;
 import net.atcore.data.DataBaseMySql;
+import net.atcore.data.DataSection;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
@@ -89,7 +90,6 @@ public class DataBaseRegister extends DataBaseMySql {
 
     @Override
     protected void createTable() {
-
         try (Connection connection = getConnection()) {//revisa si la tabla existe
             DatabaseMetaData dbMetaData = connection.getMetaData();
             try (ResultSet resultSet = dbMetaData.getTables(null, null, "register", null)) {
@@ -138,6 +138,8 @@ public class DataBaseRegister extends DataBaseMySql {
                                    long lastLoginDate,
                                    long registerDate
     ) {
+        if (!DataSection.isDataBaseActive()) return;
+
         String sql = "INSERT INTO register (name, uuidBedrock, uuidPremium, uuidCracked, ipRegister, ipLogin, stateAccount, password, lastLoginDate, registerDate, gmail, discord) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) " +
                 "ON DUPLICATE KEY UPDATE " +
@@ -165,6 +167,7 @@ public class DataBaseRegister extends DataBaseMySql {
     }
 
     public static boolean isExistRegister(Player player) {
+        if (!DataSection.isDataBaseActive()) return true;
         String query = "SELECT EXISTS(SELECT 1 FROM register WHERE uuidCracked = ?)";
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -182,6 +185,8 @@ public class DataBaseRegister extends DataBaseMySql {
     }
 
     public static boolean updateLoginDate(String name ,long time){
+        if (!DataSection.isDataBaseActive()) return false;
+
         String sql = "UPDATE register SET lastLoginDate = ? WHERE name = ?";
 
         try (PreparedStatement stmt = getConnection().prepareStatement(sql)) {
@@ -197,6 +202,8 @@ public class DataBaseRegister extends DataBaseMySql {
     }
 
     public static boolean updateGmail(String name ,String gmail){
+        if (!DataSection.isDataBaseActive()) return true;
+
         String sql = "UPDATE register SET gmail = ? WHERE name = ?";
 
         try (PreparedStatement stmt = getConnection().prepareStatement(sql)) {
@@ -213,6 +220,8 @@ public class DataBaseRegister extends DataBaseMySql {
     }
 
     public static boolean updateDiscord(String name ,String discord){
+        if (!DataSection.isDataBaseActive()) return true;
+
         String sql = "UPDATE register SET discord = ? WHERE name = ?";
 
         try (PreparedStatement stmt = getConnection().prepareStatement(sql)) {
@@ -229,6 +238,8 @@ public class DataBaseRegister extends DataBaseMySql {
     }
 
     public static boolean updatePassword(String name, String password){
+        if (!DataSection.isDataBaseActive()) return true;
+
         String sql = "UPDATE register SET password = ? WHERE name = ?";
 
         try (PreparedStatement stmt = getConnection().prepareStatement(sql)) {
@@ -245,6 +256,8 @@ public class DataBaseRegister extends DataBaseMySql {
     }
 
     public static boolean updateAddress(String name, String ip){
+        if (!DataSection.isDataBaseActive()) return true;
+
         String sql = "UPDATE register SET ipLogin = ? WHERE name = ?";
 
         try (PreparedStatement stmt = getConnection().prepareStatement(sql)) {
@@ -261,6 +274,8 @@ public class DataBaseRegister extends DataBaseMySql {
     }
 
     public static boolean changeState(String name, StateLogins stateLogins){
+        if (!DataSection.isDataBaseActive()) return true;
+
         String sql = "UPDATE register SET stateAccount = ? WHERE name = ?";
 
         try (PreparedStatement stmt = getConnection().prepareStatement(sql)) {
@@ -283,6 +298,8 @@ public class DataBaseRegister extends DataBaseMySql {
      */
 
     public static boolean removeRegister(String name, String author){
+        if (!DataSection.isDataBaseActive()) return true;
+
         String sql = "DELETE FROM register WHERE name = ?";
         try (PreparedStatement stmt = getConnection().prepareStatement(sql)){
             stmt.setString(1, name);
@@ -298,6 +315,8 @@ public class DataBaseRegister extends DataBaseMySql {
     }
 
     public static void addUUIDBedrock(String name, UUID uuid){
+        if (!DataSection.isDataBaseActive()) return;
+
         String sql = "UPDATE register SET uuidBedrock = ? WHERE name = ?";
 
         try (PreparedStatement stmt = getConnection().prepareStatement(sql)) {
@@ -312,6 +331,8 @@ public class DataBaseRegister extends DataBaseMySql {
     }
 
     public static void checkRegister(Player player) {
+        if (!DataSection.isDataBaseActive()) return;
+
         LoginData login = LoginManager.getDataLogin(player);
         RegisterData register = login.getRegister();
         boolean isExist = DataBaseRegister.isExistRegister(player);
@@ -320,11 +341,11 @@ public class DataBaseRegister extends DataBaseMySql {
                     register.getUuidCracked().toString(),
                     register.getUuidPremium() == null ? null : register.getUuidPremium().toString(),
                     register.getRegisterAddress().getHostAddress(),
-                    login.getSession().getAddress().getHostAddress(),
+                    register.getLastAddress().getHostAddress(),
                     register.getStateLogins(),
                     register.getPasswordShaded(),
-                    login.getSession().getStartTimeLogin(),
-                    login.getRegister().getRegisterDate()
+                    register.getLastLoginDate(),
+                    register.getRegisterDate()
             );
             MessagesManager.logConsole("Se añadió un registro de " + player.getName() + " que no existía", TypeMessages.WARNING, CategoryMessages.LOGIN);
         }

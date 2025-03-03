@@ -6,7 +6,6 @@ import lombok.Setter;
 import net.atcore.armament.ArmamentSection;
 import net.atcore.command.CommandSection;
 import net.atcore.data.DataSection;
-import net.atcore.data.FileYaml;
 import net.atcore.data.sql.DataBaseRegister;
 import net.atcore.data.yml.ConfigFile;
 import net.atcore.listener.ListenerSection;
@@ -33,6 +32,7 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +52,7 @@ public class AviaTerraCore extends JavaPlugin {
     public static String tokenBot;
     public static final List<String> LIST_MOTD = new ArrayList<>();
     public static final List<String> LIST_BROADCAST = new ArrayList<>();
-    //public static final List<String> LIST_MODULE = new ArrayList<>(List.of("net.atmi.Application"));
+    @Nullable
     public static JDA jda;
     private static long startTime;
     @Getter private static LuckPerms lp;

@@ -219,6 +219,7 @@ public final class MessagesManager {
 
 
     private static void sendMessageLogDiscord(TypeMessages type, CategoryMessages categoryMessages, String message) {
+        if (AviaTerraCore.jda == null) return;
         AviaTerraCore.enqueueTaskAsynchronously(() -> {
             String finalMessage;
             switch (type) {

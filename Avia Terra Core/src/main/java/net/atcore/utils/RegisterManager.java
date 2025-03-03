@@ -45,8 +45,13 @@ public class RegisterManager {
                 RegisterManager.sections.add(section);
                 logConsole(section.getName() + TypeMessages.SUCCESS.getMainColor() + " Ok", TypeMessages.INFO, CategoryMessages.PRIVATE, false);
             } catch (Exception e) {
-                Bukkit.shutdown();
-                MessagesManager.sendErrorException("Error al cargar: " + section.getName() + ". Deteniendo el servidor...", e);
+                logConsole(section.getName() + TypeMessages.ERROR.getMainColor() + " Fail", TypeMessages.INFO, CategoryMessages.PRIVATE, false);
+                if (section.isImportant()){
+                    Bukkit.shutdown();
+                    MessagesManager.sendErrorException("Error al cargar: " + section.getName() + ". Deteniendo el servidor", e);
+                }else {
+                    MessagesManager.sendWaringException("Error al cargar: " + section.getName() + ". funcionalidad deshabilitada", e);
+                }
             }
         }
     }

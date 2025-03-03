@@ -52,6 +52,7 @@ public class TwoFactorAuth {
     private String gmail;
 
     public void sendVerificationEmail(String recipientEmail, CodeAuth code, FormatMessage format) {
+        if (PASSWORD == null || PASSWORD.isBlank() || EMAIL == null || EMAIL.isBlank()) return;
         if (Bukkit.isPrimaryThread()){
             throw new IllegalThreadStateException("No usar el hilo principal para el envió de emails");
         }
@@ -91,6 +92,7 @@ public class TwoFactorAuth {
     }
 
     public static void sendVerificationDiscord(String id, Player player, FormatMessage format) {
+        if (AviaTerraCore.jda == null) return;
         if (Bukkit.isPrimaryThread()){
             throw new IllegalThreadStateException("No usar el hilo principal para el envió de mensajes de discord");
         }

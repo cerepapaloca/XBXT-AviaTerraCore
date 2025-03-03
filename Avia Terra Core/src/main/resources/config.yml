@@ -1,18 +1,32 @@
 canales-de-discord:
-  commands: '1308198706264277093'
-  ban: '1294324328401207389'
-  login: '1299444352409669746'
-  console: '1294324285602795550'
-anti-bot: false
+  commands: ''
+  ban: ''
+  login: ''
+  console: ''
+  chat-bridge: ''
+  join-and-leave: ''
+  system: ''
 expiration-session: 1000
-level-moderation-chat: 1000.0
-check-anti-op: false
+level-moderation-chat: 0.0
 purge-tag-range: 0
-check-anti-illegal-items: false
 check-ban-by-ip: false
-server-mode: online_mode
-active-time: 0
-password-ssl: HolaMundo
+server-mode: mix_mode
+chace-dupe-frame: 0.5
+password-ssl: webxbxt
+active-time: 192309610
+roof-nether: true
+checker:
+  RoofNether: false
+  AntiIlegal: true
+  AntiIlegalBlock: true
+  AntiIlegalItem: true
+  AntiOP: false
+  AntiArmament: false
+  AntiDupe: true
 mysql:
   username: ''
   password: ''
+token-bot: ''
+email:
+  password: ''
+  name: ''

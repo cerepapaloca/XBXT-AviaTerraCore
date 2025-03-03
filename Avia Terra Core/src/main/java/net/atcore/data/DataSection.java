@@ -15,10 +15,16 @@ import net.atcore.data.yml.ymls.CacheLimboFlies;
 import net.atcore.data.yml.ymls.MapArtsFiles;
 import net.atcore.data.yml.ymls.MessagesLocaleFile;
 import net.atcore.data.yml.ymls.PlayersDataFiles;
+import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.HashSet;
+
+import static net.atcore.messages.MessagesManager.logConsole;
+import static net.atcore.messages.MessagesManager.sendString;
 
 public class DataSection implements Section {
 
@@ -31,11 +37,20 @@ public class DataSection implements Section {
     @Getter private static CacheVoteFile cacheVoteFile;
     @Getter private static MessagesLocaleFile messagesLocaleFile;
     @Getter private static MapArtsFiles mapArtsFiles;
+    @Getter private static boolean isDataBaseActive = false;
 
     @Override
     public void enable() {
-        new DataBaseBan();
-        new DataBaseRegister();
+        try (Connection connection = DataBaseMySql.getConnection()) {
+            if (connection == null) throw new SQLException();
+            new DataBaseBan();
+            new DataBaseRegister();
+            isDataBaseActive = true;
+        }catch (Exception e) {
+            isDataBaseActive = false;
+            logConsole("Base de Datos" + TypeMessages.ERROR.getMainColor() + " Fail", TypeMessages.INFO, CategoryMessages.PRIVATE, false);
+            MessagesManager.sendWaringException("Error al iniciar la base de datos", e);
+        }
         new CommandsFile();
         new Discord();
         new Email();
@@ -83,5 +98,10 @@ public class DataSection implements Section {
     @Override
     public String getName() {
         return "Datos";
+    }
+
+    @Override
+    public boolean isImportant() {
+        return true;
     }
 }

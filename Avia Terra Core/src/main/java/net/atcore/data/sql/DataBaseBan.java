@@ -2,6 +2,7 @@ package net.atcore.data.sql;
 
 import net.atcore.AviaTerraCore;
 import net.atcore.data.DataBaseMySql;
+import net.atcore.data.DataSection;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
@@ -108,7 +109,10 @@ public class DataBaseBan extends DataBaseMySql {
                                        long dateUnban,
                                        long dateBan,
                                        String context,
-                                       String author) throws UnknownHostException {
+                                       String author
+    ) throws UnknownHostException  {
+        if (!DataSection.isDataBaseActive()) return;
+
         UUID uuid = null;
         if (uuids != null){
             uuid = UUID.fromString(uuids);
@@ -134,7 +138,7 @@ public class DataBaseBan extends DataBaseMySql {
         listDataBanByIP.put(ipAddress, listIP);
 
     }
-    /* No se esto se volver a usar en el futuro
+    /* No se si esto se volver a usar en el futuro
     protected static @NotNull HashSet<DataBan> getDataBan(@NotNull Player player, InetAddress address, SearchBanBy searchBanBy) throws SQLException {
 
         PreparedStatement statement = null;
@@ -175,6 +179,8 @@ public class DataBaseBan extends DataBaseMySql {
     }*/
 
     public void addBanPlayer(DataBan dataBan) {
+        if (!DataSection.isDataBaseActive()) return;
+
         String sql = "INSERT INTO bans (name, uuid, ip, reason, unban_date, ban_date, context, author) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?) " +
                 "ON DUPLICATE KEY UPDATE " +
@@ -222,6 +228,8 @@ public class DataBaseBan extends DataBaseMySql {
     }
 
     public void removeBanPlayer(String name, ContextBan context, String author) {
+        if (!DataSection.isDataBaseActive()) return;
+
         String sql = "DELETE FROM bans WHERE name = ? AND context = ?";
         try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {

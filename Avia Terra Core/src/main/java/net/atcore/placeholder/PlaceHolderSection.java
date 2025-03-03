@@ -30,4 +30,9 @@ public class PlaceHolderSection implements Section {
     public @NotNull String getName(){
         return "placeholder";
     }
+
+    @Override
+    public boolean isImportant() {
+        return false;
+    }
 }

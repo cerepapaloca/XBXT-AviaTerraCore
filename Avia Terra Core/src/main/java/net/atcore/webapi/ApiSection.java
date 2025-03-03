@@ -37,4 +37,9 @@ public class ApiSection implements Section {
         }
         new ApiHandler();
     }
+
+    @Override
+    public boolean isImportant() {
+        return false;
+    }
 }

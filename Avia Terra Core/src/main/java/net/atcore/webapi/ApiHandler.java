@@ -93,7 +93,7 @@ public final class ApiHandler {
             server.start();
             ApiHandler.server = server;
         } catch (Exception e) {
-            MessagesManager.sendWaringException("Error al iniciar la api de pagina web, Api deshabilitada", e);
+            throw new RuntimeException(e);
         }
     }
 }

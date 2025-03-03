@@ -22,8 +22,8 @@ public abstract class DataBaseMySql implements Reloadable {
     private static final String HOST = "192.168.1.55";//localhost
     private static final String PORT = "3306";
     private static final String DATABASE = "xbxt";
-    private static final String USER;
-    private static final String PASSWORD;
+    public static final String USER;
+    public static final String PASSWORD;
 
     static {
         USER = Objects.requireNonNullElseGet(DataSection.getConfigFile(),  () -> {

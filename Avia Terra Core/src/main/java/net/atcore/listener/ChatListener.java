@@ -62,12 +62,14 @@ public class ChatListener implements Listener {
 
         Bukkit.getConsoleSender().sendMessage(setFormat(message, player, player, textPlain.contains(player.getName())));
 
-        TextChannel channel = AviaTerraCore.jda.getTextChannelById(DiscordBot.chatId);
-        if (channel !=  null) {
-            channel.sendMessage(PlainTextComponentSerializer.plainText().serialize(
-                    GlobalUtils.chatColorLegacyToComponent(
-                            String.format(Message.EVENT_CHAT_FORMAT.getMessageLocaleDefault(), "**" + player.getName() + "**", textPlain))
-            )).queue();
+        if (AviaTerraCore.jda != null) {
+            TextChannel channel = AviaTerraCore.jda.getTextChannelById(DiscordBot.chatId);
+            if (channel !=  null) {
+                channel.sendMessage(PlainTextComponentSerializer.plainText().serialize(
+                        GlobalUtils.chatColorLegacyToComponent(
+                                String.format(Message.EVENT_CHAT_FORMAT.getMessageLocaleDefault(), "**" + player.getName() + "**", textPlain))
+                )).queue();
+            }
         }
     }
 

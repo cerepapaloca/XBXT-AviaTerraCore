@@ -37,4 +37,9 @@ public class ListenerSection implements Section {
     public String getName() {
         return "Listener";
     }
+
+    @Override
+    public boolean isImportant() {
+        return true;
+    }
 }

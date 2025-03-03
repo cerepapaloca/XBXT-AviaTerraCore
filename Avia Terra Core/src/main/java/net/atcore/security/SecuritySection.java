@@ -47,4 +47,9 @@ public class SecuritySection implements Section {
     public String getName() {
         return "Seguridad";
     }
+
+    @Override
+    public boolean isImportant() {
+        return true;
+    }
 }

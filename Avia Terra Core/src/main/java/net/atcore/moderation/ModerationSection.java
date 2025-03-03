@@ -28,4 +28,9 @@ public class ModerationSection implements Section {
     public String getName() {
         return "Moderación";
     }
+
+    @Override
+    public boolean isImportant() {
+        return true;
+    }
 }

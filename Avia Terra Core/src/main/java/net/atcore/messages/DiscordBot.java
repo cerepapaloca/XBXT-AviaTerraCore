@@ -39,8 +39,8 @@ public class DiscordBot extends ListenerAdapter{
 
     public static void startDiscordBot(){
         AviaTerraCore.enqueueTaskAsynchronously(true, () -> {
-            jda = JDABuilder.createDefault(tokenBot).enableIntents(GatewayIntent.MESSAGE_CONTENT).build();
             try {
+                jda = JDABuilder.createDefault(tokenBot).enableIntents(GatewayIntent.MESSAGE_CONTENT).build();
                 jda.removeEventListener(DiscordBot.class);
                 jda.awaitReady();
                 jda.addEventListener(new DiscordBot());
@@ -69,8 +69,8 @@ public class DiscordBot extends ListenerAdapter{
                 }).attach().schedule();
                 MessagesManager.logConsole("discord bot " + TypeMessages.SUCCESS.getMainColor() + "Ok", TypeMessages.INFO, false);
             } catch (Exception e) {
-                MessagesManager.sendErrorException("No se pudo iniciar el bot de discord (Reinicio Iniciado)", e);
-                Bukkit.shutdown();
+                MessagesManager.logConsole("discord bot " + TypeMessages.ERROR.getMainColor() + "Fail", TypeMessages.INFO, false);
+                MessagesManager.sendWaringException("No se pudo iniciar el bot de discord", e);
             }
         });
     }
@@ -78,6 +78,7 @@ public class DiscordBot extends ListenerAdapter{
     public static void startStateBot(){
         String os = System.getProperty("os.name").toLowerCase();
         // Esto solo funciona el linux es decir en el servidor principal
+        if (jda == null) return;
         if (os.contains("nix") || os.contains("nux")) {
             stateTasks = new BukkitRunnable() {
                 @Override

@@ -11,7 +11,6 @@ import net.atcore.security.AntiTwoPlayer;
 import net.atcore.security.Login.LoginManager;
 import net.atcore.security.Login.model.LimboData;
 import net.atcore.security.Login.model.LoginData;
-import net.atcore.security.Login.model.RegisterData;
 import net.atcore.security.SecuritySection;
 import net.atcore.utils.GlobalUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -49,9 +48,7 @@ public class JoinAndQuitListener implements Listener {
 
 
         if (LoginManager.getDataLogin(player) != null) {// si le llega a borrar el registro
-            AviaTerraCore.enqueueTaskAsynchronously(() -> {
-                DataBaseRegister.checkRegister(player);
-            });
+            AviaTerraCore.enqueueTaskAsynchronously(() -> DataBaseRegister.checkRegister(player));
 
             // Borra a los jugadores cracked y semi cracked que no pudieron registrarse para evitar tener jugadores fantasmas
             if (LoginManager.getDataLogin(player).getRegister().isTemporary()){
@@ -102,13 +99,15 @@ public class JoinAndQuitListener implements Listener {
     }
 
     private void sendEmbed(@NotNull Player player, Color color, String message) {
-        EmbedBuilder embed = new EmbedBuilder();
-        embed.setColor(color);
-        String normalizedName = player.getName().startsWith(".") ? player.getName().substring(1) : player.getName();
-        embed.setAuthor(String.format(message, player.getName()), null, "https://crafthead.net/cube/" + normalizedName);
-        TextChannel textChannel = AviaTerraCore.jda.getTextChannelById(DiscordBot.JoinAndLeave);
-        assert textChannel != null;
-        textChannel.sendMessageEmbeds(embed.build()).queue();
+        if (AviaTerraCore.jda != null) {
+            EmbedBuilder embed = new EmbedBuilder();
+            embed.setColor(color);
+            String normalizedName = player.getName().startsWith(".") ? player.getName().substring(1) : player.getName();
+            embed.setAuthor(String.format(message, player.getName()), null, "https://crafthead.net/cube/" + normalizedName);
+            TextChannel textChannel = AviaTerraCore.jda.getTextChannelById(DiscordBot.JoinAndLeave);
+            assert textChannel != null;
+            textChannel.sendMessageEmbeds(embed.build()).queue();
+        }
     }
 
     @EventHandler

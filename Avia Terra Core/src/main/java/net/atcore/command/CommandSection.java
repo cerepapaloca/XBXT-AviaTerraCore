@@ -69,4 +69,9 @@ public class CommandSection implements Section {
     public String getName() {
         return "Comandos";
     }
+
+    @Override
+    public boolean isImportant() {
+        return true;
+    }
 }

@@ -63,4 +63,9 @@ public class ArmamentSection implements Section {
     public void reload() {
 
     }
+
+    @Override
+    public boolean isImportant() {
+        return true;
+    }
 }
