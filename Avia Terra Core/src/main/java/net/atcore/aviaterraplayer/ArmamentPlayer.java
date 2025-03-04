@@ -2,22 +2,14 @@ package net.atcore.aviaterraplayer;
 
 import lombok.Getter;
 import lombok.Setter;
-import me.neznamy.tab.api.TabAPI;
-import me.neznamy.tab.api.TabPlayer;
-import me.neznamy.tab.api.bossbar.BarColor;
-import me.neznamy.tab.api.bossbar.BarStyle;
-import me.neznamy.tab.api.bossbar.BossBar;
-import me.neznamy.tab.api.bossbar.BossBarManager;
 import net.atcore.AviaTerraCore;
 import net.atcore.armament.ArmamentUtils;
 import net.atcore.armament.BaseWeapon;
 import net.atcore.armament.BaseWeaponUltraKill;
 import net.atcore.armament.Compartment;
 import net.atcore.utils.GlobalUtils;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Sound;
-import org.bukkit.SoundCategory;
+import net.kyori.adventure.bossbar.BossBar;
+import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
@@ -36,9 +28,14 @@ public class ArmamentPlayer extends AbstractAviaTerraPlayer implements Compartme
     }
 
     private boolean isReloading = false;
+    private BukkitTask bossBarTask;
     @Nullable
     private BukkitTask shootTask;
+
     private long lastShoot = 0;
+    private final BossBar bossBar = BossBar.bossBar(Component.empty(), 0f, BossBar.Color.BLUE, BossBar.Overlay.NOTCHED_10);
+
+
 
     @Override
     public boolean reload(Player player){
@@ -52,33 +49,15 @@ public class ArmamentPlayer extends AbstractAviaTerraPlayer implements Compartme
                         if (itemArmament.getItemMeta() != null){
                             Integer amountAmmo = (Integer) GlobalUtils.getPersistenData(itemArmament,"AmountAmmo", PersistentDataType.INTEGER);
                             if (amountAmmo != null){
-                                TabPlayer tabPlayer = TabAPI.getInstance().getPlayer(aviaTerraPlayer.getUuid());
-                                if (tabPlayer != null){
-                                    player.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, weapon.getReloadDelay() + 1, 2, true, false, false));
-                                    if (bossBar == null){
-                                        createBossBar();
-                                    }
-                                    BossBarManager bossBarManager = TabAPI.getInstance().getBossBarManager();
-                                    try {
-                                        if (amountAmmo < weapon.getMaxAmmo()){
-                                            amountAmmo++;
-                                            GlobalUtils.setPersistentData(itemArmament, "AmountAmmo", PersistentDataType.INTEGER, amountAmmo);
-                                            bossBar.setTitle(ChatColor.translateAlternateColorCodes('&', "&3&lCantidad De Munición: &6&l" + amountAmmo));
-                                            bossBar.setProgress((((float) amountAmmo / (float) weapon.getMaxAmmo())*100));
-                                            if (bossBarManager != null)bossBarManager.sendBossBarTemporarily(tabPlayer, bossBar.getName(), weapon.getReloadDelay()*20 + 20);
-                                            return;
-                                        }else {
-                                            player.getWorld().playSound(player.getLocation(), Sound.ITEM_ARMOR_EQUIP_IRON, SoundCategory.PLAYERS, 1, 1);
-                                            bossBar.setTitle(ChatColor.translateAlternateColorCodes('&', "&3&lCantidad De Munición: &6&l" + weapon.getMaxAmmo()));
-                                            bossBar.setProgress((((float) amountAmmo / (float) weapon.getMaxAmmo())*100));
-                                            if (bossBarManager != null)bossBarManager.sendBossBarTemporarily(tabPlayer, bossBar.getName(), 10);
-                                        }
-                                    }catch (Exception ignored){
-                                        //TODO: hay que arreglar esto algún dia
-                                    }
-                                    weapon.updateLore(itemArmament, null);
+                                player.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, weapon.getReloadDelay() + 1, 2, true, false, false));
+                                sendBossBar(player, weapon, amountAmmo);
+                                weapon.updateLore(itemArmament, null);
+                                if (amountAmmo < weapon.getMaxAmmo()) {
+                                    GlobalUtils.setPersistentData(itemArmament, "AmountAmmo", PersistentDataType.INTEGER, amountAmmo + 1);
+                                    return;
                                 }
                             }
+
                         }
                     }
                     if (player.isOnline()) player.removePotionEffect(PotionEffectType.SLOWNESS);
@@ -87,7 +66,7 @@ public class ArmamentPlayer extends AbstractAviaTerraPlayer implements Compartme
 
                 @Override
                 public void cancel(){
-                    Bukkit.getScheduler().cancelTask(getTaskId());
+                    super.cancel();
                     isReloading = false;
                 }
             }.runTaskTimer(AviaTerraCore.getInstance(), 1L, weapon.getReloadDelay());
@@ -97,19 +76,25 @@ public class ArmamentPlayer extends AbstractAviaTerraPlayer implements Compartme
         }
     }
 
+    public void sendBossBar(Player player, BaseWeaponUltraKill weapon, int amountAmmo) {
+        bossBar.removeViewer(player);
+        Component title = AviaTerraCore.getMiniMessage().deserialize("<aqua>Cantidad De Munición:</aqua> <gold>" + amountAmmo + "</gold>");
+        float progres = (((float) amountAmmo / (float) weapon.getMaxAmmo()));
+        bossBar.progress(progres);
+        bossBar.name(title);
+        bossBar.addViewer(player);
+        if (bossBarTask != null) bossBarTask.cancel();
+        bossBarTask = new BukkitRunnable() {
+            @Override
+            public void run() {
+                bossBar.removeViewer(aviaTerraPlayer.getPlayer());
+                aviaTerraPlayer.getPlayer().sendMessage("AA");
+            }
+        }.runTaskLater(AviaTerraCore.getInstance(), 20*5);
+    }
+
     @Override
     public boolean outCompartment(Player player, ItemStack item) {
         return false;
-    }
-
-    private BossBar bossBar;
-
-    public void createBossBar(){
-        Player player = Bukkit.getPlayer(aviaTerraPlayer.getPlayer().getUniqueId());
-        if (player != null) {
-            bossBar = TabAPI.getInstance().getBossBarManager().createBossBar("timerBossBar" + player, 1f, BarColor.BLUE, BarStyle.NOTCHED_10);
-            bossBar.setTitle(ChatColor.translateAlternateColorCodes('&', "&3&lCantidad De Munición: &6&l ?"));
-            bossBar.setProgress(0.5f);
-        }
     }
 }

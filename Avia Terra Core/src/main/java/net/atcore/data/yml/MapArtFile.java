@@ -2,10 +2,11 @@ package net.atcore.data.yml;
 
 import lombok.Getter;
 import net.atcore.data.FileYaml;
-import org.bukkit.Bukkit;
-import org.w3c.dom.ls.LSInput;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class MapArtFile extends FileYaml {
     public MapArtFile(String fileName, String folderName) {

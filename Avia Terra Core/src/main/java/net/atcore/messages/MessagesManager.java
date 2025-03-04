@@ -24,7 +24,6 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.text.MessageFormat;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
@@ -179,21 +178,12 @@ public final class MessagesManager {
      * @param message    el mensaje que quieres modificar
      * @param type       si en un mensaje informativo o de un error etc. esto soporta nulo si lo pones nulo
      *                   mostrar un color gris
-     * @param isResister en este indica si se tiene que registrar en caso de que si se le añade este sufijo
-     *                   {@code [R]} indíca que ese mensaje se tiene que registrar en
-     *                   un canal de discord OJO esto no hace que envié el mensaje
      * @param showPrefix se tiene que poner él {@link #PREFIX} en el mensaje en casi en todos los casos hay que
      *                   poner le prefijo al mensaje para que sea más fácil de identificar
      * @return regresa el texto con todos las aplicadas
      */
 
-    public static String addProprieties(String message, @Nullable TypeMessages type, boolean isResister, boolean showPrefix) {
-        if (isResister) {
-            while (Character.isSpaceChar(message.charAt(message.length() - 1))) {
-                message = message.substring(0, message.length() - 1);
-            }
-            message = message + " <red>[R]";
-        }
+    public static String addProprieties(String message, @Nullable TypeMessages type, boolean showPrefix) {
         String s;
         if (showPrefix) {
             s = PREFIX;
@@ -213,7 +203,7 @@ public final class MessagesManager {
         if (categoryMessages != CategoryMessages.PRIVATE) {
             sendMessageLogDiscord(type, categoryMessages, message);
         }
-        String s = addProprieties(GlobalUtils.convertToMiniMessageFormat(message), type, categoryMessages != CategoryMessages.PRIVATE, isPrefix);
+        String s = addProprieties(GlobalUtils.convertToMiniMessageFormat(message), type, isPrefix);
         return AviaTerraCore.getMiniMessage().deserialize(s);
     }
 
@@ -252,15 +242,15 @@ public final class MessagesManager {
     }
 
     /**
-     * Le manda un título a jugador respetando el formato de {@link #addProprieties(String, TypeMessages, boolean, boolean) addProprieties}
+     * Le manda un título a jugador respetando el formato de {@link #addProprieties(String, TypeMessages, boolean) addProprieties}
      */
 
     public static void sendTitle(Player player, String title, String subtitle, int fadeIn, int stay, int fadeOut, TypeMessages type) {
         final Title.Times times = Title.Times.times(Duration.ofMillis(20L *fadeIn), Duration.ofMillis(20L *stay), Duration.ofMillis(20L *fadeOut));
         // Using the times object this title will use 500ms to fade in, stay on screen for 3000ms and then fade out for 1000ms
         final Title t = Title.title(
-                AviaTerraCore.getMiniMessage().deserialize(GlobalUtils.convertToMiniMessageFormat(addProprieties(title, type, false, false))),
-                AviaTerraCore.getMiniMessage().deserialize(GlobalUtils.convertToMiniMessageFormat(addProprieties(subtitle, type, false, false))),
+                AviaTerraCore.getMiniMessage().deserialize(GlobalUtils.convertToMiniMessageFormat(addProprieties(title, type, false))),
+                AviaTerraCore.getMiniMessage().deserialize(GlobalUtils.convertToMiniMessageFormat(addProprieties(subtitle, type, false))),
                 times
         );
 

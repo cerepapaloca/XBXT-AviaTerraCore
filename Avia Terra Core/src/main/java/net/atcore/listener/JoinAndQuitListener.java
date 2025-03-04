@@ -53,6 +53,7 @@ public class JoinAndQuitListener implements Listener {
             // Borra a los jugadores cracked y semi cracked que no pudieron registrarse para evitar tener jugadores fantasmas
             if (LoginManager.getDataLogin(player).getRegister().isTemporary()){
                 AviaTerraCore.enqueueTaskAsynchronously(() -> {
+                    LoginManager.removeDataLogin(GlobalUtils.getRealName(player));
                     DataBaseRegister.removeRegister(player.getName(), "Servidor (EL registro es temporal)");
                     /*if (!Service.removeStatsPlayer(player.getUniqueId())){
                         MessagesManager.logConsole(String.format("Error al borrar las stats del jugador <|%s|>", player.getName()), TypeMessages.WARNING);
@@ -71,7 +72,7 @@ public class JoinAndQuitListener implements Listener {
         UUIDPlayers.forEach(UUID -> Objects.requireNonNull(Bukkit.getPlayer(UUID)).closeInventory());
         event.quitMessage(GlobalUtils.chatColorLegacyToComponent(MessagesManager.addProprieties(
                 String.format(Message.EVENT_QUIT.getMessage(player), event.getPlayer().getName()),
-                TypeMessages.INFO, false, false)));
+                TypeMessages.INFO, false)));
 
         sendEmbed(player, Color.RED, "%s Se salio del servidor");
     }
@@ -81,7 +82,7 @@ public class JoinAndQuitListener implements Listener {
         Player player = event.getPlayer();
         event.joinMessage(GlobalUtils.chatColorLegacyToComponent(MessagesManager.addProprieties(
                 String.format(Message.EVENT_JOIN.getMessage(player), event.getPlayer().getName()),
-                TypeMessages.INFO, false, false)));
+                TypeMessages.INFO, false)));
         onEnteringServer(player);
 
         new BukkitRunnable() {

@@ -3,14 +3,11 @@ package net.atcore.security.check.checker;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
-import net.atcore.security.check.BaseCheckerMulti;
 import net.atcore.security.check.CheckerUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.Event;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryEvent;
-import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;

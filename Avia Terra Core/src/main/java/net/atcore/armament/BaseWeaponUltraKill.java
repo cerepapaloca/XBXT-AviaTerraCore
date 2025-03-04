@@ -2,9 +2,6 @@ package net.atcore.armament;
 
 import lombok.Getter;
 import lombok.Setter;
-import me.neznamy.tab.api.TabAPI;
-import me.neznamy.tab.api.TabPlayer;
-import me.neznamy.tab.api.bossbar.BossBar;
 import net.atcore.aviaterraplayer.ArmamentPlayer;
 import net.atcore.aviaterraplayer.AviaTerraPlayer;
 import net.atcore.messages.Message;
@@ -12,7 +9,9 @@ import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import net.atcore.utils.GlobalUtils;
 import net.kyori.adventure.text.Component;
-import org.bukkit.*;
+import org.bukkit.Material;
+import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -62,20 +61,7 @@ public abstract class BaseWeaponUltraKill extends BaseWeapon {
                 amountAmmo--;
                 GlobalUtils.setPersistentData(item, "AmountAmmo", PersistentDataType.INTEGER, amountAmmo);
                 ArmamentPlayer armamentPlayer = AviaTerraPlayer.getPlayer(player).getArmamentPlayer();
-                if (armamentPlayer.getBossBar() == null){
-                    armamentPlayer.createBossBar();
-                }
-                BossBar bossBar = armamentPlayer.getBossBar();
-                TabPlayer tabPlayer = TabAPI.getInstance().getPlayer(player.getUniqueId());
-                if (tabPlayer != null){
-                    try {
-                        bossBar.setTitle(ChatColor.translateAlternateColorCodes('&', "&3&lCantidad De Munición: &6&l" + amountAmmo));
-                        bossBar.setProgress((((float) amountAmmo / (float) maxAmmo)*100));
-                        TabAPI.getInstance().getBossBarManager().sendBossBarTemporarily(tabPlayer, bossBar.getName(), 3);
-                    }catch (Exception ignored){
-
-                    }
-                }
+                armamentPlayer.sendBossBar(player, this, amountAmmo);
                 updateLore(player.getInventory().getItemInMainHand(), null);
                 player.getWorld().playSound(player.getLocation(), Sound.ENTITY_SNOW_GOLEM_SHOOT, SoundCategory.PLAYERS, 1.1f, 0.8f);
                 return;

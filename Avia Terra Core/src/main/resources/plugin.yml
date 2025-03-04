@@ -2,7 +2,7 @@ name: AviaTerraCore
 version: '1.18.5'
 main: net.atcore.AviaTerraCore
 api-version: '1.21'
-depend: [ProtocolLib, TAB, LuckPerms]
+depend: [ProtocolLib, LuckPerms]
 prefix: ""
 authors: [Ceres, Vitah, EvaProject]
 description: Las bases del servidor

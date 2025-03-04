@@ -71,12 +71,18 @@ public final class LoginManager {
         LIST_DATA_LOGIN.clear();
     }
 
+    /**
+     * Eliminar registro del jugador
+     * @param name El nombre del jugador debe ser el nombre original es decir sin el punto de Floodgate
+     */
+
     public void removeDataLogin(String name) {
         Player player = Bukkit.getPlayer(name);
         if (player != null) {
             if (FloodgateApi.getInstance().isFloodgatePlayer(player.getUniqueId())) {
                 FloodgatePlayer playerFP = FloodgateApi.getInstance().getPlayer(player.getUniqueId());
                 LIST_DATA_LOGIN.remove(GlobalUtils.getUUIDByName(playerFP.getUsername()));
+                return;
             }
         }
         LIST_DATA_LOGIN.remove(GlobalUtils.getUUIDByName(name));

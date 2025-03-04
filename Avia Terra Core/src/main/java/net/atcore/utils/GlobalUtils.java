@@ -32,7 +32,6 @@ import java.net.InetAddress;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -234,7 +233,7 @@ public final class GlobalUtils {
         reason = MessagesManager.addProprieties(upper
                 + "|!>" + (reason == null ? "Has sido expulsado" : reason) +
                 lower,
-                TypeMessages.KICK, false, false);
+                TypeMessages.KICK, false);
         if (Bukkit.isPrimaryThread()){
             kickFinal(player, reason);
         }else{

@@ -9,30 +9,19 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ea0f4ef9-10c7-4d19-b67e-e1a9046efa9d" name="Changes" comment="bug fix con falso positivos con los de bedrock">
+    <list default="true" id="ea0f4ef9-10c7-4d19-b67e-e1a9046efa9d" name="Changes" comment="mejoras en la modularidad de las funciones del plugin">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Avia Terra Core/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/AviaTerraCore.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/AviaTerraCore.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/Section.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/Section.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/ArmamentSection.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/ArmamentSection.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/command/CommandSection.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/command/CommandSection.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/data/DataBaseMySql.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/data/DataBaseMySql.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/BaseWeaponUltraKill.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/BaseWeaponUltraKill.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/aviaterraplayer/ArmamentPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/aviaterraplayer/ArmamentPlayer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/data/DataSection.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/data/DataSection.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/data/sql/DataBaseBan.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/data/sql/DataBaseBan.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/data/sql/DataBaseRegister.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/data/sql/DataBaseRegister.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/listener/ChatListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/listener/ChatListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/data/yml/MapArtFile.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/data/yml/MapArtFile.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/listener/JoinAndQuitListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/listener/JoinAndQuitListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/listener/ListenerSection.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/listener/ListenerSection.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/messages/DiscordBot.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/messages/DiscordBot.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/messages/MessagesManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/messages/MessagesManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/moderation/ModerationSection.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/moderation/ModerationSection.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/placeholder/PlaceHolderSection.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/placeholder/PlaceHolderSection.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/Login/TwoFactorAuth.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/Login/TwoFactorAuth.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/SecuritySection.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/SecuritySection.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/utils/RegisterManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/utils/RegisterManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/webapi/ApiHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/webapi/ApiHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/webapi/ApiSection.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/webapi/ApiSection.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/resources/config.yml" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/resources/config.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/Login/LoginManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/Login/LoginManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/check/checker/AntiIlegalItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/check/checker/AntiIlegalItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/utils/GlobalUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/utils/GlobalUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/resources/plugin.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -115,65 +104,65 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.AviaTerraSpring.executor": "Run",
-    "Application.ExampleResource.executor": "Run",
-    "Gradle.Build Avia Terra Micronaut.executor": "Run",
-    "HTTP Request.All in generated-requests.executor": "Run",
-    "HTTP Request.generated-requests | #1.executor": "Run",
-    "HTTP Request.generated-requests | #2.executor": "Run",
-    "HTTP Request.generated-requests | #3.executor": "Run",
-    "HTTP Request.generated-requests | #4.executor": "Run",
-    "JAR Application.Unnamed.executor": "Run",
-    "JAR Application.avia-terra-spring.jar.executor": "Run",
-    "Maven.Avia-Terra [package].executor": "Run",
-    "Maven.avia-terra-core [clean,install].executor": "Run",
-    "Maven.avia-terra-core [clean].executor": "Run",
-    "Maven.avia-terra-core [compile,-DforkCount=0...].executor": "Debug",
-    "Maven.avia-terra-core [compile].executor": "Run",
-    "Maven.avia-terra-core [install].executor": "Run",
-    "Maven.avia-terra-core [package].executor": "Run",
-    "Micronaut.Application (1).executor": "Run",
-    "Micronaut.Application (2).executor": "Run",
-    "OpenAPI/Swagger Code Generator.AviaTerra-openapi_1.yaml.executor": "Run",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "Spring Boot.AviaTerraCore.executor": "Run",
-    "Spring Boot.AviaTerraSpring.executor": "Run",
-    "Spring Boot.SpringManager (1).executor": "Run",
-    "Spring Boot.SpringManager.executor": "Run",
-    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit5",
-    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5": "",
-    "extract.method.default.visibility": "private",
-    "git-widget-placeholder": "master",
-    "kotlin-language-version-configured": "true",
-    "last.edited.regexp": "Test",
-    "last_opened_file_path": "C:/Users/Cagut/Desktop/VS/PaginaDeSever",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Artifacts",
-    "project.structure.proportion": "0.15820312",
-    "project.structure.side.proportion": "0.27664232",
-    "run.code.analysis.last.selected.profile": "pProject Default",
-    "run.configurations.included.in.services": "true",
-    "settings.editor.selected.configurable": "discord-application",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.AviaTerraSpring.executor&quot;: &quot;Run&quot;,
+    &quot;Application.ExampleResource.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build Avia Terra Micronaut.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.All in generated-requests.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.generated-requests | #1.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.generated-requests | #2.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.generated-requests | #3.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.generated-requests | #4.executor&quot;: &quot;Run&quot;,
+    &quot;JAR Application.Unnamed.executor&quot;: &quot;Run&quot;,
+    &quot;JAR Application.avia-terra-spring.jar.executor&quot;: &quot;Run&quot;,
+    &quot;Maven.Avia-Terra [package].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.avia-terra-core [clean,install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.avia-terra-core [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.avia-terra-core [compile,-DforkCount=0...].executor&quot;: &quot;Debug&quot;,
+    &quot;Maven.avia-terra-core [compile].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.avia-terra-core [install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.avia-terra-core [package].executor&quot;: &quot;Run&quot;,
+    &quot;Micronaut.Application (1).executor&quot;: &quot;Run&quot;,
+    &quot;Micronaut.Application (2).executor&quot;: &quot;Run&quot;,
+    &quot;OpenAPI/Swagger Code Generator.AviaTerra-openapi_1.yaml.executor&quot;: &quot;Run&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;Spring Boot.AviaTerraCore.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.AviaTerraSpring.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.SpringManager (1).executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.SpringManager.executor&quot;: &quot;Run&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary&quot;: &quot;JUnit5&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5&quot;: &quot;&quot;,
+    &quot;extract.method.default.visibility&quot;: &quot;private&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last.edited.regexp&quot;: &quot;Test&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Cagut/Desktop/VS/PaginaDeSever&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Artifacts&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15820312&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.27664232&quot;,
+    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
+    &quot;run.configurations.included.in.services&quot;: &quot;true&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;discord-application&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "mysql_aurora"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;mysql_aurora&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Cagut\IdeaProjects\Avia-Terra\Avia Terra Core\libs" />
@@ -438,15 +427,8 @@
       <workItem from="1740930493150" duration="10084000" />
       <workItem from="1740959543705" duration="24000" />
       <workItem from="1740967198052" duration="1841000" />
-      <workItem from="1741037318752" duration="4126000" />
-    </task>
-    <task id="LOCAL-00033" summary="El modo limbo puede guardar más datos">
-      <option name="closed" value="true" />
-      <created>1736364429227</created>
-      <option name="number" value="00033" />
-      <option name="presentableId" value="LOCAL-00033" />
-      <option name="project" value="LOCAL" />
-      <updated>1736364429227</updated>
+      <workItem from="1741037318752" duration="5493000" />
+      <workItem from="1741051400907" duration="9999000" />
     </task>
     <task id="LOCAL-00034" summary="mejoras en depuración de las tareas asincrónicas">
       <option name="closed" value="true" />
@@ -832,14 +814,21 @@
       <option name="project" value="LOCAL" />
       <updated>1740943447902</updated>
     </task>
-    <option name="localTasksCounter" value="82" />
+    <task id="LOCAL-00082" summary="mejoras en la modularidad de las funciones del plugin">
+      <option name="closed" value="true" />
+      <created>1741041878961</created>
+      <option name="number" value="00082" />
+      <option name="presentableId" value="LOCAL-00082" />
+      <option name="project" value="LOCAL" />
+      <updated>1741041878961</updated>
+    </task>
+    <option name="localTasksCounter" value="83" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Simplifico el sistema de permisos de los comandos" />
     <MESSAGE value="se añadió PlayerStats.java" />
     <MESSAGE value="Cambios al sistema de mensajes" />
     <MESSAGE value="fix á un posible exploit con el login" />
@@ -864,7 +853,8 @@
     <MESSAGE value="mini refactor a las armas y más checker" />
     <MESSAGE value="Se borra todos los datos sensibles" />
     <MESSAGE value="bug fix con falso positivos con los de bedrock" />
-    <option name="LAST_COMMIT_MESSAGE" value="bug fix con falso positivos con los de bedrock" />
+    <MESSAGE value="mejoras en la modularidad de las funciones del plugin" />
+    <option name="LAST_COMMIT_MESSAGE" value="mejoras en la modularidad de las funciones del plugin" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
