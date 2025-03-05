@@ -8,6 +8,7 @@ import net.atcore.moderation.ban.BanManager;
 import net.atcore.moderation.ban.ContextBan;
 import net.atcore.moderation.ban.DataBan;
 import net.atcore.security.AntiTwoPlayer;
+import net.atcore.security.Login.LimboManager;
 import net.atcore.security.Login.LoginManager;
 import net.atcore.security.Login.model.LimboData;
 import net.atcore.security.Login.model.LoginData;
@@ -45,7 +46,8 @@ public class JoinAndQuitListener implements Listener {
             LimboData limbo = login.getLimbo();
             limbo.restorePlayer(player);// Carga los datos del jugador para que el servidor guarde sus datos como si estuviera logueado
         }
-
+        // Esto no es muy fiable para los de bedrock
+        LimboManager.IN_PROCESS.remove(player.getUniqueId());
 
         if (LoginManager.getDataLogin(player) != null) {// si le llega a borrar el registro
             AviaTerraCore.enqueueTaskAsynchronously(() -> DataBaseRegister.checkRegister(player));

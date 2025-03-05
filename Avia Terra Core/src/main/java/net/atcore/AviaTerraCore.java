@@ -240,24 +240,22 @@ public class AviaTerraCore extends JavaPlugin {
                 Future<?> future = EXECUTOR.submit(task);
                 try {
                     future.get(1000*45, TimeUnit.MILLISECONDS);
+                    long elapsedNanos = System.nanoTime() - startTime;
+                    if (elapsedNanos > 1_000_000_000L && !task.isHeavyProcess()) { // 1s en nanosegundos
+                        StringBuilder builder = getStackTrace(task);
+                        AviaTerraCore.getInstance().getLogger().warning(
+                                String.format("La tarea tardó %s ms en procesarse", elapsedNanos * 0.000001D) + "\n" + builder
+                        );
+                    }
                 } catch (TimeoutException e) {
                     StringBuilder builder = getStackTrace(task);
                     future.cancel(true); // Cancelamos la tarea si tarda demasiado
                     AviaTerraCore.getInstance().getLogger().severe("La tarea fue cancelada por que tardo mucho en procesarse" + "\n" + builder);
-                    return;
                 } catch (ExecutionException e) {
                     StringBuilder builder = getStackTrace(task);
                     AviaTerraCore.getInstance().getLogger().severe("Hubo un error al iniciar la tarea [" + e.getMessage() + "]" + "\n" + builder);
-                    return;
                 }
 
-                long elapsedNanos = System.nanoTime() - startTime;
-                if (elapsedNanos > 1_000_000_000L && !task.isHeavyProcess()) { // 1s en nanosegundos
-                    StringBuilder builder = getStackTrace(task);
-                    AviaTerraCore.getInstance().getLogger().warning(
-                            String.format("La tarea tardó %s ms en procesarse", elapsedNanos * 0.000001D) + "\n" + builder
-                    );
-                }
             }
         } catch (InterruptedException e) {
             if (!Bukkit.isStopping()) MessagesManager.sendErrorException("Hilo del AviaTerra hubo una excepción de interrupción", e);

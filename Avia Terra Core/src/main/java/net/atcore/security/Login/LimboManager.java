@@ -32,14 +32,14 @@ public class LimboManager {
 
     public final int LIMBO_TIME = 20*60;
     // Evita que el jugador entré el modo limbo dos veces por el delay de los hilos asincrónicos
-    public final Set<UUID> LIST_IN_PROCESS = Sets.newHashSet();
+    public final Set<UUID> IN_PROCESS = Sets.newHashSet();
     public final Location LIMBO_LOCATION = new Location(Bukkit.getWorlds().getFirst(), 0, 100, 0);
     private final PotionEffect BLINDNESS_EFFECT = new PotionEffect(PotionEffectType.BLINDNESS, PotionEffect.INFINITE_DURATION,1, true, false);
 
     public void startAsynchronouslyLimboMode(Player player, ReasonLimbo reasonLimbo) {
         try {
-            if (player.isOnline() && !LoginManager.isLimboMode(player) && !LIST_IN_PROCESS.contains(player.getUniqueId())) {
-                LIST_IN_PROCESS.add(player.getUniqueId());
+            if (player.isOnline() && !LoginManager.isLimboMode(player) && !IN_PROCESS.contains(player.getUniqueId())) {
+                IN_PROCESS.add(player.getUniqueId());
                 if (Bukkit.isPrimaryThread()) {
                     switch (reasonLimbo) {
                         case NO_SESSION -> {
@@ -66,7 +66,6 @@ public class LimboManager {
                 }
             }
         }catch (Exception e){// Esto es un porsi acaso hay un error. Es mejor hacer un kick por seguridad
-            LIST_IN_PROCESS.remove(player.getUniqueId());
             MessagesManager.sendWaringException("Error al pasar al limbo mode", e);
             GlobalUtils.synchronizeKickPlayer(player, Message.LOGIN_KICK_ENTRY_LIMBO_ERROR);
         }
@@ -141,7 +140,7 @@ public class LimboManager {
         LimboData limboData = newLimboData(player);
         loginData.setLimbo(limboData);
         clearPlayer(player);
-        LIST_IN_PROCESS.remove(player.getUniqueId());
+        IN_PROCESS.remove(player.getUniqueId());
     }
 
     private static @NotNull LimboData newLimboData(Player player) {

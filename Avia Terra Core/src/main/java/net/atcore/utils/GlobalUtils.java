@@ -10,6 +10,7 @@ import net.atcore.AviaTerraCore;
 import net.atcore.data.DataSection;
 import net.atcore.listener.NuVotifierListener;
 import net.atcore.messages.*;
+import net.atcore.security.Login.LimboManager;
 import net.atcore.security.Login.LoginManager;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -17,7 +18,7 @@ import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.luckperms.api.node.types.InheritanceNode;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
+import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -118,7 +119,7 @@ public final class GlobalUtils {
      * <ul>
      * Añade una persisten Data que contiene un {@code ?} indicando que el item está a la
      * espera de la asignación de la UUID, hasta entonces el item se puede duplicar pero
-     * cuando {@link net.atcore.moderation.ban.CheckAutoBan#checkDupe(Player, Inventory) checkDupe()}
+     * cuando {@link net.atcore.security.check.checker.AntiDupe#onCheck(Event) onCheck()}
      * lo llaman le asigna una UUID única para que este no se pueda duplicar
      *
      * @param item el item que le quieres aplicar la protección
@@ -195,6 +196,7 @@ public final class GlobalUtils {
     }
 
     public void synchronizeKickPlayer(@NotNull Player player, Message message){
+
         if (Bukkit.isPrimaryThread()){
             kickPlayer(player, message);
         }else {
@@ -203,10 +205,11 @@ public final class GlobalUtils {
     }
 
     public String kickPlayer(@NotNull Player player, @NotNull Message message){
+        LimboManager.IN_PROCESS.remove(player.getUniqueId());
         try {
             return kickPlayer(player, message.getMessage(player), message.getTypeMessages());
         }catch (Exception e){
-            MessagesManager.sendWaringException("as", e);
+            MessagesManager.sendWaringException("error al hacer kick a un jugador", e);
             return kickPlayer(player, message.getMessageLocaleDefault(), message.getTypeMessages());
         }
     }

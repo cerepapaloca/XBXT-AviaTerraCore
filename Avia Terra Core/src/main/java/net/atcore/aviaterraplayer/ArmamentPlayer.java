@@ -88,7 +88,6 @@ public class ArmamentPlayer extends AbstractAviaTerraPlayer implements Compartme
             @Override
             public void run() {
                 bossBar.removeViewer(aviaTerraPlayer.getPlayer());
-                aviaTerraPlayer.getPlayer().sendMessage("AA");
             }
         }.runTaskLater(AviaTerraCore.getInstance(), 20*5);
     }

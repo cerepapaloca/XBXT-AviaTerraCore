@@ -354,19 +354,15 @@ public final class LoginManager {
         LoginData loginData = getDataLogin(player);
         if (loginData != null) {
             RegisterData registerData = loginData.getRegister();
-            if (registerData != null) {
-                if (Config.getServerMode().equals(ServerMode.OFFLINE_MODE) || registerData.getStateLogins() != StateLogins.PREMIUM){
-                    checkLogin(player, false, true);
-                }
-                AviaTerraCore.enqueueTaskAsynchronously(() -> {
-                    if (FloodgateApi.getInstance().isFloodgatePlayer(player.getUniqueId()) && loginData.getRegister().getUuidBedrock() == null) {
-                        DataBaseRegister.addUUIDBedrock(GlobalUtils.getRealName(player), player.getUniqueId());
-                        loginData.getRegister().setUuidBedrock(player.getUniqueId());
-                    }
-                });
-            }else{
-                GlobalUtils.kickPlayer(player, Message.LOGIN_KICK_NO_REGISTER.getMessage(player));
+            if (Config.getServerMode().equals(ServerMode.OFFLINE_MODE) || registerData.getStateLogins() != StateLogins.PREMIUM) {
+                checkLogin(player, false, true);
             }
+            AviaTerraCore.enqueueTaskAsynchronously(() -> {
+                if (FloodgateApi.getInstance().isFloodgatePlayer(player.getUniqueId()) && loginData.getRegister().getUuidBedrock() == null) {
+                    DataBaseRegister.addUUIDBedrock(GlobalUtils.getRealName(player), player.getUniqueId());
+                    loginData.getRegister().setUuidBedrock(player.getUniqueId());
+                }
+            });
         }else {
             GlobalUtils.kickPlayer(player, Message.LOGIN_KICK_NO_REGISTER.getMessage(player));
         }

@@ -31,11 +31,12 @@ public class PruebaCommand extends BaseCommand {
     public void execute(CommandSender sender, String[] args) {
         sendMessage(sender, Message.TEST_MESSAGE);
         AviaTerraCore.enqueueTaskAsynchronously(() -> {
-            try {
+            /*try {
                 Thread.sleep(1000*60);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
-            }
+            }*/
+            throw new RuntimeException();
         });
     }
 }
