@@ -41,12 +41,13 @@ public class JoinAndQuitListener implements Listener {
     public void onQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
 
-        if (LoginManager.isLimboMode(player)) {//Esto es para que los jugadores no logueados
+        //Esto es para que los jugadores no logueados
+        if (LoginManager.isLimboMode(player)) {
             LoginData login = LoginManager.getDataLogin(player);
             LimboData limbo = login.getLimbo();
-            limbo.restorePlayer(player);// Carga los datos del jugador para que el servidor guarde sus datos como si estuviera logueado
+            // Carga los datos del jugador para que el servidor guarde sus datos como si estuviera logueado
+            limbo.restorePlayer(player);
         }
-        // Esto no es muy fiable para los de bedrock
         LimboManager.IN_PROCESS.remove(player.getUniqueId());
 
         if (LoginManager.getDataLogin(player) != null) {// si le llega a borrar el registro

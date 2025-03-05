@@ -14,7 +14,6 @@ import java.util.List;
 @UtilityClass
 public class CheckerUtils {
 
-
     public @NotNull List<ItemStack> getItems(InventoryEvent event) {
         HumanEntity player = event.getView().getPlayer();
         List<ItemStack> items = new ArrayList<>(Arrays.stream(player.getOpenInventory().getTopInventory().getContents()).filter(item -> item != null && item.getType() != Material.AIR).toList());

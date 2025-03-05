@@ -2,6 +2,8 @@ package net.atcore.data;
 
 import net.atcore.AviaTerraCore;
 import net.atcore.Reloadable;
+import net.atcore.data.sql.DataBaseBan;
+import net.atcore.data.sql.DataBaseRegister;
 import net.atcore.data.yml.ConfigFile;
 import net.atcore.messages.MessagesManager;
 import org.bukkit.Bukkit;
@@ -19,9 +21,9 @@ import net.atcore.messages.TypeMessages;
 public abstract class DataBaseMySql implements Reloadable {
     private static Connection connection;
 
-    private static final String HOST = "192.168.1.55";//localhost
-    private static final String PORT = "3306";
-    private static final String DATABASE = "xbxt";
+    private static final String HOST;
+    private static final String PORT;
+    private static final String DATABASE;
     public static final String USER;
     public static final String PASSWORD;
 
@@ -32,6 +34,9 @@ public abstract class DataBaseMySql implements Reloadable {
             return configFile;
         }).getFileYaml().getString("mysql.username");
         PASSWORD = DataSection.getConfigFile().getFileYaml().getString("mysql.password");
+        HOST = DataSection.getConfigFile().getFileYaml().getString("mysql.host");
+        PORT = DataSection.getConfigFile().getFileYaml().getString("mysql.port");
+        DATABASE = DataSection.getConfigFile().getFileYaml().getString("mysql.database");
     }
 
     /**

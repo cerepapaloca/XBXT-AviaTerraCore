@@ -7,7 +7,6 @@ import org.bukkit.event.Event;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryEvent;
-import org.bukkit.event.inventory.InventoryInteractEvent;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.plugin.EventExecutor;
 
@@ -16,7 +15,7 @@ import java.lang.reflect.Type;
 import java.util.HashSet;
 
 /**
- * A través de esta clase se puede añadir un evento para una situación en concreta
+ * A través de esta clase se puede añadir un evento para una situación específica e independiente del resto del plugin.
  * @param <T> El evento que se tiene que escuchar y el parámetro que se vá usar en {@link #onCheck(Event)}
  */
 
@@ -26,6 +25,11 @@ public abstract class BaseChecker<T extends Event> implements Listener {
 
 
     protected final EventExecutor eventExecutor;
+
+    /**
+     * Los jugadores op serán ignorados
+     */
+
     protected boolean byPassOp = true;
     public boolean enabled = true;
     private Class<T> eventClass;

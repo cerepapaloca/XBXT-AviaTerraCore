@@ -25,24 +25,31 @@ public class CommandManager {
 
     /**
      * Comprueba que el comando que esta ejecutado es valido
-     * @return verdadero sí hubo un problema
+     * @param command El nombre del comando
+     * @param player El que ejecutó el comando
+     * @param isSilent si no se tiene dar una notification al jugador de que no se puede ejecutar el comando
+     * @param limboMode el jugador puede entrar en modo limbo?
+     * @return verdadero sí no se podría ejecutar el comando
      */
 
-    public boolean checkCommand(String command, Player player, boolean isSilent, boolean b){
+    public boolean checkCommand(String command, Player player, boolean isSilent, boolean limboMode){
         try {
+            // Se obtiene el comando de otros plugins o de este mismo plugin
             Command bukkitCommand = Objects.requireNonNullElse(CommandHandler.getCommand(command), Bukkit.getPluginCommand(command));
             boolean hasPermission;
+            // En caso que el comando sea de este plugin
             if (bukkitCommand instanceof BaseCommand baseCommand) {
-                hasPermission = CommandUtils.hasPermission(bukkitCommand, baseCommand.getVisibility(), player, b);
+                hasPermission = CommandUtils.hasPermission(bukkitCommand, baseCommand.getVisibility(), player, limboMode);
             }else {
+                // Se obtiene la visibilidad del comandos en commandos.yml
                 CommandVisibility visibility = COMMANDS.get(bukkitCommand.getName());
-                hasPermission = CommandUtils.hasPermission(bukkitCommand, visibility == null ? CommandVisibility.PRIVATE : visibility, player, b);
+                hasPermission = CommandUtils.hasPermission(bukkitCommand, visibility == null ? CommandVisibility.PRIVATE : visibility, player, limboMode);
             }
             if (hasPermission) {
                 return false;
             } else {
                 if (!isSilent) {
-                    if (LoginManager.checkLogin(player, true, b)) {
+                    if (LoginManager.checkLogin(player, true, limboMode)) {
                         sendMessage(player, net.atcore.messages.Message.COMMAND_GENERIC_NO_PERMISSION);
                     } else {
                         sendMessage(player, net.atcore.messages.Message.COMMAND_GENERIC_NO_LOGIN);
@@ -50,8 +57,9 @@ public class CommandManager {
                 }
                 return true;
             }
+            // En caso que el comando no exista
         }catch (NullPointerException e){
-            if (LoginManager.checkLogin(player, true, b)){
+            if (LoginManager.checkLogin(player, true, limboMode)){
                 if (player.isOp()){
                     return false;
                 }else {

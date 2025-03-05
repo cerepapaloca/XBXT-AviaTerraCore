@@ -205,6 +205,7 @@ public final class GlobalUtils {
     }
 
     public String kickPlayer(@NotNull Player player, @NotNull Message message){
+        // Se añade esto para evitar bugs
         LimboManager.IN_PROCESS.remove(player.getUniqueId());
         try {
             return kickPlayer(player, message.getMessage(player), message.getTypeMessages());
@@ -536,12 +537,15 @@ public final class GlobalUtils {
     }
 
     /**
+     * Código proporcionado por 8b8t
+     * <p>
      * Convierte los códigos de color antiguos en los nuevo sistema de MiniMessage
      * ejemplo
+     * </p>
      * <blockquote><pre>
      *     &lBuenos días&o gente.&r&6 Que buen dia
      * </pre></blockquote>
-     * pasaría a esto
+     * Pasaría a esto
      * <blockquote><pre>
      *     <bold>Buenos días<italic> gente.<reset><gold> Que buen dia
      * </pre></blockquote>
