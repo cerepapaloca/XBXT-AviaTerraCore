@@ -8,6 +8,7 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
+@Deprecated
 public class LimitWorld {
 
     public static void checkLimit(Player player) {

@@ -26,30 +26,32 @@ public class DeathListener implements Listener {
     public void onDeath(PlayerDeathEvent e) {
         Player player = e.getEntity();
         if (player.getLastDamageCause() != null){
-
-
-            LivingEntity killer;
-            if (e.getEntity().getKiller() != null) {
-                killer = e.getEntity().getKiller();
-            } else {
-                // En caso de que no tenga un killer se usara la última entidad que le hizo daño
-                UUID uuid = MapLastDamagerEntity.get(player.getUniqueId());
-                if (uuid != null){
-                    Entity entity = Bukkit.getEntity(uuid);
-                    if (entity instanceof LivingEntity le) {
-                        killer = le;
+            try {
+                LivingEntity killer;
+                if (e.getEntity().getKiller() != null) {
+                    killer = e.getEntity().getKiller();
+                } else {
+                    // En caso de que no tenga un killer se usara la última entidad que le hizo daño
+                    UUID uuid = MapLastDamagerEntity.get(player.getUniqueId());
+                    if (uuid != null){
+                        Entity entity = Bukkit.getEntity(uuid);
+                        if (entity instanceof LivingEntity le) {
+                            killer = le;
+                        }else {
+                            killer = null;
+                        }
                     }else {
                         killer = null;
                     }
-                }else {
-                    killer = null;
                 }
-            }
 
-            ItemStack item = getItemStack(killer);
-            MessagesManager.logConsole(String.format("Jugador: %s murió en %s", player.getName(), GlobalUtils.locationToString(player.getLocation())), TypeMessages.INFO, CategoryMessages.PLAY);
-            MessagesManager.deathMessage(player, killer, item, player.getLastDamageCause().getCause());
-            e.deathMessage(null);
+                ItemStack item = getItemStack(killer);
+                MessagesManager.logConsole(String.format("Jugador: %s murió en %s", player.getName(), GlobalUtils.locationToString(player.getLocation())), TypeMessages.INFO, CategoryMessages.PLAY);
+                MessagesManager.deathMessage(player, killer, item, player.getLastDamageCause().getCause());
+                e.deathMessage(null);
+            }catch (Exception ex) {
+                MessagesManager.sendWaringException("Error al modificar el mensaje de muerte", ex);
+            }
         }
     }
 

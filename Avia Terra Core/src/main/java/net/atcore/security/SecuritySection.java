@@ -23,6 +23,8 @@ public class SecuritySection implements Section {
         new AntiOP();
         new AntiIlegalBlock();
         new AntiArmament();
+        new FixItems();
+        new RangePurge();
         new AntiDupe();
         init();
     }

@@ -96,7 +96,7 @@ public class JoinAndQuitListener implements Listener {
         }.runTaskLater(AviaTerraCore.getInstance(), 20L*2);
 
         if (LoginManager.getDataLogin(player).getRegister().isTemporary()) {
-            sendEmbed(player, Color.YELLOW, "%s Se unió por primera vez");
+            sendEmbed(player, Color.YELLOW, "%s Se unió por primera vez");// TODO: Hay que reglar eso
         }else {
             sendEmbed(player, Color.GREEN, "%s Se unió al servidor");
         }
