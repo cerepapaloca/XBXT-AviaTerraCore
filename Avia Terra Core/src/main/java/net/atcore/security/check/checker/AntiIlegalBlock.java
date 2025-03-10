@@ -14,6 +14,7 @@ import java.util.List;
 
 public class AntiIlegalBlock extends BaseChecker<PlayerChunkLoadEvent> {
 
+    // Código tomando de 8b8t
     @Override
     public void onCheck(PlayerChunkLoadEvent event) {
         Chunk chunk = event.getChunk();

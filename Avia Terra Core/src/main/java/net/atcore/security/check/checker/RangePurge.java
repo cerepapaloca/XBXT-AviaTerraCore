@@ -1,5 +1,6 @@
 package net.atcore.security.check.checker;
 
+import jdk.jfr.Experimental;
 import net.atcore.Config;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.MessagesManager;
@@ -12,6 +13,7 @@ import org.bukkit.event.inventory.InventoryEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 
+@Experimental
 public class RangePurge extends InventoryChecker{
     @Override
     public void onCheck(Event event) {

@@ -46,14 +46,8 @@ public class AviaTerraCommand extends BaseTabCommand {
                         sendString(sender, "Modo no valido", TypeMessages.ERROR);
                         return;
                     }
-                    if (CommandUtils.isTrueOrFalse(args[1])){
-                        Config.setServerMode(mode);
-                        sendString(sender,"El modo del servidor esta en " + Config.getServerMode().name().toLowerCase().replace("_"," "), TypeMessages.INFO);
-                    }else{
-                        Config.setServerMode(mode);
-                        sendString(sender,"El modo del servidor esta en " + Config.getServerMode().name().toLowerCase().replace("_"," "), TypeMessages.INFO);
-                    }
-
+                    Config.setServerMode(mode);
+                    sendString(sender,"El modo del servidor esta en " + Config.getServerMode().name().toLowerCase().replace("_"," "), TypeMessages.INFO);
                 }else{
                     sendString(sender,"El modo mixto esta <|" + Config.getServerMode().name().toLowerCase() + "|>", TypeMessages.INFO);
                 }

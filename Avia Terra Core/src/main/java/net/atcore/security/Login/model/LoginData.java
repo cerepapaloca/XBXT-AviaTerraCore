@@ -11,7 +11,7 @@ import java.util.UUID;
 @Setter
 public class LoginData {
 
-    public LoginData(RegisterData register) {
+    public LoginData(@NotNull RegisterData register) {
         this.register = register;
     }
 

@@ -3,7 +3,6 @@ package net.atcore.listener;
 import net.atcore.armament.*;
 import net.atcore.inventory.ActionsInventoryManager;
 import net.atcore.moderation.Freeze;
-import net.atcore.security.AntiExploit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
