@@ -12,7 +12,6 @@ purge-tag-range: 0
 check-ban-by-ip: false
 server-mode: mix_mode
 chace-dupe-frame: 0.5
-# La cambié
 password-ssl: ''
 active-time: 192309610
 roof-nether: true

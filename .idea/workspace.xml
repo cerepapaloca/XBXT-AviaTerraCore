@@ -9,17 +9,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ea0f4ef9-10c7-4d19-b67e-e1a9046efa9d" name="Changes" comment="se añadió RangePurge">
+    <list default="true" id="ea0f4ef9-10c7-4d19-b67e-e1a9046efa9d" name="Changes" comment="ups">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/AviaTerraCore.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/AviaTerraCore.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/command/CommandHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/command/CommandHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/command/commnads/AviaTerraCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/command/commnads/AviaTerraCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/command/commnads/PruebaCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/command/commnads/PruebaCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/listener/InventoryListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/listener/InventoryListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/AntiExploit.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/Login/model/LoginData.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/Login/model/LoginData.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/check/checker/AntiIlegalBlock.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/check/checker/AntiIlegalBlock.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/check/checker/RangePurge.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/check/checker/RangePurge.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/resources/config.yml" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/resources/config.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -431,23 +423,7 @@
       <workItem from="1741192467086" duration="3990000" />
       <workItem from="1741536149038" duration="1835000" />
       <workItem from="1741559664384" duration="4210000" />
-      <workItem from="1741623006941" duration="1309000" />
-    </task>
-    <task id="LOCAL-00038" summary="bug fix con los idiomas">
-      <option name="closed" value="true" />
-      <created>1737236701389</created>
-      <option name="number" value="00038" />
-      <option name="presentableId" value="LOCAL-00038" />
-      <option name="project" value="LOCAL" />
-      <updated>1737236701389</updated>
-    </task>
-    <task id="LOCAL-00039" summary="cambio menor a los mensajes de muertes">
-      <option name="closed" value="true" />
-      <created>1737242515589</created>
-      <option name="number" value="00039" />
-      <option name="presentableId" value="LOCAL-00039" />
-      <option name="project" value="LOCAL" />
-      <updated>1737242515589</updated>
+      <workItem from="1741623006941" duration="2444000" />
     </task>
     <task id="LOCAL-00040" summary="se añadio el /premium">
       <option name="closed" value="true" />
@@ -825,7 +801,23 @@
       <option name="project" value="LOCAL" />
       <updated>1741560900974</updated>
     </task>
-    <option name="localTasksCounter" value="87" />
+    <task id="LOCAL-00087" summary="mini cambios">
+      <option name="closed" value="true" />
+      <created>1741624427839</created>
+      <option name="number" value="00087" />
+      <option name="presentableId" value="LOCAL-00087" />
+      <option name="project" value="LOCAL" />
+      <updated>1741624427839</updated>
+    </task>
+    <task id="LOCAL-00088" summary="ups">
+      <option name="closed" value="true" />
+      <created>1741624987838</created>
+      <option name="number" value="00088" />
+      <option name="presentableId" value="LOCAL-00088" />
+      <option name="project" value="LOCAL" />
+      <updated>1741624987838</updated>
+    </task>
+    <option name="localTasksCounter" value="89" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -843,8 +835,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="eliminando cosas que creo nunca valla usar" />
-    <MESSAGE value="update al protocolib y bug fix con los permisos de los comandos" />
     <MESSAGE value="se elimino mensajes de log en los mensajes localizados" />
     <MESSAGE value="OffHandCommand para mejorar la experiencia de juego lo de bedrock" />
     <MESSAGE value="Se añade el comando RemovePasswordCommand" />
@@ -868,7 +858,9 @@
     <MESSAGE value="bug fix menores" />
     <MESSAGE value="update readme" />
     <MESSAGE value="se añadió RangePurge" />
-    <option name="LAST_COMMIT_MESSAGE" value="se añadió RangePurge" />
+    <MESSAGE value="mini cambios" />
+    <MESSAGE value="ups" />
+    <option name="LAST_COMMIT_MESSAGE" value="ups" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
