@@ -25,8 +25,6 @@ public class InventoryListener implements Listener {
     @EventHandler
     public void onInventoryOpen(@NotNull InventoryOpenEvent event) {
         Player player = (Player) event.getPlayer();
-        Inventory inventory = event.getInventory();
-        AntiExploit.checkRangePurge(inventory);
         event.setCancelled(Freeze.isFreeze(player));
     }
 
