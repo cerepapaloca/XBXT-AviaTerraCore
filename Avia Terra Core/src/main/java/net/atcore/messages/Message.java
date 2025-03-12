@@ -57,6 +57,7 @@ public enum Message {
                 Tiempo jugado: <|%sH|>
                 Nombre Real: <|%s|>
                 Idioma: <|%s|>
+                Rango: <|%s|>
                 """, INFO),
     BAN_ERROR("ban", "Hubo un problema con las bases de datos al banear <|%s|> por <|%s|>", ERROR),
     BAN_AUTO_BAN_BOT("ban", "Uso de bots (Baneo Automático)", KICK),

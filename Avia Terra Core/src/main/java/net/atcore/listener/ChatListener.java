@@ -17,6 +17,7 @@ import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+import net.luckperms.api.model.user.User;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.Statistic;
@@ -78,10 +79,23 @@ public class ChatListener implements Listener {
         long distanceWalkedKm = Math.round((distanceWalked / 100000.0)*10);
         int timePlayedTicks = sender.getStatistic(Statistic.PLAY_ONE_MINUTE);
         long timePlayedHours = Math.round((timePlayedTicks / 20.0 / 3600.0)*10);
+        User user = AviaTerraCore.getLp().getUserManager().getUser(sender.getName());
+        String groupName;
+        if (user != null) {
+            groupName = user.getPrimaryGroup();
+        }else {
+            groupName = "usuario";
+        }
         String locale = sender.locale().getDisplayName();
 
         Component hoverText = MessagesManager.applyFinalProprieties(
-                String.format(EVENT_CHAT_HOVER.getMessage(sender), (float) distanceWalkedKm/10, (float) timePlayedHours/10, sender.getName(), locale),
+                String.format(EVENT_CHAT_HOVER.getMessage(sender),
+                        (float) distanceWalkedKm/10,
+                        (float) timePlayedHours/10,
+                        sender.getName(),
+                        locale,
+                        groupName.equals("default") ? "usuario" : groupName
+                ),
                 TypeMessages.INFO, CategoryMessages.PRIVATE, false
         );
         if (isMention) target.playSound(target, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.7f, 1);
