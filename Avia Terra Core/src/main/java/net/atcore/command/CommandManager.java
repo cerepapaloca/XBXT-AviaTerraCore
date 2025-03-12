@@ -5,14 +5,13 @@ import net.atcore.AviaTerraCore;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
-import net.atcore.security.Login.LoginManager;
+import net.atcore.security.login.LoginManager;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.Member;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 
-import java.beans.Visibility;
 import java.util.HashMap;
 import java.util.Objects;
 

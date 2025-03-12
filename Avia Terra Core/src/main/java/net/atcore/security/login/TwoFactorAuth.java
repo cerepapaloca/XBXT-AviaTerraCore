@@ -1,4 +1,4 @@
-package net.atcore.security.Login;
+package net.atcore.security.login;
 
 import lombok.Setter;
 import lombok.experimental.UtilityClass;
@@ -7,7 +7,7 @@ import net.atcore.data.DataSection;
 import net.atcore.data.yml.ConfigFile;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
-import net.atcore.security.Login.model.CodeAuth;
+import net.atcore.security.login.model.CodeAuth;
 import net.atcore.utils.GlobalUtils;
 import net.dv8tion.jda.api.entities.User;
 import org.bukkit.Bukkit;

@@ -11,7 +11,7 @@ import net.atcore.messages.TypeMessages;
 import net.atcore.misc.Dupe;
 import net.atcore.moderation.Freeze;
 import net.atcore.moderation.ban.ContextBan;
-import net.atcore.security.Login.LoginManager;
+import net.atcore.security.login.LoginManager;
 import net.atcore.utils.GlobalConstantes;
 import net.atcore.utils.GlobalUtils;
 import net.atcore.utils.RangeType;

@@ -137,6 +137,7 @@ public enum Message {
     COMMAND_LINK_SEND_DISCORD_2("command.link","Se esta enviando un mensaje directo con el código", INFO),
     COMMAND_LINK_NOT_FOUNT_DISCORD("command.link", "No tienes un Discord vinculado", INFO),
     COMMAND_LINK_MISSING_ARGS("command.link", "Tienes que poner discord, gmail o un condigo", ERROR),
+    COMMAND_ROCKED_TITLE("command.rock", "Lanzamiento en...", NULL),
     COMMAND_LOGIN_ALREADY("command.login", "Ya estas logueado", ERROR),
     COMMAND_LOGIN_NO_REGISTER("command.login", "No estas registrado usa el <|/register|>", ERROR),
     COMMAND_LOGIN_MISSING_ARGS("command.login", "Tienes que poner tu contraseña", ERROR),

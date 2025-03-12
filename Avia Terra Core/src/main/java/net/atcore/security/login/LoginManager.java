@@ -1,4 +1,4 @@
-package net.atcore.security.Login;
+package net.atcore.security.login;
 
 import com.github.games647.craftapi.model.Profile;
 import com.github.games647.craftapi.resolver.MojangResolver;
@@ -12,9 +12,9 @@ import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import net.atcore.security.EncryptService;
-import net.atcore.security.Login.model.LoginData;
-import net.atcore.security.Login.model.RegisterData;
-import net.atcore.security.Login.model.SessionData;
+import net.atcore.security.login.model.LoginData;
+import net.atcore.security.login.model.RegisterData;
+import net.atcore.security.login.model.SessionData;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;

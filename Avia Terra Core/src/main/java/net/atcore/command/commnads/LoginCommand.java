@@ -9,8 +9,8 @@ import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import net.atcore.moderation.ban.ContextBan;
 import net.atcore.moderation.ModerationSection;
-import net.atcore.security.Login.*;
-import net.atcore.security.Login.model.LoginData;
+import net.atcore.security.login.*;
+import net.atcore.security.login.model.LoginData;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -20,7 +20,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 import static net.atcore.messages.MessagesManager.sendMessage;
-import static net.atcore.security.Login.LoginManager.startPlaySessionCracked;
+import static net.atcore.security.login.LoginManager.startPlaySessionCracked;
 
 public class LoginCommand extends BaseCommand {
 

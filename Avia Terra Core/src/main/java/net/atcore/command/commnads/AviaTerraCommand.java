@@ -9,7 +9,7 @@ import net.atcore.command.CommandVisibility;
 import net.atcore.data.DataSection;
 import net.atcore.data.yml.MapArtFile;
 import net.atcore.messages.TypeMessages;
-import net.atcore.security.Login.ServerMode;
+import net.atcore.security.login.ServerMode;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.command.CommandSender;
 

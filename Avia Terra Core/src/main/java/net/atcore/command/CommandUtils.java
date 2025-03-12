@@ -4,7 +4,7 @@ import lombok.experimental.UtilityClass;
 import net.atcore.AviaTerraCore;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
-import net.atcore.security.Login.LoginManager;
+import net.atcore.security.login.LoginManager;
 import net.atcore.utils.GlobalConstantes;
 import net.atcore.utils.ModeTab;
 import net.atcore.utils.RangeType;

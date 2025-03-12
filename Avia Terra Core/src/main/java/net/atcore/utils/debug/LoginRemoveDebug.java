@@ -1,7 +1,7 @@
 package net.atcore.utils.debug;
 
 import net.atcore.aviaterraplayer.AviaTerraPlayer;
-import net.atcore.security.Login.LoginManager;
+import net.atcore.security.login.LoginManager;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.TestOnly;
 

@@ -1,8 +1,8 @@
-package net.atcore.security.Login.model;
+package net.atcore.security.login.model;
 
 import lombok.Getter;
 import lombok.Setter;
-import net.atcore.security.Login.StateLogins;
+import net.atcore.security.login.StateLogins;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;

@@ -1,4 +1,4 @@
-package net.atcore.security.Login;
+package net.atcore.security.login;
 
 import com.google.common.collect.Sets;
 import lombok.experimental.UtilityClass;
@@ -10,8 +10,8 @@ import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
-import net.atcore.security.Login.model.LimboData;
-import net.atcore.security.Login.model.LoginData;
+import net.atcore.security.login.model.LimboData;
+import net.atcore.security.login.model.LoginData;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;

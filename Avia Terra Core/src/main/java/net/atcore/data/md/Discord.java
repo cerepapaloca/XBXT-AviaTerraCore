@@ -1,7 +1,7 @@
 package net.atcore.data.md;
 
 import net.atcore.data.FileMarkdownDocumentation;
-import net.atcore.security.Login.TwoFactorAuth;
+import net.atcore.security.login.TwoFactorAuth;
 
 public class Discord extends FileMarkdownDocumentation {
 

@@ -1,4 +1,4 @@
-package net.atcore.security.Login;
+package net.atcore.security.login;
 
 public enum ServerMode {
     ONLINE_MODE,

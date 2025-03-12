@@ -7,9 +7,9 @@ import net.atcore.command.ArgumentUse;
 import net.atcore.command.CommandVisibility;
 import net.atcore.data.sql.DataBaseRegister;
 import net.atcore.messages.Message;
-import net.atcore.security.Login.*;
-import net.atcore.security.Login.model.CodeAuth;
-import net.atcore.security.Login.model.LoginData;
+import net.atcore.security.login.*;
+import net.atcore.security.login.model.CodeAuth;
+import net.atcore.security.login.model.LoginData;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 

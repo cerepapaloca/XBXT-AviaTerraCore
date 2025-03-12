@@ -1,9 +1,11 @@
 package net.atcore.data.yml;
 
 import net.atcore.data.FileYaml;
-import net.atcore.security.Login.model.LimboData;
-import net.atcore.security.Login.model.LoginData;
-import net.atcore.security.Login.LoginManager;
+import net.atcore.messages.MessagesManager;
+import net.atcore.messages.TypeMessages;
+import net.atcore.security.login.model.LimboData;
+import net.atcore.security.login.model.LoginData;
+import net.atcore.security.login.LoginManager;
 import org.bukkit.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -79,7 +81,12 @@ public class CacheLimboFile extends FileYaml {
 
     @Override
     public void saveData() {
-        LimboData limboData = LoginManager.getDataLogin(UUID.fromString(fileName.replace(".yml", ""))).getLimbo();
+        UUID userUUID = UUID.fromString(fileName.replace(".yml", ""));
+        LimboData limboData = LoginManager.getDataLogin(userUUID).getLimbo();
+        if (limboData == null) {
+            MessagesManager.logConsole("El limbo data dio nulo para la uuid " + userUUID, TypeMessages.WARNING);
+            return;
+        }
         fileYaml.set("location.world", Objects.requireNonNull(limboData.getLocation().getWorld()).getName());
         fileYaml.set("location.x", limboData.getLocation().getX());
         fileYaml.set("location.y", limboData.getLocation().getY());

@@ -8,7 +8,7 @@ import net.atcore.command.commnads.TellCommand;
 import net.atcore.messages.*;
 import net.atcore.moderation.ChatModeration;
 import net.atcore.moderation.ban.ContextBan;
-import net.atcore.security.Login.LoginManager;
+import net.atcore.security.login.LoginManager;
 import net.atcore.utils.GlobalUtils;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.kyori.adventure.text.Component;

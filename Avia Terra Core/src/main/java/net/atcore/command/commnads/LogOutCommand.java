@@ -6,7 +6,7 @@ import net.atcore.command.CommandVisibility;
 import net.atcore.command.Confirmable;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
-import net.atcore.security.Login.LoginManager;
+import net.atcore.security.login.LoginManager;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 

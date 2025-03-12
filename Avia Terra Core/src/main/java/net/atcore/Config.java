@@ -3,7 +3,7 @@ package net.atcore;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.UtilityClass;
-import net.atcore.security.Login.ServerMode;
+import net.atcore.security.login.ServerMode;
 
 @UtilityClass
 public class Config {

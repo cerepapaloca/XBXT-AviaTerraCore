@@ -3,7 +3,7 @@ package net.atcore.webapi.response;
 import io.undertow.server.HttpServerExchange;
 import net.atcore.AviaTerraCore;
 import net.atcore.Config;
-import net.atcore.security.Login.LoginManager;
+import net.atcore.security.login.LoginManager;
 import net.atcore.utils.GlobalUtils;
 import net.atcore.webapi.BaseApi;
 import net.atcore.webapi.ContentType;

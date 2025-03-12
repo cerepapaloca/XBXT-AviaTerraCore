@@ -3,7 +3,7 @@ package net.atcore.command.commnads;
 import net.atcore.command.*;
 import net.atcore.messages.Message;
 import net.atcore.messages.TypeMessages;
-import net.atcore.security.Login.LoginManager;
+import net.atcore.security.login.LoginManager;
 import org.bukkit.command.CommandSender;
 
 import static net.atcore.messages.MessagesManager.sendArgument;

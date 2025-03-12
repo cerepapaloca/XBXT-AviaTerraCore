@@ -1,4 +1,4 @@
-package net.atcore.security.Login;
+package net.atcore.security.login;
 
 import java.lang.reflect.Method;
 import java.net.InetAddress;
@@ -12,7 +12,7 @@ import javax.crypto.SecretKey;
 
 import lombok.RequiredArgsConstructor;
 import net.atcore.messages.MessagesManager;
-import net.atcore.security.Login.model.LoginData;
+import net.atcore.security.login.model.LoginData;
 import org.bukkit.entity.Player;
 
 import com.comphenix.protocol.PacketType;

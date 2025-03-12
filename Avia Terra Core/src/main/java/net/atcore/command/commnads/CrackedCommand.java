@@ -8,10 +8,10 @@ import net.atcore.command.Confirmable;
 import net.atcore.data.sql.DataBaseRegister;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
-import net.atcore.security.Login.LoginManager;
-import net.atcore.security.Login.StateLogins;
-import net.atcore.security.Login.model.LoginData;
-import net.atcore.security.Login.model.RegisterData;
+import net.atcore.security.login.LoginManager;
+import net.atcore.security.login.StateLogins;
+import net.atcore.security.login.model.LoginData;
+import net.atcore.security.login.model.RegisterData;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -22,7 +22,7 @@ public class CrackedCommand extends BaseCommand implements Confirmable {
         super("cracked",
                 new ArgumentUse("cracked"),
                 CommandVisibility.PUBLIC,
-                "Pasa de modo premium a modo cracked pidiéndote"
+                "Pasa de modo premium a modo cracked pidiéndote contraseña de nuevo"
         );
     }
 

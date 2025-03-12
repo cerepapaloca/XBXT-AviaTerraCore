@@ -5,10 +5,9 @@ import net.atcore.command.*;
 import net.atcore.data.sql.DataBaseRegister;
 import net.atcore.messages.Message;
 import net.atcore.messages.TypeMessages;
-import net.atcore.security.Login.LoginManager;
+import net.atcore.security.login.LoginManager;
 import org.bukkit.command.CommandSender;
 
-import java.util.HashSet;
 import java.util.List;
 
 import static net.atcore.messages.MessagesManager.*;

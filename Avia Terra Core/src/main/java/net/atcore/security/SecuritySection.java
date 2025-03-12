@@ -3,7 +3,7 @@ package net.atcore.security;
 import lombok.Getter;
 import net.atcore.Section;
 import net.atcore.data.DataSection;
-import net.atcore.security.Login.SimulateOnlineMode;
+import net.atcore.security.login.SimulateOnlineMode;
 import net.atcore.security.check.BaseChecker;
 import net.atcore.security.check.checker.*;
 

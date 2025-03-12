@@ -6,10 +6,10 @@ import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
 import net.atcore.AviaTerraCore;
-import net.atcore.security.Login.LimboManager;
-import net.atcore.security.Login.LoginManager;
-import net.atcore.security.Login.model.LimboData;
-import net.atcore.security.Login.model.LoginData;
+import net.atcore.security.login.LimboManager;
+import net.atcore.security.login.LoginManager;
+import net.atcore.security.login.model.LimboData;
+import net.atcore.security.login.model.LoginData;
 import net.atcore.security.SecuritySection;
 import org.bukkit.entity.Player;
 

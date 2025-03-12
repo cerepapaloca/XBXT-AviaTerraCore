@@ -1,4 +1,4 @@
-package net.atcore.security.Login;
+package net.atcore.security.login;
 
 import lombok.Getter;
 import net.atcore.messages.Message;

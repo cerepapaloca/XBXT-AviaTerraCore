@@ -9,13 +9,12 @@ import net.atcore.AviaTerraCore;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.Message;
 import net.atcore.messages.TypeMessages;
-import net.atcore.security.Login.model.LoginData;
-import net.atcore.security.Login.model.SessionData;
-import net.atcore.security.Login.LoginManager;
-import net.atcore.security.Login.StateLogins;
-import net.atcore.security.Login.SimulateOnlineMode;
+import net.atcore.security.login.model.LoginData;
+import net.atcore.security.login.model.SessionData;
+import net.atcore.security.login.LoginManager;
+import net.atcore.security.login.StateLogins;
+import net.atcore.security.login.SimulateOnlineMode;
 import net.atcore.utils.GlobalUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -29,8 +28,8 @@ import java.util.Objects;
 import java.util.Optional;
 
 import static net.atcore.messages.MessagesManager.logConsole;
-import static net.atcore.security.Login.SimulateOnlineMode.LIST_UUID_PREMIUM;
-import static net.atcore.security.Login.SimulateOnlineMode.MAP_TOKENS;
+import static net.atcore.security.login.SimulateOnlineMode.LIST_UUID_PREMIUM;
+import static net.atcore.security.login.SimulateOnlineMode.MAP_TOKENS;
 
 public class VerificationPremium {
 
@@ -110,6 +109,7 @@ public class VerificationPremium {
     @SuppressWarnings({"deprecation", "UnstableApiUsage"})
     private static @NotNull String generateServerId(@NotNull PublicKey publicKey, byte[] sharedSecret) {
         Hasher hasher = Hashing.sha1().newHasher();
+        // El nombre del servidor va vació
         hasher.putBytes("".getBytes(StandardCharsets.ISO_8859_1));
         hasher.putBytes(sharedSecret);
         hasher.putBytes(publicKey.getEncoded());

@@ -49,7 +49,8 @@ public class CommandSection implements Section {
                 new RemovePasswordCommand(),
                 new CrackedCommand(),
                 new KillCommand(),
-                new AviaTerraCheckersCommand()
+                new AviaTerraCheckersCommand(),
+                new RockedCommand()
         );
     }
 

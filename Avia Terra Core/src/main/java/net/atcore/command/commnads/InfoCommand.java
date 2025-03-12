@@ -4,12 +4,11 @@ import net.atcore.AviaTerraCore;
 import net.atcore.command.*;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.TypeMessages;
-import net.atcore.security.Login.LoginManager;
-import net.atcore.security.Login.model.LoginData;
+import net.atcore.security.login.LoginManager;
+import net.atcore.security.login.model.LoginData;
 import net.atcore.utils.GlobalUtils;
 import net.luckperms.api.model.user.User;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 

@@ -9,8 +9,8 @@ import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.Message;
 import net.atcore.messages.TypeMessages;
 import net.atcore.security.EncryptService;
-import net.atcore.security.Login.LoginManager;
-import net.atcore.security.Login.TwoFactorAuth;
+import net.atcore.security.login.LoginManager;
+import net.atcore.security.login.TwoFactorAuth;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 

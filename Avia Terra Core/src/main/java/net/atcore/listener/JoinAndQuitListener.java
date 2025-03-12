@@ -8,11 +8,11 @@ import net.atcore.moderation.ban.BanManager;
 import net.atcore.moderation.ban.ContextBan;
 import net.atcore.moderation.ban.DataBan;
 import net.atcore.security.AntiTwoPlayer;
-import net.atcore.security.Login.LimboManager;
-import net.atcore.security.Login.LoginManager;
-import net.atcore.security.Login.model.LimboData;
-import net.atcore.security.Login.model.LoginData;
 import net.atcore.security.SecuritySection;
+import net.atcore.security.login.LimboManager;
+import net.atcore.security.login.LoginManager;
+import net.atcore.security.login.model.LimboData;
+import net.atcore.security.login.model.LoginData;
 import net.atcore.utils.GlobalUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
@@ -33,7 +33,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-import static net.atcore.security.Login.LoginManager.onEnteringServer;
+import static net.atcore.security.login.LoginManager.onEnteringServer;
 
 public class JoinAndQuitListener implements Listener {
 

@@ -5,9 +5,8 @@ import net.atcore.Config;
 import net.atcore.data.FileYaml;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.DiscordBot;
-import net.atcore.security.Login.ServerMode;
+import net.atcore.security.login.ServerMode;
 import net.atcore.security.check.BaseChecker;
-import org.bukkit.Bukkit;
 
 public class ConfigFile extends FileYaml {
 

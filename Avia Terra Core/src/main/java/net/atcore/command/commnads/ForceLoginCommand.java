@@ -6,12 +6,11 @@ import net.atcore.command.CommandVisibility;
 import net.atcore.command.ModeTabPlayers;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
-import net.atcore.messages.TypeMessages;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import static net.atcore.security.Login.LoginManager.startPlaySessionCracked;
+import static net.atcore.security.login.LoginManager.startPlaySessionCracked;
 
 public class ForceLoginCommand extends BaseCommand {
 

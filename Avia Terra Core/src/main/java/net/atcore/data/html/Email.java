@@ -1,7 +1,7 @@
 package net.atcore.data.html;
 
 import net.atcore.data.FileHTML;
-import net.atcore.security.Login.TwoFactorAuth;
+import net.atcore.security.login.TwoFactorAuth;
 
 public class Email extends FileHTML {
 
