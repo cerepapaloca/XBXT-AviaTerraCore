@@ -23,6 +23,7 @@ se llamaba AviaTerra luego se quedó el nombre asi</small>
 [ProtocolLib](https://www.spigotmc.org/resources/protocollib.1997/),
 [LuckPerms](https://luckperms.net/) y [Votifier](https://www.spigotmc.org/resources/nuvotifier.13449/).
 6. El servidor debe estar en modo offline
+7. En server.properties tienen que dejar `server-name=` vacio
 
 A partir de qui no es obligatorio, peró si quieres tener todas funciones tienes que hacer esto
 - Crear un bot de discord y ir en la sección de Bot, luego le das click a un botón que se llama `regenerate a new token` o `Reset Token`
