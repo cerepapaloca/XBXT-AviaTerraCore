@@ -9,10 +9,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ea0f4ef9-10c7-4d19-b67e-e1a9046efa9d" name="Changes" comment="se añadió un comando chistoso">
+    <list default="true" id="ea0f4ef9-10c7-4d19-b67e-e1a9046efa9d" name="Changes" comment="add rango en el chat">
+      <change afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/command/commnads/HomeListCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/listener/ChatListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/listener/ChatListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/command/CommandSection.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/command/CommandSection.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/messages/Message.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/messages/Message.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/messages/MessagesManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/messages/MessagesManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/login/SimulateOnlineMode.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/login/SimulateOnlineMode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/utils/GlobalUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/utils/GlobalUtils.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -427,15 +431,12 @@
       <workItem from="1741623006941" duration="8655000" />
       <workItem from="1741710322139" duration="4315000" />
       <workItem from="1741752744542" duration="822000" />
-      <workItem from="1741795225438" duration="4593000" />
-    </task>
-    <task id="LOCAL-00042" summary="floodGate está mal hecho">
-      <option name="closed" value="true" />
-      <created>1737306914954</created>
-      <option name="number" value="00042" />
-      <option name="presentableId" value="LOCAL-00042" />
-      <option name="project" value="LOCAL" />
-      <updated>1737306914954</updated>
+      <workItem from="1741795225438" duration="6702000" />
+      <workItem from="1741802326180" duration="115000" />
+      <workItem from="1741841585227" duration="599000" />
+      <workItem from="1741909289330" duration="3728000" />
+      <workItem from="1741955147473" duration="1999000" />
+      <workItem from="1742075017096" duration="3020000" />
     </task>
     <task id="LOCAL-00043" summary="cambios menores a los mensajes de muerte">
       <option name="closed" value="true" />
@@ -821,7 +822,15 @@
       <option name="project" value="LOCAL" />
       <updated>1741799233616</updated>
     </task>
-    <option name="localTasksCounter" value="91" />
+    <task id="LOCAL-00091" summary="add rango en el chat">
+      <option name="closed" value="true" />
+      <created>1741800242005</created>
+      <option name="number" value="00091" />
+      <option name="presentableId" value="LOCAL-00091" />
+      <option name="project" value="LOCAL" />
+      <updated>1741800242005</updated>
+    </task>
+    <option name="localTasksCounter" value="92" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -839,7 +848,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Se añade el comando RemovePasswordCommand" />
     <MESSAGE value="Beta de CrackedCommand" />
     <MESSAGE value="add kill y añadir logs" />
     <MESSAGE value="mini fix con el prefijo de algunos mensajes y fix del bot de discord" />
@@ -864,7 +872,8 @@
     <MESSAGE value="ups" />
     <MESSAGE value="se eliminó el resource pack" />
     <MESSAGE value="se añadió un comando chistoso" />
-    <option name="LAST_COMMIT_MESSAGE" value="se añadió un comando chistoso" />
+    <MESSAGE value="add rango en el chat" />
+    <option name="LAST_COMMIT_MESSAGE" value="add rango en el chat" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

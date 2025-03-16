@@ -1,22 +1,6 @@
 package net.atcore.security.login;
 
-import java.lang.reflect.Method;
-import java.net.InetAddress;
-import java.security.Key;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.UUID;
-
-import javax.crypto.Cipher;
-import javax.crypto.SecretKey;
-
-import lombok.RequiredArgsConstructor;
-import net.atcore.messages.MessagesManager;
-import net.atcore.security.login.model.LoginData;
-import org.bukkit.entity.Player;
-
 import com.comphenix.protocol.PacketType;
-import static com.comphenix.protocol.PacketType.Login.Client.START;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.injector.netty.channel.NettyChannelInjector;
@@ -29,16 +13,31 @@ import com.comphenix.protocol.wrappers.WrappedGameProfile;
 import com.comphenix.protocol.wrappers.WrappedSignedProperty;
 import com.github.games647.craftapi.model.auth.Verification;
 import com.github.games647.craftapi.model.skin.Textures;
-
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import net.atcore.Config;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.Message;
-import static net.atcore.messages.MessagesManager.logConsole;
+import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import net.atcore.security.SecuritySection;
 import net.atcore.security.VerificationPremium;
+import net.atcore.security.login.model.LoginData;
+import net.atcore.security.login.model.SessionData;
 import net.atcore.utils.GlobalUtils;
+import org.bukkit.entity.Player;
+
+import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
+import java.lang.reflect.Method;
+import java.net.InetAddress;
+import java.security.Key;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.UUID;
+
+import static com.comphenix.protocol.PacketType.Login.Client.START;
+import static net.atcore.messages.MessagesManager.logConsole;
 
 public class SimulateOnlineMode {
 
@@ -82,6 +81,9 @@ public class SimulateOnlineMode {
             }
             logConsole(String.format("Iniciando login: <|%1$s|> para el jugador: <|%2$s|> Ip: <|%3$s|> (%4$s)", state.name().toLowerCase(), name, inetAddress.getHostName(), inetAddress.getHostAddress()), TypeMessages.INFO, CategoryMessages.LOGIN);
             return state == StateLogins.PREMIUM; //se cancela por que asi el servidor no se da cuenta de que a recibido un paquete
+        }else {
+            SessionData sessionData = loginData.getSession();
+            logConsole(String.format("Login simplificado para <|%s|>, tiempo restante %s de la sesión", name, GlobalUtils.timeToString(System.currentTimeMillis() - sessionData.getEndTimeLogin(), 1)), TypeMessages.INFO);
         }
         return false;
     }
