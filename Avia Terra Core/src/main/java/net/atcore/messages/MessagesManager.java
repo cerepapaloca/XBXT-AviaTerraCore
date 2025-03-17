@@ -193,7 +193,7 @@ public final class MessagesManager {
         String colorMain = type.getMainColor();
         return s + colorMain + message
                 .replace("<|", type.getSecondColor())
-                .replace("|>", "<reset>" + colorMain)
+                .replace("|>", type.getSecondColorClose())
                 .replace("|!>", "<reset>" + colorMain)
                 .replace("`", "");
     }
