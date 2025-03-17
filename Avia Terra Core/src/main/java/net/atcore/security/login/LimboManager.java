@@ -4,6 +4,7 @@ import com.google.common.collect.Sets;
 import lombok.experimental.UtilityClass;
 import net.atcore.AviaTerraCore;
 import net.atcore.data.DataSection;
+import net.atcore.data.File;
 import net.atcore.data.FileYaml;
 import net.atcore.data.yml.CacheLimboFile;
 import net.atcore.messages.CategoryMessages;
@@ -49,7 +50,7 @@ public class LimboManager {
                             if (isOk) {
                                 if (loginData.isBedrockPlayer()) {
                                     // En caso de que sea de bedrock lo ejecuta con un tick de delay
-                                    Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> LimboManager.createLimboMode(player, reasonLimbo));
+                                    AviaTerraCore.taskSynchronously( () -> LimboManager.createLimboMode(player, reasonLimbo));
                                 } else {
                                     LimboManager.createLimboMode(player, reasonLimbo);
                                 }
@@ -59,10 +60,10 @@ public class LimboManager {
                             }
                         }
                         // Si no esta registrado lo hace con un delay si o si
-                        case NO_REGISTER -> Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> LimboManager.createLimboMode(player, reasonLimbo));
+                        case NO_REGISTER -> AviaTerraCore.taskSynchronously(() -> LimboManager.createLimboMode(player, reasonLimbo));
                     }
                 }else {
-                    Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> LimboManager.createLimboMode(player, reasonLimbo));
+                    AviaTerraCore.taskSynchronously(() -> LimboManager.createLimboMode(player, reasonLimbo));
                 }
             }
         }catch (Exception e){// Esto es un porsi acaso hay un error. Es mejor hacer un kick por seguridad
@@ -75,30 +76,22 @@ public class LimboManager {
         MessagesManager.logConsole(String.format("El jugador <|%s|> entro en modo limbo", player.getName()), TypeMessages.INFO, CategoryMessages.LOGIN);
         LoginData loginData = LoginManager.getDataLogin(player);
         String uuidString = GlobalUtils.getRealUUID(player).toString();
-        FileYaml file = DataSection.getCacheLimboFlies().getConfigFile(uuidString, false);
-        AtomicBoolean aBoolean = new AtomicBoolean(true);
-        addLimboData(player, loginData);
+        addLimboData(player);
         if (loginData.isBedrockPlayer()) player.addPotionEffect(BLINDNESS_EFFECT);
-        if (file != null) {// Si tiene un archivo eso quiere decir que no pudo aplicar las propiedades al usuario
+        AviaTerraCore.enqueueTaskAsynchronously(() -> {
+            FileYaml file = DataSection.getCacheLimboFlies().getConfigFile(uuidString, true);
             if (file instanceof CacheLimboFile cacheLimbo){
-                if (!cacheLimbo.isRestored()) {
-                    aBoolean.set(false);
-                    AviaTerraCore.enqueueTaskAsynchronously(() -> {
-                        // Carga los datos del usuario
-                        // Se realiza de manera asincrónica por qué no se requiere los datos del usuario para crear el LimboData
-                        cacheLimbo.loadData();
-                        MessagesManager.logConsole(String.format("Se restauro el usuario %s usando el .yaml", player.getName()), TypeMessages.INFO, CategoryMessages.LOGIN);
-                    });
+                if (cacheLimbo.isRestored()) {
+                    cacheLimbo.saveData();
+                    cacheLimbo.setRestored(false);
+                } else {
+                    // Carga los datos del usuario
+                    // Se realiza de manera asincrónica por qué no se requiere los datos del usuario para crear el LimboData
+                    cacheLimbo.loadData();
+                    MessagesManager.logConsole(String.format("Se restauro el usuario %s usando el Yaml", player.getName()), TypeMessages.INFO, CategoryMessages.LOGIN);
                 }
             }
-        }
-        AviaTerraCore.enqueueTaskAsynchronously(() -> {
-            if (aBoolean.get()) {
-                CacheLimboFile limboFile = (CacheLimboFile) DataSection.getCacheLimboFlies()
-                        .registerConfigFile(GlobalUtils.getRealUUID(player).toString());
-                limboFile.saveData();
-                limboFile.setRestored(false);
-            }
+
             sendMessage(player, reasonLimbo);
         });
     }
@@ -136,9 +129,9 @@ public class LimboManager {
         }
     }
 
-    private void addLimboData(Player player, LoginData loginData) {
+    private void addLimboData(Player player) {
         LimboData limboData = newLimboData(player);
-        loginData.setLimbo(limboData);
+        LoginManager.getDataLogin(player).setLimbo(limboData);
         clearPlayer(player);
         IN_PROCESS.remove(player.getUniqueId());
     }

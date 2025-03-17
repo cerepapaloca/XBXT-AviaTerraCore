@@ -65,7 +65,7 @@ public class DataSection implements Section {
         mapArtsFiles = new MapArtsFiles();
 
         for (DataBaseMySql db : DATA_BASE) db.createTable();
-        for (File fileYaml : FILES) fileYaml.loadData();
+        //for (File fileYaml : FILES) fileYaml.loadData();
     }
 
     @Override
@@ -90,8 +90,10 @@ public class DataSection implements Section {
                 }
                 if (!AviaTerraCore.isStarting()) MessagesManager.logConsole(String.format("Archivo %s recargador exitosamente", file), TypeMessages.SUCCESS);
             }
-            cacheLimboFlies.reloadConfigs();
+            /*cacheLimboFlies.reloadConfigs();
             mapArtsFiles.reloadConfigs();
+            messagesLocaleFile.reloadConfigs();
+            playersDataFiles.reloadConfigs();*/
             MessagesManager.logConsole("Archivos recargador exitosamente", TypeMessages.SUCCESS);
         });
     }

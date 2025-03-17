@@ -2,6 +2,7 @@ package net.atcore.data;
 
 import lombok.Getter;
 import net.atcore.AviaTerraCore;
+import org.bukkit.Bukkit;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
@@ -24,13 +25,12 @@ public abstract class FilesYams {
 
     public void configure() {
         createFolder();
-        reloadConfigs();
+        reloadConfigsFiles();
     }
 
-    public void reloadConfigs(){
+    public void reloadConfigsFiles(){
         this.configFiles = new HashSet<>();
         registerConfigFiles();
-        //loadConfigs();
     }
 
     public void createFolder(){
@@ -74,6 +74,17 @@ public abstract class FilesYams {
             return registerConfigFile(pathName + ".yml");
         }else {
             return null;
+        }
+    }
+
+    public void unloadConfigFile(String pathName) {
+        if (!pathName.endsWith(".yml")) pathName = pathName + ".yml";
+        for (FileYaml configFile : configFiles) {
+            if (configFile.fileName.equals(pathName)) {
+                configFiles.remove(configFile);
+                DataSection.FILES.remove(configFile);
+                return;
+            }
         }
     }
 

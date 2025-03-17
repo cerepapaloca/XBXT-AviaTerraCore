@@ -2,6 +2,7 @@ package net.atcore.listener;
 
 import net.atcore.AviaTerraCore;
 import net.atcore.aviaterraplayer.AviaTerraPlayer;
+import net.atcore.data.DataSection;
 import net.atcore.data.sql.DataBaseRegister;
 import net.atcore.messages.*;
 import net.atcore.moderation.ban.BanManager;
@@ -26,6 +27,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
@@ -33,6 +35,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+import static net.atcore.security.login.LoginManager.getDataLogin;
 import static net.atcore.security.login.LoginManager.onEnteringServer;
 
 public class JoinAndQuitListener implements Listener {
@@ -49,6 +52,19 @@ public class JoinAndQuitListener implements Listener {
             limbo.restorePlayer(player);
         }
         LimboManager.IN_PROCESS.remove(player.getUniqueId());
+        UUID uuidLimbo = GlobalUtils.getRealUUID(player);
+        UUID uuidPlayer = player.getUniqueId();
+        AviaTerraPlayer atp = AviaTerraPlayer.getPlayer(player);
+        // Esta tarea descargar los datos del jugador para ahorrar memoria
+        BukkitTask task = new BukkitRunnable() {
+            @Override
+            public void run() {
+                DataSection.getCacheLimboFlies().unloadConfigFile(uuidLimbo.toString());
+                DataSection.getPlayersDataFiles().unloadConfigFile(uuidPlayer.toString());
+                atp.unloadPlayer();
+            }
+        }.runTaskLater(AviaTerraCore.getInstance(), 20*15); //TODO: Cambiar el tiempo y hacer unas cuentas pruebas más
+        AviaTerraPlayer.TASKS_UNLOAD.put(uuidLimbo, task);
 
         if (LoginManager.getDataLogin(player) != null) {// si le llega a borrar el registro
             UUID uuid = GlobalUtils.getRealUUID(player);
@@ -125,6 +141,8 @@ public class JoinAndQuitListener implements Listener {
             return;
         }
         AviaTerraPlayer.addPlayer(player);
+        UUID realUUID = GlobalUtils.getRealUUID(player);
+        if (AviaTerraPlayer.TASKS_UNLOAD.containsKey(realUUID)) AviaTerraPlayer.TASKS_UNLOAD.remove(realUUID).cancel();
         SecuritySection.getSimulateOnlineMode().applySkin(player);
     }
 

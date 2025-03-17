@@ -119,9 +119,4 @@ public class CacheLimboFile extends FileYaml {
         LoginData login = LoginManager.getDataLogin(UUID.fromString(fileName.replace(".yml", "")));
         login.setLimbo(null);
     }
-
-    @Override
-    protected void addFile(){
-
-    }
 }

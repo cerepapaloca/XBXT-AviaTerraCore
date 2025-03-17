@@ -15,7 +15,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachmentInfo;
+import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,17 +32,28 @@ import java.util.UUID;
 @Getter
 @Setter
 public class AviaTerraPlayer {
+
+    public static final HashMap<UUID, BukkitTask> TASKS_UNLOAD = new HashMap<>();
+
     public AviaTerraPlayer(Player player) {
         this.uuid = player.getUniqueId();
+        if (TASKS_UNLOAD.containsKey(uuid)) TASKS_UNLOAD.get(uuid).cancel();
         AviaTerraCore.enqueueTaskAsynchronously(() -> {
             this.playerDataFile = (PlayerDataFile) DataSection.getPlayersDataFiles().getConfigFile(uuid.toString(), true);
-            joinEvent(player);
+            //DataSection.getCacheLimboFlies().getConfigFile(uuid.toString(), true);
+            updateView(player);
+            playerDataFile.loadData();
+            AviaTerraCore.taskSynchronously(() -> {
+                if (nameColor != null) player.displayName(GlobalUtils.chatColorLegacyToComponent(nameColor));
+            });
         });
     }
 
     private final static HashMap<UUID, AviaTerraPlayer> AVIA_TERRA_PLAYERS = new HashMap<>();
 
+    @NotNull
     private final ModerationPlayer moderationPlayer = new ModerationPlayer(this);
+    @NotNull
     private final ArmamentPlayer armamentPlayer = new ArmamentPlayer(this);
     private final UUID uuid;
     private final List<TpaCommand.TpaRequest> ListTpa = new ArrayList<>();
@@ -58,6 +71,10 @@ public class AviaTerraPlayer {
         MessagesManager.sendString(getPlayer(), message, type);
     }
 
+    /**
+     * @param uuid La uuid que le da el servidor no la real
+     */
+
     @Contract(pure = true)
     public static AviaTerraPlayer getPlayer(UUID uuid){
         return AVIA_TERRA_PLAYERS.get(uuid);
@@ -73,19 +90,16 @@ public class AviaTerraPlayer {
         return GlobalUtils.getPlayer(uuid);
     }
 
+    public void unloadPlayer(){
+        AVIA_TERRA_PLAYERS.remove(uuid);
+    }
+
     public static void addPlayer(Player player){
         if (!AVIA_TERRA_PLAYERS.containsKey(player.getUniqueId())){
             AVIA_TERRA_PLAYERS.put(player.getUniqueId(), new AviaTerraPlayer(player));
         }
-        AVIA_TERRA_PLAYERS.get(player.getUniqueId()).joinEvent(player);
-    }
 
-    public void joinEvent(Player player) {
-        updateView(player);
-        Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> {
-            if (nameColor != null) player.displayName(GlobalUtils.chatColorLegacyToComponent(nameColor));
-        });
-        AviaTerraCore.enqueueTaskAsynchronously(() -> playerDataFile.loadData());
+        //AVIA_TERRA_PLAYERS.get(player.getUniqueId()).joinEvent(player);
     }
 
     public void updateView(Player player) {

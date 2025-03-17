@@ -66,9 +66,4 @@ public class MapArtFile extends FileYaml {
             return author + mapIds.toString().replace(" ", "");
         }
     }
-
-    @Override
-    protected void addFile(){
-
-    }
 }

@@ -9,8 +9,8 @@ public class MapArtsFiles extends FilesYams {
     }
 
     @Override
-    public void reloadConfigs(){
+    public void reloadConfigsFiles(){
         MapArtFile.MAP_DATA_LIST.clear();
-        super.reloadConfigs();
+        super.reloadConfigsFiles();
     }
 }
