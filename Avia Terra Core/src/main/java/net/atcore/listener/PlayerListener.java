@@ -119,6 +119,7 @@ public class PlayerListener implements Listener {
         event.setCancelled(checkReload(player));
     }
 
+    @Deprecated
     private void addRange(@NotNull Player player){
         ItemStack item = player.getInventory().getItemInMainHand();
         if (item.getType().equals(Material.NAME_TAG)) {
@@ -157,11 +158,11 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onTeleport(@NotNull PlayerTeleportEvent event) {
         Player player = event.getPlayer();
-        MessagesManager.logConsole(String.format("EL jugador: <|%S|> se teletransportó de <|%s|> a <|%s|> por <|%s|>",
+        MessagesManager.logConsole(String.format("EL jugador: <|%s|> se teletransportó de <|%s|> a <|%s|> por <|%s|>",
                 player.getName(),
                 GlobalUtils.locationToString(event.getFrom()),
                 GlobalUtils.locationToString(event.getTo()),
-                event.getCause()
+                event.getCause().toString().toLowerCase().replace('/', ' ')
         ), TypeMessages.INFO, CategoryMessages.PLAY);
     }
 }

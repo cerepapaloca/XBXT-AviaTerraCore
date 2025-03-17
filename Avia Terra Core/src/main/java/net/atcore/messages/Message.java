@@ -112,6 +112,7 @@ public enum Message {
     COMMAND_FREEZE_FREEZE_AUTHOR("command.freeze","El jugador se congelo", INFO),
     COMMAND_FREEZE_FREEZE_TARGET("command.freeze","Te an congelado, por favor habla con el staff", INFO),
     COMMAND_HOME_LIST_SUCCESSFUL("command.home-list", "<white>%s.</white> <|%s|> localizado en <|%s|> a <|%sm|>", INFO),
+    COMMAND_HOME_LIST_HOVER("command.home-list", "<white>click para ir a %s</white>", NULL),
     COMMAND_PREMIUM_IS_PREMIUM("command.premium", "Esta cuenta ya es premium", ERROR),
     COMMAND_PREMIUM_IS_CRACKED("command.premium", "El nombre de usuario no pertenece a mojang", ERROR),
     COMMAND_PREMIUM_ERROR("command.premium", "Hubo un error al cambiar su estado de cuenta, vuelve a intentarlo", ERROR),

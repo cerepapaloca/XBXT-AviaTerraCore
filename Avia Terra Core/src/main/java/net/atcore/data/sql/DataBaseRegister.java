@@ -166,19 +166,19 @@ public class DataBaseRegister extends DataBaseMySql {
         }
     }
 
-    public static boolean isExistRegister(Player player) {
+    public static boolean isExistRegister(UUID uuid, String name) {
         if (!DataSection.isDataBaseActive()) return true;
         String query = "SELECT EXISTS(SELECT 1 FROM register WHERE uuidCracked = ?)";
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
-            stmt.setString(1, GlobalUtils.getRealUUID(player).toString());
+            stmt.setString(1, uuid.toString());
             ResultSet rs = stmt.executeQuery();
             ResultSet resultSet = stmt.executeQuery();
             if (resultSet.next()) {
                 return resultSet.getBoolean(1);
             }
         } catch (SQLException e) {
-            logConsole(String.format("Error al conocer el nombre del jugador %s", player.getName()), TypeMessages.ERROR, CategoryMessages.LOGIN);
+            logConsole(String.format("Error al conocer el nombre del jugador %s con uuid %s", name, uuid), TypeMessages.ERROR, CategoryMessages.LOGIN);
             MessagesManager.sendErrorException(Message.DATA_MYSQL_EXCEPTION.getMessageLocatePrivate(), e);
         }
         return false;
@@ -330,12 +330,12 @@ public class DataBaseRegister extends DataBaseMySql {
         }
     }
 
-    public static void checkRegister(Player player) {
+    public static void checkRegister(Player player, UUID uuid) {
         if (!DataSection.isDataBaseActive()) return;
 
-        LoginData login = LoginManager.getDataLogin(player);
+        LoginData login = LoginManager.getDataLogin(uuid);
         RegisterData register = login.getRegister();
-        boolean isExist = DataBaseRegister.isExistRegister(player);
+        boolean isExist = DataBaseRegister.isExistRegister(uuid, player.getName());
         if (!isExist) {
             DataBaseRegister.addRegister(register.getUsername(),
                     register.getUuidCracked().toString(),
@@ -347,7 +347,7 @@ public class DataBaseRegister extends DataBaseMySql {
                     register.getLastLoginDate(),
                     register.getRegisterDate()
             );
-            MessagesManager.logConsole("Se añadió un registro de " + player.getName() + " que no existía", TypeMessages.WARNING, CategoryMessages.LOGIN);
+            MessagesManager.logConsole("Se añadió un registro de " + player.getName() + " (" + uuid + ")  que no existía", TypeMessages.WARNING, CategoryMessages.LOGIN);
         }
     }
 }

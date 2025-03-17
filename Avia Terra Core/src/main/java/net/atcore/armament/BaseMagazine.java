@@ -140,7 +140,7 @@ public abstract class BaseMagazine extends BaseArmament implements Compartment {
             reloadTask.put(player.getUniqueId(), task);
             return true;
         }else {
-            MessagesManager.sendTitle(player,"", "No tiene balas en el inventario", 0, 0,30, TypeMessages.ERROR);
+            MessagesManager.sendTitle(player,"", "No tienes balas en el inventario", 0, 0,30, TypeMessages.ERROR);
         }
         return false;
     }

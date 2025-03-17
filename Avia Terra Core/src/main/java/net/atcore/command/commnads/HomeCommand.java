@@ -19,9 +19,9 @@ import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 
-public class HomeCommandAliase extends BaseTabCommand implements CommandAliase {
+public class HomeCommand extends BaseTabCommand implements CommandAliase {
 
-    public HomeCommandAliase() {
+    public HomeCommand() {
         super("home",
                 new ArgumentUse("home").addNote("Nombre de tu Home").addArgOptional().addArg("add", "remove"),
                 CommandVisibility.PUBLIC,
@@ -47,14 +47,13 @@ public class HomeCommandAliase extends BaseTabCommand implements CommandAliase {
                         Location l = spawnLocation.clone();
                         l.setWorld(player.getWorld());
                         double distance = player.getLocation().distance(l);
-                        // Esto quiere decir si está en el nether
                         if (player.getWorld().getEnvironment() == World.Environment.NETHER) distance *= 8;
                         int distanceMinTp = 100;
                         if (distance > distanceMinTp){
                             player.getWorld().spawnParticle(Particle.PORTAL, player.getLocation(), 10, 0.5, 1,0.5);
                             player.teleport(loc, PlayerTeleportEvent.TeleportCause.COMMAND);
-                            player.getWorld().playSound(player, Sound.ENTITY_PLAYER_TELEPORT, SoundCategory.PLAYERS, 1, 1, -1);
-                            player.getWorld().spawnParticle(Particle.REVERSE_PORTAL, player.getLocation(), 10, 0.5, 1,0.5);
+                            player.getWorld().playSound(player, Sound.ENTITY_PLAYER_TELEPORT, SoundCategory.PLAYERS, 1, 1);
+                            if (player.getGameMode() != GameMode.SPECTATOR) player.getWorld().spawnParticle(Particle.REVERSE_PORTAL, player.getLocation(), 10, 0.5, 1,0.5);
                         }else {
                             MessagesManager.sendFormatMessage(sender, Message.COMMAND_HOME_CLOSE_SPAWN, Math.round(distanceMinTp - distance));
                         }

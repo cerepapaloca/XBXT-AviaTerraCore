@@ -51,7 +51,8 @@ public class JoinAndQuitListener implements Listener {
         LimboManager.IN_PROCESS.remove(player.getUniqueId());
 
         if (LoginManager.getDataLogin(player) != null) {// si le llega a borrar el registro
-            AviaTerraCore.enqueueTaskAsynchronously(() -> DataBaseRegister.checkRegister(player));
+            UUID uuid = GlobalUtils.getRealUUID(player);
+            AviaTerraCore.enqueueTaskAsynchronously(() -> DataBaseRegister.checkRegister(player, uuid));
 
             // Borra a los jugadores cracked y semi cracked que no pudieron registrarse para evitar tener jugadores fantasmas
             if (LoginManager.getDataLogin(player).getRegister().isTemporary()){

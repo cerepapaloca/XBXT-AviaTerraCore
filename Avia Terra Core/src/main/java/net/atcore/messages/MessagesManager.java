@@ -41,7 +41,7 @@ public final class MessagesManager {
     public static final String LINK_DISCORD = "&a&n<click:open_url:http://discord.xbxt.xyz>http://discord.xbxt.xyz</click>";
     public static final String LINK_WEBSITE = "&a&n<click:open_url:https://xbxt.xyz>xbxt.xyz</click>";
     public static final String LINK_VOTE = "&a&n<click:open_url:https://minecraft-mp.com/server-s339858>minecraft-mp.com/server-s339858</click>";
-    public static final String PREFIX = "<dark_gray>[</dark_gray><b><#4B2FDE>XT<#ff8C00>XB<dark_gray></b>]</dark_gray> ";
+    public static final String PREFIX = "<dark_gray>[</dark_gray><b><#4B2FDE>XT<#ff8C00>XB</b><dark_gray>]</dark_gray> ";
     public static final String PREFIX_CHAT_DISCORD = "<dark_gray>[</dark_gray><b><gradient:#0000FF:#0000AA>DISCORD</gradient></b><dark_gray>]</dark_gray> ";
     public static final LocaleAvailable DEFAULT_LOCALE_USER = LocaleAvailable.EN;
     public static final LocaleAvailable DEFAULT_LOCALE_PRIVATE = LocaleAvailable.ES;

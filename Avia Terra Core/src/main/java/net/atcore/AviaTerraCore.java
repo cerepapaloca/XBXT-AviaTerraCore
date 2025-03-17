@@ -143,7 +143,7 @@ public class AviaTerraCore extends JavaPlugin {
         LIST_BROADCAST.clear();
         if (DiscordBot.stateTasks != null) DiscordBot.stateTasks.cancel();
         getOnlinePlayers().forEach(player -> {
-            DataBaseRegister.checkRegister(player);
+            DataBaseRegister.checkRegister(player, GlobalUtils.getRealUUID(player));
             GlobalUtils.kickPlayer(player, "El servidor va a cerrar, volveremos pronto...");
         });
         TASK_QUEUE.clear();
