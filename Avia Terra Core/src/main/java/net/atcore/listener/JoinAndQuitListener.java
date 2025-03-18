@@ -63,7 +63,7 @@ public class JoinAndQuitListener implements Listener {
                 DataSection.getPlayersDataFiles().unloadConfigFile(uuidPlayer.toString());
                 atp.unloadPlayer();
             }
-        }.runTaskLater(AviaTerraCore.getInstance(), 20*15); //TODO: Cambiar el tiempo y hacer unas cuentas pruebas más
+        }.runTaskLater(AviaTerraCore.getInstance(), 20*15);
         AviaTerraPlayer.TASKS_UNLOAD.put(uuidLimbo, task);
 
         if (LoginManager.getDataLogin(player) != null) {// si le llega a borrar el registro

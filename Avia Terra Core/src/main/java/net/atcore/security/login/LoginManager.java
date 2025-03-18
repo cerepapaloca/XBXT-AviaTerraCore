@@ -152,37 +152,6 @@ public final class LoginManager {
                     null,
                     System.currentTimeMillis(), System.currentTimeMillis()
             ));
-            /*if (profile.isPresent()){
-                Profile profileObj = profile.get();
-                registerData = new RegisterData(profileObj.getName(), GlobalUtils.getUUIDByName(name), profileObj.getId(), StateLogins.SEMI_CRACKED, true);
-                registerData.setLastAddress(ip);
-                // Se guarda el registro en la base de datos
-                Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(), () ->
-                        DataBaseRegister.addRegister(registerData.getUsername(),
-                        profileObj.getId().toString(),
-                                GlobalUtils.getUUIDByName(name).toString(),
-                                ip.getHostAddress(),
-                                ip.getHostAddress(),
-                                StateLogins.SEMI_CRACKED,
-                                null,
-                        System.currentTimeMillis(), System.currentTimeMillis()
-                ));
-
-            }else {// Es temporal el registro por qué no ha puesto la contraseña
-                registerData = new RegisterData(name, GlobalUtils.getUUIDByName(name), StateLogins.CRACKED, true);
-                registerData.setLastAddress(ip);
-                //se guarda el registro en la base de datos
-                Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(), () ->
-                        DataBaseRegister.addRegister(registerData.getUsername(),
-                                null,
-                                GlobalUtils.getUUIDByName(name).toString(),
-                                ip.getHostAddress(),
-                                ip.getHostAddress(),
-                                StateLogins.CRACKED,
-                                null,
-                        System.currentTimeMillis(), System.currentTimeMillis()
-                ));
-            }*/
             return registerData;
         } catch (IOException | RateLimitException e) {
             MessagesManager.sendWaringException("Error al iniciar el registro del jugador", e);
@@ -200,11 +169,21 @@ public final class LoginManager {
      * El usuario pasa de modo limbo a modo play comenzado a jugar y creando
      * una sesión válida Cracked
      *
-     * @param player El usuario que iniciar sessión
+     * @param player El usuario que va iniciar sessión
+     * @param codeSession Un código que se obtiene en {@link #codeSession(Player)} para identificar la instancia del jugador
      */
 
-    public static @NotNull LoginData startPlaySessionCracked(@NotNull Player player){
+    public static void startPlaySessionCracked(@NotNull Player player, long codeSession) {
         LoginData loginData = getDataLogin(player);
+        if (!player.isOnline()) {
+            MessagesManager.logConsole(String.format("Se aborto el inicio de sesión de <|%s|>", player.getName()) , TypeMessages.WARNING, CategoryMessages.LOGIN);
+            return;
+        }
+        if (codeSession != LoginManager.codeSession(player)) {
+            // Si son diferente eso quiere decir que la instancia de player no es la instancia actual
+            MessagesManager.logConsole(String.format("Inicio de session cracked invalida para <|%s|>", player.getName()) , TypeMessages.WARNING, CategoryMessages.LOGIN);
+            return;
+        }
         SessionData sessionData = new SessionData(player, StateLogins.CRACKED);//TODO: Cambiar si es un Cracked o un semi cracked
         sessionData.setEndTimeLogin(Config.getExpirationSession() + System.currentTimeMillis());
         loginData.setSession(sessionData);
@@ -219,7 +198,6 @@ public final class LoginManager {
             }
         }.runTaskLater(AviaTerraCore.getInstance(), 20*3);
         MessagesManager.logConsole(String.format("Inicio de sesión cracked valida para <|%s|>", player.getName()) , TypeMessages.SUCCESS, CategoryMessages.LOGIN);
-        return loginData;
     }
 
     /**
@@ -366,5 +344,13 @@ public final class LoginManager {
         }else {
             GlobalUtils.kickPlayer(player, Message.LOGIN_KICK_NO_REGISTER.getMessage(player));
         }
+    }
+
+    public long codeSession(Player player){
+        Player p = Bukkit.getPlayer(player.getUniqueId());
+        if (p == null) {
+            return 0;
+        }
+        return Long.valueOf(p.getLastLogin()).hashCode();
     }
 }

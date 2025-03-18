@@ -6,10 +6,12 @@ import net.atcore.command.CommandVisibility;
 import net.atcore.command.ModeTabPlayers;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
+import net.atcore.security.login.LoginManager;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import static net.atcore.security.login.LoginManager.codeSession;
 import static net.atcore.security.login.LoginManager.startPlaySessionCracked;
 
 public class ForceLoginCommand extends BaseCommand {
@@ -28,7 +30,8 @@ public class ForceLoginCommand extends BaseCommand {
             if (args.length <= 1){
                 Player p = Bukkit.getPlayer(args[0]);
                 if (p != null){
-                    startPlaySessionCracked(p).getRegister().setTemporary(false);
+                    startPlaySessionCracked(p, codeSession(p));
+                    LoginManager.getDataLogin(p).getRegister().setTemporary(false);
                 }else {
                     MessagesManager.sendMessage(sender, Message.COMMAND_GENERIC_PLAYER_NOT_FOUND);
                 }

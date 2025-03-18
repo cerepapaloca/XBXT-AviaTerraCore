@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.Objects;
 import java.util.UUID;
 
+import static net.atcore.messages.MessagesManager.logConsole;
 import static net.atcore.messages.MessagesManager.sendMessage;
 import static net.atcore.security.login.LoginManager.startPlaySessionCracked;
 
@@ -88,8 +89,9 @@ public class LoginCommand extends BaseCommand {
     }
 
     private void startPlay(Player player) {
+        long codeSession = LoginManager.codeSession(player);
         AviaTerraCore.enqueueTaskAsynchronously(() -> {
-            startPlaySessionCracked(player);
+            startPlaySessionCracked(player, codeSession);
             attempts.remove(player.getUniqueId());
             LoginManager.updateLoginDataBase(GlobalUtils.getRealName(player), Objects.requireNonNull(player.getAddress()).getAddress());
             MessagesManager.sendTitle(player, Message.COMMAND_LOGIN_SUCCESSFUL_TITLE.getMessage(player),

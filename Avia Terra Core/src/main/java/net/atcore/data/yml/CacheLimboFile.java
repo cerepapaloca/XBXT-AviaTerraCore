@@ -1,6 +1,7 @@
 package net.atcore.data.yml;
 
 import net.atcore.data.FileYaml;
+import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import net.atcore.security.login.model.LimboData;
@@ -83,11 +84,11 @@ public class CacheLimboFile extends FileYaml {
     public void saveData() {
         UUID userUUID = UUID.fromString(fileName.replace(".yml", ""));
         LimboData limboData = LoginManager.getDataLogin(userUUID).getLimbo();
-        if (limboData == null) {
-            MessagesManager.logConsole("El limbo data dio nulo para la uuid " + userUUID, TypeMessages.WARNING);
+        if (limboData == null) {//TODO: Mejorar esto para evitar que salga este waring. Sucede cuando entras te logueas y sale muy rápido varias veces
+            MessagesManager.logConsole("El limbo data dio nulo para la uuid " + userUUID + ". No se pudo guardar los datos", TypeMessages.WARNING, CategoryMessages.LOGIN);
             return;
         }
-        fileYaml.set("location.world", Objects.requireNonNull(limboData.getLocation().getWorld()).getName());
+        fileYaml.set("location.world", limboData.getLocation().getWorld().getName());
         fileYaml.set("location.x", limboData.getLocation().getX());
         fileYaml.set("location.y", limboData.getLocation().getY());
         fileYaml.set("location.z", limboData.getLocation().getZ());

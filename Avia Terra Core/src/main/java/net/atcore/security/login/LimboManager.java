@@ -4,7 +4,6 @@ import com.google.common.collect.Sets;
 import lombok.experimental.UtilityClass;
 import net.atcore.AviaTerraCore;
 import net.atcore.data.DataSection;
-import net.atcore.data.File;
 import net.atcore.data.FileYaml;
 import net.atcore.data.yml.CacheLimboFile;
 import net.atcore.messages.CategoryMessages;
@@ -25,8 +24,8 @@ import org.bukkit.scheduler.BukkitTask;
 import org.geysermc.floodgate.api.FloodgateApi;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.Set;
+import java.util.UUID;
 
 @UtilityClass
 public class LimboManager {
@@ -159,6 +158,9 @@ public class LimboManager {
                 GlobalUtils.kickPlayer(player, reason);
             }
         }.runTaskLater(AviaTerraCore.getInstance(), LIMBO_TIME);
-        LoginManager.getDataLogin(player).getLimbo().setTask(task);
+        LimboData limboData = LoginManager.getDataLogin(player).getLimbo();
+        if (limboData != null) {
+            limboData.setTask(task);
+        }
     }
 }
