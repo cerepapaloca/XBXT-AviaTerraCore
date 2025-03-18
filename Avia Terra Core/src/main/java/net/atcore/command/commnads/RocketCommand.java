@@ -14,10 +14,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
-public class RockedCommand extends BaseCommand {
+public class RocketCommand extends BaseCommand {
 
-    public RockedCommand() {
-        super("rocked", new ArgumentUse("rocked"), CommandVisibility.PUBLIC, "?");
+    public RocketCommand() {
+        super("rocket", new ArgumentUse("rocket"), CommandVisibility.PUBLIC, "?");
     }
 
     @Override

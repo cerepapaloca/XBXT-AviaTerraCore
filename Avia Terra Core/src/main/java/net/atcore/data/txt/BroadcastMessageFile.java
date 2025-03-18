@@ -13,6 +13,7 @@ public class BroadcastMessageFile  extends File {
     public BroadcastMessageFile() {
         super("broadcastMessage", "txt", null);
         copyDefaultConfig();
+        loadData();
     }
 
     @Override

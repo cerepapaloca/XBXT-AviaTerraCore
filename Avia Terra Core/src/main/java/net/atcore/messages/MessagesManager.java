@@ -69,6 +69,11 @@ public final class MessagesManager {
         sendMessage(sender, message, type, CategoryMessages.PRIVATE, true);
     }
 
+    public static void sendString(CommandSender sender, String message, @NotNull TypeMessages type, boolean prefix) {
+        sendMessage(sender, message, type, CategoryMessages.PRIVATE, prefix);
+    }
+
+
     public static void sendString(CommandSender sender, String message, @NotNull TypeMessages type, CategoryMessages categoryMessages) {
         sendMessage(sender, message, type, categoryMessages, true);
     }

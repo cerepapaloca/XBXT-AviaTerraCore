@@ -346,7 +346,7 @@ public final class LoginManager {
         }
     }
 
-    public long codeSession(Player player){
+    public static long codeSession(Player player){
         Player p = Bukkit.getPlayer(player.getUniqueId());
         if (p == null) {
             return 0;

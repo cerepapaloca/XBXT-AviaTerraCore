@@ -12,6 +12,7 @@ public class MOTDFile extends File {
     public MOTDFile() {
         super("MOTD", "txt", null);
         copyDefaultConfig();
+        loadData();
     }
 
     @Override

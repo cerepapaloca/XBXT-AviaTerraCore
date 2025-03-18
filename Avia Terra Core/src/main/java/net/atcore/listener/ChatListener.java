@@ -86,10 +86,10 @@ public class ChatListener implements Listener {
         }else {
             groupName = "usuario";
         }
-        String locale = sender.locale().getDisplayName();
+        String locale = sender.locale().getDisplayName(target.locale());
 
         Component hoverText = MessagesManager.applyFinalProprieties(
-                String.format(EVENT_CHAT_HOVER.getMessage(sender),
+                String.format(EVENT_CHAT_HOVER.getMessage(target),
                         (float) distanceWalkedKm/10,
                         (float) timePlayedHours/10,
                         sender.getName(),

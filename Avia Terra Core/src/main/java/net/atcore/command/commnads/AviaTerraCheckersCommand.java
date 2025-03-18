@@ -31,7 +31,7 @@ public class AviaTerraCheckersCommand extends BaseTabCommand {
             case 1 -> {
                 for (BaseChecker<?> check : BaseChecker.REGISTERED_CHECKS){
                     if (check.getClass().getSimpleName().equalsIgnoreCase(args[0])) {
-                        MessagesManager.sendString(sender, String.format("El %s esta %s", check.getClass().getSimpleName(), CommandUtils.booleanToString(check.enabled)), TypeMessages.INFO);
+                        MessagesManager.sendString(sender, String.format("El %s está %s", check.getClass().getSimpleName(), CommandUtils.booleanToString(check.enabled)), TypeMessages.INFO);
                         return;
                     }
                 }

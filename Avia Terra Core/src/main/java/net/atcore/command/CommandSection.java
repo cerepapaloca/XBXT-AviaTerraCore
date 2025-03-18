@@ -50,7 +50,7 @@ public class CommandSection implements Section {
                 new CrackedCommand(),
                 new KillCommand(),
                 new AviaTerraCheckersCommand(),
-                new RockedCommand(),
+                new RocketCommand(),
                 new HomeListCommand()
         );
     }

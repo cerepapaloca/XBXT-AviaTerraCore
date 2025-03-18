@@ -35,7 +35,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-import static net.atcore.security.login.LoginManager.getDataLogin;
 import static net.atcore.security.login.LoginManager.onEnteringServer;
 
 public class JoinAndQuitListener implements Listener {
@@ -63,7 +62,7 @@ public class JoinAndQuitListener implements Listener {
                 DataSection.getPlayersDataFiles().unloadConfigFile(uuidPlayer.toString());
                 atp.unloadPlayer();
             }
-        }.runTaskLater(AviaTerraCore.getInstance(), 20*15);
+        }.runTaskLater(AviaTerraCore.getInstance(), 20*60*60);
         AviaTerraPlayer.TASKS_UNLOAD.put(uuidLimbo, task);
 
         if (LoginManager.getDataLogin(player) != null) {// si le llega a borrar el registro
@@ -90,9 +89,10 @@ public class JoinAndQuitListener implements Listener {
 
         List<UUID> UUIDPlayers = List.copyOf(AviaTerraPlayer.getPlayer(player).getModerationPlayer().getManipulatorInventoryPlayer());
         UUIDPlayers.forEach(UUID -> Objects.requireNonNull(Bukkit.getPlayer(UUID)).closeInventory());
-        event.quitMessage(GlobalUtils.chatColorLegacyToComponent(MessagesManager.addProprieties(
-                String.format(Message.EVENT_QUIT.getMessage(player), event.getPlayer().getName()),
-                TypeMessages.INFO, false)));
+        event.quitMessage(null);
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            MessagesManager.sendString(p, String.format(Message.EVENT_QUIT.getMessage(p), event.getPlayer().getName()), Message.EVENT_QUIT.getTypeMessages(), false);
+        }
 
         sendEmbed(player, Color.RED, "%s Se salio del servidor");
     }
@@ -100,10 +100,14 @@ public class JoinAndQuitListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onJoin(@NotNull PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        event.joinMessage(GlobalUtils.chatColorLegacyToComponent(MessagesManager.addProprieties(
-                String.format(Message.EVENT_JOIN.getMessage(player), event.getPlayer().getName()),
-                TypeMessages.INFO, false)));
+        event.joinMessage(null);
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            MessagesManager.sendString(p, String.format(Message.EVENT_JOIN.getMessage(p), event.getPlayer().getName()), Message.EVENT_JOIN.getTypeMessages(), false);
+        }
         onEnteringServer(player);
+        AviaTerraCore.taskSynchronously(() -> {
+            player.displayName(GlobalUtils.chatColorLegacyToComponent(AviaTerraPlayer.getPlayer(player).getNameColor()));
+        });
 
         new BukkitRunnable() {
             @Override
