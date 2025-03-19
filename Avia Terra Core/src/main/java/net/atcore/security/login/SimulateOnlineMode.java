@@ -83,7 +83,7 @@ public class SimulateOnlineMode {
             return state == StateLogins.PREMIUM; //se cancela por que asi el servidor no se da cuenta de que a recibido un paquete
         }else {
             SessionData sessionData = loginData.getSession();
-            logConsole(String.format("Login simplificado para <|%s|>, tiempo restante %s de la sesión", name, GlobalUtils.timeToString(System.currentTimeMillis() - sessionData.getEndTimeLogin(), 1)), TypeMessages.INFO);
+            logConsole(String.format("Login simplificado para <|%s|>, tiempo restante %s de la sesión", name, GlobalUtils.timeToString(sessionData.getEndTimeLogin() - System.currentTimeMillis(), 1)), TypeMessages.INFO);
         }
         return false;
     }

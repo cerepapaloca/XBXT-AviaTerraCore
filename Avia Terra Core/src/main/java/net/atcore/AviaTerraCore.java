@@ -258,7 +258,7 @@ public class AviaTerraCore extends JavaPlugin {
 
             }
         } catch (InterruptedException e) {
-            //Thread.currentThread().interrupt();
+            Thread.currentThread().interrupt();
             if (!Bukkit.isStopping()) MessagesManager.sendErrorException("Hilo del AviaTerra hubo una excepción de interrupción", e);
         }
     }

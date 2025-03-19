@@ -8,6 +8,7 @@ import com.google.common.hash.Hashing;
 import net.atcore.AviaTerraCore;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.Message;
+import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import net.atcore.security.login.model.LoginData;
 import net.atcore.security.login.model.SessionData;
@@ -102,7 +103,8 @@ public class VerificationPremium {
                 logConsole(String.format("tokens no son iguales del el jugador <|Desconocido|> y la ip <|%1$s|>. Discrepancia detectada", inetAddress.toString()), TypeMessages.WARNING, CategoryMessages.LOGIN);
             }
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            GlobalUtils.kickPlayer(player, Message.LOGIN_KICK_GENERIC.getMessageLocaleDefault());
+            MessagesManager.sendErrorException("Erro al verificar la cuenta premium", e);
         }
     }
 

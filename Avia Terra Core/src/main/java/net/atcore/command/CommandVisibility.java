@@ -10,7 +10,7 @@ public enum CommandVisibility {
      */
     ALL,
     /**
-     * El comando puede solo puede ejecutado por jugadores logueados
+     * El comando puede solo puede ser ejecutado por jugadores logueados
      */
     PUBLIC,
     /**
