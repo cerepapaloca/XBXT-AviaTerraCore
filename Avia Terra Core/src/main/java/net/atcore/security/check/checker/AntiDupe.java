@@ -40,7 +40,7 @@ public class AntiDupe extends InventoryChecker {
                     if (item.getItemMeta() == null) continue;
                     String uniqueId = (String) GlobalUtils.getPersistenData(item, "uuid", PersistentDataType.STRING);
                     if (uniqueId != null){
-                        if (item.getAmount() != 1) item.setAmount(1);
+                        item.setAmount(1);
                         AntiDupeItem antiDupeItem = itemCounts.getOrDefault(uniqueId, new AntiDupeItem(uniqueId));
                         antiDupeItem.items.add(item);
                         itemCounts.put(uniqueId, antiDupeItem);

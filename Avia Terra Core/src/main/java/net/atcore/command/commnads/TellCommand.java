@@ -41,7 +41,7 @@ public class TellCommand extends BaseCommand implements CommandAliase {
                 String finalMessage = message;
                 sendFormatMessage(sender, Message.COMMAND_TELL_FEEDBACK, args[0], finalMessage);
                 CommandUtils.executeForPlayer(sender, args[0], true, (name, player) -> {
-                    sendMessage(player,String.format(Message.COMMAND_TELL_FORMAT_MESSAGE.getMessage(player), sender.getName(), finalMessage), TypeMessages.NULL, CategoryMessages.PRIVATE, false);
+                    sendMessage(player,String.format(Message.COMMAND_TELL_FORMAT_MESSAGE.getMessage(player), sender.getName(), finalMessage), TypeMessages.GENERIC, CategoryMessages.PRIVATE, false);
                 });
             }
         }

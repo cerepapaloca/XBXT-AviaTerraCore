@@ -388,7 +388,7 @@ public final class GlobalUtils {
                     }
                 }
 
-                lineas.add(MessagesManager.applyFinalProprieties(GlobalUtils.convertToMiniMessageFormat(color) + parte.substring(inicio, fin), TypeMessages.NULL, CategoryMessages.PRIVATE, false));
+                lineas.add(MessagesManager.applyFinalProprieties(GlobalUtils.convertToMiniMessageFormat(color) + parte.substring(inicio, fin), TypeMessages.GENERIC, CategoryMessages.PRIVATE, false));
                 inicio = fin + 1; // Salta el espacio
             }
         }
@@ -624,6 +624,7 @@ public final class GlobalUtils {
     @NotNull
     @Contract(pure = true)
     public String getRealName(Player player) {
+        /*
         if (player.isOnline()){
             if (FloodgateApi.getInstance().isFloodgatePlayer(player.getUniqueId())){
                 return FloodgateApi.getInstance().getPlayer(player.getUniqueId()).getUsername();
@@ -633,7 +634,8 @@ public final class GlobalUtils {
         }else {
             // En caso de que un jugador de bedrock se desconecte
             return LoginManager.getDataLogin(player.getName()).getRegister().getUsername();
-        }
+        }*/
+        return player.getName().startsWith(".") ? player.getName().substring(1) : player.getName();
     }
 
     @Contract(pure = true)

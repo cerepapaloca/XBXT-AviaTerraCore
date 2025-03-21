@@ -27,7 +27,7 @@ import java.util.*;
 public abstract class BaseMagazine extends BaseArmament implements Compartment {
 
     public BaseMagazine(List<Class<? extends BaseAmmo>> compatibleCaliber, List<Class<? extends BaseAmmo>> defaultCaliber, int ammoMax, String displayName, int reloadTime) {
-        super(displayName, new ItemStack(Material.SUGAR));
+        super(displayName, new ItemStack(Material.BRICK));
         this.displayName = displayName;
         this.DefaultammonList = listAmmoFill(defaultCaliber);
         this.compatibleAmmonList = listAmmoClassToListBaseAmmo(compatibleCaliber);
@@ -55,7 +55,6 @@ public abstract class BaseMagazine extends BaseArmament implements Compartment {
             for (String armament : ArmamentUtils.stringToList(stringAmmo)) AmmoBaseList.add(ArmamentUtils.getAmmo(armament));
             String finalLore = getFinalLore(setLore, AmmoBaseList);
             if (setLore){
-
                 List<Component> lore = GlobalUtils.stringToLoreComponent(finalLore, true);
                 lore.addAll(GlobalUtils.stringToLoreComponent(Message.MISC_WARING_ANTI_DUPE.getMessageLocaleDefault(), false, TypeMessages.WARNING.getMainColor()));
                 meta.lore(lore);
@@ -98,8 +97,13 @@ public abstract class BaseMagazine extends BaseArmament implements Compartment {
 
     @Override
     public boolean reload(Player player){
-        ItemStack charger = player.getInventory().getItemInMainHand();
-        if (charger.getItemMeta() == null) return false;
+        ItemStack magazine = player.getInventory().getItemInMainHand();
+        if (magazine.getItemMeta() == null) return false;
+        String armamentList = (String) GlobalUtils.getPersistenData(magazine, "magazineAmmo", PersistentDataType.STRING);
+        if (armamentList != null && ArmamentUtils.stringToList(armamentList).size() == ammoMax) {
+            MessagesManager.sendTitle(player,"", "Cargador lleno", 0, 0,30, TypeMessages.INFO);
+            return true;
+        }
         if (reloadTask.containsKey(player.getUniqueId())) return false;
         boolean b = false;
         for (ItemStack item : player.getInventory().getContents()) {//busca si tienes al menos una bala en el inventario
@@ -108,25 +112,28 @@ public abstract class BaseMagazine extends BaseArmament implements Compartment {
             if (armament == null) continue;
             BaseAmmo baseAmmo = ArmamentUtils.getAmmo(armament);
             if (baseAmmo == null) continue;
-            b = true;//se confirma que tiene al menos un bala
+            b = true;//se confirma que tiene al menos una bala
             break;
         }
         if (b){
+
             BukkitTask task = new BukkitRunnable() {
                 public void run() {
-                    ItemStack charger = player.getInventory().getItemInMainHand();
-                    if (charger.getItemMeta() != null){
-                        String armamentList = (String) GlobalUtils.getPersistenData(charger, "magazineAmmo", PersistentDataType.STRING);
-                        if (armamentList != null) {
-                            if (ArmamentUtils.stringToList(armamentList).size() < ammoMax) {
-                                onReload(player);
-                            }else {
-                                MessagesManager.sendTitle(player,"", "Recargado Completada", 0, 0,30, TypeMessages.SUCCESS);
-                                player.removePotionEffect(PotionEffectType.SLOWNESS);
-                                reloadTask.remove(player.getUniqueId());
-                                cancel();
+                    ItemStack magazine = player.getInventory().getItemInMainHand();
+                    if (magazine.getItemMeta() != null){
+                        String armamentList = (String) GlobalUtils.getPersistenData(magazine, "magazineAmmo", PersistentDataType.STRING);
+                        if (ArmamentUtils.getMagazine(magazine) != null){
+                            if (armamentList != null) {
+                                if (ArmamentUtils.stringToList(armamentList).size() < ammoMax) {
+                                    onReload(player);
+                                }else {
+                                    MessagesManager.sendTitle(player,"", "Recargado Completada", 0, 0,30, TypeMessages.SUCCESS);
+                                    player.removePotionEffect(PotionEffectType.SLOWNESS);
+                                    reloadTask.remove(player.getUniqueId());
+                                    cancel();
+                                }
+                                return;
                             }
-                            return;
                         }
                     }
                     MessagesManager.sendTitle(player,"", "Recargado Cancelada", 0, 0,30, TypeMessages.ERROR);
@@ -134,7 +141,7 @@ public abstract class BaseMagazine extends BaseArmament implements Compartment {
                     reloadTask.remove(player.getUniqueId());
                     cancel();
                 }
-            }.runTaskTimer(AviaTerraCore.getInstance(), 3, 3);
+            }.runTaskTimer(AviaTerraCore.getInstance(), 2, 2);
             MessagesManager.sendTitle(player,"", "Recargando...", 0, 0,30, TypeMessages.INFO);
             player.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, Integer.MAX_VALUE, 3, true, false, false));
             reloadTask.put(player.getUniqueId(), task);

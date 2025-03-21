@@ -118,7 +118,7 @@ public class DiscordBot extends ListenerAdapter{
                     member.getColor() == null ? "<#AAAAAA>" + member.getUser().getGlobalName() :
                             "<" + GlobalUtils.javaColorToStringHex(member.getColor()) + ">" + member.getUser().getGlobalName(),
                     "<" + NamedTextColor.GRAY.asHexString() + ">" + rowContent
-            ), TypeMessages.NULL, CategoryMessages.PRIVATE, false);
+            ), TypeMessages.GENERIC, CategoryMessages.PRIVATE, false);
             Component roles = Component.text("Roles: ");
             for (Role role : member.getRoles()) {
                 roles = roles.append(Component.text(role.getName()).color(TextColor.color(role.getColorRaw())).appendSpace());
