@@ -38,7 +38,9 @@ public class HomeListCommand extends BaseCommand {
                             homeCount.get(),
                             name,
                             GlobalUtils.locationToString(location),
-                            (int) player.getLocation().distance(location)
+                            location.getWorld() == player.getLocation().getWorld() ?
+                                    (int) player.getLocation().distance(location) :
+                                    "--"
                             ) + "</hover></click>", TypeMessages.INFO
                     );
                 });

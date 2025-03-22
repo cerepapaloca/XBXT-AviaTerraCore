@@ -5,7 +5,7 @@ import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import net.atcore.security.check.CheckerUtils;
-import org.bukkit.Material;
+import net.atcore.security.check.InventoryChecker;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.Event;
 import org.bukkit.event.inventory.InventoryEvent;

@@ -1,6 +1,5 @@
-package net.atcore.security.check.checker;
+package net.atcore.security.check;
 
-import net.atcore.security.check.BaseCheckerMulti;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 

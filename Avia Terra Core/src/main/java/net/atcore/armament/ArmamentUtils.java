@@ -136,30 +136,22 @@ public class ArmamentUtils {
 
     public void drawParticleLine(@NotNull Location start, Location end, Color color, double density) {
         World world = start.getWorld();
-        if (world == null || !world.equals(end.getWorld())) {
-            return;
-        }
+        if (density <= 0) return; // Evita divisiones por cero
 
-        Vector direction = end.toVector().subtract(start.toVector()).normalize();
         double distance = start.distance(end);
+        int steps = (int) (distance / density); // Calcula cuántos puntos se necesitan
+
         Particle.DustOptions dustOptions = new Particle.DustOptions(color, 0.6F);
-        //Location point = start;
-        new BukkitRunnable() {
-            Location point = start;
-            double d = 0;
-            public void run() {
-                for (int i = 0; i < 3; i++){// crear las partículas en 3 en 3
-                    d += density;
-                    point = start.clone().add(direction.clone().multiply(d));
-                    //los ceros representa como de aleatorio aran spawn en el mundo en cada eje, primer numeró es la calidad de particular y el ultimo la velocidad
-                    world.spawnParticle(Particle.DUST, point, 2, 0, 0, 0,0.3, dustOptions ,false);
-                    if (d > distance){
-                        cancel();
-                        break;
-                    }
-                }
-            }
-        }.runTaskTimer(AviaTerraCore.getInstance(), 1, 1);
+
+        // Vector dirección normalizado
+        double dx = (end.getX() - start.getX()) / distance;
+        double dy = (end.getY() - start.getY()) / distance;
+        double dz = (end.getZ() - start.getZ()) / distance;
+
+        for (int i = 0; i <= steps; i++) {
+            Location point = start.clone().add(dx * density * i, dy * density * i, dz * density * i);
+            world.spawnParticle(Particle.DUST, point, 2, 0, 0, 0,0.3, dustOptions ,false);
+        }
     }
 
     public Location getLookLocation(Vector direction, Location location, double maxDistance, double stepSize) {

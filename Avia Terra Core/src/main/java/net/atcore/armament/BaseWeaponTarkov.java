@@ -84,9 +84,13 @@ public abstract class BaseWeaponTarkov extends BaseWeapon implements Compartment
         for (ItemStack itemCharger : player.getInventory().getStorageContents()){// Busca un cargador con balas
             if (itemCharger == null) continue;
             String ammo = (String) GlobalUtils.getPersistenData(itemCharger, "magazineAmmo", PersistentDataType.STRING);//se obtiene la munición del cargador
+
             if (ammo == null) continue;
             List<String> ammoCharger = ArmamentUtils.stringToList(ammo);
-            if (ammoCharger.isEmpty() || itemCharger.equals(itemWeapon))continue;// Si el cargador está vacío busca otro cargador o el cargador es la propia arma
+            if (ammoCharger.isEmpty() || itemCharger.equals(itemWeapon)) continue;// Si el cargador está vacío busca otro cargador o el cargador es la propia arma
+
+            String name = (String) GlobalUtils.getPersistenData(itemCharger, "armament", PersistentDataType.STRING);
+            if (!isCompatible(name))continue;//es un cargador compatible?
             b = true;//sí hay un cargador
             break;
         }
@@ -131,7 +135,6 @@ public abstract class BaseWeaponTarkov extends BaseWeapon implements Compartment
                 MessagesManager.sendTitle(player,"", "Recargado...", 10, charger.getReloadTime(),10, TypeMessages.INFO);
                 player.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, charger.getReloadTime(), 2, true, false, false));
                 IN_RELOAD.put(player.getUniqueId(), bukkitTask);// Por si se guarda el delay por si se tiene que cancelar
-                return true;
             }else {
                 MessagesManager.sendTitle(player, "", "No tienes cargadores con munición", 0,20,60, TypeMessages.ERROR);
             }
@@ -139,12 +142,11 @@ public abstract class BaseWeaponTarkov extends BaseWeapon implements Compartment
             if (b){//hay un cargador que se puede cambiar?
                 onReload(itemWeapon, player);
                 MessagesManager.sendTitle(player,"", "Recargado", 0, 0,30, TypeMessages.SUCCESS);
-                return true;
             }else {
                 MessagesManager.sendTitle(player, "", "No tienes cargadores con munición", 0,20,60, TypeMessages.ERROR);
             }
         }
-        return false;
+        return true;
     }
 
     private void onReload(ItemStack itemWeapon ,Player player) {
@@ -211,7 +213,7 @@ public abstract class BaseWeaponTarkov extends BaseWeapon implements Compartment
         s = String.format("""
                 ARMA
                 Rango máximo: <|%sm|>
-                Presión: <|%s|>
+                Precisión: <|%s|>
                 """,
                 maxDistance,
                 (100 - vague) + "%"
@@ -227,12 +229,14 @@ public abstract class BaseWeaponTarkov extends BaseWeapon implements Compartment
             if (chargerNow != null && !chargerNow.equals("null")){//es técnicamente imposible que diera nulo
                 s += Objects.requireNonNull(ArmamentUtils.getMagazine(chargerNow)).getProperties(weapon, false);//solo se obtiene el lore del cargador
             }else{
-                s += """
+                s += String.format("""
                          \n
-                        SIN CARGADOR""";
+                        SIN CARGADOR
+                        Cargadores compatibles: <|%s|>
+                        """,String.join(", ", this.getMagazineList().stream().map(magazine -> ArmamentUtils.getMagazine(magazine.getName()).getDisplayName()).toList()));
             }
         }
-        List<Component> lore = GlobalUtils.stringToLoreComponent(s, true);
+        List<Component> lore = GlobalUtils.stringToLoreComponent(s, true, 1000);
         lore.addAll(GlobalUtils.stringToLoreComponent(Message.MISC_WARING_ANTI_DUPE.getMessageLocaleDefault(), false, TypeMessages.WARNING.getMainColor()));
         itemMeta.lore(lore);
         weapon.setItemMeta(itemMeta);

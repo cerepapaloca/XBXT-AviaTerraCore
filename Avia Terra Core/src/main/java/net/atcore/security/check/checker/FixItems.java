@@ -1,13 +1,14 @@
 package net.atcore.security.check.checker;
 
 import net.atcore.security.check.CheckerUtils;
+import net.atcore.security.check.InventoryChecker;
 import org.bukkit.event.Event;
 import org.bukkit.event.inventory.InventoryEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
-public class FixItems extends InventoryChecker{
+public class FixItems extends InventoryChecker {
 
     @Override
     public void onCheck(Event event) {

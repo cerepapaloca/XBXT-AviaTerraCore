@@ -54,7 +54,11 @@ public class LimboManager {
                                     LimboManager.createLimboMode(player, reasonLimbo);
                                 }
                             }else {
-                                MessagesManager.logConsole(String.format("Los registros de %s y el floodGate dieron datos inconsistentes", player.getName()), TypeMessages.WARNING, CategoryMessages.LOGIN);
+                                MessagesManager.logConsole(String.format("Los registros de %s y el floodGate dieron datos inconsistentes, Data base: %s, Floodgate: %s",
+                                        player.getName(),
+                                        loginData.isBedrockPlayer(),
+                                        FloodgateApi.getInstance().isFloodgatePlayer(player.getUniqueId())
+                                ), TypeMessages.WARNING, CategoryMessages.LOGIN);
                                 GlobalUtils.synchronizeKickPlayer(player, Message.LOGIN_LIMBO_BEDROCK_ERROR);
                             }
                         }

@@ -2,15 +2,13 @@ package net.atcore.armament.ammo;
 
 import net.atcore.armament.BaseAmmo;
 import net.atcore.armament.Initializer;
-import net.atcore.armament.Shot;
-import org.bukkit.Color;
 
 @Initializer
-public final class MMxxPrueba extends BaseAmmo {
+public final class OtanMediumNormal extends BaseAmmo {
 
-    public MMxxPrueba() {
+    public OtanMediumNormal() {
         super(10,
-                "prueba",
+                "5,56×45mm",
                 10
         );
     }

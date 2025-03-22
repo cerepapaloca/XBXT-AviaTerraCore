@@ -46,7 +46,7 @@ public class AntiIlegalBlock extends BaseChecker<PlayerChunkLoadEvent> {
                     }
                 }
             }
-            Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> blocksRemove.forEach(block -> block.setType(Material.AIR)));
+            AviaTerraCore.taskSynchronously(() -> blocksRemove.forEach(block -> block.setType(Material.AIR)));
         });
     }
 }

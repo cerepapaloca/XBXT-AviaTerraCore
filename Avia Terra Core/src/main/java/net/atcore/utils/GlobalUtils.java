@@ -169,7 +169,7 @@ public final class GlobalUtils {
     @Contract(pure = true)
     public Object getPersistenData(@NotNull ItemStack item, String nameKey, PersistentDataType<?, ?> type){
         ItemMeta meta = item.getItemMeta();
-        assert meta != null;
+        if (meta == null) return null;
         PersistentDataContainer dataContainer = meta.getPersistentDataContainer();
         NamespacedKey key = new NamespacedKey(AviaTerraCore.getInstance(), nameKey);
         if (dataContainer.has(key)){

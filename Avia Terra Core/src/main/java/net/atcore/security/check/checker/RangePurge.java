@@ -6,6 +6,7 @@ import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import net.atcore.security.check.CheckerUtils;
+import net.atcore.security.check.InventoryChecker;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.Material;
 import org.bukkit.event.Event;
@@ -14,7 +15,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 
 @Experimental
-public class RangePurge extends InventoryChecker{
+public class RangePurge extends InventoryChecker {
     @Override
     public void onCheck(Event event) {
         if (event instanceof InventoryEvent){

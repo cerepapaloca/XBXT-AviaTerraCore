@@ -1,16 +1,10 @@
 package net.atcore.armament;
 
 import net.atcore.Section;
-import net.atcore.armament.ammo.Cartucho;
-import net.atcore.armament.ammo.MM45Otan;
-import net.atcore.armament.ammo.MM45OtanVerde;
-import net.atcore.armament.ammo.MMxxPrueba;
-import net.atcore.armament.magazines.M4_30;
-import net.atcore.armament.magazines.M4_60;
-import net.atcore.armament.weapons.M16;
-import net.atcore.armament.weapons.M4;
-import net.atcore.armament.weapons.Test1;
-import net.atcore.armament.weapons.Test2;
+import net.atcore.armament.ammo.*;
+import net.atcore.armament.ammo.Shot;
+import net.atcore.armament.magazines.*;
+import net.atcore.armament.weapons.*;
 
 public class ArmamentSection implements Section {
 
@@ -23,19 +17,29 @@ public class ArmamentSection implements Section {
     }
 
     public static void initialize() {
-        new MMxxPrueba();
-        new MM45OtanVerde();
-        new MM45Otan();
-        new Cartucho();
+        new OtanMediumPenetration();
+        new OtanMediumTrace();
+        new OtanMediumNormal();
+        new UURSMediumPenetration();
+        new UURSMediumTrace();
+        new UURSMediumNormal();
+        new Shot();
         ////////////
-        new M4_60();
-        new M4_30();
+        new OtanMedium60();
+        new OtanMedium30();
+        new OtanMedium15();
+        new UURSMedium60();
+        new UURSMedium30();
+        new UURSMedium15();
         ////////////
+        new AK47();
+        new AR15();
+        new M4();
         new M16();
+        new SKS();
+
         new Test1();
         new Test2();
-        ////////////
-        new M4();
         ////////////
         /*Reflections reflections = new Reflections(PACKAGE);
         Set<Class<?>> annotatedClasses = reflections.getTypesAnnotatedWith(Initializer.class);

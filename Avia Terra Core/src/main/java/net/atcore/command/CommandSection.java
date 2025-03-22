@@ -51,7 +51,8 @@ public class CommandSection implements Section {
                 new KillCommand(),
                 new AviaTerraCheckersCommand(),
                 new RocketCommand(),
-                new HomeListCommand()
+                new HomeListCommand(),
+                new ReloadCommand()
         );
     }
 

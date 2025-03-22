@@ -44,8 +44,7 @@ public class ArmamentActions {
         if (item.getItemMeta() == null) return false;
         Compartment compartment = ArmamentUtils.getCompartment(item);
         if (compartment != null){
-            compartment.reload(player);
-            return true;
+            return compartment.reload(player);
         }else {
             AviaTerraPlayer aviaPlayer = AviaTerraPlayer.getPlayer(player);
             return aviaPlayer.getArmamentPlayer().reload(player);

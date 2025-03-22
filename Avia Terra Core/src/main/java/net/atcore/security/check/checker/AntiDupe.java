@@ -3,6 +3,7 @@ package net.atcore.security.check.checker;
 import lombok.AllArgsConstructor;
 import net.atcore.AviaTerraCore;
 import net.atcore.security.check.CheckerUtils;
+import net.atcore.security.check.InventoryChecker;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.event.Event;
 import org.bukkit.event.inventory.InventoryEvent;

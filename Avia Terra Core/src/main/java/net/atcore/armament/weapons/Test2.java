@@ -2,9 +2,9 @@ package net.atcore.armament.weapons;
 
 import net.atcore.armament.BaseWeaponUltraKill;
 import net.atcore.armament.WeaponMode;
-import net.atcore.armament.ammo.Cartucho;
+import net.atcore.armament.ammo.Shot;
 
-public class Test2 extends BaseWeaponUltraKill {
+public final class Test2 extends BaseWeaponUltraKill {
 
     public Test2() {
         super("Test 2",
@@ -12,7 +12,7 @@ public class Test2 extends BaseWeaponUltraKill {
                 2,
                 50,
                 15,
-                Cartucho.class,
+                Shot.class,
                 WeaponMode.SEMI,
                 50
         );
