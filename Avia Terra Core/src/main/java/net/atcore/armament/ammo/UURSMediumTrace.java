@@ -9,7 +9,7 @@ import java.util.List;
 public final class UURSMediumTrace extends BaseAmmo implements TraceIsFire {
 
     public UURSMediumTrace() {
-        super(12,
+        super(18,
                 "7,62x39mm T",
                 20
         );

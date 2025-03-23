@@ -52,7 +52,9 @@ public class CommandSection implements Section {
                 new AviaTerraCheckersCommand(),
                 new RocketCommand(),
                 new HomeListCommand(),
-                new ReloadCommand()
+                new ReloadCommand(),
+                new UnblockCommand(),
+                new BlockCommand()
         );
     }
 

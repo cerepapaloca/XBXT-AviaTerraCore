@@ -4,6 +4,7 @@ import net.atcore.aviaterraplayer.AviaTerraPlayer;
 import net.atcore.command.*;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
+import net.atcore.utils.GlobalUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -58,7 +59,16 @@ public class TpaCommand extends BaseTabCommand implements CommandAliase {
                     }
                     case "N" -> {
                         AviaTerraPlayer atp = AviaTerraPlayer.getPlayer(p);
-                        atp.getListTpa().clear();
+                        if (atp.getListTpa().isEmpty()){
+                            atp.sendMessage(Message.COMMAND_TPA_NO_FOUND);
+                            return;
+                        }
+                        TpaRequest request = atp.getListTpa().getFirst();
+                        Player player = Bukkit.getPlayer(request.uuid);
+                        if (player != null) {
+                            MessagesManager.sendMessage(player, Message.COMMAND_TPA_CANCEL_RECEIVE);
+                        }
+                        MessagesManager.sendMessage(sender, Message.COMMAND_TPA_CANCEL_SELF);
                     }
                     default -> {
                         Player player = Bukkit.getPlayer(args[0]);
@@ -69,6 +79,7 @@ public class TpaCommand extends BaseTabCommand implements CommandAliase {
                         if (player != null) {
                             AviaTerraPlayer atp = AviaTerraPlayer.getPlayer(player);
                             MessagesManager.sendFormatMessage(sender, Message.COMMAND_TPA_SEND, player.getName());
+                            if (atp.getPlayersBLock().contains(p.getName())) return;
                             MessagesManager.sendFormatMessage(atp.getPlayer(), Message.COMMAND_TPA_RECEIVE, p.getName());
                             atp.getListTpa().add(new TpaRequest(p.getUniqueId(), System.currentTimeMillis() + 1000*60*5));
                         }else {

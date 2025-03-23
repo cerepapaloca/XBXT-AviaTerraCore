@@ -91,7 +91,7 @@ public class LimboManager {
                     // Carga los datos del usuario
                     // Se realiza de manera asincrónica por qué no se requiere los datos del usuario para crear el LimboData
                     cacheLimbo.loadData();
-                    MessagesManager.logConsole(String.format("Se restauro el usuario %s usando el Yaml", player.getName()), TypeMessages.INFO, CategoryMessages.LOGIN);
+                    if (!loginData.getRegister().isTemporary()) MessagesManager.logConsole(String.format("Se restauro el usuario %s usando el Yaml", player.getName()), TypeMessages.INFO, CategoryMessages.LOGIN);
                 }
             }
 

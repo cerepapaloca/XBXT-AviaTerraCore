@@ -4,7 +4,7 @@ import net.atcore.armament.BaseAmmo;
 
 public final class Shot extends BaseAmmo implements net.atcore.armament.Shot {
     public Shot() {
-        super(7,
+        super(12,
                 "Cartucho 12C",
                 2
         );

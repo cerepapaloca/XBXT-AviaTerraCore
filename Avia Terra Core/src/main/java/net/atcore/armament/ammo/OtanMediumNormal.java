@@ -7,7 +7,7 @@ import net.atcore.armament.Initializer;
 public final class OtanMediumNormal extends BaseAmmo {
 
     public OtanMediumNormal() {
-        super(10,
+        super(15,
                 "5,56×45mm",
                 10
         );

@@ -12,7 +12,7 @@ import java.util.List;
 public final class OtanMediumTrace extends BaseAmmo implements TraceIsFire {
 
     public OtanMediumTrace() {
-        super(10,
+        super(15,
                 "5,56×45mm T",
                 10
         );

@@ -5,7 +5,7 @@ import net.atcore.armament.BaseAmmo;
 public final class UURSMediumNormal extends BaseAmmo {
 
     public UURSMediumNormal() {
-        super(12,
+        super(17,
                 "7,62x39mm",
                 5
         );

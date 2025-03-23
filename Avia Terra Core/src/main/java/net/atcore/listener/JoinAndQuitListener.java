@@ -54,14 +54,11 @@ public class JoinAndQuitListener implements Listener {
         }
         LimboManager.IN_PROCESS.remove(player.getUniqueId());
         UUID uuidLimbo = GlobalUtils.getRealUUID(player);
-        UUID uuidPlayer = player.getUniqueId();
         AviaTerraPlayer atp = AviaTerraPlayer.getPlayer(player);
         // Esta tarea descargar los datos del jugador para ahorrar memoria
         BukkitTask task = new BukkitRunnable() {
             @Override
             public void run() {
-                DataSection.getCacheLimboFlies().unloadConfigFile(uuidLimbo.toString());
-                DataSection.getPlayersDataFiles().unloadConfigFile(uuidPlayer.toString());
                 atp.unloadPlayer();
             }
         }.runTaskLater(AviaTerraCore.getInstance(), 20*60*60);

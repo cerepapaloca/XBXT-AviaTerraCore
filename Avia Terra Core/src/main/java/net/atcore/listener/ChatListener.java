@@ -4,6 +4,7 @@ import io.papermc.paper.event.player.AsyncChatEvent;
 import lombok.Getter;
 import lombok.Setter;
 import net.atcore.AviaTerraCore;
+import net.atcore.aviaterraplayer.AviaTerraPlayer;
 import net.atcore.command.commnads.TellCommand;
 import net.atcore.messages.*;
 import net.atcore.moderation.ChatModeration;
@@ -36,41 +37,47 @@ public class ChatListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onChat(AsyncChatEvent event) {
-        Player player = event.getPlayer();
+        Player sender = event.getPlayer();
         Component message = event.message();
         event.setCancelled(true);
 
         String textPlain = PlainTextComponentSerializer.plainText().serialize(message);
 
-        if (!LoginManager.checkLogin(player)) {
-            sendMessage(player, Message.LOGIN_LIMBO_CHAT_WRITE);
+        if (!LoginManager.checkLogin(sender)) {
+            sendMessage(sender, Message.LOGIN_LIMBO_CHAT_WRITE);
             return;
         }
 
-        if (ContextBan.CHAT.onContext(player, event) != null){//está baneado?
+        if (ContextBan.CHAT.onContext(sender, event) != null){//está baneado?
             return;
         }
 
-        if (ChatModeration.antiSpam(player, textPlain) || ChatModeration.antiBanWord(player, textPlain)){
+        /*if (ChatModeration.antiSpam(sender, textPlain) || ChatModeration.antiBanWord(sender, textPlain)){
             return;//hay algo indecente?
-        }
+        }*/
 
-        TellCommand.lastNamePlayer = player.getName();
+        TellCommand.lastNamePlayer = sender.getName();
 
         for (Player target : Bukkit.getOnlinePlayers()) {//busca todos los jugadores
-            target.sendMessage(setFormat(message, player, target, textPlain.contains(target.getName())));
+            AviaTerraPlayer atp = AviaTerraPlayer.getPlayer(target);
+            // En caso de que tenga el jugador bloqueado no se le enviara el mensaje
+            if (!atp.getPlayersBLock().contains(sender.getName())) {
+                target.sendMessage(setFormat(message, sender, target, textPlain.contains(target.getName())));
+            }
         }
 
-        Bukkit.getConsoleSender().sendMessage(setFormat(message, player, player, textPlain.contains(player.getName())));
+        Bukkit.getConsoleSender().sendMessage(setFormat(message, sender, sender, textPlain.contains(sender.getName())));
 
         if (AviaTerraCore.jda != null) {
-            TextChannel channel = AviaTerraCore.jda.getTextChannelById(DiscordBot.chatId);
-            if (channel !=  null) {
-                channel.sendMessage(PlainTextComponentSerializer.plainText().serialize(
-                        GlobalUtils.chatColorLegacyToComponent(
-                                String.format(Message.EVENT_CHAT_FORMAT.getMessageLocaleDefault(), "**" + player.getName() + "**", textPlain))
-                )).queue();
-            }
+            AviaTerraCore.enqueueTaskAsynchronously(() -> {
+                TextChannel channel = AviaTerraCore.jda.getTextChannelById(DiscordBot.chatId);
+                if (channel !=  null) {
+                    channel.sendMessage(PlainTextComponentSerializer.plainText().serialize(
+                            GlobalUtils.chatColorLegacyToComponent(
+                                    String.format(Message.EVENT_CHAT_FORMAT.getMessageLocaleDefault(), "**" + sender.getName() + "**", textPlain))
+                    )).queue();
+                }
+            });
         }
     }
 

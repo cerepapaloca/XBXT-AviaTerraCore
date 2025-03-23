@@ -9,57 +9,26 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ea0f4ef9-10c7-4d19-b67e-e1a9046efa9d" name="Changes" comment="Floodgate esté bien bugeado">
-      <change afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/ammo/OtanMediumPenetration.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/ammo/TraceIsFire.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/ammo/UURSMediumNormal.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/ammo/UURSMediumPenetration.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/ammo/UURSMediumTrace.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/magazines/AA12Magazine.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/magazines/OtamMediumFamily.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/magazines/OtanMedium15.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/magazines/OtanMedium30.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/magazines/OtanMedium60.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/magazines/UURSMedium15.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/magazines/UURSMedium30.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/magazines/UURSMedium60.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/magazines/UURSMediumFamily.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/weapons/AA12.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/weapons/AK47.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/weapons/AR15.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/weapons/OtanWeapon.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/weapons/SKS.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/weapons/UURSWeapon.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/command/commnads/ReloadCommand.java" afterDir="false" />
+    <list default="true" id="ea0f4ef9-10c7-4d19-b67e-e1a9046efa9d" name="Changes" comment="Modo USA">
+      <change afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/command/commnads/BlockCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/command/commnads/UnblockCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/ArmamentActions.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/ArmamentActions.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/ArmamentSection.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/ArmamentSection.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/ArmamentUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/ArmamentUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/BaseMagazine.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/BaseMagazine.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/BaseWeaponTarkov.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/BaseWeaponTarkov.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/ammo/Cartucho.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/ammo/Shot.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/ammo/MM45Otan.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/ammo/OtanMediumNormal.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/ammo/MM45OtanVerde.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/ammo/OtanMediumTrace.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/ammo/MMxxPrueba.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/magazines/M4Family.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/magazines/M4_30.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/magazines/M4_60.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/weapons/M16.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/weapons/M16.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/weapons/M4.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/weapons/M4.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/weapons/Test1.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/weapons/Test1.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/weapons/Test2.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/weapons/Test2.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/ammo/OtanMediumNormal.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/ammo/OtanMediumNormal.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/ammo/OtanMediumPenetration.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/ammo/OtanMediumPenetration.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/ammo/OtanMediumTrace.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/ammo/OtanMediumTrace.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/ammo/UURSMediumNormal.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/ammo/UURSMediumNormal.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/ammo/UURSMediumPenetration.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/ammo/UURSMediumPenetration.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/ammo/UURSMediumTrace.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/ammo/UURSMediumTrace.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/aviaterraplayer/AviaTerraPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/aviaterraplayer/AviaTerraPlayer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/command/CommandSection.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/command/CommandSection.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/command/commnads/HomeListCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/command/commnads/HomeListCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/command/commnads/TellCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/command/commnads/TellCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/command/commnads/TpaCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/command/commnads/TpaCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/data/yml/PlayerDataFile.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/data/yml/PlayerDataFile.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/listener/ChatListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/listener/ChatListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/listener/JoinAndQuitListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/listener/JoinAndQuitListener.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/messages/Message.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/messages/Message.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/check/checker/AntiArmament.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/check/checker/AntiArmament.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/check/checker/AntiDupe.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/check/checker/AntiDupe.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/check/checker/AntiIlegalBlock.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/check/checker/AntiIlegalBlock.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/check/checker/AntiIlegalItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/check/checker/AntiIlegalItem.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/check/checker/FixItems.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/check/checker/FixItems.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/check/checker/InventoryChecker.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/check/InventoryChecker.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/check/checker/RangePurge.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/check/checker/RangePurge.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/login/LimboManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/login/LimboManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/utils/GlobalUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/utils/GlobalUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/resources/plugin.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -497,15 +466,10 @@
       <workItem from="1742514140646" duration="4903000" />
       <workItem from="1742521240224" duration="3264000" />
       <workItem from="1742575083590" duration="24287000" />
-      <workItem from="1742668748982" duration="5908000" />
-    </task>
-    <task id="LOCAL-00051" summary="back-end por fin!!!">
-      <option name="closed" value="true" />
-      <created>1738477166173</created>
-      <option name="number" value="00051" />
-      <option name="presentableId" value="LOCAL-00051" />
-      <option name="project" value="LOCAL" />
-      <updated>1738477166173</updated>
+      <workItem from="1742668748982" duration="7066000" />
+      <workItem from="1742702655662" duration="182000" />
+      <workItem from="1742703713975" duration="293000" />
+      <workItem from="1742749910166" duration="7085000" />
     </task>
     <task id="LOCAL-00052" summary="Back-end ahora sí. ¡Por fin!!!">
       <option name="closed" value="true" />
@@ -891,7 +855,15 @@
       <option name="project" value="LOCAL" />
       <updated>1742515386480</updated>
     </task>
-    <option name="localTasksCounter" value="100" />
+    <task id="LOCAL-00100" summary="Modo USA">
+      <option name="closed" value="true" />
+      <created>1742680043676</created>
+      <option name="number" value="00100" />
+      <option name="presentableId" value="LOCAL-00100" />
+      <option name="project" value="LOCAL" />
+      <updated>1742680043676</updated>
+    </task>
+    <option name="localTasksCounter" value="101" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -909,7 +881,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="fix con un bucle con los log" />
     <MESSAGE value="por FIN!!!, arreglé él POM.XMl" />
     <MESSAGE value="Nuevo sistema de redudancia y protección con tareas largas" />
     <MESSAGE value="regresando al pasado (No funciona)" />
@@ -934,7 +905,8 @@
     <MESSAGE value="fixeos menores" />
     <MESSAGE value="Cambios menores" />
     <MESSAGE value="Floodgate esté bien bugeado" />
-    <option name="LAST_COMMIT_MESSAGE" value="Floodgate esté bien bugeado" />
+    <MESSAGE value="Modo USA" />
+    <option name="LAST_COMMIT_MESSAGE" value="Modo USA" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

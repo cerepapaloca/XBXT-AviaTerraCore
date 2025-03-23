@@ -11,7 +11,6 @@ import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import net.atcore.utils.GlobalUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachmentInfo;
@@ -19,10 +18,7 @@ import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Se encarga de guardar variable y funciones donde implique a un jugador específico.
@@ -37,6 +33,7 @@ public class AviaTerraPlayer {
 
     public AviaTerraPlayer(Player player) {
         this.uuid = player.getUniqueId();
+        this.realUuid = GlobalUtils.getRealUUID(player);
         if (TASKS_UNLOAD.containsKey(uuid)) TASKS_UNLOAD.get(uuid).cancel();
         AviaTerraCore.enqueueTaskAsynchronously(() -> {
             this.playerDataFile = (PlayerDataFile) DataSection.getPlayersDataFiles().getConfigFile(uuid.toString(), true);
@@ -53,8 +50,13 @@ public class AviaTerraPlayer {
     @NotNull
     private final ArmamentPlayer armamentPlayer = new ArmamentPlayer(this);
     private final UUID uuid;
+    private final UUID realUuid;
     private final List<TpaCommand.TpaRequest> ListTpa = new ArrayList<>();
     private final HashMap<String, Location> homes = new HashMap<>();
+    /**
+     * Se usa el nombre del jugador que le da el servidor
+     */
+    private final HashSet<String> playersBLock = new HashSet<>();
     private String nameColor = null;
     private PlayerDataFile playerDataFile;
 
@@ -89,6 +91,8 @@ public class AviaTerraPlayer {
 
     public void unloadPlayer(){
         AVIA_TERRA_PLAYERS.remove(uuid);
+        DataSection.getCacheLimboFlies().unloadConfigFile(realUuid.toString());
+        DataSection.getPlayersDataFiles().unloadConfigFile(uuid.toString());
     }
 
     public static void addPlayer(Player player){

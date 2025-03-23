@@ -1,10 +1,13 @@
 package net.atcore.command.commnads;
 
+import net.atcore.aviaterraplayer.AviaTerraPlayer;
 import net.atcore.command.*;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.Message;
 import net.atcore.messages.TypeMessages;
+import net.atcore.utils.GlobalUtils;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +44,10 @@ public class TellCommand extends BaseCommand implements CommandAliase {
                 String finalMessage = message;
                 sendFormatMessage(sender, Message.COMMAND_TELL_FEEDBACK, args[0], finalMessage);
                 CommandUtils.executeForPlayer(sender, args[0], true, (name, player) -> {
-                    sendMessage(player,String.format(Message.COMMAND_TELL_FORMAT_MESSAGE.getMessage(player), sender.getName(), finalMessage), TypeMessages.GENERIC, CategoryMessages.PRIVATE, false);
+                    AviaTerraPlayer atp = AviaTerraPlayer.getPlayer(player);
+                    if (!(sender instanceof Player p) || !atp.getPlayersBLock().contains(p.getName())) {
+                        sendMessage(player,String.format(Message.COMMAND_TELL_FORMAT_MESSAGE.getMessage(player), sender.getName(), finalMessage), TypeMessages.GENERIC, CategoryMessages.PRIVATE, false);
+                    }
                 });
             }
         }
