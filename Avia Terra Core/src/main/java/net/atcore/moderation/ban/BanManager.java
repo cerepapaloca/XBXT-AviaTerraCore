@@ -117,7 +117,7 @@ public class BanManager extends DataBaseBan {
     @Contract(pure = true)
     public static String formadMessageBan(DataBan dataBan) {
         String contextName = dataBan.getContext().name().toLowerCase().replace("_", " ");
-        if (Objects.equals(dataBan.getContext().name(), "GLOBAL")) contextName = "Avia Terra";
+        if (Objects.equals(dataBan.getContext().name(), "GLOBAL")) contextName = "XBXT";
         return String.format("""
                 Estas Baneado De <|%s|>
                 Expira en: <|%s|>

@@ -3,7 +3,6 @@ package net.atcore.armament.ammo;
 import net.atcore.armament.BaseAmmo;
 import net.atcore.armament.Initializer;
 import net.atcore.armament.ShootData;
-import net.atcore.armament.Trace;
 import org.bukkit.Color;
 
 import java.util.List;

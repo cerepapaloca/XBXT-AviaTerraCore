@@ -69,7 +69,7 @@ public abstract class BaseCommand extends Command {
      */
 
     @Override
-    public boolean execute(@NotNull CommandSender sender, @NotNull String commandLabel, @NotNull String[] args) {
+    public boolean execute(@NotNull CommandSender sender, @NotNull String commandLabel, @NotNull String @NotNull [] args) {
         MessagesManager.logConsole("Se ejecuto el método execute de BaseCommand", TypeMessages.WARNING);
         CommandSection.getCommandHandler().onCommand(sender, this, commandLabel, args);
         return true;

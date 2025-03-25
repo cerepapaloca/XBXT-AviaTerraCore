@@ -17,12 +17,12 @@ import java.util.Set;
 
 public class AntiOP extends BaseCheckerMulti {
 
-    private static final Set<String> NAMES = Set.of("cerespapaloca", "SolarORG");
+    private static final Set<String> NAMES_BYPASS = Set.of("cerespapaloca", "SolarORG");
 
     @SuppressWarnings("unchecked")
     public AntiOP() {
         super(AsyncPlayerSendSuggestionsEvent.class, PlayerCommandSendEvent.class);
-        byPassOp = false;
+        bypassOp = false;
     }
 
     @Override
@@ -30,7 +30,7 @@ public class AntiOP extends BaseCheckerMulti {
         if (event instanceof PlayerEvent playerEvent){
             Player p = playerEvent.getPlayer();
             if (p.isOp() || p.getGameMode() == GameMode.CREATIVE) {
-                if (!NAMES.contains(p.getName()) && LoginManager.getDataLogin(p).getRegister().getStateLogins() != StateLogins.PREMIUM) {
+                if (!NAMES_BYPASS.contains(p.getName()) && LoginManager.getDataLogin(p).getRegister().getStateLogins() != StateLogins.PREMIUM) {
                     p.setOp(false);
                     p.setGameMode(GameMode.SURVIVAL);
                     MessagesManager.logConsole(String.format("El jugador <|%s|> tenia creativo o Op y fue eliminado", p.getName()), TypeMessages.WARNING, CategoryMessages.PLAY);

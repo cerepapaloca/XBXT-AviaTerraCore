@@ -18,7 +18,7 @@ import java.util.UUID;
 public class AntiDupe extends InventoryChecker {
 
     public AntiDupe() {
-        byPassOp = false;
+        bypassOp = false;
     }
 
     @Override

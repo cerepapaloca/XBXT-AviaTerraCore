@@ -30,7 +30,7 @@ public abstract class BaseChecker<T extends Event> implements Listener {
      * Los jugadores op serán ignorados
      */
 
-    protected boolean byPassOp = true;
+    protected boolean bypassOp = true;
     public boolean enabled = true;
     private Class<T> eventClass;
 
@@ -39,7 +39,7 @@ public abstract class BaseChecker<T extends Event> implements Listener {
         Type type;
         eventExecutor = (listener, event) -> {
             if (!enabled) return;
-            if (byPassOp) {
+            if (bypassOp) {
                 if (event instanceof PlayerEvent playerEvent) {
                     if (playerEvent.getPlayer().isOp()) {
                         return;
@@ -53,7 +53,7 @@ public abstract class BaseChecker<T extends Event> implements Listener {
             instance(event);
         };
         try {
-             type = ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+            type = ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
             eventClass = (Class<T>) TypeToken.get(type).getRawType();
             REGISTERED_CHECKS.add(this);
             Bukkit.getPluginManager().registerEvent(eventClass, this, EventPriority.LOWEST, eventExecutor, AviaTerraCore.getInstance());
