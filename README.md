@@ -11,19 +11,23 @@ se llamaba AviaTerra luego se quedó el nombre asi</small>
 - **Gestor de comandos:** Gestiona los comandos que los usuarios pueden ejecutar y los filtra en el tab
 
 ## Como se instala
-1. Abre una terminal en el root del proyecto es decir donde está guardado el proyecto
+1. Abre una terminal en el la carpeta `Avia Terra Core`
 2. ejecuta esté comando de maven
+    ```
+    mvn paper-nms:init -f pom.xml 
+    ```
+    y luego en la carpeta root del proyecto abre un terminal y ejecuta este comando
     ```
     mvn clean package
     ```
-   1. En caso de que no lo tengas instalado. [Aquí](https://maven.apache.org/download.cgi) puedes descargarlo
-3. luego se van a crear varios .jar el importante es que se llama `avia-terra-core-0.0-SNAPSHOT.jar`
-4. Ese jar lo pasa al a tu carpeta de plugins
-5. Luego tiene que poner otros plugin que son dependéncia, Los cuales son
+    En caso de que no lo tengas instalado. [Aquí](https://maven.apache.org/download.cgi) puedes descargarlo
+4. luego se van a crear varios .jar el importante es que se llama `avia-terra-core-0.0-SNAPSHOT.jar`
+5. Ese jar lo pasa al a tu carpeta de plugins
+6. Luego tiene que poner otros plugin que son dependéncia, Los cuales son
 [ProtocolLib](https://www.spigotmc.org/resources/protocollib.1997/),
 [LuckPerms](https://luckperms.net/) y [Votifier](https://www.spigotmc.org/resources/nuvotifier.13449/).
-6. El servidor debe estar en modo offline
-7. En server.properties tienen que dejar `server-name=` vacio
+7. El servidor debe estar en modo offline
+8. En server.properties tienen que dejar `server-name=` vacio
 
 A partir de qui no es obligatorio, peró si quieres tener todas funciones tienes que hacer esto
 - Crear un bot de discord y ir en la sección de Bot, luego le das click a un botón que se llama `regenerate a new token` o `Reset Token`
