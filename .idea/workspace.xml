@@ -9,16 +9,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ea0f4ef9-10c7-4d19-b67e-e1a9046efa9d" name="Changes" comment="la cura al acoso">
+    <list default="true" id="ea0f4ef9-10c7-4d19-b67e-e1a9046efa9d" name="Changes" comment="las cabezas de los jugadores">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/ammo/OtanMediumTrace.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/armament/ammo/OtanMediumTrace.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/command/BaseCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/command/BaseCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/listener/DeathListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/listener/DeathListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/moderation/ban/BanManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/moderation/ban/BanManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/check/BaseChecker.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/check/BaseChecker.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/check/checker/AntiDupe.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/check/checker/AntiDupe.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/check/checker/AntiOP.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/check/checker/AntiOP.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/resources/plugin.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -461,14 +453,10 @@
       <workItem from="1742703713975" duration="293000" />
       <workItem from="1742749910166" duration="9314000" />
       <workItem from="1742834172253" duration="2986000" />
-    </task>
-    <task id="LOCAL-00053" summary="Mejorando la api">
-      <option name="closed" value="true" />
-      <created>1738718169653</created>
-      <option name="number" value="00053" />
-      <option name="presentableId" value="LOCAL-00053" />
-      <option name="project" value="LOCAL" />
-      <updated>1738718169653</updated>
+      <workItem from="1742946110688" duration="41000" />
+      <workItem from="1742946167069" duration="30000" />
+      <workItem from="1743133476116" duration="999000" />
+      <workItem from="1743180552598" duration="2801000" />
     </task>
     <task id="LOCAL-00054" summary="Se añadió los alias especiales">
       <option name="closed" value="true" />
@@ -854,7 +842,15 @@
       <option name="project" value="LOCAL" />
       <updated>1742757288059</updated>
     </task>
-    <option name="localTasksCounter" value="102" />
+    <task id="LOCAL-00102" summary="las cabezas de los jugadores">
+      <option name="closed" value="true" />
+      <created>1742946137577</created>
+      <option name="number" value="00102" />
+      <option name="presentableId" value="LOCAL-00102" />
+      <option name="project" value="LOCAL" />
+      <updated>1742946137577</updated>
+    </task>
+    <option name="localTasksCounter" value="103" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -872,7 +868,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Nuevo sistema de redudancia y protección con tareas largas" />
     <MESSAGE value="regresando al pasado (No funciona)" />
     <MESSAGE value="mini refactor a las armas y más checker" />
     <MESSAGE value="Se borra todos los datos sensibles" />
@@ -897,7 +892,8 @@
     <MESSAGE value="Floodgate esté bien bugeado" />
     <MESSAGE value="Modo USA" />
     <MESSAGE value="la cura al acoso" />
-    <option name="LAST_COMMIT_MESSAGE" value="la cura al acoso" />
+    <MESSAGE value="las cabezas de los jugadores" />
+    <option name="LAST_COMMIT_MESSAGE" value="las cabezas de los jugadores" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
