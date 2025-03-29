@@ -9,8 +9,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ea0f4ef9-10c7-4d19-b67e-e1a9046efa9d" name="Changes" comment="las cabezas de los jugadores">
+    <list default="true" id="ea0f4ef9-10c7-4d19-b67e-e1a9046efa9d" name="Changes" comment="se añadió NMS">
+      <change afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/advanced/BaseAchievementSimple.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/advanced/Test.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/advanced/TestA.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/advanced/TestB.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/misc/CustomAchievements.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/AviaTerraCore.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/AviaTerraCore.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/command/commnads/PruebaCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/command/commnads/PruebaCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/listener/JoinAndQuitListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/listener/JoinAndQuitListener.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,8 +52,8 @@
       <list>
         <option value="JUnit5 Test Class" />
         <option value="AnnotationType" />
-        <option value="Enum" />
         <option value="Interface" />
+        <option value="Enum" />
         <option value="Class" />
       </list>
     </option>
@@ -107,6 +115,7 @@
     &quot;JAR Application.avia-terra-spring.jar.executor&quot;: &quot;Run&quot;,
     &quot;Maven.Avia-Terra [clean,package].executor&quot;: &quot;Run&quot;,
     &quot;Maven.Avia-Terra [package].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.avia-terra-core [ca.bkaw:paper-nms-maven-plugin:1.4.6:init].executor&quot;: &quot;Run&quot;,
     &quot;Maven.avia-terra-core [clean,install].executor&quot;: &quot;Run&quot;,
     &quot;Maven.avia-terra-core [clean].executor&quot;: &quot;Run&quot;,
     &quot;Maven.avia-terra-core [compile,-DforkCount=0...].executor&quot;: &quot;Debug&quot;,
@@ -139,7 +148,7 @@
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Artifacts&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Libraries&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.15820312&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.27664232&quot;,
     &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
@@ -178,6 +187,7 @@
       <recent name="net.atcore.messages" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="net.atcore.advanced" />
       <recent name="net.atcore.armament.weapons" />
       <recent name="net.atcore.armament.magazines" />
     </key>
@@ -205,6 +215,36 @@
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
+    </configuration>
+    <configuration name="avia-terra-core [paper-nms:init]" type="MavenRunConfiguration" factoryName="Maven">
+      <MavenSettings>
+        <option name="myGeneralSettings" />
+        <option name="myRunnerSettings" />
+        <option name="myRunnerParameters">
+          <MavenRunnerParameters>
+            <option name="cmdOptions" />
+            <option name="profiles">
+              <set />
+            </option>
+            <option name="goals">
+              <list>
+                <option value="paper-nms:init" />
+              </list>
+            </option>
+            <option name="multimoduleDir" />
+            <option name="pomFileName" value="pom.xml" />
+            <option name="profilesMap">
+              <map />
+            </option>
+            <option name="projectsCmdOptionValues">
+              <list />
+            </option>
+            <option name="resolveToWorkspace" value="false" />
+            <option name="workingDirPath" value="$PROJECT_DIR$/Avia Terra Core" />
+          </MavenRunnerParameters>
+        </option>
+      </MavenSettings>
+      <method v="2" />
     </configuration>
   </component>
   <component name="SharedIndexes">
@@ -457,14 +497,8 @@
       <workItem from="1742946167069" duration="30000" />
       <workItem from="1743133476116" duration="999000" />
       <workItem from="1743180552598" duration="2801000" />
-    </task>
-    <task id="LOCAL-00054" summary="Se añadió los alias especiales">
-      <option name="closed" value="true" />
-      <created>1738777878762</created>
-      <option name="number" value="00054" />
-      <option name="presentableId" value="LOCAL-00054" />
-      <option name="project" value="LOCAL" />
-      <updated>1738777878762</updated>
+      <workItem from="1743186974916" duration="12434000" />
+      <workItem from="1743204108854" duration="19519000" />
     </task>
     <task id="LOCAL-00055" summary="No me acuerdo de nada">
       <option name="closed" value="true" />
@@ -850,7 +884,15 @@
       <option name="project" value="LOCAL" />
       <updated>1742946137577</updated>
     </task>
-    <option name="localTasksCounter" value="103" />
+    <task id="LOCAL-00103" summary="se añadió NMS">
+      <option name="closed" value="true" />
+      <created>1743197369970</created>
+      <option name="number" value="00103" />
+      <option name="presentableId" value="LOCAL-00103" />
+      <option name="project" value="LOCAL" />
+      <updated>1743197369970</updated>
+    </task>
+    <option name="localTasksCounter" value="104" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -868,7 +910,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="regresando al pasado (No funciona)" />
     <MESSAGE value="mini refactor a las armas y más checker" />
     <MESSAGE value="Se borra todos los datos sensibles" />
     <MESSAGE value="bug fix con falso positivos con los de bedrock" />
@@ -893,7 +934,8 @@
     <MESSAGE value="Modo USA" />
     <MESSAGE value="la cura al acoso" />
     <MESSAGE value="las cabezas de los jugadores" />
-    <option name="LAST_COMMIT_MESSAGE" value="las cabezas de los jugadores" />
+    <MESSAGE value="se añadió NMS" />
+    <option name="LAST_COMMIT_MESSAGE" value="se añadió NMS" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

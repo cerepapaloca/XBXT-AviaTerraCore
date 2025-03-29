@@ -3,6 +3,9 @@ package net.atcore;
 import com.github.games647.craftapi.resolver.MojangResolver;
 import lombok.Getter;
 import lombok.Setter;
+import net.atcore.advanced.Test;
+import net.atcore.advanced.TestA;
+import net.atcore.advanced.TestB;
 import net.atcore.armament.ArmamentSection;
 import net.atcore.command.CommandSection;
 import net.atcore.data.DataSection;
@@ -106,6 +109,9 @@ public class AviaTerraCore extends JavaPlugin {
         startAutoRestart();
         isStarting = false;
         messageOn(startTime);
+        new Test();
+        new TestA();
+        new TestB();
     }
 
     private void registerPermission(){

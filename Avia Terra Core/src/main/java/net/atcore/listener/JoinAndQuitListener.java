@@ -1,6 +1,7 @@
 package net.atcore.listener;
 
 import net.atcore.AviaTerraCore;
+import net.atcore.advanced.BaseAchievementSimple;
 import net.atcore.aviaterraplayer.AviaTerraPlayer;
 import net.atcore.data.DataSection;
 import net.atcore.data.sql.DataBaseRegister;
@@ -119,6 +120,8 @@ public class JoinAndQuitListener implements Listener {
                 GlobalUtils.addRangeVote(player);
             }
         }.runTaskLater(AviaTerraCore.getInstance(), 20L*2);
+
+        BaseAchievementSimple.sendAllAchievement(player);
 
         if (LoginManager.getDataLogin(player).getRegister().isTemporary()) {
             sendEmbed(player, Color.YELLOW, "%s Se unió por primera vez");// TODO: Hay que reglar eso
