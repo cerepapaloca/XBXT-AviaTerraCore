@@ -1,9 +1,8 @@
 package net.atcore.listener;
 
 import net.atcore.AviaTerraCore;
-import net.atcore.advanced.BaseAchievementSimple;
+import net.atcore.advanced.BaseAchievement;
 import net.atcore.aviaterraplayer.AviaTerraPlayer;
-import net.atcore.data.DataSection;
 import net.atcore.data.sql.DataBaseRegister;
 import net.atcore.messages.*;
 import net.atcore.moderation.ban.BanManager;
@@ -117,11 +116,12 @@ public class JoinAndQuitListener implements Listener {
         new BukkitRunnable() {
             @Override
             public void run() {
+                BaseAchievement.sendAllAchievement(player);
                 GlobalUtils.addRangeVote(player);
             }
         }.runTaskLater(AviaTerraCore.getInstance(), 20L*2);
 
-        BaseAchievementSimple.sendAllAchievement(player);
+
 
         if (LoginManager.getDataLogin(player).getRegister().isTemporary()) {
             sendEmbed(player, Color.YELLOW, "%s Se unió por primera vez");// TODO: Hay que reglar eso

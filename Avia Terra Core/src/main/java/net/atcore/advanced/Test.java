@@ -19,7 +19,7 @@ public class Test extends BaseAchievementSimple<BlockBreakEvent> {
     }
 
     @Override
-    public void onGrantAdvanced(Player player) {
+    public void rewards(Player player) {
 
     }
 }

@@ -3,6 +3,7 @@ package net.atcore.aviaterraplayer;
 import lombok.Getter;
 import lombok.Setter;
 import net.atcore.AviaTerraCore;
+import net.atcore.advanced.BaseAchievement;
 import net.atcore.command.commnads.TpaCommand;
 import net.atcore.data.DataSection;
 import net.atcore.data.yml.PlayerDataFile;
@@ -11,8 +12,11 @@ import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import net.atcore.utils.GlobalUtils;
+import net.minecraft.advancements.AdvancementProgress;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.Contract;
@@ -53,6 +57,8 @@ public class AviaTerraPlayer {
     private final UUID realUuid;
     private final List<TpaCommand.TpaRequest> ListTpa = new ArrayList<>();
     private final HashMap<String, Location> homes = new HashMap<>();
+    private final HashMap<BaseAchievement<? extends Event>, AdvancementProgress> AchievementProgress = new HashMap<>();
+
     /**
      * Se usa el nombre del jugador que le da el servidor
      */
@@ -68,6 +74,10 @@ public class AviaTerraPlayer {
 
     public void sendString(String message, TypeMessages type) {
         MessagesManager.sendString(getPlayer(), message, type);
+    }
+
+    public AdvancementProgress getAchievementProgress(BaseAchievement<? extends Event> achievement) {
+        return AchievementProgress.computeIfAbsent(achievement,k -> new AdvancementProgress());
     }
 
     /**
