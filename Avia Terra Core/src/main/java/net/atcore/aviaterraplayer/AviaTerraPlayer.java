@@ -1,6 +1,7 @@
 package net.atcore.aviaterraplayer;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import net.atcore.AviaTerraCore;
 import net.atcore.advanced.BaseAchievement;
@@ -13,7 +14,7 @@ import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import net.atcore.utils.GlobalUtils;
 import net.minecraft.advancements.AdvancementProgress;
-import org.bukkit.Bukkit;
+import net.minecraft.resources.ResourceLocation;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -35,7 +36,7 @@ public class AviaTerraPlayer {
 
     public static final HashMap<UUID, BukkitTask> TASKS_UNLOAD = new HashMap<>();
 
-    public AviaTerraPlayer(Player player) {
+    private AviaTerraPlayer(Player player) {
         this.uuid = player.getUniqueId();
         this.realUuid = GlobalUtils.getRealUUID(player);
         if (TASKS_UNLOAD.containsKey(uuid)) TASKS_UNLOAD.get(uuid).cancel();
@@ -57,7 +58,7 @@ public class AviaTerraPlayer {
     private final UUID realUuid;
     private final List<TpaCommand.TpaRequest> ListTpa = new ArrayList<>();
     private final HashMap<String, Location> homes = new HashMap<>();
-    private final HashMap<BaseAchievement<? extends Event>, AdvancementProgress> AchievementProgress = new HashMap<>();
+    private final HashMap<ResourceLocation, DataProgress> achievementProgress = new HashMap<>();
 
     /**
      * Se usa el nombre del jugador que le da el servidor
@@ -76,8 +77,33 @@ public class AviaTerraPlayer {
         MessagesManager.sendString(getPlayer(), message, type);
     }
 
-    public AdvancementProgress getAchievementProgress(BaseAchievement<? extends Event> achievement) {
-        return AchievementProgress.computeIfAbsent(achievement,k -> new AdvancementProgress());
+    public DataProgress getProgress(BaseAchievement<? extends Event> achievement) {
+        return achievementProgress.computeIfAbsent(achievement.locationId, k -> new DataProgress(k, new AdvancementProgress()));
+    }
+
+    public DataProgressContinuos getProgressInteger(BaseAchievement<? extends Event> achievement) {
+        DataProgress progress = achievementProgress.computeIfAbsent(achievement.locationId, k -> new DataProgressContinuos(k, new AdvancementProgress(), 0));
+        if (progress instanceof DataProgressContinuos i) {
+            return i;
+        }else {
+            DataProgressContinuos i = new DataProgressContinuos(progress.locationId, progress.getProgress(), 0);
+            achievementProgress.put(achievement.locationId, i);
+            return i;
+        }
+    }
+
+    public List<DataProgress> getAllProgress() {
+        List<DataProgress> achievements = new ArrayList<>();
+        achievementProgress.forEach((achievement, progress) -> achievements.add(progress));
+        return achievements;
+    }
+
+    public void addProgress(DataProgress progress) {
+        achievementProgress.put(progress.locationId, progress);
+    }
+
+    public void clearAchievementProgress() {
+        achievementProgress.clear();
     }
 
     /**
@@ -145,5 +171,25 @@ public class AviaTerraPlayer {
             }
         }
         return renderDistance;
+    }
+
+    @Getter
+    @RequiredArgsConstructor
+    public static class DataProgress {
+        private final ResourceLocation locationId;
+        private final AdvancementProgress progress;
+    }
+
+    @Setter
+    @Getter
+    public static class DataProgressContinuos extends DataProgress {
+        public DataProgressContinuos(ResourceLocation locationId, AdvancementProgress progress, int value) {
+            super(locationId, progress);
+            this.value = value;
+        }
+        private double value;
+        public void addValue(double value) {
+            this.value += value;
+        }
     }
 }

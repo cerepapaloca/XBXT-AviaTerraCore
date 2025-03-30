@@ -1,20 +1,21 @@
 package net.atcore.advanced;
 
+import net.minecraft.advancements.AdvancementType;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 
-public class TestB extends BaseAchievementProgressive<BlockBreakEvent> {
+public class TestProgressive extends BaseAchievementProgressive<BlockBreakEvent> {
 
-    public TestB() {
-        super(Material.STONE, "Test 1", "Test Description 1", "bedrock/stone");
+    public TestProgressive() {
+        super(Material.STONE, "Test 1", "Test Description 1", "bedrock/stone", AdvancementType.GOAL);
     }
 
     @Override
     public void onEvent(BlockBreakEvent event) {
         Player player = event.getPlayer();
         if (event.getBlock().getType() == Material.STONE) {
-            grantAdvanced(player);
+            grantAdvanced(player, null);
         }
     }
 
@@ -24,7 +25,7 @@ public class TestB extends BaseAchievementProgressive<BlockBreakEvent> {
     }
 
     @Override
-    protected int getMaxProgress() {
+    protected int getMetaProgress() {
         return 5;
     }
 }

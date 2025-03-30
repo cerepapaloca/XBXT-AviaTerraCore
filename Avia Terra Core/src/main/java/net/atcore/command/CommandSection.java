@@ -54,7 +54,8 @@ public class CommandSection implements Section {
                 new HomeListCommand(),
                 new ReloadCommand(),
                 new UnblockCommand(),
-                new BlockCommand()
+                new BlockCommand(),
+                new AviaTerraAchievementCommand()
         );
     }
 

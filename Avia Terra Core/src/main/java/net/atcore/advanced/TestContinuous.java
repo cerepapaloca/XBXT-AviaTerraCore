@@ -1,25 +1,31 @@
 package net.atcore.advanced;
 
+import net.minecraft.advancements.AdvancementType;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 
-public class TestA extends BaseAchievementSimple<BlockBreakEvent> {
+public class TestContinuous extends BaseAchievementContinuous<BlockBreakEvent> {
 
-    public TestA() {
-        super(Material.BEDROCK, "Test 1", "Test Description 1", "bedrock");
+    public TestContinuous() {
+        super(Material.BEDROCK, "Test 1", "Test Description 1", "bedrock", AdvancementType.TASK);
     }
 
     @Override
     public void onEvent(BlockBreakEvent event) {
         Player player = event.getPlayer();
         if (event.getBlock().getType() == Material.BEDROCK) {
-            grantAdvanced(player);
+            grantAdvanced(player, 1);
         }
     }
 
     @Override
     public void rewards(Player player) {
 
+    }
+
+    @Override
+    public int getMetaValue() {
+        return 4;
     }
 }

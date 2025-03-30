@@ -108,16 +108,12 @@ public class JoinAndQuitListener implements Listener {
             MessagesManager.sendString(sender, String.format(Message.EVENT_JOIN.getMessage(sender), event.getPlayer().getName()), Message.EVENT_JOIN.getTypeMessages(), false);
         }
         onEnteringServer(player);
-        AviaTerraCore.taskSynchronously(() -> {
-            String displayName = AviaTerraPlayer.getPlayer(player).getNameColor();
-            if (displayName != null) player.displayName(GlobalUtils.chatColorLegacyToComponent(displayName));
-        });
 
         new BukkitRunnable() {
             @Override
             public void run() {
-                BaseAchievement.sendAllAchievement(player);
                 GlobalUtils.addRangeVote(player);
+                AviaTerraCore.enqueueTaskAsynchronously(() -> BaseAchievement.sendAllAchievement(player));
             }
         }.runTaskLater(AviaTerraCore.getInstance(), 20L*2);
 

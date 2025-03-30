@@ -6,7 +6,6 @@ import net.atcore.command.BaseCommand;
 import net.atcore.command.CommandVisibility;
 import net.atcore.command.ModeTabPlayers;
 import net.atcore.messages.Message;
-import net.atcore.misc.CustomAchievements;
 import org.bukkit.command.CommandSender;
 
 import static net.atcore.messages.MessagesManager.sendMessage;
@@ -28,8 +27,6 @@ public class PruebaCommand extends BaseCommand {
 
     @Override
     public void execute(CommandSender sender, String[] args) {
-        CustomAchievements achievements = new CustomAchievements();
-        achievements.onInit(AviaTerraCore.getInstance());
         sendMessage(sender, Message.TEST_MESSAGE);
     }
 }
