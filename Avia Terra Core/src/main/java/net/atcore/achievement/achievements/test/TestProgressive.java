@@ -1,21 +1,21 @@
-package net.atcore.achievement.achievements;
+package net.atcore.achievement.achievements.test;
 
-import net.atcore.achievement.BaseAchievementSimple;
+import net.atcore.achievement.BaseAchievementProgressive;
 import net.minecraft.advancements.AdvancementType;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 
-public class TestSimple extends BaseAchievementSimple<BlockBreakEvent> {
+public class TestProgressive extends BaseAchievementProgressive<BlockBreakEvent> {
 
-    public TestSimple() {
-        super(Material.OBSIDIAN, null, AdvancementType.GOAL);
+    public TestProgressive() {
+        super(Material.STONE, "bedrock/stone", AdvancementType.GOAL);
     }
 
     @Override
     public void onEvent(BlockBreakEvent event) {
         Player player = event.getPlayer();
-        if (event.getBlock().getType() == Material.OBSIDIAN) {
+        if (event.getBlock().getType() == Material.STONE) {
             grantAdvanced(player, null);
         }
     }
@@ -28,5 +28,10 @@ public class TestSimple extends BaseAchievementSimple<BlockBreakEvent> {
     @Override
     protected int getY(String path) {
         return 0;
+    }
+
+    @Override
+    protected int getMetaProgress() {
+        return 5;
     }
 }

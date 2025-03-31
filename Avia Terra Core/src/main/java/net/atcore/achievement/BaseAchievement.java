@@ -64,26 +64,26 @@ public abstract class BaseAchievement<T extends Event> implements Listener {
 
         advancements = createAdvancement(material, null, advancementType, true);
         Type type;
-        eventExecutor = (listener, event) -> {
-            if (event instanceof PlayerEvent playerEvent) {
-                if (playerEvent.getPlayer().isOp()) {
-                    return;
+        if (this instanceof SynchronouslyEvent) {
+            eventExecutor = (listener, event) -> {
+                if (eventClass.isInstance(event)) {
+                    T t = eventClass.cast(event);
+                    onEvent(t);
                 }
-            } else if (event instanceof InventoryEvent inventoryEvent) {
-                if (inventoryEvent.getView().getPlayer().isOp()) {
-                    return;
+            };
+        }else {
+            eventExecutor = (listener, event) -> AviaTerraCore.enqueueTaskAsynchronously(() -> {
+                if (eventClass.isInstance(event)) {
+                    T t = eventClass.cast(event);
+                    onEvent(t);
                 }
-            }
-            if (eventClass.isInstance(event)) {
-                T t = eventClass.cast(event);
-                onEvent(t);
-            }
-        };
+            });
+        }
 
         try {
             type = ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
             eventClass = (Class<T>) TypeToken.get(type).getRawType();
-            Bukkit.getPluginManager().registerEvent(eventClass, this, EventPriority.LOWEST, eventExecutor, AviaTerraCore.getInstance());
+            Bukkit.getPluginManager().registerEvent(eventClass, this, EventPriority.MONITOR, eventExecutor, AviaTerraCore.getInstance());
         } catch (ClassCastException e) {
             eventClass = null;
         }
@@ -125,7 +125,7 @@ public abstract class BaseAchievement<T extends Event> implements Listener {
                 PaperAdventure.asVanilla(GlobalUtils.chatColorLegacyToComponent(description.get(random.nextInt(titles.size())))),
                 Optional.of(background),
                 type,
-                player == null || !AviaTerraPlayer.getPlayer(player).getProgress(this).getProgress().isDone() || toas,
+                 toas || (player != null && !AviaTerraPlayer.getPlayer(player).getProgress(this).getProgress().isDone()),
                 true,
                 false
         );
@@ -195,7 +195,7 @@ public abstract class BaseAchievement<T extends Event> implements Listener {
         if (progress.getProgress().isDone()) {
             rewards(player);
         }
-        sendAchievement(player, progress.getProgress());
+        sendAchievement(player, progress.getProgress(), true);
     }
 
     public void grantAchievement(Player player, boolean b) {
@@ -208,7 +208,7 @@ public abstract class BaseAchievement<T extends Event> implements Listener {
         }
         AviaTerraCore.enqueueTaskAsynchronously(() -> atp.getPlayerDataFile().saveData());
         if (b) rewards(player);
-        sendAchievement(player, progress.getProgress());
+        sendAchievement(player, progress.getProgress(), b);
     }
 
     public void revokeAchievement(Player player, boolean b) {
@@ -220,10 +220,10 @@ public abstract class BaseAchievement<T extends Event> implements Listener {
             requirements.forEach(s -> progress.getProgress().revokeProgress(s));
         }
         AviaTerraCore.enqueueTaskAsynchronously(() -> atp.getPlayerDataFile().saveData());
-        sendAchievement(player, progress.getProgress());
+        sendAchievement(player, progress.getProgress(), true);
     }
 
-    public void sendAchievement(Player player, AdvancementProgress progress) {
+    public void sendAchievement(Player player, AdvancementProgress progress, boolean toas) {
         ServerPlayer nmsPlayer = ((CraftPlayer) player).getHandle();
         DisplayInfo displayInfo = advancements.value().display().get();
         nmsPlayer.connection.send(new ClientboundUpdateAdvancementsPacket(
@@ -231,7 +231,7 @@ public abstract class BaseAchievement<T extends Event> implements Listener {
                 List.of(createAdvancement(displayInfo.getIcon().asBukkitCopy().getType(),
                         player,
                         displayInfo.getType(),
-                        true)
+                        toas)
                 ),
                 Set.of(),
                 Map.of(locationId, progress)
@@ -247,6 +247,8 @@ public abstract class BaseAchievement<T extends Event> implements Listener {
         Map<ResourceLocation, AdvancementProgress> advancementsProgress = new HashMap<>();
         for (BaseAchievement<?> advancement : REGISTERED_ACHIEVEMENT) {
             DisplayInfo displayInfo = advancement.advancements.value().display().get();
+            if (advancement.parentId == null) advancement.grantAchievement(player, false);
+
             advancements.add(advancement.createAdvancement(displayInfo.getIcon().asBukkitCopy().getType(),
                          player,
                          displayInfo.getType(),

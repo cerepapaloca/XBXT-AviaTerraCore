@@ -1,4 +1,4 @@
-package net.atcore.achievement.achievements;
+package net.atcore.achievement.achievements.test;
 
 import net.atcore.achievement.BaseAchievementContinuous;
 import net.minecraft.advancements.AdvancementType;

@@ -1,18 +1,20 @@
 package net.atcore.achievement;
 
 import net.atcore.Section;
-import net.atcore.achievement.achievements.TestContinuous;
-import net.atcore.achievement.achievements.TestProgressive;
-import net.atcore.achievement.achievements.TestSimple;
-import net.atcore.achievement.achievements.TestStep;
+import net.atcore.achievement.achievements.ExplorateAchievement;
+import net.atcore.achievement.achievements.InventoryAchievement;
+import net.atcore.achievement.achievements.RootAchievement;
 
 public class AchievementSection implements Section {
     @Override
     public void enable() {
-        new TestSimple();
+        /*new TestSimple();
         new TestContinuous();
         new TestProgressive();
-        new TestStep();
+        new TestStep();*/
+        new RootAchievement();
+        new ExplorateAchievement();
+        new InventoryAchievement();
     }
 
     @Override

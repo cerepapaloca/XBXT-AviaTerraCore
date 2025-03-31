@@ -66,8 +66,11 @@ public class MessageFile extends FileYaml {
                 if (available.equals(MessagesManager.DEFAULT_LOCALE_PRIVATE)){
                     fileYaml.set(path + ".title", "default title");
                     fileYaml.set(path + ".description", "default description");
+                    messagesAchievement.put(achievement, new BaseAchievement.MessagesAchievement(List.of("default title"), List.of("default description")));
+                }else {
+                    messagesAchievement.put(achievement, null);
                 }
-                messagesAchievement.put(achievement, null);
+
             }
             pathsAchievements.add(path + ".title");
             pathsAchievements.add(path + ".description");
