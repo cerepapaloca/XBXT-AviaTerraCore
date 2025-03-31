@@ -1,7 +1,7 @@
 package net.atcore.listener;
 
 import net.atcore.AviaTerraCore;
-import net.atcore.advanced.BaseAchievement;
+import net.atcore.achievement.BaseAchievement;
 import net.atcore.aviaterraplayer.AviaTerraPlayer;
 import net.atcore.data.sql.DataBaseRegister;
 import net.atcore.messages.*;

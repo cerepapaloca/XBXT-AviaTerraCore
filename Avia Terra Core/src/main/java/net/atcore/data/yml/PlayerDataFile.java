@@ -1,6 +1,6 @@
 package net.atcore.data.yml;
 
-import net.atcore.advanced.BaseAchievement;
+import net.atcore.achievement.BaseAchievement;
 import net.atcore.aviaterraplayer.AviaTerraPlayer;
 import net.atcore.data.FileYaml;
 import net.atcore.utils.GlobalUtils;

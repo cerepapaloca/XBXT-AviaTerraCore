@@ -1,6 +1,5 @@
-package net.atcore.advanced;
+package net.atcore.achievement;
 
-import net.atcore.AviaTerraCore;
 import net.atcore.aviaterraplayer.AviaTerraPlayer;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.advancements.AdvancementType;
@@ -14,8 +13,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 
 public abstract class BaseAchievementStep<T extends Event> extends BaseAchievement<T> {
-    public BaseAchievementStep(Material material, String title, String description, String path, AdvancementType type) {
-        super(material, title, description, path, type);
+    public BaseAchievementStep(Material material, String path, AdvancementType type) {
+        super(material, path, type);
     }
 
     @Override

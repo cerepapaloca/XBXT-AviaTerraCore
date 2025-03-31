@@ -1,14 +1,17 @@
 package net.atcore.data.yml;
 
+import net.atcore.Section;
+import net.atcore.achievement.BaseAchievement;
 import net.atcore.data.FileYaml;
 import net.atcore.messages.LocaleAvailable;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
+import org.apache.maven.model.ConfigurationContainer;
+import org.bukkit.Bukkit;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.EntityType;
 
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class MessageFile extends FileYaml {
@@ -17,10 +20,13 @@ public class MessageFile extends FileYaml {
     }
 
     public final HashMap<EntityType, List<String>> messagesEntity = new HashMap<>();
+    public final HashMap<BaseAchievement<?>, BaseAchievement.MessagesAchievement> messagesAchievement = new HashMap<>();
 
     @Override
     public void loadData() {
         loadConfig();
+        messagesEntity.clear();
+        messagesAchievement.clear();
         EnumSet<EntityType> allEntityTypes = EnumSet.allOf(EntityType.class);
         String tagLocale = fileName.replace(".yml", "");
         // Filtrar las entidades hostiles
@@ -43,12 +49,35 @@ public class MessageFile extends FileYaml {
                 if (available.equals(MessagesManager.DEFAULT_LOCALE_PRIVATE)) fileYaml.set(path, "<|%2$s|> mató a <|%1$s|>");
                 messagesEntity.put(entityType, null);
             }
-
+        }
+        ConfigurationSection configSection = fileYaml.getConfigurationSection("achievement");
+        Set<String> pathsAchievements = new HashSet<>(configSection == null ? Set.of("") : configSection.getKeys(true));
+        for (BaseAchievement<?> achievement : BaseAchievement.getAllAchievement()){
+            String path = "achievement." + achievement.locationId.getPath().replace("/", ".");
+            String title = fileYaml.getString(path + ".title");
+            List<String> titles = fileYaml.getStringList(path + ".title");
+            String description = fileYaml.getString(path + ".description");
+            List<String> descriptions = fileYaml.getStringList(path + ".description");
+            if (!titles.isEmpty() && !descriptions.isEmpty()) {
+                messagesAchievement.put(achievement, new BaseAchievement.MessagesAchievement(List.copyOf(titles), List.copyOf(descriptions)));
+            }else if (title != null && description != null) {
+                messagesAchievement.put(achievement, new BaseAchievement.MessagesAchievement(List.of(title), List.of(description)));
+            }else {
+                if (available.equals(MessagesManager.DEFAULT_LOCALE_PRIVATE)){
+                    fileYaml.set(path + ".title", "default title");
+                    fileYaml.set(path + ".description", "default description");
+                }
+                messagesAchievement.put(achievement, null);
+            }
+            pathsAchievements.add(path + ".title");
+            pathsAchievements.add(path + ".description");
+            pathsAchievements.add(path);
         }
         for (String s : fileYaml.getKeys(true)){
             if (fileYaml.isConfigurationSection(s)) continue;
             if (s.startsWith("death-cause.entity")) continue;
             try {
+                if (pathsAchievements.contains(s)) continue;
                 Message.valueOf(s.toUpperCase()
                         .replace("-", "_")
                         .replace(".", "_")

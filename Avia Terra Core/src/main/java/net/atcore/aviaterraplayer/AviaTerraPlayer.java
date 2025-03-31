@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import net.atcore.AviaTerraCore;
-import net.atcore.advanced.BaseAchievement;
+import net.atcore.achievement.BaseAchievement;
 import net.atcore.command.commnads.TpaCommand;
 import net.atcore.data.DataSection;
 import net.atcore.data.yml.PlayerDataFile;

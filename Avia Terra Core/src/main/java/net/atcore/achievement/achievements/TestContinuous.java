@@ -1,5 +1,6 @@
-package net.atcore.advanced;
+package net.atcore.achievement.achievements;
 
+import net.atcore.achievement.BaseAchievementContinuous;
 import net.minecraft.advancements.AdvancementType;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -8,7 +9,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 public class TestContinuous extends BaseAchievementContinuous<BlockBreakEvent> {
 
     public TestContinuous() {
-        super(Material.BEDROCK, "Test 1", "Test Description 1", "bedrock", AdvancementType.TASK);
+        super(Material.BEDROCK, "bedrock", AdvancementType.TASK);
     }
 
     @Override
@@ -22,6 +23,11 @@ public class TestContinuous extends BaseAchievementContinuous<BlockBreakEvent> {
     @Override
     public void rewards(Player player) {
 
+    }
+
+    @Override
+    protected int getY(String path) {
+        return 0;
     }
 
     @Override

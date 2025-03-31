@@ -1,4 +1,4 @@
-package net.atcore.advanced;
+package net.atcore.achievement;
 
 import net.atcore.aviaterraplayer.AviaTerraPlayer;
 import net.minecraft.advancements.AdvancementProgress;
@@ -8,8 +8,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
 public abstract class BaseAchievementSimple<T extends Event>  extends BaseAchievement<T> {
-    public BaseAchievementSimple(Material material, String title, String description, String path, AdvancementType type) {
-        super(material, title, description, path, type);
+    public BaseAchievementSimple(Material material, String path, AdvancementType type) {
+        super(material, path, type);
     }
 
     @Override

@@ -283,9 +283,9 @@ public final class MessagesManager {
 
                 // Obtener el MessageFile del idioma del jugador
                 MessageFile messageFile = (MessageFile) DataSection.getMessagesLocaleFile().getConfigFile(LocaleAvailable.getLocate(locale).name().toLowerCase(), false);
-                // Obtiene la lista de mensajes, en caso de que no existe tomara el idioma defecto
+                // Obtiene la lista de mensajes, en caso de que no existe tomara el idioma por defecto
                 List<String> messages = Objects.requireNonNullElseGet(messageFile.messagesEntity.get(killer.getType()), () -> {
-                    MessageFile mf = (MessageFile) DataSection.getMessagesLocaleFile().getConfigFile(MessagesManager.DEFAULT_LOCALE_PRIVATE.name().toLowerCase(), false);
+                    MessageFile mf = (MessageFile) DataSection.getMessagesLocaleFile().getConfigFile(MessagesManager.DEFAULT_LOCALE_USER.name().toLowerCase(), false);
                     return mf.messagesEntity.get(killer.getType());
                 });
                 // Obtiene un mensaje aleatorio

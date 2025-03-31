@@ -1,5 +1,6 @@
-package net.atcore.advanced;
+package net.atcore.achievement.achievements;
 
+import net.atcore.achievement.BaseAchievementSimple;
 import net.minecraft.advancements.AdvancementType;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -8,7 +9,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 public class TestSimple extends BaseAchievementSimple<BlockBreakEvent> {
 
     public TestSimple() {
-        super(Material.OBSIDIAN, "Test", "Test Description", null, AdvancementType.GOAL);
+        super(Material.OBSIDIAN, null, AdvancementType.GOAL);
     }
 
     @Override
@@ -22,5 +23,10 @@ public class TestSimple extends BaseAchievementSimple<BlockBreakEvent> {
     @Override
     public void rewards(Player player) {
 
+    }
+
+    @Override
+    protected int getY(String path) {
+        return 0;
     }
 }

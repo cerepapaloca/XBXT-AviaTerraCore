@@ -1,6 +1,6 @@
 package net.atcore.command.commnads;
 
-import net.atcore.advanced.BaseAchievement;
+import net.atcore.achievement.BaseAchievement;
 import net.atcore.command.ArgumentUse;
 import net.atcore.command.BaseTabCommand;
 import net.atcore.command.CommandUtils;
@@ -23,16 +23,25 @@ public class AviaTerraAchievementCommand extends BaseTabCommand {
     @Override
     public void execute(CommandSender sender, String[] args) throws Exception {
         if (args.length > 2) {
-            ResourceLocation location = ResourceLocation.parse(args[2]);
-            BaseAchievement<? extends Event> baseAchievement = BaseAchievement.getAchievement(location);
-            if (baseAchievement != null) {
+            boolean all  = args[2].equals("*");
+            ResourceLocation location = all ? null : ResourceLocation.parse(args[2]);
+            BaseAchievement<? extends Event> baseAchievement = all ? null : BaseAchievement.getAchievement(location);
+            if (baseAchievement != null || all) {
                 switch (args[1]) {
                     case "add" -> CommandUtils.executeForPlayer(sender, args[0], false, (name, player) -> {
-                        baseAchievement.grantAchievement(player, true);
+                        if (baseAchievement != null) {
+                            baseAchievement.grantAchievement(player, true);
+                        }else {
+                            BaseAchievement.getAllAchievement().forEach(achievement -> achievement.grantAchievement(player, true));
+                        }
                         MessagesManager.sendString(sender, String.format("Se añadió el logro %s de %s", args[2], args[0]), TypeMessages.SUCCESS);
                     });
                     case "remove" -> CommandUtils.executeForPlayer(sender, args[0], false, (name, player) -> {
-                        baseAchievement.revokeAchievement(player, true);
+                        if (baseAchievement != null) {
+                            baseAchievement.revokeAchievement(player, true);
+                        }else {
+                            BaseAchievement.getAllAchievement().forEach(achievement -> achievement.revokeAchievement(player, true));
+                        }
                         MessagesManager.sendString(sender, String.format("Se elimino el logro %s de %s", args[2], args[0]), TypeMessages.SUCCESS);
                     });
                     default -> MessagesManager.sendString(sender, "Tiene que poner add o remove", TypeMessages.ERROR);

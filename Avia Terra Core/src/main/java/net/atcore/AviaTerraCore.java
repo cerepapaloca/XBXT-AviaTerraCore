@@ -3,10 +3,11 @@ package net.atcore;
 import com.github.games647.craftapi.resolver.MojangResolver;
 import lombok.Getter;
 import lombok.Setter;
-import net.atcore.advanced.TestSimple;
-import net.atcore.advanced.TestContinuous;
-import net.atcore.advanced.TestProgressive;
-import net.atcore.advanced.TestStep;
+import net.atcore.achievement.AchievementSection;
+import net.atcore.achievement.achievements.TestSimple;
+import net.atcore.achievement.achievements.TestContinuous;
+import net.atcore.achievement.achievements.TestProgressive;
+import net.atcore.achievement.achievements.TestStep;
 import net.atcore.armament.ArmamentSection;
 import net.atcore.command.CommandSection;
 import net.atcore.data.DataSection;
@@ -94,6 +95,7 @@ public class AviaTerraCore extends JavaPlugin {
         if (Bukkit.getOnlineMode()) throw new IllegalStateException("modo online esta activo");
         DiscordBot.startDiscordBot();
         register(
+                new AchievementSection(),
                 new DataSection(),
                 new CommandSection(),
                 new ModerationSection(),
@@ -110,10 +112,6 @@ public class AviaTerraCore extends JavaPlugin {
         startAutoRestart();
         isStarting = false;
         messageOn(startTime);
-        new TestSimple();
-        new TestContinuous();
-        new TestProgressive();
-        new TestStep();
     }
 
     private void registerPermission(){
@@ -250,18 +248,20 @@ public class AviaTerraCore extends JavaPlugin {
                     future.get(1000*45, TimeUnit.MILLISECONDS);
                     long elapsedNanos = System.nanoTime() - startTime;
                     if (elapsedNanos > 1_000_000_000L && !task.isHeavyProcess()) { // 1s en nanosegundos
-                        StringBuilder builder = getStackTrace(task);
+                        StringBuilder builder = getStackTrace(task.getStackTraceElements());
                         AviaTerraCore.getInstance().getLogger().warning(
                                 String.format("La tarea tardó %s ms en procesarse", elapsedNanos * 0.000001D) + "\n" + builder
                         );
                     }
                 } catch (TimeoutException e) {
-                    StringBuilder builder = getStackTrace(task);
+                    StringBuilder builder1 = getStackTrace(task.getStackTraceElements());
+                    StringBuilder builder2 = getStackTrace(e.getCause().getStackTrace());
                     future.cancel(true); // Cancelamos la tarea si tarda demasiado
-                    AviaTerraCore.getInstance().getLogger().severe("La tarea fue cancelada por que tardo mucho en procesarse" + "\n" + builder);
+                    AviaTerraCore.getInstance().getLogger().severe("La tarea fue cancelada por que tardo mucho en procesarse" + "\n" + builder2 + "\n\t" + builder1);
                 } catch (ExecutionException e) {
-                    StringBuilder builder = getStackTrace(task);
-                    AviaTerraCore.getInstance().getLogger().severe("Hubo un error al iniciar la tarea [" + e.getMessage() + "]" + "\n" + builder);
+                    StringBuilder builder1 = getStackTrace(task.getStackTraceElements());
+                    StringBuilder builder2 = getStackTrace(e.getCause().getStackTrace());
+                    AviaTerraCore.getInstance().getLogger().severe("Hubo un error al iniciar la tarea [" + e.getMessage() + "]" + "\n" + builder2 + "\n\t" + builder1);
                 }
 
             }
@@ -271,9 +271,9 @@ public class AviaTerraCore extends JavaPlugin {
         }
     }
 
-    private static @NotNull StringBuilder getStackTrace(AviaRunnable task) {
+    private static @NotNull StringBuilder getStackTrace(StackTraceElement[] traceElements) {
         StringBuilder builder = new StringBuilder();
-        for (StackTraceElement element : task.getStackTraceElements()) {
+        for (StackTraceElement element : traceElements) {
             builder.append(element.toString()).append("\n\t");
         }
         return builder;

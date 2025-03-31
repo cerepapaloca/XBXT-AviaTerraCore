@@ -1,4 +1,4 @@
-package net.atcore.advanced;
+package net.atcore.achievement;
 
 import net.atcore.aviaterraplayer.AviaTerraPlayer;
 import net.minecraft.advancements.AdvancementType;
@@ -7,8 +7,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
 public abstract class BaseAchievementContinuous<T extends Event> extends BaseAchievementSimple<T> {
-    public BaseAchievementContinuous(Material material, String title, String description, String path, AdvancementType type) {
-        super(material, title, description, path, type);
+    public BaseAchievementContinuous(Material material, String path, AdvancementType type) {
+        super(material, path, type);
     }
 
     @Override

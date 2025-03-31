@@ -1,5 +1,6 @@
-package net.atcore.advanced;
+package net.atcore.achievement.achievements;
 
+import net.atcore.achievement.BaseAchievementStep;
 import net.minecraft.advancements.AdvancementType;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -10,7 +11,7 @@ import java.util.List;
 public class TestStep extends BaseAchievementStep<BlockBreakEvent> {
 
     public TestStep() {
-        super(Material.OBSIDIAN, "Test", "Test Description", "bedrock/stone/step", AdvancementType.CHALLENGE);
+        super(Material.OBSIDIAN, "bedrock/stone/step", AdvancementType.CHALLENGE);
     }
 
     @Override
@@ -30,6 +31,11 @@ public class TestStep extends BaseAchievementStep<BlockBreakEvent> {
     @Override
     public void rewards(Player player) {
 
+    }
+
+    @Override
+    protected int getY(String path) {
+        return 0;
     }
 
     @Override

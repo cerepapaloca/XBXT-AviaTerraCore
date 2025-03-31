@@ -618,7 +618,7 @@ public final class GlobalUtils {
     @NotNull
     @Contract(pure = true)
     public Component chatColorLegacyToComponent(String input) {
-        return MiniMessage.miniMessage().deserialize(GlobalUtils.convertToMiniMessageFormat(input.replace('§', '&')));
+        return AviaTerraCore.getMiniMessage().deserialize(GlobalUtils.convertToMiniMessageFormat(input.replace('§', '&')));
     }
 
     @NotNull

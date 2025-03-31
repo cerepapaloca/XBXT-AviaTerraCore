@@ -1,4 +1,4 @@
-package net.atcore.advanced;
+package net.atcore.achievement;
 
 import net.atcore.aviaterraplayer.AviaTerraPlayer;
 import net.minecraft.advancements.AdvancementProgress;
@@ -11,8 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class BaseAchievementProgressive<T extends Event> extends BaseAchievement<T> {
-    public BaseAchievementProgressive(Material material, String title, String description, String path, AdvancementType type) {
-        super(material, title, description, path, type);
+    public BaseAchievementProgressive(Material material, String path, AdvancementType type) {
+        super(material, path, type);
 
     }
 
