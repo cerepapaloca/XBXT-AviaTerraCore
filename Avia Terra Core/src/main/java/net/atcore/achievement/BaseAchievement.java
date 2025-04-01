@@ -22,6 +22,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryEvent;
+import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.EventExecutor;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -66,12 +68,15 @@ public abstract class BaseAchievement<T extends Event> implements Listener {
         Type type;
         if (this instanceof SynchronouslyEvent) {
             eventExecutor = (listener, event) -> {
-                /*Player player = null;
+                Player player = null;
                 if (event instanceof PlayerEvent playerEvent) {
                     player = playerEvent.getPlayer();
                 }else if (event instanceof InventoryEvent inventoryEvent) {
                     player = (Player) inventoryEvent.getView().getPlayer();
-                }if (player != null && AviaTerraPlayer.getPlayer(player).getAchievementProgress().get(id).getProgress().isDone()) return;*/
+                }if (player != null){
+                    AviaTerraPlayer.DataProgress progress = AviaTerraPlayer.getPlayer(player).getAchievementProgress().get(id);
+                    if (progress != null && progress.getProgress().isDone()) return;
+                }
                 if (eventClass.isInstance(event)) {
                     T t = eventClass.cast(event);
                     onEvent(t);
@@ -79,12 +84,15 @@ public abstract class BaseAchievement<T extends Event> implements Listener {
             };
         }else {
             eventExecutor = (listener, event) -> {
-                /*Player player = null;
+                Player player = null;
                 if (event instanceof PlayerEvent playerEvent) {
                     player = playerEvent.getPlayer();
                 }else if (event instanceof InventoryEvent inventoryEvent) {
                     player = (Player) inventoryEvent.getView().getPlayer();
-                }if (player != null && AviaTerraPlayer.getPlayer(player).getAchievementProgress().get(id).getProgress().isDone()) return;*/
+                }if (player != null){
+                    AviaTerraPlayer.DataProgress progress = AviaTerraPlayer.getPlayer(player).getAchievementProgress().get(id);
+                    if (progress != null && progress.getProgress().isDone()) return;
+                }
                 AviaTerraCore.enqueueTaskAsynchronously(() -> {
                     if (eventClass.isInstance(event)) {
                         T t = eventClass.cast(event);

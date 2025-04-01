@@ -7,8 +7,8 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerMoveEvent;
 
-public class Explorate1Achievement extends BaseAchievementSimple<PlayerMoveEvent> {
-    public Explorate1Achievement() {
+public class FindHighwayAchievement extends BaseAchievementSimple<PlayerMoveEvent> {
+    public FindHighwayAchievement() {
         super(Material.COMPASS, RootAchievement.class, AdvancementType.TASK);
     }
 

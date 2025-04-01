@@ -7,9 +7,9 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerMoveEvent;
 
-public class Explorate4Achievement extends BaseAchievementContinuous<PlayerMoveEvent> {
-    public Explorate4Achievement() {
-        super(Material.DIAMOND_BOOTS, Explorate3Achievement.class, AdvancementType.TASK);
+public class TravelsHighway3Achievement extends BaseAchievementContinuous<PlayerMoveEvent> {
+    public TravelsHighway3Achievement() {
+        super(Material.DIAMOND_BOOTS, TravelsHighway2Achievement.class, AdvancementType.TASK);
     }
 
     @Override

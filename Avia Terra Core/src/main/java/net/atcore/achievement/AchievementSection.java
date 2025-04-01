@@ -3,8 +3,6 @@ package net.atcore.achievement;
 import net.atcore.Section;
 import net.atcore.achievement.achievements.*;
 
-import static net.atcore.achievement.BaseAchievement.createNode;
-
 public class AchievementSection implements Section {
     @Override
     public void enable() {
@@ -13,16 +11,23 @@ public class AchievementSection implements Section {
         new TestProgressive();
         new TestStep();*/
         new RootAchievement();
-        new Explorate5Achievement();
-        new Explorate4Achievement();
-        new Explorate3Achievement();
-        new Explorate2Achievement();
-        new Explorate1Achievement();
-        new InventoryAchievement();
+        new TravelsHighway4Achievement();
+        new TravelsHighway3Achievement();
+        new TravelsHighway2Achievement();
+        new TravelsHighway1Achievement();
+        new FindHighwayAchievement();
+        new GetShulkerBoxAchievement();
         new AllShulkerBoxAchievement();
-        new ShulkerFullAchievement();
+        new FullShulkerBoxAchievement();
         new DeathByWhitherAchievement();
-        createNode();
+        new GetEndCrystalAchievement();
+        new RenameWitherAchievement();
+        new FullChestFullShulkerBoxAchievement();
+        new GetEnderChestAchievement();
+        new KillPlayerAchievement();
+        new EscapesUsedChorusFruit();
+        BaseAchievement.createNode();
+        PlayerInventoryChangeEvent.start();
     }
 
     @Override
@@ -44,4 +49,5 @@ public class AchievementSection implements Section {
     public void reload() {
 
     }
+    // consigue un ender chest
 }

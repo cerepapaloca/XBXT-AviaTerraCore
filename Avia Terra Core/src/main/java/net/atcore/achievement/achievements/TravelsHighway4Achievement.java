@@ -7,9 +7,9 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerMoveEvent;
 
-public class Explorate3Achievement extends BaseAchievementContinuous<PlayerMoveEvent> {
-    public Explorate3Achievement() {
-        super(Material.GOLDEN_BOOTS, Explorate2Achievement.class, AdvancementType.TASK);
+public class TravelsHighway4Achievement extends BaseAchievementContinuous<PlayerMoveEvent> {
+    public TravelsHighway4Achievement() {
+        super(Material.NETHERITE_BOOTS, TravelsHighway3Achievement.class, AdvancementType.CHALLENGE);
     }
 
     @Override
@@ -27,6 +27,6 @@ public class Explorate3Achievement extends BaseAchievementContinuous<PlayerMoveE
 
     @Override
     public int getMetaValue() {
-        return 5000;
+        return 1_000_000;
     }
 }

@@ -1,18 +1,18 @@
 package net.atcore.achievement.achievements;
 
 import net.atcore.achievement.BaseAchievementStep;
+import net.atcore.achievement.PlayerInventoryChangeEvent;
 import net.atcore.security.check.CheckerUtils;
 import net.minecraft.advancements.AdvancementType;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
-public class AllShulkerBoxAchievement extends BaseAchievementStep<InventoryClickEvent> {
+public class AllShulkerBoxAchievement extends BaseAchievementStep<PlayerInventoryChangeEvent> {
     public AllShulkerBoxAchievement() {
-        super(Material.WHITE_SHULKER_BOX, InventoryAchievement.class, AdvancementType.TASK);
+        super(Material.WHITE_SHULKER_BOX, GetShulkerBoxAchievement.class, AdvancementType.GOAL);
     }
 
     @Override
@@ -24,12 +24,13 @@ public class AllShulkerBoxAchievement extends BaseAchievementStep<InventoryClick
     }
 
     @Override
-    public void onEvent(InventoryClickEvent event) {
+    public void onEvent(PlayerInventoryChangeEvent event) {
         List<ItemStack> list = CheckerUtils.getItems(event);
         for (ItemStack item : list) {
             if (item == null || item.getType() == Material.AIR) continue;
             if (item.getType().name().endsWith("SHULKER_BOX")) {
-                grantAdvanced((Player) event.getWhoClicked(), item.getType().name());
+                grantAdvanced(event.getPlayer(), item.getType().name());
+                return;
             }
         }
     }
