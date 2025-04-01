@@ -24,9 +24,4 @@ public class TestSimple extends BaseAchievementSimple<BlockBreakEvent> {
     public void rewards(Player player) {
 
     }
-
-    @Override
-    protected int getY(String path) {
-        return 0;
-    }
 }

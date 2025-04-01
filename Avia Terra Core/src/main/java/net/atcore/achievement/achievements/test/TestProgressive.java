@@ -9,7 +9,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 public class TestProgressive extends BaseAchievementProgressive<BlockBreakEvent> {
 
     public TestProgressive() {
-        super(Material.STONE, "bedrock/stone", AdvancementType.GOAL);
+        super(Material.STONE, TestContinuous.class, AdvancementType.GOAL);
     }
 
     @Override
@@ -23,11 +23,6 @@ public class TestProgressive extends BaseAchievementProgressive<BlockBreakEvent>
     @Override
     public void rewards(Player player) {
 
-    }
-
-    @Override
-    protected int getY(String path) {
-        return 0;
     }
 
     @Override

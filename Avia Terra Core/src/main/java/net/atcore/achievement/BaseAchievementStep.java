@@ -6,15 +6,16 @@ import net.minecraft.advancements.AdvancementType;
 import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.critereon.ImpossibleTrigger;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
-
+/**
+ * Los logros tendrán una lista de tareas por realizar, por ejemplo consigue unos items en específico
+ */
 public abstract class BaseAchievementStep<T extends Event> extends BaseAchievement<T> {
-    public BaseAchievementStep(Material material, String path, AdvancementType type) {
-        super(material, path, type);
+    public BaseAchievementStep(Material material, Class<? extends BaseAchievement<? extends Event>> parent, AdvancementType type) {
+        super(material, parent, type);
     }
 
     @Override
@@ -40,8 +41,7 @@ public abstract class BaseAchievementStep<T extends Event> extends BaseAchieveme
     }
 
     @Override
-    public void onProgressAdvanced(Player player, Object data) {
-        AdvancementProgress progress = AviaTerraPlayer.getPlayer(player).getProgress(this).getProgress();
+    public void onProgressAdvanced(AdvancementProgress progress, Object data) {
         progress.update(advancements.value().requirements());
         if (data instanceof String s) {
             progress.grantProgress(s);

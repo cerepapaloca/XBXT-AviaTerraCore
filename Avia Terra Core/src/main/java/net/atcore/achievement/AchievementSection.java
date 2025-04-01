@@ -1,9 +1,9 @@
 package net.atcore.achievement;
 
 import net.atcore.Section;
-import net.atcore.achievement.achievements.ExplorateAchievement;
-import net.atcore.achievement.achievements.InventoryAchievement;
-import net.atcore.achievement.achievements.RootAchievement;
+import net.atcore.achievement.achievements.*;
+
+import static net.atcore.achievement.BaseAchievement.createNode;
 
 public class AchievementSection implements Section {
     @Override
@@ -13,8 +13,16 @@ public class AchievementSection implements Section {
         new TestProgressive();
         new TestStep();*/
         new RootAchievement();
-        new ExplorateAchievement();
+        new Explorate5Achievement();
+        new Explorate4Achievement();
+        new Explorate3Achievement();
+        new Explorate2Achievement();
+        new Explorate1Achievement();
         new InventoryAchievement();
+        new AllShulkerBoxAchievement();
+        new ShulkerFullAchievement();
+        new DeathByWhitherAchievement();
+        createNode();
     }
 
     @Override

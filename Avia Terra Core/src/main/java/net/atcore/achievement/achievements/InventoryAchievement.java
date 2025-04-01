@@ -3,7 +3,6 @@ package net.atcore.achievement.achievements;
 import net.atcore.achievement.BaseAchievementSimple;
 import net.atcore.achievement.SynchronouslyEvent;
 import net.minecraft.advancements.AdvancementType;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityPickupItemEvent;
@@ -11,7 +10,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class InventoryAchievement extends BaseAchievementSimple<EntityPickupItemEvent> implements SynchronouslyEvent {
     public InventoryAchievement() {
-        super(Material.GREEN_SHULKER_BOX, "inventory", AdvancementType.TASK);
+        super(Material.SHULKER_BOX, RootAchievement.class, AdvancementType.TASK);
     }
 
     @Override
@@ -26,10 +25,5 @@ public class InventoryAchievement extends BaseAchievementSimple<EntityPickupItem
     @Override
     public void rewards(Player player) {
 
-    }
-
-    @Override
-    protected int getY(String path) {
-        return 1;
     }
 }

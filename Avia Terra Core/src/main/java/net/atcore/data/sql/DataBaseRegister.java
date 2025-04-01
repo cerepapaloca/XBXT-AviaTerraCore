@@ -185,7 +185,7 @@ public class DataBaseRegister extends DataBaseMySql {
     }
 
     public static boolean updateLoginDate(String name ,long time){
-        if (!DataSection.isDataBaseActive()) return false;
+        if (!DataSection.isDataBaseActive()) return true;
 
         String sql = "UPDATE register SET lastLoginDate = ? WHERE name = ?";
 

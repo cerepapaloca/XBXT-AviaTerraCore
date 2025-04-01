@@ -9,7 +9,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 public class TestContinuous extends BaseAchievementContinuous<BlockBreakEvent> {
 
     public TestContinuous() {
-        super(Material.BEDROCK, "bedrock", AdvancementType.TASK);
+        super(Material.BEDROCK, TestSimple.class, AdvancementType.TASK);
     }
 
     @Override
@@ -23,11 +23,6 @@ public class TestContinuous extends BaseAchievementContinuous<BlockBreakEvent> {
     @Override
     public void rewards(Player player) {
 
-    }
-
-    @Override
-    protected int getY(String path) {
-        return 0;
     }
 
     @Override

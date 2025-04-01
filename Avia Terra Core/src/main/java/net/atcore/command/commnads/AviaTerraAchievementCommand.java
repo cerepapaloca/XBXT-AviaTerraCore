@@ -60,7 +60,7 @@ public class AviaTerraAchievementCommand extends BaseTabCommand {
                 return CommandUtils.listTab(args[1], List.of("add", "remove"));
             }
             case 3 -> {
-                return BaseAchievement.getAllAchievement().stream().map(achievement -> achievement.locationId.getNamespace() + ":" + achievement.locationId.getPath()).toList();
+                return BaseAchievement.getAllAchievement().stream().map(achievement -> achievement.id.getNamespace() + ":" + achievement.id.getPath()).toList();
             }
             default -> {
                 return List.of();

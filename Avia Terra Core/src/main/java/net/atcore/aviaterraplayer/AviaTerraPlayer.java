@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import net.atcore.AviaTerraCore;
+import net.atcore.Config;
 import net.atcore.achievement.BaseAchievement;
 import net.atcore.command.commnads.TpaCommand;
 import net.atcore.data.DataSection;
@@ -12,9 +13,11 @@ import net.atcore.inventory.InventorySection;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
+import net.atcore.security.login.ServerMode;
 import net.atcore.utils.GlobalUtils;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.resources.ResourceLocation;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -37,7 +40,9 @@ public class AviaTerraPlayer {
     public static final HashMap<UUID, BukkitTask> TASKS_UNLOAD = new HashMap<>();
 
     private AviaTerraPlayer(Player player) {
+        this.player = player;
         this.uuid = player.getUniqueId();
+        this.realName = GlobalUtils.getRealName(player);
         this.realUuid = GlobalUtils.getRealUUID(player);
         if (TASKS_UNLOAD.containsKey(uuid)) TASKS_UNLOAD.get(uuid).cancel();
         AviaTerraCore.enqueueTaskAsynchronously(() -> {
@@ -55,6 +60,8 @@ public class AviaTerraPlayer {
     @NotNull
     private final ArmamentPlayer armamentPlayer = new ArmamentPlayer(this);
     private final UUID uuid;
+    private final String realName;
+    private final Player player;
     private final UUID realUuid;
     private final List<TpaCommand.TpaRequest> ListTpa = new ArrayList<>();
     private final HashMap<String, Location> homes = new HashMap<>();
@@ -78,16 +85,16 @@ public class AviaTerraPlayer {
     }
 
     public DataProgress getProgress(BaseAchievement<? extends Event> achievement) {
-        return achievementProgress.computeIfAbsent(achievement.locationId, k -> new DataProgress(k, new AdvancementProgress()));
+        return achievementProgress.computeIfAbsent(achievement.id, k -> new DataProgress(k, new AdvancementProgress()));
     }
 
     public DataProgressContinuos getProgressInteger(BaseAchievement<? extends Event> achievement) {
-        DataProgress progress = achievementProgress.computeIfAbsent(achievement.locationId, k -> new DataProgressContinuos(k, new AdvancementProgress(), 0));
+        DataProgress progress = achievementProgress.computeIfAbsent(achievement.id, k -> new DataProgressContinuos(k, new AdvancementProgress(), 0));
         if (progress instanceof DataProgressContinuos i) {
             return i;
         }else {
             DataProgressContinuos i = new DataProgressContinuos(progress.locationId, progress.getProgress(), 0);
-            achievementProgress.put(achievement.locationId, i);
+            achievementProgress.put(achievement.id, i);
             return i;
         }
     }
@@ -122,7 +129,11 @@ public class AviaTerraPlayer {
 
     @Contract(pure = true)
     public Player getPlayer(){
-        return GlobalUtils.getPlayer(uuid);
+        if (Config.getServerMode() == ServerMode.ONLINE_MODE) {
+            return Objects.requireNonNullElse(Bukkit.getPlayer(uuid), player);
+        }else {
+            return GlobalUtils.getPlayer(uuid);
+        }
     }
 
     public void unloadPlayer(){

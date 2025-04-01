@@ -55,30 +55,20 @@ public class PlayerDataFile extends FileYaml {
         atp.clearAchievementProgress();
         ConfigurationSection csAchievement = fileYaml.getConfigurationSection("achievements");
         if (csAchievement == null) return;
-        for (String key : csAchievement.getKeys(false)) {
-            ResourceLocation rl = ResourceLocation.fromNamespaceAndPath(key.split(":")[0], key.split(":")[1]);
+        for (BaseAchievement<?> achievement : BaseAchievement.getAllAchievement()) {
             AdvancementProgress progressAchievement = new AdvancementProgress();
-            BaseAchievement<?> achievement = BaseAchievement.getAchievement(rl);
-            if (achievement == null) continue;
+            String path = "achievements." + achievement.id.getPath().replace("/", ".");
             progressAchievement.update(achievement.advancements.value().requirements());
-            List<?> progressComplete = fileYaml.getList("achievements." + key + ".complete");
+            List<?> progressComplete = fileYaml.getList(path  + ".complete");
             if (progressComplete == null) continue;
             for (Object raw : progressComplete) {
                 if (raw == null) continue;
                 if (raw instanceof String s) progressAchievement.grantProgress(s);
             }
-
-            if (fileYaml.isInt("achievements." + key + ".progress")){
-                atp.addProgress(new AviaTerraPlayer.DataProgressContinuos(rl, progressAchievement, fileYaml.getInt("achievements." + key + ".progress")));
+            if (fileYaml.isDouble(path + ".progress")){
+                atp.addProgress(new AviaTerraPlayer.DataProgressContinuos(achievement.id, progressAchievement, fileYaml.getInt(path + ".progress")));
             }else {
-                atp.addProgress(new AviaTerraPlayer.DataProgress(rl, progressAchievement));
-            }
-        }
-        rawList = fileYaml.getList("achievements", atp.getAllProgress());
-        if (rawList != null) {
-            for (Object raw : rawList) {
-                if (raw == null) continue;
-                if (raw instanceof AviaTerraPlayer.DataProgress dataProgress) atp.addProgress(dataProgress);
+                atp.addProgress(new AviaTerraPlayer.DataProgress(achievement.id, progressAchievement));
             }
         }
     }
@@ -106,11 +96,11 @@ public class PlayerDataFile extends FileYaml {
         for (AviaTerraPlayer.DataProgress data : atp.getAllProgress()){
             ArrayList<String> completed = new ArrayList<>();
             data.getProgress().getCompletedCriteria().forEach(completed::add);
-            fileYaml.set("achievements." + data.getLocationId() + ".complete", completed);
+            String path = data.getLocationId().getPath().replace("/",".");
+            fileYaml.set("achievements." + path + ".complete", completed);
             if (data instanceof AviaTerraPlayer.DataProgressContinuos dataInteger) {
-                fileYaml.set("achievements." + data.getLocationId() + ".progress", dataInteger.getValue());
+                fileYaml.set("achievements." + path + ".progress", dataInteger.getValue());
             }
-//            fileYaml.set("achievements." + data.locationId() + ".remain", data.progress().getRemainingCriteria());
         }
         saveConfig();
     }

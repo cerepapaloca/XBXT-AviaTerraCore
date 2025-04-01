@@ -21,7 +21,7 @@ import java.util.UUID;
 
 public class DeathListener implements Listener {
 
-    private final HashMap<UUID, UUID> MapLastDamagerEntity = new HashMap<>();
+    private static final HashMap<UUID, UUID> MapLastDamagerEntity = new HashMap<>();
 
     @EventHandler
     public void onDeath(PlayerDeathEvent e) {
@@ -36,21 +36,11 @@ public class DeathListener implements Listener {
         if (player.getLastDamageCause() != null){
             try {
                 LivingEntity killer;
-                if (e.getEntity().getKiller() != null) {
-                    killer = e.getEntity().getKiller();
+                if (player.getKiller() != null) {
+                    killer = player.getKiller();
                 } else {
                     // En caso de que no tenga un killer se usara la última entidad que le hizo daño
-                    UUID uuid = MapLastDamagerEntity.get(player.getUniqueId());
-                    if (uuid != null){
-                        Entity entity = Bukkit.getEntity(uuid);
-                        if (entity instanceof LivingEntity le) {
-                            killer = le;
-                        }else {
-                            killer = null;
-                        }
-                    }else {
-                        killer = null;
-                    }
+                    killer = getKillerByDamage(player);
                 }
 
                 ItemStack item = getItemStack(killer);
@@ -61,6 +51,22 @@ public class DeathListener implements Listener {
                 MessagesManager.sendWaringException("Error al modificar el mensaje de muerte", ex);
             }
         }
+    }
+
+    public static @Nullable LivingEntity getKillerByDamage(Player player) {
+        LivingEntity killer;
+        UUID uuid = MapLastDamagerEntity.get(player.getUniqueId());
+        if (uuid != null){
+            Entity entity = Bukkit.getEntity(uuid);
+            if (entity instanceof LivingEntity le) {
+                killer = le;
+            }else {
+                killer = null;
+            }
+        }else {
+            killer = null;
+        }
+        return killer;
     }
 
     private @Nullable ItemStack getItemStack(LivingEntity killer) {

@@ -53,7 +53,7 @@ public class MessageFile extends FileYaml {
         ConfigurationSection configSection = fileYaml.getConfigurationSection("achievement");
         Set<String> pathsAchievements = new HashSet<>(configSection == null ? Set.of("") : configSection.getKeys(true));
         for (BaseAchievement<?> achievement : BaseAchievement.getAllAchievement()){
-            String path = "achievement." + achievement.locationId.getPath().replace("/", ".");
+            String path = "achievement." + achievement.id.getPath().replace("/", ".");
             String title = fileYaml.getString(path + ".title");
             List<String> titles = fileYaml.getStringList(path + ".title");
             String description = fileYaml.getString(path + ".description");

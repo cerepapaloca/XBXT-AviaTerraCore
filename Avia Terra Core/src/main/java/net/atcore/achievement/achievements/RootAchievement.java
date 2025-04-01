@@ -20,9 +20,4 @@ public class RootAchievement extends BaseAchievementSimple<BlockBreakEvent> {
     public void rewards(Player player) {
 
     }
-
-    @Override
-    protected int getY(String path) {
-        return 0;
-    }
 }

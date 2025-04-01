@@ -11,7 +11,7 @@ import java.util.List;
 public class TestStep extends BaseAchievementStep<BlockBreakEvent> {
 
     public TestStep() {
-        super(Material.OBSIDIAN, "bedrock/stone/step", AdvancementType.CHALLENGE);
+        super(Material.OBSIDIAN, TestProgressive.class, AdvancementType.CHALLENGE);
     }
 
     @Override
@@ -31,11 +31,6 @@ public class TestStep extends BaseAchievementStep<BlockBreakEvent> {
     @Override
     public void rewards(Player player) {
 
-    }
-
-    @Override
-    protected int getY(String path) {
-        return 0;
     }
 
     @Override

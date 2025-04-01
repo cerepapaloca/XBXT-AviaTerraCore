@@ -22,10 +22,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryEvent;
-import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.EventExecutor;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -35,33 +36,37 @@ import java.util.*;
 
 public abstract class BaseAchievement<T extends Event> implements Listener {
 
-    private static final List<BaseAchievement<? extends Event>> REGISTERED_ACHIEVEMENT = new ArrayList<>();
+    private static final HashMap<ResourceLocation, BaseAchievement<? extends Event>> REGISTERED_ACHIEVEMENT = new HashMap<>();
+    private static final ResourceLocation ROOT = ResourceLocation.fromNamespaceAndPath(AviaTerraCore.getInstance().getName().toLowerCase(), "anarchy/root");
 
     protected final EventExecutor eventExecutor;
     private Class<T> eventClass;
-    protected final String path;
     @NotNull
     public final AdvancementHolder advancements;
-    @NotNull
-    public final ResourceLocation locationId;
     @NotNull
     public final ResourceLocation categoryId;
     @Nullable
     public final ResourceLocation parentId;
+    @NotNull
+    public final ResourceLocation id;
+    private AdvancementNode node = null;
+
 
     @SuppressWarnings("unchecked")
-    public BaseAchievement(Material material, String path, AdvancementType advancementType) {
-        this.path = path;
+    public BaseAchievement(Material material, Class<? extends BaseAchievement<? extends Event>> parent, AdvancementType advancementType) {
+        String normalizePath = parent == null ? null : parent.getSimpleName().replace("Achievement", "").toLowerCase();
         categoryId = ResourceLocation.fromNamespaceAndPath(
                 AviaTerraCore.getInstance().getName().toLowerCase(), "anarchy/root"
         );
-        parentId = path != null ? ResourceLocation.fromNamespaceAndPath(
-                AviaTerraCore.getInstance().getName().toLowerCase(), "anarchy/" + path.split("/")[path.split("/").length - 1]
-        ) : null;
-        locationId = path != null ? ResourceLocation.fromNamespaceAndPath(
-                AviaTerraCore.getInstance().getName().toLowerCase(), "anarchy/root/" + path
-        ) : categoryId;
+        parentId = normalizePath != null ? ResourceLocation.fromNamespaceAndPath(AviaTerraCore.getInstance().getName().toLowerCase(),"anarchy/" + normalizePath) : null;
+        id = normalizePath != null ? ResourceLocation.fromNamespaceAndPath(AviaTerraCore.getInstance().getName().toLowerCase(),
+                        "anarchy/" + this.getClass().getSimpleName().replace("Achievement", "").toLowerCase()
+                ) : ROOT;
 
+//        Bukkit.getLogger().warning("//////////////////");
+//        Bukkit.getLogger().warning(categoryId.toString());
+//        Bukkit.getLogger().warning(parentId != null ? parentId.toString() : null);
+//        Bukkit.getLogger().warning(id.toString());
         advancements = createAdvancement(material, null, advancementType, true);
         Type type;
         if (this instanceof SynchronouslyEvent) {
@@ -87,7 +92,49 @@ public abstract class BaseAchievement<T extends Event> implements Listener {
         } catch (ClassCastException e) {
             eventClass = null;
         }
-        REGISTERED_ACHIEVEMENT.add(this);
+        REGISTERED_ACHIEVEMENT.put(id, this);
+    }
+
+    private static AdvancementNode setParent(AdvancementNode advancement, AdvancementNode parent) {
+        List<AdvancementNode> children = new ArrayList<>();
+        for (AdvancementNode child : advancement.children())
+            children.add(child);
+
+        try {
+            AdvancementHolder newAdvancementHolder = deconstructAdvancement(advancement.advancement()).parent(parent.holder()).build(advancement.holder().id());
+            AdvancementNode newAdvancement = new AdvancementNode(newAdvancementHolder, parent);
+
+            for (AdvancementNode child : children)
+                newAdvancement.addChild(child);
+
+            parent.addChild(newAdvancement);
+            return newAdvancement;
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to set parent of advancement.", e);
+        }
+    }
+
+    private static Advancement.Builder deconstructAdvancement(Advancement advancement) {
+        Advancement.Builder builder = Advancement.Builder.advancement();
+        if (advancement.display().isPresent())
+            builder.display(advancement.display().get());
+        for (Map.Entry<String, Criterion<?>> entry : advancement.criteria().entrySet())
+            builder.addCriterion(entry.getKey(), entry.getValue());
+        builder.requirements(advancement.requirements());
+        return builder;
+    }
+
+    public static void createNode(){
+        //A todos le crea un nodo sin pariente
+        for (BaseAchievement<?> achievement : REGISTERED_ACHIEVEMENT.values()){
+            achievement.node = new AdvancementNode(achievement.advancements, null);
+        }
+        // A todos se le añade un pariente ya qué todos tiene un nodo
+        for (BaseAchievement<?> achievement : REGISTERED_ACHIEVEMENT.values()){
+            if (achievement.parentId == null) continue;
+            achievement.node = setParent(achievement.node, REGISTERED_ACHIEVEMENT.get(achievement.parentId).node);
+        }
+        TreeNodePosition.run(AdvancementNode.getRoot(REGISTERED_ACHIEVEMENT.get(ROOT).node));
     }
 
     private AdvancementHolder createAdvancement(Material material, @Nullable Player player, AdvancementType type, boolean toas) {
@@ -100,7 +147,7 @@ public abstract class BaseAchievement<T extends Event> implements Listener {
         List<String> titles;
         List<String> description;
 
-        if (!AviaTerraCore.isStarting()){
+        if (!AviaTerraCore.isStarting()) {
             MessageFile messageFile;
             if (player != null) {
                 messageFile = (MessageFile) DataSection.getMessagesLocaleFile().getConfigFile(LocaleAvailable.getLocate(player.locale()).name().toLowerCase(), false);
@@ -115,7 +162,7 @@ public abstract class BaseAchievement<T extends Event> implements Listener {
                 MessageFile mf = (MessageFile) DataSection.getMessagesLocaleFile().getConfigFile(MessagesManager.DEFAULT_LOCALE_PRIVATE.name().toLowerCase(), false);
                 return mf.messagesAchievement.get(this);
             }).description;
-        }else {
+        } else {
             titles = List.of("default");
             description = List.of("default");
         }
@@ -125,16 +172,17 @@ public abstract class BaseAchievement<T extends Event> implements Listener {
                 PaperAdventure.asVanilla(GlobalUtils.chatColorLegacyToComponent(description.get(random.nextInt(titles.size())))),
                 Optional.of(background),
                 type,
-                 toas || (player != null && !AviaTerraPlayer.getPlayer(player).getProgress(this).getProgress().isDone()),
+                toas,
                 true,
                 false
         );
+        if (node != null)
+            display.setLocation(node.advancement().display().get().getX(), node.advancement().display().get().getY());
         BaseProperties properties = createProperties();
-        display.setLocation(getX(path), getY(path)); // Implementa esta lógica
         return new AdvancementHolder(
-                locationId,
+                id,
                 new Advancement(
-                        parentId != null ? Optional.of(categoryId) : Optional.empty(),
+                        parentId != null ? Optional.of(parentId) : Optional.empty(),
                         Optional.of(display),
                         AdvancementRewards.EMPTY,
                         properties.criteria(),
@@ -144,6 +192,7 @@ public abstract class BaseAchievement<T extends Event> implements Listener {
         );
     }
 
+    @Contract(" -> new")
     protected @NotNull BaseAchievement.BaseProperties createProperties() {
         Map<String, Criterion<?>> criteria = new HashMap<>();
         for (int i = 1; i <= getMetaProgress(); i++) {
@@ -163,20 +212,19 @@ public abstract class BaseAchievement<T extends Event> implements Listener {
     protected record BaseProperties(Map<String, Criterion<?>> criteria, List<List<String>> requirements) {
     }
 
-    protected int getX(String path) {
-        // Ejemplo: asigna coordenadas basadas en el "path"
-        return path == null ? 0 : path.split("/").length;
-    }
-
     public abstract void onEvent(T event);
 
     public abstract void rewards(Player player);
 
-    protected abstract int getY(String path);
-
     protected abstract int getMetaProgress();
 
-    protected abstract void onProgressAdvanced(Player player, Object data);
+    protected abstract void onProgressAdvanced(AdvancementProgress progress, Object data);
+
+    /**
+     * Das un avance en el logro en caso de cumplir con todos los requisitos se completaría
+     * @param player el jugador que cometió el avance
+     * @param data esto si se requiere datos especiales para dar el avance en la mayor de casos solo es poner null
+     */
 
     protected void grantAdvanced(Player player, Object data) {
         AviaTerraPlayer atp = AviaTerraPlayer.getPlayer(player);
@@ -185,18 +233,39 @@ public abstract class BaseAchievement<T extends Event> implements Listener {
             return;
         } else {
             if ((this instanceof BaseAchievementContinuous<?> achievementContinuous) && (progress instanceof AviaTerraPlayer.DataProgressContinuos progressContinuos)) {
-                if (achievementContinuous.getMetaValue() <= progressContinuos.getValue())
-                    onProgressAdvanced(player, data);
+                if (achievementContinuous.getMetaValue() <= progressContinuos.getValue())  onProgressAdvanced(progress.getProgress(), data);
             } else {
-                onProgressAdvanced(player, data);
+                onProgressAdvanced(progress.getProgress(), data);
             }
-            AviaTerraCore.enqueueTaskAsynchronously(() -> atp.getPlayerDataFile().saveData());
+            saveData(atp);
         }
         if (progress.getProgress().isDone()) {
+            sendAchievement(player, progress.getProgress(), true);
             rewards(player);
+        }else {
+            sendAchievement(player, progress.getProgress(), false);
         }
-        sendAchievement(player, progress.getProgress(), true);
     }
+
+    private final HashMap<AviaTerraPlayer, BukkitTask> taks = new HashMap<>();
+
+    public void saveData(AviaTerraPlayer player) {
+        if (!taks.containsKey(player)) {
+            taks.put(player, new BukkitRunnable() {
+                @Override
+                public void run() {
+                    AviaTerraCore.enqueueTaskAsynchronously(() -> player.getPlayerDataFile().saveData());
+                    taks.remove(player);
+                }
+            }.runTaskLaterAsynchronously(AviaTerraCore.getInstance(), 40));
+        }
+    }
+
+    /**
+     * Completa un logro a un jugador sin importar lo que le falte
+     * @param player el jugador afectado
+     * @param b si se tiene que ver él toas y dar recompensa
+     */
 
     public void grantAchievement(Player player, boolean b) {
         AviaTerraPlayer atp = AviaTerraPlayer.getPlayer(player);
@@ -218,6 +287,9 @@ public abstract class BaseAchievement<T extends Event> implements Listener {
             ArrayList<String> requirements = new ArrayList<>();
             progress.getProgress().getCompletedCriteria().forEach(requirements::add);
             requirements.forEach(s -> progress.getProgress().revokeProgress(s));
+            if (progress instanceof AviaTerraPlayer.DataProgressContinuos progressContinuos) {
+                progressContinuos.setValue(0);
+            }
         }
         AviaTerraCore.enqueueTaskAsynchronously(() -> atp.getPlayerDataFile().saveData());
         sendAchievement(player, progress.getProgress(), true);
@@ -234,27 +306,34 @@ public abstract class BaseAchievement<T extends Event> implements Listener {
                         toas)
                 ),
                 Set.of(),
-                Map.of(locationId, progress)
+                Map.of(id, progress)
         ));
     }
 
     @SuppressWarnings("OptionalGetWithoutIsPresent")
     public static void sendAllAchievement(Player player) {
         ServerPlayer nmsPlayer = ((CraftPlayer) player).getHandle();
-        REGISTERED_ACHIEVEMENT.sort(Comparator.comparingInt((BaseAchievement<?> achievementSimple) ->
-                achievementSimple.locationId.getPath().split("/").length));
         List<AdvancementHolder> advancements = new ArrayList<>();
         Map<ResourceLocation, AdvancementProgress> advancementsProgress = new HashMap<>();
-        for (BaseAchievement<?> advancement : REGISTERED_ACHIEVEMENT) {
+        for (BaseAchievement<?> advancement : REGISTERED_ACHIEVEMENT.values()) {
             DisplayInfo displayInfo = advancement.advancements.value().display().get();
-            if (advancement.parentId == null) advancement.grantAchievement(player, false);
+            AviaTerraPlayer atp = AviaTerraPlayer.getPlayer(player);
+            AviaTerraPlayer.DataProgress progress = atp.getProgress(advancement);
+            if (advancement.id.equals(ROOT)) {
+                if (!progress.getProgress().isDone()) {
+                    List<String> requirements = new ArrayList<>();
+                    progress.getProgress().getRemainingCriteria().forEach(requirements::add);
+                    requirements.forEach(s -> progress.getProgress().grantProgress(s));
+                }
+                AviaTerraCore.enqueueTaskAsynchronously(() -> atp.getPlayerDataFile().saveData());
+            }
 
             advancements.add(advancement.createAdvancement(displayInfo.getIcon().asBukkitCopy().getType(),
                          player,
                          displayInfo.getType(),
                     false)
             );
-            advancementsProgress.put(advancement.locationId, AviaTerraPlayer.getPlayer(player).getProgress(advancement).getProgress());
+            advancementsProgress.put(advancement.id, AviaTerraPlayer.getPlayer(player).getProgress(advancement).getProgress());
         }
         nmsPlayer.connection.send(new ClientboundUpdateAdvancementsPacket(
                 false,
@@ -266,16 +345,11 @@ public abstract class BaseAchievement<T extends Event> implements Listener {
 
     @Nullable
     public static BaseAchievement<? extends Event> getAchievement(ResourceLocation location) {
-        for (BaseAchievement<?> ach : REGISTERED_ACHIEVEMENT) {
-            if (ach.locationId.getPath().equals(location.getPath()) && ach.locationId.getNamespace().equals(location.getNamespace())) {
-                return ach;
-            }
-        }
-        return null;
+        return REGISTERED_ACHIEVEMENT.get(location);
     }
 
     public static List<BaseAchievement<? extends Event>> getAllAchievement() {
-        return REGISTERED_ACHIEVEMENT;
+        return REGISTERED_ACHIEVEMENT.values().stream().toList();
     }
 
     public record MessagesAchievement(List<String> title, List<String> description){}
