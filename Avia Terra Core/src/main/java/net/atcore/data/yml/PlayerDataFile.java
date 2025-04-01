@@ -5,7 +5,6 @@ import net.atcore.aviaterraplayer.AviaTerraPlayer;
 import net.atcore.data.FileYaml;
 import net.atcore.utils.GlobalUtils;
 import net.minecraft.advancements.AdvancementProgress;
-import net.minecraft.resources.ResourceLocation;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -25,26 +24,28 @@ public class PlayerDataFile extends FileYaml {
     public void loadData() {
         loadConfig();
         AviaTerraPlayer atp = AviaTerraPlayer.getPlayer(UUID.fromString(fileName.replace(".yml", "")));
-        ConfigurationSection csHome = fileYaml.getConfigurationSection("homes");
+
         String displayName = fileYaml.getString("display-name");
         atp.setNameColor(displayName);
         if (displayName != null) atp.getPlayer().displayName(GlobalUtils.chatColorLegacyToComponent(displayName));
-        if (csHome == null) return;
         atp.getPlayersBLock().clear();
         atp.getHomes().clear();
         atp.clearAchievementProgress();
-        for (String key : csHome.getKeys(false)) {
-            String worldName = csHome.getString(key + ".world");
-            double x = csHome.getDouble(key + ".x");
-            double y = csHome.getDouble(key + ".y");
-            double z = csHome.getDouble(key + ".z");
-            float yaw = (float) csHome.getDouble(key + ".yaw");
-            float pitch = (float) csHome.getDouble(key + ".pitch");
+        ConfigurationSection csHome = fileYaml.getConfigurationSection("homes");
+        if (csHome != null) {
+            for (String key : csHome.getKeys(false)) {
+                String worldName = csHome.getString(key + ".world");
+                double x = csHome.getDouble(key + ".x");
+                double y = csHome.getDouble(key + ".y");
+                double z = csHome.getDouble(key + ".z");
+                float yaw = (float) csHome.getDouble(key + ".yaw");
+                float pitch = (float) csHome.getDouble(key + ".pitch");
 
-            if (worldName == null) worldName = Bukkit.getWorlds().getFirst().getName();
-            World world = Bukkit.getWorld(worldName);
-            if (world == null) world = Bukkit.getWorlds().getFirst();
-            atp.getHomes().put(key, new Location(world ,x, y, z, yaw, pitch));
+                if (worldName == null) worldName = Bukkit.getWorlds().getFirst().getName();
+                World world = Bukkit.getWorld(worldName);
+                if (world == null) world = Bukkit.getWorlds().getFirst();
+                atp.getHomes().put(key, new Location(world ,x, y, z, yaw, pitch));
+            }
         }
         List<?> rawList = fileYaml.getList("block-players");
         if (rawList != null) {
@@ -54,22 +55,19 @@ public class PlayerDataFile extends FileYaml {
             }
         }
         ConfigurationSection csAchievement = fileYaml.getConfigurationSection("achievements");
-        if (csAchievement == null) return;
-        for (BaseAchievement<?> achievement : BaseAchievement.getAllAchievement()) {
-            AdvancementProgress progressAchievement = new AdvancementProgress();
-            String path = "achievements." + achievement.id.getPath().replace("/", ".");
-            progressAchievement.update(achievement.advancements.value().requirements());
-            List<?> progressComplete = fileYaml.getList(path  + ".complete");
-            if (progressComplete == null) continue;
-            for (Object raw : progressComplete) {
-                if (raw == null) continue;
-                if (raw instanceof String s) progressAchievement.grantProgress(s);
-            }
-
-            if (fileYaml.isDouble(path + ".progress")){
-                atp.addProgress(new AviaTerraPlayer.DataProgressContinuos(achievement.id, progressAchievement, fileYaml.getInt(path + ".progress")));
-            }else {
-                atp.addProgress(new AviaTerraPlayer.DataProgress(achievement.id, progressAchievement));
+        if (csAchievement != null) {
+            for (BaseAchievement<?> achievement : BaseAchievement.getAllAchievement()) {
+                AdvancementProgress progressAchievement = atp.getProgress(achievement).getProgress();
+                String path = "achievements." + achievement.id.getPath().replace("/", ".");
+                List<?> progressComplete = fileYaml.getList(path  + ".complete");
+                if (progressComplete == null) continue;
+                for (Object raw : progressComplete) {
+                    if (raw == null) continue;
+                    if (raw instanceof String s) progressAchievement.grantProgress(s);
+                }
+                if (fileYaml.isDouble(path + ".progress")){
+                    atp.getProgressInteger(achievement).setValue(fileYaml.getInt(path + ".progress"));
+                }
             }
         }
     }

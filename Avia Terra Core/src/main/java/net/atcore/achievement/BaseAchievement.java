@@ -338,8 +338,8 @@ public abstract class BaseAchievement<T extends Event> implements Listener {
                     }
                 }
                 Random random = new Random();
-                MessagesAchievement messagesAchievement = getMessage(player);
                 for (Player sender : Bukkit.getOnlinePlayers()){
+                    MessagesAchievement messagesAchievement = getMessage(sender);
                     Component component = MessagesManager.applyFinalProprieties(String.format("<dark_gray>[</dark_gray><gold>★</gold><dark_gray>]</dark_gray> " + message.getMessage(sender),
                             "<|<click:SUGGEST_COMMAND:/w " + player.getName() + ">" + AviaTerraCore.getMiniMessage().serialize(Objects.requireNonNullElse(player.customName(), player.name())) + "</click>|>",
                             "<" + color + ">[<hover:show_text:'<" + color + ">" + messagesAchievement.description().get(random.nextInt(messagesAchievement.description().size())) + "</" + color + ">'>" + messagesAchievement.title().get(random.nextInt(messagesAchievement.title().size())) + "</hover>]</" + color + ">"
@@ -378,7 +378,6 @@ public abstract class BaseAchievement<T extends Event> implements Listener {
                 }
                 AviaTerraCore.enqueueTaskAsynchronously(() -> atp.getPlayerDataFile().saveData());
             }
-
             advancements.add(advancement.createAdvancement(displayInfo.getIcon().asBukkitCopy().getType(),
                          player,
                          displayInfo.getType(),

@@ -228,7 +228,7 @@ public class AviaTerraCore extends JavaPlugin {
         if (!TASK_QUEUE.offer(new AviaRunnable(task, isHeavyProcess))){
             MessagesManager.logConsole("Error al añadir una tarea la cola", TypeMessages.ERROR);
         }
-        if (TASK_QUEUE.size() > 6){
+        if (TASK_QUEUE.size() >= 10){
             MessagesManager.logConsole(String.format("Hay <|%s|> tareas en cola, Hilo sobre cargador", TASK_QUEUE.size()), TypeMessages.WARNING);
         }
     }

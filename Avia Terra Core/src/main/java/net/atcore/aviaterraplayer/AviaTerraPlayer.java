@@ -50,6 +50,7 @@ public class AviaTerraPlayer {
             //DataSection.getCacheLimboFlies().getConfigFile(uuid.toString(), true);
             updateView(player);
             playerDataFile.loadData();
+            player.customName(GlobalUtils.chatColorLegacyToComponent(nameColor));
         });
     }
 
@@ -85,7 +86,11 @@ public class AviaTerraPlayer {
     }
 
     public DataProgress getProgress(BaseAchievement<? extends Event> achievement) {
-        return achievementProgress.computeIfAbsent(achievement.id, k -> new DataProgress(k, new AdvancementProgress()));
+        return achievementProgress.computeIfAbsent(achievement.id, k -> {
+            AdvancementProgress progress = new AdvancementProgress();
+            progress.update(achievement.advancements.value().requirements());
+            return new DataProgress(k, progress);
+        });
     }
 
     public DataProgressContinuos getProgressInteger(BaseAchievement<? extends Event> achievement) {

@@ -1,6 +1,7 @@
 package net.atcore.achievement.achievements;
 
 import net.atcore.achievement.BaseAchievementSimple;
+import net.atcore.achievement.SynchronouslyEvent;
 import net.atcore.listener.DeathListener;
 import net.minecraft.advancements.AdvancementType;
 import org.bukkit.Material;
@@ -8,7 +9,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
-public class KillPlayerAchievement extends BaseAchievementSimple<PlayerDeathEvent> {
+public class KillPlayerAchievement extends BaseAchievementSimple<PlayerDeathEvent> implements SynchronouslyEvent {
     public KillPlayerAchievement() {
         super(Material.IRON_SWORD, RootAchievement.class, AdvancementType.TASK);
     }
