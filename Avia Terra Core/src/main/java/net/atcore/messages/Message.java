@@ -59,6 +59,9 @@ public enum Message {
                 Idioma: <|%s|>
                 Rango: <|%s|>
                 """, INFO),
+    EVENT_CHAT_ADVANCEMENT_CHALLENGE("event.chat", "%s ha completado el desafío %s", INFO),
+    EVENT_CHAT_ADVANCEMENT_GOAL("event.chat", "%s ha completado el meta %s", INFO),
+    EVENT_CHAT_ADVANCEMENT_TASK("event.chat", "%s ha completado el objetivo %s", INFO),
     BAN_ERROR("ban", "Hubo un problema con las bases de datos al banear <|%s|> por <|%s|>", ERROR),
     BAN_AUTO_BAN_BOT("ban", "Uso de bots (Baneo Automático)", KICK),
     BAN_AUTO_BAN_SPAM("ban", "Por enviar mensajes automatizado en el chat (Baneo Automático)", KICK),

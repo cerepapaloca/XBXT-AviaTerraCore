@@ -81,7 +81,7 @@ public class ChatListener implements Listener {
         }
     }
 
-    public Component setFormat(Component message, @NotNull Player sender, Player target, boolean isMention) {
+    public static Component setFormat(Component message, @NotNull Player sender, Player target, boolean isMention) {
         int distanceWalked = sender.getStatistic(Statistic.WALK_ONE_CM) + sender.getStatistic(Statistic.SPRINT_ONE_CM);
         long distanceWalkedKm = Math.round((distanceWalked / 100000.0)*10);
         int timePlayedTicks = sender.getStatistic(Statistic.PLAY_ONE_MINUTE);

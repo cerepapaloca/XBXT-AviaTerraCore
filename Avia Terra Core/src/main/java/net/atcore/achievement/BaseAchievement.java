@@ -6,9 +6,9 @@ import net.atcore.AviaTerraCore;
 import net.atcore.aviaterraplayer.AviaTerraPlayer;
 import net.atcore.data.DataSection;
 import net.atcore.data.yml.MessageFile;
-import net.atcore.messages.LocaleAvailable;
-import net.atcore.messages.MessagesManager;
+import net.atcore.messages.*;
 import net.atcore.utils.GlobalUtils;
+import net.kyori.adventure.text.Component;
 import net.minecraft.advancements.*;
 import net.minecraft.advancements.critereon.ImpossibleTrigger;
 import net.minecraft.network.protocol.game.ClientboundUpdateAdvancementsPacket;
@@ -62,27 +62,36 @@ public abstract class BaseAchievement<T extends Event> implements Listener {
         id = normalizePath != null ? ResourceLocation.fromNamespaceAndPath(AviaTerraCore.getInstance().getName().toLowerCase(),
                         "anarchy/" + this.getClass().getSimpleName().replace("Achievement", "").toLowerCase()
                 ) : ROOT;
-
-//        Bukkit.getLogger().warning("//////////////////");
-//        Bukkit.getLogger().warning(categoryId.toString());
-//        Bukkit.getLogger().warning(parentId != null ? parentId.toString() : null);
-//        Bukkit.getLogger().warning(id.toString());
         advancements = createAdvancement(material, null, advancementType, true);
         Type type;
         if (this instanceof SynchronouslyEvent) {
             eventExecutor = (listener, event) -> {
+                /*Player player = null;
+                if (event instanceof PlayerEvent playerEvent) {
+                    player = playerEvent.getPlayer();
+                }else if (event instanceof InventoryEvent inventoryEvent) {
+                    player = (Player) inventoryEvent.getView().getPlayer();
+                }if (player != null && AviaTerraPlayer.getPlayer(player).getAchievementProgress().get(id).getProgress().isDone()) return;*/
                 if (eventClass.isInstance(event)) {
                     T t = eventClass.cast(event);
                     onEvent(t);
                 }
             };
         }else {
-            eventExecutor = (listener, event) -> AviaTerraCore.enqueueTaskAsynchronously(() -> {
-                if (eventClass.isInstance(event)) {
-                    T t = eventClass.cast(event);
-                    onEvent(t);
-                }
-            });
+            eventExecutor = (listener, event) -> {
+                /*Player player = null;
+                if (event instanceof PlayerEvent playerEvent) {
+                    player = playerEvent.getPlayer();
+                }else if (event instanceof InventoryEvent inventoryEvent) {
+                    player = (Player) inventoryEvent.getView().getPlayer();
+                }if (player != null && AviaTerraPlayer.getPlayer(player).getAchievementProgress().get(id).getProgress().isDone()) return;*/
+                AviaTerraCore.enqueueTaskAsynchronously(() -> {
+                    if (eventClass.isInstance(event)) {
+                        T t = eventClass.cast(event);
+                        onEvent(t);
+                    }
+                });
+            };
         }
 
         try {
@@ -143,7 +152,34 @@ public abstract class BaseAchievement<T extends Event> implements Listener {
                 "textures/block/obsidian.png" // Ruta de la textura
         );
         Random random = new Random();
+        MessagesAchievement message = getMessage(player);
+        DisplayInfo display = new DisplayInfo(
+                CraftItemStack.asNMSCopy(new ItemStack(material)),
+                PaperAdventure.asVanilla(GlobalUtils.chatColorLegacyToComponent(message.title().get(random.nextInt(message.title().size())))),
+                PaperAdventure.asVanilla(GlobalUtils.chatColorLegacyToComponent(message.description().get(random.nextInt(message.title().size())))),
+                Optional.of(background),
+                type,
+                toas,
+                true,
+                false
+        );
+        if (node != null)
+            display.setLocation(node.advancement().display().orElseThrow().getX(), node.advancement().display().orElseThrow().getY());
+        BaseProperties properties = createProperties();
+        return new AdvancementHolder(
+                id,
+                new Advancement(
+                        parentId != null ? Optional.of(parentId) : Optional.empty(),
+                        Optional.of(display),
+                        AdvancementRewards.EMPTY,
+                        properties.criteria(),
+                        new AdvancementRequirements(properties.requirements()),
+                        false
+                )
+        );
+    }
 
+    private @NotNull MessagesAchievement getMessage(@Nullable Player player) {
         List<String> titles;
         List<String> description;
 
@@ -166,30 +202,7 @@ public abstract class BaseAchievement<T extends Event> implements Listener {
             titles = List.of("default");
             description = List.of("default");
         }
-        DisplayInfo display = new DisplayInfo(
-                CraftItemStack.asNMSCopy(new ItemStack(material)),
-                PaperAdventure.asVanilla(GlobalUtils.chatColorLegacyToComponent(titles.get(random.nextInt(titles.size())))),
-                PaperAdventure.asVanilla(GlobalUtils.chatColorLegacyToComponent(description.get(random.nextInt(titles.size())))),
-                Optional.of(background),
-                type,
-                toas,
-                true,
-                false
-        );
-        if (node != null)
-            display.setLocation(node.advancement().display().get().getX(), node.advancement().display().get().getY());
-        BaseProperties properties = createProperties();
-        return new AdvancementHolder(
-                id,
-                new Advancement(
-                        parentId != null ? Optional.of(parentId) : Optional.empty(),
-                        Optional.of(display),
-                        AdvancementRewards.EMPTY,
-                        properties.criteria(),
-                        new AdvancementRequirements(properties.requirements()),
-                        false
-                )
-        );
+        return new MessagesAchievement(titles, description);
     }
 
     @Contract(" -> new")
@@ -275,7 +288,7 @@ public abstract class BaseAchievement<T extends Event> implements Listener {
             progress.getProgress().getRemainingCriteria().forEach(requirements::add);
             requirements.forEach(s -> progress.getProgress().grantProgress(s));
         }
-        AviaTerraCore.enqueueTaskAsynchronously(() -> atp.getPlayerDataFile().saveData());
+        saveData(atp);
         if (b) rewards(player);
         sendAchievement(player, progress.getProgress(), b);
     }
@@ -291,23 +304,53 @@ public abstract class BaseAchievement<T extends Event> implements Listener {
                 progressContinuos.setValue(0);
             }
         }
-        AviaTerraCore.enqueueTaskAsynchronously(() -> atp.getPlayerDataFile().saveData());
+        saveData(atp);
         sendAchievement(player, progress.getProgress(), true);
     }
 
     public void sendAchievement(Player player, AdvancementProgress progress, boolean toas) {
-        ServerPlayer nmsPlayer = ((CraftPlayer) player).getHandle();
-        DisplayInfo displayInfo = advancements.value().display().get();
-        nmsPlayer.connection.send(new ClientboundUpdateAdvancementsPacket(
-                false,
-                List.of(createAdvancement(displayInfo.getIcon().asBukkitCopy().getType(),
-                        player,
-                        displayInfo.getType(),
-                        toas)
-                ),
-                Set.of(),
-                Map.of(id, progress)
-        ));
+        AviaTerraCore.enqueueTaskAsynchronously(() -> {
+            ServerPlayer nmsPlayer = ((CraftPlayer) player).getHandle();
+            DisplayInfo displayInfo = advancements.value().display().orElseThrow();
+            if (toas && progress.isDone()) {
+                String color;
+                Message message;
+                switch (displayInfo.getType()){
+                    case CHALLENGE ->{
+                        color = "light_purple";
+                        message = Message.EVENT_CHAT_ADVANCEMENT_CHALLENGE;
+                    }
+                    case GOAL -> {
+                        color = "aqua";
+                        message = Message.EVENT_CHAT_ADVANCEMENT_GOAL;
+                    }
+                    default -> {
+                        color = "green";
+                        message = Message.EVENT_CHAT_ADVANCEMENT_TASK;
+                    }
+                }
+                Random random = new Random();
+                MessagesAchievement messagesAchievement = getMessage(player);
+                for (Player sender : Bukkit.getOnlinePlayers()){
+                    Component component = MessagesManager.applyFinalProprieties(String.format("<dark_gray>[</dark_gray><gold>★</gold><dark_gray>]</dark_gray> " + message.getMessage(sender),
+                            "<|<click:SUGGEST_COMMAND:/w " + player.getName() + ">" + AviaTerraCore.getMiniMessage().serialize(Objects.requireNonNullElse(player.customName(), player.name())) + "</click>|>",
+                            "<" + color + ">[<hover:show_text:'<" + color + ">" + messagesAchievement.description().get(random.nextInt(messagesAchievement.description().size())) + "</" + color + ">'>" + messagesAchievement.title().get(random.nextInt(messagesAchievement.title().size())) + "</hover>]</" + color + ">"
+                    ), TypeMessages.INFO, CategoryMessages.PRIVATE, false);
+                    sender.sendMessage(component);
+                }
+            }
+            AdvancementHolder advancementHolder = createAdvancement(displayInfo.getIcon().asBukkitCopy().getType(),
+                    player,
+                    displayInfo.getType(),
+                    toas
+            );
+            nmsPlayer.connection.send(new ClientboundUpdateAdvancementsPacket(
+                    false,
+                    List.of(advancementHolder),
+                    Set.of(),
+                    Map.of(id, progress)
+            ));
+        });
     }
 
     @SuppressWarnings("OptionalGetWithoutIsPresent")

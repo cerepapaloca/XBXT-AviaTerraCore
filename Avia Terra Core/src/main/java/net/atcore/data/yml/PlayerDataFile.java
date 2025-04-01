@@ -32,6 +32,7 @@ public class PlayerDataFile extends FileYaml {
         if (csHome == null) return;
         atp.getPlayersBLock().clear();
         atp.getHomes().clear();
+        atp.clearAchievementProgress();
         for (String key : csHome.getKeys(false)) {
             String worldName = csHome.getString(key + ".world");
             double x = csHome.getDouble(key + ".x");
@@ -52,7 +53,6 @@ public class PlayerDataFile extends FileYaml {
                 if (raw instanceof String name) atp.getPlayersBLock().add(name);
             }
         }
-        atp.clearAchievementProgress();
         ConfigurationSection csAchievement = fileYaml.getConfigurationSection("achievements");
         if (csAchievement == null) return;
         for (BaseAchievement<?> achievement : BaseAchievement.getAllAchievement()) {
@@ -65,6 +65,7 @@ public class PlayerDataFile extends FileYaml {
                 if (raw == null) continue;
                 if (raw instanceof String s) progressAchievement.grantProgress(s);
             }
+
             if (fileYaml.isDouble(path + ".progress")){
                 atp.addProgress(new AviaTerraPlayer.DataProgressContinuos(achievement.id, progressAchievement, fileYaml.getInt(path + ".progress")));
             }else {

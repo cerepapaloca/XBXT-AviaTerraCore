@@ -61,11 +61,11 @@ public class AviaTerraPlayer {
     private final ArmamentPlayer armamentPlayer = new ArmamentPlayer(this);
     private final UUID uuid;
     private final String realName;
-    private final Player player;
     private final UUID realUuid;
     private final List<TpaCommand.TpaRequest> ListTpa = new ArrayList<>();
     private final HashMap<String, Location> homes = new HashMap<>();
     private final HashMap<ResourceLocation, DataProgress> achievementProgress = new HashMap<>();
+    private Player player;
 
     /**
      * Se usa el nombre del jugador que le da el servidor
@@ -129,11 +129,7 @@ public class AviaTerraPlayer {
 
     @Contract(pure = true)
     public Player getPlayer(){
-        if (Config.getServerMode() == ServerMode.ONLINE_MODE) {
-            return Objects.requireNonNullElse(Bukkit.getPlayer(uuid), player);
-        }else {
-            return GlobalUtils.getPlayer(uuid);
-        }
+        return Objects.requireNonNullElse(Bukkit.getPlayer(uuid), player);
     }
 
     public void unloadPlayer(){
@@ -145,9 +141,13 @@ public class AviaTerraPlayer {
     public static void addPlayer(Player player){
         if (!AVIA_TERRA_PLAYERS.containsKey(player.getUniqueId())){
             AVIA_TERRA_PLAYERS.put(player.getUniqueId(), new AviaTerraPlayer(player));
+        }else {
+            AVIA_TERRA_PLAYERS.get(player.getUniqueId()).updatePlayer(player);
         }
+    }
 
-        //AVIA_TERRA_PLAYERS.get(player.getUniqueId()).joinEvent(player);
+    public void updatePlayer(Player player){
+        this.player = player;
     }
 
     public void updateView(Player player) {

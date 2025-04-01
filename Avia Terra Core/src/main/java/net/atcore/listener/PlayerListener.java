@@ -1,8 +1,10 @@
 package net.atcore.listener;
 
+import io.papermc.paper.advancement.AdvancementDisplay;
 import net.atcore.AviaTerraCore;
 import net.atcore.Config;
 import net.atcore.armament.ArmamentActions;
+import net.atcore.aviaterraplayer.AviaTerraPlayer;
 import net.atcore.command.CommandManager;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.Message;
@@ -15,7 +17,9 @@ import net.atcore.security.login.LoginManager;
 import net.atcore.utils.GlobalConstantes;
 import net.atcore.utils.GlobalUtils;
 import net.atcore.utils.RangeType;
+import net.kyori.adventure.text.Component;
 import net.luckperms.api.node.types.InheritanceNode;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -30,6 +34,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import static net.atcore.armament.BaseWeaponTarkov.checkReload;
@@ -153,6 +158,37 @@ public class PlayerListener implements Listener {
                     "</gradient>";
             MessagesManager.sendTitle(player,"Nuevo Rango", s, 20, 60, 40, TypeMessages.INFO);
         }
+    }
+
+    @EventHandler
+    public void onAchievement(PlayerAdvancementDoneEvent event) {
+        Player player = event.getPlayer();
+        AdvancementDisplay display = event.getAdvancement().getDisplay();
+        if (display == null) return;
+        String color;
+        Message message;
+        switch (display.frame()){
+            case CHALLENGE ->{
+                color = "light_purple";
+                message = Message.EVENT_CHAT_ADVANCEMENT_CHALLENGE;
+            }
+            case GOAL -> {
+                color = "aqua";
+                message = Message.EVENT_CHAT_ADVANCEMENT_GOAL;
+            }
+            default -> {
+                color = "green";
+                message = Message.EVENT_CHAT_ADVANCEMENT_TASK;
+            }
+        }
+        for (Player sender : Bukkit.getOnlinePlayers()){
+            Component component = MessagesManager.applyFinalProprieties(String.format("<dark_gray>[</dark_gray><gold>★</gold><dark_gray>]</dark_gray> " + message.getMessage(sender),
+                    "<|<click:SUGGEST_COMMAND:/w " + player.getName() + ">" + AviaTerraCore.getMiniMessage().serialize(Objects.requireNonNullElse(player.customName(), player.name())) + "</click>|>",
+                    "<" + color + ">[<hover:show_text:'<" + color + ">" + AviaTerraCore.getMiniMessage().serialize(display.description()) + "</" + color + ">'>" + AviaTerraCore.getMiniMessage().serialize(display.title()) + "</hover>]</" + color + ">"
+            ), TypeMessages.INFO, CategoryMessages.PRIVATE, false);
+            sender.sendMessage(component);
+        }
+        event.message(null);
     }
 
     @EventHandler
