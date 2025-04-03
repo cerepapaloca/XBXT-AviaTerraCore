@@ -113,7 +113,10 @@ public class JoinAndQuitListener implements Listener {
             @Override
             public void run() {
                 GlobalUtils.addRangeVote(player);
-                AviaTerraCore.enqueueTaskAsynchronously(() -> BaseAchievement.sendAllAchievement(player));
+                if (LoginManager.getDataLogin(player).hasSession()) AviaTerraCore.enqueueTaskAsynchronously(() -> {
+                    BaseAchievement.sendAllAchievement(player);
+                    player.customName(GlobalUtils.chatColorLegacyToComponent(AviaTerraPlayer.getPlayer(player).getNameColor()));
+                });
             }
         }.runTaskLater(AviaTerraCore.getInstance(), 20L*2);
 

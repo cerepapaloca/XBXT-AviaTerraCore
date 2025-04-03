@@ -1,5 +1,6 @@
 package net.atcore.achievement.achievements;
 
+import net.atcore.AviaTerraCore;
 import net.atcore.achievement.BaseAchievementSimple;
 import net.atcore.achievement.SynchronouslyEvent;
 import net.atcore.listener.DeathListener;
@@ -20,7 +21,7 @@ public class KillPlayerAchievement extends BaseAchievementSimple<PlayerDeathEven
         LivingEntity killer = player.getKiller();
         if (killer == null) killer = DeathListener.getKillerByDamage(player);
         if (killer == null) return;
-        if (killer instanceof Player playerKiller) grantAdvanced(playerKiller, null);
+        if (killer instanceof Player playerKiller) AviaTerraCore.enqueueTaskAsynchronously(() -> grantAdvanced(playerKiller, null));
     }
 
     @Override

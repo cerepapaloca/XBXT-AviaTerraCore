@@ -50,7 +50,6 @@ public class AviaTerraPlayer {
             //DataSection.getCacheLimboFlies().getConfigFile(uuid.toString(), true);
             updateView(player);
             playerDataFile.loadData();
-            player.customName(GlobalUtils.chatColorLegacyToComponent(nameColor));
         });
     }
 

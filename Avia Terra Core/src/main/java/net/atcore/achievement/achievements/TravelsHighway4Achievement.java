@@ -8,7 +8,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerMoveEvent;
 
-public class TravelsHighway4Achievement extends BaseAchievementContinuous<PlayerMoveEvent> implements SynchronouslyEvent {
+public class TravelsHighway4Achievement extends BaseAchievementContinuous<PlayerMoveEvent> {
     public TravelsHighway4Achievement() {
         super(Material.NETHERITE_BOOTS, TravelsHighway3Achievement.class, AdvancementType.CHALLENGE);
     }

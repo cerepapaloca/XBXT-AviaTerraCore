@@ -30,7 +30,6 @@ public class AllShulkerBoxAchievement extends BaseAchievementStep<PlayerInventor
             if (item == null || item.getType() == Material.AIR) continue;
             if (item.getType().name().endsWith("SHULKER_BOX")) {
                 grantAdvanced(event.getPlayer(), item.getType().name());
-                return;
             }
         }
     }

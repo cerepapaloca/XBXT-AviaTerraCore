@@ -2,6 +2,8 @@ package net.atcore.achievement;
 
 import net.atcore.Section;
 import net.atcore.achievement.achievements.*;
+import net.minecraft.world.entity.animal.TropicalFish;
+import org.bukkit.Bukkit;
 
 public class AchievementSection implements Section {
     @Override

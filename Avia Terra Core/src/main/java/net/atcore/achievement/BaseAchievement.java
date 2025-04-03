@@ -7,7 +7,9 @@ import net.atcore.aviaterraplayer.AviaTerraPlayer;
 import net.atcore.data.DataSection;
 import net.atcore.data.yml.MessageFile;
 import net.atcore.messages.*;
+import net.atcore.security.login.LoginManager;
 import net.atcore.utils.GlobalUtils;
+import net.dv8tion.jda.api.entities.BulkBanResponse;
 import net.kyori.adventure.text.Component;
 import net.minecraft.advancements.*;
 import net.minecraft.advancements.critereon.ImpossibleTrigger;
@@ -16,6 +18,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
@@ -27,7 +30,6 @@ import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.EventExecutor;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -40,6 +42,7 @@ public abstract class BaseAchievement<T extends Event> implements Listener {
 
     private static final HashMap<ResourceLocation, BaseAchievement<? extends Event>> REGISTERED_ACHIEVEMENT = new HashMap<>();
     private static final ResourceLocation ROOT = ResourceLocation.fromNamespaceAndPath(AviaTerraCore.getInstance().getName().toLowerCase(), "anarchy/root");
+    public static final HashMap<Class<? extends Event>, List<BaseAchievement<? extends Event>>> EVENTS_REGISTERED = new HashMap<>();
 
     protected final EventExecutor eventExecutor;
     private Class<T> eventClass;
@@ -51,6 +54,7 @@ public abstract class BaseAchievement<T extends Event> implements Listener {
     public final ResourceLocation parentId;
     @NotNull
     public final ResourceLocation id;
+    public final boolean isSyn;
     private AdvancementNode node = null;
 
 
@@ -66,7 +70,8 @@ public abstract class BaseAchievement<T extends Event> implements Listener {
                 ) : ROOT;
         advancements = createAdvancement(material, null, advancementType, true);
         Type type;
-        if (this instanceof SynchronouslyEvent) {
+        isSyn = this instanceof SynchronouslyEvent;
+        if (isSyn) {
             eventExecutor = (listener, event) -> {
                 Player player = null;
                 if (event instanceof PlayerEvent playerEvent) {
@@ -74,6 +79,7 @@ public abstract class BaseAchievement<T extends Event> implements Listener {
                 }else if (event instanceof InventoryEvent inventoryEvent) {
                     player = (Player) inventoryEvent.getView().getPlayer();
                 }if (player != null){
+                    if (!LoginManager.getDataLogin(player).hasSession()) return;
                     AviaTerraPlayer.DataProgress progress = AviaTerraPlayer.getPlayer(player).getAchievementProgress().get(id);
                     if (progress != null && progress.getProgress().isDone()) return;
                 }
@@ -84,33 +90,49 @@ public abstract class BaseAchievement<T extends Event> implements Listener {
             };
         }else {
             eventExecutor = (listener, event) -> {
-                Player player = null;
+                Player player;
                 if (event instanceof PlayerEvent playerEvent) {
                     player = playerEvent.getPlayer();
                 }else if (event instanceof InventoryEvent inventoryEvent) {
                     player = (Player) inventoryEvent.getView().getPlayer();
-                }if (player != null){
-                    AviaTerraPlayer.DataProgress progress = AviaTerraPlayer.getPlayer(player).getAchievementProgress().get(id);
-                    if (progress != null && progress.getProgress().isDone()) return;
+                } else {
+                    player = null;
                 }
+
                 AviaTerraCore.enqueueTaskAsynchronously(() -> {
                     if (eventClass.isInstance(event)) {
                         T t = eventClass.cast(event);
-                        onEvent(t);
+                        for (BaseAchievement<? extends Event> achievement : EVENTS_REGISTERED.getOrDefault(t.getClass(), List.of())) {
+                            if (player != null){
+                                AviaTerraPlayer.DataProgress progress = AviaTerraPlayer.getPlayer(player).getAchievementProgress().get(achievement.id);
+                                if (progress != null && progress.getProgress().isDone()) continue;
+                            }
+                            try {
+                                ((BaseAchievement<T>) achievement).onEvent(t);
+                            }catch (ClassCastException e){
+                                MessagesManager.sendWaringException("Error a hacer un cast, En los logros", e);
+                            }
+                        }
                     }
                 });
             };
         }
-
         try {
             type = ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
             eventClass = (Class<T>) TypeToken.get(type).getRawType();
-            Bukkit.getPluginManager().registerEvent(eventClass, this, EventPriority.MONITOR, eventExecutor, AviaTerraCore.getInstance());
+            if (EVENTS_REGISTERED.containsKey(eventClass)) {
+                EVENTS_REGISTERED.get(eventClass).add(this);
+            }else {
+                Bukkit.getPluginManager().registerEvent(eventClass, this, EventPriority.MONITOR, eventExecutor, AviaTerraCore.getInstance());
+                if (!isSyn) EVENTS_REGISTERED.put(eventClass, new ArrayList<>(List.of(this)));
+            }
         } catch (ClassCastException e) {
             eventClass = null;
         }
         REGISTERED_ACHIEVEMENT.put(id, this);
     }
+
+    public abstract void onEvent(T event);
 
     private static AdvancementNode setParent(AdvancementNode advancement, AdvancementNode parent) {
         List<AdvancementNode> children = new ArrayList<>();
@@ -187,13 +209,13 @@ public abstract class BaseAchievement<T extends Event> implements Listener {
         );
     }
 
-    private @NotNull MessagesAchievement getMessage(@Nullable Player player) {
+    private @NotNull MessagesAchievement getMessage(@Nullable CommandSender sender) {
         List<String> titles;
         List<String> description;
 
         if (!AviaTerraCore.isStarting()) {
             MessageFile messageFile;
-            if (player != null) {
+            if (sender instanceof Player player) {
                 messageFile = (MessageFile) DataSection.getMessagesLocaleFile().getConfigFile(LocaleAvailable.getLocate(player.locale()).name().toLowerCase(), false);
             } else {
                 messageFile = (MessageFile) DataSection.getMessagesLocaleFile().getConfigFile(MessagesManager.DEFAULT_LOCALE_PRIVATE.name().toLowerCase(), false);
@@ -233,13 +255,15 @@ public abstract class BaseAchievement<T extends Event> implements Listener {
     protected record BaseProperties(Map<String, Criterion<?>> criteria, List<List<String>> requirements) {
     }
 
-    public abstract void onEvent(T event);
+
 
     public abstract void rewards(Player player);
 
     protected abstract int getMetaProgress();
 
     protected abstract void onProgressAdvanced(AdvancementProgress progress, Object data);
+
+    private final HashSet<UUID> sendTaks = new HashSet<>();
 
     /**
      * Das un avance en el logro en caso de cumplir con todos los requisitos se completaría
@@ -250,9 +274,11 @@ public abstract class BaseAchievement<T extends Event> implements Listener {
     protected void grantAdvanced(Player player, Object data) {
         AviaTerraPlayer atp = AviaTerraPlayer.getPlayer(player);
         AviaTerraPlayer.DataProgress progress = atp.getProgress(this);
+        // Si el logro está completo no se hace nada
         if (progress.getProgress().isDone()) {
             return;
         } else {
+            // Se le añade el progreso
             if ((this instanceof BaseAchievementContinuous<?> achievementContinuous) && (progress instanceof AviaTerraPlayer.DataProgressContinuos progressContinuos)) {
                 if (achievementContinuous.getMetaValue() <= progressContinuos.getValue())  onProgressAdvanced(progress.getProgress(), data);
             } else {
@@ -260,25 +286,30 @@ public abstract class BaseAchievement<T extends Event> implements Listener {
             }
             saveData(atp);
         }
+        // Si el logro se completó por esta acción se le envía él toas
         if (progress.getProgress().isDone()) {
             sendAchievement(player, progress.getProgress(), true);
             rewards(player);
         }else {
-            sendAchievement(player, progress.getProgress(), false);
+            // Estos tipos de logros, solo se requiere un seguimiento a tiempo real
+            if ((this instanceof BaseAchievementStep<?>) || (this instanceof BaseAchievementProgressive<?>)) sendAchievement(player, progress.getProgress(), false);
         }
     }
 
-    private final HashMap<AviaTerraPlayer, BukkitTask> taks = new HashMap<>();
+    private final HashSet<AviaTerraPlayer> saveTaks = new HashSet<>();
 
     public void saveData(AviaTerraPlayer player) {
-        if (!taks.containsKey(player)) {
-            taks.put(player, new BukkitRunnable() {
+        if (!saveTaks.contains(player)) {
+            saveTaks.add(player);
+            new BukkitRunnable() {
                 @Override
                 public void run() {
-                    AviaTerraCore.enqueueTaskAsynchronously(() -> player.getPlayerDataFile().saveData());
-                    taks.remove(player);
+                    AviaTerraCore.taskSynchronously(() -> {
+                        player.getPlayerDataFile().saveData();
+                        saveTaks.remove(player);
+                    });
                 }
-            }.runTaskLaterAsynchronously(AviaTerraCore.getInstance(), 40));
+            }.runTaskLater(AviaTerraCore.getInstance(), 40);
         }
     }
 
@@ -316,49 +347,50 @@ public abstract class BaseAchievement<T extends Event> implements Listener {
         sendAchievement(player, progress.getProgress(), true);
     }
 
+
     public void sendAchievement(Player player, AdvancementProgress progress, boolean toas) {
-        AviaTerraCore.enqueueTaskAsynchronously(() -> {
-            ServerPlayer nmsPlayer = ((CraftPlayer) player).getHandle();
-            DisplayInfo displayInfo = advancements.value().display().orElseThrow();
-            if (toas && progress.isDone()) {
-                String color;
-                Message message;
-                switch (displayInfo.getType()){
-                    case CHALLENGE ->{
-                        color = "light_purple";
-                        message = Message.EVENT_CHAT_ADVANCEMENT_CHALLENGE;
-                    }
-                    case GOAL -> {
-                        color = "aqua";
-                        message = Message.EVENT_CHAT_ADVANCEMENT_GOAL;
-                    }
-                    default -> {
-                        color = "green";
-                        message = Message.EVENT_CHAT_ADVANCEMENT_TASK;
-                    }
+        ServerPlayer nmsPlayer = ((CraftPlayer) player).getHandle();
+        DisplayInfo displayInfo = advancements.value().display().orElseThrow();
+        if (toas && progress.isDone()) {
+            String color;
+            Message message;
+            switch (displayInfo.getType()){
+                case CHALLENGE ->{
+                    color = "light_purple";
+                    message = Message.EVENT_CHAT_ADVANCEMENT_CHALLENGE;
                 }
-                Random random = new Random();
-                for (Player sender : Bukkit.getOnlinePlayers()){
-                    MessagesAchievement messagesAchievement = getMessage(sender);
-                    Component component = MessagesManager.applyFinalProprieties(String.format("<dark_gray>[</dark_gray><gold>★</gold><dark_gray>]</dark_gray> " + message.getMessage(sender),
-                            "<|<click:SUGGEST_COMMAND:/w " + player.getName() + ">" + AviaTerraCore.getMiniMessage().serialize(Objects.requireNonNullElse(player.customName(), player.name())) + "</click>|>",
-                            "<" + color + ">[<hover:show_text:'<" + color + ">" + messagesAchievement.description().get(random.nextInt(messagesAchievement.description().size())) + "</" + color + ">'>" + messagesAchievement.title().get(random.nextInt(messagesAchievement.title().size())) + "</hover>]</" + color + ">"
-                    ), TypeMessages.INFO, CategoryMessages.PRIVATE, false);
-                    sender.sendMessage(component);
+                case GOAL -> {
+                    color = "aqua";
+                    message = Message.EVENT_CHAT_ADVANCEMENT_GOAL;
+                }
+                default -> {
+                    color = "green";
+                    message = Message.EVENT_CHAT_ADVANCEMENT_TASK;
                 }
             }
-            AdvancementHolder advancementHolder = createAdvancement(displayInfo.getIcon().asBukkitCopy().getType(),
-                    player,
-                    displayInfo.getType(),
-                    toas
-            );
-            nmsPlayer.connection.send(new ClientboundUpdateAdvancementsPacket(
-                    false,
-                    List.of(advancementHolder),
-                    Set.of(),
-                    Map.of(id, progress)
-            ));
-        });
+            Random random = new Random();
+            List<CommandSender> senders = new ArrayList<>(Bukkit.getOnlinePlayers());
+            senders.add(Bukkit.getConsoleSender());
+            for (CommandSender sender : senders){
+                MessagesAchievement messagesAchievement = getMessage(sender);
+                Component component = MessagesManager.applyFinalProprieties(String.format("<dark_gray>[</dark_gray><gold>★</gold><dark_gray>]</dark_gray> " + message.getMessage(sender),
+                        "<click:SUGGEST_COMMAND:/w " + player.getName() + ">" + player.getName() + "</click>",
+                        "<" + color + ">[<hover:show_text:'<" + color + ">" + messagesAchievement.description().get(random.nextInt(messagesAchievement.description().size())) + "</" + color + ">'>" + messagesAchievement.title().get(random.nextInt(messagesAchievement.title().size())) + "</hover>]</" + color + ">"
+                ), TypeMessages.INFO, CategoryMessages.PRIVATE, false);
+                sender.sendMessage(component);
+            }
+        }
+        AdvancementHolder advancementHolder = createAdvancement(displayInfo.getIcon().asBukkitCopy().getType(),
+                player,
+                displayInfo.getType(),
+                toas
+        );
+        nmsPlayer.connection.send(new ClientboundUpdateAdvancementsPacket(
+                false,
+                List.of(advancementHolder),
+                Set.of(),
+                Map.of(id, progress)
+        ));
     }
 
     @SuppressWarnings("OptionalGetWithoutIsPresent")

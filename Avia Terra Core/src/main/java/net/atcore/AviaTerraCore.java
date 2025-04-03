@@ -37,10 +37,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.*;
 
 import static net.atcore.utils.RegisterManager.register;
@@ -228,8 +225,9 @@ public class AviaTerraCore extends JavaPlugin {
         if (!TASK_QUEUE.offer(new AviaRunnable(task, isHeavyProcess))){
             MessagesManager.logConsole("Error al añadir una tarea la cola", TypeMessages.ERROR);
         }
-        if (TASK_QUEUE.size() >= 10){
-            MessagesManager.logConsole(String.format("Hay <|%s|> tareas en cola, Hilo sobre cargador", TASK_QUEUE.size()), TypeMessages.WARNING);
+        if (TASK_QUEUE.size() >= 6){
+            MessagesManager.logConsole(String.format("Hay <|%s|> tareas en cola, Hilo sobre cargador \n" +
+                    Arrays.stream(Thread.currentThread().getStackTrace()).toList().get(3), TASK_QUEUE.size()), TypeMessages.WARNING);
         }
     }
 

@@ -6,6 +6,7 @@ import com.github.games647.craftapi.resolver.RateLimitException;
 import lombok.experimental.UtilityClass;
 import net.atcore.AviaTerraCore;
 import net.atcore.Config;
+import net.atcore.achievement.BaseAchievement;
 import net.atcore.data.sql.DataBaseRegister;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.Message;
@@ -187,10 +188,11 @@ public final class LoginManager {
         SessionData sessionData = new SessionData(player, StateLogins.CRACKED);//TODO: Cambiar si es un Cracked o un semi cracked
         sessionData.setEndTimeLogin(Config.getExpirationSession() + System.currentTimeMillis());
         loginData.setSession(sessionData);
-        Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> {
+        AviaTerraCore.taskSynchronously( () -> {
             loginData.getLimbo().restorePlayer(player);
             player.updateCommands();
         });
+        AviaTerraCore.enqueueTaskAsynchronously(() -> BaseAchievement.sendAllAchievement(player));
         player.playSound(player, Sound.ENTITY_PLAYER_LEVELUP, 0.4f, 1);
         new BukkitRunnable() {
             public void run() {

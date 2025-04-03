@@ -27,6 +27,6 @@ public class TravelsHighway2Achievement extends BaseAchievementContinuous<Player
 
     @Override
     public int getMetaValue() {
-        return 5_000;// renombrado
+        return 5_000;
     }
 }

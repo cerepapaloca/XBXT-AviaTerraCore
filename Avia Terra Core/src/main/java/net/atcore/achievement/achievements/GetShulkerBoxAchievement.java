@@ -9,7 +9,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-public class GetShulkerBoxAchievement extends BaseAchievementSimple<PlayerInventoryChangeEvent> implements SynchronouslyEvent {
+public class GetShulkerBoxAchievement extends BaseAchievementSimple<PlayerInventoryChangeEvent> {
     public GetShulkerBoxAchievement() {
         super(Material.SHULKER_BOX, RootAchievement.class, AdvancementType.TASK);
     }
