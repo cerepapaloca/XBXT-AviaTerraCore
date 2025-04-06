@@ -9,7 +9,6 @@ import net.atcore.data.yml.MessageFile;
 import net.atcore.messages.*;
 import net.atcore.security.login.LoginManager;
 import net.atcore.utils.GlobalUtils;
-import net.dv8tion.jda.api.entities.BulkBanResponse;
 import net.kyori.adventure.text.Component;
 import net.minecraft.advancements.*;
 import net.minecraft.advancements.critereon.ImpossibleTrigger;
@@ -104,6 +103,7 @@ public abstract class BaseAchievement<T extends Event> implements Listener {
                         T t = eventClass.cast(event);
                         for (BaseAchievement<? extends Event> achievement : EVENTS_REGISTERED.getOrDefault(t.getClass(), List.of())) {
                             if (player != null){
+                                if (!LoginManager.getDataLogin(player).hasSession()) return;
                                 AviaTerraPlayer.DataProgress progress = AviaTerraPlayer.getPlayer(player).getAchievementProgress().get(achievement.id);
                                 if (progress != null && progress.getProgress().isDone()) continue;
                             }
@@ -262,9 +262,7 @@ public abstract class BaseAchievement<T extends Event> implements Listener {
     protected abstract int getMetaProgress();
 
     protected abstract void onProgressAdvanced(AdvancementProgress progress, Object data);
-
-    private final HashSet<UUID> sendTaks = new HashSet<>();
-
+    
     /**
      * Das un avance en el logro en caso de cumplir con todos los requisitos se completaría
      * @param player el jugador que cometió el avance

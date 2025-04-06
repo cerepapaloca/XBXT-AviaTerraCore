@@ -11,6 +11,7 @@ import net.atcore.data.yml.CacheLimboFile;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
+import net.atcore.security.login.LoginManager;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -22,6 +23,7 @@ import org.bukkit.scheduler.BukkitTask;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -63,7 +65,8 @@ public class LimboData {
         if (gameMode == GameMode.SURVIVAL) player.setAllowFlight(false);
         CacheLimboFile cacheLimbo = (CacheLimboFile) DataSection.getCacheLimboFlies().getConfigFile(GlobalUtils.getRealUUID(player).toString(), false);
         AviaTerraCore.enqueueTaskAsynchronously(() -> cacheLimbo.setRestored(true));
-        cacheLimbo.removeLimbo();
+        LoginData login = LoginManager.getDataLogin(player);
+        login.setLimbo(null);
         if (packets != null) {
             for (PacketContainer packet : packets.stream().toList()) {
                 ProtocolLibrary.getProtocolManager().sendServerPacket(player, packet, true);

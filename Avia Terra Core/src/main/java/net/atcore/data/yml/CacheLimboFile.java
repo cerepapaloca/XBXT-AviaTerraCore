@@ -115,9 +115,4 @@ public class CacheLimboFile extends FileYaml {
         fileYaml.set("is-restored", isRestored);
         saveConfig();
     }
-
-    public void removeLimbo() {
-        LoginData login = LoginManager.getDataLogin(UUID.fromString(fileName.replace(".yml", "")));
-        login.setLimbo(null);
-    }
 }

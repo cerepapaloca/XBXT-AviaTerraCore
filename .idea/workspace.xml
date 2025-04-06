@@ -9,21 +9,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ea0f4ef9-10c7-4d19-b67e-e1a9046efa9d" name="Changes" comment="bugfix">
+    <list default="true" id="ea0f4ef9-10c7-4d19-b67e-e1a9046efa9d" name="Changes" comment="la versión que se me olvida">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/AviaTerraCore.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/AviaTerraCore.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/achievement/AchievementSection.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/achievement/AchievementSection.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/achievement/BaseAchievement.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/achievement/BaseAchievement.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/achievement/achievements/AllShulkerBoxAchievement.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/achievement/achievements/AllShulkerBoxAchievement.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/achievement/achievements/DeathByWhitherAchievement.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/achievement/achievements/DeathByWhitherAchievement.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/achievement/achievements/GetShulkerBoxAchievement.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/achievement/achievements/GetShulkerBoxAchievement.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/achievement/achievements/KillPlayerAchievement.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/achievement/achievements/KillPlayerAchievement.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/achievement/achievements/TravelsHighway2Achievement.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/achievement/achievements/TravelsHighway2Achievement.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/achievement/achievements/TravelsHighway4Achievement.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/achievement/achievements/TravelsHighway4Achievement.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/achievement/PlayerInventoryChangeEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/achievement/PlayerInventoryChangeEvent.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/aviaterraplayer/AviaTerraPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/aviaterraplayer/AviaTerraPlayer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/command/commnads/RegisterCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/command/commnads/RegisterCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/data/yml/CacheLimboFile.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/data/yml/CacheLimboFile.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/listener/JoinAndQuitListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/listener/JoinAndQuitListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/listener/PlayerListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/listener/PlayerListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/login/LoginManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/login/LoginManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/messages/DiscordBot.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/messages/DiscordBot.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/login/model/LimboData.java" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/java/net/atcore/security/login/model/LimboData.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Avia Terra Core/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/Avia Terra Core/src/main/resources/plugin.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -511,23 +507,12 @@
       <workItem from="1743431763524" duration="51853000" />
       <workItem from="1743520207841" duration="24844000" />
       <workItem from="1743612506638" duration="5371000" />
-      <workItem from="1743695624373" duration="15229000" />
-    </task>
-    <task id="LOCAL-00064" summary="se elimino mensajes de log en los mensajes localizados">
-      <option name="closed" value="true" />
-      <created>1740020553729</created>
-      <option name="number" value="00064" />
-      <option name="presentableId" value="LOCAL-00064" />
-      <option name="project" value="LOCAL" />
-      <updated>1740020553729</updated>
-    </task>
-    <task id="LOCAL-00065" summary="OffHandCommand para mejorar la experiencia de juego lo de bedrock">
-      <option name="closed" value="true" />
-      <created>1740089876401</created>
-      <option name="number" value="00065" />
-      <option name="presentableId" value="LOCAL-00065" />
-      <option name="project" value="LOCAL" />
-      <updated>1740089876401</updated>
+      <workItem from="1743695624373" duration="16945000" />
+      <workItem from="1743742929889" duration="593000" />
+      <workItem from="1743782190645" duration="6881000" />
+      <workItem from="1743792169209" duration="977000" />
+      <workItem from="1743893845154" duration="1548000" />
+      <workItem from="1743896062541" duration="8084000" />
     </task>
     <task id="LOCAL-00066" summary="Se añade el comando RemovePasswordCommand">
       <option name="closed" value="true" />
@@ -905,7 +890,23 @@
       <option name="project" value="LOCAL" />
       <updated>1743550046194</updated>
     </task>
-    <option name="localTasksCounter" value="113" />
+    <task id="LOCAL-00113" summary="mejoras en el redimiendo">
+      <option name="closed" value="true" />
+      <created>1743715805927</created>
+      <option name="number" value="00113" />
+      <option name="presentableId" value="LOCAL-00113" />
+      <option name="project" value="LOCAL" />
+      <updated>1743715805927</updated>
+    </task>
+    <task id="LOCAL-00114" summary="la versión que se me olvida">
+      <option name="closed" value="true" />
+      <created>1743716287033</created>
+      <option name="number" value="00114" />
+      <option name="presentableId" value="LOCAL-00114" />
+      <option name="project" value="LOCAL" />
+      <updated>1743716287033</updated>
+    </task>
+    <option name="localTasksCounter" value="115" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -923,8 +924,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="ups" />
-    <MESSAGE value="se eliminó el resource pack" />
     <MESSAGE value="se añadió un comando chistoso" />
     <MESSAGE value="add rango en el chat" />
     <MESSAGE value="add HomeListCommand" />
@@ -948,7 +947,9 @@
     <MESSAGE value="cambios menores" />
     <MESSAGE value="Más Logros, más más..." />
     <MESSAGE value="bugfix" />
-    <option name="LAST_COMMIT_MESSAGE" value="bugfix" />
+    <MESSAGE value="mejoras en el redimiendo" />
+    <MESSAGE value="la versión que se me olvida" />
+    <option name="LAST_COMMIT_MESSAGE" value="la versión que se me olvida" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 import net.atcore.achievement.AchievementSection;
 import net.atcore.armament.ArmamentSection;
-import net.atcore.aviaterraplayer.AviaTerraPlayer;
 import net.atcore.command.CommandSection;
 import net.atcore.data.DataSection;
 import net.atcore.data.sql.DataBaseRegister;
@@ -18,6 +17,8 @@ import net.atcore.messages.TypeMessages;
 import net.atcore.moderation.ModerationSection;
 import net.atcore.placeholder.PlaceHolderSection;
 import net.atcore.security.SecuritySection;
+import net.atcore.security.login.LoginManager;
+import net.atcore.security.login.model.LoginData;
 import net.atcore.utils.AviaRunnable;
 import net.atcore.utils.GlobalUtils;
 import net.atcore.utils.RegisterManager;
@@ -28,7 +29,6 @@ import net.luckperms.api.LuckPerms;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.PluginCommand;
-import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -137,11 +137,29 @@ public class AviaTerraCore extends JavaPlugin {
     @Override
     public void onDisable() {
         isStopping = true;
+        // Borra a los jugadores cracked y semi cracked que no pudieron registrarse para evitar tener jugadores fantasmas
         DataSection.getConfigFile().saveActiveTime();
         for (Section section : RegisterManager.sections){
             section.disable();
         }
         LIST_BROADCAST.clear();
+        LIST_MOTD.clear();
+        for (LoginData data : LoginManager.getDataLogin()){
+            // Cuidado con esta condición por qué puede borrar todas la cuentas
+            if (data.getRegister().isTemporary()){
+                DataBaseRegister.removeRegister(data.getRegister().getUsername(), "Servidor (EL registro es temporal)");
+                LoginManager.removeDataLogin(data.getRegister().getUsername());
+                /*if (!Service.removeStatsPlayer(player.getUniqueId())){
+                    MessagesManager.logConsole(String.format("Error al borrar las stats del jugador <|%s|>", player.getName()), TypeMessages.WARNING);
+                }
+                if (!AviaTerraPlayer.getPlayer(player).getPlayerDataFile().getFile().delete()){
+                    MessagesManager.logConsole(String.format("Error al borrar ATPF del jugador <|%s|>", player.getName()), TypeMessages.WARNING);
+                }
+                if (!Service.removePlayerData(player.getUniqueId())){
+                    MessagesManager.logConsole(String.format("Error al borrar PlayerData del jugador <|%s|>", player.getName()), TypeMessages.WARNING);
+                }*/
+            }
+        }
         if (DiscordBot.stateTasks != null) DiscordBot.stateTasks.cancel();
         getOnlinePlayers().forEach(player -> {
             DataBaseRegister.checkRegister(player, GlobalUtils.getRealUUID(player));
@@ -225,7 +243,7 @@ public class AviaTerraCore extends JavaPlugin {
         if (!TASK_QUEUE.offer(new AviaRunnable(task, isHeavyProcess))){
             MessagesManager.logConsole("Error al añadir una tarea la cola", TypeMessages.ERROR);
         }
-        if (TASK_QUEUE.size() >= 6){
+        if (TASK_QUEUE.size() >= 20){
             MessagesManager.logConsole(String.format("Hay <|%s|> tareas en cola, Hilo sobre cargador \n" +
                     Arrays.stream(Thread.currentThread().getStackTrace()).toList().get(3), TASK_QUEUE.size()), TypeMessages.WARNING);
         }

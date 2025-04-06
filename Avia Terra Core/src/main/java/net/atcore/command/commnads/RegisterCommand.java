@@ -38,6 +38,7 @@ public class RegisterCommand extends BaseCommand {
     public void execute(CommandSender sender, String[] args) {
         if (sender instanceof Player player){
             LoginData loginData = LoginManager.getDataLogin(player);
+            if (loginData == null) return;
             if (loginData.getRegister().getPasswordShaded() == null){
                 if (loginData.getRegister().getStateLogins() != StateLogins.PREMIUM || Config.getServerMode().equals(ServerMode.OFFLINE_MODE)){
                     if (args.length >= 2){

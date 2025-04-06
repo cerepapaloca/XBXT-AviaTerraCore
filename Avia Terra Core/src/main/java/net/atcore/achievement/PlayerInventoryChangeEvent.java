@@ -49,7 +49,7 @@ public class PlayerInventoryChangeEvent extends InventoryEvent {
                     }
                 }
             }
-        }.runTaskTimer(AviaTerraCore.getInstance(), 0, 1); // Cada Tick
+        }.runTaskTimerAsynchronously(AviaTerraCore.getInstance(), 0, 1); // Cada Tick
     }
 
     private static int hashInventory(Inventory inventory) {

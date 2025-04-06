@@ -116,7 +116,7 @@ public class DiscordBot extends ListenerAdapter{
             Component component = MessagesManager.applyFinalProprieties(String.format(
                     MessagesManager.PREFIX_CHAT_DISCORD + format.getMessageLocaleDefault(),
                     member.getColor() == null ? "<#AAAAAA>" + member.getUser().getGlobalName() :
-                            "<" + GlobalUtils.javaColorToStringHex(member.getColor()) + ">" + member.getUser().getGlobalName(),
+                            "<" + GlobalUtils.javaColorToStringHex(member.getColor()) + ">" + (member.getUser().getGlobalName() != null ? member.getUser().getGlobalName() : member.getUser().getName()),
                     "<" + NamedTextColor.GRAY.asHexString() + ">" + rowContent
             ), TypeMessages.GENERIC, CategoryMessages.PRIVATE, false);
             Component roles = Component.text("Roles: ");

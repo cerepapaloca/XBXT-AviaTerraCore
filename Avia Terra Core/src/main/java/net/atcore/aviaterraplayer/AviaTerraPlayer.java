@@ -45,6 +45,7 @@ public class AviaTerraPlayer {
         this.realName = GlobalUtils.getRealName(player);
         this.realUuid = GlobalUtils.getRealUUID(player);
         if (TASKS_UNLOAD.containsKey(uuid)) TASKS_UNLOAD.get(uuid).cancel();
+        nameColor = null;
         AviaTerraCore.enqueueTaskAsynchronously(() -> {
             this.playerDataFile = (PlayerDataFile) DataSection.getPlayersDataFiles().getConfigFile(uuid.toString(), true);
             //DataSection.getCacheLimboFlies().getConfigFile(uuid.toString(), true);
@@ -71,7 +72,7 @@ public class AviaTerraPlayer {
      * Se usa el nombre del jugador que le da el servidor
      */
     private final HashSet<String> playersBLock = new HashSet<>();
-    private String nameColor = null;
+    private String nameColor;
     private PlayerDataFile playerDataFile;
 
     private InventorySection inventorySection = null;

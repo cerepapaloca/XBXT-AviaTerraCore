@@ -32,14 +32,14 @@ import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
 
 import static net.atcore.security.login.LoginManager.onEnteringServer;
 
 public class JoinAndQuitListener implements Listener {
+
+    private final Set<UUID> uniquePlayers = new HashSet<>();
 
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
@@ -59,6 +59,7 @@ public class JoinAndQuitListener implements Listener {
         BukkitTask task = new BukkitRunnable() {
             @Override
             public void run() {
+                uniquePlayers.remove(player.getUniqueId());
                 atp.unloadPlayer();
             }
         }.runTaskLater(AviaTerraCore.getInstance(), 20*60*60);
@@ -67,23 +68,6 @@ public class JoinAndQuitListener implements Listener {
         if (LoginManager.getDataLogin(player) != null) {// si le llega a borrar el registro
             UUID uuid = GlobalUtils.getRealUUID(player);
             AviaTerraCore.enqueueTaskAsynchronously(() -> DataBaseRegister.checkRegister(player, uuid));
-
-            // Borra a los jugadores cracked y semi cracked que no pudieron registrarse para evitar tener jugadores fantasmas
-            if (LoginManager.getDataLogin(player).getRegister().isTemporary()){
-                AviaTerraCore.enqueueTaskAsynchronously(() -> {
-                    LoginManager.removeDataLogin(GlobalUtils.getRealName(player));
-                    DataBaseRegister.removeRegister(player.getName(), "Servidor (EL registro es temporal)");
-                    /*if (!Service.removeStatsPlayer(player.getUniqueId())){
-                        MessagesManager.logConsole(String.format("Error al borrar las stats del jugador <|%s|>", player.getName()), TypeMessages.WARNING);
-                    }
-                    if (!AviaTerraPlayer.getPlayer(player).getPlayerDataFile().getFile().delete()){
-                        MessagesManager.logConsole(String.format("Error al borrar ATPF del jugador <|%s|>", player.getName()), TypeMessages.WARNING);
-                    }
-                    if (!Service.removePlayerData(player.getUniqueId())){
-                        MessagesManager.logConsole(String.format("Error al borrar PlayerData del jugador <|%s|>", player.getName()), TypeMessages.WARNING);
-                    }*/
-                });
-            }
         }
 
         List<UUID> UUIDPlayers = List.copyOf(AviaTerraPlayer.getPlayer(player).getModerationPlayer().getManipulatorInventoryPlayer());
@@ -108,21 +92,24 @@ public class JoinAndQuitListener implements Listener {
             MessagesManager.sendString(sender, String.format(Message.EVENT_JOIN.getMessage(sender), event.getPlayer().getName()), Message.EVENT_JOIN.getTypeMessages(), false);
         }
         onEnteringServer(player);
+        AviaTerraCore.enqueueTaskAsynchronously(() -> {
+            if (AviaTerraPlayer.getPlayer(player).getNameColor() == null) return;
+            player.displayName(GlobalUtils.chatColorLegacyToComponent(AviaTerraPlayer.getPlayer(player).getNameColor()));
+        });
 
         new BukkitRunnable() {
             @Override
             public void run() {
-                GlobalUtils.addRangeVote(player);
-                if (LoginManager.getDataLogin(player).hasSession()) AviaTerraCore.enqueueTaskAsynchronously(() -> {
+                if (LoginManager.getDataLogin(player) != null && LoginManager.getDataLogin(player).hasSession()) AviaTerraCore.enqueueTaskAsynchronously(() -> {
                     BaseAchievement.sendAllAchievement(player);
-                    player.customName(GlobalUtils.chatColorLegacyToComponent(AviaTerraPlayer.getPlayer(player).getNameColor()));
+                    GlobalUtils.addRangeVote(player);
                 });
             }
         }.runTaskLater(AviaTerraCore.getInstance(), 20L*2);
 
 
-
-        if (LoginManager.getDataLogin(player).getRegister().isTemporary()) {
+        if (LoginManager.getDataLogin(player).getRegister().isTemporary() && !uniquePlayers.contains(player.getUniqueId())) {
+            uniquePlayers.add(player.getUniqueId());
             sendEmbed(player, Color.YELLOW, "%s Se unió por primera vez");// TODO: Hay que reglar eso
         }else {
             sendEmbed(player, Color.GREEN, "%s Se unió al servidor");
