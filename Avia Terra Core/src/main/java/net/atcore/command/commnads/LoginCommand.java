@@ -1,14 +1,14 @@
 package net.atcore.command.commnads;
 
 import net.atcore.AviaTerraCore;
-import net.atcore.command.BaseCommand;
 import net.atcore.command.ArgumentUse;
+import net.atcore.command.BaseCommand;
 import net.atcore.command.CommandVisibility;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
-import net.atcore.moderation.ban.ContextBan;
 import net.atcore.moderation.ModerationSection;
+import net.atcore.moderation.ban.ContextBan;
 import net.atcore.security.login.*;
 import net.atcore.security.login.model.LoginData;
 import net.atcore.utils.GlobalUtils;
@@ -19,7 +19,6 @@ import java.util.HashMap;
 import java.util.Objects;
 import java.util.UUID;
 
-import static net.atcore.messages.MessagesManager.logConsole;
 import static net.atcore.messages.MessagesManager.sendMessage;
 import static net.atcore.security.login.LoginManager.startPlaySessionCracked;
 

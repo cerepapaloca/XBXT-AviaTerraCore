@@ -7,7 +7,6 @@ import net.atcore.AviaTerraCore;
 import net.atcore.aviaterraplayer.AviaTerraPlayer;
 import net.atcore.command.commnads.TellCommand;
 import net.atcore.messages.*;
-import net.atcore.moderation.ChatModeration;
 import net.atcore.moderation.ban.ContextBan;
 import net.atcore.security.login.LoginManager;
 import net.atcore.utils.GlobalUtils;
