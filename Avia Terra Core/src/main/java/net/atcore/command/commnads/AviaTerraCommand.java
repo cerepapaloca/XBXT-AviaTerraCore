@@ -8,12 +8,15 @@ import net.atcore.command.CommandUtils;
 import net.atcore.command.CommandVisibility;
 import net.atcore.data.DataSection;
 import net.atcore.data.yml.MapArtFile;
+import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import net.atcore.security.login.ServerMode;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -125,12 +128,51 @@ public class AviaTerraCommand extends BaseTabCommand {
                     }
                 }
             }
+            case "thread" -> AviaTerraCore.enqueueTaskAsynchronously(() -> {
+                ArrayList<Double> sorted = new ArrayList<>(AviaTerraCore.telemetryTasks.stream().map(AviaTerraCore.telemetryTask::elapsedProcess).toList());
+                Collections.sort(sorted);
+
+                double min = sorted.getFirst();
+                double max = sorted.getLast();
+                double sum = 0;
+                for (double time : sorted) {
+                    sum += time;
+                }
+
+                double average = sum / sorted.size();
+                double p95 = sorted.get((int) (sorted.size() * 0.95) - 1); // percentil 95+
+                String s1 = String.format("Avg: <|%.2f|>ms | P95: <|%.2f|>ms | Min: <|%.2f|>ms | Max: <|%.2f|>ms",
+                        average, p95, min, max);
+
+                LinkedList<Integer> max10m = new LinkedList<>();
+                LinkedList<Integer> max1m = new LinkedList<>();
+                LinkedList<Integer> max10s = new LinkedList<>();
+
+                long currentTime = System.currentTimeMillis();
+                for (AviaTerraCore.telemetryTask telemetry : AviaTerraCore.telemetryTasks) {
+                    if (currentTime - 1000*10 < telemetry.currentTime()) max10s.add(telemetry.queue());
+                    if (currentTime - 1000*60 <  telemetry.currentTime()) max1m.add(telemetry.queue());
+                    if (currentTime - 1000*600 < telemetry.currentTime()) max10m.add(telemetry.queue());
+                }
+                Collections.sort(max10m);
+                Collections.sort(max1m);
+                Collections.sort(max10s);
+                StringBuilder sb = new StringBuilder();
+                for (int i = AviaTerraCore.amountTask.size(); i > 1; i--) {
+                    sb.append(" | ").append(((AviaTerraCore.amountTask.size() - i) +1) * 2).append("m: <|").append(AviaTerraCore.amountTask.get(i - 1)).append("|>");
+                }
+                String s2 = String.format("queue: <|%s|> " + "actual: <|%s|>" + sb,
+                        AviaTerraCore.taskQueue.size(), AviaTerraCore.currentAoumt.get());
+                String s3 = String.format("10s: <|%s|> | 1m: <|%s|> | 10m: <|%s|>"
+                        , max10s.isEmpty() ? 0 : max10m.getLast(),max1m.isEmpty() ? 0 : max1m.getLast(),max10m.isEmpty() ? 0 : max10m.getLast());
+                MessagesManager.sendString(sender, "Ultimas 200 Tareas:\n" + s1 + "\n" + s2 + "\n" + s3, TypeMessages.INFO);
+            });
         }
     }
 
     @Override
     public List<String> onTab(CommandSender sender, String[] args) {
-        String[] argsRoot = new String[]{"antiBot","reload", "mapArt", "serverMode", "checkBanPorIp", "purgaRangos","tiempoDeSession", "levelModerationChat"};
+        String[] argsRoot = new String[]{"antiBot","reload", "mapArt", "serverMode", "checkBanPorIp", "purgaRangos","tiempoDeSession", "levelModerationChat", "thread"};
         if (args.length >= 2) {
             switch (args[0].toLowerCase().replace("_","")) {
                 case "antiop", "antiilegalitems", "checkbanporip" -> {

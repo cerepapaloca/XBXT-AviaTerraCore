@@ -78,7 +78,7 @@ public abstract class BaseAchievement<T extends Event> implements Listener {
                 }else if (event instanceof InventoryEvent inventoryEvent) {
                     player = (Player) inventoryEvent.getView().getPlayer();
                 }if (player != null){
-                    if (!LoginManager.getDataLogin(player).hasSession()) return;
+                    if (LoginManager.getDataLogin(player) == null || !LoginManager.getDataLogin(player).hasSession()) return;
                     AviaTerraPlayer.DataProgress progress = AviaTerraPlayer.getPlayer(player).getAchievementProgress().get(id);
                     if (progress != null && progress.getProgress().isDone()) return;
                 }
@@ -103,7 +103,7 @@ public abstract class BaseAchievement<T extends Event> implements Listener {
                         T t = eventClass.cast(event);
                         for (BaseAchievement<? extends Event> achievement : EVENTS_REGISTERED.getOrDefault(t.getClass(), List.of())) {
                             if (player != null){
-                                if (!LoginManager.getDataLogin(player).hasSession()) return;
+                                if (LoginManager.getDataLogin(player) == null || !LoginManager.getDataLogin(player).hasSession()) return;
                                 AviaTerraPlayer.DataProgress progress = AviaTerraPlayer.getPlayer(player).getAchievementProgress().get(achievement.id);
                                 if (progress != null && progress.getProgress().isDone()) continue;
                             }
@@ -294,17 +294,17 @@ public abstract class BaseAchievement<T extends Event> implements Listener {
         }
     }
 
-    private final HashSet<AviaTerraPlayer> saveTaks = new HashSet<>();
+    private final HashSet<AviaTerraPlayer> saveTask = new HashSet<>();
 
     public void saveData(AviaTerraPlayer player) {
-        if (!saveTaks.contains(player)) {
-            saveTaks.add(player);
+        if (!saveTask.contains(player)) {
+            saveTask.add(player);
             new BukkitRunnable() {
                 @Override
                 public void run() {
                     AviaTerraCore.taskSynchronously(() -> {
                         player.getPlayerDataFile().saveData();
-                        saveTaks.remove(player);
+                        saveTask.remove(player);
                     });
                 }
             }.runTaskLater(AviaTerraCore.getInstance(), 40);

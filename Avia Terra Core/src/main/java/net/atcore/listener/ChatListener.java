@@ -59,6 +59,7 @@ public class ChatListener implements Listener {
         TellCommand.lastNamePlayer = sender.getName();
 
         for (Player target : Bukkit.getOnlinePlayers()) {//busca todos los jugadores
+            if (!LoginManager.getDataLogin(target).hasSession())return;
             AviaTerraPlayer atp = AviaTerraPlayer.getPlayer(target);
             // En caso de que tenga el jugador bloqueado no se le enviara el mensaje
             if (!atp.getPlayersBLock().contains(sender.getName())) {

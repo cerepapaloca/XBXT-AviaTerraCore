@@ -28,5 +28,12 @@ public class PruebaCommand extends BaseCommand {
     @Override
     public void execute(CommandSender sender, String[] args) {
         sendMessage(sender, Message.TEST_MESSAGE);
+        AviaTerraCore.enqueueTaskAsynchronously(() -> {
+            try {
+                Thread.sleep(5000);
+            }catch (InterruptedException e) {
+
+            }
+        });
     }
 }

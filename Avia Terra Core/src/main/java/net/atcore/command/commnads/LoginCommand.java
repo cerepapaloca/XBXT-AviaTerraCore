@@ -38,9 +38,9 @@ public class LoginCommand extends BaseCommand {
     private final HashMap<UUID, Integer> attempts = new HashMap<>();
 
     @Override
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(CommandSender sender, String... args) {
         if (sender instanceof Player player) {
-            if (args.length > 0) {
+            if (args.length > 0 && !args[0].isEmpty()) {
                 LoginData loginData = LoginManager.getDataLogin(player);
                 if (loginData.getRegister().getStateLogins() == StateLogins.PREMIUM){
                     MessagesManager.sendMessage(player, Message.COMMAND_REGISTER_IS_PREMIUM);
@@ -68,6 +68,7 @@ public class LoginCommand extends BaseCommand {
                     sendMessage(player, Message.COMMAND_LOGIN_NO_REGISTER);
                 }
             }else {
+                LimboManager.sendForm(player, ReasonLimbo.NO_SESSION, Message.COMMAND_LOGIN_MISSING_ARGS);
                 sendMessage(player, Message.COMMAND_LOGIN_MISSING_ARGS);
             }
         }

@@ -3,6 +3,9 @@ package net.atcore.security.login;
 import com.google.common.collect.Sets;
 import lombok.experimental.UtilityClass;
 import net.atcore.AviaTerraCore;
+import net.atcore.command.CommandHandler;
+import net.atcore.command.commnads.LoginCommand;
+import net.atcore.command.commnads.RegisterCommand;
 import net.atcore.data.DataSection;
 import net.atcore.data.FileYaml;
 import net.atcore.data.yml.CacheLimboFile;
@@ -13,6 +16,7 @@ import net.atcore.messages.TypeMessages;
 import net.atcore.security.login.model.LimboData;
 import net.atcore.security.login.model.LoginData;
 import net.atcore.utils.GlobalUtils;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -21,8 +25,11 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
+import org.geysermc.cumulus.form.CustomForm;
 import org.geysermc.floodgate.api.FloodgateApi;
+import org.geysermc.floodgate.api.player.FloodgatePlayer;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Set;
 import java.util.UUID;
@@ -80,7 +87,7 @@ public class LimboManager {
         LoginData loginData = LoginManager.getDataLogin(player);
         String uuidString = GlobalUtils.getRealUUID(player).toString();
         addLimboData(player);
-        if (loginData.isBedrockPlayer()) player.addPotionEffect(BLINDNESS_EFFECT);
+        if (FloodgateApi.getInstance().isFloodgatePlayer(player.getUniqueId()) || loginData.isBedrockPlayer()) player.addPotionEffect(BLINDNESS_EFFECT);
         AviaTerraCore.enqueueTaskAsynchronously(() -> {
             FileYaml file = DataSection.getCacheLimboFlies().getConfigFile(uuidString, true);
             if (file instanceof CacheLimboFile cacheLimbo){
@@ -118,6 +125,7 @@ public class LimboManager {
     }
 
     private void sendMessage(Player player, ReasonLimbo reasonLimbo) {
+        sendForm(player, reasonLimbo, null);
         switch (reasonLimbo){
             case NO_SESSION -> {
                 MessagesManager.sendTitle(player, Message.LOGIN_LIMBO_INITIATED_BY_SESSION_TITLE.getMessage(player), Message.LOGIN_LIMBO_INITIATED_BY_SESSION_SUBTITLE.getMessage(player), 30, LIMBO_TIME, 30, TypeMessages.INFO);
@@ -128,6 +136,47 @@ public class LimboManager {
                 MessagesManager.sendTitle(player, Message.LOGIN_LIMBO_INITIATED_BY_REGISTER_TITLE.getMessage(player), Message.LOGIN_LIMBO_INITIATED_BY_REGISTER_SUBTITLE.getMessage(player), 30, LIMBO_TIME, 30, TypeMessages.INFO);
                 MessagesManager.sendMessage(player, Message.LOGIN_LIMBO_INITIATED_BY_REGISTER_CHAT);
                 startTimeOut(player, Message.LOGIN_LIMBO_TIME_OUT_REGISTER.getMessage(player));
+            }
+        }
+    }
+
+    public void sendForm(Player player, ReasonLimbo reasonLimbo, @Nullable Message message) {
+        if (!FloodgateApi.getInstance().isFloodgatePlayer(player.getUniqueId())) return;
+        FloodgatePlayer brPlayer = FloodgateApi.getInstance().getPlayer(player.getUniqueId());
+        switch (reasonLimbo){
+            case NO_REGISTER -> {
+                RegisterCommand registerCommand = (RegisterCommand) CommandHandler.getCommand("register");
+                if (registerCommand == null) return;
+                brPlayer.sendForm(CustomForm.builder()
+                        .title(Message.LOGIN_FORM_TITLE_REGISTER.getMessage(player))
+                        .label(message == null ? "" : PlainTextComponentSerializer.plainText().serialize(AviaTerraCore.getMiniMessage().deserialize(String.format(message.getMessage(player), RegisterCommand.LENGTH_MIN_PASSWORD))))
+                        .input(Message.LOGIN_FORM_NEW_PASSWORD.getMessage(player), Message.LOGIN_FORM_NEW_PASSWORD.getMessage(player))
+                        .input(Message.LOGIN_FORM_PASSWORD_AGAIN.getMessage(player), Message.LOGIN_FORM_PASSWORD_AGAIN.getMessage(player))
+                        .closedOrInvalidResultHandler(() -> sendForm(player, reasonLimbo, message))
+                        .validResultHandler(response -> {
+                            String password = response.next();
+                            String confirmPassword = response.next();
+                            registerCommand.execute(player, new String[]{password, confirmPassword});
+                            String s = (password + " " + confirmPassword).replaceAll("\\S", "*");
+                            MessagesManager.logConsole(String.format("El jugador <|%s|> uso el formulario para registrase: `%s`", player.getName(), s), TypeMessages.INFO, CategoryMessages.LOGIN);
+                        })
+                );
+            }
+            case NO_SESSION -> {
+                LoginCommand loginCommand = (LoginCommand) CommandHandler.getCommand("login");
+                if (loginCommand == null) return;
+                brPlayer.sendForm(CustomForm.builder()
+                        .title(Message.LOGIN_FORM_TITLE_LOGIN.getMessage(player))
+                        .label(message == null ? "" : PlainTextComponentSerializer.plainText().serialize(AviaTerraCore.getMiniMessage().deserialize(message.getMessage(player))))
+                        .input(Message.LOGIN_FORM_YOUR_PASSWORD.getMessage(player), Message.LOGIN_FORM_YOUR_PASSWORD.getMessage(player))
+                        .closedOrInvalidResultHandler(() -> sendForm(player, reasonLimbo, message))
+                        .validResultHandler(response -> {
+                            String password = response.next();
+                            loginCommand.execute(player, password);
+                            String s = (password == null ? "" : password).replaceAll("\\S", "*");
+                            MessagesManager.logConsole(String.format("El jugador <|%s|> uso el formulario para iniciar sesión: `%s`", player.getName(), s), TypeMessages.INFO, CategoryMessages.LOGIN);
+                        })
+                );
             }
         }
     }

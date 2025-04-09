@@ -75,7 +75,7 @@ public class PlayerListener implements Listener {
         Dupe.frameDupe(event);
     }
 
-    private final List<String> COMMANDS_PRE_LOGIN = List.of("login", "register", "log", "reg");
+    public static final List<String> COMMANDS_PRE_LOGIN = List.of("login", "register", "log", "reg");
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onExecuteCommand(@NotNull PlayerCommandPreprocessEvent event) {
@@ -166,7 +166,9 @@ public class PlayerListener implements Listener {
     public void onAchievement(PlayerAdvancementDoneEvent event) {
         Player player = event.getPlayer();
         AdvancementDisplay display = event.getAdvancement().getDisplay();
+        event.message(null);
         if (display == null) return;
+        if (!display.doesShowToast()) return;
         String color;
         Message message;
         switch (display.frame()){
@@ -192,7 +194,7 @@ public class PlayerListener implements Listener {
             ), TypeMessages.INFO, CategoryMessages.PRIVATE, false);
             sender.sendMessage(component);
         }
-        event.message(null);
+
     }
 
     @EventHandler

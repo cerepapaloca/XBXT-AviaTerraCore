@@ -45,7 +45,7 @@ public class PlayerInventoryChangeEvent extends InventoryEvent {
                     int currentHash = playerInventoryHash.computeIfAbsent(player.getUniqueId(),k -> hash);
                     if (currentHash != hash) {
                         playerInventoryHash.put(player.getUniqueId(), hash);
-                        Bukkit.getPluginManager().callEvent(new PlayerInventoryChangeEvent(player));
+                        AviaTerraCore.taskSynchronously(() -> Bukkit.getPluginManager().callEvent(new PlayerInventoryChangeEvent(player)));
                     }
                 }
             }

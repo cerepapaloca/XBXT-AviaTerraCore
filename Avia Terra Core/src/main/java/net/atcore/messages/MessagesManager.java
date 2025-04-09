@@ -226,7 +226,7 @@ public final class MessagesManager {
                 }
             }
             //no parece que tenga sentido, pero sí lo tiene, es por qué asi puede quitar los códigos de color del texto
-            Component component = MiniMessage.miniMessage().deserialize(finalMessage);
+            Component component = AviaTerraCore.getMiniMessage().deserialize(finalMessage);
             // Convertir Component a texto plano
             String s = PlainTextComponentSerializer.plainText().serialize(component);
             //obtén el canal por su ID

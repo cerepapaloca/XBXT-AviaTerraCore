@@ -39,15 +39,13 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static net.atcore.utils.RegisterManager.register;
 import static org.bukkit.Bukkit.getOnlinePlayers;
 
 
 public class AviaTerraCore extends JavaPlugin {
-
-    private static final BlockingQueue<AviaRunnable> TASK_QUEUE = new LinkedBlockingQueue<>();
-    private Thread workerThread;
 
     public static String tokenBot;
     public static final List<String> LIST_MOTD = new ArrayList<>();
@@ -165,7 +163,7 @@ public class AviaTerraCore extends JavaPlugin {
             DataBaseRegister.checkRegister(player, GlobalUtils.getRealUUID(player));
             GlobalUtils.kickPlayer(player, "El servidor va a cerrar, volveremos pronto...");
         });
-        TASK_QUEUE.clear();
+        taskQueue.clear();
         DiscordBot.handler.shutdown();
         workerThread.interrupt();
         isStopping = false;
@@ -228,6 +226,13 @@ public class AviaTerraCore extends JavaPlugin {
         Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), task);
     }
 
+    private static final ExecutorService EXECUTOR = Executors.newCachedThreadPool();
+    private Thread workerThread;
+    public static final BlockingQueue<AviaRunnable> taskQueue = new LinkedBlockingQueue<>();
+    public static volatile LinkedList<telemetryTask> telemetryTasks = new LinkedList<>();
+    public static volatile ArrayList<Integer> amountTask = new ArrayList<>();
+    public static volatile AtomicInteger currentAoumt = new AtomicInteger(0);
+
     /**
      * Realiza tareas de manera asincrónica y lo añade a una cola para evitar problemas de sincronización y que se haga
      * los proceso de manera consecutiva.
@@ -240,42 +245,54 @@ public class AviaTerraCore extends JavaPlugin {
      */
 
     public static void enqueueTaskAsynchronously(boolean isHeavyProcess, Runnable task) {
-        if (!TASK_QUEUE.offer(new AviaRunnable(task, isHeavyProcess))){
+        if (!taskQueue.offer(new AviaRunnable(task, isHeavyProcess))){
             MessagesManager.logConsole("Error al añadir una tarea la cola", TypeMessages.ERROR);
         }
-        if (TASK_QUEUE.size() >= 20){
+        if (taskQueue.size() >= 20){
             MessagesManager.logConsole(String.format("Hay <|%s|> tareas en cola, Hilo sobre cargador \n" +
-                    Arrays.stream(Thread.currentThread().getStackTrace()).toList().get(3), TASK_QUEUE.size()), TypeMessages.WARNING);
+                    Arrays.stream(Thread.currentThread().getStackTrace()).toList().get(3), taskQueue.size()), TypeMessages.WARNING);
         }
     }
 
-    private static final ExecutorService EXECUTOR = Executors.newCachedThreadPool();
 
     private void processQueue() {
+        new BukkitRunnable(){
+            @Override
+            public void run() {
+                if (amountTask.size() >= 5) {
+                    amountTask.removeFirst(); // Elimina el más antiguo
+                }
+                amountTask.add(currentAoumt.get());
+                currentAoumt.set(0);
+            }
+        }.runTaskTimerAsynchronously(this, 0, 20*60*2);
         try {
             while (!Thread.currentThread().isInterrupted()) {
-                AviaRunnable task = TASK_QUEUE.take();
+                AviaRunnable task = taskQueue.take();
                 long startTime = System.nanoTime();
 
                 Future<?> future = EXECUTOR.submit(task);
                 try {
                     future.get(1000*45, TimeUnit.MILLISECONDS);
                     long elapsedNanos = System.nanoTime() - startTime;
-                    if (elapsedNanos > 1_000_000_000L && !task.isHeavyProcess()) { // 1s en nanosegundos
-                        StringBuilder builder = getStackTrace(task.getStackTraceElements());
+                    /*if (elapsedNanos > 1_000_000_000L && !task.isHeavyProcess()) { // 1s en nanosegundos
+                        StringBuilder builder = getStackTrace(new Exception().getStackTrace());
                         AviaTerraCore.getInstance().getLogger().warning(
                                 String.format("La tarea tardó %s ms en procesarse", elapsedNanos * 0.000001D) + "\n" + builder
                         );
+                    }*/
+                    if (telemetryTasks.size() >= 200) {
+                        telemetryTasks.removeFirst(); // Elimina el más antiguo
                     }
+                    telemetryTasks.add(new telemetryTask(System.currentTimeMillis(), elapsedNanos * 0.000001D,  taskQueue.size()));
+                    currentAoumt.set(currentAoumt.get() + 1);
                 } catch (TimeoutException e) {
-                    StringBuilder builder1 = getStackTrace(task.getStackTraceElements());
-                    StringBuilder builder2 = getStackTrace(e.getCause().getStackTrace());
+                    StringBuilder builder = getStackTrace(e.getCause().getStackTrace());
                     future.cancel(true); // Cancelamos la tarea si tarda demasiado
-                    AviaTerraCore.getInstance().getLogger().severe("La tarea fue cancelada por que tardo mucho en procesarse" + "\n" + builder2 + "\n\t" + builder1);
+                    AviaTerraCore.getInstance().getLogger().severe("La tarea fue cancelada por que tardo mucho en procesarse" + "\n" + builder);
                 } catch (ExecutionException e) {
-                    StringBuilder builder1 = getStackTrace(task.getStackTraceElements());
-                    StringBuilder builder2 = getStackTrace(e.getCause().getStackTrace());
-                    AviaTerraCore.getInstance().getLogger().severe("Hubo un error al iniciar la tarea [" + e.getMessage() + "]" + "\n" + builder2 + "\n\t" + builder1);
+                    StringBuilder builder = getStackTrace(e.getCause().getStackTrace());
+                    AviaTerraCore.getInstance().getLogger().severe("Hubo un error al iniciar la tarea [" + e.getMessage() + "]" + "\n" + builder);
                 }
 
             }
@@ -292,6 +309,8 @@ public class AviaTerraCore extends JavaPlugin {
         }
         return builder;
     }
+
+    public record telemetryTask(long currentTime, double elapsedProcess, int queue) {}
 
     /*
     public static void initModules() {

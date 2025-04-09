@@ -8,9 +8,7 @@ import net.atcore.command.CommandVisibility;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
-import net.atcore.security.login.LoginManager;
-import net.atcore.security.login.ServerMode;
-import net.atcore.security.login.StateLogins;
+import net.atcore.security.login.*;
 import net.atcore.security.login.model.LoginData;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -32,7 +30,7 @@ public class RegisterCommand extends BaseCommand {
         addAlias("reg");
     }
 
-    private static final int LENGTH_MIN_PASSWORD = 4;
+    public static final int LENGTH_MIN_PASSWORD = 4;
 
     @Override
     public void execute(CommandSender sender, String[] args) {
@@ -55,15 +53,19 @@ public class RegisterCommand extends BaseCommand {
                                             , 20, 20*3, 40, TypeMessages.INFO);
                                     LoginManager.checkLogin(player);
                                 }else {
+                                    LimboManager.sendForm(player, ReasonLimbo.NO_REGISTER, Message.COMMAND_REGISTER_PASSWORD_EQUAL_NAME);
                                     sendMessage(player, Message.COMMAND_REGISTER_PASSWORD_EQUAL_NAME);
                                 }
                             }else {
+                                LimboManager.sendForm(player, ReasonLimbo.NO_REGISTER, Message.COMMAND_REGISTER_PASSWORD_TOO_SHORT);
                                 sendFormatMessage(player, Message.COMMAND_REGISTER_PASSWORD_TOO_SHORT, LENGTH_MIN_PASSWORD);
                             }
                         }else{
+                            LimboManager.sendForm(player, ReasonLimbo.NO_REGISTER, Message.COMMAND_REGISTER_NO_EQUAL_PASSWORD);
                             sendMessage(player, Message.COMMAND_REGISTER_NO_EQUAL_PASSWORD);
                         }
                     }else{
+                        LimboManager.sendForm(player, ReasonLimbo.NO_REGISTER, Message.COMMAND_REGISTER_MISSING_ARGS_PASSWORD);
                         sendMessage(player, Message.COMMAND_REGISTER_MISSING_ARGS_PASSWORD);
                     }
                 }else {

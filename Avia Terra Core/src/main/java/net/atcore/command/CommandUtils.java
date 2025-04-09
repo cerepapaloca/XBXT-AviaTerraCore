@@ -128,24 +128,16 @@ public final class CommandUtils {
     public @Nullable List<String> listTab(String arg,  List<String> args, @NotNull ModeTab mode){
         switch (mode){
             case CONTAINS -> {
-                return args.stream()
-                        .filter(name -> name.contains(arg))
-                        .collect(toList());
+                return args.stream().filter(name -> name.contains(arg)).toList();
             }
             case CONTAINS_IGNORE_CASE -> {
-                return args.stream()
-                        .filter(name -> name.toLowerCase().contains(arg.toLowerCase()))
-                        .collect(toList());
+                return args.stream().filter(name -> name.toLowerCase().contains(arg.toLowerCase())).toList();
             }
             case START_WITH -> {
-                return args.stream()
-                        .filter(name -> name.startsWith(arg))
-                        .collect(toList());
+                return args.stream().filter(name -> name.startsWith(arg)).toList();
             }
             case START_WITH_IGNORE_CASE -> {
-                return args.stream()
-                        .filter(name -> name.toLowerCase().startsWith(arg.toLowerCase()))
-                        .collect(toList());
+                return args.stream().filter(name -> name.toLowerCase().startsWith(arg.toLowerCase())).toList();
             }
         }
         return null;

@@ -41,7 +41,7 @@ public class DiscordBot extends ListenerAdapter{
         AviaTerraCore.enqueueTaskAsynchronously(true, () -> {
             try {
                 jda = JDABuilder.createDefault(tokenBot).enableIntents(GatewayIntent.MESSAGE_CONTENT).build();
-                jda.removeEventListener(DiscordBot.class);
+                jda.removeEventListener(DiscordBot.class);//TODO: Cuando se hace reload los mensaje de discord se duplican
                 jda.awaitReady();
                 jda.addEventListener(new DiscordBot());
                 startStateBot();
