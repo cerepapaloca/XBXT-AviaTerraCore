@@ -9,8 +9,8 @@ import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import net.atcore.moderation.ban.ContextBan;
 import net.atcore.moderation.ban.DataBan;
-import net.atcore.security.login.model.LoginData;
 import net.atcore.security.login.LoginManager;
+import net.atcore.security.login.model.LoginData;
 import net.atcore.utils.GlobalConstantes;
 import net.atcore.utils.GlobalUtils;
 import org.jetbrains.annotations.Nullable;
@@ -18,7 +18,8 @@ import org.jetbrains.annotations.Nullable;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.sql.*;
-import java.util.*;
+import java.util.HashMap;
+import java.util.UUID;
 
 public class DataBaseBan extends DataBaseMySql {
 
@@ -35,7 +36,7 @@ public class DataBaseBan extends DataBaseMySql {
     }
 
     @Override
-    public void reload() {
+    public void reload() throws UnknownHostException, SQLException {
         String sql = "SELECT uuid, name, ip, reason, unban_date, ban_date, context, author FROM bans";
         listDataBanByNAME.clear();
         listDataBanByIP.clear();
@@ -57,8 +58,6 @@ public class DataBaseBan extends DataBaseMySql {
                 // Lógica para añadir los datos a tus listas
                 addListDataBan(name, uuids, ip, reason, dateUnban, dateBan, context, author);
             }
-        } catch (SQLException | UnknownHostException e) {
-            MessagesManager.sendErrorException("Error al recargar la base de datos", e);
         }
 
         if (!AviaTerraCore.isStarting()) MessagesManager.logConsole("Baneos Recargado", TypeMessages.SUCCESS);
@@ -75,28 +74,27 @@ public class DataBaseBan extends DataBaseMySql {
                     return;
                 }
             }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        String createTableSQL = "CREATE TABLE IF NOT EXISTS bans (" +
-                "id INT AUTO_INCREMENT PRIMARY KEY, " +
-                "name VARCHAR(36) NOT NULL, " +
-                "uuid VARCHAR(100), " +
-                "ip VARCHAR(45), " +
-                "reason TEXT, " +
-                "unban_date BIGINT NOT NULL, " +
-                "ban_date BIGINT, " +
-                "context VARCHAR(255) NOT NULL, " +
-                "author VARCHAR(36)" +
-                ");";
-        String addUniqueKeySQL = "ALTER TABLE bans ADD UNIQUE KEY unique_name_context (name, context)";
-        try (Connection connection = getConnection();
-             Statement statement = connection.createStatement()) {
-            statement.executeUpdate(createTableSQL);
-            statement.executeUpdate(addUniqueKeySQL);
-            MessagesManager.logConsole("DataBase Bans " + TypeMessages.SUCCESS.getMainColor() + "Creada", TypeMessages.INFO, false);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        } catch (SQLException | UnknownHostException e) {
+            String createTableSQL = "CREATE TABLE IF NOT EXISTS bans (" +
+                    "id INT AUTO_INCREMENT PRIMARY KEY, " +
+                    "name VARCHAR(36) NOT NULL, " +
+                    "uuid VARCHAR(100), " +
+                    "ip VARCHAR(45), " +
+                    "reason TEXT, " +
+                    "unban_date BIGINT NOT NULL, " +
+                    "ban_date BIGINT, " +
+                    "context VARCHAR(255) NOT NULL, " +
+                    "author VARCHAR(36)" +
+                    ");";
+            String addUniqueKeySQL = "ALTER TABLE bans ADD UNIQUE KEY unique_name_context (name, context)";
+            try (Connection connection = getConnection();
+                 Statement statement = connection.createStatement()) {
+                statement.executeUpdate(createTableSQL);
+                statement.executeUpdate(addUniqueKeySQL);
+                MessagesManager.logConsole("DataBase Bans " + TypeMessages.SUCCESS.getMainColor() + "Creada", TypeMessages.INFO, false);
+            } catch (SQLException ee) {
+                throw new RuntimeException(ee);
+            }
         }
     }
 
@@ -210,11 +208,11 @@ public class DataBaseBan extends DataBaseMySql {
                     tiempoDeBaneo,
                     dataBan.getAuthor(),
                     dataBan.getReason()), TypeMessages.SUCCESS, CategoryMessages.BAN);
-        } catch (SQLException e) {
+        } catch (UnknownHostException | SQLException e) {
             String tiempoDeBaneo;
-            if (dataBan.getUnbanDate() == GlobalConstantes.NUMERO_PERMA){
+            if (dataBan.getUnbanDate() == GlobalConstantes.NUMERO_PERMA) {
                 tiempoDeBaneo = "Permanente";
-            }else {
+            } else {
                 tiempoDeBaneo = GlobalUtils.timeToString(dataBan.getUnbanDate() - dataBan.getBanDate(), 2);
             }
             MessagesManager.logConsole(String.format("Error al banear al jugador <|%1$s|> Contexto: <|%2$s|> Tiempo de baneo: <|%3$s|> Autor: <|%4$s|> razón de baneo: <|%5$s|>",
@@ -241,7 +239,7 @@ public class DataBaseBan extends DataBaseMySql {
                     name,
                     context.name(),
                     author), TypeMessages.SUCCESS, CategoryMessages.BAN);
-        } catch (SQLException e) {
+        } catch (UnknownHostException | SQLException e) {
             MessagesManager.logConsole(String.format("Error al desbanear al jugador <|%1$s|> del contexto <|%2$s|> por <|%3$s|>",
                     name,
                     context.name(),

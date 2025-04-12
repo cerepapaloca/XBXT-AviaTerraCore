@@ -38,6 +38,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.net.UnknownHostException;
+import java.sql.SQLException;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -176,7 +178,11 @@ public class AviaTerraCore extends JavaPlugin {
         DiscordBot.handler.shutdown();
         DiscordBot.startDiscordBot();
         for (Section section : RegisterManager.sections){
-            section.reload();
+            try {
+                section.reload();
+            } catch (UnknownHostException | SQLException e) {
+                MessagesManager.sendErrorException("Error al reloadar el sistema", e);
+            }
         }
     }
 

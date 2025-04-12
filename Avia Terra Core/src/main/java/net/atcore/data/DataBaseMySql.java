@@ -46,6 +46,7 @@ public abstract class DataBaseMySql implements Reloadable {
 
     public DataBaseMySql() {
         DataSection.DATA_BASE.add(this);
+        createTable();
     }
 
     private static void connect() {

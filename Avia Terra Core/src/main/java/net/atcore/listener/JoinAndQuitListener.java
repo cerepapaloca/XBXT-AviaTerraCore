@@ -66,10 +66,10 @@ public class JoinAndQuitListener implements Listener {
         }.runTaskLater(AviaTerraCore.getInstance(), 20*60*60);
         player.setInvulnerable(false);
         AviaTerraPlayer.TASKS_UNLOAD.put(uuidLimbo, task);
-        MessagesManager.logConsole("`<red>-</red>` jugador: <|" + player.getName() + "|>", TypeMessages.INFO, CategoryMessages.PLAY);
+        //MessagesManager.logConsole("`<red>-</red>` jugador: <|" + player.getName() + "|>", TypeMessages.INFO, CategoryMessages.PLAY);
+        MessagesManager.quitAndJoinMessage(player, Message.EVENT_QUIT);
         if (LoginManager.getDataLogin(player) != null) {// si le llega a borrar el registro
             UUID uuid = GlobalUtils.getRealUUID(player);
-            if (LoginManager.getDataLogin(player).hasSession()) MessagesManager.quitAndJoinMessage(player, Message.EVENT_QUIT);
             AviaTerraScheduler.enqueueTaskAsynchronously(() -> DataBaseRegister.checkRegister(player, uuid));
         }
     }
@@ -78,7 +78,7 @@ public class JoinAndQuitListener implements Listener {
     public void onJoin(@NotNull PlayerJoinEvent event) {
         Player player = event.getPlayer();
         event.joinMessage(null);
-        MessagesManager.logConsole("`<green>+</green>` jugador: <|" + player.getName() + "|>", TypeMessages.INFO, CategoryMessages.PLAY);
+        //MessagesManager.logConsole("`<green>+</green>` jugador: <|" + player.getName() + "|>", TypeMessages.INFO, CategoryMessages.PLAY);
 
         onEnteringServer(player);
         AviaTerraScheduler.enqueueTaskAsynchronously(() -> {
@@ -93,7 +93,7 @@ public class JoinAndQuitListener implements Listener {
             });
         });
 
-        if (LoginManager.getDataLogin(player) != null && LoginManager.getDataLogin(player).hasSession()) MessagesManager.quitAndJoinMessage(player, Message.EVENT_JOIN);
+        MessagesManager.quitAndJoinMessage(player, Message.EVENT_JOIN);
     }
 
     @EventHandler

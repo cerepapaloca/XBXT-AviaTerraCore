@@ -22,11 +22,12 @@ import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import net.atcore.utils.AviaTerraScheduler;
 
+import java.net.UnknownHostException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.HashSet;
 
-import static net.atcore.messages.MessagesManager.logConsole;
+import static net.atcore.messages.MessagesManager.*;
 
 public class DataSection implements Section {
 
@@ -40,12 +41,13 @@ public class DataSection implements Section {
     @Getter private static MessagesLocaleFile messagesLocaleFile;
     @Getter private static MapArtsFiles mapArtsFiles;
     @Getter private static boolean isDataBaseActive = false;
+    @Getter private static DataBaseBan databaseBan;
 
     @Override
     public void enable() {
         try (Connection connection = DataBaseMySql.getConnection()) {
             if (connection == null) throw new SQLException();
-            new DataBaseBan();
+            databaseBan = new DataBaseBan();
             new DataBaseRegister();
             isDataBaseActive = true;
         }catch (Exception e) {
@@ -64,8 +66,6 @@ public class DataSection implements Section {
         cacheVoteFile = new CacheVoteFile();
         cacheLimboFlies = new CacheLimboFlies();
         mapArtsFiles = new MapArtsFiles();
-
-        for (DataBaseMySql db : DATA_BASE) db.createTable();
         //for (File fileYaml : FILES) fileYaml.loadData();
     }
 
@@ -81,7 +81,13 @@ public class DataSection implements Section {
     @Override
     public void reload() {
         AviaTerraScheduler.enqueueTaskAsynchronously(true, () -> {
-            for (DataBaseMySql dataBaseMySql : DATA_BASE) dataBaseMySql.reload();
+            for (DataBaseMySql dataBaseMySql : DATA_BASE) {
+                try {
+                    dataBaseMySql.reload();
+                } catch (UnknownHostException | SQLException e) {
+                    sendErrorException("Error al reloadar el sistema", e);
+                }
+            }
             for (File file : FILES) {
                 if (file instanceof FileYaml yaml) {
                     yaml.reloadConfig();

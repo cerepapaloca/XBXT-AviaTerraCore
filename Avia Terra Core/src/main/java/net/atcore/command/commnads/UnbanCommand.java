@@ -2,6 +2,7 @@ package net.atcore.command.commnads;
 
 import net.atcore.AviaTerraCore;
 import net.atcore.command.*;
+import net.atcore.data.DataSection;
 import net.atcore.messages.Message;
 import net.atcore.moderation.ModerationSection;
 import net.atcore.moderation.ban.ContextBan;
@@ -36,7 +37,7 @@ public class UnbanCommand extends BaseTabCommand {
         //en un hilo aparte por qué explota el servidor
         CommandUtils.executeForPlayer(sender, args[0], false, (name, player) ->
                 AviaTerraScheduler.enqueueTaskAsynchronously(() ->
-                        ModerationSection.getBanManager().removeBanPlayer(name, contextBan, sender.getName())));
+                        DataSection.getDatabaseBan().removeBanPlayer(name, contextBan, sender.getName())));
         sendMessage(sender, Message.COMMAND_UNBAN_SUCCESSFUL);
     }
 

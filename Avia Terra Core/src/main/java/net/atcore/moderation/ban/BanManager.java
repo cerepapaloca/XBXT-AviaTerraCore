@@ -2,6 +2,7 @@ package net.atcore.moderation.ban;
 
 import net.atcore.AviaTerraCore;
 import net.atcore.Config;
+import net.atcore.data.DataSection;
 import net.atcore.data.sql.DataBaseBan;
 import net.atcore.security.login.model.LoginData;
 import net.atcore.security.login.LoginManager;
@@ -24,7 +25,7 @@ import java.util.UUID;
 
 import static net.atcore.messages.MessagesManager.*;
 
-public class BanManager extends DataBaseBan {
+public class BanManager {
 
     public void banPlayer(Player player, String reason, long time, ContextBan contextBan, String nameAuthor) {
         banPlayer(player.getName(),
@@ -43,10 +44,9 @@ public class BanManager extends DataBaseBan {
         }
         DataBan dataBan = new DataBan(name, uuid, ip, reason, finalTime, System.currentTimeMillis(), context, nameAuthor);
         Player player = Bukkit.getPlayer(name);
-        if (player != null) {
-            dataBan.getContext().onBan(player, dataBan);
-        }
-        AviaTerraScheduler.enqueueTaskAsynchronously(() -> addBanPlayer(dataBan));
+        if (player != null) dataBan.getContext().onBan(player, dataBan);
+
+        AviaTerraScheduler.enqueueTaskAsynchronously(() -> DataSection.getDatabaseBan().addBanPlayer(dataBan));
     }
 
     /**
@@ -71,13 +71,13 @@ public class BanManager extends DataBaseBan {
         Collection<DataBan> dataBans = null;
 
         // Se busca él databan del jugador
-        if (listDataBanByNAME.containsKey(player.getName())) {
-            dataBans = getDataBan(player.getName()).values();
+        if (DataBaseBan.listDataBanByNAME.containsKey(player.getName())) {
+            dataBans = DataBaseBan.getDataBan(player.getName()).values();
             checkName = true;//Se Busca por su UUID de usuario, si está baneado
         }
 
-        if (ip != null && listDataBanByIP.containsKey(ip)) {
-            dataBans = getDataBan(ip).values();
+        if (ip != null && DataBaseBan.listDataBanByIP.containsKey(ip)) {
+            dataBans = DataBaseBan.getDataBan(ip).values();
             checkIp = true;//Se Busca por su ip, si está baneado
         }
 
@@ -102,7 +102,7 @@ public class BanManager extends DataBaseBan {
                                 "<|" +  time + "|>", TypeMessages.INFO, CategoryMessages.BAN);
                         return IsBan.YES;
                     } else {// eliminar él baneó cuando expiro y realiza en un hilo aparte para que no pete el servidor
-                        Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(), () -> ModerationSection.getBanManager().removeBanPlayer(player.getName(), ban.getContext(), "Servidor (Expiro)"));
+                        Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(), () -> DataSection.getDatabaseBan().removeBanPlayer(player.getName(), ban.getContext(), "Servidor (Expiro)"));
                         return IsBan.NOT;
                     }
                 } else{

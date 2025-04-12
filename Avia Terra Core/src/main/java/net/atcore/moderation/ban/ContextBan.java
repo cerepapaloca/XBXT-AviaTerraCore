@@ -1,9 +1,11 @@
 package net.atcore.moderation.ban;
 
 import io.papermc.paper.event.player.AsyncChatEvent;
+import net.atcore.data.sql.DataBaseBan;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import net.atcore.utils.GlobalUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
@@ -20,6 +22,7 @@ public enum ContextBan {
         private static final Set<String> SET_COMMANDS_SOCIAL = Set.of("tell", "w", "whipper", "r", "msg");
         @Override
         public DataBan onContext(Player player, Event event) {
+            Bukkit.getLogger().info("onContext");
             if (event instanceof AsyncChatEvent e) {
                 return ban(player, e);
             }
@@ -36,7 +39,7 @@ public enum ContextBan {
             IsBan isBan = BanManager.checkBan(player, Objects.requireNonNull(player.getAddress()).getAddress(), ContextBan.CHAT);
             if (isBan.equals(IsBan.YES)) {
                 e.setCancelled(true);
-                DataBan dataBan = BanManager.getDataBan(player.getName()).get(ContextBan.CHAT);
+                DataBan dataBan = DataBaseBan.getDataBan(player.getName()).get(ContextBan.CHAT);
                 MessagesManager.sendString(player, BanManager.formadMessageBan(dataBan), TypeMessages.KICK);
                 return dataBan;
             }
@@ -54,7 +57,7 @@ public enum ContextBan {
             if (event instanceof PlayerLoginEvent e) {
                 IsBan isBan = BanManager.checkBan(player, e.getAddress(), ContextBan.GLOBAL);
                 if (isBan.equals(IsBan.YES)) {
-                    DataBan dataBan = BanManager.getDataBan(player.getName()).get(ContextBan.GLOBAL);
+                    DataBan dataBan = DataBaseBan.getDataBan(player.getName()).get(ContextBan.GLOBAL);
                     GlobalUtils.kickPlayer(player, BanManager.formadMessageBan(dataBan));
                     return dataBan;
                 }

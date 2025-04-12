@@ -197,7 +197,6 @@ public final class LoginManager {
             player.updateCommands();
         });
         AviaTerraScheduler.enqueueTaskAsynchronously(() -> BaseAchievement.sendAllAchievement(player));
-        MessagesManager.quitAndJoinMessage(player, Message.EVENT_JOIN);
         player.playSound(player, Sound.ENTITY_PLAYER_LEVELUP, 0.4f, 1);
         new BukkitRunnable() {
             public void run() {
