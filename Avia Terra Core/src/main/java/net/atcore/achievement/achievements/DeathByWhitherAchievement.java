@@ -4,6 +4,7 @@ import net.atcore.AviaTerraCore;
 import net.atcore.achievement.BaseAchievementSimple;
 import net.atcore.achievement.SynchronouslyEvent;
 import net.atcore.listener.DeathListener;
+import net.atcore.utils.AviaTerraScheduler;
 import net.minecraft.advancements.AdvancementType;
 import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
@@ -22,7 +23,7 @@ public class DeathByWhitherAchievement extends BaseAchievementSimple<PlayerDeath
         LivingEntity killer = player.getKiller();
         if (killer == null) killer = DeathListener.getKillerByDamage(player);
         if (killer == null) return;
-        if (killer instanceof Wither wither && wither.customName() != null) AviaTerraCore.enqueueTaskAsynchronously(() -> grantAdvanced(player, null));
+        if (killer instanceof Wither wither && wither.customName() != null) AviaTerraScheduler.enqueueTaskAsynchronously(() -> grantAdvanced(player, null));
     }
 
     @Override

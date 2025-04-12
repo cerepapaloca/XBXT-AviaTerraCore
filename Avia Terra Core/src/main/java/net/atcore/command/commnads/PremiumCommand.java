@@ -12,6 +12,7 @@ import net.atcore.security.login.LoginManager;
 import net.atcore.security.login.StateLogins;
 import net.atcore.security.login.model.LoginData;
 import net.atcore.security.login.model.RegisterData;
+import net.atcore.utils.AviaTerraScheduler;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -34,11 +35,13 @@ public class PremiumCommand extends BaseCommand implements Confirmable {
             switch (data.getRegister().getStateLogins()){
                 case PREMIUM -> MessagesManager.sendMessage(player, Message.COMMAND_PREMIUM_IS_PREMIUM);
                 case CRACKED -> MessagesManager.sendMessage(player, Message.COMMAND_PREMIUM_IS_CRACKED);
-                case SEMI_CRACKED -> AviaTerraCore.enqueueTaskAsynchronously(() -> {
+                case SEMI_CRACKED -> AviaTerraScheduler.enqueueTaskAsynchronously(() -> {
                     if (DataBaseRegister.changeState(GlobalUtils.getRealName(player), StateLogins.PREMIUM)){
-                        RegisterData register = LoginManager.getDataLogin(player).getRegister();
+                        LoginData loginData = LoginManager.getDataLogin(player);
+                        RegisterData register = loginData.getRegister();
                         register.setStateLogins(StateLogins.PREMIUM);
                         register.setTemporary(false);
+                        loginData.getSession().setState(StateLogins.PREMIUM);
                         GlobalUtils.synchronizeKickPlayer(player, Message.COMMAND_PREMIUM_SUCCESSFUL);
                     }else {
                         MessagesManager.sendMessage(player, Message.COMMAND_PREMIUM_ERROR);
@@ -52,9 +55,7 @@ public class PremiumCommand extends BaseCommand implements Confirmable {
     }
 
     @Override
-    public String getMessageConfirm() {
-        return "<red><b>Advertencia</b></red> Solo ejecutar cuando tiene una cuenta oficial de microsoft," +
-                " En caso que sea asi ejecuta este commando <|<Click:suggest_command:/confirm>/confirm</click>|> o " +
-                "<|<Click:suggest_command:/premium>/premium</click>|> para pasar al modo premium";
+    public Message getMessageConfirm() {
+        return Message.COMMAND_PREMIUM_CONFIRM;
     }
 }

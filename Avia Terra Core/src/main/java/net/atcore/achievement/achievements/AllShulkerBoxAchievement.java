@@ -1,7 +1,7 @@
 package net.atcore.achievement.achievements;
 
 import net.atcore.achievement.BaseAchievementStep;
-import net.atcore.achievement.PlayerInventoryChangeEvent;
+import net.atcore.achievement.InventoryChangeEvent;
 import net.atcore.security.check.CheckerUtils;
 import net.minecraft.advancements.AdvancementType;
 import org.bukkit.Material;
@@ -10,7 +10,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
-public class AllShulkerBoxAchievement extends BaseAchievementStep<PlayerInventoryChangeEvent> {
+public class AllShulkerBoxAchievement extends BaseAchievementStep<InventoryChangeEvent> {
     public AllShulkerBoxAchievement() {
         super(Material.WHITE_SHULKER_BOX, GetShulkerBoxAchievement.class, AdvancementType.GOAL);
     }
@@ -24,7 +24,7 @@ public class AllShulkerBoxAchievement extends BaseAchievementStep<PlayerInventor
     }
 
     @Override
-    public void onEvent(PlayerInventoryChangeEvent event) {
+    public void onEvent(InventoryChangeEvent event) {
         List<ItemStack> list = CheckerUtils.getItems(event);
         for (ItemStack item : list) {
             if (item == null || item.getType() == Material.AIR) continue;

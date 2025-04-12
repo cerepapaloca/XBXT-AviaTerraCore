@@ -5,6 +5,7 @@ import net.atcore.Config;
 import net.atcore.data.sql.DataBaseBan;
 import net.atcore.security.login.model.LoginData;
 import net.atcore.security.login.LoginManager;
+import net.atcore.utils.AviaTerraScheduler;
 import net.atcore.utils.GlobalConstantes;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.TypeMessages;
@@ -45,7 +46,7 @@ public class BanManager extends DataBaseBan {
         if (player != null) {
             dataBan.getContext().onBan(player, dataBan);
         }
-        AviaTerraCore.enqueueTaskAsynchronously(() -> addBanPlayer(dataBan));
+        AviaTerraScheduler.enqueueTaskAsynchronously(() -> addBanPlayer(dataBan));
     }
 
     /**
@@ -75,7 +76,7 @@ public class BanManager extends DataBaseBan {
             checkName = true;//Se Busca por su UUID de usuario, si está baneado
         }
 
-        if (ip != null && listDataBanByIP.containsKey(ip) && Config.isCheckBanByIp()) {
+        if (ip != null && listDataBanByIP.containsKey(ip)) {
             dataBans = getDataBan(ip).values();
             checkIp = true;//Se Busca por su ip, si está baneado
         }

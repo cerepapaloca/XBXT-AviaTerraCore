@@ -17,9 +17,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 
-import static net.atcore.messages.MessagesManager.sendErrorException;
-import static net.atcore.messages.MessagesManager.sendMessage;
-
 @Getter
 public final class CommandHandler implements TabExecutor {
 
@@ -36,7 +33,7 @@ public final class CommandHandler implements TabExecutor {
                     SAVES_COMMANDS_CONFIRMS.remove(player.getUniqueId());
                 } else {
                     SAVES_COMMANDS_CONFIRMS.put(player.getUniqueId(), label + " " + String.join(" ", args));
-                    MessagesManager.sendString(sender, confirmable.getMessageConfirm(), TypeMessages.INFO);
+                    MessagesManager.sendString(sender, confirmable.getMessageConfirm().getMessage(sender), TypeMessages.INFO);
                     return true;
                 }
             }
@@ -47,9 +44,9 @@ public final class CommandHandler implements TabExecutor {
                         return true;
                     }else{
                         if (LoginManager.checkLogin(player)){
-                            sendMessage(sender, Message.COMMAND_GENERIC_NO_PERMISSION);
+                            MessagesManager.sendMessage(sender, Message.COMMAND_GENERIC_NO_PERMISSION);
                         }else {
-                            sendMessage(player, Message.COMMAND_GENERIC_NO_LOGIN);
+                            MessagesManager.sendMessage(player, Message.COMMAND_GENERIC_NO_LOGIN);
                         }
                     }
                 }else {
@@ -57,12 +54,12 @@ public final class CommandHandler implements TabExecutor {
                     return true;
                 }
             }catch (Exception e) {
-                sendMessage(sender, Message.COMMAND_GENERIC_EXCEPTION_ERROR);
+                MessagesManager.sendMessage(sender, Message.COMMAND_GENERIC_EXCEPTION_ERROR);
                 StringBuilder sb = new StringBuilder();
                 sb.append(label).append(" ");
                 for (String arg : args) sb.append(arg).append(" ");
                 MessagesManager.logConsole(String.format("[%s] <|%s|> -> `%s`",e.getMessage(), sender.getName(), sb), TypeMessages.ERROR, CategoryMessages.COMMANDS);
-                sendErrorException("Error al ejecutar el comando", e);
+                MessagesManager.sendErrorException("Error al ejecutar el comando", e);
                 return false;
             }
         }

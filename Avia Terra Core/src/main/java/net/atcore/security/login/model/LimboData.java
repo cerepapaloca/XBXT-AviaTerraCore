@@ -12,7 +12,9 @@ import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import net.atcore.security.login.LoginManager;
+import net.atcore.utils.AviaTerraScheduler;
 import net.atcore.utils.GlobalUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -61,10 +63,11 @@ public class LimboData {
         player.setInvisible(false);
         player.setInvulnerable(false);
         player.setFlying(false);
-        player.saveData();// Se guarda los datos del usuario en el servidor por si el servidor peta
+        // Se guarda los datos del usuario en el servidor por si el servidor peta
+        AviaTerraScheduler.runTask(player::saveData);
         if (gameMode == GameMode.SURVIVAL) player.setAllowFlight(false);
         CacheLimboFile cacheLimbo = (CacheLimboFile) DataSection.getCacheLimboFlies().getConfigFile(GlobalUtils.getRealUUID(player).toString(), false);
-        AviaTerraCore.enqueueTaskAsynchronously(() -> cacheLimbo.setRestored(true));
+        AviaTerraScheduler.enqueueTaskAsynchronously(() -> cacheLimbo.setRestored(true));
         LoginData login = LoginManager.getDataLogin(player);
         login.setLimbo(null);
         if (packets != null) {

@@ -44,14 +44,10 @@ public class SimulateOnlineMode {
     public static final HashMap<String, BasicDataPlayer> MAP_TOKENS = new HashMap<>();
     public static final HashMap<String, Verification> LIST_UUID_PREMIUM = new HashMap<>();
 
-    public void startProtocol(Player player, PacketContainer packet){
-
-        if (player.getAddress() == null){
-            GlobalUtils.kickPlayer(player, Message.LOGIN_KICK_GENERIC.getMessage(player));
-            return;
-        }
-
-        VerificationPremium.checkPremium(packet, player);
+    public void startLoginPremium(Player player, PacketContainer packet){
+        if (player.getAddress() != null){
+            VerificationPremium.checkPremium(packet, player);
+        }else GlobalUtils.kickPlayer(player, Message.LOGIN_KICK_GENERIC.getMessage(player));
     }
 
     public boolean preStartLogin(Player player, PacketContainer packet){

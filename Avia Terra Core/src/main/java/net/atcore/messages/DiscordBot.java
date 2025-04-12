@@ -4,6 +4,7 @@ import me.scarsz.jdaappender.ChannelLoggingHandler;
 import me.scarsz.jdaappender.ExtensionBuilder;
 import net.atcore.AviaTerraCore;
 import net.atcore.command.CommandManager;
+import net.atcore.utils.AviaTerraScheduler;
 import net.atcore.utils.GlobalUtils;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.*;
@@ -38,7 +39,7 @@ public class DiscordBot extends ListenerAdapter{
     public static BukkitTask stateTasks = null;
 
     public static void startDiscordBot(){
-        AviaTerraCore.enqueueTaskAsynchronously(true, () -> {
+        AviaTerraScheduler.enqueueTaskAsynchronously(true, () -> {
             try {
                 jda = JDABuilder.createDefault(tokenBot).enableIntents(GatewayIntent.MESSAGE_CONTENT).build();
                 jda.removeEventListener(DiscordBot.class);//TODO: Cuando se hace reload los mensaje de discord se duplican

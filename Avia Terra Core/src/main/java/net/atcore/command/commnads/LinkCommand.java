@@ -10,6 +10,7 @@ import net.atcore.messages.Message;
 import net.atcore.security.login.*;
 import net.atcore.security.login.model.CodeAuth;
 import net.atcore.security.login.model.LoginData;
+import net.atcore.utils.AviaTerraScheduler;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -58,7 +59,7 @@ public class LinkCommand extends BaseTabCommand {
                                 if (loginData.getRegister().getMail() != null){
                                     sendMessage(sender, Message.COMMAND_LINK_ALREADY_GMAIL);
                                 }
-                                AviaTerraCore.enqueueTaskAsynchronously(() -> {
+                                AviaTerraScheduler.enqueueTaskAsynchronously(() -> {
                                     TwoFactorAuth.sendVerificationEmail(args[1], codeAuth, FormatMessage.LINK);
                                     sendMessage(sender, Message.COMMAND_LINK_ARRIVED_MESSAGE_GMAIL);
                                 });
@@ -78,7 +79,7 @@ public class LinkCommand extends BaseTabCommand {
                             );
                             TwoFactorAuth.CODES.put(uuid, codeAuth);
                             sendMessage(sender, Message.COMMAND_LINK_SEND_GMAIL_2);
-                            AviaTerraCore.enqueueTaskAsynchronously(() -> {
+                            AviaTerraScheduler.enqueueTaskAsynchronously(() -> {
                                 TwoFactorAuth.sendVerificationEmail(loginData.getRegister().getMail(), codeAuth, FormatMessage.CODE);
                                 sendMessage(sender, Message.COMMAND_LINK_ARRIVED_MESSAGE_GMAIL);
                             });
@@ -104,7 +105,7 @@ public class LinkCommand extends BaseTabCommand {
                                 if (loginData.getRegister().getDiscord() != null){
                                     sendMessage(sender, Message.COMMAND_LINK_ALREADY_DISCORD);
                                 }
-                                AviaTerraCore.enqueueTaskAsynchronously(() -> TwoFactorAuth.sendVerificationDiscord(args[1], player, FormatMessage.LINK));
+                                AviaTerraScheduler.enqueueTaskAsynchronously(() -> TwoFactorAuth.sendVerificationDiscord(args[1], player, FormatMessage.LINK));
                             }else {
                                 sendMessage(player, Message.COMMAND_LINK_MISSING_ARGS_DISCORD);
                             }
@@ -123,7 +124,7 @@ public class LinkCommand extends BaseTabCommand {
                             TwoFactorAuth.CODES.put(uuid, codeAuth);
 
                             sendMessage(sender, Message.COMMAND_LINK_SEND_DISCORD_2);
-                            AviaTerraCore.enqueueTaskAsynchronously(() ->
+                            AviaTerraScheduler.enqueueTaskAsynchronously(() ->
                                     TwoFactorAuth.sendVerificationDiscord(loginData.getRegister().getDiscord(), player, FormatMessage.CODE));
                         }else {
                             sendMessage(sender, Message.COMMAND_LINK_NOT_FOUNT_DISCORD);
@@ -134,7 +135,7 @@ public class LinkCommand extends BaseTabCommand {
                     CodeAuth codeAuth = TwoFactorAuth.CODES.get(uuid);
                     if (codeAuth != null && TwoFactorAuth.checkCode(player, args[0])){
                         switch (codeAuth.getMediaAuth()){
-                            case DISCORD -> AviaTerraCore.enqueueTaskAsynchronously(() -> {
+                            case DISCORD -> AviaTerraScheduler.enqueueTaskAsynchronously(() -> {
                                 if (DataBaseRegister.updateDiscord(player.getName(), TwoFactorAuth.CODES.get(uuid).getMedia())){
                                     LoginData login = LoginManager.getDataLogin(player);
                                     login.getRegister().setDiscord(TwoFactorAuth.CODES.get(uuid).getMedia());
@@ -144,7 +145,7 @@ public class LinkCommand extends BaseTabCommand {
                                 }
                                 TwoFactorAuth.CODES.remove(uuid);
                             });
-                            case GMAIL -> AviaTerraCore.enqueueTaskAsynchronously(() -> {
+                            case GMAIL -> AviaTerraScheduler.enqueueTaskAsynchronously(() -> {
                                 if (DataBaseRegister.updateGmail(player.getName(), TwoFactorAuth.CODES.get(uuid).getMedia())){
                                     LoginData login = LoginManager.getDataLogin(player);
                                     login.getRegister().setMail(TwoFactorAuth.CODES.get(uuid).getMedia());

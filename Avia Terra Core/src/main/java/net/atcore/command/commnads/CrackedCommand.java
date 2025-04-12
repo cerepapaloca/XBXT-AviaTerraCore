@@ -12,6 +12,7 @@ import net.atcore.security.login.LoginManager;
 import net.atcore.security.login.StateLogins;
 import net.atcore.security.login.model.LoginData;
 import net.atcore.security.login.model.RegisterData;
+import net.atcore.utils.AviaTerraScheduler;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -32,11 +33,13 @@ public class CrackedCommand extends BaseCommand implements Confirmable {
             LoginData data = LoginManager.getDataLogin(player);
             switch (data.getRegister().getStateLogins()){
                 case SEMI_CRACKED, CRACKED -> MessagesManager.sendMessage(player, Message.COMMAND_CRACKED_IS_CRACKED);
-                case PREMIUM -> AviaTerraCore.enqueueTaskAsynchronously(() -> {
+                case PREMIUM -> AviaTerraScheduler.enqueueTaskAsynchronously(() -> {
                     if (DataBaseRegister.changeState(GlobalUtils.getRealName(player), StateLogins.SEMI_CRACKED)) {
-                        RegisterData register = LoginManager.getDataLogin(player).getRegister();
+                        LoginData loginData = LoginManager.getDataLogin(player);
+                        RegisterData register = loginData.getRegister();
                         register.setStateLogins(StateLogins.SEMI_CRACKED);
-                        register.setTemporary(false);//TODO: Revisar si esto funciona bien
+                        register.setTemporary(false);
+                        loginData.getSession().setState(StateLogins.SEMI_CRACKED);
                         GlobalUtils.synchronizeKickPlayer(player, Message.COMMAND_CRACKED_SUCCESSFUL);
                     }else {
                         MessagesManager.sendMessage(player, Message.COMMAND_CRACKED_ERROR);
@@ -49,9 +52,7 @@ public class CrackedCommand extends BaseCommand implements Confirmable {
     }
 
     @Override
-    public String getMessageConfirm() {
-        return "<red><b>Advertencia</b></red> En caso de que tu cuenta tenga una contraseña, tendrás que iniciar con esa contraseña, " +
-                "En caso contrario te pedirá que te registre. Si quieres proseguir ejecuta <|este mismo comando|> o " +
-                "<|<Click:suggest_command:/premium>/premium</click>|>";
+    public Message getMessageConfirm() {
+        return Message.COMMAND_CRACKED_CONFIRM;
     }
 }

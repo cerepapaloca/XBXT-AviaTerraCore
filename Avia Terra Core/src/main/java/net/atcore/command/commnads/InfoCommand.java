@@ -3,9 +3,11 @@ package net.atcore.command.commnads;
 import net.atcore.AviaTerraCore;
 import net.atcore.command.*;
 import net.atcore.messages.CategoryMessages;
+import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import net.atcore.security.login.LoginManager;
 import net.atcore.security.login.model.LoginData;
+import net.atcore.utils.AviaTerraScheduler;
 import net.atcore.utils.GlobalUtils;
 import net.luckperms.api.model.user.User;
 import org.bukkit.Bukkit;
@@ -13,8 +15,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
-
-import static net.atcore.messages.MessagesManager.sendMessage;
 
 public class InfoCommand extends BaseCommand {
 
@@ -49,7 +49,7 @@ public class InfoCommand extends BaseCommand {
             }
             send(sender," ");
         }else {
-            AviaTerraCore.enqueueTaskAsynchronously(() -> CommandUtils.executeForPlayer(sender, args[0], true, (name, player) -> {
+            AviaTerraScheduler.enqueueTaskAsynchronously(() -> CommandUtils.executeForPlayer(sender, args[0], true, (name, player) -> {
                 LoginData data = LoginManager.getDataLogin(player);
                 send(sender, String.format("Nombres: <|%s|>", player.getName()));
                 send(sender, String.format("Display name: <|%s|>", player.displayName()));
@@ -59,6 +59,7 @@ public class InfoCommand extends BaseCommand {
                 send(sender, String.format("Localización: <|%s|>", GlobalUtils.locationToString(player.getLocation())));
                 send(sender, String.format("Tiempo Logueado: <|%s|>", GlobalUtils.timeToString(System.currentTimeMillis() - data.getRegister().getLastLoginDate(), 1)));
                 send(sender, String.format("Tiempo Registrado: <|%s|>", GlobalUtils.timeToString(System.currentTimeMillis() - data.getRegister().getRegisterDate(), 1)));
+                send(sender, String.format("Tiempo Restante: <|%s|>", GlobalUtils.timeToString(System.currentTimeMillis() - data.getSession().getEndTimeLogin(), 1)));
                 send(sender, String.format("Ping: <|%s|>", player.getPing()));
                 send(sender, String.format("Ip: <|%s|>", player.getAddress() == null ? null : player.getAddress().getAddress().getHostAddress()));
                 if (args.length == 1 || !args[1].equalsIgnoreCase("more")) return;
@@ -72,7 +73,7 @@ public class InfoCommand extends BaseCommand {
                 send(sender, String.format("Discord: <|%s|>", data.getRegister().getDiscord()));
                 send(sender, String.format("Mail: <|%s|>", data.getRegister().getMail()));
                 send(sender, String.format("OP: <|%s|>", player.isOp()));
-                send(sender, String.format("Sesión Expirada: <|%s|>", !LoginManager.checkLogin(player, false, false)));
+                send(sender, String.format("Sesión Expirada: <|%s|> (<|%s|>)", !LoginManager.checkLogin(player, false, false), !(data.getSession().getEndTimeLogin() > System.currentTimeMillis())));
                 send(sender, String.format("Vida: <|%s|>", player.getHealth()));
                 send(sender, String.format("Comida: <|%s|>", player.getFoodLevel()));
                 send(sender, String.format("Nivel: <|%s|>", player.getLevel()));
@@ -82,7 +83,7 @@ public class InfoCommand extends BaseCommand {
     }
 
     private void send(CommandSender sender, String s){
-        sendMessage(sender,s, TypeMessages.INFO, CategoryMessages.PRIVATE, false);
+        MessagesManager.sendMessage(sender,s, TypeMessages.INFO, CategoryMessages.PRIVATE, false);
     }
 
     private String applySpace(String s){

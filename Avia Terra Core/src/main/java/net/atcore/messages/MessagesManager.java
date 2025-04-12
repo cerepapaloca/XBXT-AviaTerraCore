@@ -1,10 +1,15 @@
 package net.atcore.messages;
 
+import lombok.experimental.UtilityClass;
 import net.atcore.AviaTerraCore;
 import net.atcore.command.ArgumentUse;
 import net.atcore.data.DataSection;
 import net.atcore.data.yml.MessageFile;
+import net.atcore.listener.JoinAndQuitListener;
+import net.atcore.security.login.LoginManager;
+import net.atcore.utils.AviaTerraScheduler;
 import net.atcore.utils.GlobalUtils;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent.Builder;
@@ -23,9 +28,11 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.awt.*;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.*;
 
 import static net.kyori.adventure.text.event.ClickEvent.Action;
@@ -35,15 +42,16 @@ import static net.kyori.adventure.text.event.ClickEvent.Action;
  * al igual que todos los colores.
  */
 
+@UtilityClass
 public final class MessagesManager {
 
-    public static final String LINK_DISCORD = "&a&n<click:open_url:http://discord.xbxt.xyz>http://discord.xbxt.xyz</click>";
-    public static final String LINK_WEBSITE = "&a&n<click:open_url:https://xbxt.xyz>xbxt.xyz</click>";
-    public static final String LINK_VOTE = "&a&n<click:open_url:https://minecraft-mp.com/server-s339858>minecraft-mp.com/server-s339858</click>";
-    public static final String PREFIX = "<dark_gray>[</dark_gray><b><#4B2FDE>XT<#ff8C00>XB</b><dark_gray>]</dark_gray> ";
-    public static final String PREFIX_CHAT_DISCORD = "<dark_gray>[</dark_gray><b><gradient:#0000FF:#0000AA>DISCORD</gradient></b><dark_gray>]</dark_gray> ";
-    public static final LocaleAvailable DEFAULT_LOCALE_USER = LocaleAvailable.ES;
-    public static final LocaleAvailable DEFAULT_LOCALE_PRIVATE = LocaleAvailable.ES;
+    public final String LINK_DISCORD = "&a&n<click:open_url:http://discord.xbxt.xyz>http://discord.xbxt.xyz</click>";
+    public final String LINK_WEBSITE = "&a&n<click:open_url:https://xbxt.xyz>xbxt.xyz</click>";
+    public final String LINK_VOTE = "&a&n<click:open_url:https://minecraft-mp.com/server-s339858>minecraft-mp.com/server-s339858</click>";
+    public final String PREFIX = "<dark_gray>[</dark_gray><b><#4B2FDE>XT<#ff8C00>XB</b><dark_gray>]</dark_gray> ";
+    public final String PREFIX_CHAT_DISCORD = "<dark_gray>[</dark_gray><b><gradient:#0000FF:#0000AA>DISCORD</gradient></b><dark_gray>]</dark_gray> ";
+    public final LocaleAvailable DEFAULT_LOCALE_USER = LocaleAvailable.ES;
+    public final LocaleAvailable DEFAULT_LOCALE_PRIVATE = LocaleAvailable.ES;
 
     /// ////////////////////////
     /// ////////////////////////
@@ -96,7 +104,7 @@ public final class MessagesManager {
      * @see #sendMessage(Player, String, TypeMessages, CategoryMessages, boolean) sendMessage()
      */
 
-    public static void sendMessage(Player player, String message, @NotNull TypeMessages type, CategoryMessages categoryMessages) {
+    public void sendMessage(Player player, String message, @NotNull TypeMessages type, CategoryMessages categoryMessages) {
         sendMessage(player, message, type, categoryMessages, true);
     }
 
@@ -115,7 +123,7 @@ public final class MessagesManager {
      * @see #addProprieties
      */
 
-    public static void sendMessage(Player player, String message, @NotNull TypeMessages type, CategoryMessages categoryMessages, boolean isPrefix) {
+    public void sendMessage(Player player, String message, @NotNull TypeMessages type, CategoryMessages categoryMessages, boolean isPrefix) {
         player.sendMessage(applyFinalProprieties(message, type, categoryMessages, isPrefix));
     }
 
@@ -150,17 +158,17 @@ public final class MessagesManager {
     ///////////////////////////
     ///////////////////////////
 
-    public static void sendErrorException(String message, Exception exception) {
+    public void sendErrorException(String message, Exception exception) {
         //sendMessageLogDiscord(TypeMessages.ERROR, CategoryMessages.SYSTEM, String.format("%s [%s=%s]", message, exception.getClass().getSimpleName(), exception.getMessage()));
         AviaTerraCore.getInstance().getLogger().severe(setFormatException(message, exception));
     }
 
-    public static void sendWaringException(String message, Exception exception) {
+    public void sendWaringException(String message, Exception exception) {
         //sendMessageLogDiscord(TypeMessages.WARNING, CategoryMessages.SYSTEM, String.format("%s [%s=%s]", message, exception.getClass().getSimpleName(), exception.getMessage()));
         AviaTerraCore.getInstance().getLogger().warning(setFormatException(message, exception));
     }
 
-    private static String setFormatException(String message, Exception exception) {
+    private String setFormatException(String message, Exception exception) {
         StringBuilder builder = new StringBuilder();
         for (StackTraceElement element : exception.getStackTrace()) {
             builder.append(element.toString()).append("\n\t");
@@ -186,7 +194,7 @@ public final class MessagesManager {
      * @return regresa el texto con todos las aplicadas
      */
 
-    public static String addProprieties(String message, @Nullable TypeMessages type, boolean showPrefix) {
+    public String addProprieties(String message, @Nullable TypeMessages type, boolean showPrefix) {
         String s;
         if (showPrefix) {
             s = PREFIX;
@@ -202,7 +210,7 @@ public final class MessagesManager {
                 .replace("`", "");
     }
 
-    public static Component applyFinalProprieties(String message, @NotNull TypeMessages type, CategoryMessages categoryMessages, boolean isPrefix) {
+    public Component applyFinalProprieties(String message, @NotNull TypeMessages type, CategoryMessages categoryMessages, boolean isPrefix) {
         if (categoryMessages != CategoryMessages.PRIVATE) {
             sendMessageLogDiscord(type, categoryMessages, message);
         }
@@ -211,9 +219,9 @@ public final class MessagesManager {
     }
 
 
-    private static void sendMessageLogDiscord(TypeMessages type, CategoryMessages categoryMessages, String message) {
+    private void sendMessageLogDiscord(TypeMessages type, CategoryMessages categoryMessages, String message) {
         if (AviaTerraCore.jda == null) return;
-        AviaTerraCore.enqueueTaskAsynchronously(() -> {
+        AviaTerraScheduler.enqueueTaskAsynchronously(() -> {
             String finalMessage;
             switch (type) {
                 case SUCCESS -> finalMessage = "🟩 " + message;
@@ -248,7 +256,7 @@ public final class MessagesManager {
      * Le manda un título a jugador respetando el formato de {@link #addProprieties(String, TypeMessages, boolean) addProprieties}
      */
 
-    public static void sendTitle(Player player, String title, String subtitle, int fadeIn, int stay, int fadeOut, TypeMessages type) {
+    public void sendTitle(Player player, String title, String subtitle, int fadeIn, int stay, int fadeOut, TypeMessages type) {
         final Title.Times times = Title.Times.times(Duration.ofMillis(20L *fadeIn), Duration.ofMillis(20L *stay), Duration.ofMillis(20L *fadeOut));
         // Using the times object this title will use 500ms to fade in, stay on screen for 3000ms and then fade out for 1000ms
         final Title t = Title.title(
@@ -261,7 +269,7 @@ public final class MessagesManager {
         player.showTitle(t);
     }
 
-    public static void deathMessage(@NotNull Player victim, @Nullable LivingEntity killer, @Nullable ItemStack stack, @NotNull EntityDamageEvent.DamageCause cause) {
+    public void deathMessage(@NotNull Player victim, @Nullable LivingEntity killer, @Nullable ItemStack stack, @NotNull EntityDamageEvent.DamageCause cause) {
         Random r = new Random();
         List<CommandSender> senders = new ArrayList<>(Bukkit.getOnlinePlayers());
         senders.add(Bukkit.getConsoleSender());
@@ -269,9 +277,9 @@ public final class MessagesManager {
             String message;//TODO: Incluir el dragon;
             if ((killer != null && killer.getType() != EntityType.PLAYER && (
                     cause.equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK) ||
-                    cause.equals(EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK) ||
-                    cause.equals(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION) ||
-                    cause.equals(EntityDamageEvent.DamageCause.PROJECTILE))
+                            cause.equals(EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK) ||
+                            cause.equals(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION) ||
+                            cause.equals(EntityDamageEvent.DamageCause.PROJECTILE))
             )) {
                 Locale locale;
                 if (p instanceof Player player) {
@@ -293,7 +301,12 @@ public final class MessagesManager {
                 if (killer != null && killer.getType() == EntityType.PLAYER && cause.equals(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION)) {
                     message = Message.DEATH_CAUSE_END_CRYSTAL.getMessage(p);
                 }else {
-                    message = Message.valueOf("DEATH_CAUSE_" + cause.name()).getMessage(p);
+                    // En caso de que se mate asi mismo
+                    if (victim.equals(killer)) {
+                        message = Message.DEATH_CAUSE_SUICIDE.getMessage(p);
+                    }else {
+                        message = Message.valueOf("DEATH_CAUSE_" + cause.name()).getMessage(p);
+                    }
                 }
             }
             Builder tc = Component.text();
@@ -334,6 +347,38 @@ public final class MessagesManager {
                 component = component.replaceText(config3.build());
             }
             p.sendMessage(component);
+        }
+    }
+
+    public void quitAndJoinMessage(Player player, Message message) {
+        List<CommandSender> senders = new ArrayList<>(Bukkit.getOnlinePlayers());
+        senders.add(Bukkit.getConsoleSender());
+        switch (message){
+            case EVENT_JOIN -> {
+                if (LoginManager.getDataLogin(player).getRegister().isNew() && !JoinAndQuitListener.uniquePlayers.contains(player.getUniqueId())) {
+                    JoinAndQuitListener.uniquePlayers.add(player.getUniqueId());
+                    sendEmbed(player, Color.YELLOW, "%s Se unió por primera vez");// TODO: Hay que reglar eso
+                }else {
+                    sendEmbed(player, Color.GREEN, "%s Se unió al servidor");
+                }
+            }
+            case EVENT_QUIT -> sendEmbed(player, Color.RED, "%s Se salio del servidor");
+            default -> throw new IllegalArgumentException("Unrecognized message " + message);
+        }
+        for (CommandSender sender : senders) {
+            MessagesManager.sendString(sender, String.format(message.getMessage(sender), player.getName()), message.getTypeMessages(), false);
+        }
+    }
+
+    private void sendEmbed(@NotNull Player player, Color color, String message) {
+        if (AviaTerraCore.jda != null) {
+            EmbedBuilder embed = new EmbedBuilder();
+            embed.setColor(color);
+            String normalizedName = player.getName().startsWith(".") ? player.getName().substring(1) : player.getName();
+            embed.setAuthor(String.format(message, player.getName()), null, "https://crafthead.net/cube/" + normalizedName);
+            TextChannel textChannel = AviaTerraCore.jda.getTextChannelById(DiscordBot.JoinAndLeave);
+            assert textChannel != null;
+            textChannel.sendMessageEmbeds(embed.build()).queue();
         }
     }
 }

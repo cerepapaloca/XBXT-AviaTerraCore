@@ -20,6 +20,7 @@ import net.atcore.data.yml.ymls.PlayersDataFiles;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
+import net.atcore.utils.AviaTerraScheduler;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -79,7 +80,7 @@ public class DataSection implements Section {
 
     @Override
     public void reload() {
-        AviaTerraCore.enqueueTaskAsynchronously(true, () -> {
+        AviaTerraScheduler.enqueueTaskAsynchronously(true, () -> {
             for (DataBaseMySql dataBaseMySql : DATA_BASE) dataBaseMySql.reload();
             for (File file : FILES) {
                 if (file instanceof FileYaml yaml) {

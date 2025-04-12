@@ -13,7 +13,6 @@ import net.atcore.messages.*;
 import net.atcore.security.login.LimboManager;
 import net.atcore.security.login.LoginManager;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.luckperms.api.node.types.InheritanceNode;
 import org.bukkit.*;
@@ -23,7 +22,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
-import org.geysermc.floodgate.api.FloodgateApi;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -206,7 +204,7 @@ public final class GlobalUtils {
 
     public String kickPlayer(@NotNull Player player, @NotNull Message message){
         // Se añade esto para evitar bugs
-        LimboManager.IN_PROCESS.remove(player.getUniqueId());
+        LimboManager.inProcess.remove(player.getUniqueId());
         try {
             return kickPlayer(player, message.getMessage(player), message.getTypeMessages());
         }catch (Exception e){

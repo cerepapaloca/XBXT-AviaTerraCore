@@ -4,6 +4,7 @@ import net.atcore.AviaTerraCore;
 import net.atcore.achievement.BaseAchievementSimple;
 import net.atcore.achievement.SynchronouslyEvent;
 import net.atcore.listener.DeathListener;
+import net.atcore.utils.AviaTerraScheduler;
 import net.minecraft.advancements.AdvancementType;
 import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
@@ -21,7 +22,7 @@ public class KillPlayerAchievement extends BaseAchievementSimple<PlayerDeathEven
         LivingEntity killer = player.getKiller();
         if (killer == null) killer = DeathListener.getKillerByDamage(player);
         if (killer == null) return;
-        if (killer instanceof Player playerKiller) AviaTerraCore.enqueueTaskAsynchronously(() -> grantAdvanced(playerKiller, null));
+        if (killer instanceof Player playerKiller) AviaTerraScheduler.enqueueTaskAsynchronously(() -> grantAdvanced(playerKiller, null));
     }
 
     @Override

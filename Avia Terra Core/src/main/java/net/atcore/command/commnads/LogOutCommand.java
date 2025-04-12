@@ -7,6 +7,7 @@ import net.atcore.command.Confirmable;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
 import net.atcore.security.login.LoginManager;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -31,7 +32,7 @@ public class LogOutCommand extends BaseCommand implements Confirmable {
     }
 
     @Override
-    public String getMessageConfirm() {
-        return "Seguro que desea cerrar sesión, Si es asi ejecuta <|<Click:suggest_command:/confirm>/confirm</click>|> o vuelve a ejecutar este commando";
+    public Message getMessageConfirm() {
+        return Message.COMMAND_LOGOUT_CONFIRM;
     }
 }

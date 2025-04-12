@@ -5,6 +5,7 @@ import net.atcore.aviaterraplayer.AviaTerraPlayer;
 import net.atcore.command.*;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
+import net.atcore.utils.AviaTerraScheduler;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -31,7 +32,7 @@ public class BlockCommand extends BaseCommand {
                     aviaTerraPlayer.getPlayersBLock().add(name);
                     list.add(name);
                 });
-                AviaTerraCore.enqueueTaskAsynchronously(() -> {
+                AviaTerraScheduler.enqueueTaskAsynchronously(() -> {
                     aviaTerraPlayer.getPlayerDataFile().saveData();
                     MessagesManager.sendFormatMessage(p, Message.COMMAND_BLOCK_SUCCESSFUL, String.join(", ", list));
                 });

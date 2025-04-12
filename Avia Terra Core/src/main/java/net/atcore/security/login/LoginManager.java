@@ -16,6 +16,7 @@ import net.atcore.security.EncryptService;
 import net.atcore.security.login.model.LoginData;
 import net.atcore.security.login.model.RegisterData;
 import net.atcore.security.login.model.SessionData;
+import net.atcore.utils.AviaTerraScheduler;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
@@ -30,13 +31,14 @@ import org.jetbrains.annotations.Nullable;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static net.atcore.data.sql.DataBaseRegister.*;
 
 @UtilityClass
 public final class LoginManager {
 
-    private final HashMap<UUID, LoginData> LIST_DATA_LOGIN = new HashMap<>();
+    private final ConcurrentHashMap<UUID, LoginData> LIST_DATA_LOGIN = new ConcurrentHashMap<>();
 
     public LoginData getDataLogin(String name) {
         String normalizeName = name.startsWith(".") ? name.substring(1) : name;
@@ -143,8 +145,9 @@ public final class LoginManager {
             registerData.setRegisterAddress(ip);
             registerData.setRegisterDate(System.currentTimeMillis());
             registerData.setLastLoginDate(System.currentTimeMillis());
+            registerData.setNew(true);
             // Se guarda el registro en la base de datos
-            AviaTerraCore.enqueueTaskAsynchronously(() -> DataBaseRegister.addRegister(registerData.getUsername(),
+            AviaTerraScheduler.enqueueTaskAsynchronously(() -> DataBaseRegister.addRegister(registerData.getUsername(),
                     GlobalUtils.getUUIDByName(name).toString(),
                     b ? profileObj.getId().toString() : null,
                     ip.getHostAddress(),
@@ -185,14 +188,16 @@ public final class LoginManager {
             MessagesManager.logConsole(String.format("Inicio de session cracked invalida para <|%s|>", player.getName()) , TypeMessages.WARNING, CategoryMessages.LOGIN);
             return;
         }
-        SessionData sessionData = new SessionData(player, StateLogins.CRACKED);//TODO: Cambiar si es un Cracked o un semi cracked
+        SessionData sessionData = new SessionData(player, StateLogins.CRACKED);
         sessionData.setEndTimeLogin(Config.getExpirationSession() + System.currentTimeMillis());
         loginData.setSession(sessionData);
-        AviaTerraCore.taskSynchronously( () -> {
-            loginData.getLimbo().restorePlayer(player);
+        AviaTerraScheduler.runTask(() -> {
+            // Puede ser que esté limbo o no, Debido a que al ejecutar /login o /register lo saque del modo limbo más rápido que esto
+            if (loginData.isLimboMode()) loginData.getLimbo().restorePlayer(player);
             player.updateCommands();
         });
-        AviaTerraCore.enqueueTaskAsynchronously(() -> BaseAchievement.sendAllAchievement(player));
+        AviaTerraScheduler.enqueueTaskAsynchronously(() -> BaseAchievement.sendAllAchievement(player));
+        MessagesManager.quitAndJoinMessage(player, Message.EVENT_JOIN);
         player.playSound(player, Sound.ENTITY_PLAYER_LEVELUP, 0.4f, 1);
         new BukkitRunnable() {
             public void run() {
@@ -217,7 +222,7 @@ public final class LoginManager {
         data.setTemporary(false);
         data.setPasswordShaded(s);
         updateLoginDataBase(name, player.getAddress().getAddress());
-        AviaTerraCore.enqueueTaskAsynchronously(() -> {
+        AviaTerraScheduler.enqueueTaskAsynchronously(() -> {
             if (!updatePassword(name, s)){
                 GlobalUtils.synchronizeKickPlayer(player, Message.LOGIN_KICK_PASSWORD_ERROR);
             }
@@ -226,7 +231,7 @@ public final class LoginManager {
     }
 
     public void updateLoginDataBase(String name, InetAddress inetAddress){
-        AviaTerraCore.enqueueTaskAsynchronously(() -> {
+        AviaTerraScheduler.enqueueTaskAsynchronously(() -> {
             boolean b = updateAddress(name, inetAddress.getHostAddress()) && updateLoginDate(name, System.currentTimeMillis());
             if (!b) { // En caso de un error hace un kick al jugador para que vuelva a entrar
                 Player player = Bukkit.getPlayer(name);
@@ -265,14 +270,14 @@ public final class LoginManager {
             switch (sessionData.getState()) {
                 case CRACKED, SEMI_CRACKED -> {
                     if (loginData.getRegister().getPasswordShaded() != null) {// tiene una contraseña la cuenta?
-                        // no puede ver cracked en modo online
+                        // No puede ver cracked en modo online
                         if (Config.getServerMode().equals(ServerMode.ONLINE_MODE)) {
                             GlobalUtils.synchronizeKickPlayer(player, Message.LOGIN_KICK_ONLINE_MODE);
                             return false;
                         }
                         if (GlobalUtils.equalIp(sessionData.getAddress(), player.getAddress().getAddress())) {// las ips tiene que ser iguales
                             if (ignoreTime || loginData.getSession().getEndTimeLogin() > System.currentTimeMillis()) {// expiro? o no se tiene en cuenta
-                                Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> {
+                                AviaTerraScheduler.runSync(() -> {
                                     if (loginData.isLimboMode() && limboMode && player.isOnline()) {
                                         loginData.getLimbo().restorePlayer(player);
                                     }
@@ -337,7 +342,7 @@ public final class LoginManager {
             if (Config.getServerMode().equals(ServerMode.OFFLINE_MODE) || registerData.getStateLogins() != StateLogins.PREMIUM) {
                 checkLogin(player, false, true);
             }
-            AviaTerraCore.enqueueTaskAsynchronously(() -> {
+            AviaTerraScheduler.enqueueTaskAsynchronously(() -> {
                 if (FloodgateApi.getInstance().isFloodgatePlayer(player.getUniqueId()) && loginData.getRegister().getUuidBedrock() == null) {
                     DataBaseRegister.addUUIDBedrock(GlobalUtils.getRealName(player), player.getUniqueId());
                     loginData.getRegister().setUuidBedrock(player.getUniqueId());

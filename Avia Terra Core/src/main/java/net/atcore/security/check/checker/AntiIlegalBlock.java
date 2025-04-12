@@ -1,9 +1,8 @@
 package net.atcore.security.check.checker;
 
 import io.papermc.paper.event.packet.PlayerChunkLoadEvent;
-import net.atcore.AviaTerraCore;
 import net.atcore.security.check.BaseChecker;
-import org.bukkit.Bukkit;
+import net.atcore.utils.AviaTerraScheduler;
 import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -19,7 +18,7 @@ public class AntiIlegalBlock extends BaseChecker<PlayerChunkLoadEvent> {
     public void onCheck(PlayerChunkLoadEvent event) {
         Chunk chunk = event.getChunk();
 
-        AviaTerraCore.enqueueTaskAsynchronously(() -> {
+        AviaTerraScheduler.enqueueTaskAsynchronously(() -> {
             List<Block> blocksRemove = new ArrayList<>();
             int yUpperLimit = event.getWorld().getMaxHeight();
             int yLowerLimit = event.getWorld().getMinHeight();
@@ -46,7 +45,7 @@ public class AntiIlegalBlock extends BaseChecker<PlayerChunkLoadEvent> {
                     }
                 }
             }
-            AviaTerraCore.taskSynchronously(() -> blocksRemove.forEach(block -> block.setType(Material.AIR)));
+            AviaTerraScheduler.runTask(() -> blocksRemove.forEach(block -> block.setType(Material.AIR)));
         });
     }
 }

@@ -7,6 +7,7 @@ import net.atcore.command.CommandUtils;
 import net.atcore.command.CommandVisibility;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
+import net.atcore.utils.ModeTab;
 import net.minecraft.resources.ResourceLocation;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.Event;
@@ -60,7 +61,7 @@ public class AviaTerraAchievementCommand extends BaseTabCommand {
                 return CommandUtils.listTab(args[1], List.of("add", "remove"));
             }
             case 3 -> {
-                return BaseAchievement.getAllAchievement().stream().map(achievement -> achievement.id.getNamespace() + ":" + achievement.id.getPath()).toList();
+                return CommandUtils.listTab(args[2], BaseAchievement.getAllAchievement().stream().map(achievement -> achievement.id.getNamespace() + ":" + achievement.id.getPath()).toList(), ModeTab.CONTAINS_IGNORE_CASE);
             }
             default -> {
                 return List.of();

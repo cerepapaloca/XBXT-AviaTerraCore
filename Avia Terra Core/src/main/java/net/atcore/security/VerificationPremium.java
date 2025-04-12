@@ -65,7 +65,8 @@ public class VerificationPremium {
                 if (SimulateOnlineMode.enableEncryption(new SecretKeySpec(sharedSecret, "AES"), player)) {
                     // Se investiga en la base de datos en mojang para saber si está logueado.
                     response = resolver.hasJoined(name, serverId, inetAddress);
-                    if (response.isPresent()){//Se mira la base de datos
+                    // ¿Los datos existe?
+                    if (response.isPresent()){
                         Verification verification = response.get();
                         if (checkNameAndUUID(verification, name, uuid)) {// Mira si son iguales las uuid premium
                             if (ip.equals(inetAddress.getHostAddress())){// Mira si la ip son la misma ip

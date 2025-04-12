@@ -65,6 +65,7 @@ public class DataBaseRegister extends DataBaseMySql {
                 registerData.setRegisterDate(registerDate);
                 registerData.setMail(gmail);
                 registerData.setDiscord(discord);
+                registerData.setNew(false);
 
                 LoginData loginData = LoginManager.addDataLogin(name, registerData);
                 SessionData session = sessions.get(uuid);// Se obtiene las sesiones para que no se tenga que loguear de nuevo

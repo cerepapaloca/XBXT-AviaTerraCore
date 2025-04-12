@@ -9,6 +9,7 @@ import net.atcore.command.commnads.TellCommand;
 import net.atcore.messages.*;
 import net.atcore.moderation.ban.ContextBan;
 import net.atcore.security.login.LoginManager;
+import net.atcore.utils.AviaTerraScheduler;
 import net.atcore.utils.GlobalUtils;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.kyori.adventure.text.Component;
@@ -28,7 +29,6 @@ import org.bukkit.event.Listener;
 import org.jetbrains.annotations.NotNull;
 
 import static net.atcore.messages.Message.EVENT_CHAT_HOVER;
-import static net.atcore.messages.MessagesManager.sendMessage;
 
 @Setter
 @Getter
@@ -43,7 +43,7 @@ public class ChatListener implements Listener {
         String textPlain = PlainTextComponentSerializer.plainText().serialize(message);
 
         if (!LoginManager.checkLogin(sender)) {
-            sendMessage(sender, Message.LOGIN_LIMBO_CHAT_WRITE);
+            MessagesManager.sendMessage(sender, Message.LOGIN_LIMBO_CHAT_WRITE);
             return;
         }
 
@@ -69,7 +69,7 @@ public class ChatListener implements Listener {
         Bukkit.getConsoleSender().sendMessage(setFormat(message, sender, sender, textPlain.contains(sender.getName())));
 
         if (AviaTerraCore.jda != null) {
-            AviaTerraCore.enqueueTaskAsynchronously(() -> {
+            AviaTerraScheduler.enqueueTaskAsynchronously(() -> {
                 TextChannel channel = AviaTerraCore.jda.getTextChannelById(DiscordBot.chatId);
                 if (channel !=  null) {
                     channel.sendMessage(PlainTextComponentSerializer.plainText().serialize(

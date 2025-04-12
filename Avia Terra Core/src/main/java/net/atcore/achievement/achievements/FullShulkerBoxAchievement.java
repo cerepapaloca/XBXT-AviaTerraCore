@@ -2,7 +2,7 @@ package net.atcore.achievement.achievements;
 
 import net.atcore.achievement.AchievementsUtils;
 import net.atcore.achievement.BaseAchievementSimple;
-import net.atcore.achievement.PlayerInventoryChangeEvent;
+import net.atcore.achievement.InventoryChangeEvent;
 import net.atcore.security.check.CheckerUtils;
 import net.minecraft.advancements.AdvancementType;
 import org.bukkit.Material;
@@ -15,13 +15,13 @@ import org.bukkit.inventory.meta.BlockStateMeta;
 
 import java.util.List;
 
-public class FullShulkerBoxAchievement extends BaseAchievementSimple<PlayerInventoryChangeEvent> {
+public class FullShulkerBoxAchievement extends BaseAchievementSimple<InventoryChangeEvent> {
     public FullShulkerBoxAchievement() {
         super(Material.GRAY_SHULKER_BOX, GetShulkerBoxAchievement.class, AdvancementType.TASK);
     }
 
     @Override
-    public void onEvent(PlayerInventoryChangeEvent event) {
+    public void onEvent(InventoryChangeEvent event) {
         List<ItemStack> list = CheckerUtils.getItems(event);
         Player player = event.getPlayer();
         if (player.getOpenInventory().getTopInventory().getType() == InventoryType.SHULKER_BOX &&

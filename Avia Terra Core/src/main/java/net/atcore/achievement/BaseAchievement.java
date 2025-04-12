@@ -8,6 +8,7 @@ import net.atcore.data.DataSection;
 import net.atcore.data.yml.MessageFile;
 import net.atcore.messages.*;
 import net.atcore.security.login.LoginManager;
+import net.atcore.utils.AviaTerraScheduler;
 import net.atcore.utils.GlobalUtils;
 import net.kyori.adventure.text.Component;
 import net.minecraft.advancements.*;
@@ -98,7 +99,7 @@ public abstract class BaseAchievement<T extends Event> implements Listener {
                     player = null;
                 }
 
-                AviaTerraCore.enqueueTaskAsynchronously(() -> {
+                AviaTerraScheduler.enqueueTaskAsynchronously(() -> {
                     if (eventClass.isInstance(event)) {
                         T t = eventClass.cast(event);
                         for (BaseAchievement<? extends Event> achievement : EVENTS_REGISTERED.getOrDefault(t.getClass(), List.of())) {
@@ -143,8 +144,7 @@ public abstract class BaseAchievement<T extends Event> implements Listener {
             AdvancementHolder newAdvancementHolder = deconstructAdvancement(advancement.advancement()).parent(parent.holder()).build(advancement.holder().id());
             AdvancementNode newAdvancement = new AdvancementNode(newAdvancementHolder, parent);
 
-            for (AdvancementNode child : children)
-                newAdvancement.addChild(child);
+            for (AdvancementNode child : children) newAdvancement.addChild(child);
 
             parent.addChild(newAdvancement);
             return newAdvancement;
@@ -157,8 +157,7 @@ public abstract class BaseAchievement<T extends Event> implements Listener {
         Advancement.Builder builder = Advancement.Builder.advancement();
         if (advancement.display().isPresent())
             builder.display(advancement.display().get());
-        for (Map.Entry<String, Criterion<?>> entry : advancement.criteria().entrySet())
-            builder.addCriterion(entry.getKey(), entry.getValue());
+        for (Map.Entry<String, Criterion<?>> entry : advancement.criteria().entrySet()) builder.addCriterion(entry.getKey(), entry.getValue());
         builder.requirements(advancement.requirements());
         return builder;
     }
@@ -302,7 +301,7 @@ public abstract class BaseAchievement<T extends Event> implements Listener {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    AviaTerraCore.taskSynchronously(() -> {
+                    AviaTerraScheduler.runTask(() -> {
                         player.getPlayerDataFile().saveData();
                         saveTask.remove(player);
                     });
@@ -406,7 +405,7 @@ public abstract class BaseAchievement<T extends Event> implements Listener {
                     progress.getProgress().getRemainingCriteria().forEach(requirements::add);
                     requirements.forEach(s -> progress.getProgress().grantProgress(s));
                 }
-                AviaTerraCore.enqueueTaskAsynchronously(() -> atp.getPlayerDataFile().saveData());
+                AviaTerraScheduler.enqueueTaskAsynchronously(() -> atp.getPlayerDataFile().saveData());
             }
             advancements.add(advancement.createAdvancement(displayInfo.getIcon().asBukkitCopy().getType(),
                          player,

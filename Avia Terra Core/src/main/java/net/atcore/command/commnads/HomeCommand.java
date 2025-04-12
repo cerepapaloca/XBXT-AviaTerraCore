@@ -8,6 +8,7 @@ import net.atcore.data.FileYaml;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
+import net.atcore.utils.AviaTerraScheduler;
 import org.bukkit.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -41,31 +42,50 @@ public class HomeCommand extends BaseTabCommand implements CommandAliase {
                 return;
             }
             switch (args.length) {
-                case 1 -> {
+                case 1 -> AviaTerraScheduler.enqueueTaskAsynchronously(() -> {
                     if (atp.getHomes().containsKey(args[0])) {
                         Location loc = atp.getHomes().get(args[0]);
+                        boolean isSafe = false;
+                        int i = 0;
+                        while (!isSafe && i < 20) {
+                            isSafe = loc.clone().add(0, -1, 0).getBlock().getType().isSolid();
+                            if (!isSafe) loc.add(0, -1, 0);
+                            i++;
+                        }
+                        isSafe = false;
+                        i = 0;
+                        while (!isSafe && i < 20) {
+                            isSafe = loc.clone().add(0, 1, 0).getBlock().getType().isAir();
+                            if (!isSafe) loc.add(0, 1, 0);
+                            i++;
+                        }
                         Location l = spawnLocation.clone();
                         l.setWorld(player.getWorld());
                         double distance = player.getLocation().distance(l);
                         if (player.getWorld().getEnvironment() == World.Environment.NETHER) distance *= 8;
                         int distanceMinTp = 100;
-                        if (distance > distanceMinTp){
-                            player.getWorld().spawnParticle(Particle.PORTAL, player.getLocation(), 10, 0.5, 1,0.5);
-                            player.teleport(loc, PlayerTeleportEvent.TeleportCause.COMMAND);
-                            player.getWorld().playSound(player, Sound.ENTITY_PLAYER_TELEPORT, SoundCategory.PLAYERS, 1, 1);
-                            if (player.getGameMode() != GameMode.SPECTATOR) player.getWorld().spawnParticle(Particle.REVERSE_PORTAL, player.getLocation(), 10, 0.5, 1,0.5);
-                        }else {
-                            MessagesManager.sendFormatMessage(sender, Message.COMMAND_HOME_CLOSE_SPAWN, Math.round(distanceMinTp - distance));
-                        }
+                        final double finalDistance = distance;
+                        AviaTerraScheduler.runTask(() -> {
+                            if (finalDistance > distanceMinTp){
+                                player.getWorld().spawnParticle(Particle.PORTAL, player.getLocation(), 10, 0.5, 1,0.5);
+                                player.teleport(loc, PlayerTeleportEvent.TeleportCause.COMMAND);
+                                player.setInvulnerable(true);
+                                AviaTerraScheduler.runTaskLater(60, () -> player.setInvulnerable(false));
+                                player.getWorld().playSound(player, Sound.ENTITY_PLAYER_TELEPORT, SoundCategory.PLAYERS, 1, 1);
+                                if (player.getGameMode() != GameMode.SPECTATOR) player.getWorld().spawnParticle(Particle.REVERSE_PORTAL, player.getLocation(), 10, 0.5, 1,0.5);
+                            }else {
+                                MessagesManager.sendFormatMessage(sender, Message.COMMAND_HOME_CLOSE_SPAWN, Math.round(distanceMinTp - finalDistance));
+                            }
+                        });
 
                     }else {
                         MessagesManager.sendFormatMessage(sender, Message.COMMAND_HOME_NOT_FOUND, args[0]);
                     }
-                }
+                });
                 case 2 -> {
                     FileYaml fileYaml = DataSection.getPlayersDataFiles().getConfigFile(atp.getUuid().toString(), true);
                     switch (args[1].toLowerCase()){
-                        case "add" -> AviaTerraCore.enqueueTaskAsynchronously(() -> {
+                        case "add" -> AviaTerraScheduler.enqueueTaskAsynchronously(() -> {
                             if (args[0].contains(".")){
                                 MessagesManager.sendMessage(sender, Message.COMMAND_HOME_CONTAINS_POINT);
                                 return;
@@ -79,7 +99,7 @@ public class HomeCommand extends BaseTabCommand implements CommandAliase {
                             fileYaml.saveData();
                             MessagesManager.sendMessage(sender, Message.COMMAND_HOME_ADD_SUCCESSFUL);
                         });
-                        case "remove" -> AviaTerraCore.enqueueTaskAsynchronously(() -> {
+                        case "remove" -> AviaTerraScheduler.enqueueTaskAsynchronously(() -> {
                             if (atp.getHomes().containsKey(args[0])) {
                                 atp.getHomes().remove(args[0]);
                                 fileYaml.saveData();

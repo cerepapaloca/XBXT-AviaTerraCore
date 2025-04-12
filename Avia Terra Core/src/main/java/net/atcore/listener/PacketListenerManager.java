@@ -50,7 +50,7 @@ public class PacketListenerManager {
             @Override
             public void onPacketReceiving(PacketEvent event) {
                 event.setCancelled(true);//se cancela por qué si no el servidor le tira error al cliente por enviar un paquete que no debería
-                SecuritySection.getSimulateOnlineMode().startProtocol(event.getPlayer(), event.getPacket());
+                SecuritySection.getSimulateOnlineMode().startLoginPremium(event.getPlayer(), event.getPacket());
             }
         });
 

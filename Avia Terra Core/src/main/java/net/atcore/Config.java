@@ -9,13 +9,6 @@ import net.atcore.security.login.ServerMode;
 public class Config {
 
     /**
-     * Comprueba si tiene items ilegales en su inventario cuando
-     * no es Op
-     */
-
-    @Getter @Setter private boolean checkAntiIllegalItems = false;
-
-    /**
      * Habilitará el protocolo de encriptación de minecraft
      * para los usuarios premium. Mientras los cracked no tiene
      * que pasar por este protocolo. Sí se deshabilita todos los
@@ -24,13 +17,6 @@ public class Config {
      */
 
     @Getter @Setter private ServerMode serverMode = ServerMode.MIX_MODE;
-
-    /**
-     * Si está habilitado al momento de revisar si un jugador
-     * está baneado se tiene en cuenta la ip si no, lo omite
-     */
-
-    @Getter @Setter private boolean checkBanByIp = false;
 
     /**
      * Indica a partir de que fecha los tag de rango son validós
@@ -67,9 +53,5 @@ public class Config {
     @Getter @Setter private double chaceDupeFrame = 0.5;
 
     @Getter @Setter private String passwordSSL = "";
-
-    @Getter @Setter private boolean roofNether = true;
-
-
 
 }

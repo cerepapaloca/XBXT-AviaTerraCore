@@ -11,6 +11,7 @@ import net.atcore.messages.TypeMessages;
 import net.atcore.security.EncryptService;
 import net.atcore.security.login.LoginManager;
 import net.atcore.security.login.TwoFactorAuth;
+import net.atcore.utils.AviaTerraScheduler;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -56,7 +57,7 @@ public class ChangePasswordCommand extends BaseTabCommand {
 
     private static void onChange(Player player, String password, String reason) {
         LoginManager.getDataLogin(player).getRegister().setPasswordShaded(password);
-        AviaTerraCore.enqueueTaskAsynchronously(() -> {
+        AviaTerraScheduler.enqueueTaskAsynchronously(() -> {
             if (DataBaseRegister.updatePassword(player.getName(), password)){
                 sendMessage(player, Message.COMMAND_CHANGE_PASSWORD_SUCCESSFUL);
             }else {

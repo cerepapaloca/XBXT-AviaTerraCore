@@ -20,6 +20,7 @@ import net.atcore.security.SecuritySection;
 import net.atcore.security.login.LoginManager;
 import net.atcore.security.login.model.LoginData;
 import net.atcore.utils.AviaRunnable;
+import net.atcore.utils.AviaTerraScheduler;
 import net.atcore.utils.GlobalUtils;
 import net.atcore.utils.RegisterManager;
 import net.atcore.webapi.ApiSection;
@@ -60,6 +61,7 @@ public class AviaTerraCore extends JavaPlugin {
     @Getter private static AviaTerraCore instance;
     @Getter private static MiniMessage miniMessage;
     @Setter private static long activeTime;
+    @Getter private static AviaTerraScheduler aviaTerraScheduler;
 
     @Override
     public void onLoad(){
@@ -78,9 +80,8 @@ public class AviaTerraCore extends JavaPlugin {
         MessagesManager.logConsole("AviaTerra Iniciando...", TypeMessages.SUCCESS, CategoryMessages.PRIVATE, false);
         startTime = System.currentTimeMillis();
         isStarting = true;
-        workerThread = new Thread(this::processQueue);
-        workerThread.setName("AviaTerraCore WorkerThread");
-        workerThread.start();
+        aviaTerraScheduler = AviaTerraScheduler.startNew();
+
         RegisteredServiceProvider<LuckPerms> provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
         if (provider != null) {
             lp = provider.getProvider();
@@ -163,9 +164,9 @@ public class AviaTerraCore extends JavaPlugin {
             DataBaseRegister.checkRegister(player, GlobalUtils.getRealUUID(player));
             GlobalUtils.kickPlayer(player, "El servidor va a cerrar, volveremos pronto...");
         });
-        taskQueue.clear();
+
         DiscordBot.handler.shutdown();
-        workerThread.interrupt();
+        aviaTerraScheduler.stop();
         isStopping = false;
         MessagesManager.logConsole("AviaTerra Se fue a dormir cómodamente", TypeMessages.SUCCESS, CategoryMessages.SYSTEM, false);
     }
@@ -192,125 +193,7 @@ public class AviaTerraCore extends JavaPlugin {
                 "<gradient:#571ecf:#3f39ea>|__|/ \\|__|              </gradient><gradient:#fb8015:#fbb71f>|__|/ \\|__|             </gradient>",
                 TypeMessages.SUCCESS, CategoryMessages.PRIVATE, false);
     }
-    /*De pronto en un futuro se use
-    public static void runTask(Runnable task){
-        Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), task);
-    }
 
-    public static void runTaskLater(long delay, Runnable task){
-        Bukkit.getScheduler().runTaskLater(AviaTerraCore.getInstance(), task, delay);
-    }
-
-    public static void runTaskLaterAsynchronously(long delay, Runnable task){
-        Bukkit.getScheduler().runTaskLaterAsynchronously(AviaTerraCore.getInstance(), task, delay);
-    }
-
-    public static void runTaskTimer(long delay, long period,Runnable task){
-        Bukkit.getScheduler().runTaskTimer(AviaTerraCore.getInstance(), task, delay, period);
-    }
-
-    public static void runTaskTimerAsynchronously(long delay, long period, Runnable task){
-        Bukkit.getScheduler().runTaskTimerAsynchronously(AviaTerraCore.getInstance(), task, delay, period);
-    }*/
-
-    /**
-     * @see #enqueueTaskAsynchronously(boolean, Runnable)
-     * @param task La tarea que se va añadir
-     */
-
-    public static void enqueueTaskAsynchronously(Runnable task) {
-        enqueueTaskAsynchronously(false, task);
-    }
-
-    public static void taskSynchronously(Runnable task) {
-        Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), task);
-    }
-
-    private static final ExecutorService EXECUTOR = Executors.newCachedThreadPool();
-    private Thread workerThread;
-    public static final BlockingQueue<AviaRunnable> taskQueue = new LinkedBlockingQueue<>();
-    public static volatile LinkedList<telemetryTask> telemetryTasks = new LinkedList<>();
-    public static volatile ArrayList<Integer> amountTask = new ArrayList<>();
-    public static volatile AtomicInteger currentAoumt = new AtomicInteger(0);
-
-    /**
-     * Realiza tareas de manera asincrónica y lo añade a una cola para evitar problemas de sincronización y que se haga
-     * los proceso de manera consecutiva.
-     * <p>
-     * Si la tarea tarda mucho en realizarse mucho en realize (<1000 ms) salta una excepción indicando el problema
-     * </p>
-     * @param task El proceso que va a realizar
-     * @param isHeavyProcess indica si la tarea es pesada haciendo una omisión del waring que se
-     *                       produce cuando la tarea tarda en completable
-     */
-
-    public static void enqueueTaskAsynchronously(boolean isHeavyProcess, Runnable task) {
-        if (!taskQueue.offer(new AviaRunnable(task, isHeavyProcess))){
-            MessagesManager.logConsole("Error al añadir una tarea la cola", TypeMessages.ERROR);
-        }
-        if (taskQueue.size() >= 20){
-            MessagesManager.logConsole(String.format("Hay <|%s|> tareas en cola, Hilo sobre cargador \n" +
-                    Arrays.stream(Thread.currentThread().getStackTrace()).toList().get(3), taskQueue.size()), TypeMessages.WARNING);
-        }
-    }
-
-
-    private void processQueue() {
-        new BukkitRunnable(){
-            @Override
-            public void run() {
-                if (amountTask.size() >= 5) {
-                    amountTask.removeFirst(); // Elimina el más antiguo
-                }
-                amountTask.add(currentAoumt.get());
-                currentAoumt.set(0);
-            }
-        }.runTaskTimerAsynchronously(this, 0, 20*60*2);
-        try {
-            while (!Thread.currentThread().isInterrupted()) {
-                AviaRunnable task = taskQueue.take();
-                long startTime = System.nanoTime();
-
-                Future<?> future = EXECUTOR.submit(task);
-                try {
-                    future.get(1000*45, TimeUnit.MILLISECONDS);
-                    long elapsedNanos = System.nanoTime() - startTime;
-                    /*if (elapsedNanos > 1_000_000_000L && !task.isHeavyProcess()) { // 1s en nanosegundos
-                        StringBuilder builder = getStackTrace(new Exception().getStackTrace());
-                        AviaTerraCore.getInstance().getLogger().warning(
-                                String.format("La tarea tardó %s ms en procesarse", elapsedNanos * 0.000001D) + "\n" + builder
-                        );
-                    }*/
-                    if (telemetryTasks.size() >= 200) {
-                        telemetryTasks.removeFirst(); // Elimina el más antiguo
-                    }
-                    telemetryTasks.add(new telemetryTask(System.currentTimeMillis(), elapsedNanos * 0.000001D,  taskQueue.size()));
-                    currentAoumt.set(currentAoumt.get() + 1);
-                } catch (TimeoutException e) {
-                    StringBuilder builder = getStackTrace(e.getCause().getStackTrace());
-                    future.cancel(true); // Cancelamos la tarea si tarda demasiado
-                    AviaTerraCore.getInstance().getLogger().severe("La tarea fue cancelada por que tardo mucho en procesarse" + "\n" + builder);
-                } catch (ExecutionException e) {
-                    StringBuilder builder = getStackTrace(e.getCause().getStackTrace());
-                    AviaTerraCore.getInstance().getLogger().severe("Hubo un error al iniciar la tarea [" + e.getMessage() + "]" + "\n" + builder);
-                }
-
-            }
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            if (!Bukkit.isStopping()) MessagesManager.sendErrorException("Hilo del AviaTerra hubo una excepción de interrupción", e);
-        }
-    }
-
-    private static @NotNull StringBuilder getStackTrace(StackTraceElement[] traceElements) {
-        StringBuilder builder = new StringBuilder();
-        for (StackTraceElement element : traceElements) {
-            builder.append(element.toString()).append("\n\t");
-        }
-        return builder;
-    }
-
-    public record telemetryTask(long currentTime, double elapsedProcess, int queue) {}
 
     /*
     public static void initModules() {

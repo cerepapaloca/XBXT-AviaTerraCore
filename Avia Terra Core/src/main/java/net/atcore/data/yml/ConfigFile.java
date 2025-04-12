@@ -29,7 +29,6 @@ public class ConfigFile extends FileYaml {
         Config.setExpirationSession(fileYaml.getLong("expiration-session", Config.getExpirationSession()));
         Config.setLevelModerationChat(fileYaml.getDouble("level-moderation-chat", Config.getLevelModerationChat()));
         Config.setPurgeTagRange(fileYaml.getLong("purge-tag-range", Config.getPurgeTagRange()));
-        Config.setCheckBanByIp(fileYaml.getBoolean("check-ban-by-ip", Config.isCheckBanByIp()));
         Config.setServerMode(ServerMode.valueOf(fileYaml.getString("server-mode", Config.getServerMode().name().toLowerCase()).toUpperCase()));
         Config.setChaceDupeFrame(fileYaml.getDouble("chace-dupe-frame", Config.getChaceDupeFrame()));
         Config.setPasswordSSL(fileYaml.getString("password-ssl", Config.getPasswordSSL()));
@@ -52,7 +51,6 @@ public class ConfigFile extends FileYaml {
         fileYaml.set("expiration-session", Config.getExpirationSession());
         fileYaml.set("level-moderation-chat", Config.getLevelModerationChat());
         fileYaml.set("purge-tag-range", Config.getPurgeTagRange());
-        fileYaml.set("check-ban-by-ip", Config.isCheckBanByIp());
         fileYaml.set("server-mode", Config.getServerMode().name().toLowerCase());
         fileYaml.set("chace-dupe-frame", Config.getChaceDupeFrame());
         fileYaml.set("password-ssl", Config.getPasswordSSL());

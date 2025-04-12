@@ -69,6 +69,14 @@ public final class CommandUtils {
         return false;
     }
 
+    @NotNull
+    @Contract(pure = true)
+    public String booleanToString(boolean bool, CommandSender sender) {
+        return bool ? "<|" + Message.MISC_ACTIVE.getMessage(sender) + "|>" : "<|" + Message.MISC_DESACTIVE.getMessage(sender) + "|>";
+    }
+
+    @NotNull
+    @Contract(pure = true)
     public String booleanToString(boolean bool) {
         return bool ? "<|Activo|>" : "<|Desactivado|>";
     }

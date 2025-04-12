@@ -15,6 +15,7 @@ import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import net.atcore.security.login.model.LimboData;
 import net.atcore.security.login.model.LoginData;
+import net.atcore.utils.AviaTerraScheduler;
 import net.atcore.utils.GlobalUtils;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
@@ -31,6 +32,7 @@ import org.geysermc.floodgate.api.player.FloodgatePlayer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -39,14 +41,14 @@ public class LimboManager {
 
     public final int LIMBO_TIME = 20*60;
     // Evita que el jugador entré el modo limbo dos veces por el delay de los hilos asincrónicos
-    public final Set<UUID> IN_PROCESS = Sets.newHashSet();
+    public final HashSet<UUID> inProcess = Sets.newHashSet();
     public final Location LIMBO_LOCATION = new Location(Bukkit.getWorlds().getFirst(), 0, 100, 0);
     private final PotionEffect BLINDNESS_EFFECT = new PotionEffect(PotionEffectType.BLINDNESS, PotionEffect.INFINITE_DURATION,1, true, false);
 
     public void startAsynchronouslyLimboMode(Player player, ReasonLimbo reasonLimbo) {
         try {
-            if (player.isOnline() && !LoginManager.isLimboMode(player) && !IN_PROCESS.contains(player.getUniqueId())) {
-                IN_PROCESS.add(player.getUniqueId());
+            if (player.isOnline() && !LoginManager.isLimboMode(player) && !inProcess.contains(player.getUniqueId())) {
+                inProcess.add(player.getUniqueId());
                 if (Bukkit.isPrimaryThread()) {
                     switch (reasonLimbo) {
                         case NO_SESSION -> {
@@ -56,7 +58,7 @@ public class LimboManager {
                             if (isOk) {
                                 if (loginData.isBedrockPlayer()) {
                                     // En caso de que sea de bedrock lo ejecuta con un tick de delay
-                                    AviaTerraCore.taskSynchronously( () -> LimboManager.createLimboMode(player, reasonLimbo));
+                                    AviaTerraScheduler.runTask(() -> LimboManager.createLimboMode(player, reasonLimbo));
                                 } else {
                                     LimboManager.createLimboMode(player, reasonLimbo);
                                 }
@@ -70,10 +72,10 @@ public class LimboManager {
                             }
                         }
                         // Si no esta registrado lo hace con un delay si o si
-                        case NO_REGISTER -> AviaTerraCore.taskSynchronously(() -> LimboManager.createLimboMode(player, reasonLimbo));
+                        case NO_REGISTER -> AviaTerraScheduler.runTask(() -> LimboManager.createLimboMode(player, reasonLimbo));
                     }
                 }else {
-                    AviaTerraCore.taskSynchronously(() -> LimboManager.createLimboMode(player, reasonLimbo));
+                    AviaTerraScheduler.runTask(() -> LimboManager.createLimboMode(player, reasonLimbo));
                 }
             }
         }catch (Exception e){// Esto es un porsi acaso hay un error. Es mejor hacer un kick por seguridad
@@ -88,7 +90,7 @@ public class LimboManager {
         String uuidString = GlobalUtils.getRealUUID(player).toString();
         addLimboData(player);
         if (FloodgateApi.getInstance().isFloodgatePlayer(player.getUniqueId()) || loginData.isBedrockPlayer()) player.addPotionEffect(BLINDNESS_EFFECT);
-        AviaTerraCore.enqueueTaskAsynchronously(() -> {
+        AviaTerraScheduler.enqueueTaskAsynchronously(() -> {
             FileYaml file = DataSection.getCacheLimboFlies().getConfigFile(uuidString, true);
             if (file instanceof CacheLimboFile cacheLimbo){
                 if (cacheLimbo.isRestored()) {
@@ -185,7 +187,7 @@ public class LimboManager {
         LimboData limboData = newLimboData(player);
         LoginManager.getDataLogin(player).setLimbo(limboData);
         clearPlayer(player);
-        IN_PROCESS.remove(player.getUniqueId());
+        inProcess.remove(player.getUniqueId());
     }
 
     private static @NotNull LimboData newLimboData(Player player) {

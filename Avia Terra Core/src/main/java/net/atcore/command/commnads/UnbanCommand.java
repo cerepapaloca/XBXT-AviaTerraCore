@@ -5,6 +5,7 @@ import net.atcore.command.*;
 import net.atcore.messages.Message;
 import net.atcore.moderation.ModerationSection;
 import net.atcore.moderation.ban.ContextBan;
+import net.atcore.utils.AviaTerraScheduler;
 import org.bukkit.command.CommandSender;
 
 import java.util.List;
@@ -34,7 +35,7 @@ public class UnbanCommand extends BaseTabCommand {
         }
         //en un hilo aparte por qué explota el servidor
         CommandUtils.executeForPlayer(sender, args[0], false, (name, player) ->
-                AviaTerraCore.enqueueTaskAsynchronously(() ->
+                AviaTerraScheduler.enqueueTaskAsynchronously(() ->
                         ModerationSection.getBanManager().removeBanPlayer(name, contextBan, sender.getName())));
         sendMessage(sender, Message.COMMAND_UNBAN_SUCCESSFUL);
     }

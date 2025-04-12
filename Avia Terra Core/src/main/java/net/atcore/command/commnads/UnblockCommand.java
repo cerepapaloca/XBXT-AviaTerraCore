@@ -7,6 +7,7 @@ import net.atcore.command.BaseTabCommand;
 import net.atcore.command.CommandVisibility;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
+import net.atcore.utils.AviaTerraScheduler;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -26,7 +27,7 @@ public class UnblockCommand extends BaseTabCommand {
         if (sender instanceof Player player){
             AviaTerraPlayer atp = AviaTerraPlayer.getPlayer(player);
             if (args.length > 0) {
-                AviaTerraCore.enqueueTaskAsynchronously(() -> atp.getPlayerDataFile().saveData());
+                AviaTerraScheduler.enqueueTaskAsynchronously(() -> atp.getPlayerDataFile().saveData());
                 if (atp.getPlayersBLock().remove(args[0])){
                     MessagesManager.sendFormatMessage(sender, Message.COMMAND_UNBLOCK_SUCCESSFUL, args[0]);
                 }else {

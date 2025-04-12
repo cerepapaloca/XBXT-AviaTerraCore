@@ -8,6 +8,7 @@ import net.atcore.command.CommandVisibility;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
+import net.atcore.utils.AviaTerraScheduler;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -27,7 +28,7 @@ public class HomeListCommand extends BaseCommand {
     @Override
     public void execute(CommandSender sender, String[] args) throws Exception {
         if (sender instanceof Player player){
-            AviaTerraCore.enqueueTaskAsynchronously(() -> {
+            AviaTerraScheduler.enqueueTaskAsynchronously(() -> {
                 AviaTerraPlayer aviaTerraPlayer = AviaTerraPlayer.getPlayer(player);
                 AtomicInteger homeCount = new AtomicInteger(0);
                 aviaTerraPlayer.getHomes().forEach((name, location) -> {

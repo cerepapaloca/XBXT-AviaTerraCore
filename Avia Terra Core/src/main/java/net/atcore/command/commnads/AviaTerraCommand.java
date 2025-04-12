@@ -11,6 +11,7 @@ import net.atcore.data.yml.MapArtFile;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import net.atcore.security.login.ServerMode;
+import net.atcore.utils.AviaTerraScheduler;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.command.CommandSender;
 
@@ -19,8 +20,6 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static net.atcore.messages.MessagesManager.sendString;
 
 public class AviaTerraCommand extends BaseTabCommand {
 
@@ -34,11 +33,11 @@ public class AviaTerraCommand extends BaseTabCommand {
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(CommandSender sender, String[] args) {//TODO: mejorar el comando un poquito
         switch (args[0].toLowerCase().replace("_","")) {
             case "reload" -> {
                 AviaTerraCore.getInstance().reloadConfig();
-                AviaTerraCore.enqueueTaskAsynchronously(() -> sendString(sender,"Reload Terminado", TypeMessages.SUCCESS));
+                AviaTerraScheduler.enqueueTaskAsynchronously(() -> MessagesManager.sendString(sender,"Reload Terminado", TypeMessages.SUCCESS));
             }
             case "servermode" -> {
                 if (args.length >= 2) {
@@ -46,46 +45,31 @@ public class AviaTerraCommand extends BaseTabCommand {
                     try {
                         mode = ServerMode.valueOf(args[1].toUpperCase());
                     }catch (Exception e){
-                        sendString(sender, "Modo no valido", TypeMessages.ERROR);
+                        MessagesManager.sendString(sender, "Modo no valido", TypeMessages.ERROR);
                         return;
                     }
                     Config.setServerMode(mode);
-                    sendString(sender,"El modo del servidor esta en " + Config.getServerMode().name().toLowerCase().replace("_"," "), TypeMessages.INFO);
+                    MessagesManager.sendString(sender,"El servidor esta en " + Config.getServerMode().name().toLowerCase().replace("_"," "), TypeMessages.INFO);
                 }else{
-                    sendString(sender,"El modo mixto esta <|" + Config.getServerMode().name().toLowerCase() + "|>", TypeMessages.INFO);
-                }
-                DataSection.getConfigFile().saveData();
-            }
-            case "checkbanporip" -> {
-                if (args.length >= 2) {
-                    if (CommandUtils.isTrueOrFalse(args[1])){
-                        Config.setCheckBanByIp(true);
-                        sendString(sender,"El check de baneo por ip <|Activado|>", TypeMessages.INFO);
-                    }else{
-                        Config.setCheckBanByIp(false);
-                        sendString(sender,"El check de baneo por ip <|Desactivado|>", TypeMessages.INFO);
-                    }
-
-                }else{
-                    sendString(sender,"El check de baneo por ip esta <|" + CommandUtils.booleanToString(Config.isCheckBanByIp()) + "|>", TypeMessages.INFO);
+                    MessagesManager.sendString(sender,"El servidor esta <|" + Config.getServerMode().name().toLowerCase() + "|>", TypeMessages.INFO);
                 }
                 DataSection.getConfigFile().saveData();
             }
             case "purgarangos" -> {
                 Config.setPurgeTagRange(System.currentTimeMillis());
-                sendString(sender,"Todas los tags de rango ya no son validas y comenzara su eliminación", TypeMessages.INFO);
+                MessagesManager.sendString(sender,"Todas los tags de rango ya no son validas y comenzara su eliminación", TypeMessages.INFO);
                 DataSection.getConfigFile().saveData();
             }
             case "tiempodesession" -> {
                 if (args.length >= 2) {
                     try {
                         Config.setExpirationSession(CommandUtils.StringToMilliseconds(args[1], true));
-                        sendString(sender, "se cambio el la duración de la sesión", TypeMessages.SUCCESS);
+                        MessagesManager.sendString(sender, "se cambio el la duración de la sesión", TypeMessages.SUCCESS);
                     }catch (RuntimeException e){
-                        sendString(sender, "formato de fecha incorrecto", TypeMessages.ERROR);
+                        MessagesManager.sendString(sender, "formato de fecha incorrecto", TypeMessages.ERROR);
                     }
                 }else{
-                    sendString(sender,"el tiempo de expiración de expiration esta en <|" +
+                    MessagesManager.sendString(sender,"el tiempo de expiración de expiration esta en <|" +
                             GlobalUtils.timeToString(Config.getExpirationSession(), 2) + "|>", TypeMessages.INFO);
                 }
                 DataSection.getConfigFile().saveData();
@@ -94,12 +78,12 @@ public class AviaTerraCommand extends BaseTabCommand {
                 if (args.length >= 2) {
                     try {
                         Config.setLevelModerationChat(Float.parseFloat(args[1]));
-                        sendString(sender, "se cambio el nivel de moderación", TypeMessages.SUCCESS);
+                        MessagesManager.sendString(sender, "se cambio el nivel de moderación", TypeMessages.SUCCESS);
                     }catch (RuntimeException e){
-                        sendString(sender, "solo números con decimales", TypeMessages.ERROR);
+                        MessagesManager.sendString(sender, "solo números con decimales", TypeMessages.ERROR);
                     }
                 }else{
-                    sendString(sender,"El nivel de moderación en el chat esta en <|" + Config.getLevelModerationChat() + "|>", TypeMessages.INFO);
+                    MessagesManager.sendString(sender,"El nivel de moderación en el chat esta en <|" + Config.getLevelModerationChat() + "|>", TypeMessages.INFO);
                 }
                 DataSection.getConfigFile().saveData();
             }
@@ -114,12 +98,12 @@ public class AviaTerraCommand extends BaseTabCommand {
                             String[] size = args[2].split(",");
                             MapArtFile.MapData mapArt = new MapArtFile.MapData(args[3], list, Integer.parseInt(size[0]), Integer.parseInt(size[1]));
                             MapArtFile.MAP_DATA_LIST.add(mapArt);
-                            AviaTerraCore.enqueueTaskAsynchronously(() -> DataSection.getMapArtsFiles().getConfigFile(mapArt.getId(), true).saveData());
+                            AviaTerraScheduler.enqueueTaskAsynchronously(() -> DataSection.getMapArtsFiles().getConfigFile(mapArt.getId(), true).saveData());
                         }
                         case "remove" -> {
                             MapArtFile.MapData mapArt = MapArtFile.getMapData(args[2]);
                             if (mapArt == null) {
-                                sendString(sender, "El art no existe", TypeMessages.ERROR);
+                                MessagesManager.sendString(sender, "El art no existe", TypeMessages.ERROR);
                                 return;
                             }
                             MapArtFile.MAP_DATA_LIST.remove(mapArt);
@@ -128,8 +112,8 @@ public class AviaTerraCommand extends BaseTabCommand {
                     }
                 }
             }
-            case "thread" -> AviaTerraCore.enqueueTaskAsynchronously(() -> {
-                ArrayList<Double> sorted = new ArrayList<>(AviaTerraCore.telemetryTasks.stream().map(AviaTerraCore.telemetryTask::elapsedProcess).toList());
+            case "thread" -> AviaTerraScheduler.enqueueTaskAsynchronously(() -> {
+                ArrayList<Double> sorted = new ArrayList<>(AviaTerraScheduler.telemetryTasks.stream().map(AviaTerraScheduler.telemetryTask::elapsedProcess).toList());
                 Collections.sort(sorted);
 
                 double min = sorted.getFirst();
@@ -149,7 +133,7 @@ public class AviaTerraCommand extends BaseTabCommand {
                 LinkedList<Integer> max10s = new LinkedList<>();
 
                 long currentTime = System.currentTimeMillis();
-                for (AviaTerraCore.telemetryTask telemetry : AviaTerraCore.telemetryTasks) {
+                for (AviaTerraScheduler.telemetryTask telemetry : AviaTerraScheduler.telemetryTasks) {
                     if (currentTime - 1000*10 < telemetry.currentTime()) max10s.add(telemetry.queue());
                     if (currentTime - 1000*60 <  telemetry.currentTime()) max1m.add(telemetry.queue());
                     if (currentTime - 1000*600 < telemetry.currentTime()) max10m.add(telemetry.queue());
@@ -158,11 +142,11 @@ public class AviaTerraCommand extends BaseTabCommand {
                 Collections.sort(max1m);
                 Collections.sort(max10s);
                 StringBuilder sb = new StringBuilder();
-                for (int i = AviaTerraCore.amountTask.size(); i > 1; i--) {
-                    sb.append(" | ").append(((AviaTerraCore.amountTask.size() - i) +1) * 2).append("m: <|").append(AviaTerraCore.amountTask.get(i - 1)).append("|>");
+                for (int i = AviaTerraScheduler.amountTask.size(); i > 1; i--) {
+                    sb.append(" | ").append(((AviaTerraScheduler.amountTask.size() - i) +1) * 2).append("m: <|").append(AviaTerraScheduler.amountTask.get(i - 1)).append("|>");
                 }
                 String s2 = String.format("queue: <|%s|> " + "actual: <|%s|>" + sb,
-                        AviaTerraCore.taskQueue.size(), AviaTerraCore.currentAoumt.get());
+                        AviaTerraScheduler.taskQueue.size(), AviaTerraScheduler.currentAoumt.get());
                 String s3 = String.format("10s: <|%s|> | 1m: <|%s|> | 10m: <|%s|>"
                         , max10s.isEmpty() ? 0 : max10m.getLast(),max1m.isEmpty() ? 0 : max1m.getLast(),max10m.isEmpty() ? 0 : max10m.getLast());
                 MessagesManager.sendString(sender, "Ultimas 200 Tareas:\n" + s1 + "\n" + s2 + "\n" + s3, TypeMessages.INFO);
@@ -172,7 +156,7 @@ public class AviaTerraCommand extends BaseTabCommand {
 
     @Override
     public List<String> onTab(CommandSender sender, String[] args) {
-        String[] argsRoot = new String[]{"antiBot","reload", "mapArt", "serverMode", "checkBanPorIp", "purgaRangos","tiempoDeSession", "levelModerationChat", "thread"};
+        String[] argsRoot = new String[]{"antiBot","reload", "mapArt", "serverMode", "purgaRangos","tiempoDeSession", "levelModerationChat", "thread"};
         if (args.length >= 2) {
             switch (args[0].toLowerCase().replace("_","")) {
                 case "antiop", "antiilegalitems", "checkbanporip" -> {

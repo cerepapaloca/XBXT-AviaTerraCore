@@ -11,6 +11,7 @@ import net.atcore.moderation.ModerationSection;
 import net.atcore.moderation.ban.ContextBan;
 import net.atcore.security.login.*;
 import net.atcore.security.login.model.LoginData;
+import net.atcore.utils.AviaTerraScheduler;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -90,7 +91,7 @@ public class LoginCommand extends BaseCommand {
 
     private void startPlay(Player player) {
         long codeSession = LoginManager.codeSession(player);
-        AviaTerraCore.enqueueTaskAsynchronously(() -> {
+        AviaTerraScheduler.enqueueTaskAsynchronously(() -> {
             startPlaySessionCracked(player, codeSession);
             attempts.remove(player.getUniqueId());
             LoginManager.updateLoginDataBase(GlobalUtils.getRealName(player), Objects.requireNonNull(player.getAddress()).getAddress());
@@ -104,7 +105,7 @@ public class LoginCommand extends BaseCommand {
     private void fail(Player player) {
         int i = attempts.getOrDefault(player.getUniqueId(), 0);
         attempts.put(player.getUniqueId(), ++i);
-        if (i >= 5) AviaTerraCore.enqueueTaskAsynchronously(() -> ModerationSection.getBanManager().banPlayer(player,
+        if (i >= 5) AviaTerraScheduler.enqueueTaskAsynchronously(() -> ModerationSection.getBanManager().banPlayer(player,
                 Message.COMMAND_LOGIN_BANNED.getMessage(player),
                 1000*60*5,
                 ContextBan.GLOBAL,

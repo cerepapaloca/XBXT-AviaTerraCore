@@ -9,6 +9,7 @@ import net.atcore.data.DataSection;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import net.atcore.security.check.BaseChecker;
+import net.atcore.utils.AviaTerraScheduler;
 import org.bukkit.command.CommandSender;
 
 import java.util.List;
@@ -31,7 +32,7 @@ public class AviaTerraCheckersCommand extends BaseTabCommand {
             case 1 -> {
                 for (BaseChecker<?> check : BaseChecker.REGISTERED_CHECKS){
                     if (check.getClass().getSimpleName().equalsIgnoreCase(args[0])) {
-                        MessagesManager.sendString(sender, String.format("El %s está %s", check.getClass().getSimpleName(), CommandUtils.booleanToString(check.enabled)), TypeMessages.INFO);
+                        MessagesManager.sendString(sender, String.format("El %s está %s", check.getClass().getSimpleName(), CommandUtils.booleanToString(check.enabled, sender)), TypeMessages.INFO);
                         return;
                     }
                 }
@@ -40,8 +41,8 @@ public class AviaTerraCheckersCommand extends BaseTabCommand {
                 for (BaseChecker<?> check : BaseChecker.REGISTERED_CHECKS){
                     if (check.getClass().getSimpleName().equalsIgnoreCase(args[0])) {
                         check.enabled = CommandUtils.isTrueOrFalse(args[1]);
-                        MessagesManager.sendString(sender, String.format("El %s se cambio a %s", check.getClass().getSimpleName(), CommandUtils.booleanToString(check.enabled)), TypeMessages.INFO);
-                        AviaTerraCore.enqueueTaskAsynchronously(() -> DataSection.getConfigFile().saveData());
+                        MessagesManager.sendString(sender, String.format("El %s se cambio a %s", check.getClass().getSimpleName(), CommandUtils.booleanToString(check.enabled, sender)), TypeMessages.INFO);
+                        AviaTerraScheduler.enqueueTaskAsynchronously(() -> DataSection.getConfigFile().saveData());
                         return;
                     }
                 }

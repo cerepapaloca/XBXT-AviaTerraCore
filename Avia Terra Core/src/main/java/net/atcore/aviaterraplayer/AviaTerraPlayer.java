@@ -13,7 +13,9 @@ import net.atcore.inventory.InventorySection;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
+import net.atcore.security.login.LoginManager;
 import net.atcore.security.login.ServerMode;
+import net.atcore.utils.AviaTerraScheduler;
 import net.atcore.utils.GlobalUtils;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.resources.ResourceLocation;
@@ -26,6 +28,7 @@ import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import java.lang.ref.WeakReference;
 import java.util.*;
 
 /**
@@ -40,13 +43,13 @@ public class AviaTerraPlayer {
     public static final HashMap<UUID, BukkitTask> TASKS_UNLOAD = new HashMap<>();
 
     private AviaTerraPlayer(Player player) {
-        this.player = player;
+        this.player = new WeakReference<>(player);
         this.uuid = player.getUniqueId();
         this.realName = GlobalUtils.getRealName(player);
         this.realUuid = GlobalUtils.getRealUUID(player);
         if (TASKS_UNLOAD.containsKey(uuid)) TASKS_UNLOAD.get(uuid).cancel();
         nameColor = null;
-        AviaTerraCore.enqueueTaskAsynchronously(() -> {
+        AviaTerraScheduler.enqueueTaskAsynchronously(() -> {
             this.playerDataFile = (PlayerDataFile) DataSection.getPlayersDataFiles().getConfigFile(uuid.toString(), true);
             //DataSection.getCacheLimboFlies().getConfigFile(uuid.toString(), true);
             updateView(player);
@@ -66,7 +69,7 @@ public class AviaTerraPlayer {
     private final List<TpaCommand.TpaRequest> ListTpa = new ArrayList<>();
     private final HashMap<String, Location> homes = new HashMap<>();
     private final HashMap<ResourceLocation, DataProgress> achievementProgress = new HashMap<>();
-    private Player player;
+    private WeakReference<Player> player;
 
     /**
      * Se usa el nombre del jugador que le da el servidor
@@ -134,7 +137,13 @@ public class AviaTerraPlayer {
 
     @Contract(pure = true)
     public Player getPlayer(){
-        return Objects.requireNonNullElse(Bukkit.getPlayer(uuid), player);
+        if (player.get() == null) {
+            Player newPlayer = Bukkit.getPlayer(uuid);
+            player = new WeakReference<>(newPlayer);
+            return newPlayer;
+        }else {
+            return player.get();
+        }
     }
 
     public void unloadPlayer(){
@@ -152,7 +161,7 @@ public class AviaTerraPlayer {
     }
 
     public void updatePlayer(Player player){
-        this.player = player;
+        this.player = new WeakReference<>(player);
     }
 
     public void updateView(Player player) {
@@ -207,5 +216,9 @@ public class AviaTerraPlayer {
         public void addValue(double value) {
             this.value += value;
         }
+    }
+
+    public boolean hasSession(){
+        return LoginManager.getDataLogin(getPlayer()) != null && LoginManager.getDataLogin(getPlayer()).hasSession();
     }
 }

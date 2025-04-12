@@ -34,6 +34,7 @@ public class RegisterData {
     @NotNull
     private UUID uuidCracked;
     private UUID uuidBedrock;
+    private boolean isNew = false;
     private String passwordShaded;
     private boolean isTemporary;
     private long lastLoginDate;

@@ -46,7 +46,11 @@ public class TellCommand extends BaseCommand implements CommandAliase {
                 CommandUtils.executeForPlayer(sender, args[0], true, (name, player) -> {
                     AviaTerraPlayer atp = AviaTerraPlayer.getPlayer(player);
                     if (!(sender instanceof Player p) || !atp.getPlayersBLock().contains(p.getName())) {
-                        sendMessage(player,String.format(Message.COMMAND_TELL_FORMAT_MESSAGE.getMessage(player), sender.getName(), finalMessage), TypeMessages.GENERIC, CategoryMessages.PRIVATE, false);
+                        if (atp.hasSession()) {
+                            sendMessage(player,String.format(Message.COMMAND_TELL_FORMAT_MESSAGE.getMessage(player), sender.getName(), finalMessage), TypeMessages.GENERIC, CategoryMessages.PRIVATE, false);
+                        }else {
+                            sendFormatMessage(sender, Message.COMMAND_TELL_NO_LOGIN, name);
+                        }
                     }
                 });
             }
