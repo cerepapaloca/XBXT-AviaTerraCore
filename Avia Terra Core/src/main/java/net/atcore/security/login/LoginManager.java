@@ -21,7 +21,6 @@ import net.atcore.utils.GlobalUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.geysermc.floodgate.api.FloodgateApi;
 import org.geysermc.floodgate.api.player.FloodgatePlayer;
 import org.jetbrains.annotations.Contract;
@@ -30,7 +29,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.net.InetAddress;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static net.atcore.data.sql.DataBaseRegister.*;
@@ -198,11 +199,7 @@ public final class LoginManager {
         });
         AviaTerraScheduler.enqueueTaskAsynchronously(() -> BaseAchievement.sendAllAchievement(player));
         player.playSound(player, Sound.ENTITY_PLAYER_LEVELUP, 0.4f, 1);
-        new BukkitRunnable() {
-            public void run() {
-                GlobalUtils.addRangeVote(player);
-            }
-        }.runTaskLater(AviaTerraCore.getInstance(), 20*3);
+        AviaTerraScheduler.runTaskLater(20*3, () -> GlobalUtils.addRangeVote(player));
         MessagesManager.logConsole(String.format("Inicio de sesión cracked valida para <|%s|>", player.getName()) , TypeMessages.SUCCESS, CategoryMessages.LOGIN);
     }
 

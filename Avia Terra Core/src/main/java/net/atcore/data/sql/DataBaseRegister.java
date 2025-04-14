@@ -25,7 +25,7 @@ import static net.atcore.messages.MessagesManager.logConsole;
 
 public class DataBaseRegister extends DataBaseMySql {
     @Override
-    public void reload() {
+    public void reload() throws UnknownHostException, SQLException {
         String sql = "SELECT name, uuidBedrock, uuidPremium, uuidCracked, ipRegister, ipLogin, stateAccount, password, lastLoginDate, registerDate, gmail, discord FROM register";
         HashMap<UUID, SessionData> sessions = new HashMap<>();
 
@@ -97,36 +97,34 @@ public class DataBaseRegister extends DataBaseMySql {
                 if (resultSet.next()){
                     reload();
                     MessagesManager.logConsole("DataBase Registro " + TypeMessages.SUCCESS.getMainColor() + "Ok", TypeMessages.INFO, false);
-                    return;
                 }
             }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        } catch (SQLException | UnknownHostException e) {
+            String createTableSQL = "CREATE TABLE IF NOT EXISTS register (" +
+                    "name VARCHAR(36) NOT NULL, " +
+                    "uuidBedrock VARCHAR(100), " +
+                    "uuidPremium VARCHAR(100), " +
+                    "uuidCracked VARCHAR(100) NOT NULL, " +
+                    "ipRegister VARCHAR(45), " +
+                    "ipLogin VARCHAR(45), " +
+                    "stateAccount VARCHAR(45) NOT NULL, " +
+                    "password VARCHAR(100), " +
+                    "lastLoginDate BIGINT NOT NULL, " +
+                    "registerDate BIGINT NOT NULL, " +
+                    "gmail VARCHAR(100)," +
+                    "discord VARCHAR(100)," +
+                    "PRIMARY KEY (name)," +
+                    "UNIQUE (name)" +
+                    ");";
+            try (Connection connection = getConnection();
+                 Statement statement = connection.createStatement()) {
+                statement.executeUpdate(createTableSQL);
+                MessagesManager.logConsole("DataBase Registro " + TypeMessages.SUCCESS.getMainColor()  + "Creada", TypeMessages.INFO, false);
+            } catch (SQLException ee) {
+                throw new RuntimeException(ee);
+            }
         }
-        String createTableSQL = "CREATE TABLE IF NOT EXISTS register (" +
-                "name VARCHAR(36) NOT NULL, " +
-                "uuidBedrock VARCHAR(100), " +
-                "uuidPremium VARCHAR(100), " +
-                "uuidCracked VARCHAR(100) NOT NULL, " +
-                "ipRegister VARCHAR(45), " +
-                "ipLogin VARCHAR(45), " +
-                "stateAccount VARCHAR(45) NOT NULL, " +
-                "password VARCHAR(100), " +
-                "lastLoginDate BIGINT NOT NULL, " +
-                "registerDate BIGINT NOT NULL, " +
-                "gmail VARCHAR(100)," +
-                "discord VARCHAR(100)," +
-                "PRIMARY KEY (name)," +
-                "UNIQUE (name)" +
-                ");";
-        try (Connection connection = getConnection();
-             Statement statement = connection.createStatement()) {
-            statement.executeUpdate(createTableSQL);
-            reload();
-            MessagesManager.logConsole("DataBase Registro " + TypeMessages.SUCCESS.getMainColor()  + "Creada", TypeMessages.INFO, false);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+
     }
 
     public static void addRegister(String name,

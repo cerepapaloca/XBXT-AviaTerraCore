@@ -6,11 +6,8 @@ import net.atcore.Section;
 
 public class ModerationSection implements Section {
 
-    @Getter private static BanManager banManager;
-
     @Override
     public void enable() {
-        banManager = new BanManager();
         ChatModeration.tickEvent();
     }
 

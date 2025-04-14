@@ -2,12 +2,11 @@ package net.atcore.utils.debug;
 
 import net.atcore.AviaTerraCore;
 import net.atcore.aviaterraplayer.AviaTerraPlayer;
-import net.atcore.data.DataSection;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
+import net.atcore.moderation.ban.BanManager;
 import net.atcore.moderation.ban.ContextBan;
-import net.atcore.moderation.ModerationSection;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.Bukkit;
 
@@ -21,15 +20,15 @@ public final class BanDebug implements RunTest {
     public void runTest(AviaTerraPlayer player) {
         String name = player.getPlayer().getName();
         InetAddress ip = Objects.requireNonNull(player.getPlayer().getAddress()).getAddress();
-        ModerationSection.getBanManager().banPlayer(
+        BanManager.banPlayer(
                 player.getPlayer(),
                 "Es una prueba automatizada seras de desbaneado en unos segundos",
                 1000*5,
                 ContextBan.GLOBAL,
                 "Servidor"
         );
-        DataSection.getDatabaseBan().removeBanPlayer(name, ContextBan.GLOBAL, "Servidor");
-        ModerationSection.getBanManager().banPlayer(
+        BanManager.unban(ContextBan.GLOBAL, name, Message.BAN_AUTHOR_AUTO_BAN.getMessageLocatePrivate());
+        BanManager.banPlayer(
                 "JugadorX",
                 GlobalUtils.getUUIDByName("JugadorX"),
                 ip,
@@ -38,7 +37,7 @@ public final class BanDebug implements RunTest {
                 ContextBan.GLOBAL,
                 "Servidor"
         );
-        DataSection.getDatabaseBan().removeBanPlayer("JugadorX", ContextBan.GLOBAL, "Servidor");
+        BanManager.unban(ContextBan.GLOBAL, "JugadorX", Message.BAN_AUTHOR_AUTO_BAN.getMessageLocatePrivate());
         Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> {
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "aviaterracore:ban jugadorA,JugadorB global 100d Es una prueba automatizada seras de desbaneado");
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "aviaterracore:unban jugadorA,JugadorB global");

@@ -7,39 +7,26 @@ import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
+import net.atcore.moderation.ban.BanManager;
 import net.atcore.moderation.ban.ContextBan;
 import net.atcore.moderation.ban.DataBan;
-import net.atcore.security.login.LoginManager;
-import net.atcore.security.login.model.LoginData;
 import net.atcore.utils.GlobalConstantes;
 import net.atcore.utils.GlobalUtils;
-import org.jetbrains.annotations.Nullable;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.sql.*;
-import java.util.HashMap;
 import java.util.UUID;
 
 public class DataBaseBan extends DataBaseMySql {
 
-    public static final HashMap<String, HashMap<ContextBan, DataBan>> listDataBanByNAME = new HashMap<>();
-    public static final HashMap<InetAddress, HashMap<ContextBan, DataBan>> listDataBanByIP = new HashMap<>();
 
-
-    public static HashMap<ContextBan, DataBan> getDataBan(String name) {
-        return listDataBanByNAME.get(name);
-    }
-
-    public static HashMap<ContextBan, DataBan> getDataBan(InetAddress ip) {
-        return listDataBanByIP.get(ip);
-    }
 
     @Override
     public void reload() throws UnknownHostException, SQLException {
         String sql = "SELECT uuid, name, ip, reason, unban_date, ban_date, context, author FROM bans";
-        listDataBanByNAME.clear();
-        listDataBanByIP.clear();
+        BanManager.listDataBanByNAME.clear();
+        BanManager.listDataBanByIP.clear();
 
         try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(sql);
@@ -47,7 +34,7 @@ public class DataBaseBan extends DataBaseMySql {
 
             while (resultSet.next()) {
                 String name = resultSet.getString("name");
-                String uuids = resultSet.getString("uuid");
+                String uuidString = resultSet.getString("uuid");
                 String ip = resultSet.getString("ip");
                 String reason = resultSet.getString("reason");
                 long dateUnban = resultSet.getLong("unban_date");
@@ -56,7 +43,10 @@ public class DataBaseBan extends DataBaseMySql {
                 String author = resultSet.getString("author");
 
                 // Lógica para añadir los datos a tus listas
-                addListDataBan(name, uuids, ip, reason, dateUnban, dateBan, context, author);
+                UUID uuid = UUID.fromString(uuidString);
+                InetAddress ipAddress = ip == null ? null : InetAddress.getByName(ip);
+                ContextBan contextBan = ContextBan.valueOf(context.toUpperCase());
+                BanManager.addListDataBan(new DataBan(name, uuid, ipAddress, reason, dateUnban, dateBan, contextBan, author));
             }
         }
 
@@ -71,7 +61,6 @@ public class DataBaseBan extends DataBaseMySql {
                 if (resultSet.next()){
                     reload();
                     MessagesManager.logConsole("DataBase Bans " + TypeMessages.SUCCESS.getMainColor() + "Ok", TypeMessages.INFO, false);
-                    return;
                 }
             }
         } catch (SQLException | UnknownHostException e) {
@@ -99,43 +88,6 @@ public class DataBaseBan extends DataBaseMySql {
     }
 
 
-
-    private static void addListDataBan(String name,
-                                       @Nullable String uuids,
-                                       @Nullable String stringIp,
-                                       String reason,
-                                       long dateUnban,
-                                       long dateBan,
-                                       String context,
-                                       String author
-    ) throws UnknownHostException  {
-        if (!DataSection.isDataBaseActive()) return;
-
-        UUID uuid = null;
-        if (uuids != null){
-            uuid = UUID.fromString(uuids);
-        }
-        InetAddress ipAddress = null;
-        if (stringIp != null) {
-            ipAddress = InetAddress.getByName(stringIp.split("/")[0]);
-        }else {
-            LoginData loginData = LoginManager.getDataLogin(name);
-            if (loginData != null) {
-                ipAddress = loginData.getRegister().getLastAddress();
-            }
-        }
-        DataBan dataBan = new DataBan(name, uuid, ipAddress, reason, dateUnban, dateBan, ContextBan.valueOf(context), author);
-
-        HashMap<ContextBan, DataBan> listUUID = listDataBanByNAME.getOrDefault(name,  new HashMap<>());//busca si hay una lista de DataBan si no hay crea una
-        listUUID.put(ContextBan.valueOf(context), dataBan);//Añade el DataBan a la lista
-        listDataBanByNAME.put(name, listUUID);//Añade la lista de DataBan Remplazando el dato
-        if (ipAddress == null) return;
-
-        HashMap<ContextBan, DataBan> listIP = listDataBanByIP.getOrDefault(ipAddress,  new HashMap<>());
-        listIP.put(ContextBan.valueOf(context), dataBan);
-        listDataBanByIP.put(ipAddress, listIP);
-
-    }
     /* No se si esto se volver a usar en el futuro
     protected static @NotNull HashSet<DataBan> getDataBan(@NotNull Player player, InetAddress address, SearchBanBy searchBanBy) throws SQLException {
 
@@ -188,7 +140,7 @@ public class DataBaseBan extends DataBaseMySql {
              PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, dataBan.getName());
             statement.setString(2, dataBan.getUuid() != null ? dataBan.getUuid().toString() : null);
-            statement.setString(3, dataBan.getAddress() != null ? dataBan.getAddress().getHostAddress().split("/")[0] : null);
+            statement.setString(3, dataBan.getAddress() != null ? dataBan.getAddress().getHostAddress() : null);
             statement.setString(4, dataBan.getReason());
             statement.setLong(5, dataBan.getUnbanDate());
             statement.setLong(6, dataBan.getBanDate());

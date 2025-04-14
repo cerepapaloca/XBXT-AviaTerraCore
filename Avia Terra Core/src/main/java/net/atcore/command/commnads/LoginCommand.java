@@ -8,6 +8,7 @@ import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
 import net.atcore.moderation.ModerationSection;
+import net.atcore.moderation.ban.BanManager;
 import net.atcore.moderation.ban.ContextBan;
 import net.atcore.security.login.*;
 import net.atcore.security.login.model.LoginData;
@@ -105,7 +106,7 @@ public class LoginCommand extends BaseCommand {
     private void fail(Player player) {
         int i = attempts.getOrDefault(player.getUniqueId(), 0);
         attempts.put(player.getUniqueId(), ++i);
-        if (i >= 5) AviaTerraScheduler.enqueueTaskAsynchronously(() -> ModerationSection.getBanManager().banPlayer(player,
+        if (i >= 5) AviaTerraScheduler.enqueueTaskAsynchronously(() -> BanManager.banPlayer(player,
                 Message.COMMAND_LOGIN_BANNED.getMessage(player),
                 1000*60*5,
                 ContextBan.GLOBAL,

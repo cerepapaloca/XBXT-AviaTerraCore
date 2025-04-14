@@ -30,9 +30,6 @@ public final class PlaceHolderHandler extends PlaceholderExpansion {
 
     @Override
     public String onPlaceholderRequest(Player player, @NotNull String identifier){
-        for (BasePlaceHolder placeHolder : PlaceHolderSection.HOLDERS){
-            if (placeHolder.getIdentifier().equals(identifier)) return placeHolder.onPlaceholderRequest(player);
-        }
-        return null;
+        return PlaceHolderSection.HOLDERS.stream().filter(placeHolder -> placeHolder.getIdentifier().equals(identifier)).findFirst().map(placeHolder -> placeHolder.onPlaceholderRequest(player)).orElse(null);
     }
 }

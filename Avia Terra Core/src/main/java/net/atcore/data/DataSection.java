@@ -20,6 +20,7 @@ import net.atcore.data.yml.ymls.PlayersDataFiles;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
+import net.atcore.moderation.ban.BanManager;
 import net.atcore.utils.AviaTerraScheduler;
 
 import java.net.UnknownHostException;
@@ -47,7 +48,7 @@ public class DataSection implements Section {
     public void enable() {
         try (Connection connection = DataBaseMySql.getConnection()) {
             if (connection == null) throw new SQLException();
-            databaseBan = new DataBaseBan();
+            databaseBan = new DataBaseBan();// TODO: Cambiar sus métodos a statics
             new DataBaseRegister();
             isDataBaseActive = true;
         }catch (Exception e) {
@@ -59,7 +60,7 @@ public class DataSection implements Section {
         new Discord();
         new Email();
         new MOTDFile();
-        new BroadcastMessageFile(); // TODO: Tengo un lio con los datos hay que refactorizar todo esto
+        new BroadcastMessageFile();
 
         messagesLocaleFile = new MessagesLocaleFile();
         playersDataFiles = new PlayersDataFiles();
@@ -74,8 +75,8 @@ public class DataSection implements Section {
         //DataSection.getMySQLConnection().close();
         FILES.clear();
         DATA_BASE.clear();
-        DataBaseBan.listDataBanByNAME.clear();
-        DataBaseBan.listDataBanByIP.clear();
+        BanManager.listDataBanByNAME.clear();
+        BanManager.listDataBanByIP.clear();
     }
 
     @Override

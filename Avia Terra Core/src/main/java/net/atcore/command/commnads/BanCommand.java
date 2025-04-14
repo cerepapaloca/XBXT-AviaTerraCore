@@ -1,11 +1,9 @@
 package net.atcore.command.commnads;
 
-import net.atcore.command.BaseTabCommand;
-import net.atcore.command.CommandUtils;
-import net.atcore.command.ArgumentUse;
-import net.atcore.command.CommandVisibility;
+import net.atcore.command.*;
 import net.atcore.messages.Message;
 import net.atcore.messages.TypeMessages;
+import net.atcore.moderation.ban.BanManager;
 import net.atcore.moderation.ban.ContextBan;
 import net.atcore.moderation.ModerationSection;
 import net.atcore.utils.GlobalUtils;
@@ -19,7 +17,7 @@ public class BanCommand extends BaseTabCommand {
 
     public BanCommand() {
         super("ban",
-                new ArgumentUse("jugador").addArg("Contexto").addTime(true).addNote("Ranzón"),
+                new ArgumentUse("ban").addArgPlayer(ModeTabPlayers.ADVANCED).addArg("Contexto").addTime(true).addFinalArg("Ranzón"),
                 CommandVisibility.PRIVATE,
                 "Baneas a los jugador de un contexto por un tiempo determinado"
         );
@@ -55,9 +53,9 @@ public class BanCommand extends BaseTabCommand {
                 CommandUtils.executeForPlayer(sender, args[0], false, (name, player) -> {
                     try {
                         if (player != null) {
-                            ModerationSection.getBanManager().banPlayer(player, finalReason, time, contextBan, sender.getName());
+                            BanManager.banPlayer(player, finalReason, time, contextBan, sender.getName());
                         }else {
-                            ModerationSection.getBanManager().banPlayer(name, GlobalUtils.getUUIDByName(name), null, finalReason, time, contextBan, sender.getName());
+                            BanManager.banPlayer(name, GlobalUtils.getUUIDByName(name), null, finalReason, time, contextBan, sender.getName());
                         }
                     }catch (Exception ignored) {
                         sendMessage(sender, Message.COMMAND_BAN_DATA_BASE_ERROR);

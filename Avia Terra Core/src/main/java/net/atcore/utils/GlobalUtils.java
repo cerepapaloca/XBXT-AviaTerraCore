@@ -7,9 +7,13 @@ import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import com.google.common.base.Charsets;
 import lombok.experimental.UtilityClass;
 import net.atcore.AviaTerraCore;
+import net.atcore.achievement.InventoryChangeEvent;
 import net.atcore.data.DataSection;
 import net.atcore.listener.NuVotifierListener;
-import net.atcore.messages.*;
+import net.atcore.messages.CategoryMessages;
+import net.atcore.messages.Message;
+import net.atcore.messages.MessagesManager;
+import net.atcore.messages.TypeMessages;
 import net.atcore.security.login.LimboManager;
 import net.atcore.security.login.LoginManager;
 import net.kyori.adventure.text.Component;
@@ -17,7 +21,6 @@ import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.luckperms.api.node.types.InheritanceNode;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -117,7 +120,7 @@ public final class GlobalUtils {
      * <ul>
      * Añade una persisten Data que contiene un {@code ?} indicando que el item está a la
      * espera de la asignación de la UUID, hasta entonces el item se puede duplicar pero
-     * cuando {@link net.atcore.security.check.checker.AntiDupe#onCheck(Event) onCheck()}
+     * cuando {@link net.atcore.security.check.checker.AntiDupe#onCheck(InventoryChangeEvent)}  onCheck()}
      * lo llaman le asigna una UUID única para que este no se pueda duplicar
      *
      * @param item el item que le quieres aplicar la protección
@@ -194,12 +197,7 @@ public final class GlobalUtils {
     }
 
     public void synchronizeKickPlayer(@NotNull Player player, Message message){
-
-        if (Bukkit.isPrimaryThread()){
-            kickPlayer(player, message);
-        }else {
-            Bukkit.getScheduler().runTask(AviaTerraCore.getInstance(), () -> kickPlayer(player, message));
-        }
+        AviaTerraScheduler.runSync(() -> kickPlayer(player, message));
     }
 
     public String kickPlayer(@NotNull Player player, @NotNull Message message){

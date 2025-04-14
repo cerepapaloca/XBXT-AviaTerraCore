@@ -1,16 +1,15 @@
 package net.atcore.moderation.ban;
 
+import lombok.experimental.UtilityClass;
 import net.atcore.AviaTerraCore;
-import net.atcore.Config;
 import net.atcore.data.DataSection;
-import net.atcore.data.sql.DataBaseBan;
+import net.atcore.messages.Message;
 import net.atcore.security.login.model.LoginData;
 import net.atcore.security.login.LoginManager;
 import net.atcore.utils.AviaTerraScheduler;
 import net.atcore.utils.GlobalConstantes;
 import net.atcore.messages.CategoryMessages;
 import net.atcore.messages.TypeMessages;
-import net.atcore.moderation.ModerationSection;
 import net.atcore.utils.GlobalUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -20,22 +19,66 @@ import org.jetbrains.annotations.Nullable;
 
 import java.net.InetAddress;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Objects;
 import java.util.UUID;
 
 import static net.atcore.messages.MessagesManager.*;
 
+@UtilityClass
 public class BanManager {
+
+    public static final HashMap<String, HashMap<ContextBan, DataBan>> listDataBanByNAME = new HashMap<>();
+    public static final HashMap<InetAddress, HashMap<ContextBan, DataBan>> listDataBanByIP = new HashMap<>();
+
+    public static HashMap<ContextBan, DataBan> getDataBan(String name) {
+        return listDataBanByNAME.get(name);
+    }
+
+    public static HashMap<ContextBan, DataBan> getDataBan(InetAddress ip) {
+        return listDataBanByIP.get(ip);
+    }
+
+    public static void addListDataBan(DataBan dataBan) {
+        if (dataBan.getAddress() != null){
+            listDataBanByIP.computeIfAbsent(dataBan.getAddress(),k -> new HashMap<>()).put(dataBan.getContext(), dataBan);
+        }
+        listDataBanByNAME.computeIfAbsent(dataBan.getName(),k -> new HashMap<>()).put(dataBan.getContext(), dataBan);
+    }
+
+    public static void removeBan(ContextBan contextBan, String name) {
+        // Obtiene todos los bans por ip
+        for (HashMap<ContextBan, DataBan> map : listDataBanByNAME.values()) {
+            // Obtiene los bans por contexto
+            for (DataBan dataBan : map.values()) {
+                // Elimina el ban con el nombre igual
+                if (dataBan.getName().equals(name)) map.remove(contextBan);
+            }
+        }
+        listDataBanByNAME.computeIfAbsent(name,k -> new HashMap<>()).remove(contextBan);
+    }
+
+    public void unban(ContextBan contextBan, String name, String author) {
+        removeBan(contextBan, name);
+        DataSection.getDatabaseBan().removeBanPlayer(name, contextBan, author);
+    }
 
     public void banPlayer(Player player, String reason, long time, ContextBan contextBan, String nameAuthor) {
         banPlayer(player.getName(),
                 player.getUniqueId(),
-                player.getAddress().getAddress(),
+                player.getAddress() == null ? null : player.getAddress().getAddress(),
                 reason, time, contextBan,
                 nameAuthor);
     }
 
-    public void banPlayer(String name, UUID uuid, InetAddress ip, String reason, long time, ContextBan context, String nameAuthor) {
+    public void banPlayer(@NotNull String name,
+                          @NotNull UUID uuid,
+                          @Nullable InetAddress ip,
+                          @NotNull String reason,
+                          long time,
+                          @NotNull ContextBan context,
+                          @NotNull String nameAuthor
+    ) {
         long finalTime = time == GlobalConstantes.NUMERO_PERMA ? GlobalConstantes.NUMERO_PERMA : time == Long.MAX_VALUE ? Long.MAX_VALUE : time + System.currentTimeMillis();
 
         LoginData loginData = LoginManager.getDataLogin(name);
@@ -46,7 +89,10 @@ public class BanManager {
         Player player = Bukkit.getPlayer(name);
         if (player != null) dataBan.getContext().onBan(player, dataBan);
 
-        AviaTerraScheduler.enqueueTaskAsynchronously(() -> DataSection.getDatabaseBan().addBanPlayer(dataBan));
+        AviaTerraScheduler.enqueueTaskAsynchronously(() -> {
+            DataSection.getDatabaseBan().addBanPlayer(dataBan);
+            addListDataBan(dataBan);
+        });
     }
 
     /**
@@ -71,13 +117,13 @@ public class BanManager {
         Collection<DataBan> dataBans = null;
 
         // Se busca él databan del jugador
-        if (DataBaseBan.listDataBanByNAME.containsKey(player.getName())) {
-            dataBans = DataBaseBan.getDataBan(player.getName()).values();
+        if (BanManager.listDataBanByNAME.containsKey(player.getName())) {
+            dataBans = BanManager.getDataBan(player.getName()).values();
             checkName = true;//Se Busca por su UUID de usuario, si está baneado
         }
 
-        if (ip != null && DataBaseBan.listDataBanByIP.containsKey(ip)) {
-            dataBans = DataBaseBan.getDataBan(ip).values();
+        if (ip != null && BanManager.listDataBanByIP.containsKey(ip)) {
+            dataBans = BanManager.getDataBan(ip).values();
             checkIp = true;//Se Busca por su ip, si está baneado
         }
 
@@ -102,7 +148,7 @@ public class BanManager {
                                 "<|" +  time + "|>", TypeMessages.INFO, CategoryMessages.BAN);
                         return IsBan.YES;
                     } else {// eliminar él baneó cuando expiro y realiza en un hilo aparte para que no pete el servidor
-                        Bukkit.getScheduler().runTaskAsynchronously(AviaTerraCore.getInstance(), () -> DataSection.getDatabaseBan().removeBanPlayer(player.getName(), ban.getContext(), "Servidor (Expiro)"));
+                        AviaTerraScheduler.enqueueTaskAsynchronously(() -> unban(ban.getContext(), player.getName(), Message.BAN_AUTHOR_AUTO_BAN.getMessageLocatePrivate() + "(Expiro)"));
                         return IsBan.NOT;
                     }
                 } else{

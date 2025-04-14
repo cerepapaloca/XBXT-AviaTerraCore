@@ -4,7 +4,6 @@ import net.atcore.command.ArgumentUse;
 import net.atcore.command.BaseTabCommand;
 import net.atcore.command.CommandUtils;
 import net.atcore.command.CommandVisibility;
-import net.atcore.data.sql.DataBaseBan;
 import net.atcore.messages.Message;
 import net.atcore.moderation.ban.BanManager;
 import net.atcore.moderation.ban.ContextBan;
@@ -50,11 +49,11 @@ public class CheckBanCommand extends BaseTabCommand {
             }
 
             if (isChecking) {
-                if (DataBaseBan.getDataBan(args[0]) == null) {
+                if (BanManager.getDataBan(args[0]) == null) {
                     sendMessage(sender, Message.COMMAND_CHECK_BAN_NOT_FOUND_BAN);
                     return;
                 }
-                for (DataBan dataBan : DataBaseBan.getDataBan(args[0]).values()) {
+                for (DataBan dataBan : BanManager.getDataBan(args[0]).values()) {
                     sendDataBan(sender, dataBan);
                 }
             }else {
@@ -75,11 +74,11 @@ public class CheckBanCommand extends BaseTabCommand {
                             case NOT -> sendMessage(sender, Message.COMMAND_CHECK_BAN_NOT_FOUND_BAN_IN_CONTEXT);
                             case NOT_THIS_CONTEXT -> {
                                 sendMessage(sender, Message.COMMAND_CHECK_BAN_FOUND_AND_KICK);
-                                if (DataBaseBan.getDataBan(player.getName()) == null) {
+                                if (BanManager.getDataBan(player.getName()) == null) {
                                     sendMessage(sender, Message.COMMAND_CHECK_BAN_NOT_FOUND_BAN);
                                     return;
                                 }
-                                for (DataBan dataBan : DataBaseBan.getDataBan(player.getName()).values()){
+                                for (DataBan dataBan : BanManager.getDataBan(player.getName()).values()){
                                     sendDataBan(sender, dataBan);
                                 }
                             }
