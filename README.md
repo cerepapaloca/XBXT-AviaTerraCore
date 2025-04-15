@@ -12,16 +12,12 @@ se llamaba AviaTerra luego se quedó el nombre asi</small>
 
 ## Como se instala
 1. Abre una terminal en el la carpeta `Avia Terra Core`
-2. ejecuta esté comando de maven
-    ```
-    mvn paper-nms:init -f pom.xml 
-    ```
-    y luego en la carpeta root del proyecto abre un terminal y ejecuta este comando
+2. ejecuta esté comando de maven en la carpeta root del proyecto
     ```
     mvn clean package
     ```
-    En caso de que no lo tengas instalado. [Aquí](https://maven.apache.org/download.cgi) puedes descargarlo
-4. luego se van a crear varios .jar el importante es que se llama `avia-terra-core-0.0-SNAPSHOT.jar`
+    En caso de que no lo tengas instalado maven. [Aquí](https://maven.apache.org/download.cgi) puedes descargarlo
+4. luego se van a crear varios jar en la carpeta `taget` en `Avia Terra Core`. el jar el importante es que se llama `avia-terra-core-0.0-SNAPSHOT.jar`
 5. Ese jar lo pasa al a tu carpeta de plugins
 6. Luego tiene que poner otros plugin que son dependéncia, Los cuales son
 [ProtocolLib](https://www.spigotmc.org/resources/protocollib.1997/),
