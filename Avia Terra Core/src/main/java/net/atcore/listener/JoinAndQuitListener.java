@@ -101,7 +101,7 @@ public class JoinAndQuitListener implements Listener {
         Player player = event.getPlayer();
         DataBan ban = ContextBan.GLOBAL.onContext(player, event);
         if (ban != null){
-            event.kickMessage(MessagesManager.applyFinalProprieties(GlobalUtils.kickPlayer(player, BanManager.formadMessageBan(ban)), TypeMessages.KICK, CategoryMessages.PRIVATE, false));
+            event.kickMessage(MessagesManager.applyFinalProprieties(player, GlobalUtils.kickPlayer(player, BanManager.formadMessageBan(ban)), TypeMessages.KICK, CategoryMessages.PRIVATE, false));
             event.setResult(PlayerLoginEvent.Result.KICK_BANNED);
             return;
         }
@@ -115,7 +115,7 @@ public class JoinAndQuitListener implements Listener {
     public void onPreLogin(@NotNull AsyncPlayerPreLoginEvent event) {
         if (AntiTwoPlayer.checkTwoPlayer(event.getName())){
             event.setLoginResult(AsyncPlayerPreLoginEvent.Result.KICK_OTHER);
-            event.kickMessage(MessagesManager.applyFinalProprieties(Message.SECURITY_KICK_ANTI_TWO_PLAYER.getMessageLocaleDefault(), TypeMessages.KICK, CategoryMessages.LOGIN, false));
+            event.kickMessage(MessagesManager.applyFinalProprieties(null, Message.SECURITY_KICK_ANTI_TWO_PLAYER.getMessageLocaleDefault(), TypeMessages.KICK, CategoryMessages.LOGIN, false));
         }
     }
 }

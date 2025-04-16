@@ -10,16 +10,12 @@ import net.atcore.data.DataSection;
 import net.atcore.data.sql.DataBaseRegister;
 import net.atcore.data.yml.ConfigFile;
 import net.atcore.listener.ListenerSection;
-import net.atcore.messages.CategoryMessages;
-import net.atcore.messages.DiscordBot;
-import net.atcore.messages.MessagesManager;
-import net.atcore.messages.TypeMessages;
+import net.atcore.messages.*;
 import net.atcore.moderation.ModerationSection;
 import net.atcore.placeholder.PlaceHolderSection;
 import net.atcore.security.SecuritySection;
 import net.atcore.security.login.LoginManager;
 import net.atcore.security.login.model.LoginData;
-import net.atcore.utils.AviaRunnable;
 import net.atcore.utils.AviaTerraScheduler;
 import net.atcore.utils.GlobalUtils;
 import net.atcore.utils.RegisterManager;
@@ -35,14 +31,11 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.net.UnknownHostException;
 import java.sql.SQLException;
 import java.util.*;
-import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static net.atcore.utils.RegisterManager.register;
 import static org.bukkit.Bukkit.getOnlinePlayers;
@@ -82,8 +75,8 @@ public class AviaTerraCore extends JavaPlugin {
         MessagesManager.logConsole("AviaTerra Iniciando...", TypeMessages.SUCCESS, CategoryMessages.PRIVATE, false);
         startTime = System.currentTimeMillis();
         isStarting = true;
-        aviaTerraScheduler = AviaTerraScheduler.startNew();
-
+        aviaTerraScheduler = AviaTerraScheduler.threadNew();
+        aviaTerraScheduler.start();
         RegisteredServiceProvider<LuckPerms> provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
         if (provider != null) {
             lp = provider.getProvider();
@@ -101,6 +94,13 @@ public class AviaTerraCore extends JavaPlugin {
                 new PlaceHolderSection(),
                 new ApiSection()
         );
+        AviaTerraScheduler.runTaskTimerAsynchronously(5, 5, () -> Bukkit.getOnlinePlayers().forEach(player -> {
+            player.playerListName(player.displayName().appendSpace().append(GlobalUtils.chatColorLegacyToComponent(String.format("<gradient:#666666:#888888>Ping %s</gradient>", player.getPing()))));
+            player.sendPlayerListHeaderAndFooter(
+                    MessagesManager.applyFinalProprieties(player, Message.MISC_TAB_HEADER.getMessage(player), TypeMessages.INFO, CategoryMessages.PRIVATE, false),
+                    MessagesManager.applyFinalProprieties(player, Message.MISC_TAB_FOOTER.getMessage(player), TypeMessages.INFO, CategoryMessages.PRIVATE, false)
+            );
+        }));
         registerPermission();
         startMOTD();
         startBroadcast();
@@ -227,7 +227,7 @@ public class AviaTerraCore extends JavaPlugin {
                 if (getOnlinePlayers().isEmpty()) return;
                 if (LIST_BROADCAST.isEmpty()) return;
                 int randomInt = random.nextInt(LIST_BROADCAST.size());
-                Bukkit.broadcast(MessagesManager.applyFinalProprieties(LIST_BROADCAST.get(randomInt), TypeMessages.INFO, CategoryMessages.PRIVATE, true));
+                Bukkit.broadcast(MessagesManager.applyFinalProprieties(null, LIST_BROADCAST.get(randomInt), TypeMessages.INFO, CategoryMessages.PRIVATE, true));
             }
         }.runTaskTimer(this, 20*60*15L, 20*60*15L);
     }

@@ -370,7 +370,7 @@ public abstract class BaseAchievement<T extends Event> implements Listener {
             senders.add(Bukkit.getConsoleSender());
             for (CommandSender sender : senders){
                 MessagesAchievement messagesAchievement = getMessage(sender);
-                Component component = MessagesManager.applyFinalProprieties(String.format("<dark_gray>[</dark_gray><gold>★</gold><dark_gray>]</dark_gray> " + message.getMessage(sender),
+                Component component = MessagesManager.applyFinalProprieties(sender, String.format("<dark_gray>[</dark_gray><gold>★</gold><dark_gray>]</dark_gray> " + message.getMessage(sender),
                         "<click:SUGGEST_COMMAND:/w " + player.getName() + ">" + player.getName() + "</click>",
                         "<" + color + ">[<hover:show_text:'<" + color + ">" + messagesAchievement.description().get(random.nextInt(messagesAchievement.description().size())) + "</" + color + ">'>" + messagesAchievement.title().get(random.nextInt(messagesAchievement.title().size())) + "</hover>]</" + color + ">"
                 ), TypeMessages.INFO, CategoryMessages.PRIVATE, false);

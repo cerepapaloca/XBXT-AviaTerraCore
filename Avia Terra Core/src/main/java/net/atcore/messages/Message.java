@@ -6,11 +6,8 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
-import java.util.Random;
+import java.util.*;
 
-import static net.atcore.messages.MessagesManager.DEFAULT_LOCALE_PRIVATE;
-import static net.atcore.messages.MessagesManager.DEFAULT_LOCALE_USER;
 import static net.atcore.messages.TypeMessages.*;
 
 @Getter
@@ -213,12 +210,6 @@ public enum Message {
     COMMAND_UNBLOCK_SUCCESSFUL("command.unblock", "Se desbloqueo al jugado %s correctamente", SUCCESS),
     COMMAND_UNBLOCK_MISSING_ARG("command.unblock", "Tienes que poner al menos a un jugador", ERROR),
     COMMAND_UNBLOCK_NOT_FOUND("command.unblock", "No se encontrar a %s en tu lista de bloqueo", WARNING),
-    MISC_KICK_UPPER("misc", "<dark_gray>< <b><st>           </st> <#4B2FDE>XT <#ff8C00>XB <dark_gray><st>           </st></b> >\n\n&r", GENERIC),
-    MISC_KICK_LOWER("misc", "\n\n<dark_gray>< <st>                  </st> | <st>                  </st> >", GENERIC),
-    MISC_WARING_ANTI_DUPE("misc", "⚠ Este Item Esta protegido, si intenta dupear se borrara el item automáticamente ⚠", WARNING),
-    MISC_NETHER_ROOF("misc", "Techo del nether deshabilitado", WARNING),
-    MISC_ACTIVE("misc", "Activo", GENERIC),
-    MISC_DESACTIVE("misc", "Activo", GENERIC),
     DEATH_CAUSE_KILL("death-cause", "<|%1$s|> se murió por que si", INFO),
     DEATH_CAUSE_WORLD_BORDER("death-cause","<|%1$s|> murió por el world border", INFO),
     DEATH_CAUSE_CONTACT("death-cause", "<|%1$s|> murió por estaba tocando algo que no debía", INFO),
@@ -252,12 +243,22 @@ public enum Message {
     DEATH_CAUSE_CRAMMING("death-cause", "<|%1$s|> se en potro con otro seres", INFO),
     DEATH_CAUSE_DRYOUT("death-cause", "<|%1$s|> se ahogo en el aire", INFO),
     DEATH_CAUSE_FREEZE("death-cause", "<|%1$s|> no soporto el team frio", INFO),
-    DEATH_CAUSE_SONIC_BOOM("death-cause", "<|%1$s|> lo mato el grito del warden", INFO);
+    DEATH_CAUSE_SONIC_BOOM("death-cause", "<|%1$s|> lo mato el grito del warden", INFO),
+    MISC_KICK_UPPER("misc", "<dark_gray>< <b><st>           </st> <#4B2FDE>XT <#ff8C00>XB <dark_gray><st>           </st></b> >\n\n&r", GENERIC),
+    MISC_KICK_LOWER("misc", "\n\n<dark_gray>< <st>                  </st> | <st>                  </st> >", GENERIC),
+    MISC_WARING_ANTI_DUPE("misc", "⚠ Este Item Esta protegido, si intenta dupear se borrara el item automáticamente ⚠", WARNING),
+    MISC_NETHER_ROOF("misc", "Techo del nether deshabilitado", WARNING),
+    MISC_ACTIVE("misc", "Activo", GENERIC),
+    MISC_DESACTIVE("misc", "Desactivado", GENERIC),
+    MISC_TAB_HEADER("misc.tab", "<gradient:#581cce:#3f39ea>&lX Bᴜɪʟᴅᴇʀ</gradient> <gradient:#fb8316:#fbb61f>&lX Tᴏᴏʟꜱ</gradient>\n ", GENERIC),
+    MISC_TAB_FOOTER("misc.tab", " \n<gradient:#581cce:#3f39ea>TPS %tps%</gradient> &8| <gradient:#fb8316:#fbb61f>PING %ping%</gradient>\n" +
+            "<gradient:#581cce:#3f39ea>Tiempo Activo:</gradient><gradient:#fb8316:#fbb61f> %AviaTerraCore_active-time%</gradient> \n \n" +
+            "<gradient:#581cce:#fb8316>ᴅɪꜱᴄᴏʀᴅ.ɢɢ/7ubQQFVMWF</gradient>", GENERIC);
 
     Message(String parent, String defaultMessage, TypeMessages type) {
         this.parent = parent;
         this.typeMessages = type;
-        this.MapMessageLocale.put(DEFAULT_LOCALE_PRIVATE, new String[]{defaultMessage});
+        this.MapMessageLocale.put(MessagesManager.DEFAULT_LOCALE_PRIVATE, new String[]{defaultMessage});
     }
 
     private final TypeMessages typeMessages;
@@ -271,29 +272,42 @@ public enum Message {
         if (sender instanceof Player player) {
             locale = LocaleAvailable.getLocate(player.locale());
         }else {
-            locale = DEFAULT_LOCALE_PRIVATE;
+            locale = MessagesManager.DEFAULT_LOCALE_PRIVATE;
         }
-        return getMessageLocate(locale);
+        return getRando(getMessageLocate(locale));
     }
 
+    @NotNull
     @Contract(pure = true)
-    private @NotNull String getMessageLocate(@NotNull LocaleAvailable locale) {
-        if (!MapMessageLocale.containsKey(locale)) locale = DEFAULT_LOCALE_USER;
-        String[] strings = this.MapMessageLocale.get(locale);
-        if (strings == null) strings = this.MapMessageLocale.get(DEFAULT_LOCALE_PRIVATE);
-        if (strings.length == 1) {
-            return strings[0];
+    public String getMessage(CommandSender sender, int seed) {
+        LocaleAvailable locale;
+        if (sender instanceof Player player) {
+            locale = LocaleAvailable.getLocate(player.locale());
         }else {
-            Random r = new Random();
-            return strings[r.nextInt(strings.length)];
+            locale = MessagesManager.DEFAULT_LOCALE_PRIVATE;
         }
+        ArrayList<String> list = getMessageLocate(locale);
+        return list.get(new Random(seed).nextInt(list.size()));
     }
+
+    @Contract(value = "_ -> new", pure = true)
+    private @NotNull ArrayList<String> getMessageLocate(@NotNull LocaleAvailable locale) {
+        if (!MapMessageLocale.containsKey(locale)) locale = MessagesManager.DEFAULT_LOCALE_USER;
+        String[] strings = this.MapMessageLocale.get(locale);
+        if (strings == null) strings = this.MapMessageLocale.get(MessagesManager.DEFAULT_LOCALE_PRIVATE);
+        return new ArrayList<>(Arrays.asList(strings));
+    }
+
+    private String getRando(List<String> list){
+        return list.get(new Random().nextInt(list.size()));
+    }
+
 
     public String getMessageLocatePrivate() {
-        return getMessageLocate(DEFAULT_LOCALE_PRIVATE);
+        return getRando(getMessageLocate(MessagesManager.DEFAULT_LOCALE_PRIVATE));
     }
 
     public String getMessageLocaleDefault() {
-        return getMessageLocate(DEFAULT_LOCALE_USER);
+        return getRando(getMessageLocate(MessagesManager.DEFAULT_LOCALE_USER));
     }
 }

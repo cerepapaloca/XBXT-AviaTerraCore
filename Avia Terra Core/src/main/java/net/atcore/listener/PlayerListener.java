@@ -185,10 +185,8 @@ public class PlayerListener implements Listener {
                 message = Message.EVENT_CHAT_ADVANCEMENT_TASK;
             }
         }
-        List<CommandSender> senders = new ArrayList<>(Bukkit.getOnlinePlayers());
-        senders.add(Bukkit.getConsoleSender());
-        for (CommandSender sender : senders) {
-            Component component = MessagesManager.applyFinalProprieties(String.format("<dark_gray>[</dark_gray><gold>★</gold><dark_gray>]</dark_gray> " + message.getMessage(sender),
+        for (CommandSender sender : GlobalUtils.getAllSenderServer()) {
+            Component component = MessagesManager.applyFinalProprieties(sender, String.format("<dark_gray>[</dark_gray><gold>★</gold><dark_gray>]</dark_gray> " + message.getMessage(sender),
                     "<click:SUGGEST_COMMAND:/w " + player.getName() + ">" + player.getName() + "</click>",
                     "<" + color + ">[<hover:show_text:'<" + color + ">" + AviaTerraCore.getMiniMessage().serialize(display.description()) + "</" + color + ">'>" + AviaTerraCore.getMiniMessage().serialize(display.title()) + "</hover>]</" + color + ">"
             ), TypeMessages.INFO, CategoryMessages.PRIVATE, false);

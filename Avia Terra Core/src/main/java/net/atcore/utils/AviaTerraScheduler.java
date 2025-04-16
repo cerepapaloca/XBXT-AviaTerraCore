@@ -33,10 +33,8 @@ public class AviaTerraScheduler {
         workerThread.start();
     }
 
-    public static AviaTerraScheduler startNew(){
-        AviaTerraScheduler scheduler = new AviaTerraScheduler();
-        scheduler.start();
-        return scheduler;
+    public static AviaTerraScheduler threadNew(){
+        return new AviaTerraScheduler();
     }
 
     public static void runSync(Runnable runnable){

@@ -96,6 +96,7 @@ public class ChatListener implements Listener {
         String locale = sender.locale().getDisplayName(target.locale());
 
         Component hoverText = MessagesManager.applyFinalProprieties(
+                target,
                 String.format(EVENT_CHAT_HOVER.getMessage(target),
                         (float) distanceWalkedKm/10,
                         (float) timePlayedHours/10,

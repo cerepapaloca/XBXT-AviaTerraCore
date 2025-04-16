@@ -4,7 +4,7 @@ import net.atcore.aviaterraplayer.AviaTerraPlayer;
 import net.atcore.command.*;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
-import net.atcore.utils.GlobalUtils;
+import net.atcore.utils.AviaTerraScheduler;
 import org.bukkit.Bukkit;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -42,16 +42,18 @@ public class TpaCommand extends BaseTabCommand implements CommandAliase {
                         }
                         TpaRequest request = atp.getListTpa().getFirst();
                         Player player = Bukkit.getPlayer(request.uuid);
-                        if (request.dateCreated < System.currentTimeMillis()) {
+                        if (request.dateExpired < System.currentTimeMillis()) {
                             MessagesManager.sendMessage(sender, Message.COMMAND_TPA_EXPIRE);
                             atp.getListTpa().clear();
                             return;
                         }
                         if (player != null) {
-                            player.getWorld().spawnParticle(Particle.PORTAL, player.getLocation(), 10, 0.5, 1,0.5);
+                            player.getWorld().spawnParticle(Particle.PORTAL, player.getLocation(), 15, 0.5, 1,0.5);
                             player.teleport(p, PlayerTeleportEvent.TeleportCause.COMMAND);
+                            player.setInvulnerable(true);
                             player.getWorld().playSound(player, Sound.ENTITY_PLAYER_TELEPORT, SoundCategory.PLAYERS, 1, 1, -1);
-                            player.getWorld().spawnParticle(Particle.REVERSE_PORTAL, player.getLocation(), 10, 0.5, 1,0.5);
+                            player.getWorld().spawnParticle(Particle.REVERSE_PORTAL, player.getLocation(), 15, 0.5, 1,0.5);
+                            AviaTerraScheduler.runTaskLater(20*5, () -> player.setInvulnerable(false));
                         }else {
                             MessagesManager.sendMessage(sender, Message.COMMAND_TPA_WAS_DISCONNECTED);
                         }
@@ -81,7 +83,7 @@ public class TpaCommand extends BaseTabCommand implements CommandAliase {
                             MessagesManager.sendFormatMessage(sender, Message.COMMAND_TPA_SEND, player.getName());
                             if (atp.getPlayersBLock().contains(p.getName())) return;
                             MessagesManager.sendFormatMessage(atp.getPlayer(), Message.COMMAND_TPA_RECEIVE, p.getName());
-                            atp.getListTpa().add(new TpaRequest(p.getUniqueId(), System.currentTimeMillis() + 1000*60*5));
+                            atp.getListTpa().add(new TpaRequest(p.getUniqueId(), System.currentTimeMillis() + 1000*60*2));
                         }else {
                             MessagesManager.sendMessage(sender, Message.COMMAND_GENERIC_PLAYER_NOT_FOUND);
                         }
@@ -126,5 +128,5 @@ public class TpaCommand extends BaseTabCommand implements CommandAliase {
         return aliases;
     }
 
-    public record TpaRequest(UUID uuid, long dateCreated){}
+    public record TpaRequest(UUID uuid, long dateExpired){}
 }

@@ -114,7 +114,7 @@ public class DiscordBot extends ListenerAdapter{
             }else {
                 rowContent = message.getContentRaw();
             }
-            Component component = MessagesManager.applyFinalProprieties(String.format(
+            Component component = MessagesManager.applyFinalProprieties(null, String.format(
                     MessagesManager.PREFIX_CHAT_DISCORD + format.getMessageLocaleDefault(),
                     member.getColor() == null ? "<#AAAAAA>" + member.getUser().getGlobalName() :
                             "<" + GlobalUtils.javaColorToStringHex(member.getColor()) + ">" + (member.getUser().getGlobalName() != null ? member.getUser().getGlobalName() : member.getUser().getName()),

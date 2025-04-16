@@ -8,6 +8,7 @@ import com.google.common.base.Charsets;
 import lombok.experimental.UtilityClass;
 import net.atcore.AviaTerraCore;
 import net.atcore.achievement.InventoryChangeEvent;
+import net.atcore.command.CommandSection;
 import net.atcore.data.DataSection;
 import net.atcore.listener.NuVotifierListener;
 import net.atcore.messages.CategoryMessages;
@@ -20,6 +21,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.luckperms.api.node.types.InheritanceNode;
 import org.bukkit.*;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -33,9 +35,7 @@ import java.io.File;
 import java.net.InetAddress;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @SuppressWarnings("unused")
@@ -384,7 +384,7 @@ public final class GlobalUtils {
                     }
                 }
 
-                lineas.add(MessagesManager.applyFinalProprieties(GlobalUtils.convertToMiniMessageFormat(color) + parte.substring(inicio, fin), TypeMessages.GENERIC, CategoryMessages.PRIVATE, false));
+                lineas.add(MessagesManager.applyFinalProprieties(null,GlobalUtils.convertToMiniMessageFormat(color) + parte.substring(inicio, fin), TypeMessages.GENERIC, CategoryMessages.PRIVATE, false));
                 inicio = fin + 1; // Salta el espacio
             }
         }
@@ -642,5 +642,12 @@ public final class GlobalUtils {
     @Contract(pure = true)
     public String locationToString(Location loc){
         return "[" + loc.getWorld().getName() + "] " + loc.getBlockX() + " " + loc.getBlockY() + " " + loc.getBlockZ();
+    }
+
+    @Contract(pure = true)
+    public Set<CommandSender> getAllSenderServer(){
+        Set<CommandSender> senders = new HashSet<>(Bukkit.getOnlinePlayers());
+        senders.add(Bukkit.getConsoleSender());
+        return senders;
     }
 }

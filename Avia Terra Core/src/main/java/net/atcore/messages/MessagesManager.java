@@ -1,11 +1,13 @@
 package net.atcore.messages;
 
 import lombok.experimental.UtilityClass;
+import me.clip.placeholderapi.PlaceholderAPI;
 import net.atcore.AviaTerraCore;
 import net.atcore.command.ArgumentUse;
 import net.atcore.data.DataSection;
 import net.atcore.data.yml.MessageFile;
 import net.atcore.listener.JoinAndQuitListener;
+import net.atcore.placeholder.PlaceHolderSection;
 import net.atcore.security.login.LoginManager;
 import net.atcore.utils.AviaTerraScheduler;
 import net.atcore.utils.GlobalUtils;
@@ -16,6 +18,7 @@ import net.kyori.adventure.text.TextComponent.Builder;
 import net.kyori.adventure.text.TextReplacementConfig;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.kyori.adventure.title.Title;
 import org.bukkit.Bukkit;
@@ -124,7 +127,7 @@ public final class MessagesManager {
      */
 
     public void sendMessage(Player player, String message, @NotNull TypeMessages type, CategoryMessages categoryMessages, boolean isPrefix) {
-        player.sendMessage(applyFinalProprieties(message, type, categoryMessages, isPrefix));
+        player.sendMessage(applyFinalProprieties(player, message, type, categoryMessages, isPrefix));
     }
 
     /////////////////////////////
@@ -147,7 +150,7 @@ public final class MessagesManager {
     }
 
     public static void logConsole(String message, @NotNull TypeMessages type, CategoryMessages categoryMessages, boolean isPrefix) {
-        Component component = applyFinalProprieties(message, type, categoryMessages, isPrefix);
+        Component component = applyFinalProprieties(null, message, type, categoryMessages, isPrefix);
         switch (type){
             case ERROR -> AviaTerraCore.getInstance().getComponentLogger().error(component);
             case WARNING -> AviaTerraCore.getInstance().getComponentLogger().warn(component);
@@ -210,11 +213,17 @@ public final class MessagesManager {
                 .replace("`", "");
     }
 
-    public Component applyFinalProprieties(String message, @NotNull TypeMessages type, CategoryMessages categoryMessages, boolean isPrefix) {
+    public Component applyFinalProprieties(@Nullable CommandSender player,@NotNull String message, @NotNull TypeMessages type, CategoryMessages categoryMessages, boolean hasPrefix) {
         if (categoryMessages != CategoryMessages.PRIVATE) {
             sendMessageLogDiscord(type, categoryMessages, message);
         }
-        String s = addProprieties(GlobalUtils.convertToMiniMessageFormat(message), type, isPrefix);
+        String placeHolder;
+        if ((player instanceof Player p) && PlaceHolderSection.isActive()) {
+            placeHolder = PlaceholderAPI.setPlaceholders(p, message);
+        }else {
+            placeHolder = message;
+        }
+        String s = addProprieties(GlobalUtils.convertToMiniMessageFormat(placeHolder), type, hasPrefix);
         return AviaTerraCore.getMiniMessage().deserialize(s);
     }
 
@@ -310,7 +319,7 @@ public final class MessagesManager {
                 }
             }
             Builder tc = Component.text();
-            Component component = tc.append(AviaTerraCore.getMiniMessage().deserialize("<dark_gray>[<dark_red>☠</dark_red>]</dark_gray> ")).append(applyFinalProprieties(message, TypeMessages.INFO, CategoryMessages.PRIVATE, false)).build();
+            Component component = tc.append(AviaTerraCore.getMiniMessage().deserialize("<dark_gray>[<dark_red>☠</dark_red>]</dark_gray> ")).append(applyFinalProprieties(p, message, TypeMessages.INFO, CategoryMessages.PRIVATE, false)).build();
 
             Builder componentVictim = Component.text();
             componentVictim.append(victim.displayName());
