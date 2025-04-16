@@ -27,7 +27,7 @@ public class RoofNether extends BaseChecker<PlayerMoveEvent> {
                     i++;
                 }
 
-                player.teleport(loc.add(0, -1,0), PlayerTeleportEvent.TeleportCause.PLUGIN);
+                player.teleportAsync(loc.add(0, -1,0), PlayerTeleportEvent.TeleportCause.PLUGIN);
                 player.playSound(player, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0F, 1.0F);
                 MessagesManager.sendTitle(player, "", Message.MISC_NETHER_ROOF.getMessage(player), 0, 80, 60, Message.MISC_NETHER_ROOF.getTypeMessages());
             }

@@ -293,20 +293,15 @@ public abstract class BaseAchievement<T extends Event> implements Listener {
         }
     }
 
-    private final HashSet<AviaTerraPlayer> saveTask = new HashSet<>();
+    private static final HashSet<AviaTerraPlayer> saveTask = new HashSet<>();
 
     public void saveData(AviaTerraPlayer player) {
         if (!saveTask.contains(player)) {
             saveTask.add(player);
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    AviaTerraScheduler.runTask(() -> {
-                        player.getPlayerDataFile().saveData();
-                        saveTask.remove(player);
-                    });
-                }
-            }.runTaskLater(AviaTerraCore.getInstance(), 40);
+            AviaTerraScheduler.runTaskLaterAsynchronously(20*2, () -> {
+                player.getPlayerDataFile().saveData();
+                saveTask.remove(player);
+            });
         }
     }
 

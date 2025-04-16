@@ -2,12 +2,15 @@ package net.atcore.data;
 
 import lombok.Getter;
 import net.atcore.AviaTerraCore;
+import net.atcore.data.yml.MessageFile;
+import net.atcore.messages.MessagesManager;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 
 @Getter
 @SuppressWarnings("ResultOfMethodCallIgnored")
@@ -62,9 +65,9 @@ public abstract class FileYaml extends net.atcore.data.File {
 
     public void saveConfig() {
         try {
-            fileYaml.save(file);
-        } catch (IOException e) {
-            throw new RuntimeException("No se pudo guardar el archivo de configuración " + fileName, e);
+            fileYaml.save(Objects.requireNonNullElseGet(file, this::reloadFile));
+        } catch (Exception e) {
+            MessagesManager.sendWaringException("No se pudo guardar el archivo de configuración " + fileName, e);
         }
     }
 

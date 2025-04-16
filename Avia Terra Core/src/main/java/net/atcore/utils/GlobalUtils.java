@@ -264,6 +264,8 @@ public final class GlobalUtils {
         }
     }
 
+    private final WeakHashMap<String, UUID> cacheUUIDs = new WeakHashMap<>();
+
     /**
      * Obtienes la uuid del jugador usando el mismo sistema que usa el servidor
      * para asignarle la uuid a los jugadores no premium
@@ -273,7 +275,7 @@ public final class GlobalUtils {
 
     @Contract(pure = true)
     public UUID getUUIDByName(String username) {
-        return UUID.nameUUIDFromBytes(("OfflinePlayer:" + username).getBytes(Charsets.UTF_8));
+        return cacheUUIDs.computeIfAbsent(username, (k) -> UUID.nameUUIDFromBytes(("OfflinePlayer:" + username).getBytes(Charsets.UTF_8)));
     }
 
     /**

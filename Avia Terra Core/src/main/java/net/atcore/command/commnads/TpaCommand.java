@@ -49,7 +49,7 @@ public class TpaCommand extends BaseTabCommand implements CommandAliase {
                         }
                         if (player != null) {
                             player.getWorld().spawnParticle(Particle.PORTAL, player.getLocation(), 15, 0.5, 1,0.5);
-                            player.teleport(p, PlayerTeleportEvent.TeleportCause.COMMAND);
+                            player.teleportAsync(p.getLocation(), PlayerTeleportEvent.TeleportCause.COMMAND);
                             player.setInvulnerable(true);
                             player.getWorld().playSound(player, Sound.ENTITY_PLAYER_TELEPORT, SoundCategory.PLAYERS, 1, 1, -1);
                             player.getWorld().spawnParticle(Particle.REVERSE_PORTAL, player.getLocation(), 15, 0.5, 1,0.5);

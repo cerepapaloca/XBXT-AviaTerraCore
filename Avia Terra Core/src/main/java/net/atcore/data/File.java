@@ -82,13 +82,14 @@ public abstract class File {
             return "";
         }
     }
-
-    protected void reloadFile() {
+    @NotNull
+    protected java.io.File reloadFile() {
         if(folderName != null){
             file = new java.io.File(AviaTerraCore.getInstance().getDataFolder() + java.io.File.separator + folderName, fileName);
         }else{
             file = new java.io.File(AviaTerraCore.getInstance().getDataFolder(), fileName);
         }
+        return file;
     }
 
     public abstract void loadData();

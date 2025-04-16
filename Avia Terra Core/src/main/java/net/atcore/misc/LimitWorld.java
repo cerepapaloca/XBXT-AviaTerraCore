@@ -67,7 +67,7 @@ public class LimitWorld {
         }
 
         feedback(player);
-        player.teleport(loc, PlayerTeleportEvent.TeleportCause.PLUGIN);
+        player.teleportAsync(loc, PlayerTeleportEvent.TeleportCause.PLUGIN);
     }
 
     private static void feedback(Player player) {

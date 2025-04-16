@@ -23,6 +23,7 @@ public class InventoryChangeEvent extends InventoryEvent {
     public InventoryChangeEvent(Player player) {
         super(player.getOpenInventory());
         this.player = player;
+
     }
 
     @Override
@@ -46,6 +47,7 @@ public class InventoryChangeEvent extends InventoryEvent {
                     int currentHash = playerInventoryHash.computeIfAbsent(player.getUniqueId(),k -> hash);
                     if (currentHash != hash) {
                         playerInventoryHash.put(player.getUniqueId(), hash);
+                        //TODO: Cambiar a asincrónico
                         AviaTerraScheduler.runTask(() -> Bukkit.getPluginManager().callEvent(new InventoryChangeEvent(player)));
                     }
                 }

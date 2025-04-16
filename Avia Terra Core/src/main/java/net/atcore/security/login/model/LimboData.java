@@ -52,7 +52,7 @@ public class LimboData {
         player.setGameMode(gameMode);
         player.setOp(op);
         player.setLevel(level);
-        player.teleport(location, PlayerTeleportEvent.TeleportCause.PLUGIN);
+        player.teleportAsync(location, PlayerTeleportEvent.TeleportCause.PLUGIN);
         player.getInventory().setContents(items);
         player.setHealth(health);
         player.setFoodLevel(foodLevel);

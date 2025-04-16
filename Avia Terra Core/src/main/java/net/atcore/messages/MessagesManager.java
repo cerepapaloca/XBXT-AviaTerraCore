@@ -18,7 +18,6 @@ import net.kyori.adventure.text.TextComponent.Builder;
 import net.kyori.adventure.text.TextReplacementConfig;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
-import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.kyori.adventure.title.Title;
 import org.bukkit.Bukkit;
@@ -218,8 +217,8 @@ public final class MessagesManager {
             sendMessageLogDiscord(type, categoryMessages, message);
         }
         String placeHolder;
-        if ((player instanceof Player p) && PlaceHolderSection.isActive()) {
-            placeHolder = PlaceholderAPI.setPlaceholders(p, message);
+        if ((player instanceof Player p)) {
+            placeHolder = PlaceHolderSection.applyPlaceholders(p, message);
         }else {
             placeHolder = message;
         }

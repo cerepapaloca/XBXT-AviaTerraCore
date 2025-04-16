@@ -110,7 +110,7 @@ public class LimboManager {
 
     private static void clearPlayer(Player player) {
         player.getInventory().clear();
-        player.teleport(LIMBO_LOCATION);
+        player.teleportAsync(LIMBO_LOCATION);
         player.setOp(false);
         player.setGameMode(GameMode.SPECTATOR);
         player.setLevel(0);

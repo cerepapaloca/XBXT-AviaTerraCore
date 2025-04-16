@@ -68,7 +68,7 @@ public class HomeCommand extends BaseTabCommand implements CommandAliase {
                         AviaTerraScheduler.runTask(() -> {
                             if (finalDistance > distanceMinTp){
                                 player.getWorld().spawnParticle(Particle.PORTAL, player.getLocation(), 10, 0.5, 1,0.5);
-                                player.teleport(loc, PlayerTeleportEvent.TeleportCause.COMMAND);
+                                player.teleportAsync(loc, PlayerTeleportEvent.TeleportCause.COMMAND);
                                 player.setInvulnerable(true);
                                 AviaTerraScheduler.runTaskLater(60, () -> player.setInvulnerable(false));
                                 player.getWorld().playSound(player, Sound.ENTITY_PLAYER_TELEPORT, SoundCategory.PLAYERS, 1, 1);

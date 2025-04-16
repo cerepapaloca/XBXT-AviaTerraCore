@@ -2,6 +2,8 @@ package net.atcore.placeholder;
 
 import lombok.Getter;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 @Getter
 public abstract class BasePlaceHolder {
@@ -13,5 +15,6 @@ public abstract class BasePlaceHolder {
         PlaceHolderSection.HOLDERS.add(this);
     }
 
-    public abstract String onPlaceholderRequest(Player player);
+    @NotNull
+    public abstract String onPlaceholderRequest(@Nullable Player player);
 }

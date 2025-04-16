@@ -92,7 +92,7 @@ public class AviaTerraScheduler {
      */
 
     public static void enqueueTaskAsynchronously(boolean isHeavyProcess, Runnable task) {
-        if (!taskQueue.offer(new AviaRunnable(task, isHeavyProcess))){
+        if (!taskQueue.add(new AviaRunnable(task, isHeavyProcess))){
             MessagesManager.logConsole("Error al añadir una tarea la cola", TypeMessages.ERROR);
         }
         if (taskQueue.size() >= 20){
