@@ -21,16 +21,22 @@ import net.atcore.utils.GlobalUtils;
 import net.atcore.utils.RegisterManager;
 import net.atcore.webapi.ApiSection;
 import net.dv8tion.jda.api.JDA;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.luckperms.api.LuckPerms;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.PluginCommand;
+import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.Team;
 import org.jetbrains.annotations.Nullable;
 
 import java.net.UnknownHostException;
@@ -94,13 +100,16 @@ public class AviaTerraCore extends JavaPlugin {
                 new PlaceHolderSection(),
                 new ApiSection()
         );
-        AviaTerraScheduler.runTaskTimerAsynchronously(5, 5, () -> Bukkit.getOnlinePlayers().forEach(player -> {
-            player.playerListName(player.displayName().appendSpace().append(GlobalUtils.chatColorLegacyToComponent(String.format("<reset><gradient:#666666:#888888>Ping %s</gradient>", player.getPing()))));
-            player.sendPlayerListHeaderAndFooter(
-                    MessagesManager.applyFinalProprieties(player, Message.MISC_TAB_HEADER.getMessage(player), TypeMessages.INFO, CategoryMessages.PRIVATE, false),
-                    MessagesManager.applyFinalProprieties(player, Message.MISC_TAB_FOOTER.getMessage(player), TypeMessages.INFO, CategoryMessages.PRIVATE, false)
-            );
-        }));
+        AviaTerraScheduler.runTaskTimerAsynchronously(5, 5, () -> {
+            Collection<? extends Player> players = Bukkit.getOnlinePlayers();
+            players.forEach(player -> {
+                player.playerListName(AviaTerraCore.getMiniMessage().deserialize(AviaTerraCore.getMiniMessage().serialize(player.displayName()) + "<reset> " + String.format("<gradient:#666666:#888888>%s</gradient>", player.getPing())));
+                player.sendPlayerListHeaderAndFooter(
+                        MessagesManager.applyFinalProprieties(player, Message.MISC_TAB_HEADER.getMessage(player), TypeMessages.GENERIC, CategoryMessages.PRIVATE, false),
+                        MessagesManager.applyFinalProprieties(player, Message.MISC_TAB_FOOTER.getMessage(player), TypeMessages.GENERIC, CategoryMessages.PRIVATE, false)
+                );
+            });
+        });
         registerPermission();
         startMOTD();
         startBroadcast();

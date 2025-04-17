@@ -153,14 +153,13 @@ public class DataBaseBan extends DataBaseMySql {
             }else {
                 tiempoDeBaneo = GlobalUtils.timeToString(dataBan.getUnbanDate() - dataBan.getBanDate(), 2);
             }
-            reload();// TODO: Esto no es lo más optimo
             MessagesManager.logConsole(String.format("El jugador <|%1$s|> fue baneado de <|%2$s|> durante <|%3$s|> por <|%4$s|> y la razón es <|%5$s|>",
                     dataBan.getName(),
                     dataBan.getContext(),
                     tiempoDeBaneo,
                     dataBan.getAuthor(),
                     dataBan.getReason()), TypeMessages.SUCCESS, CategoryMessages.BAN);
-        } catch (UnknownHostException | SQLException e) {
+        } catch (SQLException e) {
             String tiempoDeBaneo;
             if (dataBan.getUnbanDate() == GlobalConstantes.NUMERO_PERMA) {
                 tiempoDeBaneo = "Permanente";

@@ -59,8 +59,10 @@ public class BanManager {
     }
 
     public void unban(ContextBan contextBan, String name, String author) {
-        removeBan(contextBan, name);
-        DataSection.getDatabaseBan().removeBanPlayer(name, contextBan, author);
+        AviaTerraScheduler.enqueueTaskAsynchronously(() -> {
+            removeBan(contextBan, name);
+            DataSection.getDatabaseBan().removeBanPlayer(name, contextBan, author);
+        });
     }
 
     public void banPlayer(Player player, String reason, long time, ContextBan contextBan, String nameAuthor) {
@@ -148,7 +150,7 @@ public class BanManager {
                                 "<|" +  time + "|>", TypeMessages.INFO, CategoryMessages.BAN);
                         return IsBan.YES;
                     } else {// eliminar él baneó cuando expiro y realiza en un hilo aparte para que no pete el servidor
-                        AviaTerraScheduler.enqueueTaskAsynchronously(() -> unban(ban.getContext(), player.getName(), Message.BAN_AUTHOR_AUTO_BAN.getMessageLocatePrivate() + "(Expiro)"));
+                        unban(ban.getContext(), player.getName(), Message.BAN_AUTHOR_AUTO_BAN.getMessageLocatePrivate() + "(Expiro)");
                         return IsBan.NOT;
                     }
                 } else{

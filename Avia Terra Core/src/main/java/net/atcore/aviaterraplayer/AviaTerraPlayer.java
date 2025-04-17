@@ -23,6 +23,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.scheduler.BukkitTask;
+import org.bukkit.scoreboard.Team;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 

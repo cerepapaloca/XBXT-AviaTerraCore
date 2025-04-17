@@ -77,7 +77,7 @@ public class NameColorCommand extends BaseTabCommand {
         }else if (colorName.equalsIgnoreCase("reset")){
             AviaTerraPlayer atp = AviaTerraPlayer.getPlayer(player);
             atp.setNameColor(player.getName());
-            atp.getPlayerDataFile().saveData();
+            AviaTerraScheduler.enqueueTaskAsynchronously(() -> atp.getPlayerDataFile().saveData());
             player.displayName(Component.text(player.getName()));
         }
 
@@ -93,9 +93,9 @@ public class NameColorCommand extends BaseTabCommand {
 
         nameBuilder.append(player.getName());
         String displayNameString = nameBuilder.toString();
-        Component component = GlobalUtils.chatColorLegacyToComponent(displayNameString);
+        Component component = GlobalUtils.chatColorLegacyToComponent(displayNameString + "<reset>");
         AviaTerraPlayer atp = AviaTerraPlayer.getPlayer(player);
-        atp.setNameColor(displayNameString);
+        atp.setNameColor(displayNameString + "<reset>");
         player.displayName(component);
         AviaTerraScheduler.enqueueTaskAsynchronously(() -> atp.getPlayerDataFile().saveData());
     }
