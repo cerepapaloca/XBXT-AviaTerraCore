@@ -26,7 +26,7 @@ public class AviaTerraAchievementCommand extends BaseTabCommand {
         if (args.length > 2) {
             boolean all  = args[2].equals("*");
             ResourceLocation location = all ? null : ResourceLocation.parse(args[2]);
-            BaseAchievement<? extends Event> baseAchievement = all ? null : BaseAchievement.getAchievement(location);
+            BaseAchievement<? extends Event, ?> baseAchievement = all ? null : BaseAchievement.getAchievement(location);
             if (baseAchievement != null || all) {
                 switch (args[1]) {
                     case "add" -> CommandUtils.executeForPlayer(sender, args[0], false, (name, player) -> {

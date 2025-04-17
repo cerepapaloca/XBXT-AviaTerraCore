@@ -1,7 +1,6 @@
 package net.atcore.messages;
 
 import lombok.experimental.UtilityClass;
-import me.clip.placeholderapi.PlaceholderAPI;
 import net.atcore.AviaTerraCore;
 import net.atcore.command.ArgumentUse;
 import net.atcore.data.DataSection;

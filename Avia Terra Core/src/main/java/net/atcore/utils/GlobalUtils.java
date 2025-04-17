@@ -8,7 +8,6 @@ import com.google.common.base.Charsets;
 import lombok.experimental.UtilityClass;
 import net.atcore.AviaTerraCore;
 import net.atcore.achievement.InventoryChangeEvent;
-import net.atcore.command.CommandSection;
 import net.atcore.data.DataSection;
 import net.atcore.listener.NuVotifierListener;
 import net.atcore.messages.CategoryMessages;

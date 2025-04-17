@@ -1,5 +1,5 @@
 name: AviaTerraCore
-version: '1.23.2'
+version: '1.24.0'
 main: net.atcore.AviaTerraCore
 api-version: '1.21'
 depend: [ProtocolLib, LuckPerms, Votifier]

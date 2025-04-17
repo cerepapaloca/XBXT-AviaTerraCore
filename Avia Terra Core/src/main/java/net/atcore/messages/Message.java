@@ -274,7 +274,7 @@ public enum Message {
         }else {
             locale = MessagesManager.DEFAULT_LOCALE_PRIVATE;
         }
-        return getRando(getMessageLocate(locale));
+        return getRandom(getMessageLocate(locale));
     }
 
     @NotNull
@@ -298,16 +298,16 @@ public enum Message {
         return new ArrayList<>(Arrays.asList(strings));
     }
 
-    private String getRando(List<String> list){
+    private String getRandom(List<String> list){
         return list.get(new Random().nextInt(list.size()));
     }
 
 
     public String getMessageLocatePrivate() {
-        return getRando(getMessageLocate(MessagesManager.DEFAULT_LOCALE_PRIVATE));
+        return getRandom(getMessageLocate(MessagesManager.DEFAULT_LOCALE_PRIVATE));
     }
 
     public String getMessageLocaleDefault() {
-        return getRando(getMessageLocate(MessagesManager.DEFAULT_LOCALE_USER));
+        return getRandom(getMessageLocate(MessagesManager.DEFAULT_LOCALE_USER));
     }
 }

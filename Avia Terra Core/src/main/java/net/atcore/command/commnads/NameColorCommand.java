@@ -9,6 +9,7 @@ import net.atcore.command.CommandVisibility;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
 import net.atcore.messages.TypeMessages;
+import net.atcore.utils.AviaTerraScheduler;
 import net.atcore.utils.GlobalUtils;
 import net.kyori.adventure.text.Component;
 import org.bukkit.ChatColor;
@@ -48,6 +49,10 @@ public class NameColorCommand extends BaseTabCommand {
         new Gradient("red_dark", "#212121", "#f4143f");
         new Gradient("rick", "#98f8dd", "#F6FF58");
         new Gradient("purple", "#d481d2", "#703b94");
+        new Gradient("xb", "#581cce", "#3f39ea");
+        new Gradient("xt", "#fb8316", "#fbb61f");
+        new Gradient("xbxt", "#581cce", "#fb8316");
+        new Gradient("lemon","#34CE1C", "#9FFFB1");
         colorOptions = getColorOptions();
         styleOptions = getStyleOptions();
         addAlias("nc");
@@ -91,8 +96,8 @@ public class NameColorCommand extends BaseTabCommand {
         Component component = GlobalUtils.chatColorLegacyToComponent(displayNameString);
         AviaTerraPlayer atp = AviaTerraPlayer.getPlayer(player);
         atp.setNameColor(displayNameString);
-        atp.getPlayerDataFile().saveData();
         player.displayName(component);
+        AviaTerraScheduler.enqueueTaskAsynchronously(() -> atp.getPlayerDataFile().saveData());
     }
 
     @Override

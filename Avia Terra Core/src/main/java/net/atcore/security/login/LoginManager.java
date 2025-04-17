@@ -222,7 +222,7 @@ public final class LoginManager {
             if (!updatePassword(name, s)){
                 GlobalUtils.synchronizeKickPlayer(player, Message.LOGIN_KICK_PASSWORD_ERROR);
             }
-            MessagesManager.logConsole(String.format("Se creó exitosamente el registro de %s", name) , TypeMessages.SUCCESS, CategoryMessages.LOGIN);
+            MessagesManager.logConsole(String.format("Se creó exitosamente el registro de <|%s|>", name) , TypeMessages.SUCCESS, CategoryMessages.LOGIN);
         });
     }
 

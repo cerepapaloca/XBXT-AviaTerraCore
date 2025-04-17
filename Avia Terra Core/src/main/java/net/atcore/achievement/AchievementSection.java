@@ -26,6 +26,7 @@ public class AchievementSection implements Section {
         new GetEnderChestAchievement();
         new KillPlayerAchievement();
         new EscapesUsedChorusFruit();
+        new BreakEnderChestAchievement();
         BaseAchievement.createNode();
         InventoryChangeEvent.start();
     }

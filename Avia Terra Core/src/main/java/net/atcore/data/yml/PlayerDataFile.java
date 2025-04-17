@@ -56,7 +56,7 @@ public class PlayerDataFile extends FileYaml {
         }
         ConfigurationSection csAchievement = fileYaml.getConfigurationSection("achievements");
         if (csAchievement != null) {
-            for (BaseAchievement<?> achievement : BaseAchievement.getAllAchievement()) {
+            for (BaseAchievement<?, ?> achievement : BaseAchievement.getAllAchievement()) {
                 AdvancementProgress progressAchievement = atp.getProgress(achievement).getProgress();
                 String path = "achievements." + achievement.id.getPath().replace("/", ".");
                 List<?> progressComplete = fileYaml.getList(path  + ".complete");
@@ -66,7 +66,7 @@ public class PlayerDataFile extends FileYaml {
                     if (raw instanceof String s) progressAchievement.grantProgress(s);
                 }
                 if (fileYaml.isDouble(path + ".progress")){
-                    atp.getProgressInteger(achievement).setValue(fileYaml.getInt(path + ".progress"));
+                    atp.getProgressContinuos(achievement).setValue(fileYaml.getInt(path + ".progress"));
                 }
             }
         }

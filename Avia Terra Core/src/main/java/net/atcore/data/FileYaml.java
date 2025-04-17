@@ -2,7 +2,6 @@ package net.atcore.data;
 
 import lombok.Getter;
 import net.atcore.AviaTerraCore;
-import net.atcore.data.yml.MessageFile;
 import net.atcore.messages.MessagesManager;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -46,8 +45,8 @@ public abstract class FileYaml extends net.atcore.data.File {
      */
 
     protected void loadConfig() {
-        if (Bukkit.isPrimaryThread() && !AviaTerraCore.isStarting()){
-            throw new IllegalThreadStateException("No no se puede recargar un archivo en el hilo principal");
+        if (Bukkit.isPrimaryThread() && !(AviaTerraCore.isStarting() || AviaTerraCore.isStopping())) {
+            throw new IllegalThreadStateException("No no se puede cargar el archivo en el hilo principal");
         }
         if (file == null) reloadFile();
         fileYaml = YamlConfiguration.loadConfiguration(file);
@@ -64,6 +63,9 @@ public abstract class FileYaml extends net.atcore.data.File {
      */
 
     public void saveConfig() {
+        if (Bukkit.isPrimaryThread() && !(AviaTerraCore.isStarting() || AviaTerraCore.isStopping())){
+            throw new IllegalThreadStateException("No no se puede guardar el archivo en el hilo principal");
+        }
         try {
             fileYaml.save(Objects.requireNonNullElseGet(file, this::reloadFile));
         } catch (Exception e) {

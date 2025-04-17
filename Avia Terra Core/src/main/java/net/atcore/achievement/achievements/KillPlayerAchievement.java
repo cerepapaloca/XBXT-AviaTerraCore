@@ -1,6 +1,5 @@
 package net.atcore.achievement.achievements;
 
-import net.atcore.AviaTerraCore;
 import net.atcore.achievement.BaseAchievementSimple;
 import net.atcore.achievement.SynchronouslyEvent;
 import net.atcore.listener.DeathListener;

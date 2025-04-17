@@ -1,6 +1,5 @@
 package net.atcore.command.commnads;
 
-import net.atcore.AviaTerraCore;
 import net.atcore.command.ArgumentUse;
 import net.atcore.command.BaseCommand;
 import net.atcore.command.CommandVisibility;
@@ -41,7 +40,7 @@ public class PremiumCommand extends BaseCommand implements Confirmable {
                         RegisterData register = loginData.getRegister();
                         register.setStateLogins(StateLogins.PREMIUM);
                         register.setTemporary(false);
-                        loginData.getSession().setState(StateLogins.PREMIUM);
+                        if (loginData.hasSession()) loginData.getSession().setState(StateLogins.PREMIUM);
                         GlobalUtils.synchronizeKickPlayer(player, Message.COMMAND_PREMIUM_SUCCESSFUL);
                     }else {
                         MessagesManager.sendMessage(player, Message.COMMAND_PREMIUM_ERROR);

@@ -86,7 +86,7 @@ public class AviaTerraPlayer {
         MessagesManager.sendString(getPlayer(), message, type);
     }
 
-    public DataProgress getProgress(BaseAchievement<? extends Event> achievement) {
+    public DataProgress getProgress(BaseAchievement<? extends Event, ?> achievement) {
         return achievementProgress.computeIfAbsent(achievement.id, k -> {
             AdvancementProgress progress = new AdvancementProgress();
             progress.update(achievement.advancements.value().requirements());
@@ -94,7 +94,7 @@ public class AviaTerraPlayer {
         });
     }
 
-    public DataProgressContinuos getProgressInteger(BaseAchievement<? extends Event> achievement) {
+    public DataProgressContinuos getProgressContinuos(BaseAchievement<? extends Event, ?> achievement) {
         DataProgress progress = achievementProgress.computeIfAbsent(achievement.id, k -> new DataProgressContinuos(k, new AdvancementProgress(), 0));
         if (progress instanceof DataProgressContinuos i) {
             return i;

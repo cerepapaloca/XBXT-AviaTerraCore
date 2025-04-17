@@ -1,6 +1,5 @@
 package net.atcore.achievement;
 
-import net.atcore.aviaterraplayer.AviaTerraPlayer;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.advancements.AdvancementType;
 import net.minecraft.advancements.Criterion;
@@ -9,12 +8,15 @@ import org.bukkit.Material;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 /**
  * Los logros tendrán una lista de tareas por realizar, por ejemplo consigue unos items en específico
  */
-public abstract class BaseAchievementStep<T extends Event> extends BaseAchievement<T> {
-    public BaseAchievementStep(Material material, Class<? extends BaseAchievement<? extends Event>> parent, AdvancementType type) {
+public abstract class BaseAchievementStep<T extends Event> extends BaseAchievement<T, String> {
+    public BaseAchievementStep(Material material, Class<? extends BaseAchievement<? extends Event, ?>> parent, AdvancementType type) {
         super(material, parent, type);
     }
 
@@ -41,13 +43,9 @@ public abstract class BaseAchievementStep<T extends Event> extends BaseAchieveme
     }
 
     @Override
-    public void onProgressAdvanced(AdvancementProgress progress, Object data) {
+    public void onProgressAdvanced(AdvancementProgress progress, String data) {
         progress.update(advancements.value().requirements());
-        if (data instanceof String s) {
-            progress.grantProgress(s);
-        }else {
-            throw new IllegalArgumentException("step must be a string");
-        }
+        progress.grantProgress(data);
     }
 
     protected abstract List<String> listSteps();

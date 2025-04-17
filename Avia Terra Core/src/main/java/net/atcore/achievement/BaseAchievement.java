@@ -29,7 +29,6 @@ import org.bukkit.event.inventory.InventoryEvent;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.EventExecutor;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -38,11 +37,11 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.*;
 
-public abstract class BaseAchievement<T extends Event> implements Listener {
+public abstract class BaseAchievement<T extends Event, D> implements Listener {
 
-    private static final HashMap<ResourceLocation, BaseAchievement<? extends Event>> REGISTERED_ACHIEVEMENT = new HashMap<>();
+    private static final HashMap<ResourceLocation, BaseAchievement<? extends Event, ?>> REGISTERED_ACHIEVEMENT = new HashMap<>();
     private static final ResourceLocation ROOT = ResourceLocation.fromNamespaceAndPath(AviaTerraCore.getInstance().getName().toLowerCase(), "anarchy/root");
-    public static final HashMap<Class<? extends Event>, List<BaseAchievement<? extends Event>>> EVENTS_REGISTERED = new HashMap<>();
+    public static final HashMap<Class<? extends Event>, List<BaseAchievement<? extends Event, ?>>> EVENTS_REGISTERED = new HashMap<>();
 
     protected final EventExecutor eventExecutor;
     private Class<T> eventClass;
@@ -59,7 +58,7 @@ public abstract class BaseAchievement<T extends Event> implements Listener {
 
 
     @SuppressWarnings("unchecked")
-    public BaseAchievement(Material material, Class<? extends BaseAchievement<? extends Event>> parent, AdvancementType advancementType) {
+    public BaseAchievement(Material material, Class<? extends BaseAchievement<? extends Event, ?>> parent, AdvancementType advancementType) {
         String normalizePath = parent == null ? null : parent.getSimpleName().replace("Achievement", "").toLowerCase();
         categoryId = ResourceLocation.fromNamespaceAndPath(
                 AviaTerraCore.getInstance().getName().toLowerCase(), "anarchy/root"
@@ -102,14 +101,14 @@ public abstract class BaseAchievement<T extends Event> implements Listener {
                 AviaTerraScheduler.enqueueTaskAsynchronously(() -> {
                     if (eventClass.isInstance(event)) {
                         T t = eventClass.cast(event);
-                        for (BaseAchievement<? extends Event> achievement : EVENTS_REGISTERED.getOrDefault(t.getClass(), List.of())) {
+                        for (BaseAchievement<? extends Event, ?> achievement : EVENTS_REGISTERED.getOrDefault(t.getClass(), List.of())) {
                             if (player != null){
                                 if (LoginManager.getDataLogin(player) == null || !LoginManager.getDataLogin(player).hasSession()) return;
                                 AviaTerraPlayer.DataProgress progress = AviaTerraPlayer.getPlayer(player).getAchievementProgress().get(achievement.id);
                                 if (progress != null && progress.getProgress().isDone()) continue;
                             }
                             try {
-                                ((BaseAchievement<T>) achievement).onEvent(t);
+                                ((BaseAchievement<T, D>) achievement).onEvent(t);
                             }catch (ClassCastException e){
                                 MessagesManager.sendWaringException("Error a hacer un cast, En los logros", e);
                             }
@@ -164,11 +163,11 @@ public abstract class BaseAchievement<T extends Event> implements Listener {
 
     public static void createNode(){
         //A todos le crea un nodo sin pariente
-        for (BaseAchievement<?> achievement : REGISTERED_ACHIEVEMENT.values()){
+        for (BaseAchievement<?, ?> achievement : REGISTERED_ACHIEVEMENT.values()){
             achievement.node = new AdvancementNode(achievement.advancements, null);
         }
         // A todos se le añade un pariente ya qué todos tiene un nodo
-        for (BaseAchievement<?> achievement : REGISTERED_ACHIEVEMENT.values()){
+        for (BaseAchievement<?, ?> achievement : REGISTERED_ACHIEVEMENT.values()){
             if (achievement.parentId == null) continue;
             achievement.node = setParent(achievement.node, REGISTERED_ACHIEVEMENT.get(achievement.parentId).node);
         }
@@ -255,12 +254,11 @@ public abstract class BaseAchievement<T extends Event> implements Listener {
     }
 
 
-
     public abstract void rewards(Player player);
 
     protected abstract int getMetaProgress();
 
-    protected abstract void onProgressAdvanced(AdvancementProgress progress, Object data);
+    protected abstract void onProgressAdvanced(AdvancementProgress progress, D data);
     
     /**
      * Das un avance en el logro en caso de cumplir con todos los requisitos se completaría
@@ -268,7 +266,7 @@ public abstract class BaseAchievement<T extends Event> implements Listener {
      * @param data esto si se requiere datos especiales para dar el avance en la mayor de casos solo es poner null
      */
 
-    protected void grantAdvanced(Player player, Object data) {
+    protected void grantAdvanced(Player player, D data) {
         AviaTerraPlayer atp = AviaTerraPlayer.getPlayer(player);
         AviaTerraPlayer.DataProgress progress = atp.getProgress(this);
         // Si el logro está completo no se hace nada
@@ -390,7 +388,7 @@ public abstract class BaseAchievement<T extends Event> implements Listener {
         ServerPlayer nmsPlayer = ((CraftPlayer) player).getHandle();
         List<AdvancementHolder> advancements = new ArrayList<>();
         Map<ResourceLocation, AdvancementProgress> advancementsProgress = new HashMap<>();
-        for (BaseAchievement<?> advancement : REGISTERED_ACHIEVEMENT.values()) {
+        for (BaseAchievement<?, ?> advancement : REGISTERED_ACHIEVEMENT.values()) {
             DisplayInfo displayInfo = advancement.advancements.value().display().get();
             AviaTerraPlayer atp = AviaTerraPlayer.getPlayer(player);
             AviaTerraPlayer.DataProgress progress = atp.getProgress(advancement);
@@ -418,11 +416,11 @@ public abstract class BaseAchievement<T extends Event> implements Listener {
     }
 
     @Nullable
-    public static BaseAchievement<? extends Event> getAchievement(ResourceLocation location) {
+    public static BaseAchievement<? extends Event, ?> getAchievement(ResourceLocation location) {
         return REGISTERED_ACHIEVEMENT.get(location);
     }
 
-    public static List<BaseAchievement<? extends Event>> getAllAchievement() {
+    public static List<BaseAchievement<? extends Event, ?>> getAllAchievement() {
         return REGISTERED_ACHIEVEMENT.values().stream().toList();
     }
 

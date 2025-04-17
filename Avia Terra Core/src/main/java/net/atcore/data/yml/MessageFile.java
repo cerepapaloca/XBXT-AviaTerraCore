@@ -1,13 +1,10 @@
 package net.atcore.data.yml;
 
-import net.atcore.Section;
 import net.atcore.achievement.BaseAchievement;
 import net.atcore.data.FileYaml;
 import net.atcore.messages.LocaleAvailable;
 import net.atcore.messages.Message;
 import net.atcore.messages.MessagesManager;
-import org.apache.maven.model.ConfigurationContainer;
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.EntityType;
 
@@ -20,7 +17,7 @@ public class MessageFile extends FileYaml {
     }
 
     public final HashMap<EntityType, List<String>> messagesEntity = new HashMap<>();
-    public final HashMap<BaseAchievement<?>, BaseAchievement.MessagesAchievement> messagesAchievement = new HashMap<>();
+    public final HashMap<BaseAchievement<?, ?>, BaseAchievement.MessagesAchievement> messagesAchievement = new HashMap<>();
 
     @Override
     public void loadData() {
@@ -52,7 +49,7 @@ public class MessageFile extends FileYaml {
         }
         ConfigurationSection configSection = fileYaml.getConfigurationSection("achievement");
         Set<String> pathsAchievements = new HashSet<>(configSection == null ? Set.of("") : configSection.getKeys(true));
-        for (BaseAchievement<?> achievement : BaseAchievement.getAllAchievement()){
+        for (BaseAchievement<?, ?> achievement : BaseAchievement.getAllAchievement()){
             String path = "achievement." + achievement.id.getPath().replace("/", ".");
             String title = fileYaml.getString(path + ".title");
             List<String> titles = fileYaml.getStringList(path + ".title");

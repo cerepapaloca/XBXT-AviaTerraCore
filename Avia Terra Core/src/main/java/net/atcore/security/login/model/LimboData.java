@@ -5,7 +5,6 @@ import com.comphenix.protocol.events.PacketContainer;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import net.atcore.AviaTerraCore;
 import net.atcore.data.DataSection;
 import net.atcore.data.yml.CacheLimboFile;
 import net.atcore.messages.CategoryMessages;
@@ -14,7 +13,6 @@ import net.atcore.messages.TypeMessages;
 import net.atcore.security.login.LoginManager;
 import net.atcore.utils.AviaTerraScheduler;
 import net.atcore.utils.GlobalUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -25,7 +23,6 @@ import org.bukkit.scheduler.BukkitTask;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.UUID;
 
 @Getter
 @Setter

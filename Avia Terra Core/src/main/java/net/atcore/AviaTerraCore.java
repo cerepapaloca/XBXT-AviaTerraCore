@@ -95,7 +95,7 @@ public class AviaTerraCore extends JavaPlugin {
                 new ApiSection()
         );
         AviaTerraScheduler.runTaskTimerAsynchronously(5, 5, () -> Bukkit.getOnlinePlayers().forEach(player -> {
-            player.playerListName(player.displayName().appendSpace().append(GlobalUtils.chatColorLegacyToComponent(String.format("<gradient:#666666:#888888>Ping %s</gradient>", player.getPing()))));
+            player.playerListName(player.displayName().appendSpace().append(GlobalUtils.chatColorLegacyToComponent(String.format("<reset><gradient:#666666:#888888>Ping %s</gradient>", player.getPing()))));
             player.sendPlayerListHeaderAndFooter(
                     MessagesManager.applyFinalProprieties(player, Message.MISC_TAB_HEADER.getMessage(player), TypeMessages.INFO, CategoryMessages.PRIVATE, false),
                     MessagesManager.applyFinalProprieties(player, Message.MISC_TAB_FOOTER.getMessage(player), TypeMessages.INFO, CategoryMessages.PRIVATE, false)
@@ -139,12 +139,12 @@ public class AviaTerraCore extends JavaPlugin {
     public void onDisable() {
         isStopping = true;
         // Borra a los jugadores cracked y semi cracked que no pudieron registrarse para evitar tener jugadores fantasmas
+        LIST_BROADCAST.clear();
+        LIST_MOTD.clear();
         DataSection.getConfigFile().saveActiveTime();
         for (Section section : RegisterManager.sections){
             section.disable();
         }
-        LIST_BROADCAST.clear();
-        LIST_MOTD.clear();
         for (LoginData data : LoginManager.getDataLogin()){
             // Cuidado con esta condición por qué puede borrar todas la cuentas
             if (data.getRegister().isTemporary()){

@@ -16,7 +16,7 @@ public class TestContinuous extends BaseAchievementContinuous<BlockBreakEvent> {
     public void onEvent(BlockBreakEvent event) {
         Player player = event.getPlayer();
         if (event.getBlock().getType() == Material.BEDROCK) {
-            grantAdvanced(player, 1);
+            grantAdvanced(player, 1d);
         }
     }
 

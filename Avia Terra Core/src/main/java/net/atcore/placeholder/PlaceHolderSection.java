@@ -3,7 +3,6 @@ package net.atcore.placeholder;
 import lombok.Getter;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.atcore.Section;
-import net.atcore.messages.MessagesManager;
 import net.atcore.placeholder.holders.ActiveTimeHolder;
 import net.atcore.placeholder.holders.CurrentTpsHolder;
 import net.atcore.placeholder.holders.PingHolder;
